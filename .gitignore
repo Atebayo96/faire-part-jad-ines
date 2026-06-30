@@ -1,0 +1,5 @@
+_backup/
+gen_*.py
+assets/_*
+*.pyc
+__pycache__/
