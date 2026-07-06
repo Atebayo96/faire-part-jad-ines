@@ -9,6 +9,8 @@
   <meta property="og:title" content="Jad & Inès — Faire-part">
   <meta property="og:description" content="Samedi 17 octobre 2026 — Vous êtes invités">
   <meta property="og:type" content="website">
+  <link rel="preload" as="image" href="hero_frames/frame_001.webp">
+  <link rel="preload" as="image" href="hero_concepts/v3_bague_jade.png">
   <style>
     @font-face { font-family:"Playfair"; src:url("fonts/PlayfairDisplay.ttf") format("truetype"); font-display:swap; }
     @font-face { font-family:"Amiri"; src:url("fonts/Amiri.ttf") format("truetype"); font-display:swap; }
@@ -25,7 +27,7 @@
     }
     *{box-sizing:border-box}
     html{background:#0b0f17;scroll-behavior:smooth}
-    body{margin:0;font-family:"Amiri",Georgia,serif;color:var(--ink);background:#0b0f17;overflow-x:hidden}
+    body{margin:0;font-family:"Amiri",Georgia,serif;color:var(--ink);background:#0b0f17;overflow-x:hidden;overscroll-behavior-y:none}
     button,input,textarea{font:inherit}
     button,a,input,textarea{touch-action:manipulation}
     h1,h2,h3{margin:0;font-family:"Playfair",Georgia,serif;font-weight:500;letter-spacing:.01em}
@@ -38,7 +40,8 @@
     .layer[data-i="0"]{background-image:url("hero_concepts/v3_bague_jade.png");opacity:1}
     .layer[data-i="1"]{background-image:url("assets/mairie_sky.png")}
     .layer[data-i="2"]{background-image:url("assets/palacio_sky.png")}
-    .layer[data-i="3"]{background-image:url("assets/05_nuit.png")}
+    .layer[data-i="3"]{background-image:url("hero_concepts/v10_amaria_jade.png")}
+    .layer[data-i="4"]{background-image:url("assets/05_nuit.png")}
     .stage-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(130% 90% at 50% 30%,transparent 58%,rgba(11,15,23,.3) 100%)}
 
     /* ===== couches parallaxe peintes (plans séparés -> effet 3D) ===== */
@@ -164,9 +167,12 @@
     .intro .seal-mono .amp{font-size:.78em;color:#6b4a1e}
     .intro .tap{position:absolute;left:50%;bottom:max(30px,env(safe-area-inset-bottom));z-index:6;transform:translateX(-50%);width:max-content;text-align:center;
       color:rgba(255,250,240,.92);font:700 9.5px/1.5 Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;
-      padding:9px 16px;border:1px solid rgba(232,207,139,.4);border-radius:999px;background:rgba(15,26,46,.3);backdrop-filter:blur(6px);animation:tapPulse 2.6s ease-in-out infinite}
-    .intro .tap{display:none}
+      padding:9px 16px;border:1px solid rgba(232,207,139,.4);border-radius:999px;background:rgba(15,26,46,.3);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:tapPulse 2.6s ease-in-out infinite}
     .intro.opening .seal-mono,.intro.opening .tap{opacity:0;transition:opacity .2s ease}
+    .intro .flash{position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0;transform:scale(.82);
+      background:radial-gradient(115% 88% at 50% 42%,#fffdf4 0%,rgba(255,247,222,.94) 28%,rgba(232,207,139,.5) 56%,transparent 78%)}
+    .intro.opening .flash{animation:flashBloom 1.15s ease-out .85s both}
+    @keyframes flashBloom{0%{opacity:0;transform:scale(.82)}38%{opacity:1;transform:scale(1.06)}100%{opacity:0;transform:scale(1.28)}}
     .intro.gone{opacity:0;visibility:hidden}
     @keyframes tapPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,207,139,0)}50%{box-shadow:0 0 0 12px rgba(232,207,139,.1)}}
 
@@ -174,12 +180,12 @@
     .shell{position:relative;width:min(100%,var(--phone));margin:0 auto;z-index:2}
     .content{opacity:0;transition:opacity .45s ease}
     body.open .content{opacity:1}
-    .act{position:relative;min-height:100dvh;display:grid;justify-items:center;padding:96px 22px;overflow:visible}
+    .act{position:relative;min-height:100dvh;display:grid;justify-items:center;padding:96px 22px calc(96px + env(safe-area-inset-bottom));overflow:visible}
     .act>*{position:relative;z-index:1}
     .eyebrow{margin:0 0 2px;font:400 28px/1 "Script",cursive;letter-spacing:.01em;text-transform:none;color:var(--gold-light)}
 
     /* hero (union peinte dans l'image) */
-    .hero{align-content:end;text-align:center;padding-bottom:116px}
+    .hero{align-content:end;text-align:center;padding-bottom:calc(116px + env(safe-area-inset-bottom))}
     .hero-scrim{position:absolute;left:0;right:0;top:0;bottom:0;z-index:0;pointer-events:none;background:transparent}
     .hero .pre{font:400 clamp(23px,6.2vw,28px)/1.3 "Script",cursive;letter-spacing:.01em;text-transform:none;color:var(--bronze)}
     .hero h1{margin:10px 0 6px;font-size:clamp(54px,17vw,84px);line-height:.92;color:#3a2c1a;text-shadow:0 4px 18px rgba(255,250,240,.55)}
@@ -201,7 +207,7 @@
       background:radial-gradient(circle at 50% 50%,var(--gold-light) 0 2.4px,transparent 3px),linear-gradient(90deg,transparent,var(--gold-light) 48% 52%,transparent);
       background-size:13px 13px,100% 1px;background-position:center,center;background-repeat:no-repeat}
     .big-time{display:inline-grid;place-items:center;width:72px;height:72px;margin:2px auto 8px;border-radius:999px;
-      border:1px solid rgba(232,207,139,.6);color:var(--gold-light);background:rgba(15,26,46,.4);backdrop-filter:blur(4px);font:500 26px/1 "Playfair",serif}
+      border:1px solid rgba(232,207,139,.6);color:var(--gold-light);background:rgba(15,26,46,.4);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);font:500 26px/1 "Playfair",serif}
     .timeline{display:grid;gap:6px;margin:14px 0 6px;text-align:left}
     .ev{display:grid;grid-template-columns:44px 1fr;gap:11px;align-items:center;padding:8px 0;border-top:1px solid rgba(232,207,139,.28)}
     .ev:first-child{border-top:0}
@@ -210,7 +216,7 @@
     .ev p{margin:2px 0 0;color:rgba(255,250,240,.82);font-size:13px;line-height:1.4;text-shadow:0 3px 12px rgba(0,0,0,.6)}
     .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
     .btn{min-height:46px;display:inline-grid;place-items:center;text-decoration:none;text-align:center;cursor:pointer;padding:0 10px;
-      border:1px solid rgba(232,207,139,.5);border-radius:3px;color:var(--ivory-soft);background:rgba(15,26,46,.34);backdrop-filter:blur(6px);
+      border:1px solid rgba(232,207,139,.5);border-radius:3px;color:var(--ivory-soft);background:rgba(15,26,46,.34);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
       font:700 10px/1.2 Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;transition:border-color .25s ease,background .25s ease,box-shadow .25s ease,transform .25s ease}
     .btn:hover{transform:translateY(-1px)}
     .btn.solid{color:var(--night);border-color:transparent;background:linear-gradient(135deg,var(--gold-light),var(--gold))}
@@ -219,7 +225,7 @@
     .rsvp{display:grid;gap:11px;margin-top:16px;text-align:left}
     .field{display:grid;gap:5px}
     label{font:700 10px/1.2 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);text-shadow:0 3px 10px rgba(0,0,0,.6)}
-    input,textarea{width:100%;border:1px solid rgba(232,207,139,.42);border-radius:3px;background:rgba(11,15,23,.45);color:#fff5e8;padding:11px;outline:none;font-size:16px;backdrop-filter:blur(4px);transition:border-color .25s ease,box-shadow .25s ease,background .25s ease}
+    input,textarea{width:100%;border:1px solid rgba(232,207,139,.42);border-radius:3px;background:rgba(11,15,23,.45);color:#fff5e8;padding:11px;outline:none;font-size:16px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);transition:border-color .25s ease,box-shadow .25s ease,background .25s ease}
     input::placeholder,textarea::placeholder{color:rgba(255,250,240,.5)}
     textarea{min-height:66px;resize:vertical}
     .choice-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
@@ -230,11 +236,18 @@
     input:focus,textarea:focus{border-color:var(--gold-light);box-shadow:0 0 0 3px rgba(232,207,139,.18);background:rgba(11,15,23,.58)}
     .note{margin:6px 0 0;color:rgba(255,250,240,.85);font-size:13px;line-height:1.5;text-align:center;text-shadow:0 3px 12px rgba(0,0,0,.6)}
 
+    /* acte amaria (scene claire) : texte fonce */
+    .amaria-act .eyebrow{color:var(--bronze)}
+    .amaria-act .countdown .lead{color:var(--bronze);text-shadow:none}
+    .amaria-act .cd-cell{border-color:rgba(140,111,71,.45);background:rgba(255,250,240,.55)}
+    .amaria-act .cd-cell b{color:#3a2c1a}
+    .amaria-act .cd-cell span{color:var(--bronze)}
+    .amaria-act .ornament{opacity:.95}
     /* countdown */
     .countdown{margin-top:30px;text-align:center;color:var(--ivory-soft)}
     .countdown .lead{font:700 10px/1.4 Arial,sans-serif;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-light);text-shadow:0 6px 18px rgba(0,0,0,.55)}
     .cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:320px;margin:14px auto 0}
-    .cd-cell{padding:12px 4px;border:1px solid rgba(232,207,139,.42);border-radius:5px;background:rgba(15,26,46,.4);backdrop-filter:blur(6px)}
+    .cd-cell{padding:12px 4px;border:1px solid rgba(232,207,139,.42);border-radius:5px;background:rgba(15,26,46,.4);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
     .cd-cell b{display:block;font:500 30px/1 "Playfair",serif;color:#fff}
     .cd-cell span{display:block;margin-top:5px;font:700 8.5px/1 Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-light)}
 
@@ -246,7 +259,7 @@
 
     .sound{position:fixed;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(calc(min(50vw,260px) - 38px));z-index:55;
       width:40px;height:40px;display:grid;place-items:center;border-radius:999px;cursor:pointer;
-      color:var(--gold-light);background:rgba(15,26,46,.42);border:1px solid rgba(232,207,139,.45);backdrop-filter:blur(6px);
+      color:var(--gold-light);background:rgba(15,26,46,.42);border:1px solid rgba(232,207,139,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
       font-size:16px;opacity:0;pointer-events:none;transition:opacity .6s ease}
     body.open .sound{opacity:1;pointer-events:auto}
     .sound.off{color:rgba(255,250,240,.55)}
@@ -278,6 +291,7 @@
     <div class="layer" data-i="1"></div>
     <div class="layer" data-i="2"></div>
     <div class="layer" data-i="3"></div>
+    <div class="layer" data-i="4"></div>
     <div class="stage-vignette"></div>
   </div>
 
@@ -303,6 +317,7 @@
         <div class="env-flap"><img class="flap-face" src="assets/env_gen_top_flap_flat20_cropped_plus10.png" alt="" aria-hidden="true"><div class="seal"></div></div>
       </div>
       <div class="tap">Touchez le sceau pour ouvrir</div>
+      <div class="flash" aria-hidden="true"></div>
     </div>
   </div>
 
@@ -360,8 +375,25 @@
         </div>
       </section>
 
-      <!-- ACTE 4 — RSVP + countdown + clôture -->
-      <section class="act info-act" data-i="3">
+      <!-- ACTE 4 — l'amaria + compte a rebours -->
+      <section class="act info-act amaria-act" data-i="3">
+        <div class="scrim"></div>
+        <div class="info reveal">
+          <div class="ornament"></div>
+          <p class="eyebrow">Le grand jour approche</p>
+          <div class="countdown reveal d1" id="countdown" role="timer" aria-live="polite">
+            <div class="lead">Plus que…</div>
+            <div class="cd-grid">
+              <div class="cd-cell"><b id="cd-d">—</b><span>Jours</span></div>
+              <div class="cd-cell"><b id="cd-h">—</b><span>Heures</span></div>
+              <div class="cd-cell"><b id="cd-m">—</b><span>Min</span></div>
+              <div class="cd-cell"><b id="cd-s">—</b><span>Sec</span></div>
+            </div>
+        </div>
+      </section>
+
+      <!-- ACTE 5 — RSVP + clôture -->
+      <section class="act info-act" data-i="4">
         <div class="scrim"></div>
         <div class="info reveal">
           <div class="ornament"></div>
@@ -381,14 +413,6 @@
             <button class="btn solid" type="submit" style="min-height:48px">Confirmer sur WhatsApp</button>
           </form>
 
-          <div class="countdown reveal d1" id="countdown" role="timer" aria-live="polite">
-            <div class="lead">Plus que…</div>
-            <div class="cd-grid">
-              <div class="cd-cell"><b id="cd-d">—</b><span>Jours</span></div>
-              <div class="cd-cell"><b id="cd-h">—</b><span>Heures</span></div>
-              <div class="cd-cell"><b id="cd-m">—</b><span>Min</span></div>
-              <div class="cd-cell"><b id="cd-s">—</b><span>Sec</span></div>
-            </div>
           </div>
 
           <div class="closing reveal d1">
@@ -488,11 +512,11 @@
         fg.firstElementChild.style.transform=`translateY(${(-r*42).toFixed(1)}%)`;
       });
       // lanternes de la nuit : visibles avec la scène 4, remontent au fil du scroll
-      const dn=(vc-centers[3])/vh;
+      const dn=(vc-centers[4])/vh;
       nightFliers.style.opacity=Math.max(0,1-Math.abs(dn)).toFixed(3);
       nlanterns.forEach(p=>{
         const r=+p.dataset.rate||.1;
-        p.style.transform=`translate3d(0,${(-(vc-centers[3])*r).toFixed(1)}px,0)`;
+        p.style.transform=`translate3d(0,${(-(vc-centers[4])*r).toFixed(1)}px,0)`;
       });
       // texte du hero : disparaît en fondu + glisse vers le haut au scroll (réapparaît en revenant en haut)
       if(sy>2) heroTakeover=true;
@@ -531,6 +555,22 @@
       if(idx!==lastFrame){ lastFrame=idx; heroLayer.style.backgroundImage=`url("${FRAME_URL(idx)}")`; }
     }
     window.addEventListener('scroll',()=>requestAnimationFrame(scrub),{passive:true});
+
+    /* ---- scrub amaria (frames de la video, chargees en differe) ---- */
+    const AM_COUNT=24, AM_URL=i=>`amaria_frames/frame_${String(i+1).padStart(3,'0')}.webp`;
+    const amariaLayer=layers[3]; let amReady=false, amLast=-1; const amPre=[];
+    setTimeout(()=>{ Promise.all(Array.from({length:AM_COUNT},(_,i)=>new Promise(res=>{
+      const im=new Image(); im.onload=()=>res(im); im.onerror=()=>res(null); im.src=AM_URL(i); amPre.push(im);
+    }))).then(list=>{ amReady=list.every(Boolean); }); },3500);
+    function scrubAmaria(){
+      if(!amReady) return;
+      const vc=window.scrollY+vh/2;
+      const d=(vc-centers[3])/vh;               // -1 (arrive) .. 0 (centre) .. 1 (parti)
+      const pr=Math.max(0,Math.min(1,(d+0.75)/1.2));
+      const idx=Math.round(pr*(AM_COUNT-1));
+      if(idx!==amLast){ amLast=idx; amariaLayer.style.backgroundImage=`url("${AM_URL(idx)}")`; }
+    }
+    window.addEventListener('scroll',()=>requestAnimationFrame(scrubAmaria),{passive:true});
     let ticking=false;
     function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(()=>{ update(); ticking=false; }); } }
     window.addEventListener('scroll',onScroll,{passive:true});
