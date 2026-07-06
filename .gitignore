@@ -3,3 +3,8 @@ gen_*.py
 assets/_*
 *.pyc
 __pycache__/
+fix_*.py
+extract_*.py
+lantern_layout.json
+.playwright-mcp/
+index - Copie.html
