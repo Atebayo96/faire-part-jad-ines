@@ -153,17 +153,17 @@
     /* flash plein ecran (hors .intro pour survivre a sa disparition), doux et progressif */
     .flash{position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;
       background:radial-gradient(130% 110% at 50% 44%,#fffdf7 0%,rgba(255,250,238,.98) 44%,rgba(250,242,224,.82) 100%)}
-    .flash.go{animation:flashBloom 2.3s cubic-bezier(.37,0,.3,1) forwards}
-    @keyframes flashBloom{0%{opacity:0}40%{opacity:1}56%{opacity:1}100%{opacity:0}}
+    .flash.go{animation:flashBloom 2s cubic-bezier(.4,0,.2,1) forwards}
+    @keyframes flashBloom{0%{opacity:0}42%{opacity:1}56%{opacity:1}100%{opacity:0}}
     @keyframes shadowFollow{
       0%{opacity:.24;transform:translateY(0) scaleX(.92) scaleY(.74);filter:blur(5px)}
       35%{opacity:.18;transform:translateY(-2%) scaleX(.78) scaleY(.58);filter:blur(8px)}
       70%{opacity:.09;transform:translateY(-8%) scaleX(.52) scaleY(.36);filter:blur(12px)}
       100%{opacity:.03;transform:translateY(-12%) scaleX(.34) scaleY(.22);filter:blur(16px)}
     }
-    /* entrée cinématographique du hero : léger zoom-flou qui se pose */
-    body.open .layer[data-i="0"]{animation:heroEmerge 1.35s cubic-bezier(.22,.61,.36,1) both}
-    @keyframes heroEmerge{from{filter:blur(18px) brightness(1.1);transform:scale(1.1)}to{filter:blur(0) brightness(1);transform:scale(1.05)}}
+    /* entree du hero : leger settle d'echelle SANS flou ni flash de luminosite (le hero est deja net sous la lumiere qui se retire, pas de "pop") */
+    body.open .layer[data-i="0"]{animation:heroEmerge 2.4s cubic-bezier(.22,.61,.36,1) both}
+    @keyframes heroEmerge{from{transform:scale(1.09)}to{transform:scale(1.05)}}
     body.open .drifters.back{animation:driftSettle 1.1s cubic-bezier(.22,.61,.36,1) both}
     @keyframes heroSettle{from{transform:scale(1.14);filter:blur(9px) brightness(1.15)}to{transform:scale(1.05);filter:blur(0) brightness(1)}}
     @keyframes driftSettle{from{transform:translateX(-50%) scale(1.08);filter:blur(7px)}to{transform:translateX(-50%) scale(1);filter:blur(0)}}
@@ -181,16 +181,25 @@
     .shell{position:relative;width:min(100%,var(--phone));margin:0 auto;z-index:2}
     .content{opacity:0;transition:opacity .45s ease}
     body.open .content{opacity:1}
-    .act{position:relative;min-height:100dvh;display:grid;justify-items:center;padding:96px 22px calc(96px + env(safe-area-inset-bottom));overflow:visible}
+    /* scroll-snap : chaque scene se cale bien centree quand on arrete de scroller */
+    html{scroll-snap-type:y proximity;scroll-padding:0}
+    body.open{scroll-snap-type:y proximity}
+    .act{position:relative;min-height:100dvh;display:grid;justify-items:center;padding:96px 22px calc(96px + env(safe-area-inset-bottom));overflow:visible;scroll-snap-align:center;scroll-snap-stop:normal}
     .act>*{position:relative;z-index:1}
     .eyebrow{margin:0 0 2px;font:400 28px/1 "Script",cursive;letter-spacing:.01em;text-transform:none;color:var(--gold-light)}
     /* Mairie : texte posé dans le CIEL CLAIR (haut), pas sur le batiment en verre sombre */
-    .act.mairie-act{align-content:start;padding-top:calc(9vh + env(safe-area-inset-top));padding-bottom:40px}
-    .mairie-act .eyebrow{color:#5a3c14;text-shadow:0 1px 2px rgba(255,250,236,.95),0 2px 10px rgba(255,248,230,.7)}
-    .mairie-act .info h2{color:#231a10;text-shadow:0 1px 2px rgba(255,250,236,.9),0 3px 16px rgba(255,248,230,.6)}
-    .mairie-act .info .place{color:#6a4a18;text-shadow:0 1px 2px rgba(255,250,236,.95),0 2px 12px rgba(255,248,230,.6)}
-    .mairie-act .btn{color:#5a3c14;border-bottom-color:rgba(90,60,20,.45)}
-    .mairie-act .btn.solid{color:#3a2810;border-bottom-color:rgba(90,60,20,.6)}
+    .act.mairie-act{align-content:start;padding-top:calc(8.5vh + env(safe-area-inset-top));padding-bottom:40px}
+    /* look "affiche de film" : petit label dore en capitales tracees, grand titre serif quasi-noir */
+    .mairie-act .eyebrow{font:600 11.5px/1 "Playfair",serif;text-transform:uppercase;letter-spacing:.44em;text-indent:.44em;
+      color:#8a6a2e;text-shadow:0 1px 1px rgba(255,250,236,.9);margin:0 0 16px;display:inline-flex;align-items:center;gap:12px}
+    .mairie-act .eyebrow::before,.mairie-act .eyebrow::after{content:"";width:22px;height:1px;background:linear-gradient(90deg,transparent,rgba(138,106,46,.75),transparent)}
+    .mairie-act .info h2{font-family:"Playfair",serif;font-weight:600;font-size:clamp(33px,9.4vw,44px);line-height:1.03;letter-spacing:.006em;
+      color:#1f160c;text-shadow:0 1px 2px rgba(255,250,236,.85),0 5px 22px rgba(255,248,230,.5)}
+    .mairie-act .info .place{margin-top:15px;font:italic 500 clamp(15px,4.4vw,18px)/1.4 "Playfair",serif;letter-spacing:.04em;
+      color:#5a4526;text-shadow:0 1px 2px rgba(255,250,236,.9)}
+    .mairie-act .btn-row{margin-top:26px}
+    .mairie-act .btn{color:#6b4a1e;border-bottom-color:rgba(107,74,30,.5)}
+    .mairie-act .btn.solid{color:#3a2810;border-bottom-color:rgba(58,40,16,.6)}
 
     /* hero (union peinte dans l'image) */
     .hero{align-content:end;text-align:center;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
@@ -482,9 +491,11 @@
     syncSoundState();
 
     let opened=false;
-    const FLASH_DELAY=830;
-    const HERO_MORPH_DELAY=1780;
-    const INTRO_EXIT_DELAY=1840;
+    // Ouverture en UNE arche continue : le rabat s'entrouvre et la lumiere bloomit ENSEMBLE ;
+    // le passage enveloppe->hero se fait SOUS le pic blanc (invisible), puis la lumiere se retire et devoile le hero deja net.
+    const FLASH_DELAY=220;        // la lumiere commence des que le rabat bouge (fondu, pas d'etape)
+    const HERO_MORPH_DELAY=1080;  // swap vers le hero pendant que l'ecran est blanc
+    const INTRO_EXIT_DELAY=1150;  // enveloppe retiree, toujours sous le blanc
     const flashEl=document.getElementById('flash');
     function open(){
       if(opened) return; opened=true;
@@ -493,10 +504,10 @@
       setTimeout(()=>{ flashEl.classList.add('go'); },FLASH_DELAY);
       setTimeout(()=>{
         document.body.classList.add('open'); window.scrollTo(0,0); update();
-        // textes du hero en cascade douce pendant le morph
+        // textes du hero en cascade douce, revelee au moment ou la lumiere se retire
         [...heroCopy.children].forEach((el,i)=>el.animate(
           [{opacity:0,transform:'translateY(16px)',filter:'blur(5px)'},{opacity:1,transform:'translateY(0)',filter:'blur(0)'}],
-          {duration:750,delay:100+i*110,easing:'cubic-bezier(.22,.61,.36,1)',fill:'backwards'}));
+          {duration:820,delay:340+i*110,easing:'cubic-bezier(.22,.61,.36,1)',fill:'backwards'}));
       },HERO_MORPH_DELAY);
       setTimeout(()=>{ intro.classList.add('gone'); },INTRO_EXIT_DELAY);
     }
@@ -538,16 +549,17 @@
       // animation du texte au scroll : chaque bloc se fond + glisse selon la position de sa scène
       scrollRevealGroups.forEach(({ci,items})=>{
         const d=(vc-centers[ci])/vh;
-        const base=Math.max(0,Math.min(1,1-Math.abs(d)*1.08));
+        // plateau large autour du centre : la scene reste "posee" tant qu'elle est a peu pres centree
+        const base=Math.max(0,Math.min(1,1-Math.max(0,Math.abs(d)-0.14)*1.35));
         const count=Math.max(1,items.length-1);
         items.forEach((el,i)=>{
-          const stagger=(i/count)*0.58;
-          const p=Math.max(0,Math.min(1,(base-stagger)/0.38));
+          const stagger=(i/count)*0.4;
+          const p=Math.max(0,Math.min(1,(base-stagger)/0.32));
           const eased=p*p*(3-2*p);
-          const y=(1-eased)*24+d*12;
+          const y=(1-eased)*14+d*5;
           el.style.opacity=eased.toFixed(3);
-          el.style.transform=`translateY(${y.toFixed(1)}px) scale(${(0.982+eased*.018).toFixed(3)})`;
-          el.style.filter=`blur(${((1-eased)*8).toFixed(2)}px)`;
+          el.style.transform=`translateY(${y.toFixed(1)}px) scale(${(0.99+eased*.01).toFixed(3)})`;
+          el.style.filter=`blur(${((1-eased)*4).toFixed(2)}px)`;
           el.style.pointerEvents=eased>.35 ? '' : 'none';
         });
       });
