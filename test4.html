@@ -91,13 +91,13 @@
       background:linear-gradient(175deg,#ece3ce 0%,#e2d7bd 55%,#d6c9a9 100%)}
     /* ===== enveloppe réaliste (mécanique des vidéos de réf) : carte-enveloppe posée sur fond papier,
        rabat visible qui pivote, lettre qui sort par le haut ===== */
-    .env{position:absolute;inset:0;transform-origin:50% 58%;transform:scale(1.32);transform-style:preserve-3d}
-    /* à l'intérieur de l'enveloppe : le hero, qu'on découvre dès que le rabat s'entrouvre */
-    .env-interior{position:absolute;inset:0;z-index:1;opacity:0;
-      background:url("hero_concepts/v3_bague_jade_mir.png") center/cover no-repeat;filter:brightness(.94)}
-    .intro.opening .env-interior{opacity:1;transition:opacity .3s linear .1s}
-    .env-interior::after{content:"";position:absolute;inset:0;
-      background:linear-gradient(180deg,rgba(43,33,18,.42),rgba(43,33,18,.08) 40%,transparent 60%)}
+    .env{position:absolute;inset:0;transform-origin:50% 58%;transform:scale(1.32);transform-style:preserve-3d;z-index:1}
+    /* image du hero derrière l'enveloppe, au MÊME cadrage que le vrai hero (layer 0 : scale 1.05, sans filtre)
+       -> quand l'enveloppe part, on voit directement le hero, aucune bascule */
+    .env-interior{position:absolute;inset:0;z-index:0;opacity:0;
+      background:url("hero_concepts/v3_bague_jade_mir.png") center/cover no-repeat;transform:scale(1.05)}
+    .intro.opening .env-interior{opacity:1;transition:opacity .25s linear 0s}
+    .env-interior::after{content:"";position:absolute;inset:0;background:transparent}
     /* voile de lumière qui gonfle depuis l'ouverture (transition-morph des vidéos de réf) */
     .env-glow{display:none}
     /* légère poussée caméra vers l'ouverture pendant le morph */
@@ -162,7 +162,7 @@
       100%{opacity:.03;transform:translateY(-12%) scaleX(.34) scaleY(.22);filter:blur(16px)}
     }
     /* entrée cinématographique du hero : léger zoom-flou qui se pose */
-    body.open .layer[data-i="0"]{animation:heroSettle 1.1s cubic-bezier(.22,.61,.36,1) both}
+    body.open .layer[data-i="0"]{animation:none}
     body.open .drifters.back{animation:driftSettle 1.1s cubic-bezier(.22,.61,.36,1) both}
     @keyframes heroSettle{from{transform:scale(1.14);filter:blur(9px) brightness(1.15)}to{transform:scale(1.05);filter:blur(0) brightness(1)}}
     @keyframes driftSettle{from{transform:translateX(-50%) scale(1.08);filter:blur(7px)}to{transform:translateX(-50%) scale(1);filter:blur(0)}}
@@ -327,8 +327,8 @@
   <div class="intro" id="intro" role="button" tabindex="0" aria-label="Ouvrir le faire-part">
     <div class="frame">
       <div class="env-vignette"></div>
+      <div class="env-interior"></div>
       <div class="env">
-        <div class="env-interior"></div>
         <div class="env-pocket"></div>
         <div class="flap-shadow" aria-hidden="true"></div>
         <div class="env-flap"><img class="flap-face" src="assets/env_gen_top_flap_flat20_cropped_plus10.png" alt="" aria-hidden="true"><div class="seal"></div></div>
