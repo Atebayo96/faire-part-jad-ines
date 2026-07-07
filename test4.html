@@ -190,17 +190,17 @@
     /* Mairie : texte posé dans le CIEL CLAIR (haut), pas sur le batiment en verre sombre */
     .act.mairie-act{align-content:start;padding-top:calc(8.5vh + env(safe-area-inset-top));padding-bottom:40px}
     /* look "affiche de film" : petit label dore en capitales tracees, grand titre serif quasi-noir */
-    /* blanc creme + fin lisere sombre DERRIERE (paint-order) pour tenir sur les nuages clairs */
+    /* alternance : GRAND TITRE blanc creme + accents (label, date, boutons) en DORE profond ; fin lisere sombre derriere pour tenir sur les nuages clairs */
     .mairie-act .eyebrow{font:600 11.5px/1 "Playfair",serif;text-transform:uppercase;letter-spacing:.44em;text-indent:.44em;
-      color:#fbf5e8;-webkit-text-stroke:.4px rgba(38,26,10,.6);paint-order:stroke fill;text-shadow:0 1px 4px rgba(24,16,6,.7);margin:0 0 16px;display:inline-flex;align-items:center;gap:12px}
-    .mairie-act .eyebrow::before,.mairie-act .eyebrow::after{content:"";width:22px;height:1px;background:linear-gradient(90deg,transparent,rgba(251,245,232,.9),transparent)}
+      color:#8a6620;-webkit-text-stroke:.4px rgba(36,24,8,.5);paint-order:stroke fill;text-shadow:0 1px 3px rgba(255,250,236,.5);margin:0 0 16px;display:inline-flex;align-items:center;gap:12px}
+    .mairie-act .eyebrow::before,.mairie-act .eyebrow::after{content:"";width:22px;height:1px;background:linear-gradient(90deg,transparent,rgba(138,102,32,.85),transparent)}
     .mairie-act .info h2{font-family:"Playfair",serif;font-weight:600;font-size:clamp(33px,9.4vw,44px);line-height:1.03;letter-spacing:.006em;
       color:#fdf9ef;-webkit-text-stroke:.7px rgba(34,23,9,.55);paint-order:stroke fill;text-shadow:0 2px 5px rgba(22,15,6,.6),0 5px 22px rgba(16,10,4,.55)}
-    .mairie-act .info .place{margin-top:15px;font:italic 500 clamp(15px,4.4vw,18px)/1.4 "Playfair",serif;letter-spacing:.04em;
-      color:#f6efdf;-webkit-text-stroke:.4px rgba(38,26,10,.55);paint-order:stroke fill;text-shadow:0 1px 4px rgba(22,15,6,.6)}
+    .mairie-act .info .place{margin-top:15px;font:italic 600 clamp(15px,4.4vw,18px)/1.4 "Playfair",serif;letter-spacing:.04em;
+      color:#8a6620;-webkit-text-stroke:.4px rgba(36,24,8,.5);paint-order:stroke fill;text-shadow:0 1px 3px rgba(255,250,236,.55)}
     .mairie-act .btn-row{margin-top:26px}
-    .mairie-act .btn{color:#fbf5e8;-webkit-text-stroke:.35px rgba(38,26,10,.55);paint-order:stroke fill;border-bottom-color:rgba(251,245,232,.6);text-shadow:0 1px 5px rgba(20,14,6,.7)}
-    .mairie-act .btn.solid{color:#fffdf7;border-bottom-color:rgba(255,253,247,.75)}
+    .mairie-act .btn{color:#8a6620;-webkit-text-stroke:.35px rgba(36,24,8,.5);paint-order:stroke fill;border-bottom-color:rgba(138,102,32,.6);text-shadow:0 1px 3px rgba(255,250,236,.5)}
+    .mairie-act .btn.solid{color:#6f5015;border-bottom-color:rgba(111,80,21,.7)}
     /* Palacio (nuit) : texte remonte dans le ciel SOMBRE (au lieu de l'eau chargee de la fontaine), meme look affiche */
     .act.palacio-act{align-content:start;padding-top:calc(7.5vh + env(safe-area-inset-top));padding-bottom:40px}
     .palacio-act .eyebrow{font:600 11.5px/1 "Playfair",serif;text-transform:uppercase;letter-spacing:.44em;text-indent:.44em;
