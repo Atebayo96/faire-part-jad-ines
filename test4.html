@@ -223,9 +223,15 @@
       color:#2c2114;text-shadow:0 2px 4px rgba(255,252,245,.9),0 5px 22px rgba(255,250,240,.6);opacity:0;transition:opacity 1s ease}
     .hero .hero-names .amp{color:var(--gold);font-style:normal}
     body.open .hero .hero-names{opacity:1;transition-delay:.3s}
-    /* bas du hero : petite invitation (2 lignes) puis la DATE mise en avant */
-    .hero .hero-invite{margin:0 auto 13px;max-width:22em;font:italic 400 clamp(13px,3.9vw,16px)/1.5 "Playfair",serif;letter-spacing:.015em;color:#5a4632;text-shadow:0 1px 8px rgba(255,252,245,.9);text-wrap:balance}
-    .hero .hero-date{font:600 clamp(18px,5.2vw,23px)/1.2 "Playfair",serif;letter-spacing:.045em;color:#2c2114;text-shadow:0 1px 3px rgba(255,252,245,.95),0 2px 14px rgba(255,250,240,.55)}
+    /* bas du hero : invitation puis la DATE mise en avant, encadree d'un ornement dore (filet + losange) */
+    .hero .hero-invite{margin:0 auto 14px;max-width:24em;font:italic 400 clamp(13px,3.9vw,16px)/1.55 "Playfair",serif;letter-spacing:.015em;color:#5a4632;text-shadow:0 1px 8px rgba(255,252,245,.9);text-wrap:balance}
+    .hero .hero-date-wrap{display:inline-flex;align-items:center;justify-content:center;gap:14px}
+    .hero .hero-date-wrap .orn{position:relative;width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+    .hero .hero-date-wrap .orn:last-child{background:linear-gradient(90deg,var(--gold),transparent)}
+    .hero .hero-date-wrap .orn::after{content:"";position:absolute;top:50%;width:5px;height:5px;background:var(--gold);transform:translate(-50%,-50%) rotate(45deg)}
+    .hero .hero-date-wrap .orn:first-child::after{left:100%}
+    .hero .hero-date-wrap .orn:last-child::after{left:0}
+    .hero .hero-date{font:600 clamp(18px,5.2vw,23px)/1.2 "Playfair",serif;letter-spacing:.05em;color:#2c2114;text-shadow:0 1px 3px rgba(255,252,245,.95),0 2px 14px rgba(255,250,240,.55)}
     .scroll-cue{margin-top:24px;display:inline-grid;justify-items:center;gap:7px;color:var(--bronze);font:700 9.5px/1 Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase}
     .scroll-cue .chev{width:15px;height:15px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);animation:bob 1.8s ease-in-out infinite}
     @keyframes bob{0%,100%{transform:translateY(0) rotate(45deg)}50%{transform:translateY(6px) rotate(45deg)}}
@@ -290,9 +296,9 @@
        texte remonte dans le ciel etoile pour ne pas chevaucher la skyline */
     /* scene finale coupee en 2 : question en haut, WhatsApp+merci+noms en bas, le nuage reste degage au milieu */
     /* space-between place la question (haut) et la signature (bas) ; les notes sont posees juste sous le nuage, au-dessus de la Tour Eiffel */
-    .final-act{align-content:space-between;padding-top:calc(12vh + env(safe-area-inset-top));padding-bottom:calc(11vh + env(safe-area-inset-bottom))}
+    .final-act{align-content:space-between;padding-top:calc(12vh + 5px + env(safe-area-inset-top));padding-bottom:calc(11vh + env(safe-area-inset-bottom))}
     .final-act .note{font-size:14px}
-    .final-act .final-mid{position:absolute;left:0;right:0;top:42vh;margin-inline:auto;width:min(100%,420px);padding:0 22px}
+    .final-act .final-mid{position:absolute;left:0;right:0;top:calc(42vh + 5px);margin-inline:auto;width:min(100%,420px);padding:0 22px}
     .final-act .closing{margin-top:0}
     .final-act .closing p{font:500 clamp(20px,5.6vw,24px)/1.4 "Playfair",serif;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.6)}
     .final-act .closing .small{margin-top:8px;color:var(--gold-light);letter-spacing:.24em}
@@ -383,8 +389,12 @@
         <p class="basmala" dir="rtl" lang="ar" aria-label="Bismillah ar-Rahman ar-Rahim">﷽</p>
         <h1 class="hero-names">Inès <span class="amp">&amp;</span> Jad</h1>
         <div class="reveal">
-          <p class="hero-invite">ont la joie de vous convier<br>à célébrer leur mariage</p>
-          <div class="hero-date">Samedi 17 octobre 2026</div>
+          <p class="hero-invite">Ont la joie de vous convier à leur mariage qui sera célébré le</p>
+          <div class="hero-date-wrap">
+            <span class="orn" aria-hidden="true"></span>
+            <span class="hero-date">Samedi 17 octobre 2026</span>
+            <span class="orn" aria-hidden="true"></span>
+          </div>
           <div class="scroll-cue">Faites défiler<span class="chev"></span></div>
         </div>
       </section>
@@ -428,8 +438,7 @@
           <p class="eyebrow">Réception</p>
           <h2>Le Palacio</h2>
           <div class="timeline">
-            <div class="ev"><span class="t">19h</span><h3>Réception des invités</h3></div>
-            <div class="ev"><span class="t">22h</span><h3>Dîner &amp; soirée</h3></div>
+            <div class="ev"><span class="t">Dès 19h</span><h3>Cocktail de bienvenue, suivi du dîner et de la soirée</h3></div>
           </div>
           <div class="btn-row">
             <a class="btn" target="_blank" rel="noreferrer" aria-label="Ouvrir l'itineraire vers Le Palacio"
