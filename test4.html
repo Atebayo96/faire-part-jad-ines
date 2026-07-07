@@ -147,14 +147,14 @@
     /* le rabat s'ouvre autour de sa charnière haute -> la pointe + le sceau avancent vers la caméra */
     /* TEST : ouverture complete du rabat, puis le bas de l'enveloppe glisse vers le bas et disparait */
     /* le rabat s'entrouvre a peine (~10%) -> l'illumination prend le relais et sert de transition douce vers le hero */
-    .intro.opening .env-flap{animation:flapPartial 1.15s cubic-bezier(.32,0,.32,1) forwards}
+    .intro.opening .env-flap{animation:flapPartial 1.65s cubic-bezier(.32,0,.34,1) forwards}
     .intro.opening .flap-shadow{animation:none;opacity:0;transition:opacity .5s ease}
     @keyframes flapPartial{0%{transform:rotateX(0deg)}100%{transform:rotateX(40deg)}}
     /* flash plein ecran (hors .intro pour survivre a sa disparition), doux et progressif */
     .flash{position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;
       background:radial-gradient(130% 110% at 50% 44%,#fffdf7 0%,rgba(255,250,238,.98) 44%,rgba(250,242,224,.82) 100%)}
-    .flash.go{animation:flashBloom 1.7s cubic-bezier(.4,0,.2,1) forwards}
-    @keyframes flashBloom{0%{opacity:0}42%{opacity:1}56%{opacity:1}100%{opacity:0}}
+    .flash.go{animation:flashBloom 1.1s cubic-bezier(.4,0,.2,1) forwards}
+    @keyframes flashBloom{0%{opacity:0}44%{opacity:1}54%{opacity:1}100%{opacity:0}}
     @keyframes shadowFollow{
       0%{opacity:.24;transform:translateY(0) scaleX(.92) scaleY(.74);filter:blur(5px)}
       35%{opacity:.18;transform:translateY(-2%) scaleX(.78) scaleY(.58);filter:blur(8px)}
@@ -507,9 +507,9 @@
     let opened=false;
     // Ouverture en UNE arche continue : le rabat s'entrouvre et la lumiere bloomit ENSEMBLE ;
     // le passage enveloppe->hero se fait SOUS le pic blanc (invisible), puis la lumiere se retire et devoile le hero deja net.
-    const FLASH_DELAY=200;        // la lumiere commence des que le rabat bouge (fondu, pas d'etape)
-    const HERO_MORPH_DELAY=1000;  // swap vers le hero pendant que l'ecran est blanc
-    const INTRO_EXIT_DELAY=1060;  // enveloppe retiree, toujours sous le blanc
+    const FLASH_DELAY=750;        // on laisse le rabat s'ouvrir un bon moment AVANT que la lumiere monte
+    const HERO_MORPH_DELAY=1280;  // swap vers le hero pendant le bref pic blanc (~1234-1344ms)
+    const INTRO_EXIT_DELAY=1310;  // enveloppe retiree, toujours sous le blanc
     const flashEl=document.getElementById('flash');
     function open(){
       if(opened) return; opened=true;
