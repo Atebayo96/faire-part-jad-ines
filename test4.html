@@ -40,7 +40,7 @@
     .layer[data-i="0"]{background-image:url("hero_concepts/v3_bague_jade_mir.png");opacity:1}
     .layer[data-i="1"]{background-image:url("hero_concepts/g6_grotte_a.png")}
     .layer[data-i="2"]{background-image:url("assets/mairie_sky.png")}
-    .layer[data-i="3"]{background-image:url("assets/palacio_sky.png")}
+    .layer[data-i="3"]{background-image:url("assets/palacio_sky_night.png")}
     .layer[data-i="4"]{background-image:url("hero_concepts/final_paris2.png")}
     .stage-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(130% 90% at 50% 30%,transparent 58%,rgba(11,15,23,.3) 100%)}
 
@@ -195,7 +195,7 @@
       text-align:center;white-space:nowrap;font-family:"Amiri",serif;font-size:clamp(22px,6.6vw,29px);line-height:1.5;color:var(--bronze);
       text-shadow:0 1px 1px rgba(255,253,246,.8);opacity:.9}
     /* invitation en haut, sous la Basmala */
-    .hero .hero-pre{position:absolute;left:0;right:0;top:max(17vh,calc(env(safe-area-inset-top) + 13vh));z-index:1;margin:0;
+    .hero .hero-pre{position:absolute;left:0;right:0;top:max(21vh,calc(env(safe-area-inset-top) + 16vh));z-index:1;margin:0;
       text-align:center;font:500 clamp(14px,4vw,17px)/1.55 "Playfair",serif;letter-spacing:.03em;color:#4a3823;
       text-shadow:0 1px 8px rgba(255,252,245,.85);opacity:0;transition:opacity 1s ease}
     body.open .hero .hero-pre{opacity:1;transition-delay:.3s}
@@ -480,9 +480,9 @@
     syncSoundState();
 
     let opened=false;
-    const FLASH_DELAY=330;
-    const HERO_MORPH_DELAY=1280;
-    const INTRO_EXIT_DELAY=1340;
+    const FLASH_DELAY=830;
+    const HERO_MORPH_DELAY=1780;
+    const INTRO_EXIT_DELAY=1840;
     const flashEl=document.getElementById('flash');
     function open(){
       if(opened) return; opened=true;
