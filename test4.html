@@ -627,6 +627,26 @@
       if(idx!==parisLast){ parisLast=idx; parisLayer.style.backgroundImage=`url("${PARIS_URL(idx)}")`; }
     }
     window.addEventListener('scroll',()=>requestAnimationFrame(scrubParis),{passive:true});
+
+    /* ---- scrub ciels Mairie (calque 2) + Palacio (calque 3), frames chargees en differe ---- */
+    function makeSkyScrub(layerIdx, folder, delay){
+      const URL=i=>`${folder}/frame_${String(i+1).padStart(3,'0')}.webp`;
+      const layer=layers[layerIdx]; let ready=false, last=-1; const pre=[];
+      setTimeout(()=>{ Promise.all(Array.from({length:24},(_,i)=>new Promise(res=>{
+        const im=new Image(); im.onload=()=>res(im); im.onerror=()=>res(null); im.src=URL(i); pre.push(im);
+      }))).then(list=>{ ready=list.every(Boolean); }); }, delay);
+      function scrub(){
+        if(!ready) return;
+        const vc=window.scrollY+vh/2;
+        const d=(vc-centers[layerIdx])/vh;
+        const pr=Math.max(0,Math.min(1,(d+0.75)/1.2));
+        const idx=Math.round(pr*23);
+        if(idx!==last){ last=idx; layer.style.backgroundImage=`url("${URL(idx)}")`; }
+      }
+      window.addEventListener('scroll',()=>requestAnimationFrame(scrub),{passive:true});
+    }
+    makeSkyScrub(2,'mairie_frames',5500);
+    makeSkyScrub(3,'palacio_frames',6500);
     let ticking=false;
     function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(()=>{ update(); ticking=false; }); } }
     window.addEventListener('scroll',onScroll,{passive:true});
