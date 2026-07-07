@@ -146,16 +146,15 @@
     }
     /* le rabat s'ouvre autour de sa charnière haute -> la pointe + le sceau avancent vers la caméra */
     /* TEST : ouverture complete du rabat, puis le bas de l'enveloppe glisse vers le bas et disparait */
-    /* rabat : ouverture LENTE au debut (suspense) ; puis la poche descend VITE -> hero direct */
-    .intro.opening .env-flap{animation:flapOpenFull 2.4s cubic-bezier(.62,.03,.5,1) forwards}
+    /* le rabat s'ouvre jusqu'a ~40% -> flash lumineux plein ecran -> fondu flou souple vers le hero */
+    .intro.opening .env-flap{animation:flapPartial 1.3s cubic-bezier(.5,.05,.35,1) forwards}
     .intro.opening .flap-shadow{animation:none;opacity:0;transition:opacity .5s ease}
-    .intro.opening .env-pocket{animation:pocketDrop .5s cubic-bezier(.5,0,.9,.35) 2s forwards}
-    @keyframes flapOpenFull{
-      0%{transform:rotateX(0deg)}
-      82%{transform:rotateX(166deg);opacity:1}
-      100%{transform:rotateX(166deg);opacity:0}
-    }
-    @keyframes pocketDrop{to{transform:translateY(142%)}}
+    @keyframes flapPartial{0%{transform:rotateX(0deg)}100%{transform:rotateX(58deg)}}
+    /* flash plein ecran (hors .intro pour survivre a sa disparition) */
+    .flash{position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;
+      background:radial-gradient(125% 105% at 50% 44%,#fffdf7 0%,rgba(255,250,238,.97) 42%,rgba(250,242,224,.8) 100%)}
+    .flash.go{animation:flashBloom 1.6s ease-in-out forwards}
+    @keyframes flashBloom{0%{opacity:0}26%{opacity:1}50%{opacity:1}100%{opacity:0}}
     @keyframes shadowFollow{
       0%{opacity:.24;transform:translateY(0) scaleX(.92) scaleY(.74);filter:blur(5px)}
       35%{opacity:.18;transform:translateY(-2%) scaleX(.78) scaleY(.58);filter:blur(8px)}
@@ -163,7 +162,8 @@
       100%{opacity:.03;transform:translateY(-12%) scaleX(.34) scaleY(.22);filter:blur(16px)}
     }
     /* entrée cinématographique du hero : léger zoom-flou qui se pose */
-    body.open .layer[data-i="0"]{animation:none}
+    body.open .layer[data-i="0"]{animation:heroEmerge 1.1s cubic-bezier(.22,.61,.36,1) both}
+    @keyframes heroEmerge{from{filter:blur(16px) brightness(1.12);transform:scale(1.09)}to{filter:blur(0) brightness(1);transform:scale(1.05)}}
     body.open .drifters.back{animation:driftSettle 1.1s cubic-bezier(.22,.61,.36,1) both}
     @keyframes heroSettle{from{transform:scale(1.14);filter:blur(9px) brightness(1.15)}to{transform:scale(1.05);filter:blur(0) brightness(1)}}
     @keyframes driftSettle{from{transform:translateX(-50%) scale(1.08);filter:blur(7px)}to{transform:translateX(-50%) scale(1);filter:blur(0)}}
@@ -192,9 +192,13 @@
       text-align:center;white-space:nowrap;font-family:"Amiri",serif;font-size:clamp(22px,6.6vw,29px);line-height:1.5;color:var(--bronze);
       text-shadow:0 1px 1px rgba(255,253,246,.8);opacity:.9}
     .hero .pre{font:500 clamp(14px,4vw,17px)/1.55 "Playfair",serif;letter-spacing:.03em;text-transform:none;color:#4a3823;text-shadow:0 1px 8px rgba(255,252,245,.85)}
-    .hero h1{margin:2px 0 10px;font-family:"Script",cursive;font-weight:400;font-size:clamp(42px,14.5vw,64px);line-height:1.08;white-space:nowrap;color:#2c2114;text-shadow:0 2px 4px rgba(255,252,245,.9),0 5px 22px rgba(255,250,240,.6)}
+    .hero h1{margin:26px 0 10px;font-family:"Script",cursive;font-weight:400;font-size:clamp(42px,14.5vw,64px);line-height:1.08;white-space:nowrap;color:#2c2114;text-shadow:0 2px 4px rgba(255,252,245,.9),0 5px 22px rgba(255,250,240,.6)}
     .hero h1 .amp{color:var(--gold);font-style:normal}
-    .hero .date{font:600 clamp(15px,4.4vw,18px)/1.3 "Playfair",serif;letter-spacing:.03em;color:#4a3823;text-shadow:0 1px 8px rgba(255,252,245,.85)}
+    /* date deplacee en haut, sous la Basmala */
+    .hero .hero-date{position:absolute;left:0;right:0;top:max(18vh,calc(env(safe-area-inset-top) + 14vh));z-index:1;margin:0;
+      text-align:center;font:600 clamp(12px,3.6vw,15px)/1.4 "Playfair",serif;letter-spacing:.24em;text-transform:uppercase;
+      color:#5a4632;text-shadow:0 1px 8px rgba(255,252,245,.85);opacity:0;transition:opacity 1s ease}
+    body.open .hero .hero-date{opacity:1;transition-delay:.35s}
     .scroll-cue{margin-top:24px;display:inline-grid;justify-items:center;gap:7px;color:var(--bronze);font:700 9.5px/1 Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase}
     .scroll-cue .chev{width:15px;height:15px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);animation:bob 1.8s ease-in-out infinite}
     @keyframes bob{0%,100%{transform:translateY(0) rotate(45deg)}50%{transform:translateY(6px) rotate(45deg)}}
@@ -338,6 +342,7 @@
       <div class="tap">Touchez le sceau pour ouvrir</div>
     </div>
   </div>
+  <div class="flash" id="flash" aria-hidden="true"></div>
 
   <div class="shell">
     <main class="content" id="content">
@@ -346,10 +351,10 @@
       <section class="act hero" data-i="0">
         <div class="hero-scrim"></div>
         <p class="basmala" dir="rtl" lang="ar" aria-label="Bismillah ar-Rahman ar-Rahim">﷽</p>
+        <p class="hero-date">Samedi 17 octobre 2026</p>
         <div class="reveal">
           <div class="pre">Nous avons le plaisir de<br>vous inviter à notre mariage</div>
           <h1>Inès <span class="amp">&amp;</span> Jad</h1>
-          <div class="date">Samedi 17 octobre 2026</div>
           <div class="scroll-cue">Faites défiler<span class="chev"></span></div>
         </div>
       </section>
@@ -471,12 +476,15 @@
     syncSoundState();
 
     let opened=false;
-    const HERO_MORPH_DELAY=2450;
-    const INTRO_EXIT_DELAY=2550;
+    const FLASH_DELAY=1050;
+    const HERO_MORPH_DELAY=1600;
+    const INTRO_EXIT_DELAY=1650;
+    const flashEl=document.getElementById('flash');
     function open(){
       if(opened) return; opened=true;
       startMusic();
       intro.classList.add('opening');
+      setTimeout(()=>{ flashEl.classList.add('go'); },FLASH_DELAY);
       setTimeout(()=>{
         document.body.classList.add('open'); window.scrollTo(0,0); update();
         // textes du hero en cascade douce pendant le morph
