@@ -232,13 +232,23 @@
     input:focus,textarea:focus{border-color:var(--gold-light);box-shadow:0 0 0 3px rgba(232,207,139,.18);background:rgba(11,15,23,.58)}
     .note{margin:6px 0 0;color:rgba(255,250,240,.85);font-size:13px;line-height:1.5;text-align:center;text-shadow:0 3px 12px rgba(0,0,0,.6)}
 
-    /* acte amaria (scene claire) : texte fonce */
-    .amaria-act .eyebrow{color:var(--bronze)}
-    .amaria-act .countdown .lead{color:var(--bronze);text-shadow:none}
-    .amaria-act .cd-cell{border-color:rgba(140,111,71,.45);background:rgba(255,250,240,.55)}
-    .amaria-act .cd-cell b{color:#3a2c1a}
-    .amaria-act .cd-cell span{color:var(--bronze)}
-    .amaria-act .ornament{opacity:.95}
+    /* acte Grotte (scene claire) : countdown calligraphique, sans boites, place dans l'ouverture */
+    .grotte-act{align-content:center;padding-bottom:0}
+    .grotte-act .info{transform:translateY(-9vh)}
+    .grotte-act .ornament{opacity:.9;margin-bottom:14px}
+    .grotte-act .grotte-eyebrow{font:400 clamp(30px,8.5vw,40px)/1.1 "Script",cursive;color:#5a3f1c;
+      text-shadow:0 2px 12px rgba(255,250,240,.7);margin-bottom:16px}
+    .grotte-act .countdown{margin-top:0}
+    .grotte-act .countdown .lead{color:var(--bronze);text-shadow:none;font:400 15px/1 "Playfair",serif;
+      font-style:italic;letter-spacing:.28em;text-transform:uppercase;opacity:.85}
+    .grotte-act .cd-grid{display:flex;justify-content:center;align-items:flex-start;gap:0;max-width:none;margin:14px auto 0}
+    .grotte-act .cd-cell{padding:0 clamp(12px,4.6vw,22px);border:0;background:none;border-radius:0;position:relative}
+    .grotte-act .cd-cell + .cd-cell::before{content:"";position:absolute;left:0;top:14%;height:46%;width:1px;
+      background:linear-gradient(180deg,transparent,rgba(140,111,71,.55),transparent)}
+    .grotte-act .cd-cell b{font:500 clamp(34px,11vw,50px)/1 "Playfair",serif;color:#3a2c1a;
+      text-shadow:0 3px 14px rgba(255,250,240,.75)}
+    .grotte-act .cd-cell span{margin-top:7px;color:var(--bronze);font:400 13px/1 "Playfair",serif;
+      font-style:italic;letter-spacing:.06em;text-transform:lowercase}
     /* countdown */
     .countdown{margin-top:30px;text-align:center;color:var(--ivory-soft)}
     .countdown .lead{font:700 10px/1.4 Arial,sans-serif;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-light);text-shadow:0 6px 18px rgba(0,0,0,.55)}
@@ -331,18 +341,18 @@
       </section>
 
       <!-- ACTE 2 — Tanger (Grotte d'Hercule) + compte a rebours -->
-      <section class="act info-act amaria-act" data-i="1">
+      <section class="act info-act grotte-act" data-i="1">
         <div class="scrim"></div>
         <div class="info reveal">
           <div class="ornament"></div>
-          <p class="eyebrow">Le grand jour approche</p>
+          <p class="eyebrow grotte-eyebrow">Le grand jour approche</p>
           <div class="countdown reveal d1" id="countdown" role="timer" aria-live="polite">
-            <div class="lead">Plus que…</div>
+            <div class="lead">plus que</div>
             <div class="cd-grid">
-              <div class="cd-cell"><b id="cd-d">—</b><span>Jours</span></div>
-              <div class="cd-cell"><b id="cd-h">—</b><span>Heures</span></div>
-              <div class="cd-cell"><b id="cd-m">—</b><span>Min</span></div>
-              <div class="cd-cell"><b id="cd-s">—</b><span>Sec</span></div>
+              <div class="cd-cell"><b id="cd-d">—</b><span>jours</span></div>
+              <div class="cd-cell"><b id="cd-h">—</b><span>heures</span></div>
+              <div class="cd-cell"><b id="cd-m">—</b><span>min</span></div>
+              <div class="cd-cell"><b id="cd-s">—</b><span>sec</span></div>
             </div>
         </div>
       </section>
