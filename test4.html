@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0f1a2e">
-  <title>Jad & Inès — TEST 4 (B1 geste scrubbé au scroll)</title>
+  <title>Inès & Jad — TEST 4 (B1 geste scrubbé au scroll)</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23b8975a'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23e8cf8b' stroke-width='2'/%3E%3C/svg%3E">
-  <meta property="og:title" content="Jad & Inès — Faire-part">
+  <meta property="og:title" content="Inès & Jad — Faire-part">
   <meta property="og:description" content="Samedi 17 octobre 2026 — Vous êtes invités">
   <meta property="og:type" content="website">
-  <link rel="preload" as="image" href="hero_frames/frame_001.webp">
-  <link rel="preload" as="image" href="hero_concepts/v3_bague_jade.png">
+  <link rel="preload" as="image" href="hero_frames_mir/frame_001.webp">
+  <link rel="preload" as="image" href="hero_concepts/v3_bague_jade_mir.png">
   <style>
     @font-face { font-family:"Playfair"; src:url("fonts/PlayfairDisplay.ttf") format("truetype"); font-display:swap; }
     @font-face { font-family:"Amiri"; src:url("fonts/Amiri.ttf") format("truetype"); font-display:swap; }
@@ -37,7 +37,7 @@
     .stage,.drifters{position:fixed;top:0;left:50%;transform:translateX(-50%);width:min(100%,var(--phone));height:100dvh;overflow:hidden}
     .stage{z-index:0;background:var(--night)}
     .layer{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:0;transform:scale(1.05);will-change:opacity}
-    .layer[data-i="0"]{background-image:url("hero_concepts/v3_bague_jade.png");opacity:1}
+    .layer[data-i="0"]{background-image:url("hero_concepts/v3_bague_jade_mir.png");opacity:1}
     .layer[data-i="1"]{background-image:url("hero_concepts/g6_grotte_a.png")}
     .layer[data-i="2"]{background-image:url("assets/mairie_sky.png")}
     .layer[data-i="3"]{background-image:url("assets/palacio_sky.png")}
@@ -94,7 +94,7 @@
     .env{position:absolute;inset:0;transform-origin:50% 58%;transform:scale(1.32);transform-style:preserve-3d}
     /* à l'intérieur de l'enveloppe : le hero, qu'on découvre dès que le rabat s'entrouvre */
     .env-interior{position:absolute;inset:0;z-index:1;opacity:0;
-      background:url("hero_concepts/v3_bague_jade.png") center/cover no-repeat;filter:brightness(.94)}
+      background:url("hero_concepts/v3_bague_jade_mir.png") center/cover no-repeat;filter:brightness(.94)}
     .intro.opening .env-interior{opacity:1;transition:opacity .08s linear 1.44s}
     .env-interior::after{content:"";position:absolute;inset:0;
       background:linear-gradient(180deg,rgba(43,33,18,.42),rgba(43,33,18,.08) 40%,transparent 60%)}
@@ -344,7 +344,7 @@
         <p class="basmala" dir="rtl" lang="ar" aria-label="Bismillah ar-Rahman ar-Rahim">﷽</p>
         <div class="reveal">
           <div class="pre">Nous avons le plaisir de<br>vous inviter à notre mariage</div>
-          <h1>Jad <span class="amp">&amp;</span> Inès</h1>
+          <h1>Inès <span class="amp">&amp;</span> Jad</h1>
           <div class="date">Samedi 17 octobre 2026</div>
           <div class="scroll-cue">Faites défiler<span class="chev"></span></div>
         </div>
@@ -411,7 +411,7 @@
           <p class="note">Un mot sur WhatsApp suffit.</p>
           <p class="note">Merci de nous répondre avant le <strong>1<sup>er</sup> septembre 2026</strong>.</p>
           <div class="closing reveal d1">
-            <p>Jad Ghailan <span class="amp">&amp;</span> Inès Hariat</p>
+            <p>Inès Hariat <span class="amp">&amp;</span> Jad Ghailan</p>
             <div class="small">17 octobre 2026</div>
           </div>
         </div>
@@ -534,7 +534,7 @@
     }
 
     /* ---- scrub du geste (frames extraites de la video Kling/Seedance) ---- */
-    const FRAME_COUNT=24, FRAME_URL=i=>`hero_frames/frame_${String(i+1).padStart(3,'0')}.webp`;
+    const FRAME_COUNT=24, FRAME_URL=i=>`hero_frames_mir/frame_${String(i+1).padStart(3,'0')}.webp`;
     const SCRUB_RANGE=0.5; // le geste finit pendant que le hero est encore bien visible
     const heroLayer=layers[0];
     const framesPre=[]; let framesReady=false;
@@ -585,8 +585,8 @@
     tick(); setInterval(tick,1000);
 
     const EVENTS={
-      mairie:{title:"Mariage Jad & Inès — Cérémonie civile",start:"20261017T120000Z",end:"20261017T133000Z",loc:"Hôtel de Ville de Nanterre, 1 place du 27 mars 2002, 92000 Nanterre",desc:"Cérémonie civile du mariage de Jad et Inès."},
-      palacio:{title:"Mariage Jad & Inès — Réception",start:"20261017T160000Z",end:"20261018T010000Z",loc:"Le Palacio Réception, 15 rue Camille Flammarion, 91630 Avrainville",desc:"Cocktail, dîner et soirée du mariage de Jad et Inès."}
+      mairie:{title:"Mariage Inès & Jad — Cérémonie civile",start:"20261017T120000Z",end:"20261017T133000Z",loc:"Hôtel de Ville de Nanterre, 1 place du 27 mars 2002, 92000 Nanterre",desc:"Cérémonie civile du mariage d'Inès et Jad."},
+      palacio:{title:"Mariage Inès & Jad — Réception",start:"20261017T160000Z",end:"20261018T010000Z",loc:"Le Palacio Réception, 15 rue Camille Flammarion, 91630 Avrainville",desc:"Cocktail, dîner et soirée du mariage d'Inès et Jad."}
     };
     function ics(k){
       const e=EVENTS[k];
