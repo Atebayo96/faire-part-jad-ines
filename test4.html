@@ -95,7 +95,7 @@
     /* à l'intérieur de l'enveloppe : le hero, qu'on découvre dès que le rabat s'entrouvre */
     .env-interior{position:absolute;inset:0;z-index:1;opacity:0;
       background:url("hero_concepts/v3_bague_jade_mir.png") center/cover no-repeat;filter:brightness(.94)}
-    .intro.opening .env-interior{opacity:1;transition:opacity .08s linear 1.44s}
+    .intro.opening .env-interior{opacity:1;transition:opacity .3s linear .1s}
     .env-interior::after{content:"";position:absolute;inset:0;
       background:linear-gradient(180deg,rgba(43,33,18,.42),rgba(43,33,18,.08) 40%,transparent 60%)}
     /* voile de lumière qui gonfle depuis l'ouverture (transition-morph des vidéos de réf) */
@@ -145,12 +145,16 @@
       50%{transform:translate(-50%,-50%) translateZ(10px) scale(1)}
     }
     /* le rabat s'ouvre autour de sa charnière haute -> la pointe + le sceau avancent vers la caméra */
-    .intro.opening .env-flap{animation:flapOpen 7.2s linear forwards}
-    .intro.opening .flap-shadow{animation:shadowFollow 7.2s linear forwards}
-    @keyframes flapOpen{
-      0%{transform:rotateX(0deg) translateZ(0)}
-      100%{transform:rotateX(142deg) translateZ(0)}
+    /* TEST : ouverture complete du rabat, puis le bas de l'enveloppe glisse vers le bas et disparait */
+    .intro.opening .env-flap{animation:flapOpenFull 1.7s cubic-bezier(.4,0,.2,1) forwards}
+    .intro.opening .flap-shadow{animation:none;opacity:0;transition:opacity .5s ease}
+    .intro.opening .env-pocket{animation:pocketDrop 1.05s cubic-bezier(.55,0,.7,.2) 1.15s forwards}
+    @keyframes flapOpenFull{
+      0%{transform:rotateX(0deg)}
+      70%{transform:rotateX(166deg);opacity:1}
+      100%{transform:rotateX(166deg);opacity:0}
     }
+    @keyframes pocketDrop{to{transform:translateY(140%)}}
     @keyframes shadowFollow{
       0%{opacity:.24;transform:translateY(0) scaleX(.92) scaleY(.74);filter:blur(5px)}
       35%{opacity:.18;transform:translateY(-2%) scaleX(.78) scaleY(.58);filter:blur(8px)}
@@ -465,8 +469,8 @@
     syncSoundState();
 
     let opened=false;
-    const HERO_MORPH_DELAY=1440;
-    const INTRO_EXIT_DELAY=1900;
+    const HERO_MORPH_DELAY=2150;
+    const INTRO_EXIT_DELAY=2250;
     function open(){
       if(opened) return; opened=true;
       startMusic();
