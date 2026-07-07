@@ -184,8 +184,8 @@
     .hero{align-content:end;text-align:center;padding-bottom:calc(116px + env(safe-area-inset-bottom))}
     .hero-scrim{position:absolute;left:0;right:0;top:0;bottom:0;z-index:0;pointer-events:none;background:transparent}
     .hero .basmala{position:absolute;left:0;right:0;top:max(5.5vh,calc(env(safe-area-inset-top) + 2.5vh));z-index:1;margin:0;
-      text-align:center;white-space:nowrap;font-family:"Amiri",serif;font-size:clamp(26px,8vw,34px);line-height:1.5;color:var(--gold);
-      text-shadow:0 2px 18px rgba(255,250,240,.8),0 1px 3px rgba(120,90,40,.4);
+      text-align:center;white-space:nowrap;font-family:"Amiri",serif;font-size:clamp(22px,6.6vw,29px);line-height:1.5;color:var(--gold);
+      text-shadow:0 1px 0 rgba(255,252,242,.85),0 -1px 1px rgba(110,80,35,.5),0 2px 3px rgba(110,80,35,.3),0 3px 16px rgba(255,250,240,.4);
       opacity:0;transition:opacity 1.1s ease}
     body.open .hero .basmala{opacity:1;transition-delay:1.5s}
     .hero .pre{font:400 clamp(23px,6.2vw,28px)/1.3 "Script",cursive;letter-spacing:.01em;text-transform:none;color:var(--bronze)}
@@ -251,10 +251,11 @@
     .grotte-act .cd-cell span{margin-top:7px;color:var(--bronze);font:400 13px/1 "Playfair",serif;
       font-style:italic;letter-spacing:.06em;text-transform:lowercase}
 
-    /* derniere scene (soir) : RSVP informatif + cloture, stylee, sans ornements */
-    .final-act{align-content:center}
+    /* derniere scene (soir) : RSVP informatif + cloture, stylee, sans ornements ;
+       texte remonte dans le ciel etoile pour ne pas chevaucher la skyline */
+    .final-act{align-content:start;padding-top:9vh}
     .final-act .note{font-size:14px}
-    .final-act .closing{margin-top:34px}
+    .final-act .closing{margin-top:26px}
     .final-act .closing p{font:500 clamp(20px,5.6vw,24px)/1.4 "Playfair",serif;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.6)}
     .final-act .closing .small{margin-top:8px;color:var(--gold-light);letter-spacing:.24em}
     /* countdown */
