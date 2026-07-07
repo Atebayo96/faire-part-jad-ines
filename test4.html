@@ -38,9 +38,9 @@
     .stage{z-index:0;background:var(--night)}
     .layer{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:0;transform:scale(1.05);will-change:opacity}
     .layer[data-i="0"]{background-image:url("hero_concepts/v3_bague_jade.png");opacity:1}
-    .layer[data-i="1"]{background-image:url("assets/mairie_sky.png")}
-    .layer[data-i="2"]{background-image:url("assets/palacio_sky.png")}
-    .layer[data-i="3"]{background-image:url("hero_concepts/v10_amaria_jade.png")}
+    .layer[data-i="1"]{background-image:url("hero_concepts/v15_amaria_jade.png")}
+    .layer[data-i="2"]{background-image:url("assets/mairie_sky.png")}
+    .layer[data-i="3"]{background-image:url("assets/palacio_sky.png")}
     .layer[data-i="4"]{background-image:url("assets/05_nuit.png")}
     .stage-vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(130% 90% at 50% 30%,transparent 58%,rgba(11,15,23,.3) 100%)}
 
@@ -169,10 +169,6 @@
       color:rgba(255,250,240,.92);font:700 9.5px/1.5 Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;
       padding:9px 16px;border:1px solid rgba(232,207,139,.4);border-radius:999px;background:rgba(15,26,46,.3);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:tapPulse 2.6s ease-in-out infinite}
     .intro.opening .seal-mono,.intro.opening .tap{opacity:0;transition:opacity .2s ease}
-    .intro .flash{position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0;transform:scale(.82);
-      background:radial-gradient(115% 88% at 50% 42%,#fffdf4 0%,rgba(255,247,222,.94) 28%,rgba(232,207,139,.5) 56%,transparent 78%)}
-    .intro.opening .flash{animation:flashBloom 1.15s ease-out .85s both}
-    @keyframes flashBloom{0%{opacity:0;transform:scale(.82)}38%{opacity:1;transform:scale(1.06)}100%{opacity:0;transform:scale(1.28)}}
     .intro.gone{opacity:0;visibility:hidden}
     @keyframes tapPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,207,139,0)}50%{box-shadow:0 0 0 12px rgba(232,207,139,.1)}}
 
@@ -317,7 +313,6 @@
         <div class="env-flap"><img class="flap-face" src="assets/env_gen_top_flap_flat20_cropped_plus10.png" alt="" aria-hidden="true"><div class="seal"></div></div>
       </div>
       <div class="tap">Touchez le sceau pour ouvrir</div>
-      <div class="flash" aria-hidden="true"></div>
     </div>
   </div>
 
@@ -335,8 +330,25 @@
         </div>
       </section>
 
-      <!-- ACTE 2 — cérémonie civile -->
-      <section class="act info-act" data-i="1">
+      <!-- ACTE 2 — l'amaria + compte a rebours -->
+      <section class="act info-act amaria-act" data-i="1">
+        <div class="scrim"></div>
+        <div class="info reveal">
+          <div class="ornament"></div>
+          <p class="eyebrow">Le grand jour approche</p>
+          <div class="countdown reveal d1" id="countdown" role="timer" aria-live="polite">
+            <div class="lead">Plus que…</div>
+            <div class="cd-grid">
+              <div class="cd-cell"><b id="cd-d">—</b><span>Jours</span></div>
+              <div class="cd-cell"><b id="cd-h">—</b><span>Heures</span></div>
+              <div class="cd-cell"><b id="cd-m">—</b><span>Min</span></div>
+              <div class="cd-cell"><b id="cd-s">—</b><span>Sec</span></div>
+            </div>
+        </div>
+      </section>
+
+      <!-- ACTE 3 — cérémonie civile -->
+      <section class="act info-act" data-i="2">
         <div class="scrim"></div>
         <div class="info reveal">
           <div class="ornament"></div>
@@ -353,8 +365,8 @@
         </div>
       </section>
 
-      <!-- ACTE 3 — réception -->
-      <section class="act info-act" data-i="2">
+      <!-- ACTE 4 — réception -->
+      <section class="act info-act" data-i="3">
         <div class="scrim"></div>
         <div class="info reveal">
           <div class="ornament"></div>
@@ -372,23 +384,6 @@
               href="https://www.google.com/maps/search/?api=1&query=Le%20Palacio%20R%C3%A9ception%2015%20rue%20Camille%20Flammarion%2091630%20Avrainville">Itinéraire</a>
             <button class="btn solid" type="button" data-cal="palacio" aria-label="Telecharger l'evenement de la reception">Calendrier</button>
           </div>
-        </div>
-      </section>
-
-      <!-- ACTE 4 — l'amaria + compte a rebours -->
-      <section class="act info-act amaria-act" data-i="3">
-        <div class="scrim"></div>
-        <div class="info reveal">
-          <div class="ornament"></div>
-          <p class="eyebrow">Le grand jour approche</p>
-          <div class="countdown reveal d1" id="countdown" role="timer" aria-live="polite">
-            <div class="lead">Plus que…</div>
-            <div class="cd-grid">
-              <div class="cd-cell"><b id="cd-d">—</b><span>Jours</span></div>
-              <div class="cd-cell"><b id="cd-h">—</b><span>Heures</span></div>
-              <div class="cd-cell"><b id="cd-m">—</b><span>Min</span></div>
-              <div class="cd-cell"><b id="cd-s">—</b><span>Sec</span></div>
-            </div>
         </div>
       </section>
 
@@ -505,7 +500,7 @@
       const hf=Math.max(0,Math.min(1, 1-(sy-vh*0.18)/(vh*0.3)));
       driftEls.forEach(d=>d.style.opacity=hf.toFixed(3));
       // Mairie + Palacio : le bâtiment remonte d'en bas et apparaît avec la scène
-      [[mairieFg,1],[palacioFg,2]].forEach(([fg,i])=>{
+      [[mairieFg,2],[palacioFg,3]].forEach(([fg,i])=>{
         const d=(vc-centers[i])/(acts[i].offsetHeight||vh);
         fg.style.opacity=Math.max(0,1-Math.abs(d)*2.1).toFixed(3);
         const r=Math.max(-1,Math.min(1,d));
@@ -558,14 +553,14 @@
 
     /* ---- scrub amaria (frames de la video, chargees en differe) ---- */
     const AM_COUNT=24, AM_URL=i=>`amaria_frames/frame_${String(i+1).padStart(3,'0')}.webp`;
-    const amariaLayer=layers[3]; let amReady=false, amLast=-1; const amPre=[];
+    const amariaLayer=layers[1]; let amReady=false, amLast=-1; const amPre=[];
     setTimeout(()=>{ Promise.all(Array.from({length:AM_COUNT},(_,i)=>new Promise(res=>{
       const im=new Image(); im.onload=()=>res(im); im.onerror=()=>res(null); im.src=AM_URL(i); amPre.push(im);
     }))).then(list=>{ amReady=list.every(Boolean); }); },3500);
     function scrubAmaria(){
       if(!amReady) return;
       const vc=window.scrollY+vh/2;
-      const d=(vc-centers[3])/vh;               // -1 (arrive) .. 0 (centre) .. 1 (parti)
+      const d=(vc-centers[1])/vh;               // -1 (arrive) .. 0 (centre) .. 1 (parti)
       const pr=Math.max(0,Math.min(1,(d+0.75)/1.2));
       const idx=Math.round(pr*(AM_COUNT-1));
       if(idx!==amLast){ amLast=idx; amariaLayer.style.backgroundImage=`url("${AM_URL(idx)}")`; }
