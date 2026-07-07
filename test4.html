@@ -606,6 +606,22 @@
       if(idx!==amLast){ amLast=idx; amariaLayer.style.backgroundImage=`url("${AM_URL(idx)}")`; }
     }
     window.addEventListener('scroll',()=>requestAnimationFrame(scrubAmaria),{passive:true});
+
+    /* ---- scrub Paris (scene finale, frames chargees en differe) ---- */
+    const PARIS_COUNT=24, PARIS_URL=i=>`paris_frames/frame_${String(i+1).padStart(3,'0')}.webp`;
+    const parisLayer=layers[4]; let parisReady=false, parisLast=-1; const parisPre=[];
+    setTimeout(()=>{ Promise.all(Array.from({length:PARIS_COUNT},(_,i)=>new Promise(res=>{
+      const im=new Image(); im.onload=()=>res(im); im.onerror=()=>res(null); im.src=PARIS_URL(i); parisPre.push(im);
+    }))).then(list=>{ parisReady=list.every(Boolean); }); },4500);
+    function scrubParis(){
+      if(!parisReady) return;
+      const vc=window.scrollY+vh/2;
+      const d=(vc-centers[4])/vh;                 // -1 (arrive) .. 0 (centre) .. 1 (parti)
+      const pr=Math.max(0,Math.min(1,(d+0.75)/1.2));
+      const idx=Math.round(pr*(PARIS_COUNT-1));
+      if(idx!==parisLast){ parisLast=idx; parisLayer.style.backgroundImage=`url("${PARIS_URL(idx)}")`; }
+    }
+    window.addEventListener('scroll',()=>requestAnimationFrame(scrubParis),{passive:true});
     let ticking=false;
     function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(()=>{ update(); ticking=false; }); } }
     window.addEventListener('scroll',onScroll,{passive:true});
