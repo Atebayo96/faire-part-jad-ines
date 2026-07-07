@@ -289,10 +289,11 @@
     /* derniere scene (soir) : RSVP informatif + cloture, stylee, sans ornements ;
        texte remonte dans le ciel etoile pour ne pas chevaucher la skyline */
     /* scene finale coupee en 2 : question en haut, WhatsApp+merci+noms en bas, le nuage reste degage au milieu */
+    /* space-between place la question (haut) et la signature (bas) ; les notes sont posees juste sous le nuage, au-dessus de la Tour Eiffel */
     .final-act{align-content:space-between;padding-top:calc(12vh + env(safe-area-inset-top));padding-bottom:calc(11vh + env(safe-area-inset-bottom))}
     .final-act .note{font-size:14px}
-    .final-act .final-bottom{width:100%}
-    .final-act .closing{margin-top:22px}
+    .final-act .final-mid{position:absolute;left:0;right:0;top:42vh;margin-inline:auto;width:min(100%,420px);padding:0 22px}
+    .final-act .closing{margin-top:0}
     .final-act .closing p{font:500 clamp(20px,5.6vw,24px)/1.4 "Playfair",serif;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.6)}
     .final-act .closing .small{margin-top:8px;color:var(--gold-light);letter-spacing:.24em}
     /* countdown */
@@ -445,9 +446,11 @@
           <p class="eyebrow">Réponse souhaitée</p>
           <h2>Serez-vous des nôtres&nbsp;?</h2>
         </div>
-        <div class="info reveal final-bottom">
+        <div class="info reveal final-mid">
           <p class="note">Un mot sur WhatsApp suffit.</p>
           <p class="note">Merci de nous répondre avant le <strong>1<sup>er</sup> septembre 2026</strong>.</p>
+        </div>
+        <div class="info reveal final-bottom">
           <div class="closing">
             <p>Inès Hariat <span class="amp">&amp;</span> Jad Ghailan</p>
             <div class="small">17 octobre 2026</div>
