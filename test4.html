@@ -67,7 +67,10 @@
       -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 80%,transparent 100%);
       mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 80%,transparent 100%)}
     #mairieFg .mbld{background-image:url("assets/mairie_building.png")}
-    #palacioFg .pbld{background-image:url("assets/palacio_building.png")}
+    #palacioFg .pbld{background-image:url("assets/palacio_building.png");
+      /* coupe le bas du batiment (bassin/reflets dores/plantes) : fondu plus tot */
+      -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 15%,#000 60%,transparent 78%);
+      mask-image:linear-gradient(to bottom,transparent 0%,#000 15%,#000 60%,transparent 78%)}
     /* lanternes de la scène nuit, isolées de la peinture : flottent + remontent au scroll */
     .nightfliers{display:none}
     .nl{position:absolute;will-change:transform}
