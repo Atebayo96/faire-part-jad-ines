@@ -38,7 +38,7 @@
     .stage{z-index:0;background:var(--night)}
     .layer{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:0;transform:scale(1.05);will-change:opacity}
     .layer[data-i="0"]{background-image:url("hero_concepts/v3_bague_jade.png");opacity:1}
-    .layer[data-i="1"]{background-image:url("hero_concepts/v15_amaria_jade.png")}
+    .layer[data-i="1"]{background-image:url("hero_concepts/g6_grotte_a.png")}
     .layer[data-i="2"]{background-image:url("assets/mairie_sky.png")}
     .layer[data-i="3"]{background-image:url("assets/palacio_sky.png")}
     .layer[data-i="4"]{background-image:url("assets/05_nuit.png")}
@@ -330,7 +330,7 @@
         </div>
       </section>
 
-      <!-- ACTE 2 — l'amaria + compte a rebours -->
+      <!-- ACTE 2 — Tanger (Grotte d'Hercule) + compte a rebours -->
       <section class="act info-act amaria-act" data-i="1">
         <div class="scrim"></div>
         <div class="info reveal">
@@ -552,7 +552,7 @@
     window.addEventListener('scroll',()=>requestAnimationFrame(scrub),{passive:true});
 
     /* ---- scrub amaria (frames de la video, chargees en differe) ---- */
-    const AM_COUNT=24, AM_URL=i=>`amaria_frames/frame_${String(i+1).padStart(3,'0')}.webp`;
+    const AM_COUNT=24, AM_URL=i=>`grotte_frames/frame_${String(i+1).padStart(3,'0')}.webp`;
     const amariaLayer=layers[1]; let amReady=false, amLast=-1; const amPre=[];
     setTimeout(()=>{ Promise.all(Array.from({length:AM_COUNT},(_,i)=>new Promise(res=>{
       const im=new Image(); im.onload=()=>res(im); im.onerror=()=>res(null); im.src=AM_URL(i); amPre.push(im);
