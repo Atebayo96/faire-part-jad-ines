@@ -1,0 +1,13 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//JadInes//Faire-part//FR
+BEGIN:VEVENT
+UID:mairie-jadines-20261017@invitation.local
+DTSTAMP:20260711T120000Z
+DTSTART:20261017T120000Z
+DTEND:20261017T133000Z
+SUMMARY:Mariage Inès & Jad — Cérémonie civile
+LOCATION:Hôtel de Ville de Nanterre\, 1 place du 27 mars 2002\, 92000 Nanterre
+DESCRIPTION:Cérémonie civile du mariage d'Inès et Jad.
+END:VEVENT
+END:VCALENDAR
