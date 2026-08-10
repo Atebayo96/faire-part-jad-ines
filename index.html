@@ -26,7 +26,7 @@
       --tipshade:radial-gradient(46% 32% at 50% 50%,rgba(88,60,22,.22),rgba(88,60,22,.08) 55%,transparent 74%);
     }
     *{box-sizing:border-box}
-    html{background:#0b0f17;scroll-behavior:smooth}
+    html{background:#0b0f17}
     body{margin:0;font-family:"Amiri",Georgia,serif;color:var(--ink);background:#0b0f17;overflow-x:hidden;overscroll-behavior-y:none}
     button,input,textarea{font:inherit}
     button,a,input,textarea{touch-action:manipulation}
@@ -181,10 +181,8 @@
     .shell{position:relative;width:min(100%,var(--phone));margin:0 auto;z-index:2}
     .content{opacity:0;transition:opacity .45s ease}
     body.open .content{opacity:1}
-    /* scroll-snap : un swipe = une page, on atterrit toujours sur une scene pleine */
-    html{scroll-snap-type:y mandatory;scroll-padding:0}
-    body.open{scroll-snap-type:y mandatory}
-    .act{position:relative;min-height:100dvh;display:grid;justify-items:center;padding:96px 22px calc(96px + env(safe-area-inset-bottom));overflow:visible;scroll-snap-align:center;scroll-snap-stop:always}
+    /* defilement pilote en JS : un swipe = une scene entiere qui glisse et se cale (pas de snap natif) */
+    .act{position:relative;min-height:100dvh;display:grid;justify-items:center;padding:96px 22px calc(96px + env(safe-area-inset-bottom));overflow:visible}
     .act>*{position:relative;z-index:1}
     .eyebrow{margin:0 0 2px;font:400 28px/1 "Script",cursive;letter-spacing:.01em;text-transform:none;color:var(--gold-light)}
     /* Mairie : texte posé dans le CIEL CLAIR (haut), pas sur le batiment en verre sombre */
@@ -660,10 +658,61 @@
     makeSkyScrub(2,'mairie_frames',5500);
     makeSkyScrub(3,'palacio_frames',6500);
     let ticking=false;
-    function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(()=>{ update(); ticking=false; }); } }
+    function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(()=>{ update(); if(!paging) page=nearestPage(); ticking=false; }); } }
     window.addEventListener('scroll',onScroll,{passive:true});
-    window.addEventListener('resize',()=>{ measure(); update(); });
+    window.addEventListener('resize',()=>{ measure(); update(); if(document.body.classList.contains('open')&&!paging) window.scrollTo(0,pageTop(page)); });
     measure();
+
+    /* ---- pagination : un swipe (ou un cran de molette) = la scene suivante qui glisse
+       en douceur jusqu'a se caler pile en plein ecran ---- */
+    let page=0, paging=false;
+    const PAGE_DUR=900;                      // duree du glissement (ms) : calme, sans etre lent
+    const easePage=t=>1-Math.pow(1-t,3);     // demarre franc, se pose en douceur
+    function pageTop(i){ const a=acts[i]; return Math.max(0,Math.round(a.offsetTop+a.offsetHeight/2-vh/2)); }
+    function nearestPage(){ const vc=window.scrollY+vh/2; let best=0,bd=Infinity; centers.forEach((c,i)=>{ const d=Math.abs(c-vc); if(d<bd){ bd=d; best=i; } }); return best; }
+    function goTo(i){
+      i=Math.max(0,Math.min(acts.length-1,i));
+      const from=window.scrollY, to=pageTop(i);
+      page=i;
+      if(Math.abs(to-from)<2) return;
+      paging=true;
+      const t0=performance.now();
+      (function step(now){
+        const p=Math.min(1,(now-t0)/PAGE_DUR);
+        window.scrollTo(0,from+(to-from)*easePage(p));
+        if(p<1) requestAnimationFrame(step);
+        else paging=false;
+      })(t0);
+    }
+    // tactile : le scroll natif est bloque, c'est le relacher du swipe qui declenche le glissement
+    let touchY=null, touchX=null;
+    document.addEventListener('touchstart',e=>{ touchY=e.touches[0].clientY; touchX=e.touches[0].clientX; },{passive:true});
+    document.addEventListener('touchmove',e=>{ if(document.body.classList.contains('open')) e.preventDefault(); },{passive:false});
+    document.addEventListener('touchend',e=>{
+      if(!document.body.classList.contains('open')||paging||touchY===null) return;
+      const dy=touchY-e.changedTouches[0].clientY, dx=touchX-e.changedTouches[0].clientX;
+      touchY=touchX=null;
+      if(Math.abs(dy)<32||Math.abs(dy)<Math.abs(dx)) return;   // tap ou geste horizontal : on ne bouge pas
+      goTo(page+(dy>0?1:-1));
+    },{passive:true});
+    // molette / trackpad
+    let wheelCooldown=0;
+    window.addEventListener('wheel',e=>{
+      if(!document.body.classList.contains('open')) return;
+      e.preventDefault();
+      const now=performance.now();
+      if(paging||now<wheelCooldown||Math.abs(e.deltaY)<10) return;
+      wheelCooldown=now+450;
+      goTo(page+(e.deltaY>0?1:-1));
+    },{passive:false});
+    // clavier
+    window.addEventListener('keydown',e=>{
+      if(!document.body.classList.contains('open')||paging) return;
+      if(['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); goTo(page+1); }
+      else if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); goTo(page-1); }
+      else if(e.key==='Home'){ e.preventDefault(); goTo(0); }
+      else if(e.key==='End'){ e.preventDefault(); goTo(acts.length-1); }
+    });
 
     const TARGET=new Date('2026-10-17T14:00:00+02:00').getTime();
     const pad=n=>String(n).padStart(2,'0');
