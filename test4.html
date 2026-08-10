@@ -181,10 +181,10 @@
     .shell{position:relative;width:min(100%,var(--phone));margin:0 auto;z-index:2}
     .content{opacity:0;transition:opacity .45s ease}
     body.open .content{opacity:1}
-    /* scroll-snap : chaque scene se cale bien centree quand on arrete de scroller */
-    html{scroll-snap-type:y proximity;scroll-padding:0}
-    body.open{scroll-snap-type:y proximity}
-    .act{position:relative;min-height:100dvh;display:grid;justify-items:center;padding:96px 22px calc(96px + env(safe-area-inset-bottom));overflow:visible;scroll-snap-align:center;scroll-snap-stop:normal}
+    /* scroll-snap : un swipe = une page, on atterrit toujours sur une scene pleine */
+    html{scroll-snap-type:y mandatory;scroll-padding:0}
+    body.open{scroll-snap-type:y mandatory}
+    .act{position:relative;min-height:100dvh;display:grid;justify-items:center;padding:96px 22px calc(96px + env(safe-area-inset-bottom));overflow:visible;scroll-snap-align:center;scroll-snap-stop:always}
     .act>*{position:relative;z-index:1}
     .eyebrow{margin:0 0 2px;font:400 28px/1 "Script",cursive;letter-spacing:.01em;text-transform:none;color:var(--gold-light)}
     /* Mairie : texte posé dans le CIEL CLAIR (haut), pas sur le batiment en verre sombre */
@@ -457,7 +457,7 @@
         </div>
         <div class="info reveal final-mid">
           <p class="note">Un mot sur WhatsApp suffit.</p>
-          <p class="note">Merci de nous répondre avant le <strong>1<sup>er</sup> septembre 2026</strong>.</p>
+          <p class="note">Merci de nous répondre.</p>
         </div>
         <div class="info reveal final-bottom">
           <div class="closing">
