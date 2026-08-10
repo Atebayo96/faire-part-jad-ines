@@ -517,6 +517,14 @@
       else { musicWanted=false; bgm.pause(); syncSoundState(); }
     });
     syncSoundState();
+    // telephone verrouille / appli quittee / autre onglet : on coupe la musique,
+    // et on la relance au retour si l'utilisateur ne l'avait pas coupee lui-meme
+    function pauseInBackground(){ if(!bgm.paused) bgm.pause(); syncSoundState(); }
+    document.addEventListener('visibilitychange',()=>{
+      if(document.hidden) pauseInBackground();
+      else if(musicWanted&&opened){ bgm.play().then(syncSoundState).catch(syncSoundState); }
+    });
+    window.addEventListener('pagehide',pauseInBackground);
 
     let opened=false;
     // Ouverture en UNE arche continue : le rabat s'entrouvre et la lumiere bloomit ENSEMBLE ;
