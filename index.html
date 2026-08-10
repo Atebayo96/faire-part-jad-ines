@@ -296,7 +296,8 @@
     /* space-between place la question (haut) et la signature (bas) ; les notes sont posees juste sous le nuage, au-dessus de la Tour Eiffel */
     /* titre seul au centre de l'ecran, « des notres » en dore ; prenoms + date ancres en bas */
     .final-act{align-content:center}
-    .final-act h2 .hl{color:var(--gold-light)}
+    /* « des notres ? » en calligraphie doree (la script est optiquement petite : on la grossit un peu) */
+    .final-act h2 .hl{font-family:"Script",cursive;font-weight:400;font-size:1.22em;line-height:1;color:var(--gold-light)}
     .final-act .final-bottom{position:absolute;left:0;right:0;bottom:calc(9vh + env(safe-area-inset-bottom))}
     .final-act .closing{margin-top:0}
     .final-act .closing p{font:500 clamp(20px,5.6vw,24px)/1.4 "Playfair",serif;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.6)}
@@ -451,7 +452,7 @@
       <section class="act info-act final-act" data-i="4">
         <div class="scrim"></div>
         <div class="info reveal final-top">
-          <h2>Serez-vous <span class="hl">des nôtres</span>&nbsp;?</h2>
+          <h2>Serez-vous <span class="hl">des nôtres&nbsp;?</span></h2>
         </div>
         <div class="info reveal final-bottom">
           <div class="closing">
