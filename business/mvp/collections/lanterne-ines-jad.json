@@ -1,0 +1,100 @@
+{
+  "_note": "Config de reference : le faire-part d'Ines & Jad (../../index.html + en.html) exprime dans le schema. Objectif de non-regression du template : ce JSON doit regenerer exactement le rendu actuel.",
+  "slug": "ines-et-jad",
+  "plan": "couture",
+  "collection": "lanterne",
+  "season": "automne",
+  "mood": "crepuscule",
+  "locales": ["fr", "en"],
+  "theme": {
+    "palette": {
+      "--ink": "#1a1511", "--muted": "#6f5f48", "--ivory": "#f4ecd8", "--ivory-soft": "#fffaf0",
+      "--gold": "#b8975a", "--gold-light": "#e8cf8b", "--bronze": "#8c6f47",
+      "--jade": "#24483d", "--sage": "#7f8b70", "--night": "#0f1a2e"
+    },
+    "fonts": "greatvibes-playfair",
+    "particles": "lanternes"
+  },
+  "envelope": {
+    "paper": "ivoire",
+    "sealStyle": "cire",
+    "monogram": "IJ",
+    "tapHint": { "fr": "Touchez le sceau pour ouvrir", "en": "Tap the seal to open" }
+  },
+  "identity": {
+    "partnerA": { "firstName": "Inès", "lastName": "Hariat" },
+    "partnerB": { "firstName": "Jad", "lastName": "Ghailan" },
+    "date": "2026-10-17",
+    "timezone": "Europe/Paris",
+    "countdownTarget": "2026-10-17T14:00:00+02:00",
+    "invitationText": {
+      "fr": "Ont la joie de vous convier à leur mariage qui sera célébré le",
+      "en": "Joyfully invite you to celebrate their wedding on"
+    },
+    "blessing": { "kind": "basmala", "text": "﷽", "lang": "ar" },
+    "closingQuestion": { "fr": "Serez-vous des nôtres ?", "en": "Will you join us?" }
+  },
+  "scenes": [
+    {
+      "id": "hero", "kind": "hero", "source": "sur-mesure",
+      "background": { "frames": { "prefix": "hero_frames_mir/frame_", "count": 24 } },
+      "blocks": ["names", "date"]
+    },
+    {
+      "id": "grotte", "kind": "city", "source": "sur-mesure",
+      "_lieu": "Tanger, Grotte d'Hercule",
+      "background": { "frames": { "prefix": "grotte_frames/frame_", "count": 24 } },
+      "text": { "eyebrow": { "fr": "Le grand jour approche", "en": "The big day is coming" }, "scrim": "clair" },
+      "blocks": ["countdown"]
+    },
+    {
+      "id": "mairie", "kind": "building", "source": "sur-mesure", "libraryRef": "idf/nanterre-hotel-de-ville",
+      "background": { "sky": "assets/mairie_sky.png", "frames": { "prefix": "mairie_frames/frame_", "count": 24 } },
+      "foreground": { "image": "assets/mairie_building.png", "rise": true },
+      "text": { "accentColor": "#5a3f1c", "scrim": "clair" },
+      "blocks": ["event"], "eventRef": "mairie"
+    },
+    {
+      "id": "palacio", "kind": "building", "source": "sur-mesure", "libraryRef": "idf/avrainville-le-palacio",
+      "background": { "sky": "assets/palacio_sky.png", "skyNight": "assets/palacio_sky_starry.png", "frames": { "prefix": "palacio_frames/frame_", "count": 24 } },
+      "foreground": { "image": "assets/palacio_building.png", "rise": true },
+      "text": { "scrim": "sombre" },
+      "blocks": ["event"], "eventRef": "palacio"
+    },
+    {
+      "id": "paris", "kind": "closing", "source": "sur-mesure",
+      "_attention": "Paris de nuit : eclairage de la Tour Eiffel protege -> ne pas reutiliser en catalogue (doc 08)",
+      "background": { "frames": { "prefix": "paris_frames/frame_", "count": 24 } },
+      "blocks": ["closing"]
+    }
+  ],
+  "events": [
+    {
+      "id": "mairie", "type": "mairie",
+      "label": { "fr": "Cérémonie civile", "en": "Civil Ceremony" },
+      "startsAt": "2026-10-17T14:00:00+02:00", "endsAt": "2026-10-17T15:30:00+02:00",
+      "showTime": { "fr": "À 14h00", "en": "At 2:00 PM" },
+      "venue": { "name": "Hôtel de Ville de Nanterre", "address": "1 place du 27 mars 2002, 92000 Nanterre" }
+    },
+    {
+      "id": "palacio", "type": "reception",
+      "label": { "fr": "Réception", "en": "Reception" },
+      "startsAt": "2026-10-17T19:00:00+02:00", "endsAt": "2026-10-18T03:00:00+02:00",
+      "showTime": { "fr": "Dès 19h", "en": "From 7 PM" },
+      "description": {
+        "fr": "Cocktail de bienvenue, suivi du dîner et de la soirée",
+        "en": "Welcome cocktail, followed by dinner and an evening of celebration"
+      },
+      "venue": { "name": "Le Palacio Réception", "address": "15 rue Camille Flammarion, 91630 Avrainville" }
+    }
+  ],
+  "rsvp": { "mode": "informatif", "deadline": null },
+  "music": { "trackId": "A-REMPLACER-licence-commerciale", "autoplayOnOpen": true, "volume": 0.8 },
+  "share": {
+    "ogTitle": { "fr": "Inès & Jad — 17 octobre 2026", "en": "Inès & Jad — October 17, 2026" },
+    "ogDescription": { "fr": "Vous êtes invités — ouvrez notre faire-part", "en": "You are invited — open our wedding invitation" },
+    "ogImage": "assets/og_preview.jpg",
+    "customDomain": null,
+    "poweredBy": "masque"
+  }
+}

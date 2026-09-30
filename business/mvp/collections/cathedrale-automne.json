@@ -1,0 +1,42 @@
+{
+  "_note": "DEMO fictive - collection Cathedrale, saison automne. Scenes 'collection' = generiques pre-produites, sauf l'eglise (bibliotheque ou sur-mesure).",
+  "slug": "demo-claire-et-thomas",
+  "plan": "signature",
+  "collection": "cathedrale",
+  "season": "automne",
+  "mood": "jour",
+  "locales": ["fr"],
+  "theme": {
+    "palette": { "--ink": "#2a1e17", "--ivory": "#f6efe3", "--gold": "#a8834a", "--gold-light": "#e6cfa0", "--accent": "#7a2632" },
+    "fonts": "cormorant-calligraphie",
+    "particles": "feuilles"
+  },
+  "envelope": { "paper": "ivoire", "sealStyle": "cire", "sealColor": "#7a2632", "monogram": "CT", "tapHint": "Touchez le sceau pour ouvrir" },
+  "identity": {
+    "partnerA": { "firstName": "Claire" },
+    "partnerB": { "firstName": "Thomas" },
+    "date": "2027-09-25",
+    "timezone": "Europe/Paris",
+    "hosts": "Monsieur et Madame Dumont, Monsieur et Madame Lefèvre ont la joie de vous faire part du mariage de leurs enfants",
+    "invitationText": "et vous prient d'assister à la messe de mariage qui sera célébrée le",
+    "blessing": { "kind": "citation", "text": "« L'amour prend patience, l'amour rend service. » — 1 Co 13" },
+    "closingQuestion": "Serez-vous des nôtres ?"
+  },
+  "scenes": [
+    { "id": "hero", "kind": "hero", "source": "collection", "background": { "frames": { "prefix": "lib/cathedrale/automne/vitraux/frame_" } }, "blocks": ["names", "date"] },
+    { "id": "eglise", "kind": "building", "source": "sur-mesure", "background": { "sky": "lib/ciels/automne-brume.avif", "frames": { "prefix": "clients/demo-ct/eglise/frame_" } }, "foreground": { "image": "clients/demo-ct/eglise.avif" }, "blocks": ["event"], "eventRef": "messe" },
+    { "id": "jardin", "kind": "custom", "source": "collection", "background": { "frames": { "prefix": "lib/cathedrale/automne/jardin-vigne/frame_" } }, "blocks": ["event"], "eventRef": "vin" },
+    { "id": "domaine", "kind": "building", "source": "bibliotheque", "libraryRef": "bourgogne/domaine-exemple", "background": { "skyNight": "lib/ciels/automne-nuit.avif" }, "blocks": ["event", "countdown"], "eventRef": "diner" },
+    { "id": "fin", "kind": "closing", "source": "collection", "background": { "frames": { "prefix": "lib/cathedrale/automne/cloches/frame_" } }, "blocks": ["rsvp", "closing"] }
+  ],
+  "events": [
+    { "id": "messe", "type": "eglise", "label": "Messe de mariage", "startsAt": "2027-09-25T15:00:00+02:00", "showTime": "À 15h", "venue": { "name": "Église Saint-Exemple", "address": "Place de l'Église, 21200 Beaune" } },
+    { "id": "vin", "type": "vin-honneur", "label": "Vin d'honneur", "startsAt": "2027-09-25T16:30:00+02:00", "showTime": "Dès 16h30", "venue": { "name": "Jardins du Domaine", "address": "Route des Vignes, 21200 Beaune" } },
+    { "id": "diner", "type": "reception", "label": "Dîner et soirée", "startsAt": "2027-09-25T19:30:00+02:00", "showTime": "Dès 19h30", "dressCode": "Tenue de cocktail, tons d'automne bienvenus", "venue": { "name": "Domaine Exemple", "address": "Route des Vignes, 21200 Beaune" }, "groups": ["famille", "amis"] }
+  ],
+  "rsvp": { "mode": "formulaire", "deadline": "2027-07-15", "perEvent": true, "askChildren": true, "askDiet": true, "askMessage": true },
+  "guests": { "groups": [ { "id": "famille", "name": "Famille" }, { "id": "amis", "name": "Amis" }, { "id": "paroisse", "name": "Messe et vin d'honneur" } ], "personalizedLinks": true },
+  "practical": { "lodging": "Chambres réservées à l'Hôtel du Centre : code DUMONT-LEFEVRE", "parking": "Parking du domaine", "registryUrl": "https://example.com/liste" },
+  "music": { "trackId": "lib/cordes-pachelbel-arr" },
+  "share": { "ogTitle": "Claire & Thomas — 25 septembre 2027", "ogDescription": "Vous êtes invités — ouvrez notre faire-part", "poweredBy": "discret" }
+}

@@ -1,0 +1,36 @@
+{
+  "_note": "DEMO fictive - collection Hotel de Ville, printemps. Formule Essentiel : mairie issue de la bibliotheque (+19 EUR), 2 evenements.",
+  "slug": "demo-lea-et-sofiane",
+  "plan": "essentiel",
+  "collection": "hotel-de-ville",
+  "season": "printemps",
+  "mood": "jour",
+  "locales": ["fr"],
+  "theme": {
+    "palette": { "--ink": "#1b1b1f", "--ivory": "#fbf7f2", "--gold": "#c2536b", "--gold-light": "#f2b8c6", "--accent": "#2b4c7e" },
+    "fonts": "playfair-mono",
+    "particles": "confettis"
+  },
+  "envelope": { "paper": "ivoire", "sealStyle": "cire", "sealColor": "#c2536b", "monogram": "LS" },
+  "identity": {
+    "partnerA": { "firstName": "Léa" },
+    "partnerB": { "firstName": "Sofiane" },
+    "date": "2027-05-22",
+    "timezone": "Europe/Paris",
+    "invitationText": "Nous nous disons oui ! Rendez-vous le",
+    "closingQuestion": "On compte sur vous ?"
+  },
+  "scenes": [
+    { "id": "hero", "kind": "hero", "source": "collection", "background": { "frames": { "prefix": "lib/hotel-de-ville/printemps/une-journal/frame_" } }, "blocks": ["names", "date", "countdown"] },
+    { "id": "mairie", "kind": "building", "source": "bibliotheque", "libraryRef": "paris/mairie-11e", "blocks": ["event"], "eventRef": "mairie" },
+    { "id": "bistrot", "kind": "custom", "source": "collection", "background": { "frames": { "prefix": "lib/hotel-de-ville/printemps/terrasse/frame_" } }, "blocks": ["event"], "eventRef": "diner" },
+    { "id": "fin", "kind": "closing", "source": "collection", "background": { "frames": { "prefix": "lib/hotel-de-ville/printemps/toits/frame_" } }, "blocks": ["rsvp", "closing"] }
+  ],
+  "events": [
+    { "id": "mairie", "type": "mairie", "label": "Cérémonie civile", "startsAt": "2027-05-22T11:00:00+02:00", "showTime": "À 11h", "venue": { "name": "Mairie du 11e", "address": "12 place Léon Blum, 75011 Paris" } },
+    { "id": "diner", "type": "reception", "label": "Déjeuner et fête", "startsAt": "2027-05-22T13:00:00+02:00", "showTime": "Dès 13h", "venue": { "name": "Bistrot Exemple", "address": "Rue Exemple, 75011 Paris" } }
+  ],
+  "rsvp": { "mode": "formulaire", "deadline": "2027-04-30", "perEvent": true, "askChildren": false, "askDiet": false, "askMessage": true },
+  "music": { "trackId": "lib/swing-manouche-01" },
+  "share": { "ogTitle": "Léa & Sofiane — 22 mai 2027", "ogDescription": "On se marie ! Ouvrez le faire-part", "poweredBy": "visible" }
+}

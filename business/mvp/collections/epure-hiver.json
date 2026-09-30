@@ -1,0 +1,32 @@
+{
+  "_note": "DEMO fictive - collection Epure, hiver. 100% self-service, aucune scene peinte : 1 animation d'encre + typographie. Utilisable aussi pour PACS / fiancailles / save-the-date.",
+  "slug": "demo-sarah-et-yanis",
+  "plan": "essentiel",
+  "collection": "epure",
+  "season": "hiver",
+  "mood": "jour",
+  "locales": ["fr"],
+  "theme": {
+    "palette": { "--ink": "#1d2433", "--ivory": "#f5f6f8", "--gold": "#8a95a8", "--gold-light": "#cfd6e2", "--accent": "#6b1f2e" },
+    "fonts": "serif-sobre",
+    "particles": "neige"
+  },
+  "envelope": { "paper": "marbre", "sealStyle": "simple", "sealColor": "#8a95a8", "monogram": "SY" },
+  "identity": {
+    "partnerA": { "firstName": "Sarah" },
+    "partnerB": { "firstName": "Yanis" },
+    "date": "2027-12-11",
+    "timezone": "Europe/Paris",
+    "invitationText": "Save the date",
+    "closingQuestion": "Faire-part à suivre"
+  },
+  "scenes": [
+    { "id": "hero", "kind": "hero", "source": "collection", "background": { "frames": { "prefix": "lib/epure/hiver/encre/frame_" } }, "blocks": ["names", "date", "countdown", "event", "closing"], "eventRef": "mariage" }
+  ],
+  "events": [
+    { "id": "mariage", "type": "reception", "label": "Mariage", "startsAt": "2027-12-11T15:00:00+01:00", "showTime": "Samedi 11 décembre 2027", "venue": { "name": "Lyon", "address": "Lyon, France" } }
+  ],
+  "rsvp": { "mode": "aucun" },
+  "music": { "trackId": "lib/cordes-clochettes-01", "autoplayOnOpen": false },
+  "share": { "ogTitle": "Sarah & Yanis — Save the date", "ogDescription": "11.12.2027 — gardez la date", "poweredBy": "visible" }
+}

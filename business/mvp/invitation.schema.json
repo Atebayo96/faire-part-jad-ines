@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sceau.fr/schema/invitation.json",
+  "title": "Invitation Sceau",
+  "description": "Configuration complete d'un faire-part. Le meme template (moteur issu de index.html) rend n'importe quelle config valide.",
+  "type": "object",
+  "required": ["slug", "plan", "collection", "season", "mood", "locales", "identity", "events", "scenes"],
+  "properties": {
+    "slug": { "type": "string", "pattern": "^[a-z0-9-]{3,48}$", "description": "URL: sceau.fr/<slug>" },
+    "plan": { "enum": ["essentiel", "signature", "couture"] },
+    "collection": { "enum": ["lanterne", "cathedrale", "hotel-de-ville", "intime", "epure"] },
+    "season": { "enum": ["printemps", "ete", "automne", "hiver"] },
+    "mood": { "enum": ["jour", "crepuscule", "nuit"] },
+    "locales": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "enum": ["fr", "en", "ar", "es", "pt", "it", "nl"] },
+      "description": "La premiere langue est la langue par defaut. 'ar' active le sens RTL."
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "palette": {
+          "type": "object",
+          "description": "Surcharge des variables CSS (--ink, --ivory, --gold, --gold-light, --bronze, --accent, --night...)",
+          "additionalProperties": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+        },
+        "fonts": { "enum": ["greatvibes-playfair", "cormorant-calligraphie", "playfair-mono", "manuscrite-lora", "serif-sobre"] },
+        "particles": { "enum": ["lanternes", "etoiles", "petales", "lucioles", "feuilles", "neige", "confettis", "bougies", "aucune"] }
+      }
+    },
+    "envelope": {
+      "type": "object",
+      "properties": {
+        "paper": { "enum": ["ivoire", "kraft", "velours", "marbre"] },
+        "sealStyle": { "enum": ["cire", "ficelle", "simple"] },
+        "sealColor": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "monogram": { "type": "string", "maxLength": 5, "description": "ex. 'IJ' -> seal_ij_cut.png" },
+        "tapHint": { "$ref": "#/$defs/i18n" }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "required": ["partnerA", "partnerB", "date", "timezone"],
+      "properties": {
+        "partnerA": { "type": "object", "required": ["firstName"], "properties": { "firstName": { "type": "string" }, "lastName": { "type": "string" } } },
+        "partnerB": { "type": "object", "required": ["firstName"], "properties": { "firstName": { "type": "string" }, "lastName": { "type": "string" } } },
+        "date": { "type": "string", "format": "date" },
+        "timezone": { "type": "string", "default": "Europe/Paris" },
+        "countdownTarget": { "type": "string", "format": "date-time", "description": "Par defaut: debut du premier evenement" },
+        "invitationText": { "$ref": "#/$defs/i18n" },
+        "hosts": { "$ref": "#/$defs/i18n", "description": "Optionnel: 'Monsieur et Madame X...' si les parents invitent" },
+        "blessing": {
+          "type": "object",
+          "properties": {
+            "kind": { "enum": ["basmala", "verset", "citation", "aucune"] },
+            "text": { "type": "string" },
+            "lang": { "type": "string" }
+          }
+        },
+        "closingQuestion": { "$ref": "#/$defs/i18n", "description": "ex. 'Serez-vous des notres ?'" }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordre d'affichage. Chaque scene = un 'acte' plein ecran (section.act).",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind"],
+        "if": { "properties": { "source": { "const": "bibliotheque" } }, "required": ["source"] },
+        "then": { "required": ["libraryRef"] },
+        "else": { "required": ["background"] },
+        "properties": {
+          "id": { "type": "string" },
+          "kind": { "enum": ["hero", "city", "building", "custom", "closing"] },
+          "source": { "enum": ["collection", "bibliotheque", "sur-mesure"], "description": "sur-mesure = lieu peint d'apres photo (option payante hors Couture)" },
+          "libraryRef": { "type": "string", "description": "id de scene dans la bibliotheque, ex. 'idf/nanterre-hotel-de-ville'" },
+          "background": {
+            "type": "object",
+            "properties": {
+              "still": { "type": "string" },
+              "frames": { "type": "object", "properties": { "prefix": { "type": "string" }, "count": { "type": "integer", "default": 24 } } },
+              "sky": { "type": "string" },
+              "skyNight": { "type": "string" }
+            }
+          },
+          "foreground": { "type": "object", "properties": { "image": { "type": "string" }, "rise": { "type": "boolean", "default": true } } },
+          "text": {
+            "type": "object",
+            "properties": {
+              "eyebrow": { "$ref": "#/$defs/i18n" },
+              "title": { "$ref": "#/$defs/i18n" },
+              "accentColor": { "type": "string" },
+              "scrim": { "enum": ["clair", "sombre", "aucun"] }
+            }
+          },
+          "blocks": { "type": "array", "items": { "enum": ["names", "date", "countdown", "event", "rsvp", "closing", "practical"] } },
+          "eventRef": { "type": "string", "description": "id d'un evenement si blocks contient 'event'" }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "startsAt", "venue"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "enum": ["henne", "mairie", "eglise", "nikah", "houppa", "laique", "vin-honneur", "reception", "soiree", "brunch"] },
+          "label": { "$ref": "#/$defs/i18n" },
+          "startsAt": { "type": "string", "format": "date-time", "description": "ISO avec fuseau. Le lien calendrier est genere." },
+          "endsAt": { "type": "string", "format": "date-time" },
+          "showTime": { "$ref": "#/$defs/i18n", "description": "Libelle affiche, ex. 'Des 19h'" },
+          "description": { "$ref": "#/$defs/i18n" },
+          "venue": {
+            "type": "object",
+            "required": ["name", "address"],
+            "properties": { "name": { "type": "string" }, "address": { "type": "string" }, "lat": { "type": "number" }, "lng": { "type": "number" } }
+          },
+          "dressCode": { "$ref": "#/$defs/i18n" },
+          "groups": { "type": "array", "items": { "type": "string" }, "description": "Vide = visible par tous" }
+        }
+      }
+    },
+    "rsvp": {
+      "type": "object",
+      "properties": {
+        "mode": { "enum": ["formulaire", "informatif", "aucun"], "description": "informatif = reponse directe au couple (ex. WhatsApp), comme le faire-part d'Ines & Jad" },
+        "deadline": { "type": ["string", "null"], "format": "date" },
+        "perEvent": { "type": "boolean", "default": true },
+        "askChildren": { "type": "boolean" },
+        "askDiet": { "type": "boolean", "default": false, "description": "Donnee potentiellement sensible (RGPD art. 9): consentement explicite + purge auto" },
+        "askMessage": { "type": "boolean", "default": true },
+        "contactWhatsapp": { "type": "string" }
+      }
+    },
+    "guests": {
+      "type": "object",
+      "description": "Signature+ : liens personnalises ?g=<token>",
+      "properties": {
+        "groups": { "type": "array", "items": { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } } },
+        "personalizedLinks": { "type": "boolean" }
+      }
+    },
+    "practical": {
+      "type": "object",
+      "properties": {
+        "lodging": { "$ref": "#/$defs/i18n" },
+        "parking": { "$ref": "#/$defs/i18n" },
+        "registryUrl": { "type": "string", "format": "uri" },
+        "faq": { "type": "array", "items": { "type": "object", "properties": { "q": { "$ref": "#/$defs/i18n" }, "a": { "$ref": "#/$defs/i18n" } } } }
+      }
+    },
+    "music": {
+      "type": "object",
+      "properties": {
+        "trackId": { "type": "string", "description": "id bibliotheque libre de droits (licence commerciale verifiee)" },
+        "autoplayOnOpen": { "type": "boolean", "default": true },
+        "volume": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.8 }
+      }
+    },
+    "share": {
+      "type": "object",
+      "properties": {
+        "ogTitle": { "$ref": "#/$defs/i18n" },
+        "ogDescription": { "$ref": "#/$defs/i18n" },
+        "ogImage": { "type": "string" },
+        "customDomain": { "type": ["string", "null"] },
+        "poweredBy": { "enum": ["visible", "discret", "masque"] }
+      }
+    }
+  },
+  "$defs": {
+    "i18n": {
+      "description": "Texte simple (langue par defaut) ou objet { fr, en, ar, ... }",
+      "oneOf": [
+        { "type": "string" },
+        { "type": "object", "additionalProperties": { "type": "string" } }
+      ]
+    }
+  }
+}

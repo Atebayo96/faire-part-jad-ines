@@ -1,0 +1,36 @@
+{
+  "_note": "DEMO fictive - collection Intime, ete, ambiance crepuscule. Petit comite, liens personnels par invite avec message individuel.",
+  "slug": "demo-marc-et-julien",
+  "plan": "signature",
+  "collection": "intime",
+  "season": "ete",
+  "mood": "crepuscule",
+  "locales": ["fr", "en"],
+  "theme": {
+    "palette": { "--ink": "#2b2420", "--ivory": "#f3ebdf", "--gold": "#b5773f", "--gold-light": "#f0c78e", "--accent": "#51613f" },
+    "fonts": "manuscrite-lora",
+    "particles": "lucioles"
+  },
+  "envelope": { "paper": "kraft", "sealStyle": "ficelle", "monogram": "MJ" },
+  "identity": {
+    "partnerA": { "firstName": "Marc" },
+    "partnerB": { "firstName": "Julien" },
+    "date": "2027-07-10",
+    "timezone": "Europe/Paris",
+    "invitationText": { "fr": "Quelques amis, une longue table, et nous deux. Le", "en": "A few friends, a long table, and the two of us. On" },
+    "closingQuestion": { "fr": "Une place vous attend à table.", "en": "A seat is waiting for you." }
+  },
+  "scenes": [
+    { "id": "hero", "kind": "hero", "source": "collection", "background": { "frames": { "prefix": "lib/intime/ete/ecriture/frame_" } }, "blocks": ["names", "date"] },
+    { "id": "maison", "kind": "building", "source": "sur-mesure", "background": { "frames": { "prefix": "clients/demo-mj/maison/frame_" } }, "blocks": ["event"], "eventRef": "diner" },
+    { "id": "table", "kind": "closing", "source": "collection", "background": { "frames": { "prefix": "lib/intime/ete/table-bougies/frame_" } }, "blocks": ["rsvp", "closing"] }
+  ],
+  "events": [
+    { "id": "diner", "type": "reception", "label": { "fr": "Dîner sous les oliviers", "en": "Dinner under the olive trees" }, "startsAt": "2027-07-10T19:00:00+02:00", "showTime": { "fr": "Dès 19h", "en": "From 7 PM" }, "dressCode": { "fr": "Lin et sandales", "en": "Linen and sandals" }, "venue": { "name": "La maison de famille", "address": "Chemin Exemple, 84220 Gordes" } }
+  ],
+  "rsvp": { "mode": "formulaire", "deadline": "2027-06-01", "perEvent": false, "askDiet": true, "askMessage": true },
+  "guests": { "groups": [ { "id": "tous", "name": "Tous" } ], "personalizedLinks": true },
+  "practical": { "lodging": { "fr": "Chambres d'hôtes au village, liste envoyée sur demande", "en": "B&Bs in the village, list on request" } },
+  "music": { "trackId": "lib/piano-solo-03" },
+  "share": { "ogTitle": "Marc & Julien — 10 juillet 2027", "ogDescription": { "fr": "Une invitation rien que pour vous", "en": "An invitation just for you" }, "poweredBy": "discret" }
+}
