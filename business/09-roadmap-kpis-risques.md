@@ -30,7 +30,7 @@
 | Période | Jalon |
 |---|---|
 | T4 2026 | MVP concierge, 3 collections, 20 à 40 clients, 300 inscrits |
-| T1 2027 | Plateforme (RSVP, tableau de bord, liens par invité), 5 collections × 2 saisons, 30 salles partenaires, pic des ventes |
+| T1 2027 | Plateforme (RSVP, tableau de bord, liens par invité), 6 modèles × 2 saisons, 30 salles partenaires, pic des ventes |
 | T2 2027 | Configurateur en libre-service (Essentiel automatique), 4 saisons, anglais et arabe |
 | T3 2027 | Remerciements et galerie, Belgique, Suisse et Maroc (en français), nouvelles collections en creux de saison |
 | T4 2027 | Autres événements (naissance, baptême, fiançailles, bar/bat-mitsva), offre pro pour les salles |

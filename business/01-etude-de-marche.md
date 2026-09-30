@@ -64,12 +64,16 @@ Les mariages ont lieu surtout **de mai à septembre**, avec un pic en juin et ju
 | **Sites de mariage gratuits** | Joy (withjoy), Zola, Mariages.net, Zankyou | Gratuit | RSVP, liste de mariage | Rendu « site web », pas d'émotion, pas d'ouverture. Pensés pour les États-Unis |
 | **Modèles Etsy et Instagram** | Vendeurs Etsy, créateurs « faire-part animé » | 10 à 50 € | Pas cher | Vidéo MP4 figée, pas d'infos pratiques, pas de RSVP, qualité très variable |
 | **Faire-part numériques « premium » FR** | Weddinvita (**149 €**, 8 modèles, RSVP, QR code par invité, 6 langues dont l'arabe, livré en 48 h), MyInvit / fairepartanime (prix unique, RSVP, livré en 24 h), Movinvit (50 € par invitation), WeddingInvite, invitationdigitale.fr, offres « oriental » (dès 99 € à 350 €) | 49 à 350 € | Déjà RSVP et WhatsApp, ciblent le mariage oriental | **Décors génériques** (portes, rideaux, fleurs). Aucun ne **peint votre lieu**. Animations « en boucle », pas de narration scène par scène |
+| **Faire-part « mini-site » haut de gamme** (les plus proches de nous) | **The Digital Yes** (175 € / 575 € / 975 €, 31 modèles, plus de 3 000 couples, 4,9/5 Trustpilot, délai 1 à 2 semaines, modèle « La Finca » qui recrée le lieu de réception). **Perfect Yes** (199 € / 249 € / 499 €, 3 modèles, enveloppe avec sceau gravé aux initiales offerte, RSVP et tableau de bord, 15 langues, ~3 semaines de délai en haute saison, 4,94/5 sur 155 avis) | 175 à 975 € | Rendu premium, preuve sociale, catalogue, marque blanche pour planners | **Chers**, **lents** (tout est fait à la main), peu de modèles chez Perfect Yes. Pas de bibliothèque de lieux prêts à l'emploi. Pas centrés sur les mariages multiculturels français |
 | **International (plus tard)** | Paperless Post, Greenvelope, Evite, Minted | 0 à 300 $ | Marques mondiales, belle papeterie numérique | Enveloppe animée puis carte fixe. Pas de narration ni de lieux personnalisés |
 
 ### 5.2 Ce qu'on constate
 
+- **L'enveloppe avec sceau de cire et le lieu recréé ne sont plus des nouveautés** : The Digital Yes et Perfect Yes les proposent déjà. Ce n'est pas un problème : ils **prouvent que les couples paient 175 à 975 €** pour ce produit.
+- **Leur point faible : tout est fait à la main**, donc c'est cher (175 € minimum) et lent (1 à 3 semaines). **Notre angle : la même qualité, prête plus vite et moins cher**, grâce aux modèles et à la bibliothèque de lieux produits à l'avance.
+
 - **La place du « faire-part numérique avec RSVP à ~150 € » est déjà prise.** Se battre sur le prix contre Weddinvita, Canva ou Joy est perdu d'avance.
-- **Personne ne propose « votre histoire, vos lieux, en film interactif ».** Tout le monde vend des *modèles*. Nous vendons *votre* mariage peint.
+- **Presque personne ne propose « vos lieux, peints et animés au fil du doigt ».** The Digital Yes s'en approche (« La Finca ») mais en sur-mesure lent et cher.
 - Les acteurs visent déjà la communauté orientale (arabe, henné). C'est la preuve d'une vraie demande, mais cette clientèle est **très exigeante sur le rendu** et compare les offres. Notre démo Lanterne (Tanger, lanternes, basmala) y est très bien placée.
 
 ### 5.3 Matrice de positionnement
@@ -90,7 +94,7 @@ Les mariages ont lieu surtout **de mai à septembre**, avec un pic en juin et ju
                             │   Papeterie en ligne
 ```
 
-Notre place : **en haut à droite**. Aussi pratique que les meilleurs (RSVP, calendrier, itinéraire, plusieurs langues) et **le seul avec des décors vraiment personnels**.
+Notre place : **en haut à droite**. Aussi pratique que les meilleurs (RSVP, calendrier, itinéraire, plusieurs langues) et **les décors personnels les plus rapides et les moins chers**, grâce à la bibliothèque de lieux.
 
 ## 6. Ce qu'il reste à vérifier sur le terrain (pendant le MVP)
 

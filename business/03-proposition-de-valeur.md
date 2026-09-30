@@ -24,7 +24,9 @@
 
 ## 3. Les 7 leviers pour se démarquer
 
-1. **Les lieux peints**, notre signature et notre avantage le plus durable.
+> ⚠️ **Mise à jour après analyse de The Digital Yes et Perfect Yes** : l'enveloppe avec sceau aux initiales et le « lieu recréé » existent déjà chez eux (en sur-mesure, 1 à 3 semaines, 175 à 975 €). Notre avantage n'est donc pas l'idée. C'est **la vitesse et le prix à qualité égale**, grâce aux modèles et aux lieux **produits à l'avance** (livré le jour même ou en 3 à 5 jours, dès 99 €), et **la spécialisation mariages multiculturels français** (henné, plusieurs événements, arabe, diaspora).
+
+1. **Les lieux peints, déjà prêts**, notre avantage le plus durable.
    On peint la mairie, l'église, la salle, la ville d'origine du couple (comme Tanger et la Grotte d'Hercule pour nous).
    On construit **une bibliothèque de lieux** : chaque lieu peint est réutilisable (mairies de Paris et d'Île-de-France, salles de réception populaires, grandes églises, villes du Maghreb, du Portugal, d'Afrique de l'Ouest).
    Au bout de 12 mois, avec plus de 300 lieux, un couple a de bonnes chances de trouver **sa salle déjà peinte**, livrée en 24 h.

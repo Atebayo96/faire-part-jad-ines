@@ -25,7 +25,7 @@ Notre avantage marketing : **l'ouverture de l'enveloppe est faite pour une vidé
 3. **« On a peint la mairie de… »** : une série par ville (Nanterre, Paris 11e, Saint-Denis, Lyon…). Du contenu local, avec le SEO en plus.
 4. **Coulisses** : prompt → image → animation Kling → rendu final (en accéléré).
 5. **Réactions des parents et des grands-parents** (avec leur accord).
-6. **Comparatif** : « 300 invités : papier 700 €, Sceau 189 € ».
+6. **Comparatif** : « 300 invités : papier 700 €, Sceau 229 € ».
 7. **Saisons** : la même scène en printemps, été, automne et hiver (en morphing).
 8. **Tutoriels** : « Comment on répond à un faire-part Sceau » (rassure les plus âgés).
 
@@ -60,6 +60,6 @@ Livraison → envoi aux invités → 150 à 400 personnes voient le faire-part �
 |---|---|
 | Yasmine & Karim (oriental, diaspora) | « Toute la famille, de Paris à Tanger, reçoit votre faire-part en une seconde. Henné, mairie, salle : chacun voit ses événements. En français et en arabe. » |
 | Claire & Thomas (église) | « Votre église, peinte à la lumière des vitraux. Un faire-part que même Mamie ouvrira deux fois. » |
-| Léa & Sofiane (mairie, petit budget) | « Votre mairie, votre date, vos réponses. Dès 89 €, prêt ce soir. » |
+| Léa & Sofiane (mairie, petit budget) | « Votre mairie, votre date, vos réponses. Dès 99 €, prêt ce soir. » |
 | Marc & Julien (intime) | « Trente invités, trente invitations personnelles. » |
 | Nadia (planner) | « Offrez à vos mariés le faire-part dont on parle, et touchez 20 %. » |

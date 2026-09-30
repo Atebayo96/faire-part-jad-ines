@@ -6,7 +6,9 @@ Chaque combinaison correspond à un fichier de config (voir [`mvp/`](mvp/)). Le 
 
 ---
 
-## 1. Les 5 collections
+## 1. Les 6 modèles de base
+
+> Chaque modèle est **produit à l'avance** (scènes peintes et animées, enveloppe, musique) et **prêt à personnaliser**. La direction artistique est celle de notre faire-part. Plan de production : [mvp/plan-generation-modeles.md](mvp/plan-generation-modeles.md).
 
 ### ① LANTERNE (la collection de référence, issue de notre faire-part)
 - **Pour qui :** mariages orientaux, andalous, franco-maghrébins, et mariages du soir.
@@ -42,7 +44,14 @@ Chaque combinaison correspond à un fichier de config (voir [`mvp/`](mvp/)). Le 
 - **Particules :** lueurs de bougies, lucioles.
 - **Spécificité :** message personnel par invité (lien individuel), pensé pour 10 à 50 personnes.
 
-### ⑤ ÉPURE (simple, minimaliste, le prix d'appel)
+### ⑤ CHAMPÊTRE (domaine, jardin, grange)
+- **Pour qui :** mariages à la campagne, en domaine, en grange ou en plein air. C'est le style le plus demandé en France.
+- **Univers :** herbes hautes et lavande au matin, grange ou bastide en pierre, longue table sous les guirlandes lumineuses, nuit étoilée.
+- **Scènes type :** Ouverture (champ au lever du jour) → Prénoms → Domaine (bibliothèque ou d'après photo) → Dîner sous les guirlandes → RSVP
+- **Musique :** guitare folk, cordes légères.
+- **Particules :** pétales de fleurs des champs, lucioles le soir.
+
+### ⑥ ÉPURE (simple, minimaliste, le prix d'appel)
 - **Pour qui :** les couples qui veulent un faire-part numérique beau, rapide et abordable. Ou un PACS, des fiançailles, un save-the-date.
 - **Univers :** fond papier texturé, typographie, **une seule animation** (une tache d'encre ou d'aquarelle qui se diffuse et révèle les prénoms), monogramme.
 - **Scènes type :** Ouverture (sceau simple) → Prénoms et date → Infos (lieu, horaire, boutons) → RSVP. **Pas de scène peinte** (sauf en option).
@@ -66,7 +75,7 @@ La saison change **la palette, la lumière du ciel, les particules, la végétat
 | **Cire du sceau** | Rose poudré | Terracotta | Bordeaux | Argent |
 | **Musique** | Cordes légères | Guitare, oud | Piano, violoncelle | Cordes, clochettes |
 
-**5 collections × 4 saisons = 20 univers prêts à l'emploi.** Production : 20 × environ 4 scènes génériques × (1 image + 24 images Kling) ≈ **80 séquences**, soit 2 à 3 semaines de production IA avant le lancement. On commence par **3 collections × 2 saisons** (voir le doc 09).
+**6 modèles × 4 saisons = 24 univers prêts à l'emploi.** Production : 20 × environ 4 scènes génériques × (1 image + 24 images Kling) ≈ **80 séquences**, soit 2 à 3 semaines de production IA avant le lancement. On commence par **3 collections × 2 saisons** (voir le doc 09).
 
 **Ambiance jour ou nuit** (réglage séparé) : les scènes du soir basculent vers le ciel étoilé, comme notre scène Palacio avec `palacio_sky_starry`.
 
@@ -110,8 +119,9 @@ Pour chacun : lieu (adresse → bouton Itinéraire), date et heure (→ bouton C
 - Compte à rebours · Hébergement · Parking · Transport / navette · Liste de mariage ou cagnotte (lien) · FAQ · Contact des témoins
 
 ### Étape 7 — Ambiance sonore
-- Musique : bibliothèque par collection et saison (libre de droits), ou sans musique
-- Pour Couture : musique personnalisée (composition ou licence achetée)
+- Musique : bibliothèque libre de droits par modèle et saison
+- **Ou la musique du client** : il importe le morceau qu'il veut (MP3 ou M4A). Il atteste en avoir le droit (voir le doc 08)
+- Ou sans musique
 
 ### Étape 8 — Langues
 - FR par défaut. + EN, AR (de droite à gauche), ES, PT, IT, NL (Signature : 2 langues incluses)
