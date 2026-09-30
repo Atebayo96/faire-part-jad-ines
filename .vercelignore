@@ -1,2 +1,4 @@
-# Dossier business : ne pas publier sur le site du faire-part
-business/
+# Dossier business : ne pas publier le plan business sur le site du faire-part.
+# Seul business/site/ (la vitrine, projet Vercel sceau-faire-part) est deployable.
+business/*
+!business/site/
