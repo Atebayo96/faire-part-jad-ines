@@ -16,10 +16,8 @@
     --bg:#ffffff; --bg-2:#f4f4f2; --ink:#0d0d0d; --muted:#6e6e6e; --line:#e3e3e0;
     --btn:#0d0d0d; --btn-ink:#ffffff;
   }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){ --bg:#0b0b0b; --bg-2:#161616; --ink:#f2f2f2; --muted:#9a9a9a; --line:#262626; --btn:#f2f2f2; --btn-ink:#0b0b0b; }
-  }
-  :root[data-theme="dark"]{ --bg:#0b0b0b; --bg-2:#161616; --ink:#f2f2f2; --muted:#9a9a9a; --line:#262626; --btn:#f2f2f2; --btn-ink:#0b0b0b; }
+  /* un seul theme, clair, quel que soit le reglage du telephone */
+  :root{color-scheme:light}
 
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -60,13 +58,12 @@
   .facts b{display:block;font:500 28px/1 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em}
   .facts span{font-size:13px;color:var(--muted)}
 
-  /* telephone : le VRAI faire-part (demo Yasmine & Karim) dans un iframe */
+  /* telephone : apercu des 5 themes, on fait defiler les scenes */
   .device{justify-self:center;text-align:center}
   .phone{--s:.74;width:calc(390px * var(--s));height:calc(844px * var(--s));border:1px solid var(--line);border-radius:36px;overflow:hidden;background:#000;position:relative}
-  .phone iframe{width:390px;height:844px;border:0;transform:scale(var(--s));transform-origin:0 0;display:block}
+  .phone{position:relative}
+  .hero-tabs{justify-content:center;margin-top:16px;max-width:340px}
   @media (max-width:420px){ .phone{--s:.8} }
-  .device small{display:block;margin-top:14px;font-size:13px;color:var(--muted)}
-  .device button{background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;font:inherit;cursor:pointer}
 
   /* scenes */
   .rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
@@ -152,16 +149,16 @@
   .model[data-theme]{cursor:pointer}
   .model[data-theme]:hover .pic img{transform:scale(1.03)}
   .model .pic img{transition:transform .6s ease}
-  .pv{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;gap:28px;padding:16px;background:rgba(10,10,10,.82)}
+  .pv{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;gap:28px;padding:16px;background:rgba(250,250,248,.985)}
   .pv.on{display:flex}
-  .pv-side{color:#f2f2f2;max-width:260px}
+  .pv-side{color:var(--ink);max-width:260px}
   .pv-side h3{font-size:32px;margin:10px 0 8px}
-  .pv-side p{color:#a8a8a8;margin:0 0 18px;font-size:15px}
+  .pv-side p{color:var(--muted);margin:0 0 18px;font-size:15px}
   .pv-tabs{display:flex;flex-wrap:wrap;gap:6px}
-  .pv-tabs button{background:none;border:1px solid #444;color:#ddd;font:500 13px Inter,sans-serif;padding:8px 10px;cursor:pointer}
-  .pv-tabs button[aria-pressed="true"]{background:#f2f2f2;color:#0d0d0d;border-color:#f2f2f2}
-  .pv-close{position:absolute;top:14px;right:16px;background:none;border:0;color:#fff;font:300 34px/1 Inter,sans-serif;cursor:pointer}
-  .pv-phone{height:min(86vh,760px);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;background:#000;flex:none}
+  .pv-tabs button{background:var(--bg);border:1px solid var(--line);color:var(--ink);font:500 13px Inter,sans-serif;padding:8px 10px;cursor:pointer}
+  .pv-tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .pv-close{position:absolute;top:14px;right:16px;background:none;border:0;color:var(--ink);font:300 34px/1 Inter,sans-serif;cursor:pointer}
+  .pv-phone{height:min(86vh,760px);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);background:#000;flex:none}
   .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
   .pv-scroll::-webkit-scrollbar{display:none}
   .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
@@ -184,7 +181,6 @@
     <a class="logo" href="#">SCEAU</a>
     <div class="links">
       <a href="#modeles">Modèles</a>
-      <a href="#lieux">Lieux</a>
       <a href="#prix">Prix</a>
       <a class="btn solid" href="#commencer">Commencer</a>
     </div>
@@ -208,27 +204,11 @@
       </div>
     </div>
     <div class="device">
-      <div class="phone"><iframe id="demo" src="../demo/yasmine-karim/index.html" title="Démo : faire-part de Yasmine et Karim" loading="lazy" allow="autoplay"></iframe></div>
-      <small>Touchez le sceau. · <button type="button" id="replay">Rejouer</button></small>
+      <div class="phone"><div class="pv-scroll" id="heroScroll" aria-label="Aperçu du thème"></div></div>
+      <div class="pv-tabs hero-tabs" id="heroTabs" role="tablist" aria-label="Thèmes"></div>
     </div>
   </div>
 </header>
-
-<section id="scenes">
-  <div class="wrap">
-    <div class="head">
-      <h2>Des scènes à votre image.</h2>
-      <p>Composez votre faire-part comme un petit film : la rencontre, le henné, la cérémonie, la fête, un lieu qui compte pour vous. Ajoutez, retirez, changez l'ordre.</p>
-    </div>
-    <div class="rail">
-      <figure><img src="img/themes/conte-1.webp" alt="Scène d'ouverture : château de conte au crépuscule" loading="lazy"><figcaption><i>01</i>Vos prénoms</figcaption></figure>
-      <figure><img src="img/themes/nuits-2.webp" alt="Scène du henné : salon oriental aux lanternes" loading="lazy"><figcaption><i>02</i>Le henné</figcaption></figure>
-      <figure><img src="img/themes/dolcevita-2.webp" alt="Scène de cérémonie : chapelle blanche face à la mer" loading="lazy"><figcaption><i>03</i>La cérémonie</figcaption></figure>
-      <figure><img src="img/themes/americaine-3.webp" alt="Scène de fête : grange illuminée de guirlandes" loading="lazy"><figcaption><i>04</i>La fête</figcaption></figure>
-      <figure class="more"><div class="plus">+</div><figcaption><i>05</i>Ce que vous voulez</figcaption></figure>
-    </div>
-  </div>
-</section>
 
 <section id="comment">
   <div class="wrap">
@@ -254,22 +234,6 @@
       <div class="model" data-theme="nuits" role="button" tabindex="0"><div class="pic"><img src="img/theme-nuits.webp" alt="Thème Mille et une nuits : riad de nuit, arches et lanternes" loading="lazy"></div><div class="meta"><div><h3>Mille et une nuits</h3><p>Lanternes, arches, nuit étoilée.</p></div><span class="tag">Aperçu</span></div></div>
       <div class="model" data-theme="dolcevita" role="button" tabindex="0"><div class="pic"><img src="img/theme-dolcevita.webp" alt="Thème Dolce Vita : terrasse sur la côte amalfitaine, citronniers et Vespa" loading="lazy"></div><div class="meta"><div><h3>Dolce Vita</h3><p>Riviera, citronniers, Vespa.</p></div><span class="tag">Aperçu</span></div></div>
       <div class="model"><div class="pic"><span class="soon">Votre thème</span></div><div class="meta"><div><h3>Sur-mesure</h3><p>Un univers rien qu'à vous.</p></div></div></div>
-    </div>
-  </div>
-</section>
-
-<section id="lieux">
-  <div class="wrap">
-    <div class="head">
-      <h2>Des mairies, des châteaux, des villes.</h2>
-      <p>Quelques exemples de lieux peints. Envoyez une photo du vôtre, on le peint dans le style de votre faire-part.</p>
-    </div>
-    <div class="places">
-      <div class="place"><div class="pic"><img src="img/lieu-mairie.webp" alt="Une mairie peinte" loading="lazy"></div><div class="meta">Mairie<span>Place, fontaine, drapeaux</span></div></div>
-      <div class="place"><div class="pic"><img src="img/lieu-chateau.webp" alt="Un château de la Loire, peint" loading="lazy"></div><div class="meta">Château<span>Jardins à la française</span></div></div>
-      <div class="place"><div class="pic"><img src="img/lieu-salle.webp" alt="Un domaine avec orangerie, peint" loading="lazy"></div><div class="meta">Domaine<span>Grange et orangerie</span></div></div>
-      <div class="place"><div class="pic"><img src="img/lieu-paris.webp" alt="Paris de jour, peint" loading="lazy"></div><div class="meta">Ville<span>Paris</span></div></div>
-      <div class="place"><div class="pic"><img src="img/lieu-marrakech.webp" alt="Marrakech et la Koutoubia, peints" loading="lazy"></div><div class="meta">Ville<span>Marrakech</span></div></div>
     </div>
   </div>
 </section>
@@ -346,7 +310,7 @@
 <div class="pv" id="pv" role="dialog" aria-modal="true" aria-label="Aperçu du thème">
   <button class="pv-close" id="pvClose" type="button" aria-label="Fermer">×</button>
   <div class="pv-side">
-    <p class="label" style="color:#a8a8a8">Aperçu du thème</p>
+    <p class="label">Aperçu du thème</p>
     <h3 id="pvTitle"></h3>
     <p id="pvDesc"></p>
     <div class="pv-tabs" id="pvTabs"></div>
@@ -359,8 +323,6 @@
 </footer>
 
 <script>
-  const demo=document.getElementById('demo');
-  document.getElementById('replay').addEventListener('click',()=>{ demo.src=demo.src; });
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',()=>{ document.getElementById('planSel').value=a.dataset.plan; }));
   document.getElementById('waitForm').addEventListener('submit',e=>{
     const f=e.currentTarget;
@@ -381,21 +343,33 @@
       scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
   };
   const pv=document.getElementById('pv'), pvScroll=document.getElementById('pvScroll'), pvTabs=document.getElementById('pvTabs');
+  const heroScroll=document.getElementById('heroScroll'), heroTabs=document.getElementById('heroTabs');
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  Object.entries(THEMES).forEach(([k,t])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t.name; b.dataset.k=k; b.onclick=()=>showTheme(k); pvTabs.appendChild(b); });
-  function showTheme(k){
+  /* remet le defilement tout en haut (slide 1), y compris apres l'affichage de la fenetre */
+  function toTop(el){ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; }); }); }
+  function render(el,k){
     const t=THEMES[k];
-    document.getElementById('pvTitle').textContent=t.name;
-    document.getElementById('pvDesc').textContent=t.desc;
-    pvTabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
-    pvScroll.innerHTML=t.scenes.map((sc,i)=>{
+    el.innerHTML=t.scenes.map((sc,i)=>{
       const [ey,main,tx,bt]=sc;
       const big=main==='NAMES'?`<div class="nm">${esc(t.couple)}</div>`:`<div class="nm" style="font-size:clamp(30px,4.2vh,42px)">${esc(main)}</div>`;
       return `<section class="pv-sc" style="background-image:url('img/themes/${k}-${i+1}.webp')"><div class="ey">${esc(ey)}</div>${big}<div class="tx">${esc(tx)}</div>${bt?`<span class="bt">${esc(bt)}</span>`:''}${i===0?'<div class="pv-hint">Faites défiler ↓</div>':''}</section>`;
     }).join('');
-    pvScroll.scrollTop=0;
+    toTop(el);
   }
-  function openTheme(k){ showTheme(k); pv.classList.add('on'); document.body.style.overflow='hidden'; }
+  function tabs(box,onPick){
+    Object.entries(THEMES).forEach(([k,t])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t.name; b.dataset.k=k; b.onclick=()=>onPick(k); box.appendChild(b); });
+  }
+  const press=(box,k)=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
+  function heroTheme(k){ render(heroScroll,k); press(heroTabs,k); }
+  tabs(heroTabs,heroTheme); heroTheme('conte');
+  function showTheme(k){
+    const t=THEMES[k];
+    document.getElementById('pvTitle').textContent=t.name;
+    document.getElementById('pvDesc').textContent=t.desc;
+    press(pvTabs,k); render(pvScroll,k);
+  }
+  tabs(pvTabs,showTheme);
+  function openTheme(k){ pv.classList.add('on'); document.body.style.overflow='hidden'; showTheme(k); }
   function closeTheme(){ pv.classList.remove('on'); document.body.style.overflow=''; }
   document.querySelectorAll('.model[data-theme]').forEach(m=>{ m.addEventListener('click',()=>openTheme(m.dataset.theme)); m.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openTheme(m.dataset.theme); } }); });
   document.getElementById('pvClose').onclick=closeTheme;
