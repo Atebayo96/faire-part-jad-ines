@@ -6,7 +6,24 @@ Chaque combinaison correspond à un fichier de config (voir [`mvp/`](mvp/)). Le 
 
 ---
 
-## 1. Les 6 modèles de base
+## 0. Mise à jour du 30/09/2026 : l'offre s'organise par **thèmes**
+
+La vitrine présente **5 thèmes**, des univers forts et faciles à choisir (comme Missing Piece ou The Digital Yes) :
+
+| Thème | Univers | Pour qui |
+|---|---|---|
+| **Conte de fées** | Château sur une colline, carrosse, ciel lavande, lucioles | Mariages romantiques, château ou domaine |
+| **À l'américaine** | Cérémonie en plein air, allée de chaises blanches, arche fleurie, maison coloniale, guirlandes | Cérémonies laïques, mariages en extérieur |
+| **Bollywood** | Palais rose du Rajasthan, guirlandes de soucis, diyas, pétales | Mariages indiens et pakistanais, sangeet, mehndi |
+| **Mille et une nuits** | Riad de nuit, arches, zellige, lanternes (notre faire-part) | Mariages orientaux, henné |
+| **Dolce Vita** | Côte amalfitaine, citronniers, bougainvilliers, Vespa | Mariages d'été, destination, Méditerranée |
+
+- **Les lieux** (mairie, église, domaine, château, ville d'origine) **s'ajoutent à n'importe quel thème**, peints dans son style.
+- **Les scènes sont libres** : le couple ajoute, retire ou réordonne (rencontre, ville d'origine, henné, cérémonie, fête…).
+- Les « collections » ci-dessous (Lanterne, Cathédrale, Hôtel de Ville, Champêtre, Intime, Épure) restent des **styles de cérémonie** : Lanterne devient le thème Mille et une nuits, et les autres servent de packs de scènes et de réglages par défaut.
+- Visuels générés : 4 scènes par thème dans `landing/img/themes/<thème>-1..4.webp` (prénoms, cérémonie ou henné, fête, réponse), visibles dans l'aperçu interactif de la landing.
+
+## 1. Les 6 modèles de base (styles de cérémonie)
 
 > Chaque modèle est **produit à l'avance** (scènes peintes et animées, enveloppe, musique) et **prêt à personnaliser**. La direction artistique est celle de notre faire-part. Plan de production : [mvp/plan-generation-modeles.md](mvp/plan-generation-modeles.md).
 

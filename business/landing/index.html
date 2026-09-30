@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
 <style>
   /* Direction : galerie blanche. Noir, blanc, gris. Une seule famille sans-serif.
      Pas de dore, pas de creme, pas de serif : c'est le produit (les scenes peintes) qui apporte la couleur. */
@@ -98,7 +98,7 @@
   .tag{align-self:start;font-size:12px;border:1px solid var(--line);padding:4px 8px;white-space:nowrap}
 
   /* bibliotheque de lieux */
-  .places{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .places{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   @media (max-width:820px){ .places{grid-template-columns:repeat(2,1fr)} }
   .place{border:1px solid var(--line)}
   .place .pic{aspect-ratio:3/4;background:var(--bg-2)}
@@ -146,6 +146,32 @@
   @media (max-width:820px){ input,select{border-right:0;border-bottom:1px solid var(--line)} }
   form .btn{height:56px;border:0}
   .ok{display:none;margin-top:18px}
+
+  /* apercu de theme (modal) */
+  .model[data-theme]{cursor:pointer}
+  .model[data-theme]:hover .pic img{transform:scale(1.03)}
+  .model .pic img{transition:transform .6s ease}
+  .pv{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;gap:28px;padding:16px;background:rgba(10,10,10,.82)}
+  .pv.on{display:flex}
+  .pv-side{color:#f2f2f2;max-width:260px}
+  .pv-side h3{font-size:32px;margin:10px 0 8px}
+  .pv-side p{color:#a8a8a8;margin:0 0 18px;font-size:15px}
+  .pv-tabs{display:flex;flex-wrap:wrap;gap:6px}
+  .pv-tabs button{background:none;border:1px solid #444;color:#ddd;font:500 13px Inter,sans-serif;padding:8px 10px;cursor:pointer}
+  .pv-tabs button[aria-pressed="true"]{background:#f2f2f2;color:#0d0d0d;border-color:#f2f2f2}
+  .pv-close{position:absolute;top:14px;right:16px;background:none;border:0;color:#fff;font:300 34px/1 Inter,sans-serif;cursor:pointer}
+  .pv-phone{height:min(86vh,760px);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;background:#000;flex:none}
+  .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
+  .pv-scroll::-webkit-scrollbar{display:none}
+  .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
+  .pv-sc::before{content:"";position:absolute;inset:0 0 45% 0;background:linear-gradient(rgba(0,0,0,.34),transparent)}
+  .pv-sc>*{position:relative}
+  .pv-sc .ey{font:500 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.92;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+  .pv-sc .nm{font:400 clamp(38px,5.4vh,54px)/1.05 "Great Vibes",cursive;margin:10px 0 6px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+  .pv-sc .tx{font:italic 400 clamp(15px,2vh,19px)/1.35 "Cormorant Garamond",Georgia,serif;text-shadow:0 1px 10px rgba(0,0,0,.55);max-width:17em}
+  .pv-sc .bt{margin-top:14px;display:inline-block;border:1px solid rgba(255,255,255,.8);padding:8px 14px;font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;background:rgba(0,0,0,.15);backdrop-filter:blur(2px)}
+  .pv-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font:500 10px Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+  @media (max-width:760px){ .pv{flex-direction:column;gap:12px} .pv-side{text-align:center;max-width:none} .pv-side p{display:none} .pv-side h3{font-size:24px;margin:0 0 8px} .pv-tabs{justify-content:center} .pv-phone{height:min(72vh,680px)} }
   footer{border-top:1px solid var(--line);padding:28px 0 40px;font-size:13px;color:var(--muted)}
   footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 </style>
@@ -208,7 +234,7 @@
     <div class="head"><h2>Comment ça marche</h2></div>
     <div class="steps">
       <div><b>01</b><h3>Choisissez un modèle</h3><p>Cinq thèmes prêts, déclinés en quatre saisons. Changez les textes, les couleurs, la musique.</p></div>
-      <div><b>02</b><h3>Ajoutez vos lieux</h3><p>Une photo de votre mairie, de votre domaine ou de votre ville suffit : on la peint dans le style de votre faire-part.</p></div>
+      <div><b>02</b><h3>Ajoutez vos lieux</h3><p>Une photo de votre mairie, de votre château ou de votre ville suffit : on la peint dans le style de votre faire-part.</p></div>
       <div><b>03</b><h3>Envoyez le lien</h3><p>Sur WhatsApp, un lien par famille si vous voulez. Les réponses arrivent dans votre tableau de bord.</p></div>
     </div>
   </div>
@@ -221,11 +247,11 @@
       <p>Chaque thème est un faire-part complet, prêt à personnaliser : textes, couleurs, sceau, musique, et vos propres scènes. D'autres thèmes arrivent chaque saison.</p>
     </div>
     <div class="models">
-      <div class="model"><div class="pic"><img src="img/theme-conte.webp" alt="Thème Conte de fées : château sur une colline et carrosse" loading="lazy"></div><div class="meta"><div><h3>Conte de fées</h3><p>Château, carrosse, ciel de crépuscule.</p></div></div></div>
-      <div class="model"><div class="pic"><img src="img/theme-americaine.webp" alt="Thème À l'américaine : cérémonie en plein air, arche fleurie et chaises blanches" loading="lazy"></div><div class="meta"><div><h3>À l'américaine</h3><p>Cérémonie en plein air, arche fleurie.</p></div></div></div>
-      <div class="model"><div class="pic"><img src="img/theme-bollywood.webp" alt="Thème Bollywood : palais rose, guirlandes de soucis et lampes" loading="lazy"></div><div class="meta"><div><h3>Bollywood</h3><p>Palais, soucis, mille lumières.</p></div></div></div>
-      <div class="model"><div class="pic"><img src="img/reception.webp" alt="Thème Mille et une nuits : palais de nuit et lanternes" loading="lazy"></div><div class="meta"><div><h3>Mille et une nuits</h3><p>Lanternes, arches, nuit étoilée.</p></div><span class="tag">Démo</span></div></div>
-      <div class="model"><div class="pic"><img src="img/theme-dolcevita.webp" alt="Thème Dolce Vita : terrasse sur la côte amalfitaine, citronniers et Vespa" loading="lazy"></div><div class="meta"><div><h3>Dolce Vita</h3><p>Riviera, citronniers, Vespa.</p></div></div></div>
+      <div class="model" data-theme="conte" role="button" tabindex="0"><div class="pic"><img src="img/theme-conte.webp" alt="Thème Conte de fées : château sur une colline et carrosse" loading="lazy"></div><div class="meta"><div><h3>Conte de fées</h3><p>Château, carrosse, ciel de crépuscule.</p></div><span class="tag">Aperçu</span></div></div>
+      <div class="model" data-theme="americaine" role="button" tabindex="0"><div class="pic"><img src="img/theme-americaine.webp" alt="Thème À l'américaine : cérémonie en plein air, arche fleurie et chaises blanches" loading="lazy"></div><div class="meta"><div><h3>À l'américaine</h3><p>Cérémonie en plein air, arche fleurie.</p></div><span class="tag">Aperçu</span></div></div>
+      <div class="model" data-theme="bollywood" role="button" tabindex="0"><div class="pic"><img src="img/theme-bollywood.webp" alt="Thème Bollywood : palais rose, guirlandes de soucis et lampes" loading="lazy"></div><div class="meta"><div><h3>Bollywood</h3><p>Palais, soucis, mille lumières.</p></div><span class="tag">Aperçu</span></div></div>
+      <div class="model" data-theme="nuits" role="button" tabindex="0"><div class="pic"><img src="img/theme-nuits.webp" alt="Thème Mille et une nuits : riad de nuit, arches et lanternes" loading="lazy"></div><div class="meta"><div><h3>Mille et une nuits</h3><p>Lanternes, arches, nuit étoilée.</p></div><span class="tag">Aperçu</span></div></div>
+      <div class="model" data-theme="dolcevita" role="button" tabindex="0"><div class="pic"><img src="img/theme-dolcevita.webp" alt="Thème Dolce Vita : terrasse sur la côte amalfitaine, citronniers et Vespa" loading="lazy"></div><div class="meta"><div><h3>Dolce Vita</h3><p>Riviera, citronniers, Vespa.</p></div><span class="tag">Aperçu</span></div></div>
       <div class="model"><div class="pic"><span class="soon">Votre thème</span></div><div class="meta"><div><h3>Sur-mesure</h3><p>Un univers rien qu'à vous.</p></div></div></div>
     </div>
   </div>
@@ -234,13 +260,15 @@
 <section id="lieux">
   <div class="wrap">
     <div class="head">
-      <h2>Des mairies, des domaines, des villes.</h2>
+      <h2>Des mairies, des châteaux, des villes.</h2>
       <p>Quelques exemples de lieux peints. Envoyez une photo du vôtre, on le peint dans le style de votre faire-part.</p>
     </div>
     <div class="places">
       <div class="place"><div class="pic"><img src="img/lieu-mairie.webp" alt="Une mairie peinte" loading="lazy"></div><div class="meta">Mairie<span>Place, fontaine, drapeaux</span></div></div>
+      <div class="place"><div class="pic"><img src="img/lieu-chateau.webp" alt="Un château de la Loire, peint" loading="lazy"></div><div class="meta">Château<span>Jardins à la française</span></div></div>
       <div class="place"><div class="pic"><img src="img/lieu-salle.webp" alt="Un domaine avec orangerie, peint" loading="lazy"></div><div class="meta">Domaine<span>Grange et orangerie</span></div></div>
       <div class="place"><div class="pic"><img src="img/lieu-paris.webp" alt="Paris de jour, peint" loading="lazy"></div><div class="meta">Ville<span>Paris</span></div></div>
+      <div class="place"><div class="pic"><img src="img/lieu-marrakech.webp" alt="Marrakech et la Koutoubia, peints" loading="lazy"></div><div class="meta">Ville<span>Marrakech</span></div></div>
       <div class="place"><div class="pic"><img src="img/ville.webp" alt="Tanger, grotte d'Hercule, peinte" loading="lazy"></div><div class="meta">Ville<span>Tanger</span></div></div>
     </div>
   </div>
@@ -315,6 +343,17 @@
   </div>
 </section>
 
+<div class="pv" id="pv" role="dialog" aria-modal="true" aria-label="Aperçu du thème">
+  <button class="pv-close" id="pvClose" type="button" aria-label="Fermer">×</button>
+  <div class="pv-side">
+    <p class="label" style="color:#a8a8a8">Aperçu du thème</p>
+    <h3 id="pvTitle"></h3>
+    <p id="pvDesc"></p>
+    <div class="pv-tabs" id="pvTabs"></div>
+  </div>
+  <div class="pv-phone"><div class="pv-scroll" id="pvScroll"></div></div>
+</div>
+
 <footer>
   <div class="wrap"><span>SCEAU · Paris</span><span>Mentions légales · CGV · Confidentialité</span></div>
 </footer>
@@ -327,6 +366,41 @@
     const f=e.currentTarget;
     if(f.getAttribute('action')==='#'){ e.preventDefault(); f.style.display='none'; document.getElementById('ok').style.display='block'; }
   });
+
+  /* apercu des themes : 4 scenes par theme, textes d'exemple */
+  const THEMES={
+    conte:{name:"Conte de fées",desc:"Un château, un carrosse et un ciel de crépuscule. Pour les mariages romantiques.",couple:"Emma & Louis",date:"Samedi 5 juin 2027",
+      scenes:[["Ils se marient","NAMES","Samedi 5 juin 2027"],["La cérémonie","Sous l'arche de roses","15h00 · Jardins du château","Itinéraire"],["La fête","Dîner au château","Dès 19h, bal jusqu'au bout de la nuit"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre"]]},
+    americaine:{name:"À l'américaine",desc:"Cérémonie en plein air, chaises blanches et grange illuminée.",couple:"Chloé & Nathan",
+      scenes:[["We're getting married","NAMES","Samedi 19 juin 2027"],["Cérémonie & cocktail","Sur la pelouse","16h00 · Domaine des Chênes","Itinéraire"],["La fête","Dîner dans la grange","Dès 19h30, guirlandes et dancefloor"],["RSVP","On compte sur vous ?","Avant le 15 mai","Répondre"]]},
+    bollywood:{name:"Bollywood",desc:"Palais rose, soucis et mille lumières, sur plusieurs jours.",couple:"Priya & Arjun",
+      scenes:[["Shubh Vivah","NAMES","Du 9 au 11 juillet 2027"],["Mehndi","Vendredi après-midi","14h00 · Cour du palais","Itinéraire"],["Cérémonie","Sous le mandap","Samedi 17h00","Itinéraire"],["Sangeet & réception","Serez-vous des nôtres ?","Samedi, dès 20h","Répondre"]]},
+    nuits:{name:"Mille et une nuits",desc:"Riad, zellige et lanternes. Henné, cérémonie et nuit étoilée.",couple:"Yasmine & Karim",
+      scenes:[["Bismillah","NAMES","Samedi 12 juin 2027"],["Le henné","Vendredi soir","19h00 · Chez la famille Alaoui","Itinéraire"],["La cérémonie","Au riad","Samedi 14h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 19h","Répondre"]]},
+    dolcevita:{name:"Dolce Vita",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
+      scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
+  };
+  const pv=document.getElementById('pv'), pvScroll=document.getElementById('pvScroll'), pvTabs=document.getElementById('pvTabs');
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  Object.entries(THEMES).forEach(([k,t])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t.name; b.dataset.k=k; b.onclick=()=>showTheme(k); pvTabs.appendChild(b); });
+  function showTheme(k){
+    const t=THEMES[k];
+    document.getElementById('pvTitle').textContent=t.name;
+    document.getElementById('pvDesc').textContent=t.desc;
+    pvTabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
+    pvScroll.innerHTML=t.scenes.map((sc,i)=>{
+      const [ey,main,tx,bt]=sc;
+      const big=main==='NAMES'?`<div class="nm">${esc(t.couple)}</div>`:`<div class="nm" style="font-size:clamp(30px,4.2vh,42px)">${esc(main)}</div>`;
+      return `<section class="pv-sc" style="background-image:url('img/themes/${k}-${i+1}.webp')"><div class="ey">${esc(ey)}</div>${big}<div class="tx">${esc(tx)}</div>${bt?`<span class="bt">${esc(bt)}</span>`:''}${i===0?'<div class="pv-hint">Faites défiler ↓</div>':''}</section>`;
+    }).join('');
+    pvScroll.scrollTop=0;
+  }
+  function openTheme(k){ showTheme(k); pv.classList.add('on'); document.body.style.overflow='hidden'; }
+  function closeTheme(){ pv.classList.remove('on'); document.body.style.overflow=''; }
+  document.querySelectorAll('.model[data-theme]').forEach(m=>{ m.addEventListener('click',()=>openTheme(m.dataset.theme)); m.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openTheme(m.dataset.theme); } }); });
+  document.getElementById('pvClose').onclick=closeTheme;
+  pv.addEventListener('click',e=>{ if(e.target===pv) closeTheme(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeTheme(); });
 </script>
 </body>
 </html>
