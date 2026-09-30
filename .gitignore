@@ -8,3 +8,4 @@ extract_*.py
 lantern_layout.json
 .playwright-mcp/
 index - Copie.html
+.claude/settings.local.json
