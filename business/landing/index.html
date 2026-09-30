@@ -74,6 +74,7 @@
   .rail img{width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--bg-2)}
   .rail figcaption{display:flex;gap:10px;margin-top:10px;font-size:14px}
   .rail figcaption i{font-style:normal;color:var(--muted)}
+  .rail .more .plus{aspect-ratio:9/16;display:grid;place-items:center;background:var(--bg-2);font:400 56px/1 "Inter Tight",sans-serif;color:var(--muted)}
 
   /* steps */
   .steps{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink)}
@@ -104,6 +105,7 @@
   .place .pic img{width:100%;height:100%;object-fit:cover;object-position:center 70%}
   .place .meta{padding:12px 14px;font-size:14px}
   .place .meta span{display:block;color:var(--muted);font-size:13px}
+  .place .pic.soon{display:grid;place-items:center;font:500 12px/1 Inter;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
   .place.add .pic{display:grid;place-items:center;font:400 44px/1 "Inter Tight",sans-serif;color:var(--muted)}
 
   /* prix */
@@ -188,15 +190,15 @@
 <section id="scenes">
   <div class="wrap">
     <div class="head">
-      <h2>Une journée, racontée scène par scène.</h2>
-      <p>Le ciel change, les nuages passent, les lanternes s'allument pendant qu'on fait défiler. Chaque scène porte une information : la date, la cérémonie, la réception.</p>
+      <h2>Votre histoire, scène par scène.</h2>
+      <p>Voici un exemple. Vous ajoutez, retirez ou déplacez les scènes comme vous voulez : votre rencontre, votre ville d'origine, le henné, la cérémonie, la fête, un lieu qui compte pour vous.</p>
     </div>
     <div class="rail">
-      <figure><img src="img/ciel.webp" alt="Scène d'ouverture : mains unies sur un ciel peint" loading="lazy"><figcaption><i>01</i>Les prénoms, la date</figcaption></figure>
-      <figure><img src="img/ville.webp" alt="Scène de la ville d'origine : une grotte face à la mer" loading="lazy"><figcaption><i>02</i>Le compte à rebours</figcaption></figure>
-      <figure><img src="img/mairie.webp" alt="Scène de la mairie peinte" loading="lazy"><figcaption><i>03</i>La mairie</figcaption></figure>
-      <figure><img src="img/reception.webp" alt="Scène de la salle de réception, de nuit, avec lanternes" loading="lazy"><figcaption><i>04</i>La réception</figcaption></figure>
-      <figure><img src="img/nuit.webp" alt="Scène finale : Paris de nuit" loading="lazy"><figcaption><i>05</i>La réponse</figcaption></figure>
+      <figure><img src="img/ciel.webp" alt="Scène d'ouverture : mains unies sur un ciel peint" loading="lazy"><figcaption><i>01</i>Vos prénoms</figcaption></figure>
+      <figure><img src="img/ville.webp" alt="Scène de la ville d'origine : une grotte face à la mer" loading="lazy"><figcaption><i>02</i>Votre ville d'origine</figcaption></figure>
+      <figure><img src="img/mairie.webp" alt="Scène de la mairie peinte" loading="lazy"><figcaption><i>03</i>La cérémonie</figcaption></figure>
+      <figure><img src="img/reception.webp" alt="Scène de la salle de réception, de nuit, avec lanternes" loading="lazy"><figcaption><i>04</i>La fête</figcaption></figure>
+      <figure class="more"><div class="plus">+</div><figcaption><i>05</i>Ce que vous voulez</figcaption></figure>
     </div>
   </div>
 </section>
@@ -206,7 +208,7 @@
     <div class="head"><h2>Comment ça marche</h2></div>
     <div class="steps">
       <div><b>01</b><h3>Choisissez un modèle</h3><p>Six univers prêts, déclinés en quatre saisons. Changez les textes, les couleurs, la musique.</p></div>
-      <div><b>02</b><h3>Ajoutez vos lieux</h3><p>Votre mairie ou votre salle est peut-être déjà dans la bibliothèque. Sinon, envoyez une photo, on la peint.</p></div>
+      <div><b>02</b><h3>Ajoutez vos lieux</h3><p>Une photo de votre mairie, de votre château ou de votre ville suffit : on la peint dans le style de votre faire-part.</p></div>
       <div><b>03</b><h3>Envoyez le lien</h3><p>Sur WhatsApp, un lien par famille si vous voulez. Les réponses arrivent dans votre tableau de bord.</p></div>
     </div>
   </div>
@@ -232,14 +234,14 @@
 <section id="lieux">
   <div class="wrap">
     <div class="head">
-      <h2>Votre lieu est peut-être déjà peint.</h2>
-      <p>Une bibliothèque de mairies, de salles et de villes, prêtes à glisser dans votre faire-part. Si le vôtre n'y est pas, une photo suffit.</p>
+      <h2>Des mairies, des châteaux, des villes.</h2>
+      <p>Quelques exemples de lieux peints. Envoyez une photo du vôtre, on le peint dans le style de votre faire-part.</p>
     </div>
     <div class="places">
-      <div class="place"><div class="pic"><img src="img/mairie.webp" alt="Hôtel de Ville de Nanterre, peint" loading="lazy"></div><div class="meta">Hôtel de Ville de Nanterre<span>Mairie · Hauts-de-Seine</span></div></div>
-      <div class="place"><div class="pic"><img src="img/reception.webp" alt="Le Palacio, salle de réception, peinte" loading="lazy"></div><div class="meta">Le Palacio<span>Salle de réception · Essonne</span></div></div>
-      <div class="place"><div class="pic"><img src="img/ville.webp" alt="Tanger, grotte d'Hercule, peinte" loading="lazy"></div><div class="meta">Tanger, grotte d'Hercule<span>Ville d'origine · Maroc</span></div></div>
-      <div class="place add"><div class="pic">+</div><div class="meta">Le vôtre<span>D'après votre photo · 59 €</span></div></div>
+      <div class="place"><div class="pic"><img src="img/mairie.webp" alt="Hôtel de Ville de Nanterre, peint" loading="lazy"></div><div class="meta">Mairie<span>Hôtel de Ville de Nanterre</span></div></div>
+      <div class="place"><div class="pic soon">Exemple à venir</div><div class="meta">Château<span>Domaine, château, bastide</span></div></div>
+      <div class="place"><div class="pic"><img src="img/reception.webp" alt="Le Palacio, salle de réception, peinte" loading="lazy"></div><div class="meta">Salle de réception<span>Le Palacio, Essonne</span></div></div>
+      <div class="place"><div class="pic"><img src="img/ville.webp" alt="Tanger, grotte d'Hercule, peinte" loading="lazy"></div><div class="meta">Ville<span>Tanger, grotte d'Hercule</span></div></div>
     </div>
   </div>
 </section>
