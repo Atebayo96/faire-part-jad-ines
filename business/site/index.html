@@ -7,7 +7,7 @@
 <meta name="description" content="Le faire-part qui s'ouvre. Vos lieux, peints et animés, envoyés en un lien. RSVP, calendrier, itinéraire, plusieurs langues.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&family=Cinzel+Decorative:wght@400&family=Aref+Ruqaa&family=Italiana&family=Limelight&family=Parisienne&family=Jost:wght@300;400&family=Shrikhand&display=swap" rel="stylesheet">
 <style>
   /* Direction : galerie blanche. Noir, blanc, gris. Une seule famille sans-serif.
      Pas de dore, pas de creme, pas de serif : c'est le produit (les scenes peintes) qui apporte la couleur. */
@@ -95,9 +95,10 @@
   .steps p{margin:0;color:var(--muted)}
 
   /* modeles */
-  .models{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  @media (max-width:900px){ .models{grid-template-columns:repeat(2,1fr)} }
-  @media (max-width:480px){ .models{grid-template-columns:1fr} }
+  .models{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  @media (max-width:1000px){ .models{grid-template-columns:repeat(2,1fr)} }
+  .models>.model{min-width:0}
+  @media (max-width:560px){ .model .meta{flex-direction:column;gap:8px} .model h3{font-size:18px} }
   .model{background:var(--bg-2)}
   .model .pic{aspect-ratio:4/5;position:relative;overflow:hidden;background:var(--bg-2)}
   .model .pic img{width:100%;height:100%;object-fit:cover}
@@ -176,6 +177,9 @@
   .pv-scroll::-webkit-scrollbar{display:none}
   .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
   .pv-sc::before{content:"";position:absolute;inset:0 0 45% 0;background:linear-gradient(rgba(0,0,0,.34),transparent)}
+  .pv-sc.light::before{display:none}
+  .pv-sc.light .ey,.pv-sc.light .nm,.pv-sc.light .tx,.pv-sc.light .bt,.pv-sc.light .pv-hint{text-shadow:none}
+  .pv-sc.light .bt{background:transparent;backdrop-filter:none}
   .pv-sc>*{position:relative}
   .pv-sc .ey{font:500 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.92;text-shadow:0 1px 8px rgba(0,0,0,.5)}
   .pv-sc .nm{font:400 clamp(38px,5.4vh,54px)/1.05 "Great Vibes",cursive;margin:10px 0 6px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
@@ -183,6 +187,60 @@
   .pv-sc .bt{margin-top:14px;display:inline-block;border:1px solid rgba(255,255,255,.8);padding:8px 14px;font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;background:rgba(0,0,0,.15);backdrop-filter:blur(2px)}
   .pv-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font:500 10px Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6)}
   @media (max-width:760px){ .pv{flex-direction:column;gap:12px} .pv-side{text-align:center;max-width:none} .pv-side p{display:none} .pv-side h3{font-size:24px;margin:0 0 8px} .pv-tabs{justify-content:center} .pv-phone{height:min(72vh,680px)} }
+  /* filtres de style */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:-16px 0 24px}
+  .chip{background:var(--bg);border:1px solid var(--line);color:var(--ink);font:500 13px Inter,sans-serif;padding:9px 14px;cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .model[hidden]{display:none}
+  .model .style{font-size:12px;color:var(--muted);margin-top:2px}
+
+  /* composer */
+  .comp{display:grid;grid-template-columns:1fr auto;gap:56px;align-items:start}
+  @media (max-width:900px){ .comp{grid-template-columns:1fr;gap:32px} }
+  .comp .comp-form{display:grid;grid-template-columns:1fr;gap:26px;min-width:0;border:0;margin:0}
+  .comp .comp-form input{border-right:1px solid var(--line)}
+  .fld{display:grid;gap:10px}
+  .fld>span{font:500 12px/1 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .names{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+  .names b{font:400 22px "Great Vibes",cursive;color:var(--muted)}
+  .comp input[type=text],.comp input[type=date]{height:50px;border:1px solid var(--line);padding:0 14px;font:16px Inter,sans-serif;color:var(--ink);background:var(--bg);width:100%;min-width:0;border-radius:0}
+  .comp input:focus{outline:2px solid var(--ink);outline-offset:-1px}
+  .opts{display:flex;flex-wrap:wrap;gap:8px}
+  .sw{width:44px;height:44px;border-radius:50%;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+  .sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+  .sw-name{font-size:13px;color:var(--muted);margin-top:-2px}
+  .fo{background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:10px 14px;cursor:pointer;display:grid;gap:4px;justify-items:start;min-width:104px}
+  .fo b{font-size:24px;font-weight:400;line-height:1}
+  .fo small{font:500 11px Inter,sans-serif;color:var(--muted)}
+  .fo[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .comp-prev{display:grid;justify-items:center;gap:16px}
+  .cp-phone{position:relative;width:min(300px,78vw);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;background:#111 center/cover no-repeat;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
+  .cp-tint{position:absolute;inset:0;mix-blend-mode:soft-light;opacity:.55;transition:background .4s}
+  .cp-scrim{position:absolute;inset:0 0 45% 0;background:linear-gradient(rgba(0,0,0,.35),transparent)}
+  .cp-body{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0}
+  .cp-seal{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font:400 26px/1 "Great Vibes",cursive;color:rgba(255,255,255,.9);box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px rgba(0,0,0,.12);margin-bottom:14px;transition:background .4s}
+  .cp-ey{font:500 10px/1.4 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+  .cp-nm{font-size:44px;line-height:1.05;margin:10px 0 8px;word-break:break-word}
+  .cp-tx{font:italic 400 16px/1.35 "Cormorant Garamond",Georgia,serif;max-width:17em}
+  .cp-date{display:flex;align-items:center;gap:10px;margin-top:10px;font:500 15px/1.2 "Cormorant Garamond",Georgia,serif}
+  .cp-date i{display:block;width:26px;height:1px;background:currentColor;opacity:.7}
+  .cp-bt{margin-top:18px;border:1px solid currentColor;padding:8px 14px;font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+
+  /* ce que vous achetez */
+  .incl{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+  @media (max-width:1000px){ .incl{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ .incl{grid-template-columns:1fr} }
+  .incl div{padding:22px 22px 26px 0;border-bottom:1px solid var(--line);min-width:0}
+  .incl h3{font-size:20px;margin:0 0 8px}
+  .incl p{margin:0;color:var(--muted);font-size:15px}
+  .cmp-wrap{overflow-x:auto;margin-top:56px}
+  .cmp{width:100%;min-width:620px;border-collapse:collapse;font-size:15px}
+  .cmp th,.cmp td{text-align:left;padding:14px 16px 14px 0;border-bottom:1px solid var(--line);vertical-align:top}
+  .cmp thead th{font:500 12px Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .cmp tbody th{font-weight:500}
+  .cmp td{color:var(--muted)}
+  .cmp .us{color:var(--ink);font-weight:500}
+  .cmp thead .us{color:var(--ink)}
   footer{border-top:1px solid var(--line);padding:28px 0 40px;font-size:13px;color:var(--muted)}
   footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 </style>
@@ -216,7 +274,7 @@
         <div><b>FR · EN · AR</b><span>et d'autres langues</span></div>
       </div>
     </div>
-    <div class="car" id="car" aria-roledescription="carrousel" aria-label="Les 5 thèmes">
+    <div class="car" id="car" aria-roledescription="carrousel" aria-label="Les thèmes">
       <div class="car-stage" id="carStage"></div>
       <div class="car-nav">
         <button type="button" class="car-arrow" id="carPrev" aria-label="Thème précédent">←</button>
@@ -232,7 +290,7 @@
   <div class="wrap">
     <div class="head"><h2>Comment ça marche</h2></div>
     <div class="steps">
-      <div><b>01</b><h3>Choisissez un modèle</h3><p>Cinq thèmes prêts, déclinés en quatre saisons. Changez les textes, les couleurs, la musique.</p></div>
+      <div><b>01</b><h3>Choisissez un thème</h3><p>Neuf thèmes dans cinq styles. Changez les prénoms, les couleurs, la police, la musique.</p></div>
       <div><b>02</b><h3>Ajoutez vos lieux</h3><p>Une photo de votre mairie, de votre château ou de votre ville suffit : on la peint dans le style de votre faire-part.</p></div>
       <div><b>03</b><h3>Envoyez le lien</h3><p>Sur WhatsApp, un lien par famille si vous voulez. Les réponses arrivent dans votre tableau de bord.</p></div>
     </div>
@@ -242,16 +300,76 @@
 <section id="modeles">
   <div class="wrap">
     <div class="head">
-      <h2>Cinq thèmes pour commencer.</h2>
-      <p>Chaque thème est un faire-part complet, prêt à personnaliser : textes, couleurs, sceau, musique, et vos propres scènes. D'autres thèmes arrivent chaque saison.</p>
+      <h2>Neuf thèmes, cinq styles.</h2>
+      <p>Peinture, art déco, aquarelle, trait minimal ou pop rétro. Chaque thème est un faire-part complet, prêt à personnaliser.</p>
     </div>
-    <div class="models">
-      <div class="model" data-theme="conte" role="button" tabindex="0"><div class="pic"><img src="img/theme-conte.webp" alt="Thème Conte de fées : château sur une colline et carrosse" loading="lazy"></div><div class="meta"><div><h3>Conte de fées</h3><p>Château, carrosse, ciel de crépuscule.</p></div><span class="tag">Aperçu</span></div></div>
-      <div class="model" data-theme="americaine" role="button" tabindex="0"><div class="pic"><img src="img/theme-americaine.webp" alt="Thème À l'américaine : cérémonie en plein air, arche fleurie et chaises blanches" loading="lazy"></div><div class="meta"><div><h3>À l'américaine</h3><p>Cérémonie en plein air, arche fleurie.</p></div><span class="tag">Aperçu</span></div></div>
-      <div class="model" data-theme="bollywood" role="button" tabindex="0"><div class="pic"><img src="img/theme-bollywood.webp" alt="Thème Bollywood : palais rose, guirlandes de soucis et lampes" loading="lazy"></div><div class="meta"><div><h3>Bollywood</h3><p>Palais, soucis, mille lumières.</p></div><span class="tag">Aperçu</span></div></div>
-      <div class="model" data-theme="nuits" role="button" tabindex="0"><div class="pic"><img src="img/theme-nuits.webp" alt="Thème Mille et une nuits : riad de nuit, arches et lanternes" loading="lazy"></div><div class="meta"><div><h3>Mille et une nuits</h3><p>Lanternes, arches, nuit étoilée.</p></div><span class="tag">Aperçu</span></div></div>
-      <div class="model" data-theme="dolcevita" role="button" tabindex="0"><div class="pic"><img src="img/theme-dolcevita.webp" alt="Thème Dolce Vita : terrasse sur la côte amalfitaine, citronniers et Vespa" loading="lazy"></div><div class="meta"><div><h3>Dolce Vita</h3><p>Riviera, citronniers, Vespa.</p></div><span class="tag">Aperçu</span></div></div>
-      <div class="model"><div class="pic"><span class="soon">Votre thème</span></div><div class="meta"><div><h3>Sur-mesure</h3><p>Un univers rien qu'à vous.</p></div></div></div>
+    <div class="filters" id="filters" role="group" aria-label="Filtrer par style"></div>
+    <div class="models" id="models"></div>
+  </div>
+</section>
+
+<section id="composer">
+  <div class="wrap">
+    <div class="head">
+      <h2>Essayez avec vos prénoms.</h2>
+      <p>Choisissez un style, une palette et une police. Le faire-part se met à jour en direct.</p>
+    </div>
+    <div class="comp">
+      <form class="comp-form" id="compForm" autocomplete="off">
+        <label class="fld"><span>Vos prénoms</span>
+          <div class="names"><input type="text" id="cN1" value="Emma" maxlength="20" aria-label="Premier prénom"><b>&amp;</b><input type="text" id="cN2" value="Louis" maxlength="20" aria-label="Second prénom"></div>
+        </label>
+        <label class="fld"><span>Date du mariage</span><input type="date" id="cDate" value="2027-06-12"></label>
+        <div class="fld"><span>Style</span><div class="opts" id="cStyles"></div></div>
+        <div class="fld"><span>Couleurs</span><div class="opts" id="cPal"></div><div class="sw-name" id="cPalName"></div></div>
+        <div class="fld"><span>Police</span><div class="opts" id="cFonts"></div></div>
+      </form>
+      <div class="comp-prev">
+        <div class="cp-phone" id="cpPhone">
+          <div class="cp-tint" id="cpTint"></div><div class="cp-scrim" id="cpScrim"></div>
+          <div class="cp-body" id="cpBody">
+            <div class="cp-seal" id="cpSeal"></div>
+            <div class="cp-ey" id="cpEy">Ils se marient</div>
+            <div class="cp-nm" id="cpNm"></div>
+            <div class="cp-tx">Ont la joie de vous convier à leur mariage</div>
+            <div class="cp-date"><i></i><span id="cpDate"></span><i></i></div>
+            <div class="cp-bt">Répondre</div>
+          </div>
+        </div>
+        <a class="btn solid" href="#commencer" id="cpGo">Je veux celui-ci</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="inclus">
+  <div class="wrap">
+    <div class="head">
+      <h2>Ce que vous achetez.</h2>
+      <p>Pas une image à transférer : un faire-part vivant, prêt à envoyer, et tout ce qui va autour jusqu'au jour J.</p>
+    </div>
+    <div class="incl">
+      <div><h3>Votre faire-part en ligne</h3><p>Un lien à votre nom, une enveloppe qui s'ouvre au sceau de vos initiales, vos scènes et votre musique.</p></div>
+      <div><h3>Vos lieux, peints</h3><p>Votre mairie, votre salle ou votre ville d'origine, peintes d'après une photo, dans le style choisi.</p></div>
+      <div><h3>Les réponses, sans relancer</h3><p>Vos invités répondent en 20 secondes. Vous suivez tout dans un tableau de bord, par événement, avec export Excel.</p></div>
+      <div><h3>Un lien par famille</h3><p>« Chère famille Benali » sur l'enveloppe. Chacun ne voit que les événements auxquels il est invité.</p></div>
+      <div><h3>Tout le pratique</h3><p>Ajout au calendrier, itinéraire, compte à rebours, dress code, hébergement. En un tap.</p></div>
+      <div><h3>Plusieurs langues</h3><p>Français, anglais, arabe, espagnol… Vos invités lisent le faire-part dans leur langue.</p></div>
+      <div><h3>Save-the-date et vidéo</h3><p>Une version courte pour annoncer la date, et une vidéo verticale pour vos statuts WhatsApp et stories.</p></div>
+      <div><h3>Modifiable jusqu'au jour J</h3><p>Un horaire change ? On le modifie, le lien reste le même. Une vraie personne vous répond sur WhatsApp.</p></div>
+    </div>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th scope="col"></th><th scope="col">Papier</th><th scope="col">Modèle gratuit en ligne</th><th scope="col" class="us">Sceau</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Prix pour 300 invités</th><td>500 à 900 € avec l'envoi</td><td>0 à 30 €</td><td class="us">dès 99 €</td></tr>
+          <tr><th scope="row">Famille à l'étranger</th><td>Des semaines, parfois jamais</td><td>Oui</td><td class="us">En une seconde, dans sa langue</td></tr>
+          <tr><th scope="row">Réponses des invités</th><td>Coupons à relancer</td><td>À suivre à la main</td><td class="us">Tableau de bord et relances</td></tr>
+          <tr><th scope="row">Modifier après l'envoi</th><td>Impossible</td><td>Rarement</td><td class="us">Oui, jusqu'au jour J</td></tr>
+          <tr><th scope="row">Vos lieux, peints</th><td>Non</td><td>Non</td><td class="us">Oui</td></tr>
+          <tr><th scope="row">Votre temps</th><td>Des soirées</td><td>Des heures</td><td class="us">10 minutes</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
@@ -312,8 +430,9 @@
     <h2 style="margin-top:16px">Les dix premiers couples :<br>−40 % sur Signature.</h2>
     <!-- MVP : remplacer action par l'URL du formulaire (Tally, Formspree...) ou un lien de paiement Stripe -->
     <form id="waitForm" action="#" method="post">
-      <input type="text" name="prenoms" placeholder="Vos prénoms" required autocomplete="name">
+      <input type="text" name="prenoms" id="fNames" placeholder="Vos prénoms" required autocomplete="name">
       <input type="email" name="email" placeholder="E-mail" required autocomplete="email">
+      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="couleurs" id="fPal"><input type="hidden" name="police" id="fFont"><input type="hidden" name="date" id="fDate">
       <select name="plan" id="planSel" aria-label="Formule">
         <option value="signature">Signature</option>
         <option value="essentiel">Essentiel</option>
@@ -348,28 +467,50 @@
   });
 
   /* apercu des themes : 4 scenes par theme, textes d'exemple */
+  /* 9 themes, 5 styles. font/color = typographie propre au theme ; light = fond clair (texte fonce, pas de voile) */
   const THEMES={
-    conte:{name:"Conte de fées",desc:"Un château, un carrosse et un ciel de crépuscule. Pour les mariages romantiques.",couple:"Emma & Louis",date:"Samedi 5 juin 2027",
+    conte:{name:"Conte de fées",style:"Peinture",short:"Château, carrosse, crépuscule",desc:"Un château, un carrosse et un ciel de crépuscule. Pour les mariages romantiques.",couple:"Emma & Louis",
+      font:'"Great Vibes",cursive',color:"#fff",
       scenes:[["Ils se marient","NAMES","Samedi 5 juin 2027"],["La cérémonie","Sous l'arche de roses","15h00 · Jardins du château","Itinéraire"],["La fête","Dîner au château","Dès 19h, bal jusqu'au bout de la nuit"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre"]]},
-    americaine:{name:"À l'américaine",desc:"Cérémonie en plein air, chaises blanches et grange illuminée.",couple:"Chloé & Nathan",
-      scenes:[["We're getting married","NAMES","Samedi 19 juin 2027"],["Cérémonie & cocktail","Sur la pelouse","16h00 · Domaine des Chênes","Itinéraire"],["La fête","Dîner dans la grange","Dès 19h30, guirlandes et dancefloor"],["RSVP","On compte sur vous ?","Avant le 15 mai","Répondre"]]},
-    bollywood:{name:"Bollywood",desc:"Palais rose, soucis et mille lumières, sur plusieurs jours.",couple:"Priya & Arjun",
+    artdeco:{name:"Art déco",style:"Art déco",short:"Noir, or, années folles",desc:"Noir et or, géométrie des années 1920, champagne et jazz.",couple:"Margaux & Victor",
+      font:'"Limelight",serif',color:"#d9b96a",ey:"#d9b96a",tx:"#efe3c2",size:.8,
+      scenes:[["Save the date","NAMES","Samedi 16 octobre 2027"],["La cérémonie","Au grand salon","16h00 · Hôtel particulier, Paris 8e","Itinéraire"],["La soirée","Champagne & jazz","Dès 20h · Tenue de soirée"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
+    aquarelle:{name:"Aquarelle",style:"Aquarelle",short:"Pivoines, eucalyptus, papier blanc",desc:"Fleurs à l'aquarelle sur papier blanc, sauge et rose poudré.",couple:"Alice & Théo",light:true,
+      font:'"Parisienne",cursive',color:"#3e5a4a",ey:"#7a8f80",tx:"#55695d",
+      scenes:[["Nous nous marions","NAMES","Samedi 22 mai 2027"],["La cérémonie","Sous l'arche fleurie","15h30 · Domaine des Roses","Itinéraire"],["Le dîner","Au jardin","Dès 19h, sous la tonnelle"],["RSVP","Serez-vous des nôtres ?","Avant le 15 avril","Répondre"]]},
+    bollywood:{name:"Bollywood",style:"Peinture",short:"Palais, soucis, mille lumières",desc:"Palais rose, soucis et mille lumières, sur plusieurs jours.",couple:"Priya & Arjun",
+      font:'"Cinzel Decorative",serif',color:"#fff4d6",size:.72,
       scenes:[["Shubh Vivah","NAMES","Du 9 au 11 juillet 2027"],["Mehndi","Vendredi après-midi","14h00 · Cour du palais","Itinéraire"],["Cérémonie","Sous le mandap","Samedi 17h00","Itinéraire"],["Sangeet & réception","Serez-vous des nôtres ?","Samedi, dès 20h","Répondre"]]},
-    nuits:{name:"Mille et une nuits",desc:"Riad, zellige et lanternes. Henné, cérémonie et nuit étoilée.",couple:"Yasmine & Karim",
+    minimal:{name:"Trait",style:"Minimal",short:"Une ligne, du papier, rien de plus",desc:"Dessin d'un seul trait sur papier crème. Sobre et moderne.",couple:"Sarah & Yanis",light:true,
+      font:'"Jost",sans-serif',color:"#1d1d1b",ey:"#8a857c",tx:"#5a5750",size:.62,upper:true,
+      scenes:[["Save the date","NAMES","11 · 12 · 2027"],["Mairie","Mairie du 11e","11h00","Itinéraire"],["Déjeuner","Chez Paul","Dès 13h"],["Réponse","Vous venez ?","Avant le 11 novembre","Répondre"]]},
+    americaine:{name:"À l'américaine",style:"Peinture",short:"Plein air, arche fleurie, grange",desc:"Cérémonie en plein air, chaises blanches et grange illuminée.",couple:"Chloé & Nathan",
+      font:'"Playfair Display",Georgia,serif',italic:true,color:"#fff",size:.82,
+      scenes:[["We're getting married","NAMES","Samedi 19 juin 2027"],["Cérémonie & cocktail","Sur la pelouse","16h00 · Domaine des Chênes","Itinéraire"],["La fête","Dîner dans la grange","Dès 19h30, guirlandes et dancefloor"],["RSVP","On compte sur vous ?","Avant le 15 mai","Répondre"]]},
+    pop:{name:"Pop rétro",style:"Pop rétro",short:"Années 70, soleil, disco",desc:"Couleurs vives des années 70, marguerites et boule à facettes.",couple:"Lou & Max",light:true,
+      font:'"Shrikhand",cursive',color:"#e2457a",ey:"#f07b2a",tx:"#2b2240",size:.82,
+      scenes:[["On se marie !","NAMES","Samedi 3 juillet 2027"],["La cérémonie","Sous les marguerites","16h00 · Jardin de Mamie","Itinéraire"],["La fête","Disco jusqu'à l'aube","Dès 19h"],["RSVP","Tu viens danser ?","Avant le 1er juin","Répondre"]]},
+    nuits:{name:"Mille et une nuits",style:"Peinture",short:"Riad, zellige, lanternes",desc:"Riad, zellige et lanternes. Henné, cérémonie et nuit étoilée.",couple:"Yasmine & Karim",
+      font:'"Aref Ruqaa",serif',color:"#fff3d6",size:.8,
       scenes:[["Bismillah","NAMES","Samedi 12 juin 2027"],["Le henné","Vendredi soir","19h00 · Chez la famille Alaoui","Itinéraire"],["La cérémonie","Au riad","Samedi 14h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 19h","Répondre"]]},
-    dolcevita:{name:"Dolce Vita",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
+    dolcevita:{name:"Dolce Vita",style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
+      font:'"Italiana",serif',color:"#fff",size:.85,
       scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
   };
   const pv=document.getElementById('pv'), pvScroll=document.getElementById('pvScroll'), pvTabs=document.getElementById('pvTabs');
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   /* remet le defilement tout en haut (slide 1), y compris apres l'affichage de la fenetre */
   function toTop(el){ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; }); }); }
+  function nameStyle(t,scale){
+    const sz=(t.size||1)*scale;
+    return `font-family:${t.font};color:${t.color};font-size:clamp(${Math.round(34*sz)}px,${(5.2*sz).toFixed(2)}vh,${Math.round(54*sz)}px);${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.14em;font-weight:300;':''}`;
+  }
   function render(el,k){
-    const t=THEMES[k];
+    const t=THEMES[k], ey=t.ey||t.color, tx=t.tx||t.color;
     el.innerHTML=t.scenes.map((sc,i)=>{
-      const [ey,main,tx,bt]=sc;
-      const big=main==='NAMES'?`<div class="nm">${esc(t.couple)}</div>`:`<div class="nm" style="font-size:clamp(30px,4.2vh,42px)">${esc(main)}</div>`;
-      return `<section class="pv-sc" style="background-image:url('img/themes/${k}-${i+1}.webp')"><div class="ey">${esc(ey)}</div>${big}<div class="tx">${esc(tx)}</div>${bt?`<span class="bt">${esc(bt)}</span>`:''}${i===0?'<div class="pv-hint">Faites défiler ↓</div>':''}</section>`;
+      const [e,main,x,bt]=sc;
+      const big=`<div class="nm" style="${nameStyle(t,main==='NAMES'?1:.78)}">${esc(main==='NAMES'?t.couple:main)}</div>`;
+      return `<section class="pv-sc${t.light?' light':''}" style="background-image:url('img/themes/${k}-${i+1}.webp')"><div class="ey" style="color:${ey}">${esc(e)}</div>${big}<div class="tx" style="color:${tx}">${esc(x)}</div>${bt?`<span class="bt" style="color:${tx};border-color:${tx}">${esc(bt)}</span>`:''}${i===0?`<div class="pv-hint" style="color:${ey}">Faites défiler ↓</div>`:''}</section>`;
     }).join('');
     toTop(el);
   }
@@ -378,7 +519,7 @@
   }
   const press=(box,k)=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
   /* carrousel */
-  const KEYS=Object.keys(THEMES), SHORT={conte:"Château, carrosse, crépuscule",americaine:"Plein air, arche fleurie, grange",bollywood:"Palais, soucis, mille lumières",nuits:"Riad, zellige, lanternes",dolcevita:"Riviera, citronniers, Vespa"};
+  const KEYS=Object.keys(THEMES);
   const stage=document.getElementById('carStage'), dots=document.getElementById('carDots');
   let cur=0, auto=null;
   const items=KEYS.map((k,i)=>{
@@ -402,7 +543,7 @@
     });
     dots.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===cur));
     document.getElementById('carName').textContent=THEMES[KEYS[cur]].name;
-    document.getElementById('carDesc').textContent=SHORT[KEYS[cur]];
+    { const t=THEMES[KEYS[cur]]; document.getElementById('carDesc').textContent=(t.style!==t.name?t.style+' · ':'')+t.short; }
   }
   function go(i){ cur=(i+KEYS.length)%KEYS.length; toTop(items[cur].firstChild); layout(); }
   function stopAuto(){ if(auto){ clearInterval(auto); auto=null; } }
@@ -425,10 +566,60 @@
   tabs(pvTabs,showTheme);
   function openTheme(k){ pv.classList.add('on'); document.body.style.overflow='hidden'; showTheme(k); }
   function closeTheme(){ pv.classList.remove('on'); document.body.style.overflow=''; }
-  document.querySelectorAll('.model[data-theme]').forEach(m=>{ m.addEventListener('click',()=>openTheme(m.dataset.theme)); m.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openTheme(m.dataset.theme); } }); });
   document.getElementById('pvClose').onclick=closeTheme;
   pv.addEventListener('click',e=>{ if(e.target===pv) closeTheme(); });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeTheme(); });
+
+  /* catalogue avec filtre par style */
+  const models=document.getElementById('models'), filters=document.getElementById('filters');
+  KEYS.forEach(k=>{ const t=THEMES[k]; const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style; m.tabIndex=0; m.setAttribute('role','button'); m.setAttribute('aria-label','Aperçu : '+t.name);
+    m.innerHTML=`<div class="pic"><img src="img/themes/${k}-1.webp" alt="Thème ${esc(t.name)}" loading="lazy"></div><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style)}</p><p>${esc(t.short)}.</p></div><span class="tag">Aperçu</span></div>`;
+    m.addEventListener('click',()=>openTheme(k)); m.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openTheme(k); } }); models.appendChild(m); });
+  const sm=document.createElement('div'); sm.className='model'; sm.dataset.style='*'; sm.innerHTML='<div class="pic"><span class="soon">Votre thème</span></div><div class="meta"><div><h3>Sur-mesure</h3><p class="style">Couture</p><p>Un univers rien qu\'à vous.</p></div></div>'; models.appendChild(sm);
+  const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
+  STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
+    b.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); models.querySelectorAll('.model').forEach(m=>{ m.hidden=!(st==='Tous'||m.dataset.style===st||m.dataset.style==='*'); }); };
+    filters.appendChild(b); });
+
+  /* composer : prenoms, date, style, palette, police -> apercu en direct */
+  const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'}];
+  const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
+  const C={k:'conte',pal:'or',font:'theme'};
+  const $=id=>document.getElementById(id);
+  function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
+  function opt(box,items,key,label,draw){ items.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.dataset.id=it.id||it; draw(b,it); b.onclick=()=>{ C[key]=b.dataset.id; if(key==='k') C.font='theme'; paint(); }; box.appendChild(b); }); }
+  opt($('cStyles'),KEYS,'k','',(b,k)=>{ b.className='chip'; b.textContent=THEMES[k].name; });
+  opt($('cPal'),PALS,'pal','',(b,p)=>{ b.className='sw'; b.style.background=p.c; b.setAttribute('aria-label',p.name); });
+  opt($('cFonts'),FONTS,'font','',(b,f)=>{ b.className='fo'; b.innerHTML=`<b>Aa</b><small>${f.name}</small>`; });
+  function paint(){
+    const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
+    $('cStyles').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.k));
+    $('cPal').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.pal));
+    $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
+    $('cPalName').textContent=p.name;
+    $('cpPhone').style.backgroundImage=`url('img/themes/${C.k}-1.webp')`;
+    $('cpTint').style.background=p.c;
+    $('cpScrim').style.display=t.light?'none':'block';
+    const ink=t.light?(t.tx||t.color):'#fff';
+    $('cpBody').style.color=ink;
+    $('cpSeal').style.background=`radial-gradient(circle at 35% 30%, ${shade(p.c,1.25)}, ${p.c} 58%, ${shade(p.c,.6)})`;
+    const n1=($('cN1').value||'Emma').trim(), n2=($('cN2').value||'Louis').trim();
+    $('cpSeal').textContent=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
+    const nm=$('cpNm'); nm.textContent=n1+' & '+n2;
+    const fam=f.css||t.font, it=f.id==='theme'?t.italic:f.italic, up=f.id==='theme'?t.upper:f.upper;
+    nm.style.fontFamily=fam; nm.style.fontStyle=it?'italic':'normal'; nm.style.textTransform=up?'uppercase':'none'; nm.style.letterSpacing=up?'.12em':'0'; nm.style.fontWeight=up?'300':'400';
+    nm.style.fontSize=(up?26:fam.includes('Limelight')||fam.includes('Cinzel')?32:44)+'px';
+    nm.style.color=t.light?t.color:'#fff';
+    $('cpEy').style.color=t.light?(t.ey||ink):'#fff';
+    const d=$('cDate').value?new Date($('cDate').value+'T12:00:00'):null;
+    const ds=d&&!isNaN(d)?d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'Samedi 12 juin 2027';
+    $('cpDate').textContent=ds.charAt(0).toUpperCase()+ds.slice(1);
+    $('cpDate').parentElement.style.color=p.c;
+    $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fDate').value=$('cDate').value;
+  }
+  ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
+  $('compForm').addEventListener('submit',e=>e.preventDefault());
+  paint();
 </script>
 </body>
 </html>
