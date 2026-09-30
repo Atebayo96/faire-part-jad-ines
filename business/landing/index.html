@@ -58,12 +58,26 @@
   .facts b{display:block;font:500 28px/1 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em}
   .facts span{font-size:13px;color:var(--muted)}
 
-  /* telephone : apercu des 5 themes, on fait defiler les scenes */
   .device{justify-self:center;text-align:center}
-  .phone{--s:.74;width:calc(390px * var(--s));height:calc(844px * var(--s));border:1px solid var(--line);border-radius:36px;overflow:hidden;background:#000;position:relative}
-  .phone{position:relative}
-  .hero-tabs{justify-content:center;margin-top:16px;max-width:340px}
-  @media (max-width:420px){ .phone{--s:.8} }
+  /* carrousel des 5 themes : le telephone du centre en avant, les voisins en retrait */
+  .car{justify-self:center;width:100%;max-width:520px;overflow:hidden;padding:8px 0 4px}
+  .car-stage{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 78%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 78%,transparent 100%)}
+  .car-stage{position:relative;height:calc(min(260px,58vw) * 19.5 / 9);touch-action:pan-y}
+  .car-item{position:absolute;left:50%;top:0;width:min(260px,58vw);aspect-ratio:9/19.5;margin-left:calc(min(260px,58vw) / -2);
+    border-radius:32px;overflow:hidden;border:7px solid #111;background:#111;box-shadow:0 30px 50px -30px rgba(0,0,0,.5);
+    transition:transform .6s cubic-bezier(.2,.7,.2,1),opacity .6s ease,filter .6s ease;cursor:pointer}
+  .car-item.on{cursor:auto}
+  .car-item:not(.on) .pv-scroll{pointer-events:none}
+  .car-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:18px}
+  .car-arrow{width:44px;height:44px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:400 18px/1 Inter,sans-serif;cursor:pointer;flex:none}
+  .car-arrow:hover{border-color:var(--ink)}
+  .car-label{text-align:center;min-width:0;width:220px}
+  .car-label b{display:block;font:500 20px/1.2 "Inter Tight",Inter,sans-serif;letter-spacing:-.01em}
+  .car-label span{display:block;font-size:13px;color:var(--muted);margin-top:4px}
+  .car-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
+  .car-dots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
+  .car-dots button[aria-current="true"]{background:var(--ink);width:22px;border-radius:4px}
+  @media (prefers-reduced-motion:reduce){ .car-item{transition:none} }
 
   /* scenes */
   .rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
@@ -203,9 +217,14 @@
         <div><b>FR · EN · AR</b><span>et d'autres langues</span></div>
       </div>
     </div>
-    <div class="device">
-      <div class="phone"><div class="pv-scroll" id="heroScroll" aria-label="Aperçu du thème"></div></div>
-      <div class="pv-tabs hero-tabs" id="heroTabs" role="tablist" aria-label="Thèmes"></div>
+    <div class="car" id="car" aria-roledescription="carrousel" aria-label="Les 5 thèmes">
+      <div class="car-stage" id="carStage"></div>
+      <div class="car-nav">
+        <button type="button" class="car-arrow" id="carPrev" aria-label="Thème précédent">←</button>
+        <div class="car-label" aria-live="polite"><b id="carName"></b><span id="carDesc"></span></div>
+        <button type="button" class="car-arrow" id="carNext" aria-label="Thème suivant">→</button>
+      </div>
+      <div class="car-dots" id="carDots"></div>
     </div>
   </div>
 </header>
@@ -343,7 +362,6 @@
       scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
   };
   const pv=document.getElementById('pv'), pvScroll=document.getElementById('pvScroll'), pvTabs=document.getElementById('pvTabs');
-  const heroScroll=document.getElementById('heroScroll'), heroTabs=document.getElementById('heroTabs');
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   /* remet le defilement tout en haut (slide 1), y compris apres l'affichage de la fenetre */
   function toTop(el){ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; }); }); }
@@ -360,8 +378,45 @@
     Object.entries(THEMES).forEach(([k,t])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t.name; b.dataset.k=k; b.onclick=()=>onPick(k); box.appendChild(b); });
   }
   const press=(box,k)=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
-  function heroTheme(k){ render(heroScroll,k); press(heroTabs,k); }
-  tabs(heroTabs,heroTheme); heroTheme('conte');
+  /* carrousel */
+  const KEYS=Object.keys(THEMES), SHORT={conte:"Château, carrosse, crépuscule",americaine:"Plein air, arche fleurie, grange",bollywood:"Palais, soucis, mille lumières",nuits:"Riad, zellige, lanternes",dolcevita:"Riviera, citronniers, Vespa"};
+  const stage=document.getElementById('carStage'), dots=document.getElementById('carDots');
+  let cur=0, auto=null;
+  const items=KEYS.map((k,i)=>{
+    const it=document.createElement('div'); it.className='car-item'; it.setAttribute('role','group'); it.setAttribute('aria-label',THEMES[k].name);
+    const sc=document.createElement('div'); sc.className='pv-scroll'; it.appendChild(sc); stage.appendChild(it); render(sc,k);
+    it.addEventListener('click',()=>{ if(i!==cur){ stopAuto(); go(i); } });
+    const d=document.createElement('button'); d.type='button'; d.setAttribute('aria-label',THEMES[k].name); d.onclick=()=>{ stopAuto(); go(i); }; dots.appendChild(d);
+    return it;
+  });
+  function layout(){
+    const n=KEYS.length;
+    items.forEach((it,i)=>{
+      let d=i-cur; if(d>n/2) d-=n; if(d<-n/2) d+=n;
+      const a=Math.abs(d);
+      it.style.transform=`translateX(${d*58}%) scale(${a?0.8:1})`;
+      it.style.opacity=a>1?0:(a?0.55:1);
+      it.style.filter=a?'saturate(.8)':'none';
+      it.style.zIndex=10-a;
+      it.style.visibility=a>1?'hidden':'visible';
+      it.classList.toggle('on',a===0);
+    });
+    dots.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===cur));
+    document.getElementById('carName').textContent=THEMES[KEYS[cur]].name;
+    document.getElementById('carDesc').textContent=SHORT[KEYS[cur]];
+  }
+  function go(i){ cur=(i+KEYS.length)%KEYS.length; toTop(items[cur].firstChild); layout(); }
+  function stopAuto(){ if(auto){ clearInterval(auto); auto=null; } }
+  document.getElementById('carPrev').onclick=()=>{ stopAuto(); go(cur-1); };
+  document.getElementById('carNext').onclick=()=>{ stopAuto(); go(cur+1); };
+  document.getElementById('car').addEventListener('keydown',e=>{ if(e.key==='ArrowLeft'){ stopAuto(); go(cur-1); } if(e.key==='ArrowRight'){ stopAuto(); go(cur+1); } });
+  let sx=0, sy=0;
+  stage.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+  stage.addEventListener('touchend',e=>{ const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy; if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.2){ stopAuto(); go(cur+(dx<0?1:-1)); } },{passive:true});
+  stage.addEventListener('scroll',stopAuto,{capture:true,passive:true});
+  stage.addEventListener('wheel',stopAuto,{passive:true});
+  layout();
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) auto=setInterval(()=>{ if(!document.hidden) go(cur+1); },4500);
   function showTheme(k){
     const t=THEMES[k];
     document.getElementById('pvTitle').textContent=t.name;
