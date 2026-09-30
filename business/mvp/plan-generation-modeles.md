@@ -31,6 +31,20 @@ On la réutilise pour produire **à l'avance** 6 modèles complets que le client
 **Total de départ :** ~17 scènes (image + couche bâtiment + animation) + ~6 enveloppes et sceaux, avec des essais.
 **Coût :** à mesurer sur la première scène avant de lancer le reste (solde Higgsfield actuel : 600 crédits, plan Pro).
 
+## Bibliothèque d'éléments détourés (leçon de Missing Piece)
+Une scène riche = **un fond + 5 à 10 éléments détourés** qui bougent chacun à leur vitesse (parallaxe), comme nos lanternes `nuit_lantern_1..5`.
+Par modèle, ~8 éléments en PNG transparent (GPT Image 2.5, `background: transparent`), sans animation vidéo (la parallaxe suffit), donc **peu coûteux** :
+
+| Modèle | Éléments |
+|---|---|
+| Lanterne | Lanternes (5, déjà faites), arche mauresque, zellige, bouquet de jasmin, théière, tissu brodé |
+| Hôtel de Ville | Confettis, drapeaux, vélo, bouquet de pivoines, voiture ancienne, colombes |
+| Cathédrale | Lys, cloches, vitrail en médaillon, cierges, ruban, pétales |
+| Champêtre | Guirlande lumineuse, bottes de lavande, panier, vieux vélo, fleurs des champs, lucioles |
+| Intime | Bougies, verres, nappe de lin, lettre pliée, branche d'olivier |
+| Épure | Taches d'encre, brins d'eucalyptus, cachet |
+| Commun | Cadres photo ornementaux (pour les photos du couple), icônes au trait fin (itinéraire, calendrier, dress code, parking) |
+
 ## Le sceau aux initiales (pour chaque commande)
 Le sceau actuel a « J&I » gravé dans l'image. Deux options :
 1. **Générer un sceau par commande** (1 image, quelques secondes) : le rendu est parfait, mais ça coûte un peu à chaque client.
