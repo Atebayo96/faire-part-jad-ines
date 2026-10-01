@@ -7,7 +7,7 @@
 <meta name="description" content="Le faire-part qui s'ouvre. Vos lieux, peints et animés, envoyés en un lien. RSVP, calendrier, itinéraire, plusieurs langues.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&family=Cinzel+Decorative:wght@400&family=Aref+Ruqaa&family=Italiana&family=Limelight&family=Parisienne&family=Jost:wght@300;400&family=Shrikhand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&family=Cinzel+Decorative:wght@400&family=Aref+Ruqaa&family=Italiana&family=Limelight&family=Parisienne&family=Jost:wght@300;400&family=Shrikhand&family=DM+Serif+Display:ital@0;1&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <style>
   /* Direction : galerie blanche. Noir, blanc, gris. Une seule famille sans-serif.
      Pas de dore, pas de creme, pas de serif : c'est le produit (les scenes peintes) qui apporte la couleur. */
@@ -226,6 +226,75 @@
   .cp-date i{display:block;width:26px;height:1px;background:currentColor;opacity:.7}
   .cp-bt{margin-top:18px;border:1px solid currentColor;padding:8px 14px;font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase}
 
+  /* ouvertures : enveloppe, rideau, grandes portes */
+  .op-card{background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:12px 14px;cursor:pointer;display:grid;gap:3px;justify-items:start;text-align:left;min-width:128px}
+  .op-card b{font:500 15px "Inter Tight",Inter,sans-serif}
+  .op-card small{font-size:12px;color:var(--muted)}
+  .op-card[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .op{position:absolute;inset:0;z-index:5;cursor:pointer;overflow:hidden}
+  .op>div{position:absolute;inset:0;display:none}
+  .op[data-type="env"] .op-env,.op[data-type="cur"] .op-cur,.op[data-type="door"] .op-doors{display:block}
+  .op.done{pointer-events:none}
+  .op>.op-tap{inset:auto 0 7% 0}
+  .op-tap{position:absolute;left:0;right:0;bottom:7%;text-align:center;font:500 10px Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6);display:block!important;inset:auto 0 7% 0;transition:opacity .3s}
+  .op[data-type="env"] .op-tap{color:#7a6446;text-shadow:none}
+  .op.play .op-tap{opacity:0}
+  /* enveloppe */
+  .op-env{perspective:1100px;background:#efe6d3;transition:opacity .7s ease 1.15s,transform .9s ease 1.15s}
+  .op-env-in{position:absolute;top:0;height:100%;aspect-ratio:620/1111;left:50%;transform:translateX(-50%)}
+  .op-body{position:absolute;inset:0;background:url("img/open/env-body.webp") center/100% 100% no-repeat}
+  .op-flap{position:absolute;left:0;top:0;width:100%;transform-origin:50% 0;transition:transform 1.1s cubic-bezier(.32,0,.34,1);transform-style:preserve-3d}
+  .op-flap img{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 12px rgba(72,50,22,.25))}
+  .op-seal{position:absolute;left:50%;top:94%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;display:grid;place-items:center;font:400 26px/1 "Great Vibes",cursive;color:rgba(255,255,255,.92);box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px rgba(0,0,0,.12);transition:opacity .25s}
+  .op.play .op-flap{transform:rotateX(180deg)}
+  .op.play .op-seal{opacity:0}
+  .op.play .op-env{opacity:0;transform:translateY(6%)}
+  /* rideau qui se leve */
+  .op-cur{background:url("img/open/rideau.webp") center/cover no-repeat;transition:transform 1.9s cubic-bezier(.65,0,.3,1) .15s}
+  .op-cur-edge{position:absolute;left:0;right:0;bottom:-30px;height:30px;background:linear-gradient(rgba(0,0,0,.35),transparent)}
+  .op-mono{position:absolute;left:0;right:0;top:38%;text-align:center;font:400 54px/1 "Great Vibes",cursive;color:#e9c879;text-shadow:0 2px 0 #7a5a14,0 6px 16px rgba(0,0,0,.5);display:block!important;inset:38% 0 auto 0}
+  .op.play .op-cur{transform:translateY(-104%)}
+  /* grandes portes */
+  .op-doors{perspective:1400px}
+  .op-leaf{position:absolute;top:0;bottom:0;width:50.5%;background:url("img/open/porte.webp") center/cover no-repeat;transition:transform 1.8s cubic-bezier(.6,0,.25,1) .15s,filter 1.8s ease .15s;box-shadow:inset -8px 0 18px rgba(0,0,0,.25)}
+  .op-leaf.l{left:0;transform-origin:0 50%}
+  .op-leaf.r{right:0;transform-origin:100% 50%;background:none;overflow:hidden}
+  .op-leaf.r i{position:absolute;inset:0;background:url("img/open/porte.webp") center/cover no-repeat;transform:scaleX(-1);box-shadow:inset -8px 0 18px rgba(0,0,0,.25)}
+  .op-glow{position:absolute;inset:0;background:radial-gradient(60% 45% at 50% 50%,rgba(255,236,190,.6),transparent 70%);opacity:0;transition:opacity .8s ease .3s;pointer-events:none}
+  .op.play .op-glow{opacity:1}
+  .op.done .op-glow{opacity:0}
+  .op.play .op-leaf.l{transform:rotateY(-108deg);filter:brightness(.7)}
+  .op.play .op-leaf.r{transform:rotateY(108deg);filter:brightness(.7)}
+  .op.done .op-doors,.op.done .op-cur,.op.done .op-env{opacity:0;transition:opacity .4s}
+  .replay{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font:inherit;font-size:13px;cursor:pointer}
+  @media (prefers-reduced-motion:reduce){ .op-flap,.op-env,.op-cur,.op-leaf{transition-duration:.01s!important;transition-delay:0s!important} }
+
+  /* ----- mobile ----- */
+  @media (max-width:720px){
+    section{padding:56px 0}
+    .head{margin-bottom:28px}
+    .hero{padding:28px 0 48px}
+    .hero p{font-size:16px;margin-top:18px}
+    .facts{margin-top:32px}
+    .facts b{font-size:20px}
+    .facts span{font-size:12px;line-height:1.35;display:block;margin-top:4px}
+    .facts div{padding-right:8px}
+    .hero .ctas .btn{flex:1 1 auto}
+    .comp-prev{order:-1}
+    .cp-phone{width:min(250px,70vw)}
+    .op-card{min-width:0;flex:1 1 30%;padding:10px}
+    .fo{min-width:0;flex:1 1 30%}
+    .pv-tabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:100vw;padding:0 16px 4px;scrollbar-width:none}
+    .pv-tabs::-webkit-scrollbar{display:none}
+    .pv-tabs button{flex:none}
+    .pv-side{width:100%}
+    .cmp{min-width:0}
+    .cmp th:nth-child(3),.cmp td:nth-child(3){display:none}
+    .cmp th,.cmp td{padding-right:10px;font-size:14px}
+    .amount{font-size:46px}
+    .cta h2{font-size:36px}
+  }
+
   /* ce que vous achetez */
   .incl{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
   @media (max-width:1000px){ .incl{grid-template-columns:repeat(2,1fr)} }
@@ -290,7 +359,7 @@
   <div class="wrap">
     <div class="head"><h2>Comment ça marche</h2></div>
     <div class="steps">
-      <div><b>01</b><h3>Choisissez un thème</h3><p>Neuf thèmes dans cinq styles. Changez les prénoms, les couleurs, la police, la musique.</p></div>
+      <div><b>01</b><h3>Choisissez un thème</h3><p>Douze thèmes dans huit styles. Changez les prénoms, les couleurs, la police, la musique.</p></div>
       <div><b>02</b><h3>Ajoutez vos lieux</h3><p>Une photo de votre mairie, de votre château ou de votre ville suffit : on la peint dans le style de votre faire-part.</p></div>
       <div><b>03</b><h3>Envoyez le lien</h3><p>Sur WhatsApp, un lien par famille si vous voulez. Les réponses arrivent dans votre tableau de bord.</p></div>
     </div>
@@ -300,8 +369,8 @@
 <section id="modeles">
   <div class="wrap">
     <div class="head">
-      <h2>Neuf thèmes, cinq styles.</h2>
-      <p>Peinture, art déco, aquarelle, trait minimal ou pop rétro. Chaque thème est un faire-part complet, prêt à personnaliser.</p>
+      <h2>Douze thèmes, huit styles.</h2>
+      <p>Peinture, art déco, aquarelle, trait, pop rétro, bohème, céramique ou gravure. Chaque thème est un faire-part complet, prêt à personnaliser.</p>
     </div>
     <div class="filters" id="filters" role="group" aria-label="Filtrer par style"></div>
     <div class="models" id="models"></div>
@@ -312,10 +381,11 @@
   <div class="wrap">
     <div class="head">
       <h2>Essayez avec vos prénoms.</h2>
-      <p>Choisissez un style, une palette et une police. Le faire-part se met à jour en direct.</p>
+      <p>Choisissez l'ouverture, le style, les couleurs et la police. Le faire-part se met à jour en direct.</p>
     </div>
     <div class="comp">
       <form class="comp-form" id="compForm" autocomplete="off">
+        <div class="fld"><span>Ouverture</span><div class="opts" id="cOpen"></div></div>
         <label class="fld"><span>Vos prénoms</span>
           <div class="names"><input type="text" id="cN1" value="Emma" maxlength="20" aria-label="Premier prénom"><b>&amp;</b><input type="text" id="cN2" value="Louis" maxlength="20" aria-label="Second prénom"></div>
         </label>
@@ -335,7 +405,14 @@
             <div class="cp-date"><i></i><span id="cpDate"></span><i></i></div>
             <div class="cp-bt">Répondre</div>
           </div>
+          <div class="op" id="cpOp" role="button" tabindex="0" aria-label="Ouvrir le faire-part">
+            <div class="op-env"><div class="op-env-in"><div class="op-body"></div><div class="op-flap"><img src="img/open/env-flap.webp" alt=""><div class="op-seal" id="opSeal"></div></div></div></div>
+            <div class="op-cur"><div class="op-mono" id="opMonoC"></div><div class="op-cur-edge"></div></div>
+            <div class="op-doors"><div class="op-glow"></div><div class="op-leaf l"></div><div class="op-leaf r"><i></i></div></div>
+            <div class="op-tap">Touchez pour ouvrir</div>
+          </div>
         </div>
+        <button type="button" class="replay" id="cpReplay">Rejouer l'ouverture</button>
         <a class="btn solid" href="#commencer" id="cpGo">Je veux celui-ci</a>
       </div>
     </div>
@@ -432,7 +509,7 @@
     <form id="waitForm" action="#" method="post">
       <input type="text" name="prenoms" id="fNames" placeholder="Vos prénoms" required autocomplete="name">
       <input type="email" name="email" placeholder="E-mail" required autocomplete="email">
-      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="couleurs" id="fPal"><input type="hidden" name="police" id="fFont"><input type="hidden" name="date" id="fDate">
+      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="couleurs" id="fPal"><input type="hidden" name="police" id="fFont"><input type="hidden" name="date" id="fDate"><input type="hidden" name="ouverture" id="fOpen">
       <select name="plan" id="planSel" aria-label="Formule">
         <option value="signature">Signature</option>
         <option value="essentiel">Essentiel</option>
@@ -484,15 +561,24 @@
     minimal:{name:"Trait",style:"Minimal",short:"Une ligne, du papier, rien de plus",desc:"Dessin d'un seul trait sur papier crème. Sobre et moderne.",couple:"Sarah & Yanis",light:true,
       font:'"Jost",sans-serif',color:"#1d1d1b",ey:"#8a857c",tx:"#5a5750",size:.62,upper:true,
       scenes:[["Save the date","NAMES","11 · 12 · 2027"],["Mairie","Mairie du 11e","11h00","Itinéraire"],["Déjeuner","Chez Paul","Dès 13h"],["Réponse","Vous venez ?","Avant le 11 novembre","Répondre"]]},
+    boheme:{name:"Bohème",style:"Bohème",short:"Pampas, terracotta, désert",desc:"Pampas, fleurs séchées et coucher de soleil sur le désert.",couple:"Léna & Adam",light:true,
+      font:'"Cormorant Garamond",Georgia,serif',italic:true,color:"#7a3e22",ey:"#b0683f",tx:"#6b4a37",size:.9,
+      scenes:[["Save the date","NAMES","Samedi 11 septembre 2027"],["La cérémonie","Sous l'arche de pampas","17h00 · Mas des Sables","Itinéraire"],["Le dîner","À la belle étoile","Dès 19h30, coussins et bougies"],["RSVP","Serez-vous des nôtres ?","Avant le 15 juillet","Répondre","dark"]]},
     americaine:{name:"À l'américaine",style:"Peinture",short:"Plein air, arche fleurie, grange",desc:"Cérémonie en plein air, chaises blanches et grange illuminée.",couple:"Chloé & Nathan",
       font:'"Playfair Display",Georgia,serif',italic:true,color:"#fff",size:.82,
       scenes:[["We're getting married","NAMES","Samedi 19 juin 2027"],["Cérémonie & cocktail","Sur la pelouse","16h00 · Domaine des Chênes","Itinéraire"],["La fête","Dîner dans la grange","Dès 19h30, guirlandes et dancefloor"],["RSVP","On compte sur vous ?","Avant le 15 mai","Répondre"]]},
     pop:{name:"Pop rétro",style:"Pop rétro",short:"Années 70, soleil, disco",desc:"Couleurs vives des années 70, marguerites et boule à facettes.",couple:"Lou & Max",light:true,
       font:'"Shrikhand",cursive',color:"#e2457a",ey:"#f07b2a",tx:"#2b2240",size:.82,
       scenes:[["On se marie !","NAMES","Samedi 3 juillet 2027"],["La cérémonie","Sous les marguerites","16h00 · Jardin de Mamie","Itinéraire"],["La fête","Disco jusqu'à l'aube","Dès 19h"],["RSVP","Tu viens danser ?","Avant le 1er juin","Répondre"]]},
+    ceramique:{name:"Azulejos",style:"Céramique",short:"Carreaux bleus, citrons, océan",desc:"Carreaux bleus et blancs, citronniers et lumière du sud.",couple:"Sofia & Nuno",light:true,
+      font:'"DM Serif Display",Georgia,serif',color:"#1f4fa3",ey:"#3d6bb8",tx:"#2c3a55",size:.86,
+      scenes:[["Vamos casar","NAMES","Samedi 25 juin 2027"],["La cérémonie","À la chapelle blanche","16h00 · Lisbonne","Itinéraire"],["Le dîner","Face à l'océan","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre"]]},
     nuits:{name:"Mille et une nuits",style:"Peinture",short:"Riad, zellige, lanternes",desc:"Riad, zellige et lanternes. Henné, cérémonie et nuit étoilée.",couple:"Yasmine & Karim",
       font:'"Aref Ruqaa",serif',color:"#fff3d6",size:.8,
       scenes:[["Bismillah","NAMES","Samedi 12 juin 2027"],["Le henné","Vendredi soir","19h00 · Chez la famille Alaoui","Itinéraire"],["La cérémonie","Au riad","Samedi 14h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 19h","Répondre"]]},
+    gravure:{name:"Gravure",style:"Gravure",short:"Encre ancienne, papier vieilli",desc:"Gravure à l'encre sur papier ancien, comme un livre d'autrefois.",couple:"Claire & Thomas",light:true,
+      font:'"IM Fell English",Georgia,serif',italic:true,color:"#2a2620",ey:"#6b6152",tx:"#4a443a",size:.66,top1:"88%",
+      scenes:[["Ils se marient","NAMES","Samedi 2 octobre 2027"],["La messe","Église Saint-Martin","15h00","Itinéraire"],["Le dîner","Au château","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
     dolcevita:{name:"Dolce Vita",style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
       font:'"Italiana",serif',color:"#fff",size:.85,
       scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
@@ -508,9 +594,10 @@
   function render(el,k){
     const t=THEMES[k], ey=t.ey||t.color, tx=t.tx||t.color;
     el.innerHTML=t.scenes.map((sc,i)=>{
-      const [e,main,x,bt]=sc;
-      const big=`<div class="nm" style="${nameStyle(t,main==='NAMES'?1:.78)}">${esc(main==='NAMES'?t.couple:main)}</div>`;
-      return `<section class="pv-sc${t.light?' light':''}" style="background-image:url('img/themes/${k}-${i+1}.webp')"><div class="ey" style="color:${ey}">${esc(e)}</div>${big}<div class="tx" style="color:${tx}">${esc(x)}</div>${bt?`<span class="bt" style="color:${tx};border-color:${tx}">${esc(bt)}</span>`:''}${i===0?`<div class="pv-hint" style="color:${ey}">Faites défiler ↓</div>`:''}</section>`;
+      const [e,main,x,bt,mode]=sc, dk=mode==='dark';
+      const tt=dk?Object.assign({},t,{color:'#fff'}):t, ey2=dk?'#fff':ey, tx2=dk?'#fff':tx;
+      const big=`<div class="nm" style="${esc(nameStyle(tt,main==='NAMES'?1:.78))}">${esc(main==='NAMES'?t.couple:main)}</div>`;
+      return `<section class="pv-sc${t.light&&!dk?' light':''}" style="background-image:url('img/themes/${k}-${i+1}.webp');${i===0&&t.top1?'padding-top:'+t.top1:''}"><div class="ey" style="color:${ey2}">${esc(e)}</div>${big}<div class="tx" style="color:${tx2}">${esc(x)}</div>${bt?`<span class="bt" style="color:${tx2};border-color:${tx2}">${esc(bt)}</span>`:''}${i===0?`<div class="pv-hint" style="color:${ey2}">Faites défiler ↓</div>`:''}</section>`;
     }).join('');
     toTop(el);
   }
@@ -584,16 +671,19 @@
   /* composer : prenoms, date, style, palette, police -> apercu en direct */
   const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'}];
   const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
-  const C={k:'conte',pal:'or',font:'theme'};
+  const C={k:'conte',pal:'or',font:'theme',op:'env'};
+  const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent en grand'}];
   const $=id=>document.getElementById(id);
   function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
   function opt(box,items,key,label,draw){ items.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.dataset.id=it.id||it; draw(b,it); b.onclick=()=>{ C[key]=b.dataset.id; if(key==='k') C.font='theme'; paint(); }; box.appendChild(b); }); }
+  opt($('cOpen'),OPENS,'op','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   opt($('cStyles'),KEYS,'k','',(b,k)=>{ b.className='chip'; b.textContent=THEMES[k].name; });
   opt($('cPal'),PALS,'pal','',(b,p)=>{ b.className='sw'; b.style.background=p.c; b.setAttribute('aria-label',p.name); });
   opt($('cFonts'),FONTS,'font','',(b,f)=>{ b.className='fo'; b.innerHTML=`<b>Aa</b><small>${f.name}</small>`; });
   function paint(){
     const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
     $('cStyles').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.k));
+    $('cOpen').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.op));
     $('cPal').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.pal));
     $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
     $('cPalName').textContent=p.name;
@@ -604,7 +694,9 @@
     $('cpBody').style.color=ink;
     $('cpSeal').style.background=`radial-gradient(circle at 35% 30%, ${shade(p.c,1.25)}, ${p.c} 58%, ${shade(p.c,.6)})`;
     const n1=($('cN1').value||'Emma').trim(), n2=($('cN2').value||'Louis').trim();
-    $('cpSeal').textContent=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
+    const ini=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
+    $('cpSeal').textContent=ini; $('opSeal').textContent=ini; $('opMonoC').textContent=(n1[0]||'').toUpperCase()+' & '+(n2[0]||'').toUpperCase();
+    $('opSeal').style.background=$('cpSeal').style.background;
     const nm=$('cpNm'); nm.textContent=n1+' & '+n2;
     const fam=f.css||t.font, it=f.id==='theme'?t.italic:f.italic, up=f.id==='theme'?t.upper:f.upper;
     nm.style.fontFamily=fam; nm.style.fontStyle=it?'italic':'normal'; nm.style.textTransform=up?'uppercase':'none'; nm.style.letterSpacing=up?'.12em':'0'; nm.style.fontWeight=up?'300':'400';
@@ -615,9 +707,20 @@
     const ds=d&&!isNaN(d)?d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'Samedi 12 juin 2027';
     $('cpDate').textContent=ds.charAt(0).toUpperCase()+ds.slice(1);
     $('cpDate').parentElement.style.color=p.c;
-    $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fDate').value=$('cDate').value;
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
+  /* lecture de l'ouverture : fermee -> 'play' -> 'done' */
+  const op=$('cpOp'); let opT=null;
+  function closeOp(){ clearTimeout(opT); op.classList.remove('play','done'); op.dataset.type=C.op; void op.offsetWidth; }
+  function playOp(){ if(op.classList.contains('play')) return; op.classList.add('play'); opT=setTimeout(()=>op.classList.add('done'),2200); }
+  function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
+  op.addEventListener('click',playOp);
+  op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playOp(); } });
+  $('cpReplay').onclick=()=>replayOp(700);
+  $('cOpen').addEventListener('click',e=>{ if(e.target.closest('button')) replayOp(700); });
+  closeOp();
+  if('IntersectionObserver' in window){ const io=new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting){ setTimeout(playOp,900); io.disconnect(); } }); },{threshold:.6}); io.observe(op); }
   $('compForm').addEventListener('submit',e=>e.preventDefault());
   paint();
 </script>

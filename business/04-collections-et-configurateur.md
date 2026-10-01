@@ -23,6 +23,12 @@ La vitrine présente **5 thèmes**, des univers forts et faciles à choisir (com
 - Les « collections » ci-dessous (Lanterne, Cathédrale, Hôtel de Ville, Champêtre, Intime, Épure) restent des **styles de cérémonie** : Lanterne devient le thème Mille et une nuits, et les autres servent de packs de scènes et de réglages par défaut.
 - Visuels générés : 4 scènes par thème dans `landing/img/themes/<thème>-1..4.webp` (prénoms, cérémonie ou henné, fête, réponse), visibles dans l'aperçu interactif de la landing.
 
+### Mise à jour du 01/10/2026 : 12 thèmes, 8 styles, 3 ouvertures
+- **Styles** : Peinture (Conte de fées, À l'américaine, Bollywood, Mille et une nuits, Dolce Vita), Art déco, Aquarelle, Trait (minimal), Pop rétro, Bohème, Céramique (Azulejos), Gravure. Chaque thème a sa police et ses couleurs.
+- **Ouvertures au choix** : enveloppe au sceau (aux initiales), rideau de théâtre qui se lève, grandes portes qui s'ouvrent.
+- **Personnalisation sur la vitrine** : ouverture, prénoms, date, style, 5 palettes, 5 polices, avec un aperçu en direct.
+- Pistes pour la suite : Hiver enchanté, Tropical, Japonais, Marin, Photo éditoriale, Gothique romantique.
+
 ## 1. Les 6 modèles de base (styles de cérémonie)
 
 > Chaque modèle est **produit à l'avance** (scènes peintes et animées, enveloppe, musique) et **prêt à personnaliser**. La direction artistique est celle de notre faire-part. Plan de production : [mvp/plan-generation-modeles.md](mvp/plan-generation-modeles.md).
