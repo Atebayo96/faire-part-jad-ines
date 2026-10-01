@@ -214,8 +214,23 @@
   .fo small{font:500 11px Inter,sans-serif;color:var(--muted)}
   .fo[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
   .comp-prev{display:grid;justify-items:center;gap:16px}
-  .cp-phone{position:relative;width:min(300px,78vw);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;background:#111 center/cover no-repeat;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
-  .cp-tint{position:absolute;inset:0;mix-blend-mode:soft-light;opacity:.55;transition:background .4s}
+  .cp-phone{position:relative;width:min(300px,78vw);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;background:#111;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
+  .cp-tint{position:absolute;inset:0;mix-blend-mode:soft-light;opacity:.55;transition:background .4s;pointer-events:none;z-index:2}
+  .cp-phone .pv-scroll{position:absolute;inset:0}
+  .cp-phone .pv-sc{padding-top:14%}
+  .cp-phone .pv-sc .nm{margin:8px 0 6px}
+  .cp-phone .pv-sc .tx{font-size:15px}
+  .cd{display:flex;justify-content:center;gap:12px;margin-top:16px}
+  .cd div{display:grid;justify-items:center;gap:4px;min-width:40px}
+  .cd b{font:500 24px/1 "Inter Tight",Inter,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .cd span{font:500 8px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+  .cd.big{gap:14px;margin-top:22px}
+  .cd.big b{font-size:38px}
+  .cd-veil{position:absolute;inset:0;pointer-events:none}
+  .pv-sc>.cd-veil{position:absolute}
+  .cp-dl{display:flex;align-items:center;gap:10px;margin-top:10px;font:500 15px/1.2 "Cormorant Garamond",Georgia,serif}
+  .cp-dl i{display:block;width:24px;height:1px;background:currentColor;opacity:.75}
+  .cp-phone .pv-hint{z-index:1}
   .cp-scrim{position:absolute;inset:0 0 45% 0;background:linear-gradient(rgba(0,0,0,.35),transparent)}
   .cp-body{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0}
   .cp-seal{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font:400 26px/1 "Great Vibes",cursive;color:rgba(255,255,255,.9);box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px rgba(0,0,0,.12);margin-bottom:14px;transition:background .4s}
@@ -369,11 +384,11 @@
 
 <section id="comment">
   <div class="wrap">
-    <div class="head"><h2>Comment ça marche</h2></div>
+    <div class="head"><h2>Comment ça marche</h2><p>Trois étapes, et votre faire-part est prêt à partir.</p></div>
     <div class="steps">
-      <div><b>01</b><h3>Choisissez un thème</h3><p>Douze thèmes dans huit styles. Changez les prénoms, les couleurs, la police, la musique.</p></div>
-      <div><b>02</b><h3>Ajoutez vos lieux</h3><p>Une photo de votre mairie, de votre château ou de votre ville suffit : on la peint dans le style de votre faire-part.</p></div>
-      <div><b>03</b><h3>Envoyez le lien</h3><p>Sur WhatsApp, un lien par famille si vous voulez. Les réponses arrivent dans votre tableau de bord.</p></div>
+      <div><b>01</b><h3>Choisissez votre thème</h3><p>Douze thèmes dans huit styles : peinture, art déco, aquarelle, bohème… Vous pouvez tous les essayer avec vos prénoms.</p></div>
+      <div><b>02</b><h3>Paramétrez-le</h3><p>L'ouverture (enveloppe, rideau ou grandes portes), vos prénoms, la date, les couleurs, la police, la musique, le compte à rebours, vos événements et vos lieux.</p></div>
+      <div><b>03</b><h3>Recevez votre lien</h3><p>Un lien prêt à envoyer sur WhatsApp, un par famille si vous voulez. Les réponses de vos invités arrivent dans votre tableau de bord.</p></div>
     </div>
   </div>
 </section>
@@ -393,7 +408,7 @@
   <div class="wrap">
     <div class="head">
       <h2>Essayez avec vos prénoms.</h2>
-      <p>Choisissez l'ouverture, le style, les couleurs et la police. Le faire-part se met à jour en direct.</p>
+      <p>Choisissez l'ouverture, le style, les couleurs, la police et le compte à rebours. Faites défiler le faire-part : il se met à jour en direct.</p>
     </div>
     <div class="comp">
       <form class="comp-form" id="compForm" autocomplete="off">
@@ -405,18 +420,12 @@
         <div class="fld"><span>Style</span><div class="opts" id="cStyles"></div></div>
         <div class="fld"><span>Couleurs</span><div class="opts" id="cPal"></div><div class="sw-name" id="cPalName"></div></div>
         <div class="fld"><span>Police</span><div class="opts" id="cFonts"></div></div>
+        <div class="fld"><span>Compte à rebours</span><div class="opts" id="cCount"></div></div>
       </form>
       <div class="comp-prev">
         <div class="cp-phone" id="cpPhone">
-          <div class="cp-tint" id="cpTint"></div><div class="cp-scrim" id="cpScrim"></div>
-          <div class="cp-body" id="cpBody">
-            <div class="cp-seal" id="cpSeal"></div>
-            <div class="cp-ey" id="cpEy">Ils se marient</div>
-            <div class="cp-nm" id="cpNm"></div>
-            <div class="cp-tx">Ont la joie de vous convier à leur mariage</div>
-            <div class="cp-date"><i></i><span id="cpDate"></span><i></i></div>
-            <div class="cp-bt">Répondre</div>
-          </div>
+          <div class="pv-scroll" id="cpScroll" aria-label="Aperçu de votre faire-part"></div>
+          <div class="cp-tint" id="cpTint"></div>
           <div class="op" id="cpOp" role="button" tabindex="0" aria-label="Ouvrir le faire-part">
             <div class="op-env"><div class="op-env-in"><div class="op-body"></div><div class="op-flap"><img src="img/open/env-flap.webp" alt=""><div class="op-seal" id="opSeal"></div></div></div></div>
             <div class="op-cur"><div class="op-mono" id="opMonoC"></div><div class="op-cur-edge"></div></div>
@@ -521,7 +530,7 @@
     <form id="waitForm" action="#" method="post">
       <input type="text" name="prenoms" id="fNames" placeholder="Vos prénoms" required autocomplete="name">
       <input type="email" name="email" placeholder="E-mail" required autocomplete="email">
-      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="couleurs" id="fPal"><input type="hidden" name="police" id="fFont"><input type="hidden" name="date" id="fDate"><input type="hidden" name="ouverture" id="fOpen">
+      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="couleurs" id="fPal"><input type="hidden" name="police" id="fFont"><input type="hidden" name="date" id="fDate"><input type="hidden" name="ouverture" id="fOpen"><input type="hidden" name="compte_a_rebours" id="fCount">
       <select name="plan" id="planSel" aria-label="Formule">
         <option value="signature">Signature</option>
         <option value="essentiel">Essentiel</option>
@@ -589,7 +598,7 @@
       font:'"Aref Ruqaa",serif',color:"#fff3d6",size:.8,
       scenes:[["Bismillah","NAMES","Samedi 12 juin 2027"],["Le henné","Vendredi soir","19h00 · Chez la famille Alaoui","Itinéraire"],["La cérémonie","Au riad","Samedi 14h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 19h","Répondre"]]},
     gravure:{name:"Gravure",style:"Gravure",short:"Encre ancienne, papier vieilli",desc:"Gravure à l'encre sur papier ancien, comme un livre d'autrefois.",couple:"Claire & Thomas",light:true,
-      font:'"IM Fell English",Georgia,serif',italic:true,color:"#2a2620",ey:"#6b6152",tx:"#4a443a",size:.66,top1:"88%",
+      font:'"IM Fell English",Georgia,serif',italic:true,color:"#2a2620",ey:"#6b6152",tx:"#4a443a",size:.74,top1:"86%",stack:true,
       scenes:[["Ils se marient","NAMES","Samedi 2 octobre 2027"],["La messe","Église Saint-Martin","15h00","Itinéraire"],["Le dîner","Au château","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
     dolcevita:{name:"Dolce Vita",style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
       font:'"Italiana",serif',color:"#fff",size:.85,
@@ -608,7 +617,8 @@
     el.innerHTML=t.scenes.map((sc,i)=>{
       const [e,main,x,bt,mode]=sc, dk=mode==='dark';
       const tt=dk?Object.assign({},t,{color:'#fff'}):t, ey2=dk?'#fff':ey, tx2=dk?'#fff':tx;
-      const big=`<div class="nm" style="${esc(nameStyle(tt,main==='NAMES'?1:.78))}">${esc(main==='NAMES'?t.couple:main)}</div>`;
+      const nmTxt=main==='NAMES'?(t.stack?t.couple.split(' & ').map(esc).join('<br>&amp; '):esc(t.couple)):esc(main);
+      const big=`<div class="nm" style="${esc(nameStyle(tt,main==='NAMES'?1:.78))}">${nmTxt}</div>`;
       return `<section class="pv-sc${t.light&&!dk?' light':''}" style="background-image:url('img/themes/${k}-${i+1}.webp');${i===0&&t.top1?'padding-top:'+t.top1:''}"><div class="ey" style="color:${ey2}">${esc(e)}</div>${big}<div class="tx" style="color:${tx2}">${esc(x)}</div>${bt?`<span class="bt" style="color:${tx2};border-color:${tx2}">${esc(bt)}</span>`:''}${i===0?`<div class="pv-hint" style="color:${ey2}">Faites défiler ↓</div>`:''}</section>`;
     }).join('');
     toTop(el);
@@ -683,7 +693,8 @@
   /* composer : prenoms, date, style, palette, police -> apercu en direct */
   const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'}];
   const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
-  const C={k:'conte',pal:'or',font:'theme',op:'env'};
+  const C={k:'conte',pal:'or',font:'theme',op:'env',cd:'debut'};
+  const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
   const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
   const $=id=>document.getElementById(id);
   function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
@@ -692,34 +703,46 @@
   opt($('cStyles'),KEYS,'k','',(b,k)=>{ b.className='chip'; b.textContent=THEMES[k].name; });
   opt($('cPal'),PALS,'pal','',(b,p)=>{ b.className='sw'; b.style.background=p.c; b.setAttribute('aria-label',p.name); });
   opt($('cFonts'),FONTS,'font','',(b,f)=>{ b.className='fo'; b.innerHTML=`<b>Aa</b><small>${f.name}</small>`; });
+  opt($('cCount'),COUNTS,'cd','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  const cdHtml=(big,col,extra)=>`<div class="cd${big?' big':''}" style="color:${col};${extra||''}"><div><b data-u="d">0</b><span>jours</span></div><div><b data-u="h">0</b><span>heures</span></div><div><b data-u="m">0</b><span>min</span></div><div><b data-u="s">0</b><span>sec</span></div></div>`;
+  function weddingDate(){ const v=$('cDate').value; const d=v?new Date(v+'T15:00:00'):null; return d&&!isNaN(d)?d:new Date('2027-06-12T15:00:00'); }
+  function tick(){
+    const ms=Math.max(0,weddingDate()-Date.now()), v={d:Math.floor(ms/864e5),h:Math.floor(ms/36e5)%24,m:Math.floor(ms/6e4)%60,s:Math.floor(ms/1e3)%60};
+    $('cpScroll').querySelectorAll('.cd b').forEach(b=>{ b.textContent=String(v[b.dataset.u]).padStart(b.dataset.u==='d'?1:2,'0'); });
+  }
+  setInterval(tick,1000);
   function paint(){
     const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
-    $('cStyles').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.k));
-    $('cOpen').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.op));
-    $('cPal').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.pal));
+    [['cStyles','k'],['cOpen','op'],['cPal','pal'],['cCount','cd']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
     $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
     $('cPalName').textContent=p.name;
-    $('cpPhone').style.backgroundImage=`url('img/themes/${C.k}-1.webp')`;
     $('cpTint').style.background=p.c;
-    $('cpScrim').style.display=t.light?'none':'block';
-    const ink=t.light?(t.tx||t.color):'#fff';
-    $('cpBody').style.color=ink;
-    $('cpSeal').style.background=`radial-gradient(circle at 35% 30%, ${shade(p.c,1.25)}, ${p.c} 58%, ${shade(p.c,.6)})`;
     const n1=($('cN1').value||'Emma').trim(), n2=($('cN2').value||'Louis').trim();
     const ini=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
-    $('cpSeal').textContent=ini; $('opSeal').textContent=ini; $('opMonoC').textContent=(n1[0]||'').toUpperCase()+' & '+(n2[0]||'').toUpperCase();
-    $('opSeal').style.background=$('cpSeal').style.background;
-    const nm=$('cpNm'); nm.textContent=n1+' & '+n2;
+    const sealBg=`radial-gradient(circle at 35% 30%, ${shade(p.c,1.25)}, ${p.c} 58%, ${shade(p.c,.6)})`;
+    $('opSeal').textContent=ini; $('opSeal').style.background=sealBg; $('opMonoC').textContent=(n1[0]||'').toUpperCase()+' & '+(n2[0]||'').toUpperCase();
     const fam=f.css||t.font, it=f.id==='theme'?t.italic:f.italic, up=f.id==='theme'?t.upper:f.upper;
-    nm.style.fontFamily=fam; nm.style.fontStyle=it?'italic':'normal'; nm.style.textTransform=up?'uppercase':'none'; nm.style.letterSpacing=up?'.12em':'0'; nm.style.fontWeight=up?'300':'400';
-    nm.style.fontSize=(up?26:fam.includes('Limelight')||fam.includes('Cinzel')?32:44)+'px';
-    nm.style.color=t.light?t.color:'#fff';
-    $('cpEy').style.color=t.light?(t.ey||ink):'#fff';
-    const d=$('cDate').value?new Date($('cDate').value+'T12:00:00'):null;
-    const ds=d&&!isNaN(d)?d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'Samedi 12 juin 2027';
-    $('cpDate').textContent=ds.charAt(0).toUpperCase()+ds.slice(1);
-    $('cpDate').parentElement.style.color=p.c;
-    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fDate').value=$('cDate').value;
+    const base=up?24:/Limelight|Cinzel/.test(fam)?30:40;
+    const nmCss=(sz,col)=>`font-family:${fam};font-style:${it?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:${sz}px;color:${col}`;
+    const d=weddingDate(), ds0=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}), ds=ds0.charAt(0).toUpperCase()+ds0.slice(1);
+    const names=t.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
+    const page=(img,mode,inner,extra)=>{ const dk=mode==='dark', lt=t.light&&!dk;
+      const c={nm:lt?t.color:'#fff',ey:lt?(t.ey||t.color):'#fff',tx:lt?(t.tx||t.color):'#fff'};
+      return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" style="${esc(`background-image:url('img/themes/${C.k}-${img}.webp');${extra||''}`)}">${h(c)}</section>`}; };
+    const pages=[];
+    // 1. prenoms + date (+ compte a rebours au debut)
+    { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');
+      const oval=!!t.top1;
+      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc('background:'+sealBg)}">${esc(ini)}</div>`}<div class="ey" style="color:${c.ey}">${esc(t.scenes[0][0])}</div><div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}<div class="cp-dl" style="color:${p.c}"><i></i><span>${esc(ds)}</span><i></i></div>${C.cd==='debut'?cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':''):''}<div class="pv-hint" style="color:${c.ey}">Faites défiler ↓</div>`)); }
+    const scene=(idx,withCd)=>{ const [e,main,x,bt,mode]=t.scenes[idx]; const pg=page(idx+1,mode);
+      return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?`<span class="bt" style="color:${c.tx};border-color:${c.tx}">${esc(bt)}</span>`:''}`); };
+    pages.push(scene(1,false));
+    // page dediee au compte a rebours
+    if(C.cd==='page'){ const pg=page(1,''); pages.push(pg.html(c=>`<div class="cd-veil" style="background:${pg.lt?'rgba(255,253,248,.62)':'rgba(10,10,15,.45)'}"></div><div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
+    pages.push(scene(2,false));
+    pages.push(scene(3,C.cd==='fin'));
+    const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML=pages.join(''); sc.scrollTop=st; tick();
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
   /* lecture de l'ouverture : fermee -> 'play' -> 'done' */
