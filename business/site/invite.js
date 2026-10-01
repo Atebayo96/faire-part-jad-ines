@@ -190,7 +190,7 @@
     if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); layers[i].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
   }),{root:sc,threshold:[.45,.8]});
   secs.forEach(s=>io.observe(s));
-  // défilement continu, comme le faire-part d'Inès & Jad : pas de page qui s'arrête net,
+  // comme le faire-part d'Inès & Jad : pendant le glissement d'une page à l'autre,
   // le décor suivant apparaît en fondu PAR-DESSUS le précédent (jamais de trait ni de trou noir),
   // les textes de la page se fondent et glissent doucement selon sa position
   const ease=x=>x*x*(3-2*x);
@@ -212,20 +212,67 @@
       const L=layers[i], n=pages[i].n;
       L.style.opacity=i===0?1:ease(Math.max(0,Math.min(1,1+d*1.15))).toFixed(3);
       if(ANIM.has(n)&&opened&&!reduce){
-        if(Math.abs(d)<1.6) loadFrames(n);
+        if(Math.abs(d)<2.2) loadFrames(n);
         if(frames[n]&&frames[n].ready){
           const pr=i===0?Math.min(1,sc.scrollTop/(h*.6)):Math.max(0,Math.min(1,(d+.75)/1.2));
           const k=Math.round(pr*(FR-1));
           if(L._k!==k){ L._k=k; L.firstElementChild.style.backgroundImage=`url('${frameUrl(n,k)}')`; }
         }
       }
-      if(!reduce&&d>-1.3&&d<1.3) L.style.transform=`translate3d(0,${(-d*5).toFixed(2)}%,0)`;
+      if(!reduce&&d>-1.3&&d<1.3) L.style.transform=`translate3d(0,${(-d*3).toFixed(2)}%,0)`;
       if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.12)*1.9)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
     });
   }
   sc.addEventListener('scroll',()=>{ if(!ticking){ ticking=true; requestAnimationFrame(frame); } },{passive:true});
-  addEventListener('resize',frame);
   frame();
+
+  /* ---------- pagination, comme le faire-part d'Inès & Jad ----------
+     un swipe (ou un cran de molette, ou une flèche) = la scène suivante glisse en douceur
+     et se cale pile en plein écran ; une page plus haute que l'écran se lit en plusieurs crans */
+  const PAGE_DUR=900, easePage=t=>1-Math.pow(1-t,3);
+  let paging=false;
+  function stops(){
+    const h=sc.clientHeight, max=sc.scrollHeight-h, out=[];
+    secs.forEach(s=>{ const t=s.offsetTop, H=s.offsetHeight; out.push(t);
+      if(H>h*1.05){ for(let y=t+h*.85;y<t+H-h;y+=h*.85) out.push(Math.round(y)); out.push(t+H-h); } });
+    return [...new Set(out.map(y=>Math.max(0,Math.min(max,Math.round(y)))))].sort((a,b)=>a-b);
+  }
+  function glide(to){
+    const from=sc.scrollTop; if(Math.abs(to-from)<2) return;
+    paging=true; const t0=performance.now(), dur=reduce?1:PAGE_DUR;
+    (function step(now){ const p=Math.min(1,(now-t0)/dur); sc.scrollTop=from+(to-from)*easePage(p);
+      if(p<1) requestAnimationFrame(step); else paging=false; })(t0);
+  }
+  function go(dir){
+    if(!opened||paging) return;
+    const cur=sc.scrollTop, st=stops();
+    const to=dir>0?st.find(y=>y>cur+4):st.slice().reverse().find(y=>y<cur-4);
+    if(to!==undefined) glide(to);
+  }
+  function settle(){ if(!opened||paging) return; const cur=sc.scrollTop, st=stops(); glide(st.reduce((b,y)=>Math.abs(y-cur)<Math.abs(b-cur)?y:b,st[0])); }
+  // tactile : le défilement natif est bloqué, c'est le relâcher du swipe qui lance le glissement
+  let tY=null, tX=null;
+  sc.addEventListener('touchstart',e=>{ tY=e.touches[0].clientY; tX=e.touches[0].clientX; },{passive:true});
+  sc.addEventListener('touchmove',e=>{ if(opened) e.preventDefault(); },{passive:false});
+  sc.addEventListener('touchend',e=>{
+    if(tY===null) return; const dy=tY-e.changedTouches[0].clientY, dx=tX-e.changedTouches[0].clientX; tY=tX=null;
+    if(Math.abs(dy)<32||Math.abs(dy)<Math.abs(dx)) return;   // tap ou geste horizontal : on ne bouge pas
+    go(dy>0?1:-1);
+  },{passive:true});
+  // molette / trackpad : un geste = une page (l'inertie du trackpad ne fait pas sauter plusieurs pages)
+  let lastWheel=0, wheelUsed=false;
+  sc.addEventListener('wheel',e=>{
+    if(!opened) return; e.preventDefault();
+    const now=performance.now(); if(now-lastWheel>220) wheelUsed=false; lastWheel=now;
+    if(wheelUsed||paging||Math.abs(e.deltaY)<6) return;
+    wheelUsed=true; go(e.deltaY>0?1:-1);
+  },{passive:false});
+  addEventListener('keydown',e=>{
+    if(!opened||sheet.classList.contains('on')||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')) return;
+    if(['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); go(1); }
+    else if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); go(-1); }
+  });
+  addEventListener('resize',()=>{ frame(); settle(); });
   // précharge les images des pages suivantes
   [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
 
