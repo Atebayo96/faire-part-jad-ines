@@ -144,7 +144,8 @@ a{color:inherit}
 
 /* grandes portes : petit déclic, puis les deux battants s'ouvrent d'un seul mouvement continu ;
    la lumière de la salle passe par l'entrebâillement, la caméra avance doucement */
-.op-doors{overflow:hidden;background:transparent;will-change:transform}
+/* derrière les battants : uniquement de la lumière (on ne voit pas la salle avant que les portes soient ouvertes) */
+.op-doors{overflow:hidden;will-change:transform;background:radial-gradient(75% 60% at 50% 50%,#fffefa 0%,#fff6e2 40%,#f6e4bd 75%,#e9cf98 100%)}
 .op-doors-in{position:absolute;inset:0;z-index:2;perspective:620px;perspective-origin:50% 50%;transform-style:preserve-3d}
 .op-leaf{position:absolute;top:0;bottom:0;width:50%;background:var(--door,url("/img/open/portes.webp")) no-repeat;background-size:200% 100%;backface-visibility:hidden;will-change:transform;transform:rotateY(0) translateZ(0)}
 .op-leaf.l{left:0;background-position:0 0;transform-origin:0 50%}

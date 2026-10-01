@@ -194,14 +194,31 @@
   // le décor suivant apparaît en fondu PAR-DESSUS le précédent (jamais de trait ni de trou noir),
   // les textes de la page se fondent et glissent doucement selon sa position
   const ease=x=>x*x*(3-2*x);
+  // décors animés au défilement, comme notre faire-part : 24 images tirées d'une courte vidéo de chaque scène,
+  // qui avancent et reculent avec le doigt. Chargées juste avant d'arriver sur la scène.
+  const ANIM=new Set(I.anim||[]), FR=24, frames={};
+  const frameUrl=(n,k)=>`/img/frames/${I.theme}-${n}/f${String(k+1).padStart(2,'0')}.webp`;
+  function loadFrames(n){
+    if(!ANIM.has(n)||frames[n]) return;
+    const f=frames[n]={ready:false}; let ok=0;
+    for(let k=0;k<FR;k++){ const im=new Image(); im.onload=im.onerror=()=>{ if(++ok===FR) f.ready=true; }; im.src=frameUrl(n,k); }
+  }
   let ticking=false;
   function frame(){
     ticking=false;
     const h=sc.clientHeight, mid=sc.scrollTop+h/2;
     secs.forEach((s,i)=>{
       const d=(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h;   // 0 = page centrée, <0 = page encore en dessous
-      const L=layers[i];
+      const L=layers[i], n=pages[i].n;
       L.style.opacity=i===0?1:ease(Math.max(0,Math.min(1,1+d*1.15))).toFixed(3);
+      if(ANIM.has(n)&&opened&&!reduce){
+        if(Math.abs(d)<1.6) loadFrames(n);
+        if(frames[n]&&frames[n].ready){
+          const pr=i===0?Math.min(1,sc.scrollTop/(h*.6)):Math.max(0,Math.min(1,(d+.75)/1.2));
+          const k=Math.round(pr*(FR-1));
+          if(L._k!==k){ L._k=k; L.firstElementChild.style.backgroundImage=`url('${frameUrl(n,k)}')`; }
+        }
+      }
       if(!reduce&&d>-1.3&&d<1.3) L.style.transform=`translate3d(0,${(-d*5).toFixed(2)}%,0)`;
       if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.12)*1.9)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
     });
@@ -235,16 +252,16 @@
   // portes et rideau : tout se fait PENDANT le mouvement, en une seule dynamique continue :
   // la page est déjà vivante derrière l'ouverture, la lumière monte tout de suite, et les battants (ou le rideau)
   // s'effacent en fondu alors qu'ils sont encore en train de s'ouvrir.
-  const SEQ={env:{flash:1000,on:1530,gone:1560,soft:false},cur:{flash:420,on:320,gone:760,soft:true},door:{flash:450,on:280,gone:820,soft:true}};
+  const SEQ={env:{flash:1000,on:1530,gone:1560,soft:false},cur:{flash:420,on:320,gone:760,soft:true},door:{flash:0,on:1050,gone:1150,soft:true}};
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
     if(q.soft) flash.classList.add('soft');
-    setTimeout(()=>flash.classList.add('bloom'),q.flash);
-    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; secs[0].classList.add('on'); layers[0].classList.add('on'); startFx(); },q.on);
+    if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash);
+    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; secs[0].classList.add('on'); layers[0].classList.add('on'); startFx(); setTimeout(frame,1500); },q.on);
     setTimeout(()=>op.classList.add('gone'),q.gone);
-    setTimeout(()=>{ op.remove(); flash.remove(); },Math.max(q.flash+1600,q.gone+1200));
+    setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1600,q.gone+1200));
   }
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });

@@ -215,8 +215,14 @@ def site_og(T):
 
 
 def main():
+    # les images d'animation (img/frames) ne vivent que dans site/ : on les met de côté pendant la reconstruction
+    FRAMES = os.path.join(SITE, 'img', 'frames'); KEEP = os.path.join(B, '.frames-keep')
+    if os.path.isdir(FRAMES):
+        shutil.rmtree(KEEP, ignore_errors=True); shutil.move(FRAMES, KEEP)
     shutil.rmtree(SITE, ignore_errors=True)
     shutil.copytree(os.path.join(B, 'landing'), SITE, ignore=shutil.ignore_patterns('CREDITS.md', 'node_modules'))
+    if os.path.isdir(KEEP):
+        shutil.move(KEEP, FRAMES)
     l = open(os.path.join(SITE, 'index.html'), encoding='utf-8').read()
     l = l.replace('<meta name="robots" content="noindex">\n', '')
     open(os.path.join(SITE, 'index.html'), 'w', encoding='utf-8').write(l)
@@ -238,6 +244,8 @@ def main():
         dt = date_text(inv)
         title = inv.get('title') or f"{couple} · {dt}"
         desc = ('You are invited. Open our wedding invitation.' if lang == 'en' else 'Vous êtes invités. Ouvrez notre faire-part.')
+        # scènes animées disponibles (images tirées des vidéos, voir business/tools/frames.py)
+        inv['anim'] = [n for n in range(1, 5) if os.path.isdir(os.path.join(SITE, 'img', 'frames', f"{inv['theme']}-{n}"))]
         data = json.dumps(inv, ensure_ascii=False).replace('</', '<\\/')
         page = PAGE.format(lang=lang, title=html.escape(title), desc=html.escape(desc), site=SITE_URL, slug=slug, gf='' if t['gf'] == 'Great+Vibes' else '&family=' + t['gf'],
                            fontx=EXTRA_FONTS.get(inv.get('font'), ''), theme=inv['theme'], data=data)

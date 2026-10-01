@@ -353,7 +353,8 @@
 
   /* grandes portes : petit déclic, puis les deux battants s'ouvrent d'un seul mouvement continu ;
      la lumière de la salle passe par l'entrebâillement, la caméra avance doucement */
-  .op-doors{overflow:hidden;background:transparent;will-change:transform}
+  /* derrière les battants : uniquement de la lumière (on ne voit pas la salle avant que les portes soient ouvertes) */
+  .op-doors{overflow:hidden;will-change:transform;background:radial-gradient(75% 60% at 50% 50%,#fffefa 0%,#fff6e2 40%,#f6e4bd 75%,#e9cf98 100%)}
   .op-doors-in{position:absolute;inset:0;z-index:2;perspective:620px;perspective-origin:50% 50%;transform-style:preserve-3d}
   .op-leaf{position:absolute;top:0;bottom:0;width:50%;background:var(--door,url("img/open/portes.webp")) no-repeat;background-size:200% 100%;backface-visibility:hidden;will-change:transform;transform:rotateY(0) translateZ(0)}
   .op-leaf.l{left:0;background-position:0 0;transform-origin:0 50%}
@@ -824,12 +825,12 @@
   const op=$('cpOp'); let opT=null;
   // meme sequence que le faire-part d'Ines & Jad : ouverture, la lumiere monte, la page apparait dessous
   // enveloppe : lumiere a 1 s ; portes et rideau : tout pendant le mouvement (lumiere tout de suite, fondu en plein geste)
-  const cpFlash=$('cpFlash'), SEQ={env:{flash:1000,gone:1560},cur:{flash:420,gone:760,soft:1},door:{flash:450,gone:820,soft:1}}; let opT2=[];
+  const cpFlash=$('cpFlash'), SEQ={env:{flash:1000,gone:1560},cur:{flash:420,gone:760,soft:1},door:{flash:0,gone:1150,soft:1}}; let opT2=[];
   function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom','soft'); op.dataset.type=C.op;
     op.style.setProperty('--door',`url('img/open/${C.k}-portes.webp')`); op.style.setProperty('--cur',`url('img/open/${C.k}-rideau.webp')`);
     const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth; }
   function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const q=SEQ[C.op]||SEQ.env; if(q.soft) cpFlash.classList.add('soft');
-    opT2=[setTimeout(()=>cpFlash.classList.add('bloom'),q.flash), setTimeout(()=>{ op.classList.add('gone'); $('cpScroll').scrollTop=0; },q.gone)]; }
+    opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ op.classList.add('gone'); $('cpScroll').scrollTop=0; },q.gone)]; }
   function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
   op.addEventListener('click',playOp);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playOp(); } });
