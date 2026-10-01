@@ -167,9 +167,9 @@
     <canvas id="fx"></canvas>
     ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
-    <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}">
+    <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp')">
       <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div></div></div></div>
-      <div class="op-cur"><div class="op-mono">${esc(n1[0])} &amp; ${esc(n2[0])}</div><div class="op-cur-edge"></div></div>
+      <div class="op-cur"><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${esc(n1[0])} &amp; ${esc(n2[0])}</div><div class="op-cur-edge"></div></div>
       <div class="op-doors"><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l"></div><div class="op-leaf r"></div><div class="op-seam"></div></div></div>
       ${fam&&fam.label?`<div class="op-to">${esc(fam.label)}</div>`:''}
       <div class="op-tap">${(I.opening||'env')==='env'?S.tapSeal:S.tap}</div>
@@ -216,15 +216,20 @@
   const op=$('#op');
   // une seule arche continue, comme le faire-part d'Inès & Jad : l'ouverture commence, la lumière monte,
   // le passage vers la première page se fait sous le pic blanc, puis la lumière se retire et dévoile la page déjà nette
-  const TIMING={env:1000,cur:1250,door:1600};  // moment où la lumière commence à monter
+  // enveloppe : la lumière monte à 1 s et la page apparaît sous le pic, comme le faire-part d'Inès & Jad.
+  // portes et rideau : tout se fait PENDANT le mouvement, en une seule dynamique continue :
+  // la page est déjà vivante derrière l'ouverture, la lumière monte tout de suite, et les battants (ou le rideau)
+  // s'effacent en fondu alors qu'ils sont encore en train de s'ouvrir.
+  const SEQ={env:{flash:1000,on:1530,gone:1560,soft:false},cur:{flash:420,on:320,gone:760,soft:true},door:{flash:450,on:280,gone:820,soft:true}};
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
-    const f=TIMING[op.dataset.type]||1000, flash=$('#flash');
-    setTimeout(()=>flash.classList.add('bloom'),f);
-    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; secs[0].classList.add('on'); startFx(); },f+530);
-    setTimeout(()=>op.classList.add('gone'),f+560);
-    setTimeout(()=>{ op.remove(); flash.remove(); },f+1300);
+    const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
+    if(q.soft) flash.classList.add('soft');
+    setTimeout(()=>flash.classList.add('bloom'),q.flash);
+    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; secs[0].classList.add('on'); startFx(); },q.on);
+    setTimeout(()=>op.classList.add('gone'),q.gone);
+    setTimeout(()=>{ op.remove(); flash.remove(); },Math.max(q.flash+1600,q.gone+1200));
   }
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
