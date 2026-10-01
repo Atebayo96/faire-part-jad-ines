@@ -1,0 +1,56 @@
+{
+  "slug": "sofia-nuno",
+  "demo": true,
+  "theme": "ceramique",
+  "couple": [
+    "Sofia",
+    "Nuno"
+  ],
+  "date": "2027-06-25T16:00",
+  "tz": "Europe/Lisbon",
+  "opening": "env",
+  "palette": "#1f4fa3",
+  "countdown": "page",
+  "music": "funiculi",
+  "intro": {
+    "eyebrow": "Vamos casar"
+  },
+  "events": [
+    {
+      "id": "ceremonie",
+      "eyebrow": "La cérémonie",
+      "title": "À la chapelle blanche",
+      "start": "2027-06-25T16:00",
+      "place": "Alfama, Lisbonne",
+      "address": "Igreja de Santo Estêvão, Lisboa",
+      "scene": 2
+    },
+    {
+      "id": "diner",
+      "eyebrow": "Le dîner",
+      "title": "Face à l'océan",
+      "start": "2027-06-25T19:30",
+      "place": "Terrasse sur le Tage",
+      "address": "Miradouro de Santa Luzia, Lisboa",
+      "scene": 3
+    }
+  ],
+  "infos": [
+    {
+      "icon": "hotel",
+      "title": "Séjour",
+      "text": "Liste d'hôtels dans l'Alfama envoyée sur simple demande."
+    },
+    {
+      "icon": "info",
+      "title": "Heure locale",
+      "text": "Lisbonne a une heure de moins que Paris : les horaires sont en heure locale."
+    }
+  ],
+  "rsvp": {
+    "deadline": "2027-05-01",
+    "title": "Serez-vous des nôtres ?",
+    "yesText": "Até breve em Lisboa !",
+    "noText": "Obrigado, on pensera à vous."
+  }
+}

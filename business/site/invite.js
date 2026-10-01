@@ -1,0 +1,311 @@
+/* Sceau : moteur de faire-part.
+   Lit window.INVITE (fiche du couple, voir business/invites/*.json) et window.SCEAU_THEMES (themes.js),
+   puis construit : ouverture, pages animées, musique, compte à rebours, itinéraires, calendrier, réponses. */
+(function(){
+  const I=window.INVITE, T=window.SCEAU_THEMES[I.theme];
+  const $=s=>document.querySelector(s);
+  const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const L=(I.lang||'fr')==='en'?'en':'fr';
+  const S={
+    fr:{tap:'Touchez pour ouvrir',scroll:'Faites défiler',route:'Itinéraire',cal:'Calendrier',reply:'Répondre',days:'jours',hours:'heures',min:'min',sec:'sec',
+      soon:'Le grand jour approche',left:'Plus que',infos:'Infos pratiques',joy:'Ont la joie de vous convier à leur mariage',
+      rsvpT:'Votre réponse',rsvpSub:'Une réponse par foyer suffit.',name:'Vos prénoms et nom',present:'Présent',absent:'Absent',guests:'Nombre de personnes',
+      diet:'Allergies ou régime (facultatif)',msg:'Un mot pour les mariés (facultatif)',send:'Envoyer ma réponse',sending:'Envoi…',thanks:'Merci !',
+      saved:'Votre réponse est bien enregistrée. Vous pouvez la modifier en répondant à nouveau.',again:'Modifier ma réponse',
+      demoNote:'Ceci est une démo : votre réponse n’est pas enregistrée.',demoDash:'Voir le tableau de bord des mariés',
+      fail:'L’envoi n’a pas fonctionné. Vérifiez votre connexion et réessayez.',need:'Indiquez votre nom et votre réponse pour chaque événement.',
+      privacy:'Vos réponses ne sont visibles que par les mariés et sont supprimées après le mariage.',
+      calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le'},
+    en:{tap:'Tap to open',scroll:'Scroll down',route:'Directions',cal:'Calendar',reply:'RSVP',days:'days',hours:'hours',min:'min',sec:'sec',
+      soon:'The big day is coming',left:'Only',infos:'Good to know',joy:'Request the pleasure of your company at their wedding',
+      rsvpT:'Your reply',rsvpSub:'One reply per household is enough.',name:'Your full name(s)',present:'Attending',absent:'Not attending',guests:'Number of guests',
+      diet:'Allergies or dietary needs (optional)',msg:'A note for the couple (optional)',send:'Send my reply',sending:'Sending…',thanks:'Thank you!',
+      saved:'Your reply has been saved. You can change it by replying again.',again:'Change my reply',
+      demoNote:'This is a demo: your reply is not saved.',demoDash:'See the couple’s dashboard',
+      fail:'Sending failed. Please check your connection and try again.',need:'Please enter your name and a reply for each event.',
+      privacy:'Only the couple can see your reply, and it is deleted after the wedding.',
+      calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before'}
+  }[L];
+  const TZ=I.tz||'Europe/Paris', LOC=L==='en'?'en-GB':'fr-FR';
+  const FONTS={script:{css:'"Great Vibes",cursive'},classique:{css:'"Playfair Display",Georgia,serif',italic:true},moderne:{css:'"Jost",sans-serif',upper:true},deco:{css:'"Limelight",serif'}};
+
+  /* ---------- dates ---------- */
+  // "2027-06-05T15:00" interprété dans le fuseau du mariage -> Date
+  function zoned(s,tz){
+    const [d,t='12:00']=s.split('T'); const [y,mo,da]=d.split('-').map(Number); const [h,mi]=t.split(':').map(Number);
+    const guess=Date.UTC(y,mo-1,da,h,mi);
+    const p=new Intl.DateTimeFormat('en-US',{timeZone:tz||TZ,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).formatToParts(new Date(guess));
+    const g=k=>+p.find(x=>x.type===k).value;
+    const asTz=Date.UTC(g('year'),g('month')-1,g('day'),g('hour'),g('minute'));
+    return new Date(guess-(asTz-guess));
+  }
+  const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+  const er=s=>L==='fr'?s.replace(/(^|\s)1 (?=\D)/,'$11er '):s;
+  const fmtDay=(d,tz)=>er(cap(d.toLocaleDateString(LOC,{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:tz||TZ})));
+  const fmtDayShort=(d,tz)=>er(cap(d.toLocaleDateString(LOC,{weekday:'long',day:'numeric',month:'long',timeZone:tz||TZ})));
+  const fmtTime=(d,tz)=>{ const s=d.toLocaleTimeString(LOC,{hour:'2-digit',minute:'2-digit',timeZone:tz||TZ}); return L==='fr'?s.replace(':','h'):s; };
+
+  /* ---------- données ---------- */
+  const fid=new URLSearchParams(location.search).get('f');
+  const fam=fid&&I.families&&I.families[fid]?I.families[fid]:null;
+  const events=(I.events||[]).filter(e=>!fam||!fam.events||fam.events.includes(e.id));
+  const main=zoned(I.date,TZ);
+  const multiDay=new Set(events.map(e=>e.start.slice(0,10))).size>1;
+  const n1=I.couple[0], n2=I.couple[1];
+  const ini=(n1[0]+n2[0]).toUpperCase();
+  const pal=I.palette||'#b8975a';
+  function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
+  const sealBg=`radial-gradient(circle at 35% 30%, ${shade(pal,1.25)}, ${pal} 58%, ${shade(pal,.6)})`;
+  const F=FONTS[I.font]||null, fam1=F?F.css:T.font, ital=F?!!F.italic:!!T.italic, up=F?!!F.upper:!!T.upper;
+  const base=up?30:/Limelight|Cinzel/.test(fam1)?38:52;
+  const nmCss=(k,col)=>`font-family:${fam1};font-style:${ital?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:clamp(${Math.round(base*k*.72)}px,${(base*k/16.5).toFixed(2)}vh,${Math.round(base*k*1.1)}px);color:${col}`;
+  const img=n=>`/img/hd/${I.theme}-${n}.webp`;
+  const isDark=n=>(T.scenes[n-1]||[])[4]==='dark';
+
+  /* ---------- icônes ---------- */
+  const ic={
+    pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+    cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>',
+    mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>',
+    dress:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3h6l-1 4 4 13H6l4-13z"/></svg>',
+    hotel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 19V7M21 19v-6a3 3 0 0 0-3-3h-7v6M3 14h18"/><circle cx="7" cy="11" r="1.8"/></svg>',
+    gift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M3 9h18M12 9v11M12 9c-2-4-6-4-6-1.5S10 9 12 9zm0 0c2-4 6-4 6-1.5S14 9 12 9z"/></svg>',
+    car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 16V11l2-5h10l2 5v5M3 16h18v2H3z"/><circle cx="7.5" cy="13" r="1"/><circle cx="16.5" cy="13" r="1"/></svg>',
+    kids:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="7" r="3"/><path d="M6 21v-3a6 6 0 0 1 12 0v3"/></svg>',
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
+    note:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 17.5V5l11-2v12.5"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="15.5" r="2.5"/></svg>',
+    mute:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 17.5V5l11-2v8M3 3l18 18"/><circle cx="6.5" cy="17.5" r="2.5"/></svg>'
+  };
+
+  /* ---------- pages ---------- */
+  const pages=[];
+  let rvI=0;
+  function page(n,inner,opts={}){
+    rvI=0;
+    const dark=opts.dark!=null?opts.dark:isDark(n), lt=T.light&&!dark;
+    const c={nm:lt?T.color:'#fff',ey:lt?(T.ey||T.color):'#fff',tx:lt?(T.tx||T.color):'#fff'};
+    const body=inner(c,lt);
+    pages.push({n,html:`<section class="pg${lt?' light':''}${opts.cls?' '+opts.cls:''}" data-img="${img(n)}" style="${esc(opts.style||'')}"><div class="bgw"><div class="bg" style="background-image:url('${img(n)}')"></div></div>${opts.veil?`<div class="veil" style="background:${lt?'rgba(255,253,248,.7)':'rgba(10,10,14,.5)'}"></div>`:''}${body}</section>`});
+  }
+  const cdHtml=(big,col)=>`<div class="cd${big?' big':''}" style="color:${col}">${['d','h','m','s'].map((u,i)=>`<div><b data-u="${u}">0</b><span>${[S.days,S.hours,S.min,S.sec][i]}</span></div>`).join('')}</div>`;
+  const oval=!!T.top1, compact=!!T.compact;
+
+  // 1. accueil
+  page(1,(c)=>{
+    const names=T.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
+    return (fam&&fam.label?`<div class="rv greet" style="--i:${rvI++};color:${c.tx}">${esc(fam.label)}</div>`:'')+
+      (oval||compact?'':`<div class="rv seal" style="--i:${rvI++};background:${sealBg}">${esc(ini)}</div>`)+
+      `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(I.intro&&I.intro.eyebrow||T.scenes[0][0])}</div>`+
+      `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(T.stack?.82:1,c.nm))}">${names}</div>`+
+      (oval||compact?'':`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${esc(I.intro&&I.intro.text||S.joy)}</div>`)+
+      `<div class="rv dl" style="--i:${rvI++};color:${T.light?pal:'#fff'}"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>`+
+      (I.countdown==='debut'?`<div class="rv" style="--i:${rvI++}">${cdHtml(false,c.tx)}</div>`:'')+
+      `<div class="hint" style="color:${c.ey}">${S.scroll} ↓</div>`;
+  },{style:oval?'padding-top:'+T.top1:''});
+
+  // 2. événements
+  const evImg=(e,i)=>e.scene||[2,3][i%2];
+  events.forEach((e,i)=>{
+    const d=zoned(e.start,e.tz);
+    page(evImg(e,i),(c)=>{
+      const when=(multiDay||e.showDate?fmtDayShort(d,e.tz)+' · ':'')+fmtTime(d,e.tz);
+      return `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(e.eyebrow||'')}</div>`+
+        `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(.74,c.nm))}">${esc(e.title)}</div>`+
+        `<div class="rv when" style="--i:${rvI++};color:${c.tx}">${esc(when)}</div>`+
+        (e.place?`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${esc(e.place)}</div>`:'')+
+        (e.note?`<div class="rv tx" style="--i:${rvI++};color:${c.tx};font-size:15px;opacity:.9">${esc(e.note)}</div>`:'')+
+        `<div class="rv acts" style="--i:${rvI++};color:${c.tx}">`+
+          (e.address?`<a class="b" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${S.route}</a>`:'')+
+          `<button type="button" class="b" data-cal="${esc(e.id)}">${ic.cal}${S.cal}</button></div>`;
+    });
+    if(i===0&&I.countdown==='page') page(1,(c)=>
+      `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${S.soon}</div>`+
+      `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(.8,c.nm))}">${S.left}</div>`+
+      `<div class="rv" style="--i:${rvI++}">${cdHtml(true,c.tx)}</div>`+
+      `<div class="rv dl" style="--i:${rvI++};color:${c.tx}"><i></i><span>${esc(fmtDay(main))}</span><i></i></div>`,{veil:true});
+  });
+
+  // 3. infos pratiques
+  if(I.infos&&I.infos.length) page(1,(c,lt)=>
+    `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(I.infosTitle||S.infos)}</div>`+
+    `<div class="rv card" style="--i:${rvI++};color:${c.tx};background:${lt?'rgba(255,255,255,.55)':'rgba(0,0,0,.28)'}">`+
+      I.infos.map(x=>`<div class="it">${ic[x.icon]||ic.info}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p></div></div>`).join('')+`</div>`,{veil:true,cls:'tall'});
+
+  // 4. réponse
+  const R=I.rsvp||{};
+  const deadline=R.deadline?zoned(R.deadline+'T23:59',TZ):null;
+  page(4,(c)=>
+    `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(R.eyebrow||T.scenes[3][0])}</div>`+
+    `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(.74,c.nm))}">${esc(R.title||T.scenes[3][1])}</div>`+
+    (deadline?`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${S.before} ${esc(er(deadline.toLocaleDateString(LOC,{day:'numeric',month:'long',timeZone:TZ})))}</div>`:'')+
+    (I.countdown==='fin'?`<div class="rv" style="--i:${rvI++}">${cdHtml(false,c.tx)}</div>`:'')+
+    `<div class="rv acts" style="--i:${rvI++};color:${c.tx}"><button type="button" class="b" data-rsvp style="color:${c.tx}">${ic.mail}${S.reply}</button></div>`+
+    `<a class="made" href="/" target="_blank" rel="noopener" style="color:${c.ey}">${S.made} <b>SCEAU</b></a>`);
+
+  /* ---------- montage ---------- */
+  document.title=I.title||`${n1} & ${n2}`;
+  const mu=I.music||T.music;
+  const app=document.createElement('div'); app.id='app';
+  app.innerHTML=`
+    <div class="sc" id="sc">${pages.map(p=>p.html).join('')}</div>
+    <canvas id="fx"></canvas>
+    ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
+    ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
+    <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}">
+      <div class="op-env"><div class="op-env-in"><div class="op-body"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background:${sealBg}">${esc(ini)}</div></div></div></div>
+      <div class="op-cur"><div class="op-mono">${esc(n1[0])} &amp; ${esc(n2[0])}</div><div class="op-cur-edge"></div></div>
+      <div class="op-doors"><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l"></div><div class="op-leaf r"></div><div class="op-seam"></div></div></div>
+      ${fam&&fam.label?`<div class="op-to">${esc(fam.label)}</div>`:''}
+      <div class="op-tap">${S.tap}</div>
+    </div>
+    <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
+  const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${img(1)}')`;
+  document.body.append(bd,app);
+  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')];
+
+  /* ---------- apparition + parallaxe ---------- */
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let opened=false;
+  const io=new IntersectionObserver(es=>es.forEach(en=>{
+    if(en.isIntersecting&&en.intersectionRatio>.55){ if(opened) en.target.classList.add('on'); bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
+  }),{root:sc,threshold:[.55,.8]});
+  secs.forEach(s=>io.observe(s));
+  function parallax(){
+    if(reduce) return;
+    const h=sc.clientHeight, top=sc.scrollTop;
+    secs.forEach(s=>{ const off=(s.offsetTop-top)/h; if(off>-1.2&&off<1.2) s.firstElementChild.style.transform=`translateY(${(off*-9).toFixed(2)}%)`; });
+  }
+  sc.addEventListener('scroll',()=>requestAnimationFrame(parallax),{passive:true});
+  parallax();
+  // précharge les images des pages suivantes
+  [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
+
+  /* ---------- compte à rebours ---------- */
+  function tick(){
+    const ms=Math.max(0,main-Date.now()), v={d:Math.floor(ms/864e5),h:Math.floor(ms/36e5)%24,m:Math.floor(ms/6e4)%60,s:Math.floor(ms/1e3)%60};
+    sc.querySelectorAll('.cd b').forEach(b=>{ b.textContent=String(v[b.dataset.u]).padStart(b.dataset.u==='d'?1:2,'0'); });
+  }
+  tick(); setInterval(tick,1000);
+
+  /* ---------- musique ---------- */
+  const bgm=$('#bgm'), snd=$('#snd');
+  let wantMusic=true;
+  function syncSnd(){ if(snd) snd.classList.toggle('muted',!bgm||bgm.paused); }
+  function playMusic(){ if(!bgm||!wantMusic) return; bgm.volume=.75; bgm.play().then(syncSnd).catch(syncSnd); }
+  if(snd) snd.onclick=()=>{ if(bgm.paused){ wantMusic=true; playMusic(); } else { wantMusic=false; bgm.pause(); syncSnd(); } };
+  document.addEventListener('visibilitychange',()=>{ if(!bgm) return; if(document.hidden) bgm.pause(); else if(wantMusic&&opened) playMusic(); });
+
+  /* ---------- ouverture ---------- */
+  const op=$('#op');
+  function open(){
+    if(op.classList.contains('play')) return;
+    op.classList.add('play'); playMusic();
+    const dur=op.dataset.type==='door'?3300:op.dataset.type==='cur'?2100:2000;
+    setTimeout(()=>{ op.classList.add('done'); app.classList.add('opened'); opened=true; secs[0].classList.add('on'); startFx(); },dur*.6);
+    setTimeout(()=>op.remove(),dur+600);
+  }
+  op.addEventListener('click',open);
+  op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
+
+  /* ---------- particules ---------- */
+  function startFx(){
+    const kind=I.particles||T.particles||'none'; if(kind==='none'||reduce) return;
+    const cv=$('#fx'), cx=cv.getContext('2d'); let W,H,dpr;
+    function size(){ dpr=Math.min(2,devicePixelRatio||1); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
+    size(); addEventListener('resize',size);
+    const P={
+      petals:{n:20,col:['#f6d5dc','#fbe9ec','#f1c1cc','#fff6f2'],up:false,sz:[4,8],sp:[.35,.8]},
+      confetti:{n:30,col:['#e2c275','#d4af37','#f3e3a8','#b8933f'],up:false,sz:[3,7],sp:[.5,1.1]},
+      marigold:{n:26,col:['#f39c12','#f7b733','#e67e22','#ffd166','#e84a5f'],up:false,sz:[4,8],sp:[.4,.9]},
+      seeds:{n:18,col:['#fff4e6','#f5e1c8','#ffffff'],up:true,sz:[2,4],sp:[.15,.35]},
+      leaves:{n:16,col:['#c9a14a','#9bb36b','#d98b3a','#b6c48a'],up:false,sz:[6,10],sp:[.35,.7]},
+      daisies:{n:18,col:['#ffffff','#ffd23f','#ff6b9a','#3ec1d3','#ff9f1c'],up:false,sz:[5,9],sp:[.4,.9]},
+      blossoms:{n:18,col:['#ffffff','#fff8e1','#fde2e4'],up:false,sz:[4,8],sp:[.3,.7]},
+      lanterns:{n:16,col:['#ffd27a','#ffb547','#ffe3a3'],up:true,sz:[2,4],sp:[.2,.45]}
+    }[kind]; if(!P) return;
+    const R=(a,b)=>a+Math.random()*(b-a);
+    const mk=(init)=>({x:R(0,W),y:init?R(0,H):(P.up?H+20:-20),s:R(...P.sz),v:R(...P.sp),a:R(0,6.28),va:R(-.03,.03),w:R(.6,1.6),ph:R(0,6.28),c:P.col[Math.floor(R(0,P.col.length))],o:R(.4,.85)});
+    const ps=Array.from({length:P.n},()=>mk(true));
+    let t=0, run=true;
+    document.addEventListener('visibilitychange',()=>{ run=!document.hidden; if(run) requestAnimationFrame(loop); });
+    function shape(p){
+      cx.fillStyle=p.c; cx.globalAlpha=p.o;
+      if(kind==='lanterns'||kind==='seeds'){ const g=cx.createRadialGradient(0,0,0,0,0,p.s*3); g.addColorStop(0,p.c); g.addColorStop(1,'rgba(255,220,150,0)'); cx.fillStyle=g; cx.beginPath(); cx.arc(0,0,p.s*3,0,7); cx.fill(); return; }
+      if(kind==='confetti'){ cx.fillRect(-p.s/2,-p.s,p.s,p.s*2*Math.abs(Math.cos(p.a*2))+1); return; }
+      if(kind==='daisies'&&p.c==='#ffffff'){ for(let k=0;k<6;k++){ cx.rotate(1.047); cx.beginPath(); cx.ellipse(p.s*.55,0,p.s*.5,p.s*.22,0,0,7); cx.fill(); } cx.fillStyle='#ffd23f'; cx.beginPath(); cx.arc(0,0,p.s*.28,0,7); cx.fill(); return; }
+      if(kind==='blossoms'){ for(let k=0;k<5;k++){ cx.rotate(1.2566); cx.beginPath(); cx.arc(p.s*.45,0,p.s*.32,0,7); cx.fill(); } return; }
+      cx.beginPath(); cx.ellipse(0,0,p.s,p.s*.55,0,0,7); cx.fill();
+    }
+    function loop(){
+      if(!run) return; t+=1; cx.clearRect(0,0,W,H);
+      ps.forEach((p,i)=>{
+        p.y+=P.up?-p.v:p.v; p.x+=Math.sin(t*.012*p.w+p.ph)*.45; p.a+=p.va;
+        if(kind==='lanterns') p.o=.5+.4*Math.sin(t*.03+p.ph);
+        if(P.up?p.y<-30:p.y>H+30) ps[i]=mk(false);
+        cx.save(); cx.translate(p.x,p.y); cx.rotate(p.a); shape(p); cx.restore();
+      });
+      cx.globalAlpha=1; requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  }
+
+  /* ---------- feuilles ---------- */
+  const sheet=$('#sheet'), sheetBody=$('#sheetBody');
+  function openSheet(html){ sheetBody.innerHTML=html; sheet.classList.add('on'); sheet.setAttribute('aria-hidden','false'); }
+  function closeSheet(){ sheet.classList.remove('on'); sheet.setAttribute('aria-hidden','true'); }
+  sheet.addEventListener('click',e=>{ if(e.target===sheet||e.target.closest('.x')) closeSheet(); });
+  addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
+
+  /* ---------- calendrier ---------- */
+  const stamp=d=>d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+  function calSheet(id){
+    const e=events.find(x=>x.id===id), d=zoned(e.start,e.tz), end=e.end?zoned(e.end,e.tz):new Date(+d+3*36e5);
+    const title=`${e.calTitle||e.eyebrow||e.title} · ${n1} & ${n2}`, loc=e.address||e.place||'';
+    const g=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${stamp(d)}/${stamp(end)}&location=${encodeURIComponent(loc)}&details=${encodeURIComponent(location.href.split('#')[0])}`;
+    const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Sceau//FR','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:${I.slug}-${e.id}@sceau`,`DTSTAMP:${stamp(new Date())}`,`DTSTART:${stamp(d)}`,`DTEND:${stamp(end)}`,
+      `SUMMARY:${title.replace(/[,;]/g,'\\$&')}`,`LOCATION:${loc.replace(/[,;]/g,'\\$&')}`,`URL:${location.href.split('#')[0]}`,'END:VEVENT','END:VCALENDAR'].join('\r\n');
+    const href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+    openSheet(`<h3>${S.calT}</h3><p class="sub">${esc(e.title)} · ${esc(fmtDayShort(d,e.tz))}, ${esc(fmtTime(d,e.tz))}</p><div class="cal"><a href="${g}" target="_blank" rel="noopener">${S.gcal}<span>→</span></a><a href="${href}" download="${esc(I.slug+'-'+e.id)}.ics">${S.ical}<span>→</span></a></div>`);
+  }
+
+  /* ---------- réponse (RSVP) ---------- */
+  const KEY='sceau-rsvp-'+I.slug+(fid?'-'+fid:'');
+  function rsvpSheet(){
+    let prev=null; try{ prev=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
+    const max=(fam&&fam.seats)||R.maxGuests||6;
+    const evRows=events.map(e=>{ const d=zoned(e.start,e.tz); return `<div class="ev"><b>${esc(e.eyebrow||e.title)}</b><small>${esc(e.title)} · ${esc(fmtDayShort(d,e.tz))}</small><div class="yn">`+
+      `<label><input type="radio" name="ev-${esc(e.id)}" value="1" ${prev&&prev.events&&prev.events[e.id]===true?'checked':''}><span>${S.present}</span></label>`+
+      `<label><input type="radio" name="ev-${esc(e.id)}" value="0" ${prev&&prev.events&&prev.events[e.id]===false?'checked':''}><span>${S.absent}</span></label></div></div>`; }).join('');
+    openSheet(`<h3>${S.rsvpT}</h3><p class="sub">${esc(R.subtitle||S.rsvpSub)}</p>
+      <form id="rf" novalidate>
+        <label class="f"><span>${S.name}</span><input name="name" autocomplete="name" required maxlength="120" value="${esc(prev?prev.name:(fam&&fam.name)||'')}"></label>
+        ${evRows}
+        <label class="f"><span>${S.guests}</span><select name="guests">${Array.from({length:max},(_,i)=>`<option ${prev&&+prev.guests===i+1?'selected':''}>${i+1}</option>`).join('')}</select></label>
+        ${R.diet!==false?`<label class="f"><span>${S.diet}</span><input name="diet" maxlength="200" value="${esc(prev?prev.diet||'':'')}"></label>`:''}
+        <label class="f"><span>${S.msg}</span><textarea name="message" maxlength="1000">${esc(prev?prev.message||'':'')}</textarea></label>
+        <label class="hp" aria-hidden="true">Site<input name="website" tabindex="-1" autocomplete="off"></label>
+        <button class="go" type="submit">${S.send}</button>
+        <p class="err" id="rerr" hidden></p>
+        <p class="note">${I.demo?S.demoNote+' ':''}${S.privacy} <a href="/confidentialite/" target="_blank" rel="noopener">${L==='en'?'Privacy':'Confidentialité'}</a></p>
+      </form>`);
+    $('#rf').addEventListener('submit',async ev=>{
+      ev.preventDefault();
+      const f=ev.currentTarget, fd=new FormData(f), err=$('#rerr');
+      const data={invite:I.slug,family:fid||null,name:(fd.get('name')||'').trim(),guests:+fd.get('guests')||1,diet:(fd.get('diet')||'').trim(),message:(fd.get('message')||'').trim(),website:fd.get('website')||'',events:{}};
+      let ok=!!data.name; events.forEach(e=>{ const v=fd.get('ev-'+e.id); if(v==null) ok=false; else data.events[e.id]=v==='1'; });
+      if(!ok){ err.textContent=S.need; err.hidden=false; return; }
+      const btn=f.querySelector('.go'); btn.disabled=true; btn.textContent=S.sending; err.hidden=true;
+      try{
+        if(!I.demo){ const r=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); if(!r.ok) throw new Error(r.status); }
+        try{ localStorage.setItem(KEY,JSON.stringify(data)); }catch(e){}
+        const yes=Object.values(data.events).some(Boolean);
+        sheetBody.innerHTML=`<div class="done-msg"><div class="big">${S.thanks}</div><p>${esc(yes?(R.yesText||''):(R.noText||''))}</p><p class="note">${S.saved}</p>${I.demo?`<p class="note">${S.demoNote}</p><p><a class="b" style="color:#2a2620" href="/tableau/?demo=${esc(I.slug)}" target="_blank" rel="noopener">${S.demoDash}</a></p>`:''}</div>`;
+      }catch(e){ btn.disabled=false; btn.textContent=S.send; err.textContent=S.fail; err.hidden=false; }
+    });
+  }
+  sc.addEventListener('click',e=>{
+    const c=e.target.closest('[data-cal]'); if(c){ calSheet(c.dataset.cal); return; }
+    if(e.target.closest('[data-rsvp]')) rsvpSheet();
+  });
+  if(location.hash==='#rsvp'){ open(); setTimeout(()=>{ sc.scrollTop=sc.scrollHeight; },400); }
+})();

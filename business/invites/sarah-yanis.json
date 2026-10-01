@@ -1,0 +1,45 @@
+{
+  "slug": "sarah-yanis",
+  "demo": true,
+  "theme": "minimal",
+  "couple": [
+    "Sarah",
+    "Yanis"
+  ],
+  "date": "2027-12-11T11:00",
+  "opening": "env",
+  "palette": "#c0643f",
+  "countdown": "non",
+  "music": "nocturne",
+  "intro": {
+    "eyebrow": "Save the date",
+    "text": "Se marient, simplement, entourés de vous"
+  },
+  "events": [
+    {
+      "id": "mairie",
+      "eyebrow": "Mairie",
+      "title": "Mairie du 11e",
+      "start": "2027-12-11T11:00",
+      "place": "Salle des mariages",
+      "address": "Mairie du 11e, 12 place Léon Blum, 75011 Paris",
+      "scene": 2
+    },
+    {
+      "id": "dejeuner",
+      "eyebrow": "Déjeuner",
+      "title": "Chez Paul",
+      "start": "2027-12-11T13:00",
+      "place": "Rue de Charonne",
+      "address": "Chez Paul, 13 rue de Charonne, 75011 Paris",
+      "scene": 3
+    }
+  ],
+  "rsvp": {
+    "deadline": "2027-11-11",
+    "eyebrow": "Réponse",
+    "title": "Vous venez ?",
+    "yesText": "Parfait. À très vite.",
+    "noText": "Merci de nous avoir prévenus."
+  }
+}

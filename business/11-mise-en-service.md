@@ -1,0 +1,42 @@
+# 11 — Mise en service : ce qui est prêt, ce qu'il reste à faire
+
+_Mis à jour le 1er octobre 2026, après l'audit « qu'est-ce qui manque pour être opérationnel »._
+
+## Ce qui est en place
+
+| Sujet | État | Où |
+|---|---|---|
+| Formulaire « Réserver ma place » | Envoie vraiment la demande (nom, e-mail, date, formule, choix faits dans l'essai) | `landing/index.html` → `/api/lead` |
+| Pages légales | Mentions légales, CGV, confidentialité, avec les champs à compléter **[entre crochets]** surlignés en jaune | `legal/*.md` → `python3 business/legal-template.py` |
+| Allégations corrigées | Plus de « Le plus choisi », de « TTC », de « Prêt tout de suite » ni de « 4 saisons » ; langues FR · EN | `landing/index.html` |
+| Aperçu WhatsApp et icône | Image d'aperçu pour la vitrine et pour chaque faire-part | `og-sceau.jpg`, `d/<slug>/og.jpg`, `favicon.svg` |
+| **Moteur de faire-part** | Ouverture (enveloppe, rideau, portes), pages animées (zoom lent, parallaxe, apparition des textes, particules par thème), musique, compte à rebours (début, page dédiée, fin, aucun), itinéraire, ajout au calendrier (Google, Apple, Outlook), infos pratiques, réponses des invités, **liens par famille** (`?f=famille-martin` : message d'accueil et événements filtrés), FR et EN | `landing/invite.js`, `landing/invite.css` |
+| Démos | 12 démos, une par thème, plus Yasmine & Karim (notre faire-part réel, avec une musique libre) | `invites/*.json` → `/d/<slug>/` |
+| Réponses des invités | Enregistrées en Europe (Paris), une seule réponse gardée par personne, supprimées automatiquement 90 jours après le mariage | `/api/rsvp`, `/api/purge` (tous les jours à 4 h) |
+| Tableau de bord des mariés | Totaux, détail par événement, liens par famille à copier, recherche, export CSV pour le traiteur | `/tableau/` (exemple : `/tableau/?demo=emma-louis`) |
+| Admin | Demandes reçues et liens des tableaux de bord de chaque faire-part | `/admin/` (clé : variable `SCEAU_SECRET` sur Vercel) |
+| Musique | 7 morceaux libres de droits, sources notées | `landing/music/CREDITS.md` |
+
+## À faire de ton côté (bloquant)
+
+1. **Créer le stockage (1 minute).** Sans lui, le formulaire et les réponses affichent une erreur. Sur vercel.com : projet **sceau-faire-part** → onglet **Storage** → **Create** → **Blob** → nom `sceau-donnees`, accès **Private**, région **Paris (cdg1)** → **Connect** au projet (Production et Preview). Ensuite, redéployer (ou me le demander).
+2. **Compléter les pages légales :** nom, adresse, SIRET, e-mail de contact, statut TVA, médiateur de la consommation. Dans `business/legal/*.md`, puis `python3 business/legal-template.py` et `python3 business/build-site.py`.
+3. **Récupérer la clé admin :** dans Vercel, Settings → Environment Variables → `SCEAU_SECRET`. C'est elle qui ouvre `/admin/`. Ne la partage pas.
+
+## Créer le faire-part d'un client
+
+1. Copier une démo proche : `cp business/invites/emma-louis.json business/invites/prenom1-prenom2.json`.
+2. Changer `slug` (identique au nom du fichier), `demo` → `false`, prénoms, date, événements (adresse exacte pour l'itinéraire), familles, textes, couleur du sceau (`palette`), ouverture, musique.
+3. `python3 business/build-site.py`, puis commit et déploiement.
+4. Dans `/admin/`, copier le lien du tableau de bord et l'envoyer aux mariés ; ils y trouvent aussi les liens par famille.
+
+Les options : `opening` = `env` | `cur` | `door` ; `countdown` = `debut` | `page` | `fin` | `non` ; `music` = `nocturne` | `valse` | `ragtime` | `marine` | `scheherazade` | `raga` | `funiculi` | `none` (ou `musicUrl` pour le morceau du client) ; `font` = `script` | `classique` | `moderne` | `deco` (sinon celle du thème) ; `lang` = `fr` | `en` ; `tz` = fuseau horaire si le mariage n'est pas en France.
+
+## Encore à faire (jaune, ensuite)
+
+- Statut (micro-entreprise), compte pro, **Stripe** (liens de paiement) et factures.
+- Vérifier « Sceau » à l'INPI, acheter le nom de domaine, e-mail pro, WhatsApp Business.
+- Héberger les polices sur notre serveur au lieu de Google Fonts (RGPD).
+- Mesure d'audience sans cookie (Vercel Analytics ou Plausible).
+- Photos du couple (bloc à ajouter au moteur), version arabe (affichage de droite à gauche).
+- Faire relire les CGV par un juriste avant les premières ventes.

@@ -1,0 +1,46 @@
+{
+  "slug": "lou-max",
+  "demo": true,
+  "theme": "pop",
+  "couple": [
+    "Lou",
+    "Max"
+  ],
+  "date": "2027-07-03T16:00",
+  "opening": "cur",
+  "palette": "#e2457a",
+  "countdown": "fin",
+  "music": "ragtime",
+  "intro": {
+    "eyebrow": "On se marie !",
+    "text": "Et on veut faire la fête avec toi"
+  },
+  "events": [
+    {
+      "id": "ceremonie",
+      "eyebrow": "La cérémonie",
+      "title": "Sous les marguerites",
+      "start": "2027-07-03T16:00",
+      "place": "Jardin de Mamie, Montreuil",
+      "address": "Parc des Beaumonts, 93100 Montreuil",
+      "scene": 2
+    },
+    {
+      "id": "fete",
+      "eyebrow": "La fête",
+      "title": "Disco jusqu'à l'aube",
+      "start": "2027-07-03T19:00",
+      "end": "2027-07-04T04:00",
+      "place": "Paillettes obligatoires",
+      "address": "Parc des Beaumonts, 93100 Montreuil",
+      "scene": 3
+    }
+  ],
+  "rsvp": {
+    "deadline": "2027-06-01",
+    "eyebrow": "RSVP",
+    "title": "Tu viens danser ?",
+    "yesText": "Prépare tes plus beaux pas !",
+    "noText": "Dommage ! On dansera pour toi."
+  }
+}

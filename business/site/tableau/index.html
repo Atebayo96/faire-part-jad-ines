@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableau de bord · Sceau</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#111;--muted:#6b6b6b;--line:#e6e6e6;--bg:#fff;--bg-2:#f6f5f2;--ok:#2f7a4f;--no:#a3402a}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 Inter,-apple-system,"Helvetica Neue",Arial,sans-serif}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+  header{border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
+  .logo{font:600 14px/1 "Inter Tight",sans-serif;letter-spacing:.32em;text-decoration:none;color:var(--ink)}
+  h1{font:500 clamp(30px,5vw,46px)/1.05 "Inter Tight",sans-serif;letter-spacing:-.03em;margin:34px 0 6px}
+  .sub{color:var(--muted);margin:0 0 26px}
+  .tag{display:inline-block;font:600 10px/1 Inter;letter-spacing:.16em;text-transform:uppercase;background:#f3e9d3;color:#7a5a14;padding:7px 10px;border-radius:20px;margin-left:8px;vertical-align:middle}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+  @media (max-width:760px){ .stats{grid-template-columns:repeat(2,1fr)} }
+  .stats div{padding:18px 16px 20px 0;border-bottom:1px solid var(--line)}
+  .stats b{display:block;font:500 34px/1 "Inter Tight",sans-serif;letter-spacing:-.02em}
+  .stats span{color:var(--muted);font-size:13px}
+  h2{font:500 22px/1.2 "Inter Tight",sans-serif;letter-spacing:-.02em;margin:40px 0 14px}
+  .evs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .ev{border:1px solid var(--line);padding:16px;border-radius:6px}
+  .ev h3{margin:0 0 10px;font:500 16px "Inter Tight",sans-serif}
+  .bar{height:6px;background:var(--bg-2);border-radius:3px;overflow:hidden;margin:8px 0}
+  .bar i{display:block;height:100%;background:var(--ink)}
+  .ev p{margin:0;color:var(--muted);font-size:13px}
+  .ev p b{color:var(--ink);font-weight:500}
+  .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+  .tools input{flex:1 1 220px;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:6px}
+  .btn{font:500 14px Inter;padding:10px 14px;border:1px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:6px;cursor:pointer;text-decoration:none;display:inline-block}
+  .btn.solid{background:var(--ink);color:#fff}
+  .tbl{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:6px}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font:500 11px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--bg-2);cursor:pointer;white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  .y{color:var(--ok);font-weight:500}.n{color:var(--no)}
+  td small{display:block;color:var(--muted)}
+  .links{display:grid;gap:8px}
+  .link{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+  .link code{font-size:13px;color:var(--muted);word-break:break-all}
+  .msg{padding:40px 0;color:var(--muted)}
+  footer{margin:60px 0 30px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="logo" href="/">SCEAU</a><span id="who" style="color:var(--muted);font-size:13px"></span></div></header>
+<main class="wrap" id="main"><p class="msg">Chargement…</p></main>
+<footer class="wrap">Ces réponses ne sont visibles que par vous. Elles sont hébergées en Europe et supprimées 90 jours après le mariage.</footer>
+<script>
+(async function(){
+  const main=document.getElementById('main');
+  const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const h=new URLSearchParams(location.hash.slice(1)), q=new URLSearchParams(location.search);
+  const demo=q.get('demo'), slug=demo||h.get('i'), key=h.get('k');
+  let data;
+  try{
+    if(demo){ const r=await fetch('/tableau/demo/'+encodeURIComponent(demo)+'.json'); if(!r.ok) throw 0; data=await r.json(); }
+    else{
+      if(!slug||!key){ main.innerHTML='<p class="msg">Ce lien est incomplet. Utilisez le lien personnel reçu avec votre faire-part.</p>'; return; }
+      const r=await fetch('/api/rsvp?invite='+encodeURIComponent(slug),{headers:{Authorization:'Bearer '+key}});
+      if(r.status===401){ main.innerHTML='<p class="msg">Ce lien n’est pas valide.</p>'; return; }
+      if(r.status===503){ main.innerHTML='<p class="msg">Le stockage des réponses n’est pas encore activé. Revenez dans quelques minutes.</p>'; return; }
+      if(!r.ok) throw 0; data=await r.json();
+    }
+  }catch(e){ main.innerHTML='<p class="msg">Impossible de charger les réponses. Vérifiez votre connexion.</p>'; return; }
+
+  const inv=data.invite, evs=inv.events, R=data.responses, fams=inv.families||{};
+  document.title='Réponses · '+inv.couple;
+  document.getElementById('who').textContent=inv.couple;
+  const attending=r=>Object.values(r.events).some(Boolean);
+  const yes=R.filter(attending), no=R.filter(r=>!attending(r));
+  const people=yes.reduce((s,r)=>s+(+r.guests||1),0);
+  const diets=R.filter(r=>r.diet).length;
+  const perEv=evs.map(e=>{ const asked=R.filter(r=>e.id in r.events), y=asked.filter(r=>r.events[e.id]); return {e,asked:asked.length,yes:y.length,people:y.reduce((s,r)=>s+(+r.guests||1),0)}; });
+  const fmt=s=>new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+  const base=location.origin+'/d/'+inv.slug+'/';
+
+  main.innerHTML=`
+    <h1>${esc(inv.couple)}${data.demo?'<span class="tag">Exemple</span>':''}</h1>
+    <p class="sub">${data.demo?'Voici le tableau de bord que reçoivent les mariés. Les réponses ci-dessous sont fictives.':'Les réponses de vos invités, en temps réel.'}</p>
+    <div class="stats">
+      <div><b>${R.length}</b><span>réponses reçues</span></div>
+      <div><b>${people}</b><span>personnes attendues</span></div>
+      <div><b>${no.length}</b><span>ne pourront pas venir</span></div>
+      <div><b>${diets}</b><span>régimes ou allergies</span></div>
+    </div>
+    <h2>Par événement</h2>
+    <div class="evs">${perEv.map(x=>`<div class="ev"><h3>${esc(x.e.label)}</h3><div class="bar"><i style="width:${x.asked?Math.round(x.yes/x.asked*100):0}%"></i></div><p><b>${x.people}</b> personnes · ${x.yes} foyers sur ${x.asked}</p></div>`).join('')}</div>
+    ${Object.keys(fams).length?`<h2>Liens par famille</h2><div class="links">${['',...Object.keys(fams)].map(f=>{ const u=base+(f?'?f='+encodeURIComponent(f):''); return `<div class="link"><div><b>${f?esc(fams[f]):'Lien général'}</b><br><code>${esc(u)}</code></div><button class="btn" data-copy="${esc(u)}">Copier</button></div>`; }).join('')}</div>`:''}
+    <h2>Toutes les réponses</h2>
+    <div class="tools"><input id="q" type="search" placeholder="Chercher un nom, un message…" aria-label="Chercher"><button class="btn" id="csv">Exporter (CSV)</button>${data.demo?'':'<button class="btn" id="reload">Actualiser</button>'}</div>
+    <div class="tbl"><table><thead><tr><th data-s="name">Nom</th><th data-s="guests">Pers.</th>${evs.map(e=>`<th>${esc(e.label)}</th>`).join('')}<th>Régime</th><th>Message</th><th data-s="at">Reçu</th></tr></thead><tbody id="rows"></tbody></table></div>`;
+
+  let sortK='at', dir=-1;
+  function draw(){
+    const qq=(document.getElementById('q').value||'').toLowerCase();
+    const rows=R.filter(r=>!qq||[r.name,r.message,r.diet,fams[r.family]].join(' ').toLowerCase().includes(qq))
+      .sort((a,b)=>(a[sortK]>b[sortK]?1:a[sortK]<b[sortK]?-1:0)*dir);
+    document.getElementById('rows').innerHTML=rows.map(r=>`<tr><td>${esc(r.name)}${r.family?`<small>${esc(fams[r.family]||r.family)}</small>`:''}</td><td>${attending(r)?r.guests:'–'}</td>${evs.map(e=>`<td>${e.id in r.events?(r.events[e.id]?'<span class="y">Oui</span>':'<span class="n">Non</span>'):'<small>–</small>'}</td>`).join('')}<td>${esc(r.diet)}</td><td>${esc(r.message)}</td><td><small>${fmt(r.at)}</small></td></tr>`).join('')||`<tr><td colspan="${5+evs.length}" style="color:var(--muted)">Aucune réponse pour le moment.</td></tr>`;
+  }
+  draw();
+  document.getElementById('q').addEventListener('input',draw);
+  main.querySelectorAll('th[data-s]').forEach(th=>th.onclick=()=>{ const k=th.dataset.s; dir=sortK===k?-dir:(k==='name'?1:-1); sortK=k; draw(); });
+  document.getElementById('csv').onclick=()=>{
+    const head=['Nom','Famille','Personnes',...evs.map(e=>e.label),'Régime','Message','Reçu le'];
+    const cell=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+    const lines=[head,...R.map(r=>[r.name,fams[r.family]||'',attending(r)?r.guests:0,...evs.map(e=>e.id in r.events?(r.events[e.id]?'Oui':'Non'):''),r.diet,r.message,new Date(r.at).toLocaleString('fr-FR')])].map(l=>l.map(cell).join(';'));
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv'})); a.download='reponses-'+inv.slug+'.csv'; a.click();
+  };
+  const rl=document.getElementById('reload'); if(rl) rl.onclick=()=>location.reload();
+  main.addEventListener('click',e=>{ const b=e.target.closest('[data-copy]'); if(!b) return; navigator.clipboard.writeText(b.dataset.copy).then(()=>{ b.textContent='Copié'; setTimeout(()=>b.textContent='Copier',1500); }); });
+})();
+</script>
+</body>
+</html>

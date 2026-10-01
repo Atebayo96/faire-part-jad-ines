@@ -4,7 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sceau — Faire-part animés</title>
-<meta name="description" content="Le faire-part qui s'ouvre. Vos lieux, peints et animés, envoyés en un lien. RSVP, calendrier, itinéraire, plusieurs langues.">
+<meta name="description" content="Le faire-part qui s'ouvre. Vos lieux peints et animés, envoyés en un lien. Réponses des invités, calendrier, itinéraire, musique.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sceau · Le faire-part qui s'ouvre">
+<meta property="og:description" content="Faire-part de mariage numériques, peints et animés. Ouvrez une démo.">
+<meta property="og:image" content="https://sceau-faire-part.vercel.app/og-sceau.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -164,12 +172,36 @@
 
   /* cta */
   .cta h2{font-size:clamp(40px,7vw,88px)}
-  form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:0;margin-top:36px;border:1px solid var(--ink)}
+  form{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:0;margin-top:36px;border:1px solid var(--ink)}
   @media (max-width:820px){ form{grid-template-columns:1fr} }
   input,select{height:56px;padding:0 16px;border:0;border-right:1px solid var(--line);background:var(--bg);color:var(--ink);font:15px Inter,sans-serif;min-width:0;border-radius:0}
   @media (max-width:820px){ input,select{border-right:0;border-bottom:1px solid var(--line)} }
   form .btn{height:56px;border:0}
   .ok{display:none;margin-top:18px}
+  /* demos */
+  .demos{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  @media (max-width:1000px){ .demos{grid-template-columns:repeat(3,1fr)} }
+  @media (max-width:720px){ .demos{grid-template-columns:repeat(2,1fr);gap:14px} }
+  .demo{display:block;color:var(--ink);text-decoration:none;min-width:0}
+  .demo .pic{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:var(--bg-2)}
+  .demo .pic img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+  .demo:hover .pic img{transform:scale(1.04)}
+  .demo .pic::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.45),transparent 45%)}
+  .demo .nm{position:absolute;left:0;right:0;top:14px;z-index:1;text-align:center;color:#fff;font-size:26px;line-height:1.1;padding:0 10px;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+  .demo .meta{padding-top:10px}
+  .demo h3{font-size:17px;margin:0 0 2px}
+  .demo p{margin:0;color:var(--muted);font-size:13px;line-height:1.4}
+  .dash-cta{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;margin-top:36px;padding:24px;border:1px solid var(--line);border-radius:6px}
+  .dash-cta h3{font-size:24px;margin:8px 0 6px}
+  .dash-cta p{margin:0;color:var(--muted);max-width:40em}
+  .pv-demo{margin-top:18px}
+  .pv-demo[hidden]{display:none}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .consent{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:14px;color:var(--muted);cursor:pointer}
+  .consent input{height:auto;width:18px;height:18px;margin:2px 0 0;flex:none;accent-color:var(--ink)}
+  .err{color:#a3402a;margin:10px 0 0;font-size:14px}
+  .price-note{color:var(--muted);font-size:14px;margin-top:18px}
+  footer .legal a{color:inherit}
 
   /* apercu de theme (modal) */
   .model[data-theme]{cursor:pointer}
@@ -381,7 +413,7 @@
       <div class="facts">
         <div><b>1 lien</b><span>pour tous vos invités</span></div>
         <div><b>0 papier</b><span>ni timbre, ni adresse</span></div>
-        <div><b>FR · EN · AR</b><span>et d'autres langues</span></div>
+        <div><b>FR · EN</b><span>et d'autres langues sur demande</span></div>
       </div>
     </div>
     <div class="car" id="car" aria-roledescription="carrousel" aria-label="Les thèmes">
@@ -415,6 +447,20 @@
     </div>
     <div class="filters" id="filters" role="group" aria-label="Filtrer par style"></div>
     <div class="models" id="models"></div>
+  </div>
+</section>
+
+<section id="demos">
+  <div class="wrap">
+    <div class="head">
+      <h2>Ouvrez une vraie démo.</h2>
+      <p>Des faire-part complets, comme vos invités les recevront : ouverture, musique, compte à rebours, itinéraires, calendrier et réponses. Ouvrez-les sur votre téléphone.</p>
+    </div>
+    <div class="demos" id="demosGrid"></div>
+    <div class="dash-cta">
+      <div><p class="label">Côté mariés</p><h3>Le tableau de bord des réponses</h3><p>Qui vient, à quel événement, combien de personnes, les allergies et les petits mots. Export en un clic pour le traiteur.</p></div>
+      <a class="btn solid" href="/tableau/?demo=emma-louis" target="_blank" rel="noopener">Voir un exemple</a>
+    </div>
   </div>
 </section>
 
@@ -509,13 +555,13 @@
     <div class="prices">
       <div class="price">
         <h3>Essentiel</h3>
-        <div class="amount">99 € <small>TTC</small></div>
-        <ul><li>Un modèle au choix, 4 saisons</li><li>2 événements</li><li>Réponses et tableau de bord</li><li>Calendrier, itinéraire, compte à rebours</li><li>Votre musique ou la nôtre</li><li>Prêt tout de suite</li></ul>
+        <div class="amount">99 €</div>
+        <ul><li>Un thème au choix parmi 12</li><li>2 événements</li><li>Réponses et tableau de bord</li><li>Calendrier, itinéraire, compte à rebours</li><li>Votre musique ou la nôtre</li><li>Prêt sous 48 h</li></ul>
         <a class="btn" href="#commencer" data-plan="essentiel">Choisir</a>
       </div>
       <div class="price">
-        <h3>Signature <span class="tag">Le plus choisi</span></h3>
-        <div class="amount">229 € <small>TTC</small></div>
+        <h3>Signature <span class="tag">Recommandé</span></h3>
+        <div class="amount">229 €</div>
         <ul><li>Tout Essentiel</li><li>Lieux de la bibliothèque + 1 lieu peint d'après photo</li><li>Jusqu'à 6 événements</li><li>Un lien personnel par famille</li><li>2 langues</li><li>Save-the-date et vidéo pour les statuts</li></ul>
         <a class="btn solid" href="#commencer" data-plan="signature">Choisir</a>
       </div>
@@ -526,6 +572,7 @@
         <a class="btn" href="#commencer" data-plan="couture">Nous écrire</a>
       </div>
     </div>
+    <p class="price-note">Prix finaux, sans frais cachés, quel que soit le nombre d'invités. <a href="/cgv/">Conditions de vente</a></p>
   </div>
 </section>
 
@@ -546,7 +593,7 @@
     <details><summary>Comment peignez-vous notre salle ?</summary><p>À partir d'une ou deux photos de la façade, on crée une illustration dans le style de votre modèle, puis on anime le ciel. Beaucoup de lieux sont déjà dans la bibliothèque.</p></details>
     <details><summary>On a un henné, une mairie et une salle, avec des invités différents.</summary><p>Avec Signature, chaque famille reçoit son propre lien et ne voit que ses événements. Les réponses sont séparées par événement.</p></details>
     <details><summary>Peut-on modifier après l'envoi ?</summary><p>Oui : un horaire, une adresse, un texte. Le lien ne change pas.</p></details>
-    <details><summary>Que faites-vous des données de nos invités ?</summary><p>Elles sont hébergées en Europe, visibles par vous seuls, et supprimées après le mariage.</p></details>
+    <details><summary>Que faites-vous des données de nos invités ?</summary><p>Elles sont hébergées en Europe (Paris), visibles par vous seuls, et supprimées automatiquement 90 jours après le mariage. Vous pouvez les exporter à tout moment. <a href="/confidentialite/">En savoir plus</a></p></details>
   </div>
 </section>
 
@@ -554,19 +601,22 @@
   <div class="wrap">
     <p class="label">Lancement</p>
     <h2 style="margin-top:16px">Les dix premiers couples :<br>−40 % sur Signature.</h2>
-    <!-- MVP : remplacer action par l'URL du formulaire (Tally, Formspree...) ou un lien de paiement Stripe -->
-    <form id="waitForm" action="#" method="post">
-      <input type="text" name="prenoms" id="fNames" placeholder="Vos prénoms" required autocomplete="name">
-      <input type="email" name="email" placeholder="E-mail" required autocomplete="email">
-      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="couleurs" id="fPal"><input type="hidden" name="police" id="fFont"><input type="hidden" name="date" id="fDate"><input type="hidden" name="ouverture" id="fOpen"><input type="hidden" name="compte_a_rebours" id="fCount">
+    <form id="waitForm" novalidate>
+      <input type="text" name="name" id="fNames" placeholder="Vos prénoms" required autocomplete="name" aria-label="Vos prénoms">
+      <input type="email" name="email" id="fEmail" placeholder="E-mail" required autocomplete="email" aria-label="E-mail">
+      <input type="text" name="date" id="fDate" placeholder="Date du mariage" onfocus="this.type='date'" aria-label="Date du mariage">
+      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="palette" id="fPal"><input type="hidden" name="font" id="fFont"><input type="hidden" name="opening" id="fOpen"><input type="hidden" name="countdown" id="fCount">
       <select name="plan" id="planSel" aria-label="Formule">
         <option value="signature">Signature</option>
         <option value="essentiel">Essentiel</option>
         <option value="couture">Couture</option>
       </select>
+      <label class="hp" aria-hidden="true">Site<input name="website" tabindex="-1" autocomplete="off"></label>
       <button class="btn solid" type="submit">Réserver ma place</button>
     </form>
-    <p class="ok" id="ok">Merci. On vous écrit sous 24 h.</p>
+    <label class="consent"><input type="checkbox" id="fConsent" required> J'accepte d'être recontacté·e au sujet de ma demande. <a href="/confidentialite/">Confidentialité</a></label>
+    <p class="err" id="fErr" hidden></p>
+    <p class="ok" id="ok">Merci ! Votre demande est bien reçue. Nous vous écrivons sous 48 h.</p>
   </div>
 </section>
 
@@ -577,61 +627,47 @@
     <h3 id="pvTitle"></h3>
     <p id="pvDesc"></p>
     <div class="pv-tabs" id="pvTabs"></div>
+    <a class="btn solid pv-demo" id="pvDemo" href="#" target="_blank" rel="noopener">Ouvrir la démo complète</a>
   </div>
   <div class="pv-phone"><div class="pv-scroll" id="pvScroll"></div></div>
 </div>
 
 <footer>
-  <div class="wrap"><span>SCEAU · Paris</span><span>Mentions légales · CGV · Confidentialité</span></div>
+  <div class="wrap"><span>SCEAU · Paris</span><span class="legal"><a href="/mentions-legales/">Mentions légales</a> · <a href="/cgv/">CGV</a> · <a href="/confidentialite/">Confidentialité</a></span></div>
 </footer>
 
+<script src="themes.js"></script>
+<script>window.SCEAU_DEMOS=[]/*DEMOS*/;</script>
 <script>
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',()=>{ document.getElementById('planSel').value=a.dataset.plan; }));
-  document.getElementById('waitForm').addEventListener('submit',e=>{
-    const f=e.currentTarget;
-    if(f.getAttribute('action')==='#'){ e.preventDefault(); f.style.display='none'; document.getElementById('ok').style.display='block'; }
+  document.getElementById('waitForm').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const f=e.currentTarget, fd=new FormData(f), err=document.getElementById('fErr'), btn=f.querySelector('button');
+    const show=m=>{ err.textContent=m; err.hidden=false; };
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fd.get('email')||'')) return show('Indiquez une adresse e-mail valide.');
+    if(!document.getElementById('fConsent').checked) return show('Cochez la case pour que nous puissions vous recontacter.');
+    err.hidden=true; btn.disabled=true; btn.textContent='Envoi…';
+    const body=Object.fromEntries(fd); body.consent=true; body.names=body.name; body.weddingDate=body.date;
+    try{
+      const r=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      if(!r.ok) throw new Error(r.status);
+      f.style.display='none'; document.querySelector('.consent').style.display='none'; document.getElementById('ok').style.display='block';
+    }catch(x){ btn.disabled=false; btn.textContent='Réserver ma place'; show("L'envoi n'a pas fonctionné. Réessayez dans un instant."); }
   });
 
   /* apercu des themes : 4 scenes par theme, textes d'exemple */
   /* 9 themes, 5 styles. font/color = typographie propre au theme ; light = fond clair (texte fonce, pas de voile) */
-  const THEMES={
-    conte:{name:"Conte de fées",style:"Peinture",short:"Château, carrosse, crépuscule",desc:"Un château, un carrosse et un ciel de crépuscule. Pour les mariages romantiques.",couple:"Emma & Louis",
-      font:'"Great Vibes",cursive',color:"#fff",
-      scenes:[["Ils se marient","NAMES","Samedi 5 juin 2027"],["La cérémonie","Sous l'arche de roses","15h00 · Jardins du château","Itinéraire"],["La fête","Dîner au château","Dès 19h, bal jusqu'au bout de la nuit"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre"]]},
-    artdeco:{name:"Art déco",style:"Art déco",short:"Noir, or, années folles",desc:"Noir et or, géométrie des années 1920, champagne et jazz.",couple:"Margaux & Victor",
-      font:'"Limelight",serif',color:"#d9b96a",ey:"#d9b96a",tx:"#efe3c2",size:.8,
-      scenes:[["Save the date","NAMES","Samedi 16 octobre 2027"],["La cérémonie","Au grand salon","16h00 · Hôtel particulier, Paris 8e","Itinéraire"],["La soirée","Champagne & jazz","Dès 20h · Tenue de soirée"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
-    aquarelle:{name:"Aquarelle",style:"Aquarelle",short:"Pivoines, eucalyptus, papier blanc",desc:"Fleurs à l'aquarelle sur papier blanc, sauge et rose poudré.",couple:"Alice & Théo",light:true,
-      font:'"Parisienne",cursive',color:"#3e5a4a",ey:"#7a8f80",tx:"#55695d",
-      scenes:[["Nous nous marions","NAMES","Samedi 22 mai 2027"],["La cérémonie","Sous l'arche fleurie","15h30 · Domaine des Roses","Itinéraire"],["Le dîner","Au jardin","Dès 19h, sous la tonnelle"],["RSVP","Serez-vous des nôtres ?","Avant le 15 avril","Répondre"]]},
-    bollywood:{name:"Bollywood",style:"Peinture",short:"Palais, soucis, mille lumières",desc:"Palais rose, soucis et mille lumières, sur plusieurs jours.",couple:"Priya & Arjun",
-      font:'"Cinzel Decorative",serif',color:"#fff4d6",size:.72,
-      scenes:[["Shubh Vivah","NAMES","Du 9 au 11 juillet 2027"],["Mehndi","Vendredi après-midi","14h00 · Cour du palais","Itinéraire"],["Cérémonie","Sous le mandap","Samedi 17h00","Itinéraire"],["Sangeet & réception","Serez-vous des nôtres ?","Samedi, dès 20h","Répondre"]]},
-    minimal:{name:"Trait",style:"Minimal",short:"Une ligne, du papier, rien de plus",desc:"Dessin d'un seul trait sur papier crème. Sobre et moderne.",couple:"Sarah & Yanis",light:true,
-      font:'"Jost",sans-serif',color:"#1d1d1b",ey:"#8a857c",tx:"#5a5750",size:.62,upper:true,
-      scenes:[["Save the date","NAMES","11 · 12 · 2027"],["Mairie","Mairie du 11e","11h00","Itinéraire"],["Déjeuner","Chez Paul","Dès 13h"],["Réponse","Vous venez ?","Avant le 11 novembre","Répondre"]]},
-    boheme:{name:"Bohème",style:"Bohème",short:"Pampas, terracotta, désert",desc:"Pampas, fleurs séchées et coucher de soleil sur le désert.",couple:"Léna & Adam",light:true,
-      font:'"Cormorant Garamond",Georgia,serif',italic:true,color:"#7a3e22",ey:"#b0683f",tx:"#6b4a37",size:.9,
-      scenes:[["Save the date","NAMES","Samedi 11 septembre 2027"],["La cérémonie","Sous l'arche de pampas","17h00 · Mas des Sables","Itinéraire"],["Le dîner","À la belle étoile","Dès 19h30, coussins et bougies"],["RSVP","Serez-vous des nôtres ?","Avant le 15 juillet","Répondre","dark"]]},
-    americaine:{name:"À l'américaine",style:"Peinture",short:"Plein air, arche fleurie, grange",desc:"Cérémonie en plein air, chaises blanches et grange illuminée.",couple:"Chloé & Nathan",
-      font:'"Playfair Display",Georgia,serif',italic:true,color:"#fff",size:.82,
-      scenes:[["We're getting married","NAMES","Samedi 19 juin 2027"],["Cérémonie & cocktail","Sur la pelouse","16h00 · Domaine des Chênes","Itinéraire"],["La fête","Dîner dans la grange","Dès 19h30, guirlandes et dancefloor"],["RSVP","On compte sur vous ?","Avant le 15 mai","Répondre"]]},
-    pop:{name:"Pop rétro",style:"Pop rétro",short:"Années 70, soleil, disco",desc:"Couleurs vives des années 70, marguerites et boule à facettes.",couple:"Lou & Max",light:true,
-      font:'"Shrikhand",cursive',color:"#e2457a",ey:"#f07b2a",tx:"#2b2240",size:.82,
-      scenes:[["On se marie !","NAMES","Samedi 3 juillet 2027"],["La cérémonie","Sous les marguerites","16h00 · Jardin de Mamie","Itinéraire"],["La fête","Disco jusqu'à l'aube","Dès 19h"],["RSVP","Tu viens danser ?","Avant le 1er juin","Répondre"]]},
-    ceramique:{name:"Azulejos",style:"Céramique",short:"Carreaux bleus, citrons, océan",desc:"Carreaux bleus et blancs, citronniers et lumière du sud.",couple:"Sofia & Nuno",light:true,
-      font:'"DM Serif Display",Georgia,serif',color:"#1f4fa3",ey:"#3d6bb8",tx:"#2c3a55",size:.86,
-      scenes:[["Vamos casar","NAMES","Samedi 25 juin 2027"],["La cérémonie","À la chapelle blanche","16h00 · Lisbonne","Itinéraire"],["Le dîner","Face à l'océan","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre"]]},
-    nuits:{name:"Mille et une nuits",style:"Peinture",short:"Riad, zellige, lanternes",desc:"Riad, zellige et lanternes. Henné, cérémonie et nuit étoilée.",couple:"Yasmine & Karim",
-      font:'"Aref Ruqaa",serif',color:"#fff3d6",size:.8,
-      scenes:[["Bismillah","NAMES","Samedi 12 juin 2027"],["Le henné","Vendredi soir","19h00 · Chez la famille Alaoui","Itinéraire"],["La cérémonie","Au riad","Samedi 14h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 19h","Répondre"]]},
-    gravure:{name:"Gravure",style:"Gravure",short:"Encre ancienne, papier vieilli",desc:"Gravure à l'encre sur papier ancien, comme un livre d'autrefois.",couple:"Claire & Thomas",light:true,
-      font:'"IM Fell English",Georgia,serif',italic:true,color:"#2a2620",ey:"#6b6152",tx:"#4a443a",size:.74,top1:"86%",stack:true,
-      scenes:[["Ils se marient","NAMES","Samedi 2 octobre 2027"],["La messe","Église Saint-Martin","15h00","Itinéraire"],["Le dîner","Au château","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
-    dolcevita:{name:"Dolce Vita",style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
-      font:'"Italiana",serif',color:"#fff",size:.85,
-      scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
-  };
+  const THEMES=window.SCEAU_THEMES;
+  /* demos jouables (liste injectee par build-site.py) */
+  (function(){
+    const box=document.getElementById('demosGrid'), D=window.SCEAU_DEMOS||[];
+    const OPN={env:'Enveloppe',cur:'Rideau',door:'Grandes portes'};
+    const e=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    box.innerHTML=D.map(d=>{ const t=THEMES[d.theme]||{}; const M=(window.SCEAU_MUSIC||{})[d.music]||{};
+      const tags=[d.special||OPN[d.opening], d.events+' événement'+(d.events>1?'s':''), d.families?'liens par famille':'', d.lang==='en'?'en anglais':'', M.name?'♪ '+M.name:''].filter(Boolean);
+      return `<a class="demo" href="/d/${e(d.slug)}/" target="_blank" rel="noopener"><div class="pic"><img src="${e(d.thumb)}" alt="" loading="lazy"><span class="nm" style="font-family:${e(t.font||'Great Vibes')};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:20px;':''}">${e(d.couple)}</span></div><div class="meta"><h3>${e(d.special?'Notre faire-part réel':t.name)}</h3><p>${e(tags.join(' · '))}</p></div></a>`; }).join('');
+    if(!D.length) document.getElementById('demos').hidden=true;
+  })();
   const pv=document.getElementById('pv'), pvScroll=document.getElementById('pvScroll'), pvTabs=document.getElementById('pvTabs');
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   /* remet le defilement tout en haut (slide 1), y compris apres l'affichage de la fenetre */
@@ -699,6 +735,8 @@
     document.getElementById('pvTitle').textContent=t.name;
     document.getElementById('pvDesc').textContent=t.desc;
     press(pvTabs,k); render(pvScroll,k);
+    const dm=(window.SCEAU_DEMOS||[]).find(d=>d.theme===k&&d.slug!=='yasmine-karim'), a=document.getElementById('pvDemo');
+    a.hidden=!dm; if(dm) a.href='/d/'+dm.slug+'/';
   }
   tabs(pvTabs,showTheme);
   function openTheme(k){ pv.classList.add('on'); document.body.style.overflow='hidden'; showTheme(k); }
@@ -770,7 +808,7 @@
     pages.push(scene(2,false));
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML=pages.join(''); sc.scrollTop=st; tick();
-    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fDate').value=$('cDate').value;
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; if($('cN1').value!==$('cN1').defaultValue||$('cN2').value!==$('cN2').defaultValue) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; if($('cDate').value&&$('cDate').value!==$('cDate').defaultValue){ $('fDate').type='date'; $('fDate').value=$('cDate').value; }
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
   /* lecture de l'ouverture : fermee -> 'play' -> 'done' */

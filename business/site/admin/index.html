@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · Sceau</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  body{margin:0;font:400 15px/1.5 Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;color:#111;background:#fff}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+  h1{font:500 30px/1.1 -apple-system,"Helvetica Neue",sans-serif;letter-spacing:-.02em;margin:10px 0 4px}
+  h2{font:500 20px/1.2 -apple-system,"Helvetica Neue",sans-serif;margin:34px 0 10px}
+  p{color:#6b6b6b}
+  .tbl{overflow-x:auto;border:1px solid #e6e6e6;border-radius:6px}
+  table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid #e6e6e6;vertical-align:top}
+  th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6b6b6b;background:#f6f5f2}
+  small{color:#6b6b6b}
+  form{display:flex;gap:8px;margin-top:16px}
+  input{flex:1;font:inherit;padding:10px;border:1px solid #ddd;border-radius:6px}
+  button{font:inherit;padding:10px 14px;border:1px solid #111;background:#111;color:#fff;border-radius:6px;cursor:pointer}
+  .warn{background:#fff6e5;border:1px solid #f0d9a8;color:#7a5a14;padding:12px 14px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <h1>Admin Sceau</h1>
+  <p>Entrez la clé secrète du site (variable SCEAU_SECRET sur Vercel).</p>
+  <form id="f"><input id="k" type="password" placeholder="Clé secrète" autocomplete="off"><button>Ouvrir</button></form>
+</div>
+<script>
+  const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  async function load(k){
+    const r=await fetch('/api/admin',{headers:{Authorization:'Bearer '+k}});
+    if(!r.ok){ alert(r.status===401?'Clé incorrecte':'Erreur '+r.status); return; }
+    try{ sessionStorage.setItem('sceau-k',k); }catch(e){}
+    const d=await r.json();
+    document.getElementById('app').innerHTML=`<h1>Admin Sceau</h1>
+      ${d.storage?'':'<p class="warn">Le stockage n’est pas encore activé : les demandes et les réponses ne peuvent pas être enregistrées. Créez le store Blob sur Vercel (voir business/11-mise-en-service.md).</p>'}
+      <h2>Demandes reçues (${d.leads.length})</h2>
+      <div class="tbl"><table><thead><tr><th>Reçu</th><th>Contact</th><th>Formule</th><th>Date du mariage</th><th>Choix dans l’essai</th><th>Message</th></tr></thead><tbody>
+      ${d.leads.map(l=>`<tr><td><small>${new Date(l.at).toLocaleString('fr-FR')}</small></td><td>${esc(l.name)}<br><a href="mailto:${esc(l.email)}">${esc(l.email)}</a><br><small>${esc(l.phone)}</small></td><td>${esc(l.plan)}</td><td>${esc(l.date)}</td><td><small>${esc(Object.entries(l.choix||{}).filter(x=>x[1]).map(x=>x[0]+' : '+x[1]).join(' · '))}</small></td><td>${esc(l.message)}</td></tr>`).join('')||'<tr><td colspan="6"><small>Aucune demande pour le moment.</small></td></tr>'}
+      </tbody></table></div>
+      <h2>Faire-part en ligne (${d.invites.length})</h2>
+      <div class="tbl"><table><thead><tr><th>Couple</th><th>Type</th><th>Faire-part</th><th>Tableau de bord des mariés</th></tr></thead><tbody>
+      ${d.invites.map(i=>`<tr><td>${esc(i.couple)}<br><small>${new Date(i.date).toLocaleDateString('fr-FR')}</small></td><td>${i.demo?'Démo':'Client'}</td><td><a href="${esc(i.link)}" target="_blank">${esc(i.link)}</a></td><td><a href="${esc(i.dashboard)}" target="_blank">Ouvrir</a><br><small>Lien à envoyer aux mariés (garder privé)</small></td></tr>`).join('')}
+      </tbody></table></div>`;
+  }
+  document.getElementById('f').addEventListener('submit',e=>{ e.preventDefault(); load(document.getElementById('k').value.trim()); });
+  try{ const k=sessionStorage.getItem('sceau-k'); if(k) load(k); }catch(e){}
+</script>
+</body>
+</html>
