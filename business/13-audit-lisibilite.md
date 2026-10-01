@@ -99,3 +99,9 @@ contrainte de zone de texte) :
    restent les mêmes (couple qui choisit, mains et téléphone, grand-mère, famille, amis, couple qui lit les réponses).
 
 Tant que les images ne sont pas refaites, le halo CSS garde les textes lisibles. Il n'est pas la solution finale.
+
+**Note sur la banque `business/banque/`** (48 scènes « mains, dos, symboles » générées en parallèle, pas encore
+branchées dans `img/hd`) : passée dans `check_images.py --dir business/banque`, elle échoue de la même façon,
+**32 images sur 48 à refaire** (seuls Trait, et quelques scènes 4, passent). Elle a été générée sans la contrainte de
+zone de texte : les mains et les symboles sont souvent centrés, donc dans la bande du haut, et les ciels restent
+pastel. Avant de la brancher, régénérer avec le prompt type ci-dessus, scène par scène, en ne gardant que ce qui passe.
