@@ -334,36 +334,47 @@
   .cp-flash.bloom{animation:flashBloom 1.1s cubic-bezier(.4,0,.2,1) forwards}
   @keyframes flashBloom{0%{opacity:0}44%{opacity:1}54%{opacity:1}100%{opacity:0}}
 
-  /* rideau */
-  .op-cur{background:url("img/open/rideau.webp") center/cover no-repeat;transition:transform 1.9s cubic-bezier(.65,0,.3,1) .15s}
-  .op-cur-edge{position:absolute;left:0;right:0;bottom:-30px;height:30px;background:linear-gradient(rgba(0,0,0,.35),transparent)}
-  .op-mono{position:absolute;left:0;right:0;top:38%;text-align:center;font:400 60px/1 "Great Vibes",cursive;color:#e9c879;text-shadow:0 2px 0 #7a5a14,0 6px 16px rgba(0,0,0,.5)}
-  .op.opening .op-cur{transform:translateY(-104%)}
+  /* rideau : il se tasse un instant, puis monte d'un seul geste (lent, accélère, ralentit), en se plissant légèrement */
+  .op-cur{background:url("img/open/rideau.webp") center/cover no-repeat;transform-origin:50% 0;will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
+  .op-cur-edge{position:absolute;left:0;right:0;bottom:-40px;height:40px;background:linear-gradient(rgba(0,0,0,.4),transparent)}
+  .op-mono{position:absolute;left:0;right:0;top:38%;text-align:center;font:400 54px/1 "Great Vibes",cursive;color:#e9c879;text-shadow:0 2px 0 #7a5a14,0 6px 16px rgba(0,0,0,.5);transition:opacity .45s ease,transform .6s ease}
+  .op.opening .op-cur{animation:opCurtain 2.4s both}
+  .op.opening .op-mono{opacity:0;transform:translateY(-6px) scale(.97)}
+  @keyframes opCurtain{
+    0%{transform:translate3d(0,0,0) scaleY(1);animation-timing-function:cubic-bezier(.33,0,.5,1)}
+    10%{transform:translate3d(0,.8%,0) scaleY(1.004);animation-timing-function:cubic-bezier(.6,0,.22,1)}
+    100%{transform:translate3d(0,-106%,0) scaleY(.9)}}
 
-  /* grandes portes */
-  .op-doors{overflow:hidden;background:#000}
-  .op-doors-in{position:absolute;inset:0;transform-origin:50% 50%;perspective:560px;perspective-origin:50% 50%}
-  .op-leaf{position:absolute;top:0;bottom:0;width:50%;background:url("img/open/portes.webp") no-repeat;background-size:200% 100%;backface-visibility:hidden}
+  /* grandes portes : petit déclic, puis les deux battants s'ouvrent d'un seul mouvement continu ;
+     la lumière de la salle passe par l'entrebâillement, la caméra avance doucement */
+  .op-doors{overflow:hidden;background:#1a140c;will-change:transform}
+  .op-doors-in{position:absolute;inset:0;z-index:2;perspective:620px;perspective-origin:50% 50%;transform-style:preserve-3d}
+  .op-leaf{position:absolute;top:0;bottom:0;width:50%;background:url("img/open/portes.webp") no-repeat;background-size:200% 100%;backface-visibility:hidden;will-change:transform;transform:rotateY(0) translateZ(0)}
   .op-leaf.l{left:0;background-position:0 0;transform-origin:0 50%}
   .op-leaf.r{right:0;background-position:100% 0;transform-origin:100% 50%}
   .op-leaf::after{content:"";position:absolute;inset:0;opacity:0}
-  .op-leaf.l::after{background:linear-gradient(90deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
-  .op-leaf.r::after{background:linear-gradient(270deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
-  .op-seam{position:absolute;top:0;bottom:0;left:50%;width:10px;margin-left:-5px;background:linear-gradient(90deg,transparent,rgba(255,240,205,.95),transparent);filter:blur(1px);opacity:0;z-index:2}
-  .op-glow{position:absolute;inset:0;z-index:1;background:radial-gradient(55% 45% at 50% 50%,#fffdf7 0%,rgba(255,240,205,.85) 40%,transparent 75%);opacity:0;pointer-events:none}
-  .op.opening .op-doors{background:#1a140c}
-  .op.opening .op-doors-in{animation:opPush 3.4s ease-in-out forwards}
-  .op.opening .op-leaf.l{animation:opDoorL 3.2s linear forwards}
-  .op.opening .op-leaf.r{animation:opDoorR 3.2s linear forwards}
-  .op.opening .op-leaf::after{animation:opShade 3.2s ease forwards}
-  .op.opening .op-seam{animation:opSeam 1.4s ease forwards}
-  .op.opening .op-glow{animation:opGlow 2.2s ease-in forwards}
-  @keyframes opDoorL{0%{transform:rotateY(0)}12%{transform:rotateY(-6deg)}20%{transform:rotateY(-4deg)}35%{transform:rotateY(-16deg)}50%{transform:rotateY(-38deg)}65%{transform:rotateY(-62deg)}80%{transform:rotateY(-82deg)}100%{transform:rotateY(-95deg)}}
-  @keyframes opDoorR{0%{transform:rotateY(0)}12%{transform:rotateY(6deg)}20%{transform:rotateY(4deg)}35%{transform:rotateY(16deg)}50%{transform:rotateY(38deg)}65%{transform:rotateY(62deg)}80%{transform:rotateY(82deg)}100%{transform:rotateY(95deg)}}
-  @keyframes opShade{0%,20%{opacity:0}100%{opacity:1}}
-  @keyframes opSeam{0%{opacity:0;transform:scaleY(.3)}25%{opacity:1;transform:scaleY(1)}70%{opacity:.9}100%{opacity:0}}
-  @keyframes opGlow{0%,20%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:scale(1.6)}}
-  @keyframes opPush{0%,25%{transform:scale(1)}100%{transform:scale(1.2)}}
+  .op-leaf.l::after{background:linear-gradient(90deg,rgba(0,0,0,.12),rgba(0,0,0,.5))}
+  .op-leaf.r::after{background:linear-gradient(270deg,rgba(0,0,0,.12),rgba(0,0,0,.5))}
+  .op-seam{position:absolute;top:0;bottom:0;left:50%;width:12px;margin-left:-6px;background:linear-gradient(90deg,transparent,rgba(255,240,205,.95),transparent);filter:blur(1.5px);opacity:0;z-index:3}
+  .op-glow{position:absolute;inset:0;z-index:1;background:radial-gradient(60% 50% at 50% 50%,#fffdf7 0%,rgba(255,240,205,.9) 38%,rgba(255,220,160,.25) 70%,transparent 85%);opacity:0;pointer-events:none;will-change:opacity,transform}
+  .op.opening .op-doors{animation:opPush 3s cubic-bezier(.45,0,.25,1) .3s both}
+  .op.opening .op-leaf.l{animation:opDoorL 2.8s both}
+  .op.opening .op-leaf.r{animation:opDoorR 2.8s both}
+  .op.opening .op-leaf::after{animation:opShade 2.6s ease-in .3s both}
+  .op.opening .op-seam{animation:opSeam 1.3s ease both}
+  .op.opening .op-glow{animation:opGlow 2s cubic-bezier(.4,0,.6,1) .25s both}
+  @keyframes opDoorL{
+    0%{transform:rotateY(0);animation-timing-function:cubic-bezier(.3,0,.4,1)}
+    11%{transform:rotateY(-3deg);animation-timing-function:cubic-bezier(.4,.05,.22,1)}
+    100%{transform:rotateY(-100deg)}}
+  @keyframes opDoorR{
+    0%{transform:rotateY(0);animation-timing-function:cubic-bezier(.3,0,.4,1)}
+    11%{transform:rotateY(3deg);animation-timing-function:cubic-bezier(.4,.05,.22,1)}
+    100%{transform:rotateY(100deg)}}
+  @keyframes opShade{from{opacity:0}to{opacity:1}}
+  @keyframes opSeam{0%{opacity:0;transform:scaleY(.4)}30%{opacity:1;transform:scaleY(1)}75%{opacity:.8}100%{opacity:0}}
+  @keyframes opGlow{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1.35)}}
+  @keyframes opPush{from{transform:scale(1)}to{transform:scale(1.16)}}
   .replay{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font:inherit;font-size:13px;cursor:pointer}
   @media (prefers-reduced-motion:reduce){ .op-flap,.op-env,.op-cur,.op-leaf{transition-duration:.01s!important;transition-delay:0s!important} .op.opening .op-leaf,.op.opening .op-doors-in,.op.opening .op-seam,.op.opening .op-glow,.op.opening .op-leaf::after,.op.opening .op-flap{animation-duration:.01s!important} }
 
@@ -843,7 +854,7 @@
   /* lecture de l'ouverture : fermee -> 'opening' -> 'gone' */
   const op=$('cpOp'); let opT=null;
   // meme sequence que le faire-part d'Ines & Jad : ouverture, la lumiere monte, la page apparait dessous
-  const cpFlash=$('cpFlash'), OPT={env:1000,cur:1150,door:1700}; let opT2=[];
+  const cpFlash=$('cpFlash'), OPT={env:1000,cur:1250,door:1600}; let opT2=[];
   function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom'); op.dataset.type=C.op; void op.offsetWidth; }
   function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const f=OPT[C.op]||1000;
     opT2=[setTimeout(()=>cpFlash.classList.add('bloom'),f), setTimeout(()=>{ op.classList.add('gone'); $('cpScroll').scrollTop=0; },f+560)]; }

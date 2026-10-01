@@ -216,7 +216,7 @@
   const op=$('#op');
   // une seule arche continue, comme le faire-part d'Inès & Jad : l'ouverture commence, la lumière monte,
   // le passage vers la première page se fait sous le pic blanc, puis la lumière se retire et dévoile la page déjà nette
-  const TIMING={env:1000,cur:1150,door:1700};  // moment où la lumière commence à monter
+  const TIMING={env:1000,cur:1250,door:1600};  // moment où la lumière commence à monter
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
