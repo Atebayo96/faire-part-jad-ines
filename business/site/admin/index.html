@@ -40,7 +40,7 @@
       ${d.storage?'':'<p class="warn">Le stockage n’est pas encore activé : les demandes et les réponses ne peuvent pas être enregistrées. Créez le store Blob sur Vercel (voir business/11-mise-en-service.md).</p>'}
       <h2>Demandes reçues (${d.leads.length})</h2>
       <div class="tbl"><table><thead><tr><th>Reçu</th><th>Contact</th><th>Formule</th><th>Date du mariage</th><th>Choix dans l’essai</th><th>Message</th></tr></thead><tbody>
-      ${d.leads.map(l=>`<tr><td><small>${new Date(l.at).toLocaleString('fr-FR')}</small></td><td>${esc(l.name)}<br><a href="mailto:${esc(l.email)}">${esc(l.email)}</a><br><small>${esc(l.phone)}</small></td><td>${esc(l.plan)}</td><td>${esc(l.date)}</td><td><small>${esc(Object.entries(l.choix||{}).filter(x=>x[1]).map(x=>x[0]+' : '+x[1]).join(' · '))}</small></td><td>${esc(l.message)}</td></tr>`).join('')||'<tr><td colspan="6"><small>Aucune demande pour le moment.</small></td></tr>'}
+      ${d.leads.map(l=>`<tr><td><small>${new Date(l.at).toLocaleString('fr-FR')}</small></td><td>${esc(l.name)}<br><a href="mailto:${esc(l.email)}">${esc(l.email)}</a><br><small>${esc(l.phone)}</small></td><td>${esc(l.plan)}${l.type==='commande'?`<br><b>commande</b><br><small>${esc(l.ref||'')}</small>`:''}</td><td>${esc(l.date)}</td><td><small>${esc(Object.entries(l.choix||{}).filter(x=>x[1]).map(x=>x[0]+' : '+x[1]).join(' · '))}</small></td><td>${esc(l.message)}</td></tr>`).join('')||'<tr><td colspan="6"><small>Aucune demande pour le moment.</small></td></tr>'}
       </tbody></table></div>
       <h2>Faire-part en ligne (${d.invites.length})</h2>
       <div class="tbl"><table><thead><tr><th>Couple</th><th>Type</th><th>Faire-part</th><th>Tableau de bord des mariés</th></tr></thead><tbody>

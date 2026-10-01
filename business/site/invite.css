@@ -252,6 +252,8 @@ a{color:inherit}
 .note{font-size:12px;color:#8a8275;margin:12px 0 0;line-height:1.45}
 .err{color:#a3402a;font-size:14px;margin:8px 0 0}
 .done-msg{text-align:center;padding:16px 0 4px}
+.edit-link{margin-top:14px;display:grid;gap:8px;justify-items:center}
+.edit-link input{width:100%;height:40px;border:1px solid #ddd6c8;border-radius:6px;padding:0 10px;font:13px Inter,sans-serif;color:#2a2620;background:#faf8f3}
 .done-msg .big{font:400 34px/1.1 "Great Vibes",cursive;color:#b8975a;margin-bottom:6px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .cal a{display:flex;align-items:center;justify-content:space-between;padding:15px 4px;border-bottom:1px solid #eee6d8;text-decoration:none;font:500 16px Inter,sans-serif}

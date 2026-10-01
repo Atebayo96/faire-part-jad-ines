@@ -1,6 +1,6 @@
 // Stockage des données (demandes de démo, réponses des invités).
 // En ligne : Vercel Blob privé, région Paris (cdg1). En local (SCEAU_LOCAL=1) : fichiers dans /tmp/sceau-data.
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createHmac, createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
@@ -13,6 +13,12 @@ export async function save(pathname, data) {
   if (LOCAL) { const f = path.join(DIR, pathname); await fs.mkdir(path.dirname(f), { recursive: true }); await fs.writeFile(f, body); return; }
   const { put } = await import('@vercel/blob');
   await put(pathname, body, { access: 'private', contentType: 'application/json', addRandomSuffix: false, allowOverwrite: true });
+}
+
+export async function readOne(pathname) {
+  if (LOCAL) { try { return JSON.parse(await fs.readFile(path.join(DIR, pathname), 'utf8')); } catch { return null; } }
+  const { get } = await import('@vercel/blob');
+  try { const g = await get(pathname, { access: 'private' }); return g ? JSON.parse(await new Response(g.stream).text()) : null; } catch { return null; }
 }
 
 export async function readAll(prefix) {
@@ -53,3 +59,6 @@ export const isAdmin = req => !!process.env.SCEAU_SECRET && same(bearer(req), pr
 export const bearer = req => (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
 export const clean = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n);
 export const id = () => new Date().toISOString().replace(/[:.]/g, '-') + '-' + Math.random().toString(36).slice(2, 8);
+// Lien personnel d'un invité pour modifier sa réponse : identifiant + clé (seule l'empreinte de la clé est stockée).
+export const newKey = () => randomBytes(12).toString('base64url');
+export const keyHash = k => createHash('sha256').update('rsvp:' + String(k || '')).digest('base64url');
