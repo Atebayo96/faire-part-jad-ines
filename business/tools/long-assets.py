@@ -11,14 +11,14 @@ B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(B, 'landing', 'img', 'long')
 KEYS = {'blue': (0, 0, 255), 'magenta': (255, 0, 255)}
 THEMES = {
-  'nuits': dict(thumb=.12, hero=dict(ink='#f6eedb', shadow='0 2px 14px rgba(0,0,0,.55)'), frame='magenta',
-                sec=[dict(ink='#f7efdc', accent='#e9cd8a'), dict(ink='#3b2a18', accent='#8a5a2b'), dict(ink='#f3ead6', accent='#e2c27a')],
+  'nuits': dict(thumb=.12, hero=dict(ink='#f6eedb', shadow='0 2px 14px rgba(0,0,0,.55)', top='31%'), frame='magenta',
+                sec=[dict(ink='#f7efdc', accent='#e9cd8a'), dict(ink='#3b2a18', accent='#6b4621'), dict(ink='#f3ead6', accent='#e2c27a')],
                 bands=[('band1', 'blue', .66), ('band2', 'blue', 1.0)], ev=['nuits-2', 'nuits-3', 'nuits-4'], photos=[1, 2, 3, 4]),
-  'bollywood': dict(thumb=.13, hero=dict(ink='#6b1230', shadow='0 1px 10px rgba(255,236,214,.7)'), frame='blue',
-                sec=[dict(ink='#fff1e0', accent='#f6c453'), dict(ink='#4a1426', accent='#8f1d4c'), dict(ink='#fbf0dc', accent='#f2c14e')],
+  'bollywood': dict(thumb=.13, hero=dict(ink='#6b1230', shadow='0 1px 10px rgba(255,236,214,.7)', top='14%'), frame='blue',
+                sec=[dict(ink='#fff1e0', accent='#f6c453'), dict(ink='#4a1426', accent='#76183e'), dict(ink='#fbf0dc', accent='#f2c14e')],
                 bands=[('band1', 'blue', .86), ('band2', 'blue', .78)], ev=['bollywood-2', 'bollywood-3', 'bollywood-4'], photos=[1, 2, 3, 4]),
-  'dolcevita': dict(thumb=.2, hero=dict(ink='#ffffff', shadow='0 2px 14px rgba(20,50,90,.55)'), frame='magenta',
-                sec=[dict(ink='#2f3b4f', accent='#2d6aa0'), dict(ink='#fbf5e6', accent='#f2db86'), dict(ink='#3d3a2a', accent='#2d6aa0')],
+  'dolcevita': dict(thumb=.2, hero=dict(ink='#193f64', shadow='0 1px 12px rgba(255,255,255,.8)', top='14%'), frame='magenta',
+                sec=[dict(ink='#2f3b4f', accent='#2b6598'), dict(ink='#fbf5e6', accent='#fbf4d9'), dict(ink='#3d3a2a', accent='#265a88')],
                 bands=[('band1', 'blue', .9), ('band2', 'magenta', 1.0)], ev=['dolcevita-2', 'dolcevita-3', 'dolcevita-4'], photos=[1, 2, 3, 4]),
 }
 

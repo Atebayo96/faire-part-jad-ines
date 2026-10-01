@@ -9,7 +9,7 @@
   {
    "tex": "tex2.webp",
    "ink": "#4a1426",
-   "accent": "#8f1d4c"
+   "accent": "#76183e"
   },
   {
    "tex": "tex3.webp",
@@ -37,7 +37,8 @@
   "w": 900,
   "h": 3628,
   "ink": "#6b1230",
-  "shadow": "0 1px 10px rgba(255,236,214,.7)"
+  "shadow": "0 1px 10px rgba(255,236,214,.7)",
+  "top": "14%"
  },
  "frame": {
   "src": "frame.webp",

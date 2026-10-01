@@ -4,17 +4,17 @@
   {
    "tex": "tex1.webp",
    "ink": "#2f3b4f",
-   "accent": "#2d6aa0"
+   "accent": "#2b6598"
   },
   {
    "tex": "tex2.webp",
    "ink": "#fbf5e6",
-   "accent": "#f2db86"
+   "accent": "#fbf4d9"
   },
   {
    "tex": "tex3.webp",
    "ink": "#3d3a2a",
-   "accent": "#2d6aa0"
+   "accent": "#265a88"
   }
  ],
  "bands": [
@@ -36,8 +36,9 @@
   "src": "hero.webp",
   "w": 900,
   "h": 3628,
-  "ink": "#ffffff",
-  "shadow": "0 2px 14px rgba(20,50,90,.55)"
+  "ink": "#193f64",
+  "shadow": "0 1px 12px rgba(255,255,255,.8)",
+  "top": "14%"
  },
  "frame": {
   "src": "frame.webp",

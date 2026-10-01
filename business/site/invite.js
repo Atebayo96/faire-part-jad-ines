@@ -231,12 +231,13 @@
     // 1. l'illustration d'ouverture et l'invitation
     const P0=I.parents||null, names=`${esc(n1)} <i>&amp;</i> ${esc(n2)}`;
     const hero=`<div class="lg-hero"><img class="lg-hero-img" src="${X.base}/${X.hero.src}" alt="" style="aspect-ratio:${X.hero.w}/${X.hero.h}">
-      <div class="lg-hero-txt" data-sp=".35" style="color:${X.hero.ink};--sh:${X.hero.shadow||'none'}">
+      <div class="lg-hero-txt" data-sp=".35" style="color:${X.hero.ink};--sh:${X.hero.shadow||'none'};--top:${X.hero.top||'14%'}">
         ${fam&&fam.label?`<div class="greet">${esc(fam.label)}</div>`:''}
         <div class="ey">${esc(I.intro&&I.intro.eyebrow||T.scenes[0][0])}</div>
         <div class="lg-names" style="${nm(1.05,X.hero.ink)}">${names}</div>
         <div class="dl"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>
-      </div><div class="hint lg-hint" style="color:${X.hero.ink}">${S.scroll} ↓</div></div>`;
+        <div class="lg-hint">${S.scroll} ↓</div>
+      </div></div>`;
     const evs=events.map((e,i)=>{ const d=zoned(e.start,e.tz), inner=X.ev[(I.events||[]).indexOf(e)]||X.ev[i%X.ev.length];
       const when=fmtDayShort(d,e.tz)+' · '+fmtTime(d,e.tz);
       return `<article class="lg-ev rv">
