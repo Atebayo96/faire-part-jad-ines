@@ -292,31 +292,56 @@
   .op-card b{font:500 15px "Inter Tight",Inter,sans-serif}
   .op-card small{font-size:12px;color:var(--muted)}
   .op-card[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
-  .op{position:absolute;inset:0;z-index:5;cursor:pointer;overflow:hidden}
+  .op{position:absolute;inset:0;z-index:5;cursor:pointer;overflow:hidden;transition:opacity .42s ease,visibility .42s ease}
   .op>div{position:absolute;inset:0;display:none}
   .op[data-type="env"] .op-env,.op[data-type="cur"] .op-cur,.op[data-type="door"] .op-doors{display:block}
-  .op.done{pointer-events:none}
-  .op>.op-tap{inset:auto 0 7% 0}
-  .op-tap{position:absolute;left:0;right:0;bottom:7%;text-align:center;font:500 10px Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6);display:block!important;inset:auto 0 7% 0;transition:opacity .3s}
-  .op[data-type="env"] .op-tap{color:#7a6446;text-shadow:none}
-  .op.play .op-tap{opacity:0}
+  .op.opening{pointer-events:none}
+  .op.gone{opacity:0;visibility:hidden}
+  .op>.op-tap{position:absolute;left:50%;right:auto;top:auto;bottom:22px;z-index:6;transform:translateX(-50%);width:max-content;display:block;text-align:center;
+    color:rgba(255,250,240,.92);font:700 9.5px/1.5 Inter,Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;
+    padding:9px 16px;border:1px solid rgba(232,207,139,.4);border-radius:999px;background:rgba(15,26,46,.3);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:tapPulse 2.6s ease-in-out infinite}
+  @keyframes tapPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,207,139,0)}50%{box-shadow:0 0 0 12px rgba(232,207,139,.1)}}
+  .op>.op-to{display:none!important;position:absolute;left:0;right:0;top:9%;bottom:auto;z-index:6;display:block;text-align:center;font:italic 400 20px/1.3 "Cormorant Garamond",Georgia,serif;color:#6d5a40;padding:0 12%}
+  .op[data-type="cur"] .op-to,.op[data-type="door"] .op-to{color:#f3e2bb;text-shadow:0 1px 10px rgba(0,0,0,.7)}
+  .op.opening .op-tap,.op.opening .op-to{opacity:0;transition:opacity .2s ease}
+
   /* enveloppe */
-  .op-env{perspective:1100px;background:#efe6d3;transition:opacity .7s ease 1.15s,transform .9s ease 1.15s}
-  .op-env-in{position:absolute;top:0;height:100%;aspect-ratio:620/1111;left:50%;transform:translateX(-50%)}
-  .op-body{position:absolute;inset:0;background:url("img/open/env-body.webp") center/100% 100% no-repeat}
-  .op-flap{position:absolute;left:0;top:0;width:100%;transform-origin:50% 0;transition:transform 1.1s cubic-bezier(.32,0,.34,1);transform-style:preserve-3d}
-  .op-flap img{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 12px rgba(72,50,22,.25))}
-  .op-seal{position:absolute;left:50%;top:94%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;display:grid;place-items:center;font:400 26px/1 "Great Vibes",cursive;color:rgba(255,255,255,.92);box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px rgba(0,0,0,.12);transition:opacity .25s}
-  .op.play .op-flap{transform:rotateX(180deg)}
-  .op.play .op-seal{opacity:0}
-  .op.play .op-env{opacity:0;transform:translateY(6%)}
-  /* rideau qui se leve */
+  .op-env{perspective:2400px;perspective-origin:50% 30%;transform-style:preserve-3d;background:linear-gradient(175deg,#ece3ce 0%,#e2d7bd 55%,#d6c9a9 100%)}
+  .op-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(135% 105% at 30% 16%,rgba(255,253,244,.34) 0%,transparent 44%,transparent 66%,rgba(84,60,28,.22) 100%)}
+  .op-env-in{position:absolute;top:0;height:100%;aspect-ratio:620/1110;left:50%;translate:-50% 0;transform:scale(1.32);transform-origin:50% 58%;transform-style:preserve-3d}
+  .op-body{position:absolute;inset:0;z-index:3;background:url("img/open/env-body.webp") center/100% 100% no-repeat}
+  .op-fshadow{position:absolute;left:0;top:34%;width:100%;height:24%;z-index:4;pointer-events:none;opacity:.24;filter:blur(5px);
+    background:radial-gradient(28% 10% at 50% 58%,rgba(62,42,18,.18),transparent 72%),
+      linear-gradient(34deg,transparent 0 45%,rgba(60,41,18,.16) 49%,transparent 54%) left top/50% 100% no-repeat,
+      linear-gradient(-34deg,transparent 0 45%,rgba(60,41,18,.16) 49%,transparent 54%) right top/50% 100% no-repeat;
+    clip-path:polygon(0 0,100% 0,50% 100%)}
+  .op-flap{position:absolute;left:0;top:0;width:100%;z-index:5;transform-origin:50% 0;transform-style:preserve-3d;will-change:transform;transform:rotateX(0deg) translateZ(0)}
+  .op-flap img{display:block;width:100%;height:auto;filter:drop-shadow(0 12px 15px rgba(72,50,22,.28))}
+  /* le sceau est un enfant du rabat : il avance vers la caméra et tourne avec l'ouverture */
+  .op-seal{position:absolute;left:50%;top:94%;width:26.5%;aspect-ratio:1;transform:translate(-50%,-50%) translateZ(10px);
+    background:center/contain no-repeat;filter:drop-shadow(0 6px 9px rgba(60,38,8,.5));display:grid;place-items:center;container-type:inline-size}
+  .op-seal b{font:400 23cqw/1.15 "Great Vibes",cursive;letter-spacing:-.01em;margin-top:2cqw;padding:0 .08em;white-space:nowrap;
+    background:linear-gradient(165deg,var(--l) 0%,var(--m) 48%,var(--d) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(255,244,214,.55)) drop-shadow(0 -1px .6px rgba(40,22,4,.75)) drop-shadow(0 1.5px 1.5px rgba(40,22,4,.35))}
+  .op-seal b i{font-style:normal;font-size:.62em;margin:0 .02em}
+  .op.opening .op-flap{animation:flapPartial 2.1s cubic-bezier(.32,0,.34,1) forwards}
+  .op.opening .op-fshadow{opacity:0;transition:opacity .5s ease}
+  @keyframes flapPartial{0%{transform:rotateX(0deg)}100%{transform:rotateX(40deg)}}
+
+  /* lumière commune aux trois ouvertures */
+  .cp-flash{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;
+    background:radial-gradient(130% 110% at 50% 44%,#fffdf7 0%,rgba(255,250,238,.98) 44%,rgba(250,242,224,.82) 100%)}
+  .cp-flash.bloom{animation:flashBloom 1.1s cubic-bezier(.4,0,.2,1) forwards}
+  @keyframes flashBloom{0%{opacity:0}44%{opacity:1}54%{opacity:1}100%{opacity:0}}
+
+  /* rideau */
   .op-cur{background:url("img/open/rideau.webp") center/cover no-repeat;transition:transform 1.9s cubic-bezier(.65,0,.3,1) .15s}
   .op-cur-edge{position:absolute;left:0;right:0;bottom:-30px;height:30px;background:linear-gradient(rgba(0,0,0,.35),transparent)}
-  .op-mono{position:absolute;left:0;right:0;top:38%;text-align:center;font:400 54px/1 "Great Vibes",cursive;color:#e9c879;text-shadow:0 2px 0 #7a5a14,0 6px 16px rgba(0,0,0,.5);display:block!important;inset:38% 0 auto 0}
-  .op.play .op-cur{transform:translateY(-104%)}
-  /* grandes portes : un seul visuel coupe en deux battants, lumiere au centre, ouverture lente + travelling avant */
-  .op-doors{overflow:hidden}
+  .op-mono{position:absolute;left:0;right:0;top:38%;text-align:center;font:400 60px/1 "Great Vibes",cursive;color:#e9c879;text-shadow:0 2px 0 #7a5a14,0 6px 16px rgba(0,0,0,.5)}
+  .op.opening .op-cur{transform:translateY(-104%)}
+
+  /* grandes portes */
+  .op-doors{overflow:hidden;background:#000}
   .op-doors-in{position:absolute;inset:0;transform-origin:50% 50%;perspective:560px;perspective-origin:50% 50%}
   .op-leaf{position:absolute;top:0;bottom:0;width:50%;background:url("img/open/portes.webp") no-repeat;background-size:200% 100%;backface-visibility:hidden}
   .op-leaf.l{left:0;background-position:0 0;transform-origin:0 50%}
@@ -325,22 +350,22 @@
   .op-leaf.l::after{background:linear-gradient(90deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
   .op-leaf.r::after{background:linear-gradient(270deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
   .op-seam{position:absolute;top:0;bottom:0;left:50%;width:10px;margin-left:-5px;background:linear-gradient(90deg,transparent,rgba(255,240,205,.95),transparent);filter:blur(1px);opacity:0;z-index:2}
-  .op-glow{position:absolute;inset:0;background:radial-gradient(55% 40% at 50% 50%,rgba(255,236,190,.75),transparent 72%);opacity:0;pointer-events:none}
-  .op.play .op-doors-in{animation:opPush 3.4s ease-in-out forwards}
-  .op.play .op-leaf.l{animation:opDoorL 3.2s linear forwards}
-  .op.play .op-leaf.r{animation:opDoorR 3.2s linear forwards}
-  .op.play .op-leaf::after{animation:opShade 3.2s ease forwards}
-  .op.play .op-seam{animation:opSeam 1.4s ease forwards}
-  .op.play .op-glow{animation:opGlow 3.2s ease forwards}
+  .op-glow{position:absolute;inset:0;z-index:1;background:radial-gradient(55% 45% at 50% 50%,#fffdf7 0%,rgba(255,240,205,.85) 40%,transparent 75%);opacity:0;pointer-events:none}
+  .op.opening .op-doors{background:#1a140c}
+  .op.opening .op-doors-in{animation:opPush 3.4s ease-in-out forwards}
+  .op.opening .op-leaf.l{animation:opDoorL 3.2s linear forwards}
+  .op.opening .op-leaf.r{animation:opDoorR 3.2s linear forwards}
+  .op.opening .op-leaf::after{animation:opShade 3.2s ease forwards}
+  .op.opening .op-seam{animation:opSeam 1.4s ease forwards}
+  .op.opening .op-glow{animation:opGlow 2.2s ease-in forwards}
   @keyframes opDoorL{0%{transform:rotateY(0)}12%{transform:rotateY(-6deg)}20%{transform:rotateY(-4deg)}35%{transform:rotateY(-16deg)}50%{transform:rotateY(-38deg)}65%{transform:rotateY(-62deg)}80%{transform:rotateY(-82deg)}100%{transform:rotateY(-95deg)}}
   @keyframes opDoorR{0%{transform:rotateY(0)}12%{transform:rotateY(6deg)}20%{transform:rotateY(4deg)}35%{transform:rotateY(16deg)}50%{transform:rotateY(38deg)}65%{transform:rotateY(62deg)}80%{transform:rotateY(82deg)}100%{transform:rotateY(95deg)}}
   @keyframes opShade{0%,20%{opacity:0}100%{opacity:1}}
   @keyframes opSeam{0%{opacity:0;transform:scaleY(.3)}25%{opacity:1;transform:scaleY(1)}70%{opacity:.9}100%{opacity:0}}
-  @keyframes opGlow{0%,15%{opacity:0}50%{opacity:1}100%{opacity:0}}
+  @keyframes opGlow{0%,20%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:scale(1.6)}}
   @keyframes opPush{0%,25%{transform:scale(1)}100%{transform:scale(1.2)}}
-  .op.done .op-doors,.op.done .op-cur,.op.done .op-env{opacity:0;transition:opacity .4s}
   .replay{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font:inherit;font-size:13px;cursor:pointer}
-  @media (prefers-reduced-motion:reduce){ .op-flap,.op-env,.op-cur,.op-leaf{transition-duration:.01s!important;transition-delay:0s!important} .op.play .op-leaf,.op.play .op-doors-in,.op.play .op-seam,.op.play .op-glow,.op.play .op-leaf::after{animation-duration:.01s!important} }
+  @media (prefers-reduced-motion:reduce){ .op-flap,.op-env,.op-cur,.op-leaf{transition-duration:.01s!important;transition-delay:0s!important} .op.opening .op-leaf,.op.opening .op-doors-in,.op.opening .op-seam,.op.opening .op-glow,.op.opening .op-leaf::after,.op.opening .op-flap{animation-duration:.01s!important} }
 
   /* ----- mobile ----- */
   @media (max-width:720px){
@@ -487,11 +512,12 @@
           <div class="pv-scroll" id="cpScroll" aria-label="Aperçu de votre faire-part"></div>
           <div class="cp-tint" id="cpTint"></div>
           <div class="op" id="cpOp" role="button" tabindex="0" aria-label="Ouvrir le faire-part">
-            <div class="op-env"><div class="op-env-in"><div class="op-body"></div><div class="op-flap"><img src="img/open/env-flap.webp" alt=""><div class="op-seal" id="opSeal"></div></div></div></div>
+            <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="img/open/env-flap.webp" alt=""><div class="op-seal" id="opSeal"><b id="opSealTxt"></b></div></div></div></div>
             <div class="op-cur"><div class="op-mono" id="opMonoC"></div><div class="op-cur-edge"></div></div>
             <div class="op-doors"><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l"></div><div class="op-leaf r"></div><div class="op-seam"></div></div></div>
-            <div class="op-tap">Touchez pour ouvrir</div>
+            <div class="op-tap" id="opTap">Touchez pour ouvrir</div>
           </div>
+          <div class="cp-flash" id="cpFlash" aria-hidden="true"></div>
         </div>
         <button type="button" class="replay" id="cpReplay">Rejouer l'ouverture</button>
         <a class="btn solid" href="#commencer" id="cpGo">Je veux celui-ci</a>
@@ -786,7 +812,10 @@
     const n1=($('cN1').value||'Emma').trim(), n2=($('cN2').value||'Louis').trim();
     const ini=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
     const sealBg=`radial-gradient(circle at 35% 30%, ${shade(p.c,1.25)}, ${p.c} 58%, ${shade(p.c,.6)})`;
-    $('opSeal').textContent=ini; $('opSeal').style.background=sealBg; $('opMonoC').textContent=(n1[0]||'').toUpperCase()+' & '+(n2[0]||'').toUpperCase();
+    const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250']}[C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
+    $('opSeal').style.backgroundImage=`url('img/seals/${SEAL[0]}.webp')`;
+    $('opSealTxt').innerHTML=`${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}`; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
+    $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir'; $('opMonoC').textContent=(n1[0]||'').toUpperCase()+' & '+(n2[0]||'').toUpperCase();
     const fam=f.css||t.font, it=f.id==='theme'?t.italic:f.italic, up=f.id==='theme'?t.upper:f.upper;
     const base=up?24:/Limelight|Cinzel/.test(fam)?30:40;
     const nmCss=(sz,col)=>`font-family:${fam};font-style:${it?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:${sz}px;color:${col}`;
@@ -811,10 +840,13 @@
     $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; if($('cN1').value!==$('cN1').defaultValue||$('cN2').value!==$('cN2').defaultValue) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; if($('cDate').value&&$('cDate').value!==$('cDate').defaultValue){ $('fDate').type='date'; $('fDate').value=$('cDate').value; }
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
-  /* lecture de l'ouverture : fermee -> 'play' -> 'done' */
+  /* lecture de l'ouverture : fermee -> 'opening' -> 'gone' */
   const op=$('cpOp'); let opT=null;
-  function closeOp(){ clearTimeout(opT); op.classList.remove('play','done'); op.dataset.type=C.op; void op.offsetWidth; }
-  function playOp(){ if(op.classList.contains('play')) return; op.classList.add('play'); opT=setTimeout(()=>op.classList.add('done'),C.op==='door'?3300:2200); }
+  // meme sequence que le faire-part d'Ines & Jad : ouverture, la lumiere monte, la page apparait dessous
+  const cpFlash=$('cpFlash'), OPT={env:1000,cur:1150,door:1700}; let opT2=[];
+  function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom'); op.dataset.type=C.op; void op.offsetWidth; }
+  function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const f=OPT[C.op]||1000;
+    opT2=[setTimeout(()=>cpFlash.classList.add('bloom'),f), setTimeout(()=>{ op.classList.add('gone'); $('cpScroll').scrollTop=0; },f+560)]; }
   function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
   op.addEventListener('click',playOp);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playOp(); } });

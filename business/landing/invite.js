@@ -7,7 +7,7 @@
   const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const L=(I.lang||'fr')==='en'?'en':'fr';
   const S={
-    fr:{tap:'Touchez pour ouvrir',scroll:'Faites défiler',route:'Itinéraire',cal:'Calendrier',reply:'Répondre',days:'jours',hours:'heures',min:'min',sec:'sec',
+    fr:{tap:'Touchez pour ouvrir',tapSeal:'Touchez le sceau pour ouvrir',scroll:'Faites défiler',route:'Itinéraire',cal:'Calendrier',reply:'Répondre',days:'jours',hours:'heures',min:'min',sec:'sec',
       soon:'Le grand jour approche',left:'Plus que',infos:'Infos pratiques',joy:'Ont la joie de vous convier à leur mariage',
       rsvpT:'Votre réponse',rsvpSub:'Une réponse par foyer suffit.',name:'Vos prénoms et nom',present:'Présent',absent:'Absent',guests:'Nombre de personnes',
       diet:'Allergies ou régime (facultatif)',msg:'Un mot pour les mariés (facultatif)',send:'Envoyer ma réponse',sending:'Envoi…',thanks:'Merci !',
@@ -16,7 +16,7 @@
       fail:'L’envoi n’a pas fonctionné. Vérifiez votre connexion et réessayez.',need:'Indiquez votre nom et votre réponse pour chaque événement.',
       privacy:'Vos réponses ne sont visibles que par les mariés et sont supprimées après le mariage.',
       calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le'},
-    en:{tap:'Tap to open',scroll:'Scroll down',route:'Directions',cal:'Calendar',reply:'RSVP',days:'days',hours:'hours',min:'min',sec:'sec',
+    en:{tap:'Tap to open',tapSeal:'Tap the seal to open',scroll:'Scroll down',route:'Directions',cal:'Calendar',reply:'RSVP',days:'days',hours:'hours',min:'min',sec:'sec',
       soon:'The big day is coming',left:'Only',infos:'Good to know',joy:'Request the pleasure of your company at their wedding',
       rsvpT:'Your reply',rsvpSub:'One reply per household is enough.',name:'Your full name(s)',present:'Attending',absent:'Not attending',guests:'Number of guests',
       diet:'Allergies or dietary needs (optional)',msg:'A note for the couple (optional)',send:'Send my reply',sending:'Sending…',thanks:'Thank you!',
@@ -56,6 +56,22 @@
   const pal=I.palette||'#b8975a';
   function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
   const sealBg=`radial-gradient(circle at 35% 30%, ${shade(pal,1.25)}, ${pal} 58%, ${shade(pal,.6)})`;
+  // sceau de cire : la couleur de cire la plus proche de la palette du couple (ou I.seal), initiales gravées dans la cire
+  // dégradé du relief des initiales (clair, moyen, sombre) pour chaque cire
+  const SEALS={or:['#fbe3a0','#c99a3a','#6e4a12'],bordeaux:['#d8737b','#8e2430','#3f0b10'],bleu:['#9bb4e8','#2f4f94','#0c1a3d'],
+    sauge:['#e4ecd6','#8fa37f','#3f4d36'],terracotta:['#f5b085','#c0643f','#4f1f0c'],rose:['#fff0f2','#d99aa6','#7a4250']};
+  function sealOf(hex){
+    const n=parseInt(hex.slice(1),16), r=(n>>16&255)/255, g=(n>>8&255)/255, b=(n&255)/255, mx=Math.max(r,g,b), mn=Math.min(r,g,b), l=(mx+mn)/2, d=mx-mn;
+    if(d<.08) return 'or';
+    let h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4; h=(h*60+360)%360;
+    if(h>=280&&h<345) return 'rose';
+    if(h>=345||h<12) return l>.6?'rose':'bordeaux';
+    if(h<30) return 'terracotta';
+    if(h<70) return 'or';
+    if(h<170) return 'sauge';
+    return 'bleu';
+  }
+  const sealName=SEALS[I.seal]?I.seal:sealOf(pal), [sealL,sealM,sealD]=SEALS[sealName];
   const F=FONTS[I.font]||null, fam1=F?F.css:T.font, ital=F?!!F.italic:!!T.italic, up=F?!!F.upper:!!T.upper;
   const base=up?30:/Limelight|Cinzel/.test(fam1)?38:52;
   const nmCss=(k,col)=>`font-family:${fam1};font-style:${ital?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:clamp(${Math.round(base*k*.72)}px,${(base*k/16.5).toFixed(2)}vh,${Math.round(base*k*1.1)}px);color:${col}`;
@@ -152,12 +168,13 @@
     ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
     <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}">
-      <div class="op-env"><div class="op-env-in"><div class="op-body"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background:${sealBg}">${esc(ini)}</div></div></div></div>
+      <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div></div></div></div>
       <div class="op-cur"><div class="op-mono">${esc(n1[0])} &amp; ${esc(n2[0])}</div><div class="op-cur-edge"></div></div>
       <div class="op-doors"><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l"></div><div class="op-leaf r"></div><div class="op-seam"></div></div></div>
       ${fam&&fam.label?`<div class="op-to">${esc(fam.label)}</div>`:''}
-      <div class="op-tap">${S.tap}</div>
+      <div class="op-tap">${(I.opening||'env')==='env'?S.tapSeal:S.tap}</div>
     </div>
+    <div class="flash" id="flash" aria-hidden="true"></div>
     <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
   const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${img(1)}')`;
   document.body.append(bd,app);
@@ -197,12 +214,17 @@
 
   /* ---------- ouverture ---------- */
   const op=$('#op');
+  // une seule arche continue, comme le faire-part d'Inès & Jad : l'ouverture commence, la lumière monte,
+  // le passage vers la première page se fait sous le pic blanc, puis la lumière se retire et dévoile la page déjà nette
+  const TIMING={env:1000,cur:1150,door:1700};  // moment où la lumière commence à monter
   function open(){
-    if(op.classList.contains('play')) return;
-    op.classList.add('play'); playMusic();
-    const dur=op.dataset.type==='door'?3300:op.dataset.type==='cur'?2100:2000;
-    setTimeout(()=>{ op.classList.add('done'); app.classList.add('opened'); opened=true; secs[0].classList.add('on'); startFx(); },dur*.6);
-    setTimeout(()=>op.remove(),dur+600);
+    if(op.classList.contains('opening')) return;
+    op.classList.add('opening'); playMusic();
+    const f=TIMING[op.dataset.type]||1000, flash=$('#flash');
+    setTimeout(()=>flash.classList.add('bloom'),f);
+    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; secs[0].classList.add('on'); startFx(); },f+530);
+    setTimeout(()=>op.classList.add('gone'),f+560);
+    setTimeout(()=>{ op.remove(); flash.remove(); },f+1300);
   }
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
