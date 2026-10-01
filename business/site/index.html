@@ -223,15 +223,21 @@
   .pv-phone{height:min(86vh,760px);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);background:#000;flex:none}
   .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
   .pv-scroll::-webkit-scrollbar{display:none}
-  .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
+  /* même échelle de lecture que le moteur (invite.css) : chapeaux 13 px, texte 17 px et plus, rien sous 11 px */
+  .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff;--halo:rgba(8,8,14,.5)}
+  .pv-sc.light{--halo:rgba(255,253,248,.74)}
+  /* halo de lisibilité local derrière le bloc de texte, comme dans le moteur */
+  .pv-sc::before{content:"";position:absolute;left:-15%;right:-15%;top:-4%;height:72%;pointer-events:none;background:radial-gradient(ellipse 74% 72% at 50% 30%,var(--halo) 0%,transparent 74%)}
+  .pv-sc:first-child::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16%;pointer-events:none;background:linear-gradient(transparent,var(--halo))}
   .pv-sc.light .ey,.pv-sc.light .nm,.pv-sc.light .tx,.pv-sc.light .bt,.pv-sc.light .pv-hint{text-shadow:none}
   .pv-sc.light .bt{background:transparent;backdrop-filter:none}
   .pv-sc>*{position:relative}
-  .pv-sc .ey{font:500 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.92;text-shadow:0 1px 8px rgba(0,0,0,.5)}
-  .pv-sc .nm{font:400 clamp(38px,5.4vh,54px)/1.05 "Great Vibes",cursive;margin:10px 0 6px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
-  .pv-sc .tx{font:italic 400 clamp(15px,2vh,19px)/1.35 "Cormorant Garamond",Georgia,serif;text-shadow:0 1px 10px rgba(0,0,0,.55);max-width:17em}
-  .pv-sc .bt{margin-top:14px;display:inline-block;border:1px solid rgba(255,255,255,.8);padding:8px 14px;font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;background:rgba(0,0,0,.15);backdrop-filter:blur(2px)}
-  .pv-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font:500 10px Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+  .pv-sc .ey{font:500 13px/1.3 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+  .pv-sc .nm{font:400 clamp(38px,5.4vh,54px)/1.08 "Great Vibes",cursive;margin:16px 0 12px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+  .pv-sc .tx{font:italic 400 clamp(17px,2.4vh,21px)/1.45 "Cormorant Garamond",Georgia,serif;text-shadow:0 1px 10px rgba(0,0,0,.55);max-width:17em}
+  .pv-sc .tx+.tx{margin-top:8px}
+  .pv-sc .bt{margin-top:24px;display:inline-block;border:1px solid rgba(255,255,255,.8);padding:11px 16px;font:500 12.5px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,0,0,.15);backdrop-filter:blur(2px)}
+  .pv-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font:500 11.5px Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6)}
   @media (max-width:760px){ .pv{flex-direction:column;gap:12px} .pv-side{text-align:center;max-width:none} .pv-side p{display:none} .pv-side h3{font-size:24px;margin:0 0 8px} .pv-tabs{justify-content:center} .pv-phone{height:min(72vh,680px)} }
   /* filtres de style */
   .filters{display:flex;flex-wrap:wrap;gap:8px;margin:-16px 0 24px}
@@ -264,37 +270,42 @@
   .cp-tint{position:absolute;inset:0;mix-blend-mode:soft-light;opacity:.55;transition:background .4s;pointer-events:none;z-index:2}
   .cp-phone .pv-scroll{position:absolute;inset:0}
   .cp-phone .pv-sc{padding-top:14%}
-  .cp-phone .pv-sc .nm{margin:8px 0 6px}
-  .cp-phone .pv-sc .tx{font-size:15px}
-  .cd{display:flex;justify-content:center;gap:12px;margin-top:16px}
-  .cd div{display:grid;justify-items:center;gap:4px;min-width:40px}
-  .cd b{font:500 24px/1 "Inter Tight",Inter,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-  .cd span{font:500 8px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
-  .cd.big{gap:14px;margin-top:22px}
-  .cd.big b{font-size:38px}
+  .cp-phone .pv-sc .nm{margin:14px 0 10px}
+  .cp-phone .pv-sc .tx{font-size:17px}
+  .cd{display:flex;justify-content:center;gap:16px;margin-top:24px}
+  .cd div{display:grid;justify-items:center;gap:6px;min-width:44px}
+  .cd b{font:500 28px/1 "Inter Tight",Inter,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .cd span{font:500 11px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
+  .cd.big{gap:18px;margin-top:26px}
+  .cd.big b{font-size:42px}
   .cd-veil{position:absolute;inset:0;pointer-events:none}
   .chip.x{font-size:12px;padding:8px 12px}
-  .pv-card{position:relative;width:100%;max-width:250px;margin-top:12px;padding:4px 12px;text-align:left;font:400 13px/1.35 "Cormorant Garamond",Georgia,serif;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-  .pv-card div{display:grid;grid-template-columns:40px 1fr;gap:8px;padding:7px 0;border-bottom:1px solid rgba(127,127,127,.3)}
+  .pv-card{position:relative;width:100%;max-width:260px;margin-top:20px;padding:6px 12px;text-align:left;font:400 15px/1.4 "Cormorant Garamond",Georgia,serif;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .pv-card div{display:grid;grid-template-columns:44px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid rgba(127,127,127,.3)}
   .pv-card div:last-child{border-bottom:0}
-  .pv-card b{font:500 10px/1.5 Inter,sans-serif;letter-spacing:.04em}
+  .pv-card b{font:500 12px/1.5 Inter,sans-serif;letter-spacing:.04em}
   .pv-card.one div{grid-template-columns:1fr}
-  .pv-sws{position:relative;display:flex;gap:8px;margin:12px 0 8px}
-  .pv-sws i{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.75)}
-  .pv-fam{position:relative;font:500 15px/1.35 "Cormorant Garamond",Georgia,serif;margin:10px 0 6px}
+  .pv-sws{position:relative;display:flex;gap:10px;margin:16px 0 14px}
+  .pv-sws i{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.75)}
+  .pv-fam{position:relative;font:500 17px/1.35 "Cormorant Garamond",Georgia,serif;margin:14px 0 10px}
   .pv-sc>.cd-veil{position:absolute}
-  .cp-dl{display:flex;align-items:center;gap:10px;margin-top:10px;font:500 15px/1.2 "Cormorant Garamond",Georgia,serif}
-  .cp-dl i{display:block;width:24px;height:1px;background:currentColor;opacity:.75}
+  .cp-dl{display:flex;align-items:center;gap:12px;margin-top:16px;font:500 17px/1.2 "Cormorant Garamond",Georgia,serif}
+  .cp-dl i{display:block;width:26px;height:1px;background:currentColor;opacity:.75}
   .cp-phone .pv-hint{z-index:1}
   .cp-scrim{position:absolute;inset:0 0 45% 0;background:linear-gradient(rgba(0,0,0,.35),transparent)}
   .cp-body{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0}
-  .cp-seal{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font:400 26px/1 "Great Vibes",cursive;color:rgba(255,255,255,.9);box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px rgba(0,0,0,.12);margin-bottom:14px;transition:background .4s}
-  .cp-ey{font:500 10px/1.4 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase}
-  .cp-nm{font-size:44px;line-height:1.05;margin:10px 0 8px;word-break:break-word}
-  .cp-tx{font:italic 400 16px/1.35 "Cormorant Garamond",Georgia,serif;max-width:17em}
-  .cp-date{display:flex;align-items:center;gap:10px;margin-top:10px;font:500 15px/1.2 "Cormorant Garamond",Georgia,serif}
+  /* sceau de cire du configurateur : même cire et mêmes initiales gravées que sur l'enveloppe (voir .op-seal) */
+  .cp-seal{width:80px;height:80px;background:center/contain no-repeat;display:grid;place-items:center;container-type:inline-size;margin-bottom:16px;filter:drop-shadow(0 8px 12px rgba(0,0,0,.38))}
+  .cp-seal b{font:400 24cqw/1.15 "Great Vibes",cursive;letter-spacing:-.01em;margin-top:2cqw;padding:0 .08em;white-space:nowrap;
+    background:linear-gradient(165deg,var(--l) 0%,var(--m) 48%,var(--d) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(255,244,214,.55)) drop-shadow(0 -1px .6px rgba(40,22,4,.75)) drop-shadow(0 1.5px 1.5px rgba(40,22,4,.35))}
+  .cp-seal b i{font-style:normal;font-size:.62em;margin:0 .02em}
+  .cp-ey{font:500 13px/1.4 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+  .cp-nm{font-size:44px;line-height:1.08;margin:16px 0 12px;word-break:break-word}
+  .cp-tx{font:italic 400 18px/1.45 "Cormorant Garamond",Georgia,serif;max-width:17em}
+  .cp-date{display:flex;align-items:center;gap:12px;margin-top:16px;font:500 17px/1.2 "Cormorant Garamond",Georgia,serif}
   .cp-date i{display:block;width:26px;height:1px;background:currentColor;opacity:.7}
-  .cp-bt{margin-top:18px;border:1px solid currentColor;padding:8px 14px;font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+  .cp-bt{margin-top:24px;border:1px solid currentColor;padding:11px 16px;font:500 12.5px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase}
 
   /* ouvertures : enveloppe, rideau, grandes portes */
   .op-card{background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:12px 14px;cursor:pointer;display:grid;gap:3px;justify-items:start;text-align:left;min-width:128px}
@@ -803,7 +814,6 @@
     $('cpTint').style.background=p.c;
     const n1=($('cN1').value||'Emma').trim(), n2=($('cN2').value||'Louis').trim();
     const ini=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
-    const sealBg=`radial-gradient(circle at 35% 30%, ${shade(p.c,1.25)}, ${p.c} 58%, ${shade(p.c,.6)})`;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250']}[C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('img/seals/${SEAL[0]}.webp')`;
     $('opSealTxt').innerHTML=`${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}`; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
@@ -822,7 +832,7 @@
     // 1. prenoms + date (+ compte a rebours au debut)
     { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');
       const oval=!!t.top1;
-      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc('background:'+sealBg)}">${esc(ini)}</div>`}<div class="ey" style="color:${c.ey}">${esc(t.scenes[0][0])}</div><div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}<div class="cp-dl" style="color:${p.c}"><i></i><span>${esc(ds)}</span><i></i></div>${C.cd==='debut'?cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':''):''}<div class="pv-hint" style="color:${c.ey}">Faites défiler ↓</div>`)); }
+      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc(`background-image:url('img/seals/${SEAL[0]}.webp')`)}"><b style="${esc(`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`)}">${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}</b></div>`}<div class="ey" style="color:${c.ey}">${esc(t.scenes[0][0])}</div><div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}<div class="cp-dl" style="color:${pg.lt?p.c:'#fff'}"><i></i><span>${esc(ds)}</span><i></i></div>${C.cd==='debut'?cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':''):''}<div class="pv-hint" style="color:${c.ey}">Faites défiler ↓</div>`)); }
     const scene=(idx,withCd)=>{ const [e,main,x,bt,mode]=t.scenes[idx]; const pg=page(idx+1,mode);
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?`<span class="bt" style="color:${c.tx};border-color:${c.tx}">${esc(bt)}</span>`:''}`); };
     // écrans en option (contenu d'exemple), sur le décor de la scène voisine avec un voile

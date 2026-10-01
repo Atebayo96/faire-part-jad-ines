@@ -56,11 +56,8 @@
   const main=zoned(I.date,TZ);
   const multiDay=new Set(events.map(e=>e.start.slice(0,10))).size>1;
   const n1=I.couple[0], n2=I.couple[1];
-  const ini=(n1[0]+n2[0]).toUpperCase();
   const pal=I.palette||'#b8975a';
-  function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
-  const sealBg=`radial-gradient(circle at 35% 30%, ${shade(pal,1.25)}, ${pal} 58%, ${shade(pal,.6)})`;
-  // sceau de cire : la couleur de cire la plus proche de la palette du couple (ou I.seal), initiales gravées dans la cire
+  // sceau de cire (enveloppe et accueil) : la couleur de cire la plus proche de la palette du couple (ou I.seal), initiales gravées dans la cire
   // dégradé du relief des initiales (clair, moyen, sombre) pour chaque cire
   const SEALS={or:['#fbe3a0','#c99a3a','#6e4a12'],bordeaux:['#d8737b','#8e2430','#3f0b10'],bleu:['#9bb4e8','#2f4f94','#0c1a3d'],
     sauge:['#e4ecd6','#8fa37f','#3f4d36'],terracotta:['#f5b085','#c0643f','#4f1f0c'],rose:['#fff0f2','#d99aa6','#7a4250']};
@@ -118,7 +115,7 @@
   page(1,(c)=>{
     const names=T.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
     return (fam&&fam.label?`<div class="rv greet" style="--i:${rvI++};color:${c.tx}">${esc(fam.label)}</div>`:'')+
-      (oval||compact?'':`<div class="rv seal" style="--i:${rvI++};background:${sealBg}">${esc(ini)}</div>`)+
+      (oval||compact?'':`<div class="rv seal" style="--i:${rvI++};background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div>`)+
       `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(I.intro&&I.intro.eyebrow||T.scenes[0][0])}</div>`+
       `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(T.stack?.82:1,c.nm))}">${names}</div>`+
       (oval||compact?'':`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${esc(I.intro&&I.intro.text||S.joy)}</div>`)+
