@@ -48,11 +48,6 @@
   ],
   "infos": [
     {
-      "icon": "dress",
-      "title": "Tenue",
-      "text": "Caftans et tenues de soirée bienvenus."
-    },
-    {
       "icon": "kids",
       "title": "Enfants",
       "text": "Les enfants sont les bienvenus au henné et à la fête."
@@ -68,7 +63,8 @@
   "families": {
     "famille-alaoui": {
       "label": "Chère famille Alaoui",
-      "seats": 6
+      "seats": 6,
+      "table": "Table Fès"
     },
     "amis": {
       "label": "Chers amis",
@@ -78,5 +74,48 @@
         "fete"
       ]
     }
+  },
+  "parents": {
+    "eyebrow": "Avec la bénédiction de leurs familles",
+    "names": [
+      "Famille Alaoui",
+      "Famille Benali"
+    ],
+    "text": "ont l’honneur de vous convier au mariage de leurs enfants"
+  },
+  "program": {
+    "title": "Le samedi 12 juin",
+    "items": [
+      {
+        "time": "11h00",
+        "title": "La mairie",
+        "text": "Le oui officiel"
+      },
+      {
+        "time": "19h00",
+        "title": "Accueil au riad",
+        "text": "Thé à la menthe et pâtisseries"
+      },
+      {
+        "time": "21h00",
+        "title": "Entrée des mariés",
+        "text": "Sur l’amaria, avec la troupe"
+      },
+      {
+        "time": "00h00",
+        "title": "Pièce montée",
+        "text": "Puis on danse jusqu’à l’aube"
+      }
+    ]
+  },
+  "dress": {
+    "title": "Tenue de fête",
+    "text": "Caftans, takchitas et tenues de soirée bienvenus. L’or et le vert émeraude sont à l’honneur.",
+    "colors": [
+      "#0f5e4c",
+      "#d4af37",
+      "#f2e6d0",
+      "#7a1f3d"
+    ]
   }
 }

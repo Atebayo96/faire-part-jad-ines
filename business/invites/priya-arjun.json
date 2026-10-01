@@ -48,11 +48,6 @@
   ],
   "infos": [
     {
-      "icon": "dress",
-      "title": "Tenues",
-      "text": "Couleurs vives bienvenues ! Évitez le blanc et le rouge, réservés aux mariés."
-    },
-    {
       "icon": "hotel",
       "title": "Hébergement",
       "text": "Navettes depuis Paris Gare du Nord chaque jour à 12h."
@@ -68,7 +63,8 @@
   "families": {
     "famille-sharma": {
       "label": "Chère famille Sharma",
-      "seats": 5
+      "seats": 5,
+      "table": "Table Jaipur"
     },
     "collegues": {
       "label": "Chers collègues",
@@ -77,5 +73,42 @@
         "sangeet"
       ]
     }
+  },
+  "parents": {
+    "names": [
+      "Famille Sharma",
+      "Famille Mehta"
+    ],
+    "text": "ont l’immense joie de vous inviter aux noces de leurs enfants"
+  },
+  "program": {
+    "title": "Trois moments",
+    "items": [
+      {
+        "time": "Ven. 14h",
+        "title": "Mehndi",
+        "text": "Henné, thé masala et musique dans la cour"
+      },
+      {
+        "time": "Sam. 17h",
+        "title": "Cérémonie",
+        "text": "Sous le mandap, arrivée du marié en baraat"
+      },
+      {
+        "time": "Sam. 20h30",
+        "title": "Sangeet",
+        "text": "Dîner, danses des familles et piste ouverte"
+      }
+    ]
+  },
+  "dress": {
+    "title": "Toutes les couleurs",
+    "text": "Couleurs vives bienvenues ! Évitez le blanc et le rouge, réservés aux mariés.",
+    "colors": [
+      "#e83f6f",
+      "#ffbf00",
+      "#2a9d8f",
+      "#7b2cbf"
+    ]
   }
 }

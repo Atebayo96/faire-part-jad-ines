@@ -225,8 +225,6 @@
   .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
   .pv-scroll::-webkit-scrollbar{display:none}
   .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
-  .pv-sc::before{content:"";position:absolute;inset:0 0 45% 0;background:linear-gradient(rgba(0,0,0,.34),transparent)}
-  .pv-sc.light::before{display:none}
   .pv-sc.light .ey,.pv-sc.light .nm,.pv-sc.light .tx,.pv-sc.light .bt,.pv-sc.light .pv-hint{text-shadow:none}
   .pv-sc.light .bt{background:transparent;backdrop-filter:none}
   .pv-sc>*{position:relative}
@@ -276,6 +274,15 @@
   .cd.big{gap:14px;margin-top:22px}
   .cd.big b{font-size:38px}
   .cd-veil{position:absolute;inset:0;pointer-events:none}
+  .chip.x{font-size:12px;padding:8px 12px}
+  .pv-card{position:relative;width:100%;max-width:250px;margin-top:12px;padding:4px 12px;text-align:left;font:400 13px/1.35 "Cormorant Garamond",Georgia,serif;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .pv-card div{display:grid;grid-template-columns:40px 1fr;gap:8px;padding:7px 0;border-bottom:1px solid rgba(127,127,127,.3)}
+  .pv-card div:last-child{border-bottom:0}
+  .pv-card b{font:500 10px/1.5 Inter,sans-serif;letter-spacing:.04em}
+  .pv-card.one div{grid-template-columns:1fr}
+  .pv-sws{position:relative;display:flex;gap:8px;margin:12px 0 8px}
+  .pv-sws i{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.75)}
+  .pv-fam{position:relative;font:500 15px/1.35 "Cormorant Garamond",Georgia,serif;margin:10px 0 6px}
   .pv-sc>.cd-veil{position:absolute}
   .cp-dl{display:flex;align-items:center;gap:10px;margin-top:10px;font:500 15px/1.2 "Cormorant Garamond",Georgia,serif}
   .cp-dl i{display:block;width:24px;height:1px;background:currentColor;opacity:.75}
@@ -514,6 +521,7 @@
         <div class="fld"><span>Couleurs</span><div class="opts" id="cPal"></div><div class="sw-name" id="cPalName"></div></div>
         <div class="fld"><span>Police</span><div class="opts" id="cFonts"></div></div>
         <div class="fld"><span>Compte à rebours</span><div class="opts" id="cCount"></div></div>
+        <div class="fld"><span>Écrans en plus <small style="font-weight:400;text-transform:none;letter-spacing:0">(facultatif, autant que vous voulez)</small></span><div class="opts" id="cExtras"></div></div>
       </form>
       <div class="comp-prev">
         <div class="cp-phone" id="cpPhone">
@@ -639,7 +647,7 @@
       <input type="text" name="name" id="fNames" placeholder="Vos prénoms" required autocomplete="name" aria-label="Vos prénoms">
       <input type="email" name="email" id="fEmail" placeholder="E-mail" required autocomplete="email" aria-label="E-mail">
       <input type="text" name="date" id="fDate" placeholder="Date du mariage" onfocus="this.type='date'" aria-label="Date du mariage">
-      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="palette" id="fPal"><input type="hidden" name="font" id="fFont"><input type="hidden" name="opening" id="fOpen"><input type="hidden" name="countdown" id="fCount">
+      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="palette" id="fPal"><input type="hidden" name="font" id="fFont"><input type="hidden" name="opening" id="fOpen"><input type="hidden" name="countdown" id="fCount"><input type="hidden" name="screens" id="fScreens">
       <select name="plan" id="planSel" aria-label="Formule">
         <option value="signature">Signature</option>
         <option value="essentiel">Essentiel</option>
@@ -764,7 +772,8 @@
   /* composer : prenoms, date, style, palette, police -> apercu en direct */
   const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'}];
   const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
-  const C={k:'conte',pal:'or',font:'theme',op:'env',cd:'debut'};
+  const C={k:'conte',pal:'or',font:'theme',op:'env',cd:'debut',x:new Set()};
+  const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Hébergement'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'}];
   const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
   const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
   const $=id=>document.getElementById(id);
@@ -775,6 +784,10 @@
   opt($('cPal'),PALS,'pal','',(b,p)=>{ b.className='sw'; b.style.background=p.c; b.setAttribute('aria-label',p.name); });
   opt($('cFonts'),FONTS,'font','',(b,f)=>{ b.className='fo'; b.innerHTML=`<b>Aa</b><small>${f.name}</small>`; });
   opt($('cCount'),COUNTS,'cd','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  // écrans en option : plusieurs à la fois ; l'aperçu fait défiler jusqu'à l'écran ajouté
+  EXTRAS.forEach(x=>{ const b=document.createElement('button'); b.type='button'; b.className='chip x'; b.dataset.id=x.id; b.textContent=x.name;
+    b.onclick=()=>{ const on=!C.x.has(x.id); on?C.x.add(x.id):C.x.delete(x.id); paint(); if(on){ const el=$('cpScroll').querySelector(`[data-x="${x.id}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); } };
+    $('cExtras').appendChild(b); });
   const cdHtml=(big,col,extra)=>`<div class="cd${big?' big':''}" style="color:${col};${extra||''}"><div><b data-u="d">0</b><span>jours</span></div><div><b data-u="h">0</b><span>heures</span></div><div><b data-u="m">0</b><span>min</span></div><div><b data-u="s">0</b><span>sec</span></div></div>`;
   function weddingDate(){ const v=$('cDate').value; const d=v?new Date(v+'T15:00:00'):null; return d&&!isNaN(d)?d:new Date('2027-06-12T15:00:00'); }
   function tick(){
@@ -784,6 +797,7 @@
   setInterval(tick,1000);
   function paint(){
     const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
+    $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
     [['cStyles','k'],['cOpen','op'],['cPal','pal'],['cCount','cd']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
     $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
     $('cPalName').textContent=p.name;
@@ -812,13 +826,28 @@
       pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc('background:'+sealBg)}">${esc(ini)}</div>`}<div class="ey" style="color:${c.ey}">${esc(t.scenes[0][0])}</div><div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}<div class="cp-dl" style="color:${p.c}"><i></i><span>${esc(ds)}</span><i></i></div>${C.cd==='debut'?cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':''):''}<div class="pv-hint" style="color:${c.ey}">Faites défiler ↓</div>`)); }
     const scene=(idx,withCd)=>{ const [e,main,x,bt,mode]=t.scenes[idx]; const pg=page(idx+1,mode);
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?`<span class="bt" style="color:${c.tx};border-color:${c.tx}">${esc(bt)}</span>`:''}`); };
+    // écrans en option (contenu d'exemple), sur le décor de la scène voisine avec un voile
+    const xp=(id,img,mode,inner)=>{ if(!C.x.has(id)) return; const pg=page(img,mode);
+      pages.push(pg.html(c=>`<div class="cd-veil" style="background:${pg.lt?'rgba(255,253,248,.66)':'rgba(10,10,15,.4)'}"></div>`+inner(c,pg.lt)).replace('<section ',`<section data-x="${id}" `)); };
+    const card=(c,lt,rows,one)=>`<div class="pv-card${one?' one':''}" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${rows.map(r=>`<div>${r[0]?`<b>${r[0]}</b>`:''}<span>${r[1]}</span></div>`).join('')}</div>`;
+    const hd=(c,ey,title)=>`<div class="ey" style="color:${c.ey};position:relative">${ey}</div>`+(title?`<div class="nm" style="${esc(nmCss(base*.62,c.nm))};position:relative">${title}</div>`:'');
+    xp('parents',1,'',c=>hd(c,'Avec leurs familles','')+`<div class="pv-fam" style="color:${c.tx}">Famille Martin &amp; Famille Bernard</div><div class="tx" style="color:${c.tx};position:relative">ont la joie de vous convier au mariage de leurs enfants</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
+    xp('story',1,'',(c,lt)=>hd(c,'Notre histoire','Il était une fois')+card(c,lt,[['2018','La rencontre, un jeudi soir'],['2022','Le premier appartement'],['2026','La demande, sous les tilleuls']]));
     pages.push(scene(1,false));
     // page dediee au compte a rebours
     if(C.cd==='page'){ const pg=page(1,''); pages.push(pg.html(c=>`<div class="cd-veil" style="background:${pg.lt?'rgba(255,253,248,.62)':'rgba(10,10,15,.45)'}"></div><div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
     pages.push(scene(2,false));
+    xp('program',3,t.scenes[2][4],(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,[['15h00','La cérémonie'],['17h00','Vin d’honneur'],['19h30','Le dîner'],['23h00','On danse']]));
+    const m4=t.scenes[3][4];
+    xp('dress',4,m4,c=>hd(c,'Dress code','Élégance d’été')+`<div class="pv-sws">${['#f3e3c3',p.c,'#7fb4d6','#e58f7a'].map(x=>`<i style="background:${x}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">Lin, soie, couleurs douces.</div>`);
+    xp('stay',4,m4,(c,lt)=>hd(c,'Hébergement et accès','')+card(c,lt,[['Hôtel','Chambres réservées à 5 min'],['Navette','Depuis la gare à 14h15']]));
+    xp('faq',4,m4,(c,lt)=>hd(c,'Vos questions','')+card(c,lt,[['','<b>Les enfants sont-ils invités ?</b><br>Oui, un espace jeux les attend.'],['','<b>Où se garer ?</b><br>Parking sur place.']],true));
+    xp('gifts',4,m4,c=>hd(c,'Liste de mariage','Votre présence suffit')+`<div class="tx" style="color:${c.tx};position:relative">Pour ceux qui le souhaitent, une cagnotte pour notre voyage.</div><span class="bt" style="color:${c.tx};border-color:${c.tx}">Participer</span>`);
+    xp('photos',4,m4,c=>hd(c,'Vos photos','')+`<div class="tx" style="color:${c.tx};position:relative">Partagez vos plus belles photos de la soirée dans notre album commun.</div><span class="bt" style="color:${c.tx};border-color:${c.tx}">Partager mes photos</span>`);
+    xp('table',4,m4,c=>hd(c,'Le jour J','Votre table')+`<div class="tx" style="color:${c.tx};position:relative;font-size:26px;margin-top:6px">La table des Roses</div><div class="tx" style="color:${c.tx};position:relative;font-size:13px">Chaque famille voit sa table sur son lien personnel.</div>`);
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML=pages.join(''); sc.scrollTop=st; tick();
-    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; if($('cN1').value!==$('cN1').defaultValue||$('cN2').value!==$('cN2').defaultValue) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; if($('cDate').value&&$('cDate').value!==$('cDate').defaultValue){ $('fDate').type='date'; $('fDate').value=$('cDate').value; }
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; if($('cN1').value!==$('cN1').defaultValue||$('cN2').value!==$('cN2').defaultValue) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', '); if($('cDate').value&&$('cDate').value!==$('cDate').defaultValue){ $('fDate').type='date'; $('fDate').value=$('cDate').value; }
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
   /* lecture de l'ouverture : fermee -> 'opening' -> 'gone' */

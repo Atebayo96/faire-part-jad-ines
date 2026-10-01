@@ -36,22 +36,61 @@
       "scene": 3
     }
   ],
-  "infos": [
-    {
-      "icon": "car",
-      "title": "Venir",
-      "text": "Aéroport de Naples, puis navette privée le 27 et le 28 août."
-    },
-    {
-      "icon": "dress",
-      "title": "Tenue",
-      "text": "Élégance d'été. Les talons fins et les pavés ne s'aiment pas."
-    }
-  ],
   "rsvp": {
     "deadline": "2027-07-01",
     "title": "Serez-vous des nôtres ?",
     "yesText": "A presto in Italia !",
     "noText": "Grazie, on pensera à vous."
+  },
+  "stay": {
+    "items": [
+      {
+        "icon": "car",
+        "title": "Venir",
+        "text": "Aéroport de Naples, puis navette privée le 27 et le 28 août."
+      },
+      {
+        "icon": "hotel",
+        "title": "Dormir à Ravello",
+        "text": "Nous avons réservé des chambres à l’Hotel Villa Fraulo et au Palazzo Avino.",
+        "url": "demo",
+        "link": "Réserver"
+      }
+    ]
+  },
+  "dress": {
+    "title": "Élégance d’été",
+    "text": "Lin, soie et couleurs de la côte. Les talons fins et les pavés ne s’aiment pas.",
+    "colors": [
+      "#f3e3c3",
+      "#e7b04d",
+      "#7fb4d6",
+      "#e58f7a"
+    ]
+  },
+  "program": {
+    "title": "Le 28 août",
+    "items": [
+      {
+        "time": "17h00",
+        "title": "La cérémonie",
+        "text": "À la petite chapelle"
+      },
+      {
+        "time": "18h00",
+        "title": "Aperitivo",
+        "text": "Spritz et citrons de la côte"
+      },
+      {
+        "time": "19h30",
+        "title": "Le dîner",
+        "text": "Face à la mer"
+      },
+      {
+        "time": "22h30",
+        "title": "Gelato e musica",
+        "text": "On danse sur la terrasse"
+      }
+    ]
   }
 }

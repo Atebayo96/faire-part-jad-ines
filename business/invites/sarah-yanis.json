@@ -41,5 +41,30 @@
     "title": "Vous venez ?",
     "yesText": "Parfait. À très vite.",
     "noText": "Merci de nous avoir prévenus."
+  },
+  "faq": {
+    "items": [
+      {
+        "q": "Combien de temps dure la mairie ?",
+        "a": "Une vingtaine de minutes. Arrivez dix minutes avant."
+      },
+      {
+        "q": "Y a-t-il un dress code ?",
+        "a": "Aucun. Venez comme vous êtes, mais chaudement : c’est décembre."
+      },
+      {
+        "q": "Où se garer ?",
+        "a": "Nulle part, c’est Paris. Métro Voltaire, ligne 9."
+      }
+    ]
+  },
+  "gifts": {
+    "text": "Pas de liste. Si vous tenez à nous faire plaisir, une cagnotte pour notre futur canapé.",
+    "url": "demo",
+    "label": "La cagnotte"
+  },
+  "photos": {
+    "text": "Vos photos de la journée, toutes au même endroit.",
+    "url": "demo"
   }
 }

@@ -30,6 +30,10 @@ _Mis à jour le 1er octobre 2026, après l'audit « qu'est-ce qui manque pour ê
 3. `python3 business/build-site.py`, puis commit et déploiement.
 4. Dans `/admin/`, copier le lien du tableau de bord et l'envoyer aux mariés ; ils y trouvent aussi les liens par famille.
 
+Écrans en option (chacun est facultatif, voir les démos pour des exemples) : `parents` (le mot des familles), `story` (notre histoire, avec `photos` possibles), `program` (le programme heure par heure), `dress` (dress code et couleurs), `stay` (hébergement et accès), `faq` (vos questions), `gifts` (liste de mariage ou cagnotte), `photos` (album partagé après le mariage), et `table` dans une famille (`families.<id>.table`) pour afficher sa table sur son lien personnel. Un lien `"url": "demo"` affiche une explication au lieu d'ouvrir un site.
+
+Transitions filmées d'une scène à l'autre : `python3 business/tools/frames.py --trans <theme>-1-2=<vidéo>` (vidéo avec image de début = scène 1 et image de fin = scène 2). Elles sont jouées pendant le glissement, dans les deux sens ; au repos, l'image d'origine en pleine définition est affichée.
+
 Les options : `opening` = `env` | `cur` | `door` ; `countdown` = `debut` | `page` | `fin` | `non` ; `music` = `nocturne` | `valse` | `ragtime` | `marine` | `scheherazade` | `raga` | `funiculi` | `none` (ou `musicUrl` pour le morceau du client) ; `font` = `script` | `classique` | `moderne` | `deco` (sinon celle du thème) ; `lang` = `fr` | `en` ; `tz` = fuseau horaire si le mariage n'est pas en France.
 
 ## Encore à faire (jaune, ensuite)

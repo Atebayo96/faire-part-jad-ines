@@ -15,7 +15,9 @@
       demoNote:'Ceci est une démo : votre réponse n’est pas enregistrée.',demoDash:'Voir le tableau de bord des mariés',
       fail:'L’envoi n’a pas fonctionné. Vérifiez votre connexion et réessayez.',need:'Indiquez votre nom et votre réponse pour chaque événement.',
       privacy:'Vos réponses ne sont visibles que par les mariés et sont supprimées après le mariage.',
-      calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le'},
+      calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le',demoLink:'Dans votre faire-part, ce bouton ouvre votre propre lien : liste de mariage, cagnotte, album photo ou réservation d’hôtel.',
+      parents:'Avec la bénédiction de leurs familles',story:'Notre histoire',program:'Le programme',dress:'Dress code',stay:'Hébergement et accès',faq:'Vos questions',
+      gifts:'Liste de mariage',giftsBtn:'Voir la liste',photos:'Vos photos',photosBtn:'Partager mes photos',dayJ:'Le jour J',table:'Votre table',tableTx:'Le plan de salle sera aussi affiché à l’entrée.',site:'Ouvrir'},
     en:{tap:'Tap to open',tapSeal:'Tap the seal to open',scroll:'Scroll down',route:'Directions',cal:'Calendar',reply:'RSVP',days:'days',hours:'hours',min:'min',sec:'sec',
       soon:'The big day is coming',left:'Only',infos:'Good to know',joy:'Request the pleasure of your company at their wedding',
       rsvpT:'Your reply',rsvpSub:'One reply per household is enough.',name:'Your full name(s)',present:'Attending',absent:'Not attending',guests:'Number of guests',
@@ -24,7 +26,9 @@
       demoNote:'This is a demo: your reply is not saved.',demoDash:'See the couple’s dashboard',
       fail:'Sending failed. Please check your connection and try again.',need:'Please enter your name and a reply for each event.',
       privacy:'Only the couple can see your reply, and it is deleted after the wedding.',
-      calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before'}
+      calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before',demoLink:'In your invitation, this button opens your own link: gift list, honeymoon fund, photo album or hotel booking.',
+      parents:'Together with their families',story:'Our story',program:'The day',dress:'Dress code',stay:'Where to stay',faq:'Questions',
+      gifts:'Gift list',giftsBtn:'View the list',photos:'Your photos',photosBtn:'Share my photos',dayJ:'On the day',table:'Your table',tableTx:'The seating plan will also be displayed at the entrance.',site:'Open'}
   }[L];
   const TZ=I.tz||'Europe/Paris', LOC=L==='en'?'en-GB':'fr-FR';
   const FONTS={script:{css:'"Great Vibes",cursive'},classique:{css:'"Playfair Display",Georgia,serif',italic:true},moderne:{css:'"Jost",sans-serif',upper:true},deco:{css:'"Limelight",serif'}};
@@ -89,6 +93,7 @@
     car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 16V11l2-5h10l2 5v5M3 16h18v2H3z"/><circle cx="7.5" cy="13" r="1"/><circle cx="16.5" cy="13" r="1"/></svg>',
     kids:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="7" r="3"/><path d="M6 21v-3a6 6 0 0 1 12 0v3"/></svg>',
     info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
+    cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
     note:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 17.5V5l11-2v12.5"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="15.5" r="2.5"/></svg>',
     mute:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 17.5V5l11-2v8M3 3l18 18"/><circle cx="6.5" cy="17.5" r="2.5"/></svg>'
   };
@@ -101,8 +106,9 @@
     const dark=opts.dark!=null?opts.dark:isDark(n), lt=T.light&&!dark;
     const c={nm:lt?T.color:'#fff',ey:lt?(T.ey||T.color):'#fff',tx:lt?(T.tx||T.color):'#fff'};
     const body=inner(c,lt);
-    // le décor n'est pas dans la page : chaque page a son calque fixe, et les calques se fondent l'un dans l'autre au défilement
-    pages.push({n,layer:`<div class="bgl${lt?' light':''}"><div class="bg" style="background-image:url('${img(n)}')"></div>${opts.veil?`<div class="veil" style="background:${lt?'rgba(255,253,248,.7)':'rgba(10,10,14,.5)'}"></div>`:''}</div>`,
+    // le décor n'est pas dans la page : un calque fixe par scène (plusieurs pages d'affilée peuvent partager la même scène,
+    // le décor reste alors en place et seul un voile apparaît sous le texte : aucune coupure)
+    pages.push({n,lt,veil:opts.veil?(lt?'rgba(255,253,248,.7)':'rgba(10,10,14,.4)'):'',
       html:`<section class="pg${lt?' light':''}${opts.cls?' '+opts.cls:''}" data-img="${img(n)}" style="${esc(opts.style||'')}">${body}</section>`});
   }
   const cdHtml=(big,col)=>`<div class="cd${big?' big':''}" style="color:${col}">${['d','h','m','s'].map((u,i)=>`<div><b data-u="${u}">0</b><span>${[S.days,S.hours,S.min,S.sec][i]}</span></div>`).join('')}</div>`;
@@ -121,35 +127,88 @@
       `<div class="hint" style="color:${c.ey}">${S.scroll} ↓</div>`;
   },{style:oval?'padding-top:'+T.top1:''});
 
-  // 2. événements
   const evImg=(e,i)=>e.scene||[2,3][i%2];
+  const rv=(cls,col,inner,st='')=>`<div class="rv ${cls}" style="--i:${rvI++};${col?'color:'+col+';':''}${st}">${inner}</div>`;
+  const head=(c,ey,title,k=.74)=>rv('ey',c.ey,esc(ey))+(title?rv('nm',null,esc(title),esc(nmCss(k,c.nm))):'');
+  // dans les démos, les liens externes (liste, album, hôtel) ouvrent une explication au lieu d'un faux site
+  const lnk=u=>u==='demo'?'href="#" data-demo':`href="${esc(u)}" target="_blank" rel="noopener"`;
+  const cardBg=lt=>lt?'rgba(255,255,255,.55)':'rgba(0,0,0,.28)';
+  const lastScene=events.length?evImg(events[events.length-1],events.length-1):2;
+
+  // 2. le mot des familles (scène 1 : le décor de l'accueil reste en place)
+  const P=I.parents;
+  if(P) page(1,(c)=>
+    head(c,P.eyebrow||S.parents,'')+
+    (P.names&&P.names.length?rv('fams',c.tx,P.names.map(x=>`<span>${esc(x)}</span>`).join('<i>&amp;</i>')):'')+
+    rv('tx',c.tx,esc(P.text||''))+
+    rv('nm',null,`${esc(n1)} &amp; ${esc(n2)}`,esc(nmCss(.7,c.nm))),{veil:true});
+
+  // 3. notre histoire
+  const ST=I.story;
+  if(ST) page(1,(c,lt)=>
+    head(c,ST.eyebrow||S.story,ST.title||'',.6)+
+    (ST.photos&&ST.photos.length?rv('ph',null,ST.photos.slice(0,3).map((u,k)=>`<img src="${esc(u)}" alt="" loading="lazy" style="--r:${[-4,3,-2][k]}deg">`).join('')):'')+
+    rv('st',c.tx,(ST.items||[]).map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')),{veil:true,cls:'tall'});
+
+  // 4. compte à rebours sur une page
+  if(I.countdown==='page') page(1,(c)=>
+    head(c,S.soon,S.left,.8)+rv('',null,cdHtml(true,c.tx))+rv('dl',c.tx,`<i></i><span>${esc(fmtDay(main))}</span><i></i>`),{veil:true});
+
+  // 5. événements
   events.forEach((e,i)=>{
     const d=zoned(e.start,e.tz);
     page(evImg(e,i),(c)=>{
       const when=(multiDay||e.showDate?fmtDayShort(d,e.tz)+' · ':'')+fmtTime(d,e.tz);
-      return `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(e.eyebrow||'')}</div>`+
-        `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(.74,c.nm))}">${esc(e.title)}</div>`+
-        `<div class="rv when" style="--i:${rvI++};color:${c.tx}">${esc(when)}</div>`+
-        (e.place?`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${esc(e.place)}</div>`:'')+
-        (e.note?`<div class="rv tx" style="--i:${rvI++};color:${c.tx};font-size:15px;opacity:.9">${esc(e.note)}</div>`:'')+
-        `<div class="rv acts" style="--i:${rvI++};color:${c.tx}">`+
-          (e.address?`<a class="b" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${S.route}</a>`:'')+
-          `<button type="button" class="b" data-cal="${esc(e.id)}">${ic.cal}${S.cal}</button></div>`;
+      return head(c,e.eyebrow||'',e.title)+rv('when',c.tx,esc(when))+
+        (e.place?rv('tx',c.tx,esc(e.place)):'')+
+        (e.note?rv('tx',c.tx,esc(e.note),'font-size:15px;opacity:.9'):'')+
+        rv('acts',c.tx,(e.address?`<a class="b" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${S.route}</a>`:'')+
+          `<button type="button" class="b" data-cal="${esc(e.id)}">${ic.cal}${S.cal}</button>`);
     });
-    if(i===0&&I.countdown==='page') page(1,(c)=>
-      `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${S.soon}</div>`+
-      `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(.8,c.nm))}">${S.left}</div>`+
-      `<div class="rv" style="--i:${rvI++}">${cdHtml(true,c.tx)}</div>`+
-      `<div class="rv dl" style="--i:${rvI++};color:${c.tx}"><i></i><span>${esc(fmtDay(main))}</span><i></i></div>`,{veil:true});
   });
 
-  // 3. infos pratiques
-  if(I.infos&&I.infos.length) page(1,(c,lt)=>
-    `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(I.infosTitle||S.infos)}</div>`+
-    `<div class="rv card" style="--i:${rvI++};color:${c.tx};background:${lt?'rgba(255,255,255,.55)':'rgba(0,0,0,.28)'}">`+
-      I.infos.map(x=>`<div class="it">${ic[x.icon]||ic.info}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p></div></div>`).join('')+`</div>`,{veil:true,cls:'tall'});
+  // 6. le programme du jour (sur le décor du dernier événement)
+  const PR=I.program;
+  if(PR) page(lastScene,(c,lt)=>
+    head(c,PR.eyebrow||S.program,PR.title||'',.6)+
+    rv('card tl',c.tx,(PR.items||[]).map(x=>`<div class="it"><b>${esc(x.time)}</b><div><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
 
-  // 4. réponse
+  // 7. infos pratiques, dress code, hébergement, questions, liste, photos, table : sur le décor de la réponse
+  if(I.infos&&I.infos.length) page(4,(c,lt)=>
+    head(c,I.infosTitle||S.infos,'')+
+    rv('card',c.tx,I.infos.map(x=>`<div class="it">${ic[x.icon]||ic.info}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+
+  const DR=I.dress;
+  if(DR) page(4,(c)=>
+    head(c,DR.eyebrow||S.dress,DR.title||'',.7)+
+    (DR.colors&&DR.colors.length?rv('sw',null,DR.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')):'')+
+    rv('tx',c.tx,esc(DR.text||'')),{veil:true});
+
+  const SY=I.stay;
+  if(SY) page(4,(c,lt)=>
+    head(c,SY.eyebrow||S.stay,SY.title||'',.6)+
+    rv('card',c.tx,(SY.items||[]).map(x=>`<div class="it">${ic[x.icon]||ic.hotel}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+
+  const FQ=I.faq;
+  if(FQ) page(4,(c,lt)=>
+    head(c,FQ.eyebrow||S.faq,FQ.title||'',.6)+
+    rv('card qa',c.tx,(FQ.items||[]).map(x=>`<div class="it"><div><h4>${esc(x.q)}</h4><p>${esc(x.a)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+
+  const GF=I.gifts;
+  if(GF) page(4,(c)=>
+    head(c,GF.eyebrow||S.gifts,GF.title||'',.7)+rv('tx',c.tx,esc(GF.text||''))+
+    (GF.url?rv('acts',c.tx,`<a class="b" ${lnk(GF.url)}>${ic.gift}${esc(GF.label||S.giftsBtn)}</a>`):''),{veil:true});
+
+  const PH=I.photos;
+  if(PH) page(4,(c)=>
+    head(c,PH.eyebrow||S.photos,PH.title||'',.7)+rv('tx',c.tx,esc(PH.text||''))+
+    (PH.url?rv('acts',c.tx,`<a class="b" ${lnk(PH.url)}>${ic.cam}${esc(PH.label||S.photosBtn)}</a>`):''),{veil:true});
+
+  // la table n'apparaît que sur le lien personnel d'une famille qui a une table
+  if(fam&&fam.table) page(4,(c)=>
+    head(c,S.dayJ,S.table,.7)+rv('tbl',c.tx,esc(fam.table))+rv('tx',c.tx,esc(I.tableText||S.tableTx)),{veil:true});
+
+  // 8. réponse
   const R=I.rsvp||{};
   const deadline=R.deadline?zoned(R.deadline+'T23:59',TZ):null;
   page(4,(c)=>
@@ -161,11 +220,13 @@
     `<a class="made" href="/" target="_blank" rel="noopener" style="color:${c.ey}">${S.made} <b>SCEAU</b></a>`);
 
   /* ---------- montage ---------- */
+  const runs=[], runOf=[];
+  pages.forEach((p,i)=>{ const r=runs[runs.length-1]; if(r&&r.n===p.n) r.b=i; else runs.push({n:p.n,lt:p.lt,a:i,b:i}); runOf[i]=runs.length-1; });
   document.title=I.title||`${n1} & ${n2}`;
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app';
   app.innerHTML=`
-    <div class="bgs" id="bgs">${pages.map(p=>p.layer).join('')}</div>
+    <div class="bgs" id="bgs">${runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}<div class="film" id="film"></div>${pages.map(p=>`<div class="vl" style="${p.veil?'background:'+p.veil:'display:none'}"></div>`).join('')}</div>
     <div class="sc" id="sc">${pages.map(p=>p.html).join('')}</div>
     <canvas id="fx"></canvas>
     ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
@@ -181,13 +242,13 @@
     <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
   const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${img(1)}')`;
   document.body.append(bd,app);
-  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').children];
+  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], veils=[...$('#bgs').querySelectorAll('.vl')], film=$('#film');
 
   /* ---------- apparition + parallaxe ---------- */
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let opened=false;
   const io=new IntersectionObserver(es=>es.forEach(en=>{
-    if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); layers[i].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
+    if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); layers[runOf[i]].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
   }),{root:sc,threshold:[.45,.8]});
   secs.forEach(s=>io.observe(s));
   // comme le faire-part d'Inès & Jad : pendant le glissement d'une page à l'autre,
@@ -198,28 +259,48 @@
   // qui avancent et reculent avec le doigt. Chargées juste avant d'arriver sur la scène.
   const ANIM=new Set(I.anim||[]), FR=24, frames={};
   const frameUrl=(n,k)=>`/img/frames/${I.theme}-${n}/f${String(k+1).padStart(2,'0')}.webp`;
-  function loadFrames(n){
-    if(!ANIM.has(n)||frames[n]) return;
-    const f=frames[n]={ready:false}; let ok=0;
-    for(let k=0;k<FR;k++){ const im=new Image(); im.onload=im.onerror=()=>{ if(++ok===FR) f.ready=true; }; im.src=frameUrl(n,k); }
+  function preload(key,count,url){
+    if(frames[key]) return; const f=frames[key]={ready:false}; let ok=0;
+    for(let k=0;k<count;k++){ const im=new Image(); im.onload=im.onerror=()=>{ if(++ok===count) f.ready=true; }; im.src=url(k); }
   }
-  let ticking=false;
+  // transitions filmées d'une scène à la suivante : la caméra passe d'un décor à l'autre pendant le glissement,
+  // sans fondu ni coupure. Au repos, c'est toujours l'image d'origine en pleine définition qui est affichée.
+  const TRANS=new Set(I.trans||[]), FT=32;
+  const transUrl=(key,k)=>`/img/trans/${I.theme}-${key}/f${String(k+1).padStart(2,'0')}.webp`;
+  const transOf=(a,b)=>TRANS.has(a+'-'+b)?{key:a+'-'+b,rev:false}:TRANS.has(b+'-'+a)?{key:b+'-'+a,rev:true}:null;
+  const setBg=(L,u)=>{ if(L._u!==u){ L._u=u; L.firstElementChild.style.backgroundImage=`url('${u}')`; } };
+  let ticking=false, filmOn=false;
   function frame(){
     ticking=false;
     const h=sc.clientHeight, mid=sc.scrollTop+h/2;
-    secs.forEach((s,i)=>{
-      const d=(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h;   // 0 = page centrée, <0 = page encore en dessous
-      const L=layers[i], n=pages[i].n;
-      L.style.opacity=i===0?1:ease(Math.max(0,Math.min(1,1+d*1.15))).toFixed(3);
-      if(ANIM.has(n)&&opened&&!reduce){
-        if(Math.abs(d)<2.2) loadFrames(n);
-        if(frames[n]&&frames[n].ready){
-          const pr=i===0?Math.min(1,sc.scrollTop/(h*.6)):Math.max(0,Math.min(1,(d+.75)/1.2));
-          const k=Math.round(pr*(FR-1));
-          if(L._k!==k){ L._k=k; L.firstElementChild.style.backgroundImage=`url('${frameUrl(n,k)}')`; }
-        }
+    const D=secs.map(s=>(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h);   // 0 = page centrée, <0 = page encore en dessous
+    let film_=null;
+    runs.forEach((r,ri)=>{
+      const L=layers[ri], d0=D[r.a], d1=D[r.b], nx=runs[ri+1];
+      L.style.opacity=ri===0?1:ease(Math.max(0,Math.min(1,1+d0*1.15))).toFixed(3);
+      if(!reduce&&d0>-1.3&&d1<1.3) L.style.transform=`translate3d(0,${(-(d0<0?d0:d1>0?d1:0)*3).toFixed(2)}%,0)`;
+      const tr=nx&&opened&&!reduce?transOf(r.n,nx.n):null;
+      if(tr){
+        if(d0>-2.2&&d1<1.2) preload('t'+tr.key,FT,k=>transUrl(tr.key,k));
+        if(d1>0&&d1<1) film_={tr,f:d1};
       }
-      if(!reduce&&d>-1.3&&d<1.3) L.style.transform=`translate3d(0,${(-d*3).toFixed(2)}%,0)`;
+      // sans transition filmée : la scène s'anime en partant (au repos, l'image d'origine reste nette)
+      if(!tr&&ANIM.has(r.n)&&opened&&!reduce){
+        if(d0>-2.2&&d1<1.2) preload(r.n,FR,k=>frameUrl(r.n,k));
+        const pr=Math.max(0,Math.min(1,d1/.9));
+        setBg(L,frames[r.n]&&frames[r.n].ready&&pr>0?frameUrl(r.n,Math.round(pr*(FR-1))):img(r.n));
+      }
+    });
+    // la pellicule couvre l'écran pendant le passage, et s'efface aux deux bouts sur l'image d'origine (identique)
+    const fr=film_&&frames['t'+film_.tr.key];
+    if(fr&&fr.ready){
+      const f=film_.tr.rev?1-film_.f:film_.f, k=Math.round(f*(FT-1));
+      const u=transUrl(film_.tr.key,k); if(film._u!==u){ film._u=u; film.style.backgroundImage=`url('${u}')`; }
+      film.style.opacity=Math.min(1,film_.f/.08,(1-film_.f)/.08).toFixed(3); filmOn=true;
+    } else if(filmOn){ film.style.opacity=0; filmOn=false; }
+    secs.forEach((s,i)=>{
+      const d=D[i];
+      if(pages[i].veil) veils[i].style.opacity=Math.max(0,Math.min(1,(1-Math.abs(d))*1.6)).toFixed(3);
       if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.12)*1.9)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
     });
   }
@@ -229,7 +310,7 @@
   /* ---------- pagination, comme le faire-part d'Inès & Jad ----------
      un swipe (ou un cran de molette, ou une flèche) = la scène suivante glisse en douceur
      et se cale pile en plein écran ; une page plus haute que l'écran se lit en plusieurs crans */
-  const PAGE_DUR=900, easePage=t=>1-Math.pow(1-t,3);
+  const PAGE_DUR=900, PAGE_DUR_FILM=1600, easePage=t=>1-Math.pow(1-t,3), easeFilm=t=>.5-Math.cos(Math.PI*t)/2;
   let paging=false;
   function stops(){
     const h=sc.clientHeight, max=sc.scrollHeight-h, out=[];
@@ -237,17 +318,22 @@
       if(H>h*1.05){ for(let y=t+h*.85;y<t+H-h;y+=h*.85) out.push(Math.round(y)); out.push(t+H-h); } });
     return [...new Set(out.map(y=>Math.max(0,Math.min(max,Math.round(y)))))].sort((a,b)=>a-b);
   }
-  function glide(to){
+  function glide(to,slow){
     const from=sc.scrollTop; if(Math.abs(to-from)<2) return;
-    paging=true; const t0=performance.now(), dur=reduce?1:PAGE_DUR;
-    (function step(now){ const p=Math.min(1,(now-t0)/dur); sc.scrollTop=from+(to-from)*easePage(p);
+    // un passage filmé d'un décor à l'autre prend un peu plus de temps, pour qu'on voie le voyage
+    paging=true; const t0=performance.now(), dur=reduce?1:slow?PAGE_DUR_FILM:PAGE_DUR;
+    const ez=slow?easeFilm:easePage;
+    (function step(now){ const p=Math.min(1,(now-t0)/dur); sc.scrollTop=from+(to-from)*ez(p);
       if(p<1) requestAnimationFrame(step); else paging=false; })(t0);
   }
   function go(dir){
     if(!opened||paging) return;
     const cur=sc.scrollTop, st=stops();
     const to=dir>0?st.find(y=>y>cur+4):st.slice().reverse().find(y=>y<cur-4);
-    if(to!==undefined) glide(to);
+    if(to===undefined) return;
+    const at=y=>{ let k=0; secs.forEach((s,i)=>{ if(s.offsetTop<=y+4) k=i; }); return runOf[k]; };
+    const ra=at(cur), rb=at(to);
+    glide(to,ra!==rb&&!!transOf(runs[ra].n,runs[rb].n));
   }
   function settle(){ if(!opened||paging) return; const cur=sc.scrollTop, st=stops(); glide(st.reduce((b,y)=>Math.abs(y-cur)<Math.abs(b-cur)?y:b,st[0])); }
   // tactile : le défilement natif est bloqué, c'est le relâcher du swipe qui lance le glissement
@@ -412,6 +498,7 @@
   sc.addEventListener('click',e=>{
     const c=e.target.closest('[data-cal]'); if(c){ calSheet(c.dataset.cal); return; }
     if(e.target.closest('[data-rsvp]')) rsvpSheet();
+    if(e.target.closest('[data-demo]')){ e.preventDefault(); openSheet(`<h3>${S.demo}</h3><p class="sub">${S.demoLink}</p>`); }
   });
   if(location.hash==='#rsvp'){ open(); setTimeout(()=>{ sc.scrollTop=sc.scrollHeight; },400); }
 })();

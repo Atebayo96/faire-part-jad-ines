@@ -216,13 +216,16 @@ def site_og(T):
 
 def main():
     # les images d'animation (img/frames) ne vivent que dans site/ : on les met de côté pendant la reconstruction
-    FRAMES = os.path.join(SITE, 'img', 'frames'); KEEP = os.path.join(B, '.frames-keep')
-    if os.path.isdir(FRAMES):
-        shutil.rmtree(KEEP, ignore_errors=True); shutil.move(FRAMES, KEEP)
+    # (scènes animées img/frames et transitions filmées img/trans)
+    kept = []
+    for sub in ('frames', 'trans'):
+        src, keep = os.path.join(SITE, 'img', sub), os.path.join(B, f'.{sub}-keep')
+        if os.path.isdir(src):
+            shutil.rmtree(keep, ignore_errors=True); shutil.move(src, keep); kept.append((keep, src))
     shutil.rmtree(SITE, ignore_errors=True)
     shutil.copytree(os.path.join(B, 'landing'), SITE, ignore=shutil.ignore_patterns('CREDITS.md', 'node_modules'))
-    if os.path.isdir(KEEP):
-        shutil.move(KEEP, FRAMES)
+    for keep, src in kept:
+        shutil.move(keep, src)
     l = open(os.path.join(SITE, 'index.html'), encoding='utf-8').read()
     l = l.replace('<meta name="robots" content="noindex">\n', '')
     open(os.path.join(SITE, 'index.html'), 'w', encoding='utf-8').write(l)
@@ -246,6 +249,8 @@ def main():
         desc = ('You are invited. Open our wedding invitation.' if lang == 'en' else 'Vous êtes invités. Ouvrez notre faire-part.')
         # scènes animées disponibles (images tirées des vidéos, voir business/tools/frames.py)
         inv['anim'] = [n for n in range(1, 5) if os.path.isdir(os.path.join(SITE, 'img', 'frames', f"{inv['theme']}-{n}"))]
+        # transitions filmées disponibles pour ce thème (img/trans/<theme>-<a>-<b>/)
+        inv['trans'] = sorted(k[len(inv['theme'])+1:] for k in os.listdir(os.path.join(SITE, 'img', 'trans')) if k.startswith(inv['theme'] + '-')) if os.path.isdir(os.path.join(SITE, 'img', 'trans')) else []
         data = json.dumps(inv, ensure_ascii=False).replace('</', '<\\/')
         page = PAGE.format(lang=lang, title=html.escape(title), desc=html.escape(desc), site=SITE_URL, slug=slug, gf='' if t['gf'] == 'Great+Vibes' else '&family=' + t['gf'],
                            fontx=EXTRA_FONTS.get(inv.get('font'), ''), theme=inv['theme'], data=data)

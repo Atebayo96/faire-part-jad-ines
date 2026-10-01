@@ -43,11 +43,6 @@
       "text": "Garden party. Heels and lawns don't mix: think block heels!"
     },
     {
-      "icon": "hotel",
-      "title": "Where to stay",
-      "text": "A block of rooms is held at the Auberge de la Forêt until May 1st."
-    },
-    {
       "icon": "gift",
       "title": "Registry",
       "text": "Your presence is the best gift. A honeymoon fund will be available on the day."
@@ -59,5 +54,37 @@
     "title": "Can we count on you?",
     "yesText": "We can't wait to celebrate with you!",
     "noText": "We'll miss you. Thank you for letting us know."
+  },
+  "stay": {
+    "items": [
+      {
+        "icon": "hotel",
+        "title": "Auberge de la Forêt",
+        "text": "A block of rooms is held for our guests until May 1st. Mention “Chloé & Nathan”.",
+        "url": "demo",
+        "link": "Book a room"
+      },
+      {
+        "icon": "car",
+        "title": "Shuttle",
+        "text": "A shuttle leaves the train station at 3:15 pm and brings everyone back from 1 am."
+      }
+    ]
+  },
+  "faq": {
+    "items": [
+      {
+        "q": "Can I bring a plus-one?",
+        "a": "Your invitation lists everyone we’re expecting. Ask us if in doubt!"
+      },
+      {
+        "q": "Are kids welcome?",
+        "a": "Of course. A kids’ corner with games and a babysitter is planned."
+      },
+      {
+        "q": "What if it rains?",
+        "a": "The ceremony moves into the barn. The party goes on!"
+      }
+    ]
   }
 }

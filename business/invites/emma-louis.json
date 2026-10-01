@@ -51,11 +51,6 @@
       "icon": "hotel",
       "title": "Dormir",
       "text": "Chambres réservées à l'Hôtel de la Forêt, à 5 minutes."
-    },
-    {
-      "icon": "gift",
-      "title": "Cadeaux",
-      "text": "Votre présence est notre plus beau cadeau. Une urne sera à votre disposition."
     }
   ],
   "rsvp": {
@@ -68,7 +63,8 @@
   "families": {
     "famille-martin": {
       "label": "Chère famille Martin",
-      "seats": 4
+      "seats": 4,
+      "table": "La table des Roses"
     },
     "famille-bernard": {
       "label": "Chers Paul et Anne",
@@ -77,5 +73,31 @@
         "ceremonie"
       ]
     }
+  },
+  "story": {
+    "title": "Notre conte",
+    "items": [
+      {
+        "when": "2016",
+        "title": "Le bal de fin d’année",
+        "text": "Elle a marché sur son pied. Il a dit que ce n’était rien."
+      },
+      {
+        "when": "2022",
+        "title": "Paris",
+        "text": "Un petit appartement sous les toits et un dimanche matin sur deux au marché."
+      },
+      {
+        "when": "2026",
+        "title": "Oui",
+        "text": "Sous les tilleuls de Vaux-le-Vicomte, un soir de septembre."
+      }
+    ]
+  },
+  "gifts": {
+    "title": "Votre présence est notre plus beau cadeau",
+    "text": "Une urne sera à votre disposition. Pour ceux qui préfèrent, une liste en ligne.",
+    "url": "demo",
+    "label": "Voir la liste"
   }
 }

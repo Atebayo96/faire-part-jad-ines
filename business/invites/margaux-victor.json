@@ -37,11 +37,6 @@
   ],
   "infos": [
     {
-      "icon": "dress",
-      "title": "Dress code",
-      "text": "Black tie. Plumes, perles et paillettes encouragées."
-    },
-    {
       "icon": "car",
       "title": "Accès",
       "text": "Métro Franklin D. Roosevelt. Voiturier à partir de 19h30."
@@ -52,5 +47,45 @@
     "title": "Serez-vous des nôtres ?",
     "yesText": "Sortez vos plus belles tenues !",
     "noText": "Nous lèverons une coupe à votre santé."
+  },
+  "dress": {
+    "title": "Black tie",
+    "text": "Smokings, robes longues. Plumes, perles et paillettes encouragées.",
+    "colors": [
+      "#111111",
+      "#d4af37",
+      "#f4efe6",
+      "#7a1f2b"
+    ]
+  },
+  "program": {
+    "title": "Le 16 octobre",
+    "items": [
+      {
+        "time": "16h00",
+        "title": "La cérémonie",
+        "text": "Au grand salon"
+      },
+      {
+        "time": "17h30",
+        "title": "Cocktail",
+        "text": "Champagne et huîtres"
+      },
+      {
+        "time": "20h00",
+        "title": "Dîner",
+        "text": "Orchestre de jazz"
+      },
+      {
+        "time": "23h30",
+        "title": "Le bal",
+        "text": "Charleston obligatoire"
+      }
+    ]
+  },
+  "gifts": {
+    "text": "Votre présence est notre plus beau cadeau. Pour ceux qui le souhaitent, une liste chez notre caviste préféré.",
+    "url": "demo",
+    "label": "Voir la liste"
   }
 }

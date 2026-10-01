@@ -39,5 +39,38 @@
     "title": "Serez-vous des nôtres ?",
     "yesText": "Nous nous réjouissons de vous accueillir.",
     "noText": "Merci de votre réponse."
+  },
+  "parents": {
+    "eyebrow": "Faire-part",
+    "names": [
+      "Monsieur et Madame Jean Delorme",
+      "Monsieur et Madame Henri Vasseur"
+    ],
+    "text": "ont la joie de vous faire part du mariage de leurs enfants"
+  },
+  "program": {
+    "title": "Le samedi 2 octobre",
+    "items": [
+      {
+        "time": "15h00",
+        "title": "La messe",
+        "text": "Cathédrale de Senlis"
+      },
+      {
+        "time": "16h30",
+        "title": "Vin d'honneur",
+        "text": "Sur le parvis, avec un quatuor à cordes"
+      },
+      {
+        "time": "19h30",
+        "title": "Le dîner",
+        "text": "Château de Mont-l'Évêque"
+      },
+      {
+        "time": "23h00",
+        "title": "Ouverture du bal",
+        "text": "Jusqu’au bout de la nuit"
+      }
+    ]
   }
 }

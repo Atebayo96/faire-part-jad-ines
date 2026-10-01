@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     at: new Date().toISOString(), email,
     name: clean(b.name, 120), phone: clean(b.phone, 40), date: clean(b.date, 20), plan: clean(b.plan, 30),
     message: clean(b.message, 2000),
-    choix: { style: clean(b.style, 40), palette: clean(b.palette, 40), police: clean(b.font, 40), ouverture: clean(b.opening, 40), compte: clean(b.countdown, 40), prenoms: clean(b.names, 80), dateMariage: clean(b.weddingDate, 20) },
+    choix: { style: clean(b.style, 40), palette: clean(b.palette, 40), police: clean(b.font, 40), ouverture: clean(b.opening, 40), compte: clean(b.countdown, 40), ecrans: clean(b.screens, 300), prenoms: clean(b.names, 80), dateMariage: clean(b.weddingDate, 20) },
     source: clean(req.headers.referer, 200)
   };
   await save('leads/' + id() + '.json', lead);
