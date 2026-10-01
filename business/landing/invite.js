@@ -15,7 +15,8 @@
       demoNote:'Ceci est une démo : votre réponse n’est pas enregistrée.',demoDash:'Voir le tableau de bord des mariés',
       fail:'L’envoi n’a pas fonctionné. Vérifiez votre connexion et réessayez.',need:'Indiquez votre nom et votre réponse pour chaque événement.',
       privacy:'Vos réponses ne sont visibles que par les mariés et sont supprimées après le mariage.',
-      calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le',demoLink:'Dans votre faire-part, ce bouton ouvre votre propre lien : liste de mariage, cagnotte, album photo ou réservation d’hôtel.',
+      calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le',already:'Vous avez déjà répondu. Vous pouvez modifier votre réponse ci-dessous.',editT:'Pour modifier votre réponse depuis un autre téléphone, gardez ce lien :',copy:'Copier le lien',copied:'Lien copié',
+      demoLink:'Dans votre faire-part, ce bouton ouvre votre propre lien : liste de mariage, cagnotte, album photo ou réservation d’hôtel.',
       parents:'Avec la bénédiction de leurs familles',story:'Notre histoire',program:'Le programme',dress:'Dress code',stay:'Hébergement et accès',faq:'Vos questions',
       gifts:'Liste de mariage',giftsBtn:'Voir la liste',photos:'Vos photos',photosBtn:'Partager mes photos',dayJ:'Le jour J',table:'Votre table',tableTx:'Le plan de salle sera aussi affiché à l’entrée.',site:'Ouvrir'},
     en:{tap:'Tap to open',tapSeal:'Tap the seal to open',scroll:'Scroll down',route:'Directions',cal:'Calendar',reply:'RSVP',days:'days',hours:'hours',min:'min',sec:'sec',
@@ -26,7 +27,8 @@
       demoNote:'This is a demo: your reply is not saved.',demoDash:'See the couple’s dashboard',
       fail:'Sending failed. Please check your connection and try again.',need:'Please enter your name and a reply for each event.',
       privacy:'Only the couple can see your reply, and it is deleted after the wedding.',
-      calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before',demoLink:'In your invitation, this button opens your own link: gift list, honeymoon fund, photo album or hotel booking.',
+      calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before',already:'You have already replied. You can change your reply below.',editT:'To change your reply from another phone, keep this link:',copy:'Copy link',copied:'Link copied',
+      demoLink:'In your invitation, this button opens your own link: gift list, honeymoon fund, photo album or hotel booking.',
       parents:'Together with their families',story:'Our story',program:'The day',dress:'Dress code',stay:'Where to stay',faq:'Questions',
       gifts:'Gift list',giftsBtn:'View the list',photos:'Your photos',photosBtn:'Share my photos',dayJ:'On the day',table:'Your table',tableTx:'The seating plan will also be displayed at the entrance.',site:'Open'}
   }[L];
@@ -462,13 +464,20 @@
 
   /* ---------- réponse (RSVP) ---------- */
   const KEY='sceau-rsvp-'+I.slug+(fid?'-'+fid:'');
+  // lien personnel d'un invité (?r=identifiant.clé) : on récupère sa réponse pour la pré-remplir sur ce téléphone
+  const rParam=new URLSearchParams(location.search).get('r');
+  if(rParam&&!I.demo) fetch(`/api/rsvp?invite=${encodeURIComponent(I.slug)}&r=${encodeURIComponent(rParam)}`).then(r=>r.ok?r.json():null).then(j=>{
+    if(!j||!j.reply) return; const [rid,rkey]=rParam.split('.');
+    try{ localStorage.setItem(KEY,JSON.stringify(Object.assign({},j.reply,{rid,rkey}))); }catch(e){}
+  }).catch(()=>{});
+  const editUrl=p=>{ const u=new URL(location.href); u.search=''; u.hash=''; if(fid) u.searchParams.set('f',fid); u.searchParams.set('r',p.rid+'.'+p.rkey); return u.toString(); };
   function rsvpSheet(){
     let prev=null; try{ prev=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
     const max=(fam&&fam.seats)||R.maxGuests||6;
     const evRows=events.map(e=>{ const d=zoned(e.start,e.tz); return `<div class="ev"><b>${esc(e.eyebrow||e.title)}</b><small>${esc(e.title)} · ${esc(fmtDayShort(d,e.tz))}</small><div class="yn">`+
       `<label><input type="radio" name="ev-${esc(e.id)}" value="1" ${prev&&prev.events&&prev.events[e.id]===true?'checked':''}><span>${S.present}</span></label>`+
       `<label><input type="radio" name="ev-${esc(e.id)}" value="0" ${prev&&prev.events&&prev.events[e.id]===false?'checked':''}><span>${S.absent}</span></label></div></div>`; }).join('');
-    openSheet(`<h3>${S.rsvpT}</h3><p class="sub">${esc(R.subtitle||S.rsvpSub)}</p>
+    openSheet(`<h3>${S.rsvpT}</h3><p class="sub">${esc(prev&&prev.name?S.already:(R.subtitle||S.rsvpSub))}</p>
       <form id="rf" novalidate>
         <label class="f"><span>${S.name}</span><input name="name" autocomplete="name" required maxlength="120" value="${esc(prev?prev.name:(fam&&fam.name)||'')}"></label>
         ${evRows}
@@ -483,18 +492,22 @@
     $('#rf').addEventListener('submit',async ev=>{
       ev.preventDefault();
       const f=ev.currentTarget, fd=new FormData(f), err=$('#rerr');
-      const data={invite:I.slug,family:fid||null,name:(fd.get('name')||'').trim(),guests:+fd.get('guests')||1,diet:(fd.get('diet')||'').trim(),message:(fd.get('message')||'').trim(),website:fd.get('website')||'',events:{}};
+      const data={invite:I.slug,rid:prev&&prev.rid||undefined,rkey:prev&&prev.rkey||undefined,family:fid||null,name:(fd.get('name')||'').trim(),guests:+fd.get('guests')||1,diet:(fd.get('diet')||'').trim(),message:(fd.get('message')||'').trim(),website:fd.get('website')||'',events:{}};
       let ok=!!data.name; events.forEach(e=>{ const v=fd.get('ev-'+e.id); if(v==null) ok=false; else data.events[e.id]=v==='1'; });
       if(!ok){ err.textContent=S.need; err.hidden=false; return; }
       const btn=f.querySelector('.go'); btn.disabled=true; btn.textContent=S.sending; err.hidden=true;
       try{
-        if(!I.demo){ const r=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); if(!r.ok) throw new Error(r.status); }
-        try{ localStorage.setItem(KEY,JSON.stringify(data)); }catch(e){}
+        if(!I.demo){ const r=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); if(!r.ok) throw new Error(r.status);
+          const j=await r.json().catch(()=>({})); if(j.rid){ data.rid=j.rid; data.rkey=j.rkey; } }
+        delete data.website; try{ localStorage.setItem(KEY,JSON.stringify(data)); }catch(e){}
         const yes=Object.values(data.events).some(Boolean);
-        sheetBody.innerHTML=`<div class="done-msg"><div class="big">${S.thanks}</div><p>${esc(yes?(R.yesText||''):(R.noText||''))}</p><p class="note">${S.saved}</p>${I.demo?`<p class="note">${S.demoNote}</p><p><a class="b" style="color:#2a2620" href="/tableau/?demo=${esc(I.slug)}" target="_blank" rel="noopener">${S.demoDash}</a></p>`:''}</div>`;
+        sheetBody.innerHTML=`<div class="done-msg"><div class="big">${S.thanks}</div><p>${esc(yes?(R.yesText||''):(R.noText||''))}</p><p class="note">${S.saved}</p>${data.rid?`<div class="edit-link"><p class="note">${S.editT}</p><input readonly value="${esc(editUrl(data))}" aria-label="Lien"><button type="button" class="b" data-copy style="color:#2a2620">${S.copy}</button></div>`:''}${I.demo?`<p class="note">${S.demoNote}</p><p><a class="b" style="color:#2a2620" href="/tableau/?demo=${esc(I.slug)}" target="_blank" rel="noopener">${S.demoDash}</a></p>`:''}</div>`;
       }catch(e){ btn.disabled=false; btn.textContent=S.send; err.textContent=S.fail; err.hidden=false; }
     });
   }
+  // lien de modification de la réponse : bouton « Copier » dans la fenêtre de réponse
+  sheetBody.addEventListener('click',e=>{ const b=e.target.closest('[data-copy]'); if(!b) return; const inp=b.parentNode.querySelector('input');
+    (navigator.clipboard?navigator.clipboard.writeText(inp.value):Promise.reject()).catch(()=>{ inp.select(); document.execCommand('copy'); }).finally(()=>{ b.textContent=S.copied; }); });
   sc.addEventListener('click',e=>{
     const c=e.target.closest('[data-cal]'); if(c){ calSheet(c.dataset.cal); return; }
     if(e.target.closest('[data-rsvp]')) rsvpSheet();

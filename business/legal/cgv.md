@@ -8,7 +8,7 @@ Les présentes conditions encadrent la vente de faire-part numériques personnal
 - **Couture : à partir de 590 €, sur devis.**
 Les prix sont indiqués en euros, toutes taxes comprises. [Si micro-entreprise : TVA non applicable, art. 293 B du CGI.] Le prix ne dépend pas du nombre d'invités.
 ## 3. Commande et paiement
-La commande est passée après échange avec le Client (formulaire, email ou messagerie) et validée par le paiement en ligne. Le Client fournit les informations nécessaires : prénoms, dates, lieux, textes, et le cas échéant photos et musique.
+La commande est passée directement sur le site (choix de la formule, acceptation des présentes conditions, puis paiement sécurisé par Stripe), ou après échange avec le Client (formulaire, email ou messagerie) et validée par le paiement en ligne. Le Client reçoit un reçu par e-mail. Le Client fournit les informations nécessaires : prénoms, dates, lieux, textes, et le cas échéant photos et musique.
 ## 4. Délais
 Essentiel : première version sous 48 heures ouvrées après réception de toutes les informations. Signature : sous 3 à 5 jours ouvrés. Couture : selon le devis. Le Client valide la version finale avant l'envoi à ses invités.
 ## 5. Retouches et modifications
