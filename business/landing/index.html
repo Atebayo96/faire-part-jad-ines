@@ -255,20 +255,32 @@
   .op-cur-edge{position:absolute;left:0;right:0;bottom:-30px;height:30px;background:linear-gradient(rgba(0,0,0,.35),transparent)}
   .op-mono{position:absolute;left:0;right:0;top:38%;text-align:center;font:400 54px/1 "Great Vibes",cursive;color:#e9c879;text-shadow:0 2px 0 #7a5a14,0 6px 16px rgba(0,0,0,.5);display:block!important;inset:38% 0 auto 0}
   .op.play .op-cur{transform:translateY(-104%)}
-  /* grandes portes */
-  .op-doors{perspective:1400px}
-  .op-leaf{position:absolute;top:0;bottom:0;width:50.5%;background:url("img/open/porte.webp") center/cover no-repeat;transition:transform 1.8s cubic-bezier(.6,0,.25,1) .15s,filter 1.8s ease .15s;box-shadow:inset -8px 0 18px rgba(0,0,0,.25)}
-  .op-leaf.l{left:0;transform-origin:0 50%}
-  .op-leaf.r{right:0;transform-origin:100% 50%;background:none;overflow:hidden}
-  .op-leaf.r i{position:absolute;inset:0;background:url("img/open/porte.webp") center/cover no-repeat;transform:scaleX(-1);box-shadow:inset -8px 0 18px rgba(0,0,0,.25)}
-  .op-glow{position:absolute;inset:0;background:radial-gradient(60% 45% at 50% 50%,rgba(255,236,190,.6),transparent 70%);opacity:0;transition:opacity .8s ease .3s;pointer-events:none}
-  .op.play .op-glow{opacity:1}
-  .op.done .op-glow{opacity:0}
-  .op.play .op-leaf.l{transform:rotateY(-108deg);filter:brightness(.7)}
-  .op.play .op-leaf.r{transform:rotateY(108deg);filter:brightness(.7)}
+  /* grandes portes : un seul visuel coupe en deux battants, lumiere au centre, ouverture lente + travelling avant */
+  .op-doors{overflow:hidden}
+  .op-doors-in{position:absolute;inset:0;transform-origin:50% 50%;perspective:560px;perspective-origin:50% 50%}
+  .op-leaf{position:absolute;top:0;bottom:0;width:50%;background:url("img/open/portes.webp") no-repeat;background-size:200% 100%;backface-visibility:hidden}
+  .op-leaf.l{left:0;background-position:0 0;transform-origin:0 50%}
+  .op-leaf.r{right:0;background-position:100% 0;transform-origin:100% 50%}
+  .op-leaf::after{content:"";position:absolute;inset:0;opacity:0}
+  .op-leaf.l::after{background:linear-gradient(90deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
+  .op-leaf.r::after{background:linear-gradient(270deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
+  .op-seam{position:absolute;top:0;bottom:0;left:50%;width:10px;margin-left:-5px;background:linear-gradient(90deg,transparent,rgba(255,240,205,.95),transparent);filter:blur(1px);opacity:0;z-index:2}
+  .op-glow{position:absolute;inset:0;background:radial-gradient(55% 40% at 50% 50%,rgba(255,236,190,.75),transparent 72%);opacity:0;pointer-events:none}
+  .op.play .op-doors-in{animation:opPush 3.4s ease-in-out forwards}
+  .op.play .op-leaf.l{animation:opDoorL 3.2s linear forwards}
+  .op.play .op-leaf.r{animation:opDoorR 3.2s linear forwards}
+  .op.play .op-leaf::after{animation:opShade 3.2s ease forwards}
+  .op.play .op-seam{animation:opSeam 1.4s ease forwards}
+  .op.play .op-glow{animation:opGlow 3.2s ease forwards}
+  @keyframes opDoorL{0%{transform:rotateY(0)}12%{transform:rotateY(-6deg)}20%{transform:rotateY(-4deg)}35%{transform:rotateY(-16deg)}50%{transform:rotateY(-38deg)}65%{transform:rotateY(-62deg)}80%{transform:rotateY(-82deg)}100%{transform:rotateY(-95deg)}}
+  @keyframes opDoorR{0%{transform:rotateY(0)}12%{transform:rotateY(6deg)}20%{transform:rotateY(4deg)}35%{transform:rotateY(16deg)}50%{transform:rotateY(38deg)}65%{transform:rotateY(62deg)}80%{transform:rotateY(82deg)}100%{transform:rotateY(95deg)}}
+  @keyframes opShade{0%,20%{opacity:0}100%{opacity:1}}
+  @keyframes opSeam{0%{opacity:0;transform:scaleY(.3)}25%{opacity:1;transform:scaleY(1)}70%{opacity:.9}100%{opacity:0}}
+  @keyframes opGlow{0%,15%{opacity:0}50%{opacity:1}100%{opacity:0}}
+  @keyframes opPush{0%,25%{transform:scale(1)}100%{transform:scale(1.2)}}
   .op.done .op-doors,.op.done .op-cur,.op.done .op-env{opacity:0;transition:opacity .4s}
   .replay{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font:inherit;font-size:13px;cursor:pointer}
-  @media (prefers-reduced-motion:reduce){ .op-flap,.op-env,.op-cur,.op-leaf{transition-duration:.01s!important;transition-delay:0s!important} }
+  @media (prefers-reduced-motion:reduce){ .op-flap,.op-env,.op-cur,.op-leaf{transition-duration:.01s!important;transition-delay:0s!important} .op.play .op-leaf,.op.play .op-doors-in,.op.play .op-seam,.op.play .op-glow,.op.play .op-leaf::after{animation-duration:.01s!important} }
 
   /* ----- mobile ----- */
   @media (max-width:720px){
@@ -409,7 +421,7 @@
           <div class="op" id="cpOp" role="button" tabindex="0" aria-label="Ouvrir le faire-part">
             <div class="op-env"><div class="op-env-in"><div class="op-body"></div><div class="op-flap"><img src="img/open/env-flap.webp" alt=""><div class="op-seal" id="opSeal"></div></div></div></div>
             <div class="op-cur"><div class="op-mono" id="opMonoC"></div><div class="op-cur-edge"></div></div>
-            <div class="op-doors"><div class="op-glow"></div><div class="op-leaf l"></div><div class="op-leaf r"><i></i></div></div>
+            <div class="op-doors"><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l"></div><div class="op-leaf r"></div><div class="op-seam"></div></div></div>
             <div class="op-tap">Touchez pour ouvrir</div>
           </div>
         </div>
@@ -673,7 +685,7 @@
   const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'}];
   const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
   const C={k:'conte',pal:'or',font:'theme',op:'env'};
-  const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent en grand'}];
+  const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
   const $=id=>document.getElementById(id);
   function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
   function opt(box,items,key,label,draw){ items.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.dataset.id=it.id||it; draw(b,it); b.onclick=()=>{ C[key]=b.dataset.id; if(key==='k') C.font='theme'; paint(); }; box.appendChild(b); }); }
@@ -714,7 +726,7 @@
   /* lecture de l'ouverture : fermee -> 'play' -> 'done' */
   const op=$('cpOp'); let opT=null;
   function closeOp(){ clearTimeout(opT); op.classList.remove('play','done'); op.dataset.type=C.op; void op.offsetWidth; }
-  function playOp(){ if(op.classList.contains('play')) return; op.classList.add('play'); opT=setTimeout(()=>op.classList.add('done'),2200); }
+  function playOp(){ if(op.classList.contains('play')) return; op.classList.add('play'); opT=setTimeout(()=>op.classList.add('done'),C.op==='door'?3300:2200); }
   function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
   op.addEventListener('click',playOp);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playOp(); } });
