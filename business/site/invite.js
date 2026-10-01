@@ -15,7 +15,7 @@
       demoNote:'Ceci est une démo : votre réponse n’est pas enregistrée.',demoDash:'Voir le tableau de bord des mariés',
       fail:'L’envoi n’a pas fonctionné. Vérifiez votre connexion et réessayez.',need:'Indiquez votre nom et votre réponse pour chaque événement.',
       privacy:'Vos réponses ne sont visibles que par les mariés et sont supprimées après le mariage.',
-      calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le',already:'Vous avez déjà répondu. Vous pouvez modifier votre réponse ci-dessous.',editT:'Pour modifier votre réponse depuis un autre téléphone, gardez ce lien :',copy:'Copier le lien',copied:'Lien copié',
+      calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le',celebr:'Les célébrations',know:'Bon à savoir',cdEnd:'Le compte à rebours a commencé',want:'Je veux ce faire-part',already:'Vous avez déjà répondu. Vous pouvez modifier votre réponse ci-dessous.',editT:'Pour modifier votre réponse depuis un autre téléphone, gardez ce lien :',copy:'Copier le lien',copied:'Lien copié',
       demoLink:'Dans votre faire-part, ce bouton ouvre votre propre lien : liste de mariage, cagnotte, album photo ou réservation d’hôtel.',
       parents:'Avec la bénédiction de leurs familles',story:'Notre histoire',program:'Le programme',dress:'Dress code',stay:'Hébergement et accès',faq:'Vos questions',
       gifts:'Liste de mariage',giftsBtn:'Voir la liste',photos:'Vos photos',photosBtn:'Partager mes photos',dayJ:'Le jour J',table:'Votre table',tableTx:'Le plan de salle sera aussi affiché à l’entrée.',site:'Ouvrir'},
@@ -27,7 +27,7 @@
       demoNote:'This is a demo: your reply is not saved.',demoDash:'See the couple’s dashboard',
       fail:'Sending failed. Please check your connection and try again.',need:'Please enter your name and a reply for each event.',
       privacy:'Only the couple can see your reply, and it is deleted after the wedding.',
-      calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before',already:'You have already replied. You can change your reply below.',editT:'To change your reply from another phone, keep this link:',copy:'Copy link',copied:'Link copied',
+      calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before',celebr:'The celebrations',know:'Good to know',cdEnd:'The countdown has begun',want:'I want this invitation',already:'You have already replied. You can change your reply below.',editT:'To change your reply from another phone, keep this link:',copy:'Copy link',copied:'Link copied',
       demoLink:'In your invitation, this button opens your own link: gift list, honeymoon fund, photo album or hotel booking.',
       parents:'Together with their families',story:'Our story',program:'The day',dress:'Dress code',stay:'Where to stay',faq:'Questions',
       gifts:'Gift list',giftsBtn:'View the list',photos:'Your photos',photosBtn:'Share my photos',dayJ:'On the day',table:'Your table',tableTx:'The seating plan will also be displayed at the entrance.',site:'Open'}
@@ -221,6 +221,63 @@
     `<div class="rv acts" style="--i:${rvI++};color:${c.tx}"><button type="button" class="b" data-rsvp style="color:${c.tx}">${ic.mail}${S.reply}</button></div>`+
     `<a class="made" href="/" target="_blank" rel="noopener" style="color:${c.ey}">${S.made} <b>SCEAU</b></a>`);
 
+  /* ---------- mise en page continue (comme un long rouleau peint) ----------
+     une grande illustration qu'on descend, qui se fond dans des fonds texturés aux couleurs du thème ;
+     entre deux parties, une guirlande à cheval sur la limite cache le changement de fond (aucune coupure) */
+  const LG=I.layout==='long'&&I.long?I.long:null;
+  function longHtml(){
+    const X=LG, sec=X.sec, R0=I.rsvp||{};
+    const nm=(k,col)=>esc(nmCss(k,col));
+    const blk=(i,inner,cls='')=>`<section class="lg-s${cls?' '+cls:''}" style="--ink:${sec[i].ink};--ac:${sec[i].accent};background-image:url('${X.base}/${sec[i].tex}')">${inner}</section>`;
+    const band=(i)=>`<div class="lg-band" aria-hidden="true"><img src="${X.base}/${X.bands[i]}" alt="" data-sp="-.10"></div>`;
+    const ttl=(t,i)=>`<h2 class="rv lg-h" style="${nm(.62,sec[i].accent)}">${esc(t)}</h2>`;
+    // 1. l'illustration d'ouverture et l'invitation
+    const P0=I.parents||null, names=`${esc(n1)} <i>&amp;</i> ${esc(n2)}`;
+    const hero=`<div class="lg-hero"><img class="lg-hero-img" src="${X.base}/${X.hero.src}" alt="" style="aspect-ratio:${X.hero.w}/${X.hero.h}">
+      <div class="lg-hero-txt" data-sp=".35" style="color:${X.hero.ink};--sh:${X.hero.shadow||'none'}">
+        ${fam&&fam.label?`<div class="greet">${esc(fam.label)}</div>`:''}
+        <div class="ey">${esc(I.intro&&I.intro.eyebrow||T.scenes[0][0])}</div>
+        <div class="lg-names" style="${nm(1.05,X.hero.ink)}">${names}</div>
+        <div class="dl"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>
+      </div><div class="hint lg-hint" style="color:${X.hero.ink}">${S.scroll} ↓</div></div>`;
+    const evs=events.map((e,i)=>{ const d=zoned(e.start,e.tz), inner=X.ev[(I.events||[]).indexOf(e)]||X.ev[i%X.ev.length];
+      const when=fmtDayShort(d,e.tz)+' · '+fmtTime(d,e.tz);
+      return `<article class="lg-ev rv">
+        <div class="lg-fr" style="aspect-ratio:${X.frame.w}/${X.frame.h}"><img class="in" src="${X.base}/${inner}" alt="" style="-webkit-mask-image:url('${X.base}/${X.frame.mask}');mask-image:url('${X.base}/${X.frame.mask}')"><img class="fr" src="${X.base}/${X.frame.src}" alt=""></div>
+        <div class="ey">${esc(e.eyebrow||'')}</div><div class="lg-evt" style="${nm(.62,sec[0].ink)}">${esc(e.title)}</div>
+        <div class="when">${esc(when)}</div>${e.place?`<div class="tx">${esc(e.place)}</div>`:''}${e.note?`<div class="tx small">${esc(e.note)}</div>`:''}
+        <div class="acts">${e.address?`<a class="b" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${S.route}</a>`:''}<button type="button" class="b" data-cal="${esc(e.id)}">${ic.cal}${S.cal}</button></div>
+      </article>`; }).join('');
+    const s1=`<div class="lg-a" style="background-image:url('${X.base}/${sec[0].tex}');--ink:${sec[0].ink};--ac:${sec[0].accent}">${hero}
+      <div class="lg-in">
+        ${P0?`<div class="rv ey">${esc(P0.eyebrow||S.parents)}</div><div class="rv lg-fams">${(P0.names||[]).map(x=>`<span>${esc(x)}</span>`).join('<i>&amp;</i>')}</div><p class="rv tx">${esc(P0.text||'')}</p>`:''}
+        <div class="rv lg-names2" style="${nm(.8,sec[0].accent)}">${names}</div>
+        <p class="rv tx">${esc(I.intro&&I.intro.text||S.joy)}</p>
+        ${I.countdown==='debut'?`<div class="rv">${cdHtml(false,sec[0].ink)}</div>`:''}
+        ${ttl(S.celebr,0)}${evs}
+      </div></div>`;
+    // 2. notre histoire, photos, dress code
+    const ST0=I.story, DR0=I.dress, phs=X.photos||[];
+    const s2=blk(1,`<div class="lg-in">${ttl(ST0&&ST0.title||S.story,1)}
+        ${ST0&&ST0.items?`<div class="rv st lg-st">${ST0.items.map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')}</div>`:''}
+      </div>
+      ${phs.length?`<div class="rv lg-ph" aria-hidden="true"><div class="lg-ph-in">${[...phs,...phs].map((u,k)=>`<img src="${X.base}/${u}" alt="" loading="lazy" style="--r:${[-3,2,-1.5,3][k%4]}deg">`).join('')}</div></div>`:''}
+      ${DR0?`<div class="lg-in">${ttl(DR0.eyebrow||S.dress,1)}${DR0.title?`<div class="rv lg-sub">${esc(DR0.title)}</div>`:''}${DR0.colors?`<div class="rv sw">${DR0.colors.map(c=>`<i style="background:${esc(c)}"></i>`).join('')}</div>`:''}<p class="rv tx">${esc(DR0.text||'')}</p></div>`:''}`);
+    // 3. bon à savoir, liste, réponse, compte à rebours
+    const infos=[...(I.infos||[]),...((I.stay&&I.stay.items)||[])];
+    const GF0=I.gifts;
+    const s3=blk(2,`<div class="lg-in">
+        ${infos.length?ttl(S.know,2)+`<div class="lg-grid">${infos.map(x=>`<div class="rv lg-it">${ic[x.icon]||ic.info}<h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div>`).join('')}</div>`:''}
+        ${GF0?ttl(GF0.eyebrow||S.gifts,2)+`<p class="rv tx">${esc(GF0.text||'')}</p>${GF0.url?`<div class="rv acts"><a class="b" ${lnk(GF0.url)}>${ic.gift}${esc(GF0.label||S.giftsBtn)}</a></div>`:''}`:''}
+        <div class="rv ey lg-gap">${esc(R0.eyebrow||S.rsvpT)}</div><div class="rv lg-sub" style="${nm(.7,sec[2].accent)}">${esc(R0.title||T.scenes[3][1])}</div>
+        ${R0.deadline?`<p class="rv tx">${S.before} ${esc(er(zoned(R0.deadline+'T23:59',TZ).toLocaleDateString(LOC,{day:'numeric',month:'long',timeZone:TZ})))}</p>`:''}
+        <div class="rv acts"><button type="button" class="b solid" data-rsvp>${ic.mail}${S.reply}</button></div>
+        ${I.countdown!=='non'?`<div class="rv ey lg-gap">${S.cdEnd}</div><div class="rv">${cdHtml(true,sec[2].ink)}</div>`:''}
+        <a class="lg-made" href="/" target="_blank" rel="noopener">${S.made} <b>SCEAU</b></a>
+      </div>`,'lg-end');
+    return `<div class="lg">${s1}${band(0)}${s2}${band(1)}${s3}</div>`;
+  }
+
   /* ---------- montage ---------- */
   const runs=[], runOf=[];
   pages.forEach((p,i)=>{ const r=runs[runs.length-1]; if(r&&r.n===p.n) r.b=i; else runs.push({n:p.n,lt:p.lt,a:i,b:i}); runOf[i]=runs.length-1; });
@@ -228,8 +285,9 @@
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app';
   app.innerHTML=`
-    <div class="bgs" id="bgs">${runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}<div class="film" id="film"></div>${pages.map(p=>`<div class="vl" style="${p.veil?'background:'+p.veil:'display:none'}"></div>`).join('')}</div>
-    <div class="sc" id="sc">${pages.map(p=>p.html).join('')}</div>
+    <div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}<div class="film" id="film"></div>${LG?'':pages.map(p=>`<div class="vl" style="${p.veil?'background:'+p.veil:'display:none'}"></div>`).join('')}</div>
+    <div class="sc${LG?' sc-long':''}" id="sc">${LG?longHtml():pages.map(p=>p.html).join('')}</div>
+    ${LG&&I.demo?`<a class="lg-want" href="/#prix">${S.want}</a>`:''}
     <canvas id="fx"></canvas>
     ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
@@ -242,7 +300,7 @@
     </div>
     <div class="flash" id="flash" aria-hidden="true"></div>
     <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
-  const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${img(1)}')`;
+  const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${LG?LG.base+'/'+LG.hero.src:img(1)}')`;
   document.body.append(bd,app);
   const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], veils=[...$('#bgs').querySelectorAll('.vl')], film=$('#film');
 
@@ -273,7 +331,7 @@
   const setBg=(L,u)=>{ if(L._u!==u){ L._u=u; L.firstElementChild.style.backgroundImage=`url('${u}')`; } };
   let ticking=false, filmOn=false;
   function frame(){
-    ticking=false;
+    ticking=false; if(LG) return;
     const h=sc.clientHeight, mid=sc.scrollTop+h/2;
     const D=secs.map(s=>(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h);   // 0 = page centrée, <0 = page encore en dessous
     let film_=null;
@@ -337,32 +395,43 @@
     const ra=at(cur), rb=at(to);
     glide(to,ra!==rb&&!!transOf(runs[ra].n,runs[rb].n));
   }
-  function settle(){ if(!opened||paging) return; const cur=sc.scrollTop, st=stops(); glide(st.reduce((b,y)=>Math.abs(y-cur)<Math.abs(b-cur)?y:b,st[0])); }
+  function settle(){ if(!opened||paging||LG) return; const cur=sc.scrollTop, st=stops(); glide(st.reduce((b,y)=>Math.abs(y-cur)<Math.abs(b-cur)?y:b,st[0])); }
   // tactile : le défilement natif est bloqué, c'est le relâcher du swipe qui lance le glissement
   let tY=null, tX=null;
   sc.addEventListener('touchstart',e=>{ tY=e.touches[0].clientY; tX=e.touches[0].clientX; },{passive:true});
-  sc.addEventListener('touchmove',e=>{ if(opened) e.preventDefault(); },{passive:false});
+  sc.addEventListener('touchmove',e=>{ if(opened&&!LG) e.preventDefault(); },{passive:false});
   sc.addEventListener('touchend',e=>{
-    if(tY===null) return; const dy=tY-e.changedTouches[0].clientY, dx=tX-e.changedTouches[0].clientX; tY=tX=null;
+    if(tY===null||LG) return; const dy=tY-e.changedTouches[0].clientY, dx=tX-e.changedTouches[0].clientX; tY=tX=null;
     if(Math.abs(dy)<32||Math.abs(dy)<Math.abs(dx)) return;   // tap ou geste horizontal : on ne bouge pas
     go(dy>0?1:-1);
   },{passive:true});
   // molette / trackpad : un geste = une page (l'inertie du trackpad ne fait pas sauter plusieurs pages)
   let lastWheel=0, wheelUsed=false;
   sc.addEventListener('wheel',e=>{
-    if(!opened) return; e.preventDefault();
+    if(!opened||LG) return; e.preventDefault();
     const now=performance.now(); if(now-lastWheel>220) wheelUsed=false; lastWheel=now;
     if(wheelUsed||paging||Math.abs(e.deltaY)<6) return;
     wheelUsed=true; go(e.deltaY>0?1:-1);
   },{passive:false});
   addEventListener('keydown',e=>{
-    if(!opened||sheet.classList.contains('on')||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')) return;
+    if(!opened||LG||sheet.classList.contains('on')||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')) return;
     if(['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); go(1); }
     else if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); go(-1); }
   });
   addEventListener('resize',()=>{ frame(); settle(); });
   // précharge les images des pages suivantes
   [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
+
+  function longStart(){
+    const rio=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('on'); rio.unobserve(en.target); } }),{root:sc,threshold:.18});
+    sc.querySelectorAll('.lg .rv').forEach(el=>rio.observe(el));
+    const sp=[...sc.querySelectorAll('[data-sp]')]; let tk=false;
+    const par=()=>{ tk=false; if(reduce) return; const vh=sc.clientHeight;
+      sp.forEach(el=>{ const r=el.parentNode.getBoundingClientRect(); if(r.bottom<-vh||r.top>2*vh) return;
+        const k=+el.dataset.sp, off=el.classList.contains('lg-hero-txt')?sc.scrollTop*k:((r.top+r.height/2)-vh/2)*k;
+        el.style.transform=el.closest('.lg-band')?`translate3d(0,calc(-50% + ${off.toFixed(1)}px),0)`:`translate3d(0,${off.toFixed(1)}px,0)`; }); };
+    sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(par); } },{passive:true}); par();
+  }
 
   /* ---------- compte à rebours ---------- */
   function tick(){
@@ -394,7 +463,7 @@
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
     if(q.soft) flash.classList.add('soft');
     if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash);
-    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; secs[0].classList.add('on'); layers[0].classList.add('on'); startFx(); setTimeout(frame,1500); },q.on);
+    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); setTimeout(frame,1500); if(LG) longStart(); },q.on);
     setTimeout(()=>op.classList.add('gone'),q.gone);
     setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1600,q.gone+1200));
   }

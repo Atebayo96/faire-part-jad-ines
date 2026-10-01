@@ -254,6 +254,9 @@ def main():
         desc = ('You are invited. Open our wedding invitation.' if lang == 'en' else 'Vous êtes invités. Ouvrez notre faire-part.')
         # scènes animées disponibles (images tirées des vidéos, voir business/tools/frames.py)
         inv['anim'] = [n for n in range(1, 5) if os.path.isdir(os.path.join(SITE, 'img', 'frames', f"{inv['theme']}-{n}"))]
+        # mise en page continue : description des images du thème (business/tools/long-assets.py)
+        if inv.get('layout') == 'long':
+            inv['long'] = json.load(open(os.path.join(B, 'landing', 'img', 'long', inv['theme'], 'meta.json')))
         # transitions filmées disponibles pour ce thème (img/trans/<theme>-<a>-<b>/)
         inv['trans'] = sorted(k[len(inv['theme'])+1:] for k in os.listdir(os.path.join(SITE, 'img', 'trans')) if k.startswith(inv['theme'] + '-')) if os.path.isdir(os.path.join(SITE, 'img', 'trans')) else []
         data = json.dumps(inv, ensure_ascii=False).replace('</', '<\\/')

@@ -1,0 +1,48 @@
+{
+ "base": "/img/long/bollywood",
+ "sec": [
+  {
+   "tex": "tex1.webp",
+   "ink": "#fff1e0",
+   "accent": "#f6c453"
+  },
+  {
+   "tex": "tex2.webp",
+   "ink": "#4a1426",
+   "accent": "#8f1d4c"
+  },
+  {
+   "tex": "tex3.webp",
+   "ink": "#fbf0dc",
+   "accent": "#f2c14e"
+  }
+ ],
+ "bands": [
+  "band1.webp",
+  "band2.webp"
+ ],
+ "ev": [
+  "ev1.webp",
+  "ev2.webp",
+  "ev3.webp"
+ ],
+ "photos": [
+  "ph1.webp",
+  "ph2.webp",
+  "ph3.webp",
+  "ph4.webp"
+ ],
+ "hero": {
+  "src": "hero.webp",
+  "w": 900,
+  "h": 3628,
+  "ink": "#6b1230",
+  "shadow": "0 1px 10px rgba(255,236,214,.7)"
+ },
+ "frame": {
+  "src": "frame.webp",
+  "mask": "frame-mask.png",
+  "w": 720,
+  "h": 1012
+ }
+}

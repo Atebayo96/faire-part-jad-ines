@@ -1,0 +1,48 @@
+{
+ "base": "/img/long/nuits",
+ "sec": [
+  {
+   "tex": "tex1.webp",
+   "ink": "#f7efdc",
+   "accent": "#e9cd8a"
+  },
+  {
+   "tex": "tex2.webp",
+   "ink": "#3b2a18",
+   "accent": "#8a5a2b"
+  },
+  {
+   "tex": "tex3.webp",
+   "ink": "#f3ead6",
+   "accent": "#e2c27a"
+  }
+ ],
+ "bands": [
+  "band1.webp",
+  "band2.webp"
+ ],
+ "ev": [
+  "ev1.webp",
+  "ev2.webp",
+  "ev3.webp"
+ ],
+ "photos": [
+  "ph1.webp",
+  "ph2.webp",
+  "ph3.webp",
+  "ph4.webp"
+ ],
+ "hero": {
+  "src": "hero.webp",
+  "w": 900,
+  "h": 3628,
+  "ink": "#f6eedb",
+  "shadow": "0 2px 14px rgba(0,0,0,.55)"
+ },
+ "frame": {
+  "src": "frame.webp",
+  "mask": "frame-mask.png",
+  "w": 720,
+  "h": 998
+ }
+}
