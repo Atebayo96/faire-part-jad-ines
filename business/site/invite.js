@@ -101,7 +101,9 @@
     const dark=opts.dark!=null?opts.dark:isDark(n), lt=T.light&&!dark;
     const c={nm:lt?T.color:'#fff',ey:lt?(T.ey||T.color):'#fff',tx:lt?(T.tx||T.color):'#fff'};
     const body=inner(c,lt);
-    pages.push({n,html:`<section class="pg${lt?' light':''}${opts.cls?' '+opts.cls:''}" data-img="${img(n)}" style="${esc(opts.style||'')}"><div class="bgw"><div class="bg" style="background-image:url('${img(n)}')"></div></div>${opts.veil?`<div class="veil" style="background:${lt?'rgba(255,253,248,.7)':'rgba(10,10,14,.5)'}"></div>`:''}${body}</section>`});
+    // le décor n'est pas dans la page : chaque page a son calque fixe, et les calques se fondent l'un dans l'autre au défilement
+    pages.push({n,layer:`<div class="bgl${lt?' light':''}"><div class="bg" style="background-image:url('${img(n)}')"></div>${opts.veil?`<div class="veil" style="background:${lt?'rgba(255,253,248,.7)':'rgba(10,10,14,.5)'}"></div>`:''}</div>`,
+      html:`<section class="pg${lt?' light':''}${opts.cls?' '+opts.cls:''}" data-img="${img(n)}" style="${esc(opts.style||'')}">${body}</section>`});
   }
   const cdHtml=(big,col)=>`<div class="cd${big?' big':''}" style="color:${col}">${['d','h','m','s'].map((u,i)=>`<div><b data-u="${u}">0</b><span>${[S.days,S.hours,S.min,S.sec][i]}</span></div>`).join('')}</div>`;
   const oval=!!T.top1, compact=!!T.compact;
@@ -163,6 +165,7 @@
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app';
   app.innerHTML=`
+    <div class="bgs" id="bgs">${pages.map(p=>p.layer).join('')}</div>
     <div class="sc" id="sc">${pages.map(p=>p.html).join('')}</div>
     <canvas id="fx"></canvas>
     ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
@@ -178,22 +181,34 @@
     <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
   const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${img(1)}')`;
   document.body.append(bd,app);
-  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')];
+  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').children];
 
   /* ---------- apparition + parallaxe ---------- */
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let opened=false;
   const io=new IntersectionObserver(es=>es.forEach(en=>{
-    if(en.isIntersecting&&en.intersectionRatio>.55){ if(opened) en.target.classList.add('on'); bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
-  }),{root:sc,threshold:[.55,.8]});
+    if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); layers[i].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
+  }),{root:sc,threshold:[.45,.8]});
   secs.forEach(s=>io.observe(s));
-  function parallax(){
-    if(reduce) return;
-    const h=sc.clientHeight, top=sc.scrollTop;
-    secs.forEach(s=>{ const off=(s.offsetTop-top)/h; if(off>-1.2&&off<1.2) s.firstElementChild.style.transform=`translateY(${(off*-9).toFixed(2)}%)`; });
+  // défilement continu, comme le faire-part d'Inès & Jad : pas de page qui s'arrête net,
+  // le décor suivant apparaît en fondu PAR-DESSUS le précédent (jamais de trait ni de trou noir),
+  // les textes de la page se fondent et glissent doucement selon sa position
+  const ease=x=>x*x*(3-2*x);
+  let ticking=false;
+  function frame(){
+    ticking=false;
+    const h=sc.clientHeight, mid=sc.scrollTop+h/2;
+    secs.forEach((s,i)=>{
+      const d=(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h;   // 0 = page centrée, <0 = page encore en dessous
+      const L=layers[i];
+      L.style.opacity=i===0?1:ease(Math.max(0,Math.min(1,1+d*1.15))).toFixed(3);
+      if(!reduce&&d>-1.3&&d<1.3) L.style.transform=`translate3d(0,${(-d*5).toFixed(2)}%,0)`;
+      if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.12)*1.9)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
+    });
   }
-  sc.addEventListener('scroll',()=>requestAnimationFrame(parallax),{passive:true});
-  parallax();
+  sc.addEventListener('scroll',()=>{ if(!ticking){ ticking=true; requestAnimationFrame(frame); } },{passive:true});
+  addEventListener('resize',frame);
+  frame();
   // précharge les images des pages suivantes
   [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
 
@@ -227,7 +242,7 @@
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
     if(q.soft) flash.classList.add('soft');
     setTimeout(()=>flash.classList.add('bloom'),q.flash);
-    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; secs[0].classList.add('on'); startFx(); },q.on);
+    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; secs[0].classList.add('on'); layers[0].classList.add('on'); startFx(); },q.on);
     setTimeout(()=>op.classList.add('gone'),q.gone);
     setTimeout(()=>{ op.remove(); flash.remove(); },Math.max(q.flash+1600,q.gone+1200));
   }

@@ -11,17 +11,20 @@ a{color:inherit}
 @media (max-width:600px){ #app{width:100vw} }
 
 /* défilement page par page */
-.sc{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}
+.sc{position:absolute;inset:0;z-index:1;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .sc::-webkit-scrollbar{display:none}
-.pg{position:relative;height:100%;min-height:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:13% 9% 0}
+.pg{position:relative;height:100%;min-height:100%;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:13% 9% 0;will-change:opacity,transform}
 .pg.tall{height:auto;min-height:100%}
-.bgw{position:absolute;inset:-6% 0;z-index:0;will-change:transform}
+/* décors : calques fixes superposés, le suivant se fond par-dessus le précédent */
+.bgs{position:absolute;inset:0;z-index:0;overflow:hidden;background:#111}
+.bgl{position:absolute;inset:-6% 0;opacity:0;will-change:opacity,transform}
+.bgl:first-child{opacity:1}
 .bg{position:absolute;inset:0;background:center/cover no-repeat;transform:scale(1.02);transition:transform 9s cubic-bezier(.2,.6,.3,1)}
-.pg.on .bg{transform:scale(1.1)}
-.pg::before{content:"";position:absolute;inset:0 0 45% 0;z-index:1;background:linear-gradient(rgba(0,0,0,.38),transparent);pointer-events:none}
-.pg.light::before{display:none}
-.pg>*:not(.bgw){position:relative;z-index:2}
-.veil{position:absolute!important;inset:0;z-index:1!important;pointer-events:none}
+.bgl.on .bg{transform:scale(1.1)}
+.bgl::after{content:"";position:absolute;left:0;right:0;top:6%;height:48%;background:linear-gradient(rgba(0,0,0,.38),transparent);pointer-events:none}
+.bgl.light::after{display:none}
+.pg>*{position:relative;z-index:2}
+.veil{position:absolute;inset:0;pointer-events:none}
 
 /* textes */
 .ey{font:500 11px/1.2 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.5)}
@@ -207,7 +210,7 @@ a{color:inherit}
 .opened .demo-tag{opacity:1}
 
 @media (prefers-reduced-motion:reduce){
-  .bg,.pg.on .bg{transition:none;transform:none}
+  .bg,.bgl.on .bg{transition:none;transform:none}
   .rv{transition:opacity .4s;transform:none}
   .hint,.op>.op-tap{animation:none}
   .rv{filter:none}

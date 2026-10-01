@@ -194,8 +194,11 @@
   .dash-cta{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;margin-top:36px;padding:24px;border:1px solid var(--line);border-radius:6px}
   .dash-cta h3{font-size:24px;margin:8px 0 6px}
   .dash-cta p{margin:0;color:var(--muted);max-width:40em}
-  .pv-demo{margin-top:18px}
-  .pv-demo[hidden]{display:none}
+  a.model{color:inherit;text-decoration:none}
+  .model .pic .cn{position:absolute;left:0;right:0;top:14px;z-index:2;text-align:center;color:#fff;font-size:24px;line-height:1.1;padding:0 10px;text-shadow:0 2px 10px rgba(0,0,0,.55);pointer-events:none}
+  .model .pic::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(rgba(0,0,0,.42),transparent 42%);pointer-events:none}
+  .car-open{display:inline-block;margin-top:8px;font:500 13px Inter,sans-serif;color:var(--ink)}
+  .car-open[hidden]{display:none}
   .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   .consent{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:14px;color:var(--muted);cursor:pointer}
   .consent input{height:auto;width:18px;height:18px;margin:2px 0 0;flex:none;accent-color:var(--ink)}
@@ -459,7 +462,7 @@
       <div class="car-stage" id="carStage"></div>
       <div class="car-nav">
         <button type="button" class="car-arrow" id="carPrev" aria-label="Thème précédent">←</button>
-        <div class="car-label" aria-live="polite"><b id="carName"></b><span id="carDesc"></span></div>
+        <div class="car-label" aria-live="polite"><b id="carName"></b><span id="carDesc"></span><a class="car-open" id="carDemo" href="#modeles" target="_blank" rel="noopener">Ouvrir la démo →</a></div>
         <button type="button" class="car-arrow" id="carNext" aria-label="Thème suivant">→</button>
       </div>
       <div class="car-dots" id="carDots"></div>
@@ -481,21 +484,11 @@
 <section id="modeles">
   <div class="wrap">
     <div class="head">
-      <h2>Douze thèmes, huit styles.</h2>
-      <p>Peinture, art déco, aquarelle, trait, pop rétro, bohème, céramique ou gravure. Chaque thème est un faire-part complet, prêt à personnaliser.</p>
+      <h2>Douze thèmes, douze démos.</h2>
+      <p>Chaque carte est un vrai faire-part à ouvrir, comme vos invités le recevront : ouverture, musique, compte à rebours, itinéraires et réponses. Ouvrez-les sur votre téléphone.</p>
     </div>
     <div class="filters" id="filters" role="group" aria-label="Filtrer par style"></div>
     <div class="models" id="models"></div>
-  </div>
-</section>
-
-<section id="demos">
-  <div class="wrap">
-    <div class="head">
-      <h2>Ouvrez une vraie démo.</h2>
-      <p>Des faire-part complets, comme vos invités les recevront : ouverture, musique, compte à rebours, itinéraires, calendrier et réponses. Ouvrez-les sur votre téléphone.</p>
-    </div>
-    <div class="demos" id="demosGrid"></div>
     <div class="dash-cta">
       <div><p class="label">Côté mariés</p><h3>Le tableau de bord des réponses</h3><p>Qui vient, à quel événement, combien de personnes, les allergies et les petits mots. Export en un clic pour le traiteur.</p></div>
       <a class="btn solid" href="/tableau/?demo=emma-louis" target="_blank" rel="noopener">Voir un exemple</a>
@@ -660,18 +653,6 @@
   </div>
 </section>
 
-<div class="pv" id="pv" role="dialog" aria-modal="true" aria-label="Aperçu du thème">
-  <button class="pv-close" id="pvClose" type="button" aria-label="Fermer">×</button>
-  <div class="pv-side">
-    <p class="label">Aperçu du thème</p>
-    <h3 id="pvTitle"></h3>
-    <p id="pvDesc"></p>
-    <div class="pv-tabs" id="pvTabs"></div>
-    <a class="btn solid pv-demo" id="pvDemo" href="#" target="_blank" rel="noopener">Ouvrir la démo complète</a>
-  </div>
-  <div class="pv-phone"><div class="pv-scroll" id="pvScroll"></div></div>
-</div>
-
 <footer>
   <div class="wrap"><span>SCEAU · Paris</span><span class="legal"><a href="/mentions-legales/">Mentions légales</a> · <a href="/cgv/">CGV</a> · <a href="/confidentialite/">Confidentialité</a></span></div>
 </footer>
@@ -698,17 +679,6 @@
   /* apercu des themes : 4 scenes par theme, textes d'exemple */
   /* 9 themes, 5 styles. font/color = typographie propre au theme ; light = fond clair (texte fonce, pas de voile) */
   const THEMES=window.SCEAU_THEMES;
-  /* demos jouables (liste injectee par build-site.py) */
-  (function(){
-    const box=document.getElementById('demosGrid'), D=window.SCEAU_DEMOS||[];
-    const OPN={env:'Enveloppe',cur:'Rideau',door:'Grandes portes'};
-    const e=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    box.innerHTML=D.map(d=>{ const t=THEMES[d.theme]||{}; const M=(window.SCEAU_MUSIC||{})[d.music]||{};
-      const tags=[d.special||OPN[d.opening], d.events+' événement'+(d.events>1?'s':''), d.families?'liens par famille':'', d.lang==='en'?'en anglais':'', M.name?'♪ '+M.name:''].filter(Boolean);
-      return `<a class="demo" href="/d/${e(d.slug)}/" target="_blank" rel="noopener"><div class="pic"><img src="${e(d.thumb)}" alt="" loading="lazy"><span class="nm" style="font-family:${e(t.font||'Great Vibes')};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:20px;':''}">${e(d.couple)}</span></div><div class="meta"><h3>${e(d.special?'Notre faire-part réel':t.name)}</h3><p>${e(tags.join(' · '))}</p></div></a>`; }).join('');
-    if(!D.length) document.getElementById('demos').hidden=true;
-  })();
-  const pv=document.getElementById('pv'), pvScroll=document.getElementById('pvScroll'), pvTabs=document.getElementById('pvTabs');
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   /* remet le defilement tout en haut (slide 1), y compris apres l'affichage de la fenetre */
   function toTop(el){ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; }); }); }
@@ -756,6 +726,7 @@
     });
     dots.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===cur));
     document.getElementById('carName').textContent=THEMES[KEYS[cur]].name;
+    { const d=(window.SCEAU_DEMOS||[]).find(x=>x.theme===KEYS[cur]&&x.slug!=='yasmine-karim'); const a=document.getElementById('carDemo'); a.hidden=!d; if(d) a.href='/d/'+d.slug+'/'; }
     { const t=THEMES[KEYS[cur]]; document.getElementById('carDesc').textContent=(t.style!==t.name?t.style+' · ':'')+t.short; }
   }
   function go(i){ cur=(i+KEYS.length)%KEYS.length; toTop(items[cur].firstChild); layout(); }
@@ -770,26 +741,19 @@
   stage.addEventListener('wheel',stopAuto,{passive:true});
   layout();
   if(!matchMedia('(prefers-reduced-motion: reduce)').matches) auto=setInterval(()=>{ if(!document.hidden) go(cur+1); },4500);
-  function showTheme(k){
-    const t=THEMES[k];
-    document.getElementById('pvTitle').textContent=t.name;
-    document.getElementById('pvDesc').textContent=t.desc;
-    press(pvTabs,k); render(pvScroll,k);
-    const dm=(window.SCEAU_DEMOS||[]).find(d=>d.theme===k&&d.slug!=='yasmine-karim'), a=document.getElementById('pvDemo');
-    a.hidden=!dm; if(dm) a.href='/d/'+dm.slug+'/';
-  }
-  tabs(pvTabs,showTheme);
-  function openTheme(k){ pv.classList.add('on'); document.body.style.overflow='hidden'; showTheme(k); }
-  function closeTheme(){ pv.classList.remove('on'); document.body.style.overflow=''; }
-  document.getElementById('pvClose').onclick=closeTheme;
-  pv.addEventListener('click',e=>{ if(e.target===pv) closeTheme(); });
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeTheme(); });
 
   /* catalogue avec filtre par style */
   const models=document.getElementById('models'), filters=document.getElementById('filters');
-  KEYS.forEach(k=>{ const t=THEMES[k]; const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style; m.tabIndex=0; m.setAttribute('role','button'); m.setAttribute('aria-label','Aperçu : '+t.name);
-    m.innerHTML=`<div class="pic"><img src="img/themes/${k}-1.webp" alt="Thème ${esc(t.name)}" loading="lazy"><img class="pic2" src="img/themes/${k}-2.webp" alt="" loading="lazy" aria-hidden="true"></div><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style)}</p><p>${esc(t.short)}.</p></div><span class="tag">Aperçu</span></div>`;
-    m.addEventListener('click',()=>openTheme(k)); m.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openTheme(k); } }); models.appendChild(m); });
+  const DEMOS=window.SCEAU_DEMOS||[], OPN={env:'Enveloppe',cur:'Rideau',door:'Grandes portes'};
+  const card=(d,t,title,style,sub,img1,img2)=>{ const M=(window.SCEAU_MUSIC||{})[d.music]||{};
+    const tags=[d.special?'':OPN[d.opening], M.name?'♪ '+M.name:'', d.lang==='en'?'en anglais':''].filter(Boolean);
+    const m=document.createElement('a'); m.className='model'; m.href='/d/'+d.slug+'/'; m.target='_blank'; m.rel='noopener'; m.dataset.theme=d.theme; m.dataset.style=style;
+    m.setAttribute('aria-label','Ouvrir la démo '+title+' : '+d.couple);
+    m.innerHTML=`<div class="pic"><img src="${esc(img1)}" alt="" loading="lazy">${img2?`<img class="pic2" src="${esc(img2)}" alt="" loading="lazy" aria-hidden="true">`:''}<span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(d.couple)}</span></div><div class="meta"><div><h3>${esc(title)}</h3><p class="style">${esc(sub)}</p><p>${esc(tags.join(' · '))}</p></div><span class="tag">Ouvrir</span></div>`;
+    models.appendChild(m); };
+  const yk=DEMOS.find(d=>d.slug==='yasmine-karim');
+  if(yk) card(yk,THEMES.nuits,'Notre faire-part réel','Peinture','Lieux réels peints et animés',yk.thumb,'');
+  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'); if(d) card(d,t,t.name,t.style,t.style,`img/themes/${k}-1.webp`,`img/themes/${k}-2.webp`); });
   const sm=document.createElement('div'); sm.className='model'; sm.dataset.style='*'; sm.innerHTML='<div class="pic"><span class="soon">Votre thème</span></div><div class="meta"><div><h3>Sur-mesure</h3><p class="style">Couture</p><p>Un univers rien qu\'à vous.</p></div></div>'; models.appendChild(sm);
   const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
   STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
