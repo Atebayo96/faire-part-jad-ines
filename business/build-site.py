@@ -284,7 +284,7 @@ def main():
     for fn in sorted(os.listdir(os.path.join(B, 'invites'))):
         inv = json.load(open(os.path.join(B, 'invites', fn), encoding='utf-8'))
         if inv.get('demo'):
-            demos.append({'slug': inv['slug'], 'theme': inv['theme'], 'couple': ' & '.join(inv['couple']), 'opening': inv.get('opening', 'env'),
+            demos.append({'slug': inv['slug'], 'theme': inv['theme'], 'couple': ' & '.join(inv['couple']), 'opening': inv.get('opening', 'env'), 'layout': inv.get('layout', 'pages'),
                           'events': len(inv['events']), 'families': bool(inv.get('families')), 'lang': inv.get('lang', 'fr'),
                           'music': inv.get('music') or T[inv['theme']].get('music'), 'thumb': f"img/themes/{inv['theme']}-2.webp"})
     p = os.path.join(SITE, 'index.html')

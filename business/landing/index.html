@@ -52,10 +52,13 @@
   nav .btn{height:38px;padding:0 16px;font-size:14px}
   @media (max-width:720px){ nav .links a:not(.btn){display:none} }
 
-  /* hero */
+  /* hero : le texte a gauche, le telephone a droite ; sur mobile, le telephone vient juste apres le titre, puis les boutons */
   .hero{padding:48px 0 72px;border-top:0}
-  .hero .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
-  @media (max-width:900px){ .hero .grid{grid-template-columns:1fr} }
+  .hero .grid{display:grid;grid-template-columns:1.2fr .8fr;grid-template-areas:"copy car" "more car";gap:0 48px;align-items:center}
+  .hero-copy{grid-area:copy;align-self:end}
+  .hero-more{grid-area:more;align-self:start}
+  .car{grid-area:car}
+  @media (max-width:900px){ .hero .grid{grid-template-columns:1fr;grid-template-areas:"copy" "car" "more";gap:0} .hero-copy{margin-bottom:28px} }
   .hero h1{font-size:clamp(48px,9vw,112px)}
   .hero p{color:var(--muted);font-size:18px;max-width:30em;margin:28px 0 0}
   .hero .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
@@ -64,26 +67,53 @@
   .facts b{display:block;font:500 28px/1 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em}
   .facts span{font-size:13px;color:var(--muted)}
 
-  .device{justify-self:center;text-align:center}
-  /* carrousel des 5 themes : le telephone du centre en avant, les voisins en retrait */
-  .car{justify-self:center;width:100%;max-width:520px;overflow:hidden;padding:8px 0 4px}
-  .car-stage{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 78%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 78%,transparent 100%)}
-  .car-stage{position:relative;height:calc(min(260px,58vw) * 19.5 / 9);touch-action:pan-y}
-  .car-item{position:absolute;left:50%;top:0;width:min(260px,58vw);aspect-ratio:9/19.5;margin-left:calc(min(260px,58vw) / -2);
-    border-radius:32px;overflow:hidden;border:7px solid #111;background:#111;box-shadow:0 30px 50px -30px rgba(0,0,0,.5);
-    transition:transform .6s cubic-bezier(.2,.7,.2,1),opacity .6s ease,filter .6s ease;cursor:pointer}
-  .car-item.on{cursor:auto}
-  .car-item:not(.on) .pv-scroll{pointer-events:none}
-  .car-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:18px}
+  /* carrousel du haut : un rail natif (glisser a gauche/droite = changer de creation, glisser vers le haut/bas = la page),
+     et dans chaque telephone un film des 4 scenes qui tourne tout seul. Rien ne defile a l'interieur du telephone. */
+  .car{--car-w:min(250px,56vw);justify-self:center;width:100%;max-width:560px;min-width:0}
+  .kinds{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;margin:0 auto 16px;width:max-content;max-width:100%}
+  .kinds button{border:0;background:transparent;color:var(--muted);font:500 13px/1 Inter,sans-serif;padding:10px 16px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .kinds button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+  .car-view{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%)}
+  .car-rail{position:relative;display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;
+    padding:10px calc(50% - var(--car-w) / 2) 16px;touch-action:pan-x pan-y;overscroll-behavior-x:contain}
+  .car-rail::-webkit-scrollbar{display:none}
+  .car-item{display:block;flex:none;width:var(--car-w);aspect-ratio:9/19.5;scroll-snap-align:center;position:relative;
+    border-radius:32px;overflow:hidden;border:7px solid #111;background:#111;box-shadow:0 30px 50px -30px rgba(0,0,0,.5);color:#fff;text-decoration:none;
+    transform:scale(.88);opacity:.55;transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .5s ease;-webkit-tap-highlight-color:transparent}
+  .car-item.on{transform:none;opacity:1}
+  .car-item[hidden]{display:none}
+  .film{position:absolute;left:0;top:0;width:100%;height:400%;display:flex;flex-direction:column;will-change:transform;transition:transform .85s cubic-bezier(.3,0,.2,1)}
+  .car-item[data-f="1"] .film{transform:translateY(-25%)}
+  .car-item[data-f="2"] .film{transform:translateY(-50%)}
+  .car-item[data-f="3"] .film{transform:translateY(-75%)}
+  .film .pv-sc{height:25%;flex:none}
+  .film .pv-sc>.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  /* faire-part en continu : un seul long tableau, que le telephone descend lentement tout seul */
+  .roll{position:absolute;inset:0;overflow:hidden}
+  .roll img{display:block;width:100%;height:auto;will-change:transform;animation:rollPan 16s cubic-bezier(.45,.05,.55,.95) infinite alternate;animation-play-state:paused}
+  .car-item.on .roll img{animation-play-state:running}
+  @keyframes rollPan{0%,6%{transform:translateY(0)}94%,100%{transform:translateY(calc(var(--car-w) * 19.5 / 9 - 14px - 100%))}}
+  .roll-txt{position:absolute;left:0;right:0;top:11%;text-align:center;padding:0 8%}
+  .roll-txt .ey{font:500 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.92}
+  .roll-txt .nm{margin:10px 0 6px;line-height:1.05}
+  .roll-txt .tx{font:italic 400 clamp(13px,1.8vh,16px)/1.35 "Cormorant Garamond",Georgia,serif}
+  @media (prefers-reduced-motion:reduce){ .roll img{animation:none} }
+  .car-tag{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:max-content;max-width:88%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:500 9.5px/1 Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;
+    color:#fff;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .4s}
+  .car-item.on .car-tag{opacity:1}
+  .car-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:6px}
   .car-arrow{width:44px;height:44px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:400 18px/1 Inter,sans-serif;cursor:pointer;flex:none}
   .car-arrow:hover{border-color:var(--ink)}
+  .car-arrow:disabled{opacity:.3;cursor:default}
   .car-label{text-align:center;min-width:0;width:220px}
   .car-label b{display:block;font:500 20px/1.2 "Inter Tight",Inter,sans-serif;letter-spacing:-.01em}
   .car-label span{display:block;font-size:13px;color:var(--muted);margin-top:4px}
   .car-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
+  .car-dots[hidden]{display:none}
   .car-dots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
   .car-dots button[aria-current="true"]{background:var(--ink);width:22px;border-radius:4px}
-  @media (prefers-reduced-motion:reduce){ .car-item{transition:none} }
+  .car-hint{text-align:center;font-size:12px;color:var(--muted);margin:14px 0 0}
+  @media (prefers-reduced-motion:reduce){ .car-item,.film{transition:none} }
 
   /* scenes */
   .rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
@@ -244,7 +274,7 @@
   .pv-tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
   .pv-close{position:absolute;top:14px;right:16px;background:none;border:0;color:var(--ink);font:300 34px/1 Inter,sans-serif;cursor:pointer}
   .pv-phone{height:min(86vh,760px);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);background:#000;flex:none}
-  .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
+  .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}
   .pv-scroll::-webkit-scrollbar{display:none}
   /* même échelle de lecture que le moteur (invite.css) : chapeaux 13 px, texte 17 px et plus, rien sous 11 px */
   .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
@@ -424,8 +454,12 @@
   @media (max-width:720px){
     section{padding:56px 0}
     .head{margin-bottom:28px}
-    .hero{padding:28px 0 48px}
-    .hero p{font-size:16px;margin-top:18px}
+    .hero{padding:24px 0 48px}
+    .hero h1{font-size:clamp(38px,11vw,48px)}
+    .hero p{font-size:16px;margin-top:16px}
+    .hero-copy{margin-bottom:22px}
+    .hero .ctas{margin-top:28px}
+    .car-hint{font-size:12px;line-height:1.4;padding:0 8px}
     .facts{margin-top:32px}
     .facts b{font-size:20px}
     .facts span{font-size:12px;line-height:1.35;display:block;margin-top:4px}
@@ -480,10 +514,26 @@
 
 <header class="hero">
   <div class="wrap grid">
-    <div>
+    <div class="hero-copy">
       <p class="label">Faire-part numériques</p>
       <h1 style="margin-top:18px">Le faire-part qui s'ouvre.</h1>
       <p>Vos lieux peints et animés, qu'on fait défiler du bout du doigt. Un seul lien sur WhatsApp, les réponses de vos invités au même endroit.</p>
+    </div>
+    <div class="car" id="car" aria-roledescription="carrousel" aria-label="Nos créations">
+      <div class="kinds" id="kinds" role="tablist" aria-label="Type de création">
+        <button type="button" role="tab" aria-selected="true" data-kind="long">En continu</button>
+        <button type="button" role="tab" aria-selected="false" data-kind="pages">Page par page</button>
+      </div>
+      <div class="car-view"><div class="car-rail" id="carRail"></div></div>
+      <div class="car-nav">
+        <button type="button" class="car-arrow" id="carPrev" aria-label="Création précédente">←</button>
+        <div class="car-label" aria-live="polite"><b id="carName"></b><span id="carDesc"></span><a class="car-open" id="carDemo" href="#modeles" target="_blank" rel="noopener">Ouvrir la démo →</a></div>
+        <button type="button" class="car-arrow" id="carNext" aria-label="Création suivante">→</button>
+      </div>
+      <div class="car-dots" id="carDots"></div>
+      <p class="car-hint" id="carHint">Un seul long tableau qu'on descend du doigt · Touchez le téléphone pour ouvrir l'exemple</p>
+    </div>
+    <div class="hero-more">
       <div class="ctas">
         <a class="btn solid" href="#commencer">Créer notre faire-part</a>
         <a class="btn" href="#continu">Voir les modèles</a>
@@ -493,15 +543,6 @@
         <div><b>0 papier</b><span>ni timbre, ni adresse</span></div>
         <div><b>FR · EN</b><span>et d'autres langues sur demande</span></div>
       </div>
-    </div>
-    <div class="car" id="car" aria-roledescription="carrousel" aria-label="Les thèmes">
-      <div class="car-stage" id="carStage"></div>
-      <div class="car-nav">
-        <button type="button" class="car-arrow" id="carPrev" aria-label="Thème précédent">←</button>
-        <div class="car-label" aria-live="polite"><b id="carName"></b><span id="carDesc"></span><a class="car-open" id="carDemo" href="#modeles" target="_blank" rel="noopener">Ouvrir la démo →</a></div>
-        <button type="button" class="car-arrow" id="carNext" aria-label="Thème suivant">→</button>
-      </div>
-      <div class="car-dots" id="carDots"></div>
     </div>
   </div>
 </header>
@@ -789,67 +830,95 @@
   /* 9 themes, 5 styles. font/color = typographie propre au theme ; light = fond clair (texte fonce, pas de voile) */
   const THEMES=window.SCEAU_THEMES;
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  /* remet le defilement tout en haut (slide 1), y compris apres l'affichage de la fenetre */
-  function toTop(el){ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; requestAnimationFrame(()=>{ el.scrollTop=0; }); }); }
   function nameStyle(t,scale){
     const sz=(t.size||1)*scale;
     return `font-family:${t.font};color:${t.color};font-size:clamp(${Math.round(34*sz)}px,${(5.2*sz).toFixed(2)}vh,${Math.round(54*sz)}px);${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.14em;font-weight:300;':''}`;
   }
-  function render(el,k){
-    const t=THEMES[k], ey=t.ey||t.color, tx=t.tx||t.color;
-    el.innerHTML=t.scenes.map((sc,i)=>{
+  /* les 4 scenes d'une creation, empilees dans un film (aucun defilement a l'interieur du telephone) */
+  function film(t,eager){
+    const ey=t.ey||t.color, tx=t.tx||t.color;
+    return '<div class="film">'+t.scenes.map((sc,i)=>{
       const [e,main,x,bt,mode]=sc, dk=mode==='dark';
       const tt=dk?Object.assign({},t,{color:'#fff'}):t, ey2=dk?'#fff':ey, tx2=dk?'#fff':tx;
       const nmTxt=main==='NAMES'?(t.stack?t.couple.split(' & ').map(esc).join('<br>&amp; '):esc(t.couple)):esc(main);
       const big=`<div class="nm" style="${esc(nameStyle(tt,main==='NAMES'?1:.78))}">${nmTxt}</div>`;
-      return `<section class="pv-sc${t.light&&!dk?' light':''}" style="background-image:url('img/themes/${k}-${i+1}.webp');${i===0&&t.top1?'padding-top:'+t.top1:''}"><div class="ey" style="color:${ey2}">${esc(e)}</div>${big}<div class="tx" style="color:${tx2}">${esc(x)}</div>${bt?`<span class="bt" style="color:${tx2};border-color:${tx2}">${esc(bt)}</span>`:''}${i===0?`<div class="pv-hint" style="color:${ey2}">Faites défiler ↓</div>`:''}</section>`;
-    }).join('');
-    toTop(el);
+      return `<div class="pv-sc${t.light&&!dk?' light':''}" style="${i===0&&t.top1?'padding-top:'+t.top1:''}"><img class="bg" src="${esc(t.img(i+1))}" alt="" width="540" height="954" decoding="async"${eager&&i===0?'':' loading="lazy"'}><div class="ey" style="color:${ey2}">${esc(e)}</div>${big}<div class="tx" style="color:${tx2}">${esc(x)}</div>${bt?`<span class="bt" style="color:${tx2};border-color:${tx2}">${esc(bt)}</span>`:''}</div>`;
+    }).join('')+'</div>';
   }
-  function tabs(box,onPick){
-    Object.entries(THEMES).forEach(([k,t])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=t.name; b.dataset.k=k; b.onclick=()=>onPick(k); box.appendChild(b); });
+
+  /* carrousel du haut : deux types de creations. « En continu » : un seul long tableau qu'on descend (3 exemples).
+     « Page par page » : nos 12 themes (une scene par ecran) et notre faire-part reel (lieux peints). Rail natif, un film par telephone. */
+  const KEYS=Object.keys(THEMES), DEMOS0=window.SCEAU_DEMOS||[];
+  const LONGS=[
+    {slug:'nour-ilyes',k:'nuits',couple:'Nour & Ilyes',ey:'Bismillah',date:'Du 8 au 10 juillet 2027 · Marrakech',ink:'#f6eedb',shadow:'0 2px 14px rgba(0,0,0,.55)',desc:'Henné, cérémonie et fête dans le désert'},
+    {slug:'ananya-rohan',k:'bollywood',couple:'Ananya & Rohan',ey:'Shubh Vivah',date:'Les 17 et 18 septembre 2027',ink:'#6b1230',shadow:'0 1px 10px rgba(255,236,214,.7)',desc:'Mehndi, mandap et sangeet'},
+    {slug:'chiara-lucas',k:'dolcevita',couple:'Chiara & Lucas',ey:'Ci sposiamo',date:'Samedi 5 juin 2027 · Ravello',ink:'#193f64',shadow:'0 1px 12px rgba(255,255,255,.8)',desc:'Aperitivo, chapelle et dîner face à la mer'}
+  ];
+  const CREAS=LONGS.map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:'En continu',font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`img/reel/long-${l.k}.webp`}); });
+  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long');
+    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`img/themes/${k}-${i}.webp`})); });
+  // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
+  CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
+    couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`img/reel/yk-${i}.webp`,
+    scenes:[["Ils se marient","NAMES","Samedi 12 juin 2027"],["Cérémonie civile","Hôtel de Ville de Nanterre","À 14h00","Itinéraire","dark"],["Réception","Le Palacio","Dès 19h · cocktail, dîner et soirée","Itinéraire","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre","dark"]]});
+  function roll(c,eager){
+    const tt={font:c.font,color:c.ink,size:c.size,italic:c.italic,upper:c.upper};
+    return `<div class="roll"><img src="${esc(c.img())}" alt="" width="540" height="2176" decoding="async"${eager?'':' loading="lazy"'}></div><div class="roll-txt" style="color:${c.ink};text-shadow:${c.shadow}"><div class="ey">${esc(c.ey)}</div><div class="nm" style="${esc(nameStyle(tt,1))}">${esc(c.couple)}</div><div class="tx">${esc(c.date)}</div></div>`;
   }
-  const press=(box,k)=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));
-  /* carrousel */
-  const KEYS=Object.keys(THEMES);
-  const stage=document.getElementById('carStage'), dots=document.getElementById('carDots');
-  let cur=0, auto=null;
-  const items=KEYS.map((k,i)=>{
-    const it=document.createElement('div'); it.className='car-item'; it.setAttribute('role','group'); it.setAttribute('aria-label',THEMES[k].name);
-    const sc=document.createElement('div'); sc.className='pv-scroll'; it.appendChild(sc); stage.appendChild(it); render(sc,k);
-    it.addEventListener('click',()=>{ if(i!==cur){ stopAuto(); go(i); } });
-    const d=document.createElement('button'); d.type='button'; d.setAttribute('aria-label',THEMES[k].name); d.onclick=()=>{ stopAuto(); go(i); }; dots.appendChild(d);
-    return it;
+  const rail=document.getElementById('carRail'), dots=document.getElementById('carDots'), kinds=document.getElementById('kinds');
+  const prevB=document.getElementById('carPrev'), nextB=document.getElementById('carNext');
+  const noMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let cur=-1, filmT=null, inView=true;
+  const items=CREAS.map((c,i)=>{
+    const it=document.createElement('a'); it.className='car-item'; it.dataset.kind=c.kind; it.dataset.f=0; it.setAttribute('aria-label','Ouvrir la démo '+c.label);
+    it.href=c.href||'#modeles'; if(c.href){ it.target='_blank'; it.rel='noopener'; }
+    it.innerHTML=(c.kind==='long'?roll(c,i<2):film(c,i<5))+`<span class="car-tag">${esc(c.tag)}</span>`;
+    it.addEventListener('click',e=>{ if(it!==items[cur]){ e.preventDefault(); center(it,true); } });
+    rail.appendChild(it); return it;
   });
-  function layout(){
-    const n=KEYS.length;
-    items.forEach((it,i)=>{
-      let d=i-cur; if(d>n/2) d-=n; if(d<-n/2) d+=n;
-      const a=Math.abs(d);
-      it.style.transform=`translateX(${d*58}%) scale(${a?0.8:1})`;
-      it.style.opacity=a>1?0:(a?0.55:1);
-      it.style.filter=a?'saturate(.8)':'none';
-      it.style.zIndex=10-a;
-      it.style.visibility=a>1?'hidden':'visible';
-      it.classList.toggle('on',a===0);
-    });
-    dots.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===cur));
-    document.getElementById('carName').textContent=THEMES[KEYS[cur]].name;
-    { const d=(window.SCEAU_DEMOS||[]).find(x=>x.theme===KEYS[cur]&&x.slug!=='yasmine-karim'); const a=document.getElementById('carDemo'); a.hidden=!d; if(d) a.href='/d/'+d.slug+'/'; }
-    { const t=THEMES[KEYS[cur]]; document.getElementById('carDesc').textContent=(t.style!==t.name?t.style+' · ':'')+t.short; }
+  const visible=()=>items.filter(it=>!it.hidden);
+  // pendant un glissement programme (fleche, point), on attend d'arriver a destination avant de suivre le rail
+  let target=null, targetT=null;
+  function center(it,smooth){
+    const sm=smooth&&!noMotion; clearTimeout(targetT); target=sm?it:null; if(sm) targetT=setTimeout(()=>{ target=null; },1200);
+    rail.scrollTo({left:it.offsetLeft-(rail.clientWidth-it.offsetWidth)/2,behavior:sm?'smooth':'auto'});
   }
-  function go(i){ cur=(i+KEYS.length)%KEYS.length; toTop(items[cur].firstChild); layout(); }
-  function stopAuto(){ if(auto){ clearInterval(auto); auto=null; } }
-  document.getElementById('carPrev').onclick=()=>{ stopAuto(); go(cur-1); };
-  document.getElementById('carNext').onclick=()=>{ stopAuto(); go(cur+1); };
-  document.getElementById('car').addEventListener('keydown',e=>{ if(e.key==='ArrowLeft'){ stopAuto(); go(cur-1); } if(e.key==='ArrowRight'){ stopAuto(); go(cur+1); } });
-  let sx=0, sy=0;
-  stage.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
-  stage.addEventListener('touchend',e=>{ const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy; if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.2){ stopAuto(); go(cur+(dx<0?1:-1)); } },{passive:true});
-  stage.addEventListener('scroll',stopAuto,{capture:true,passive:true});
-  stage.addEventListener('wheel',stopAuto,{passive:true});
-  layout();
-  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) auto=setInterval(()=>{ if(!document.hidden) go(cur+1); },4500);
+  function nearest(){ const mid=rail.scrollLeft+rail.clientWidth/2; let best=null, bd=Infinity;
+    visible().forEach(it=>{ const d=Math.abs(it.offsetLeft+it.offsetWidth/2-mid); if(d<bd){ bd=d; best=it; } }); return best; }
+  // charge les 4 scenes d'un telephone des qu'il approche du centre
+  const warm=it=>it&&it.querySelectorAll('img[loading]').forEach(im=>im.removeAttribute('loading'));
+  function startFilm(){ clearInterval(filmT); if(noMotion) return;
+    if(CREAS[cur]&&CREAS[cur].kind==='long') return;
+    filmT=setInterval(()=>{ if(document.hidden||!inView) return; const it=items[cur]; if(it) it.dataset.f=((+it.dataset.f||0)+1)%4; },2800); }
+  function setActive(it){
+    if(!it||it===items[cur]) return;
+    if(items[cur]){ items[cur].classList.remove('on'); items[cur].dataset.f=0; }
+    cur=items.indexOf(it); it.classList.add('on'); it.dataset.f=0;
+    const v=visible(), vi=v.indexOf(it); warm(it); warm(v[vi-1]); warm(v[vi+1]);
+    prevB.disabled=vi<=0; nextB.disabled=vi>=v.length-1;
+    dots.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===vi));
+    const c=CREAS[cur]; document.getElementById('carName').textContent=c.label; document.getElementById('carDesc').textContent=c.desc;
+    const a=document.getElementById('carDemo'); a.hidden=!c.href; if(c.href) a.href=c.href;
+    startFilm();
+  }
+  function go(d){ const v=visible(), i=Math.max(0,Math.min(v.length-1,v.indexOf(items[cur])+d)); center(v[i],true); setActive(v[i]); }
+  let railTick=false;
+  rail.addEventListener('scroll',()=>{ if(railTick) return; railTick=true; requestAnimationFrame(()=>{ railTick=false; const n=nearest(); if(target&&n!==target) return; target=null; setActive(n); }); },{passive:true});
+  prevB.onclick=()=>go(-1); nextB.onclick=()=>go(1);
+  document.getElementById('car').addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') go(-1); if(e.key==='ArrowRight') go(1); });
+  function showKind(kind){
+    kinds.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',b.dataset.kind===kind));
+    items.forEach(it=>{ it.hidden=it.dataset.kind!==kind; });
+    const v=visible(); dots.innerHTML=''; dots.hidden=v.length<2;
+    v.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label',CREAS[items.indexOf(it)].label); b.onclick=()=>{ center(it,true); setActive(it); }; dots.appendChild(b); });
+    document.getElementById('carHint').textContent=kind==='long'?'Un seul long tableau qu\'on descend du doigt · Glissez pour changer d\'exemple, touchez le téléphone pour l\'ouvrir':'Une scène par écran, qu\'on passe d\'un geste · Glissez pour changer de thème, touchez le téléphone pour ouvrir la démo';
+    if(items[cur]){ items[cur].classList.remove('on'); items[cur].dataset.f=0; }
+    cur=-1; center(v[0],false); setActive(v[0]);
+  }
+  kinds.addEventListener('click',e=>{ const b=e.target.closest('button[data-kind]'); if(b) showKind(b.dataset.kind); });
+  if('IntersectionObserver' in window) new IntersectionObserver(es=>{ es.forEach(en=>{ inView=en.isIntersecting; }); },{threshold:.2}).observe(rail);
+  showKind('long');
+  addEventListener('resize',()=>{ if(items[cur]) center(items[cur],false); });
 
   /* catalogue avec filtre par style */
   const models=document.getElementById('models'), filters=document.getElementById('filters');
@@ -862,7 +931,7 @@
     models.appendChild(m); };
   const yk=DEMOS.find(d=>d.slug==='yasmine-karim');
   if(yk) card(yk,THEMES.nuits,'Notre faire-part réel','Peinture','Lieux réels peints et animés',yk.thumb,'');
-  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'); if(d) card(d,t,t.name,t.style,t.style,`img/themes/${k}-1.webp`,`img/themes/${k}-2.webp`); });
+  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long'); if(d) card(d,t,t.name,t.style,t.style,`img/themes/${k}-1.webp`,`img/themes/${k}-2.webp`); });
   const sm=document.createElement('div'); sm.className='model'; sm.dataset.style='*'; sm.innerHTML='<div class="pic"><span class="soon">Votre thème</span></div><div class="meta"><div><h3>Sur-mesure</h3><p class="style">Couture</p><p>Un univers rien qu\'à vous.</p></div></div>'; models.appendChild(sm);
   const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
   STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
