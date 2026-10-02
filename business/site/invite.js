@@ -447,22 +447,17 @@
   // doucement avec lui (jamais de plein écran blanc) ; la page est déjà vivante derrière (on la voit à travers
   // l'entrebâillement, ou dès que les pans s'écartent), et le rideau / les battants s'effacent en fondu alors
   // qu'ils finissent de s'ouvrir : tout s'enchaîne, aucun temps mort sur de la lumière (voir CLAUDE.md, règle 15).
-  const SEQ={env:{flash:1000,on:1530,gone:1560},cur:{flash:0,on:320,gone:1000,cls:'soft'},door:{flash:0,on:200,gone:1950,cls:'door'},voile:{flash:0,on:150,gone:1700,cls:'door'}};
+  const SEQ={env:{flash:1000,on:1530,gone:1560},cur:{flash:0,on:320,gone:760,cls:'soft'},door:{flash:0,on:200,gone:1950,cls:'door'},voile:{flash:0,on:150,gone:1700,cls:'door'}};
   function open(){
     if(op.classList.contains('opening')) return;
-    op.classList.add('opening'); playMusic(); if(three) three.play();
+    op.classList.add('opening'); playMusic();
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
     if(q.cls) flash.classList.add(q.cls);
     if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash); else flash.classList.add('bloom');
     setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); if(LG) longStart(); },q.on);
     setTimeout(()=>op.classList.add('gone'),q.gone);
-    setTimeout(()=>{ if(three) three.dispose(); op.remove(); flash.remove(); },Math.max((q.flash||0)+1800,q.gone+1400));
+    setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1800,q.gone+1400));
   }
-  // ouverture en vrais objets 3D (open3d.js, three.js) quand WebGL est là : la version CSS reste en dessous, en secours
-  let three=null;
-  const mount3d=()=>{ const t=I.opening||'env'; if(reduce||t==='env'||!window.SceauOpen3D||opened) return;
-    three=window.SceauOpen3D.mount({op,type:t,doorUrl:`/img/open/${I.theme}-portes.webp`,curUrl:`/img/open/${I.theme}-rideau.webp`,doorBox:T.doorBox||null}); };
-  if(window.SceauOpen3D) mount3d(); else document.addEventListener('sceau3d',mount3d,{once:true});
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
 

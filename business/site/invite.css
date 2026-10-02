@@ -158,14 +158,6 @@ a{color:inherit}
 .op[data-type="voile"] .op-to{color:#4a3a24;text-shadow:0 1px 10px rgba(255,250,240,.8)}
 .op.opening .op-tap,.op.opening .op-to{opacity:0;transition:opacity .2s ease}
 
-/* ouverture 3D (open3d.js) : le canvas couvre l'ouverture ; quand il est monté (.three), l'objet CSS se cache,
-   seuls restent le monogramme et le bouton. Sans WebGL, rien ne change : la version CSS joue. */
-.op-3d{position:absolute;inset:0;width:100%;height:100%;z-index:1;display:none;pointer-events:none}
-.op.three .op-3d{display:block}
-.op.three .op-doors>*,.op.three .op-cur,.op.three .op-voile>.op-sheer{visibility:hidden}
-.op.three .op-cur .op-mono{visibility:visible;z-index:2}
-.op.three .op-voile .op-mono{position:absolute;z-index:2}
-
 /* enveloppe */
 .op-env{perspective:2400px;perspective-origin:50% 30%;transform-style:preserve-3d;background:linear-gradient(175deg,#ece3ce 0%,#e2d7bd 55%,#d6c9a9 100%)}
 .op-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(135% 105% at 30% 16%,rgba(255,253,244,.34) 0%,transparent 44%,transparent 66%,rgba(84,60,28,.22) 100%)}

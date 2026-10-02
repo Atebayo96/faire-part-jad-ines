@@ -389,13 +389,6 @@
   .op[data-type="cur"] .op-to,.op[data-type="door"] .op-to{color:#f3e2bb;text-shadow:0 1px 10px rgba(0,0,0,.7)}
   .op.opening .op-tap,.op.opening .op-to{opacity:0;transition:opacity .2s ease}
 
-  /* ouverture 3D (open3d.js), comme dans le moteur : le canvas couvre l'ouverture, l'objet CSS se cache quand elle est montée */
-  .op-3d{position:absolute;inset:0;width:100%;height:100%;z-index:1;display:none;pointer-events:none}
-  .op.three .op-3d{display:block}
-  .op.three .op-doors>*,.op.three .op-cur,.op.three .op-voile>.op-sheer{visibility:hidden}
-  .op.three .op-cur .op-mono{visibility:visible;z-index:2}
-  .op.three .op-voile .op-mono{position:absolute;z-index:2}
-
   /* enveloppe */
   .op-env{perspective:2400px;perspective-origin:50% 30%;transform-style:preserve-3d;background:linear-gradient(175deg,#ece3ce 0%,#e2d7bd 55%,#d6c9a9 100%)}
   .op-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(135% 105% at 30% 16%,rgba(255,253,244,.34) 0%,transparent 44%,transparent 66%,rgba(84,60,28,.22) 100%)}
@@ -874,7 +867,6 @@
 
 <script src="paiement.js"></script>
 <script src="themes.js"></script>
-<script type="module" src="open3d.js"></script>
 <script>window.SCEAU_DEMOS=[{"slug": "yasmine-karim", "theme": "nuits", "couple": "Yasmine & Karim", "special": "Lieux réels peints et animés", "events": 2, "music": "scheherazade", "thumb": "d/yasmine-karim/thumb.webp"}, {"slug": "alice-theo", "theme": "aquarelle", "couple": "Alice & Théo", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/aquarelle-2.webp"}, {"slug": "ananya-rohan", "theme": "bollywood", "couple": "Ananya & Rohan", "opening": "cur", "layout": "long", "events": 3, "families": true, "lang": "fr", "music": "raga", "thumb": "img/themes/bollywood-2.webp"}, {"slug": "chiara-lucas", "theme": "dolcevita", "couple": "Chiara & Lucas", "opening": "env", "layout": "long", "events": 3, "families": false, "lang": "fr", "music": "funiculi", "thumb": "img/themes/dolcevita-2.webp"}, {"slug": "chloe-nathan", "theme": "americaine", "couple": "Chloé & Nathan", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "en", "music": "marine", "thumb": "img/themes/americaine-2.webp"}, {"slug": "claire-thomas", "theme": "gravure", "couple": "Claire & Thomas", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/gravure-2.webp"}, {"slug": "emma-louis", "theme": "conte", "couple": "Emma & Louis", "opening": "voile", "layout": "pages", "events": 2, "families": true, "lang": "fr", "music": "valse", "thumb": "img/themes/conte-2.webp"}, {"slug": "giulia-hugo", "theme": "dolcevita", "couple": "Giulia & Hugo", "opening": "cur", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "funiculi", "thumb": "img/themes/dolcevita-2.webp"}, {"slug": "lena-adam", "theme": "boheme", "couple": "Léna & Adam", "opening": "cur", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/boheme-2.webp"}, {"slug": "lou-max", "theme": "pop", "couple": "Lou & Max", "opening": "cur", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "ragtime", "thumb": "img/themes/pop-2.webp"}, {"slug": "margaux-victor", "theme": "artdeco", "couple": "Margaux & Victor", "opening": "door", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "ragtime", "thumb": "img/themes/artdeco-2.webp"}, {"slug": "nour-ilyes", "theme": "nuits", "couple": "Nour & Ilyes", "opening": "door", "layout": "long", "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "img/themes/nuits-2.webp"}, {"slug": "priya-arjun", "theme": "bollywood", "couple": "Priya & Arjun", "opening": "cur", "layout": "pages", "events": 3, "families": true, "lang": "fr", "music": "raga", "thumb": "img/themes/bollywood-2.webp"}, {"slug": "salma-rayan", "theme": "nuits", "couple": "Salma & Rayan", "opening": "door", "layout": "pages", "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "img/themes/nuits-2.webp"}, {"slug": "sarah-yanis", "theme": "minimal", "couple": "Sarah & Yanis", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/minimal-2.webp"}, {"slug": "sofia-nuno", "theme": "ceramique", "couple": "Sofia & Nuno", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "funiculi", "thumb": "img/themes/ceramique-2.webp"}];</script>
 <script>
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',e=>{ document.getElementById('planSel').value=a.dataset.plan;
@@ -1165,15 +1157,11 @@
   // meme sequence que le faire-part d'Ines & Jad : ouverture, la lumiere monte, la page apparait dessous
   // enveloppe : lumiere a 1 s ; rideau, portes et voile : la lumiere part au toucher (flash:0) et monte avec le mouvement,
   // la page se voit a travers (memes valeurs que invite.js)
-  const cpFlash=$('cpFlash'), SEQ={env:{flash:1000,gone:1560},cur:{flash:0,gone:1000,cls:'soft'},door:{flash:0,gone:1950,cls:'door'},voile:{flash:0,gone:1700,cls:'door'}}; let opT2=[];
+  const cpFlash=$('cpFlash'), SEQ={env:{flash:1000,gone:1560},cur:{flash:0,gone:760,cls:'soft'},door:{flash:0,gone:1950,cls:'door'},voile:{flash:0,gone:1700,cls:'door'}}; let opT2=[];
   function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
     op.style.setProperty('--door',`url('img/open/${C.k}-portes.webp')`); op.style.setProperty('--cur',`url('img/open/${C.k}-rideau.webp')`);
-    const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth;
-    // objets 3D (open3d.js) : remontés à chaque fermeture avec les images du thème choisi
-    if(cp3d){ cp3d.dispose(); cp3d=null; }
-    if(window.SceauOpen3D&&C.op!=='env') cp3d=window.SceauOpen3D.mount({op,type:C.op,doorUrl:`img/open/${C.k}-portes.webp`,curUrl:`img/open/${C.k}-rideau.webp`,doorBox:THEMES[C.k].doorBox||null}); }
-  let cp3d=null; document.addEventListener('sceau3d',()=>{ if(!op.classList.contains('opening')) closeOp(); },{once:true});
-  function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); if(cp3d) cp3d.play(); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
+    const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth; }
+  function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
     if(!q.flash) cpFlash.classList.add('bloom');
     opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ op.classList.add('gone'); $('cpScroll').scrollTop=0; },q.gone)]; }
   function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
