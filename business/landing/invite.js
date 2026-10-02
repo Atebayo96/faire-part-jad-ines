@@ -286,16 +286,14 @@
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app';
   app.innerHTML=`
-    <div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}<div class="film" id="film"></div></div>
-    <div class="sc${LG?' sc-long':''}" id="sc">${LG?longHtml():pages.map(p=>p.html).join('')}</div>
+    <div class="sc${LG?' sc-long':''}" id="sc"><div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
     ${LG&&I.demo?`<a class="lg-want" href="/#prix">${S.want}</a>`:''}
-    <canvas id="fx"></canvas>
     ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
     <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp');--pal:${pal}${I.doormen?`;--man:url('/img/open/${I.theme}-portier.webp')`:''}">
       <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div></div></div></div>
       <div class="op-cur"><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${esc(n1[0])} &amp; ${esc(n2[0])}</div><div class="op-cur-edge"></div></div>
-      <div class="op-doors"><div class="op-room"></div><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l">${I.doormen?'<div class="op-man"></div>':''}</div><div class="op-leaf r">${I.doormen?'<div class="op-man"></div>':''}</div><div class="op-seam"></div></div></div>
+      <div class="op-doors"><div class="op-room"></div><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l">${I.doormen?'<div class="op-man"></div>':''}</div><div class="op-leaf r">${I.doormen?'<div class="op-man"></div>':''}</div></div></div>
       <div class="op-voile"><div class="op-sheer l"></div><div class="op-sheer r"></div><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${esc(n1[0])} &amp; ${esc(n2[0])}</div></div>
       ${fam&&fam.label?`<div class="op-to">${esc(fam.label)}</div>`:''}
       <div class="op-tap">${(I.opening||'env')==='env'?S.tapSeal:S.tap}</div>
@@ -304,7 +302,7 @@
     <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
   const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${LG?LG.base+'/'+LG.hero.src:img(1)}')`;
   document.body.append(bd,app);
-  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], film=$('#film');
+  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], bgs=$('#bgs'), fxc=$('#fx');
 
   /* ---------- apparition + parallaxe ---------- */
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -313,53 +311,33 @@
     if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); layers[runOf[i]].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
   }),{root:sc,threshold:[.45,.8]});
   secs.forEach(s=>io.observe(s));
-  // comme le faire-part d'Inès & Jad : pendant le glissement d'une page à l'autre,
-  // le décor suivant apparaît en fondu PAR-DESSUS le précédent (jamais de trait ni de trou noir),
-  // les textes de la page se fondent et glissent doucement selon sa position
-  const ease=x=>x*x*(3-2*x);
-  // décors animés au défilement, comme notre faire-part : 24 images tirées d'une courte vidéo de chaque scène,
-  // qui avancent et reculent avec le doigt. Chargées juste avant d'arriver sur la scène.
-  const ANIM=new Set(I.anim||[]), FR=24, frames={};
-  const frameUrl=(n,k)=>`/img/frames/${I.theme}-${n}/f${String(k+1).padStart(2,'0')}.webp`;
-  function preload(key,count,url){
-    if(frames[key]) return; const f=frames[key]={ready:false}; let ok=0;
-    for(let k=0;k<count;k++){ const im=new Image(); im.onload=im.onerror=()=>{ if(++ok===count) f.ready=true; }; im.src=url(k); }
+  /* ---------- fond continu ----------
+     Le décor n'est pas fixe derrière des pages qui glissent (l'utilisateur voyait « un changement de page, c'est
+     moche »). Il est DANS le conteneur qui défile : une bande (#bgs) avec, pour chaque suite de pages de même scène,
+     un cadre (.bgl) de la hauteur de ces pages et dedans l'image (.bg, position: sticky) à la taille d'un écran.
+     Tant que ses pages défilent, l'image reste en place ; quand la scène suivante arrive, sa propre image monte
+     avec le doigt et vient recouvrir la précédente (qui est poussée au même rythme), son bord haut fondu sur
+     OVK = 12 % d'un écran : un seul mouvement continu, le décor change sans qu'on sente une page. Aucune image
+     n'est étirée sur plusieurs écrans (jamais de zoom). Les positions sont recalculées à chaque changement de
+     taille (une page fait un écran, une page « tall » davantage). */
+  const OVK=.12;
+  function layoutStrip(){
+    const h=sc.clientHeight; fxc.style.height=h+'px'; if(LG) return;
+    const ov=Math.round(h*OVK);
+    bgs.style.height=sc.scrollHeight+'px';
+    runs.forEach((r,ri)=>{
+      const top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight, L=layers[ri], B=L.firstElementChild;
+      const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px';
+      B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
+      const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
+    });
+    frame();
   }
-  // transitions filmées d'une scène à la suivante : la caméra passe d'un décor à l'autre pendant le glissement,
-  // sans fondu ni coupure. Au repos, c'est toujours l'image d'origine en pleine définition qui est affichée.
-  const TRANS=new Set(I.trans||[]), FT=32;
-  const transUrl=(key,k)=>`/img/trans/${I.theme}-${key}/f${String(k+1).padStart(2,'0')}.webp`;
-  const transOf=(a,b)=>TRANS.has(a+'-'+b)?{key:a+'-'+b,rev:false}:TRANS.has(b+'-'+a)?{key:b+'-'+a,rev:true}:null;
-  const setBg=(L,u)=>{ if(L._u!==u){ L._u=u; L.firstElementChild.style.backgroundImage=`url('${u}')`; } };
-  let ticking=false, filmOn=false;
+  let ticking=false;
   function frame(){
     ticking=false; if(LG) return;
-    const h=sc.clientHeight, mid=sc.scrollTop+h/2;
+    const h=sc.clientHeight, y=sc.scrollTop, mid=y+h/2;
     const D=secs.map(s=>(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h);   // 0 = page centrée, <0 = page encore en dessous
-    let film_=null;
-    runs.forEach((r,ri)=>{
-      const L=layers[ri], d0=D[r.a], d1=D[r.b], nx=runs[ri+1];
-      L.style.opacity=ri===0?1:ease(Math.max(0,Math.min(1,1+d0*1.15))).toFixed(3);
-      if(!reduce&&d0>-1.3&&d1<1.3) L.style.transform=`translate3d(0,${(-(d0<0?d0:d1>0?d1:0)*3).toFixed(2)}%,0)`;
-      const tr=nx&&opened&&!reduce?transOf(r.n,nx.n):null;
-      if(tr){
-        if(d0>-2.2&&d1<1.2) preload('t'+tr.key,FT,k=>transUrl(tr.key,k));
-        if(d1>0&&d1<1) film_={tr,f:d1};
-      }
-      // sans transition filmée : la scène s'anime en partant (au repos, l'image d'origine reste nette)
-      if(!tr&&ANIM.has(r.n)&&opened&&!reduce){
-        if(d0>-2.2&&d1<1.2) preload(r.n,FR,k=>frameUrl(r.n,k));
-        const pr=Math.max(0,Math.min(1,d1/.9));
-        setBg(L,frames[r.n]&&frames[r.n].ready&&pr>0?frameUrl(r.n,Math.round(pr*(FR-1))):img(r.n));
-      }
-    });
-    // la pellicule couvre l'écran pendant le passage, et s'efface aux deux bouts sur l'image d'origine (identique)
-    const fr=film_&&frames['t'+film_.tr.key];
-    if(fr&&fr.ready){
-      const f=film_.tr.rev?1-film_.f:film_.f, k=Math.round(f*(FT-1));
-      const u=transUrl(film_.tr.key,k); if(film._u!==u){ film._u=u; film.style.backgroundImage=`url('${u}')`; }
-      film.style.opacity=Math.min(1,film_.f/.08,(1-film_.f)/.08).toFixed(3); filmOn=true;
-    } else if(filmOn){ film.style.opacity=0; filmOn=false; }
     // les textes restent lisibles pendant la plus grande partie du glissement et ne s'estompent que près du bord :
     // on ne doit pas sentir un « changement de page », seulement le décor qui change
     secs.forEach((s,i)=>{
@@ -368,7 +346,7 @@
     });
   }
   sc.addEventListener('scroll',()=>{ if(!ticking){ ticking=true; requestAnimationFrame(frame); } },{passive:true});
-  frame();
+  layoutStrip(); addEventListener('load',layoutStrip); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layoutStrip);
 
   /* ---------- pagination ----------
      Tactile : défilement natif, CONTINU. Le doigt entraîne la page, l'élan la porte, et elle se cale doucement en
@@ -376,7 +354,7 @@
      animé : l'utilisateur a refusé le swipe brusque (« comme si c'était en continu, avec des changements de décor »).
      Molette et clavier : un cran = la scène suivante, en un glissement lent qui démarre et finit en douceur ;
      une page plus haute que l'écran se lit en plusieurs crans */
-  const PAGE_DUR=1100, PAGE_DUR_FILM=1600, easePage=t=>.5-Math.cos(Math.PI*t)/2, easeFilm=t=>.5-Math.cos(Math.PI*t)/2;
+  const PAGE_DUR=1100, easePage=t=>.5-Math.cos(Math.PI*t)/2;
   let paging=false;
   function stops(){
     const h=sc.clientHeight, max=sc.scrollHeight-h, out=[];
@@ -384,13 +362,11 @@
       if(H>h*1.05){ for(let y=t+h*.85;y<t+H-h;y+=h*.85) out.push(Math.round(y)); out.push(t+H-h); } });
     return [...new Set(out.map(y=>Math.max(0,Math.min(max,Math.round(y)))))].sort((a,b)=>a-b);
   }
-  function glide(to,slow){
+  function glide(to){
     const from=sc.scrollTop; if(Math.abs(to-from)<2) return;
-    // un passage filmé d'un décor à l'autre prend un peu plus de temps, pour qu'on voie le voyage.
-    // Pendant le glissement, le snap natif est coupé : sinon il « saute » sur la page dès qu'on s'en approche
-    paging=true; sc.style.scrollSnapType='none'; const t0=performance.now(), dur=reduce?1:slow?PAGE_DUR_FILM:PAGE_DUR;
-    const ez=slow?easeFilm:easePage;
-    (function step(now){ const p=Math.min(1,(now-t0)/dur); sc.scrollTop=from+(to-from)*ez(p);
+    // pendant le glissement, le snap natif est coupé : sinon il « saute » sur la page dès qu'on s'en approche
+    paging=true; sc.style.scrollSnapType='none'; const t0=performance.now(), dur=reduce?1:PAGE_DUR;
+    (function step(now){ const p=Math.min(1,(now-t0)/dur); sc.scrollTop=from+(to-from)*easePage(p);
       if(p<1) requestAnimationFrame(step); else { paging=false; sc.style.scrollSnapType=''; } })(t0);
   }
   function go(dir){
@@ -398,9 +374,7 @@
     const cur=sc.scrollTop, st=stops();
     const to=dir>0?st.find(y=>y>cur+4):st.slice().reverse().find(y=>y<cur-4);
     if(to===undefined) return;
-    const at=y=>{ let k=0; secs.forEach((s,i)=>{ if(s.offsetTop<=y+4) k=i; }); return runOf[k]; };
-    const ra=at(cur), rb=at(to);
-    glide(to,ra!==rb&&!!transOf(runs[ra].n,runs[rb].n));
+    glide(to);
   }
   // calage : on termine le mouvement dans le sens du geste (dès 12 % de chemin parcouru), sinon vers la page la plus proche
   let lastTop=0, dir=1;
@@ -434,7 +408,7 @@
     if(['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); go(1); }
     else if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); go(-1); }
   });
-  addEventListener('resize',()=>{ frame(); settle(); });
+  addEventListener('resize',()=>{ layoutStrip(); settle(); });
   // précharge les images des pages suivantes
   [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
 
@@ -473,14 +447,14 @@
   // doucement avec lui (jamais de plein écran blanc) ; la page est déjà vivante derrière (on la voit à travers
   // l'entrebâillement, ou dès que les pans s'écartent), et le rideau / les battants s'effacent en fondu alors
   // qu'ils finissent de s'ouvrir : tout s'enchaîne, aucun temps mort sur de la lumière (voir CLAUDE.md, règle 15).
-  const SEQ={env:{flash:1000,on:1530,gone:1560},cur:{flash:0,on:320,gone:760,cls:'soft'},door:{flash:0,on:200,gone:1750,cls:'door'},voile:{flash:0,on:150,gone:1500,cls:'door'}};
+  const SEQ={env:{flash:1000,on:1530,gone:1560},cur:{flash:0,on:320,gone:760,cls:'soft'},door:{flash:0,on:200,gone:1950,cls:'door'},voile:{flash:0,on:150,gone:1700,cls:'door'}};
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
     if(q.cls) flash.classList.add(q.cls);
     if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash); else flash.classList.add('bloom');
-    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); setTimeout(frame,1500); if(LG) longStart(); },q.on);
+    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); if(LG) longStart(); },q.on);
     setTimeout(()=>op.classList.add('gone'),q.gone);
     setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1800,q.gone+1400));
   }
@@ -497,7 +471,7 @@
   function startFx(){
     const kind=I.particles||T.particles||'none'; if(kind==='none'||reduce) return;
     const cv=$('#fx'), cx=cv.getContext('2d'); let W=0,H=0,dpr=1;
-    function size(){ dpr=Math.min(2,devicePixelRatio||1); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
+    function size(){ dpr=Math.min(2,devicePixelRatio||1); cv.style.height=sc.clientHeight+'px'; W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
     size(); addEventListener('resize',size);
     // réglages par famille : nombre, taille (px, au premier plan), vitesse verticale (px/s, négatif = monte),
     // balancement, culbute (vitesse de retournement), lumineux (scintillement, halo dans le sprite)

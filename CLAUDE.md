@@ -78,6 +78,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     - **Voile** = un grand rideau **opaque** (le tissu du thème, `img/open/<thème>-rideau.webp`, coupé en deux
       pans) qui s'ouvre **par le milieu**, les pans se tassant en plis vers les bords. La version en gaze
       translucide a été refusée (« un vrai voile opaque, comme des rideaux »).
+    - **Mouvements naturels.** Un objet qui s'ouvre a un poids : il part lentement (inertie), accélère, ralentit,
+      dépasse un peu sa position et s'y repose (porte : `opDoorL/R`, dépassement à 103°) ; un tissu tiré se ramasse
+      d'abord, ondule pendant la traction (`skewY`) puis se pose (`opSheerL/R`). Jamais une courbe uniforme d'un bout
+      à l'autre : l'utilisateur trouvait les mouvements « pas naturels », « un détail qui a son importance ».
+      Portes 10 % plus lentes (2,9 s) et sans trait lumineux vertical entre les battants (retiré, « moche »).
     - **Portiers** (`doormen`) : retirés des démos (« pas ouf pour l'instant »), activables seulement avec
       `"doormen": true` dans la fiche. Les images `img/open/<thème>-portier.webp` restent.
 17. **La basmala est une calligraphie, pas une phrase.** « Bismillah » s'affiche avec la ligature `U+FDFD` (« ﷽ »)
@@ -86,8 +91,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 18. **Page par page = continu avec des changements de décor, jamais un saut.** Sur tactile, le doigt entraîne la page
     (défilement natif, élan compris) et elle se cale doucement (`scroll-snap-type: y proximity`, jamais `mandatory`,
     jamais de `preventDefault` sur le geste suivi d'un saut animé : l'utilisateur a refusé le « swipe brusque »).
-    Le décor suivant se fond par-dessus le précédent pendant tout le glissement (calques `.bgl` dans le moteur,
-    `.cp-bg` dans le configurateur), les textes restent lisibles jusqu'à |d| ≈ 0,8 et glissent avec la page.
+    Le décor est une **bande continue qui défile avec les pages** (comme le rouleau de la mise en page continue) :
+    une image par suite de pages de même scène, deux scènes voisines se chevauchent sur 30 % d'un écran et se
+    fondent par un masque en dégradé (`layoutStrip()` dans invite.js, `cpLayout()` dans le configurateur). Jamais un
+    décor fixe derrière des pages qui glissent, ni un fondu d'opacité entre décors fixes : l'utilisateur y voyait
+    encore « un changement de page, c'est moche ». Les textes restent lisibles jusqu'à |d| ≈ 0,8 et glissent avec la page.
     Molette et clavier : un glissement lent (1,1 s) qui démarre et finit en douceur. Même règle dans l'aperçu du
     configurateur (`.pv-scroll`).
 19. **Tout bloc centré l'est explicitement.** Dans la mise en page continue, `.lg-hero-txt` n'est pas une colonne
