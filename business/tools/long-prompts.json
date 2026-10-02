@@ -229,5 +229,628 @@
   "size": "1K",
   "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of two glasses of limoncello clinking above a table with lemons and majolica plates, the sea blurred behind. No faces visible. No text.",
   "ref": null
+ },
+ "chinois/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent. The top fifth is a calm plain sky where a title will be written: nothing in it but a smooth, even sky. One single continuous viewpoint and perspective from top to bottom, with only one horizon line near the top: no repeated landscape, no second horizon. The sky is a deep twilight indigo, darkening toward the very top, with a pale full moon low on one side. Below it, the curved tiled roofs of a classical Chinese pavilion with red lacquered columns and rows of red silk lanterns hanging from the eaves. In the middle, on a small arched stone bridge over a lotus and koi pond, the bride in a red and gold qipao embroidered with a phoenix and the groom in a dark silk changshan, seen from behind, side by side, under a blossoming plum tree. Lower, the courtyard with red lanterns hanging from wooden posts, peonies in porcelain pots and a round moon gate. The last tenth of the image is a red lacquered floor that fills the full width with an even deep red tone. Style: elegant traditional Chinese gongbi painting style with fine ink lines and rich mineral colours: imperial red, gold, jade and ivory. Nothing floating in the air: every lantern or decoration hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams."
+ },
+ "chinois/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone cloud and plum blossom pattern, overall colour deep imperial red #8e1b22. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "chinois/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone auspicious cloud pattern, overall colour warm rice-paper ivory #f4ead8. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "chinois/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone lattice window pattern, overall colour rich red #a3262b. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "chinois/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@chinois/hero",
+  "prompt": "A thick lush horizontal garland of plum blossom branches with small red silk lanterns hanging from them and gold tassels, spanning the entire width from the left edge to the right edge, elegant traditional Chinese gongbi painting style with fine ink lines and rich mineral colours: imperial red, gold, jade and ivory, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "chinois/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@chinois/hero",
+  "prompt": "A thick lush horizontal garland of red and pink peonies with jade leaves and gold cloud ornaments, spanning the entire width from the left edge to the right edge, elegant traditional Chinese gongbi painting style with fine ink lines and rich mineral colours: imperial red, gold, jade and ivory, isolated on a perfectly flat pure magenta background (#FF00FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "chinois/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "A round moon-gate frame in red lacquer with a thin gold border, plum blossoms climbing on one side and a small red lantern hanging at the top, front view, symmetrical, filling most of the image. The opening inside the frame and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, elegant traditional Chinese gongbi painting style with fine ink lines and rich mineral colours: imperial red, gold, jade and ivory. No text."
+ },
+ "chinois/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride in a red qipao and the groom seen from behind walking under rows of red lanterns in an old alley at dusk. No faces visible. No text."
+ },
+ "chinois/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the bride's and groom's hands serving tea in delicate porcelain cups during a tea ceremony. No faces visible. No text."
+ },
+ "chinois/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of hands holding red envelopes with gold patterns above a table with oranges. No faces visible. No text."
+ },
+ "chinois/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind on a garden bridge under plum blossoms. No faces visible. No text."
+ },
+ "chinois/scene2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@chinois/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, elegant traditional Chinese gongbi painting style with fine ink lines and rich mineral colours: imperial red, gold, jade and ivory: close-up of the bride's and groom's hands offering tea in porcelain cups on a red lacquered tray, tea ceremony. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "chinois/scene3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@chinois/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, elegant traditional Chinese gongbi painting style with fine ink lines and rich mineral colours: imperial red, gold, jade and ivory: the bride in a red qipao and the groom seen from behind standing under a round moon gate with red lanterns. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "chinois/scene4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@chinois/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, elegant traditional Chinese gongbi painting style with fine ink lines and rich mineral colours: imperial red, gold, jade and ivory: a long banquet table with red lanterns hanging above, round tables, gold and red decor, guests seen from behind at night. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "japonais/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent. The top fifth is a calm plain sky where a title will be written: nothing in it but a smooth, even sky. One single continuous viewpoint and perspective from top to bottom, with only one horizon line near the top: no repeated landscape, no second horizon. The sky is a calm, pale, almost uniform warm washi cream fading very gently to soft pink lower down. Below it, distant misty mountains with the snowy peak of Mount Fuji, then a vermilion torii gate between blossoming cherry trees. In the middle, on a stone path under the cherry blossoms, the bride in a white shiromuku kimono with a wataboshi hood and the groom in a black montsuki haori and hakama, seen from behind, walking side by side under a red wagasa parasol held by the groom. Lower, a curved wooden bridge over a stream with koi, stone lanterns and fallen petals. The last tenth of the image is plain washi paper ground in an even cream tone. Style: delicate Japanese nihonga and ukiyo-e painting style on washi paper: sakura pink, indigo, vermilion, soft gold. Nothing floating in the air: every lantern or decoration hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams."
+ },
+ "japonais/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone seigaiha wave pattern, overall colour warm washi cream #f3ece0. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "japonais/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone asanoha pattern, overall colour deep indigo #23314f. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "japonais/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone cherry blossom pattern, overall colour soft sakura pink #f3d6da. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "japonais/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@japonais/hero",
+  "prompt": "A thick lush horizontal garland of blossoming cherry branches with pink sakura flowers and buds, spanning the entire width from the left edge to the right edge, delicate Japanese nihonga and ukiyo-e painting style on washi paper: sakura pink, indigo, vermilion, soft gold, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "japonais/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@japonais/hero",
+  "prompt": "A thick lush horizontal garland of purple wisteria, white chrysanthemums and red maple leaves, spanning the entire width from the left edge to the right edge, delicate Japanese nihonga and ukiyo-e painting style on washi paper: sakura pink, indigo, vermilion, soft gold, isolated on a perfectly flat pure magenta background (#FF00FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "japonais/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "A round marumado window frame of dark lacquered wood with a cherry blossom branch crossing its top edge, front view, symmetrical, filling most of the image. The opening inside the frame and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, delicate Japanese nihonga and ukiyo-e painting style on washi paper: sakura pink, indigo, vermilion, soft gold. No text."
+ },
+ "japonais/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride in a white kimono and the groom in a black haori seen from behind walking through a red torii tunnel. No faces visible. No text."
+ },
+ "japonais/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the couple's hands holding small sake cups during the san-san-kudo ritual. No faces visible. No text."
+ },
+ "japonais/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind under cherry blossoms in full bloom by a temple. No faces visible. No text."
+ },
+ "japonais/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of hands with wedding rings resting on a folded silk furoshiki with cherry petals. No faces visible. No text."
+ },
+ "japonais/scene2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@japonais/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, delicate Japanese nihonga and ukiyo-e painting style on washi paper: sakura pink, indigo, vermilion, soft gold: close-up of the bride's and groom's hands holding red lacquered sake cups, san-san-kudo. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "japonais/scene3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@japonais/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, delicate Japanese nihonga and ukiyo-e painting style on washi paper: sakura pink, indigo, vermilion, soft gold: the bride in a white shiromuku and the groom seen from behind under a vermilion torii gate. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "japonais/scene4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@japonais/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, delicate Japanese nihonga and ukiyo-e painting style on washi paper: sakura pink, indigo, vermilion, soft gold: a ryokan garden at dusk with paper lanterns standing on the ground, low tables and guests seen from behind. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "gzhel/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent. The top fifth is a calm plain sky where a title will be written: nothing in it but a smooth, even sky. One single continuous viewpoint and perspective from top to bottom, with only one horizon line near the top: no repeated landscape, no second horizon. The sky is plain smooth white porcelain with no marks. Below it, a Russian village landscape: an onion-domed church, slender birch trees and a wooden izba house with carved window frames. In the middle, the bride in a long dress with a veil and the groom in a long coat, seen from behind, side by side in a troika sleigh drawn by three horses on a snowy road. Lower, big Gzhel roses and leaves, a frozen river and snowy firs. The last tenth of the image is plain white porcelain. Style: Russian Gzhel porcelain painting style: everything painted only in cobalt blue brush strokes of varying intensity on pure white porcelain, no other colours at all. Nothing floating in the air: every lantern or decoration hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams."
+ },
+ "gzhel/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone Gzhel floral pattern, overall colour porcelain white #f7f7f4. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "gzhel/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone Gzhel rose pattern, overall colour deep cobalt blue #1f3f96. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "gzhel/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone scattered small blue flower pattern, overall colour very pale blue white #eef2fa. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "gzhel/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@gzhel/hero",
+  "prompt": "A thick lush horizontal garland of big Gzhel roses, leaves and curling tendrils painted in cobalt blue on white porcelain, spanning the entire width from the left edge to the right edge, Russian Gzhel porcelain painting style: everything painted only in cobalt blue brush strokes of varying intensity on pure white porcelain, no other colours at all, isolated on a perfectly flat pure magenta background (#FF00FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "gzhel/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@gzhel/hero",
+  "prompt": "A thick lush horizontal garland of cobalt blue painted forget-me-nots, wheat ears and birch leaves on white porcelain, spanning the entire width from the left edge to the right edge, Russian Gzhel porcelain painting style: everything painted only in cobalt blue brush strokes of varying intensity on pure white porcelain, no other colours at all, isolated on a perfectly flat pure magenta background (#FF00FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "gzhel/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "An oval frame shaped like the rim of a white porcelain plate with a wide cobalt blue Gzhel floral border, front view, symmetrical, filling most of the image. The opening inside the frame and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, Russian Gzhel porcelain painting style: everything painted only in cobalt blue brush strokes of varying intensity on pure white porcelain, no other colours at all. No text."
+ },
+ "gzhel/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind in a snowy birch forest, she wears a white fur stole. No faces visible. No text."
+ },
+ "gzhel/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the couple's hands with wedding rings holding a white and blue Gzhel porcelain teacup. No faces visible. No text."
+ },
+ "gzhel/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of hands holding a round decorated wedding bread with a small salt cellar on an embroidered towel. No faces visible. No text."
+ },
+ "gzhel/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind walking toward an onion-domed church in winter. No faces visible. No text."
+ },
+ "gzhel/scene2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@gzhel/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, Russian Gzhel porcelain painting style: everything painted only in cobalt blue brush strokes of varying intensity on pure white porcelain, no other colours at all: close-up of the bride's and groom's hands holding a round decorated karavai wedding bread on an embroidered towel. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "gzhel/scene3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@gzhel/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, Russian Gzhel porcelain painting style: everything painted only in cobalt blue brush strokes of varying intensity on pure white porcelain, no other colours at all: the bride and groom seen from behind under snowy birch trees. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "gzhel/scene4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@gzhel/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, Russian Gzhel porcelain painting style: everything painted only in cobalt blue brush strokes of varying intensity on pure white porcelain, no other colours at all: a long festive table with a samovar, Gzhel porcelain and candles, guests seen from behind. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "asianchic/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent. The top fifth is a calm plain sky where a title will be written: nothing in it but a smooth, even sky. One single continuous viewpoint and perspective from top to bottom, with only one horizon line near the top: no repeated landscape, no second horizon. The sky is a smooth deep black-blue night sky, very dark and even. Below it, a modern minimalist pavilion with slender black lacquered columns and gold-leaf roof edges, white orchids in tall vases. In the middle, by a still dark reflecting pool with white candles standing on its stone edge, the bride in an ivory silk column gown with a long veil and the groom in a black tuxedo, seen from behind, side by side on a stone path. Lower, black bamboo, gold ginkgo leaves on the ground and polished jade stones. The last tenth of the image is a plain black lacquer floor in an even tone. Style: luxurious modern Asian chic illustration: black lacquer, gold leaf, deep jade green and ivory silk, refined, minimal, elegant. Nothing floating in the air: every lantern or decoration hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams."
+ },
+ "asianchic/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone gold leaf crackle pattern, overall colour black lacquer #15140f. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "asianchic/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone silk damask pattern, overall colour ivory silk #f2ece0. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "asianchic/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone bamboo leaf pattern, overall colour deep jade green #24564a. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "asianchic/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@asianchic/hero",
+  "prompt": "A thick lush horizontal garland of white phalaenopsis orchids with gold leaves and small jade beads, spanning the entire width from the left edge to the right edge, luxurious modern Asian chic illustration: black lacquer, gold leaf, deep jade green and ivory silk, refined, minimal, elegant, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "asianchic/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@asianchic/hero",
+  "prompt": "A thick lush horizontal garland of black bamboo stems with gold ginkgo leaves and white blossoms, spanning the entire width from the left edge to the right edge, luxurious modern Asian chic illustration: black lacquer, gold leaf, deep jade green and ivory silk, refined, minimal, elegant, isolated on a perfectly flat pure magenta background (#FF00FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "asianchic/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "A slender octagonal frame of black lacquer with fine gold-leaf edges and a single white orchid spray at one corner, front view, symmetrical, filling most of the image. The opening inside the frame and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, luxurious modern Asian chic illustration: black lacquer, gold leaf, deep jade green and ivory silk, refined, minimal, elegant. No text."
+ },
+ "asianchic/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride in an ivory silk gown and the groom in a black tuxedo seen from behind by a black reflecting pool at night with candles. No faces visible. No text."
+ },
+ "asianchic/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the couple's hands with rings resting on a black lacquer box with white orchids. No faces visible. No text."
+ },
+ "asianchic/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: two champagne glasses and gold ginkgo leaves on a black marble table. No faces visible. No text."
+ },
+ "asianchic/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind in a modern pavilion with gold light. No faces visible. No text."
+ },
+ "asianchic/scene2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@asianchic/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, luxurious modern Asian chic illustration: black lacquer, gold leaf, deep jade green and ivory silk, refined, minimal, elegant: close-up of the bride's and groom's hands with rings resting on a black lacquer tray with a white orchid. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "asianchic/scene3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@asianchic/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, luxurious modern Asian chic illustration: black lacquer, gold leaf, deep jade green and ivory silk, refined, minimal, elegant: the bride in ivory silk and the groom in a black tuxedo seen from behind beside a still reflecting pool with candles. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "asianchic/scene4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@asianchic/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, luxurious modern Asian chic illustration: black lacquer, gold leaf, deep jade green and ivory silk, refined, minimal, elegant: an elegant dinner table with black and gold tableware, white orchids and candles, guests seen from behind. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "y2k/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent. The top fifth is a calm plain sky where a title will be written: nothing in it but a smooth, even sky. One single continuous viewpoint and perspective from top to bottom, with only one horizon line near the top: no repeated landscape, no second horizon. The sky is a smooth pastel baby pink gradient, soft and even, slightly lighter at the top. Below it, a dreamy pastel city boulevard at sunset with palm trees and a glowing pink neon heart sign fixed on a building. In the middle, the bride in a short white satin slip dress and long veil and the groom in a baggy pale blue suit, seen from behind, sitting side by side in a glossy baby pink vintage convertible. Lower, daisies and pink flowers with butterflies resting on them, small chrome hearts lying on a glittery pink road. The last tenth of the image is a plain glossy baby pink ground in an even tone. Style: glossy dreamy Y2K early-2000s airbrushed illustration: pastel baby pink, lilac and baby blue with chrome silver, holographic sheen, little sparkles. Nothing floating in the air: every lantern or decoration hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams."
+ },
+ "y2k/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone tiny sparkle and heart pattern, overall colour baby pink #f6c9de. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "y2k/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone tiny star pattern, overall colour lilac #cdbdf2. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "y2k/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone tiny butterfly pattern, overall colour baby blue #bfe2f7. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "y2k/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@y2k/hero",
+  "prompt": "A thick lush horizontal garland of pink and white daisies, butterflies with holographic wings and small chrome hearts, spanning the entire width from the left edge to the right edge, glossy dreamy Y2K early-2000s airbrushed illustration: pastel baby pink, lilac and baby blue with chrome silver, holographic sheen, little sparkles, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "y2k/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@y2k/hero",
+  "prompt": "A thick lush horizontal garland of glossy chrome silver hearts, stars and pink roses, spanning the entire width from the left edge to the right edge, glossy dreamy Y2K early-2000s airbrushed illustration: pastel baby pink, lilac and baby blue with chrome silver, holographic sheen, little sparkles, isolated on a perfectly flat pure magenta background (#FF00FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "y2k/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "A glossy chrome silver heart-shaped frame with small pink rhinestones and a butterfly at the top, front view, symmetrical, filling most of the image. The opening inside the frame and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, glossy dreamy Y2K early-2000s airbrushed illustration: pastel baby pink, lilac and baby blue with chrome silver, holographic sheen, little sparkles. No text."
+ },
+ "y2k/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride in a short white satin dress and the groom in a pale blue suit seen from behind sitting in a pink vintage convertible. No faces visible. No text."
+ },
+ "y2k/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of hands with glittery pink nails and wedding rings holding a pink flip phone. No faces visible. No text."
+ },
+ "y2k/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind dancing under a disco ball with pink lights. No faces visible. No text."
+ },
+ "y2k/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of a pink frosted wedding cake with butterflies and chrome hearts. No faces visible. No text."
+ },
+ "y2k/scene2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@y2k/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, glossy dreamy Y2K early-2000s airbrushed illustration: pastel baby pink, lilac and baby blue with chrome silver, holographic sheen, little sparkles: close-up of the bride's and groom's hands with glittery nails and rings making a heart shape. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "y2k/scene3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@y2k/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, glossy dreamy Y2K early-2000s airbrushed illustration: pastel baby pink, lilac and baby blue with chrome silver, holographic sheen, little sparkles: the bride and groom seen from behind in a glossy pink convertible on a palm boulevard. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "y2k/scene4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@y2k/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, glossy dreamy Y2K early-2000s airbrushed illustration: pastel baby pink, lilac and baby blue with chrome silver, holographic sheen, little sparkles: a party dance floor with a disco ball and pink lights, the couple seen from behind dancing. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "oldmoney/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent. The top fifth is a calm plain sky where a title will be written: nothing in it but a smooth, even sky. One single continuous viewpoint and perspective from top to bottom, with only one horizon line near the top: no repeated landscape, no second horizon. The sky is a calm, pale ivory overcast sky, smooth and even. Below it, an English Georgian country manor with an ivy-covered stone facade, chimneys and tall white windows. In the middle, on the gravel drive near a vintage dark green classic car, the bride in an ivory long-sleeve silk dress and the groom in a navy suit, seen from behind, walking hand in hand toward the manor. Lower, clipped boxwood topiary, white roses, a stone fountain and a black Labrador sitting on the lawn. The last tenth of the image is a plain pale gravel ground in an even ivory tone. Style: refined classic oil painting style like an English country house portrait: muted navy, ivory, forest green and antique gold, quiet luxury. Nothing floating in the air: every lantern or decoration hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams."
+ },
+ "oldmoney/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone linen weave pattern, overall colour ivory linen #f2ecdf. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "oldmoney/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone small heraldic crest pattern, overall colour deep navy #1e2a42. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "oldmoney/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone damask pattern, overall colour forest green #2f4a36. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "oldmoney/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@oldmoney/hero",
+  "prompt": "A thick lush horizontal garland of clipped boxwood leaves, white garden roses and ivy, spanning the entire width from the left edge to the right edge, refined classic oil painting style like an English country house portrait: muted navy, ivory, forest green and antique gold, quiet luxury, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "oldmoney/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@oldmoney/hero",
+  "prompt": "A thick lush horizontal garland of laurel leaves with an antique gold ribbon and white peonies, spanning the entire width from the left edge to the right edge, refined classic oil painting style like an English country house portrait: muted navy, ivory, forest green and antique gold, quiet luxury, isolated on a perfectly flat pure magenta background (#FF00FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "oldmoney/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "A carved antique gilded wooden picture frame, classic museum style, rectangular with rounded corners, front view, symmetrical, filling most of the image. The opening inside the frame and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, refined classic oil painting style like an English country house portrait: muted navy, ivory, forest green and antique gold, quiet luxury. No text."
+ },
+ "oldmoney/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride in an ivory silk dress and the groom in a navy suit seen from behind walking on the lawn of an English country house. No faces visible. No text."
+ },
+ "oldmoney/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the couple's hands with rings holding a fountain pen above a wedding register. No faces visible. No text."
+ },
+ "oldmoney/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: a tower of champagne coupes on a white tablecloth in a garden. No faces visible. No text."
+ },
+ "oldmoney/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind leaning on a vintage green car on a gravel drive. No faces visible. No text."
+ },
+ "oldmoney/scene2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@oldmoney/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, refined classic oil painting style like an English country house portrait: muted navy, ivory, forest green and antique gold, quiet luxury: close-up of the bride's and groom's hands with rings signing a leather-bound register with a fountain pen. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "oldmoney/scene3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@oldmoney/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, refined classic oil painting style like an English country house portrait: muted navy, ivory, forest green and antique gold, quiet luxury: the bride in ivory and the groom in navy seen from behind walking in a rose garden toward a manor. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "oldmoney/scene4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@oldmoney/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, refined classic oil painting style like an English country house portrait: muted navy, ivory, forest green and antique gold, quiet luxury: a long dinner table in a marquee on a lawn with candelabras and white flowers, guests seen from behind. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "afro/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent. The top fifth is a calm plain sky where a title will be written: nothing in it but a smooth, even sky. One single continuous viewpoint and perspective from top to bottom, with only one horizon line near the top: no repeated landscape, no second horizon. The sky is a deep dusk sky, dark plum and indigo, darkening toward the very top, smooth and even. Below it, a savanna horizon with a huge baobab tree silhouetted against the last golden light. In the middle, under a wooden pavilion draped with kente and wax-print fabrics and hanging woven baskets, the bride in an emerald and gold kente gown with a tall gele headwrap and the groom in a matching agbada, seen from behind, side by side. Lower, protea and marigold flowers, clay pots, woven mats and cowrie shells. The last tenth of the image is a plain terracotta ground in an even tone. Style: vibrant contemporary African painting style with bold wax print and kente patterns: warm ochre, terracotta, emerald green, gold and indigo. Nothing floating in the air: every lantern or decoration hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams."
+ },
+ "afro/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone wax print pattern, overall colour deep terracotta #8a3b1d. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "afro/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone mudcloth bogolan pattern, overall colour warm cream #efe3cc. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "afro/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone kente stripe pattern, overall colour emerald green #1f5e46. No objects, no frame, no text, no light spots, no vignette."
+ },
+ "afro/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@afro/hero",
+  "prompt": "A thick lush horizontal garland of kente fabric ribbons with orange marigolds, pink proteas and palm fronds, spanning the entire width from the left edge to the right edge, vibrant contemporary African painting style with bold wax print and kente patterns: warm ochre, terracotta, emerald green, gold and indigo, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "afro/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "ref": "@afro/hero",
+  "prompt": "A thick lush horizontal garland of cowrie shells, colourful glass beads, gold rings and green leaves, spanning the entire width from the left edge to the right edge, vibrant contemporary African painting style with bold wax print and kente patterns: warm ochre, terracotta, emerald green, gold and indigo, isolated on a perfectly flat pure magenta background (#FF00FF) that fills everything around it, no shadow on the background, front view, crisp edges."
+ },
+ "afro/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "A carved dark wooden frame decorated with cowrie shells, colourful beads and Adinkra symbols, front view, symmetrical, filling most of the image. The opening inside the frame and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, vibrant contemporary African painting style with bold wax print and kente patterns: warm ochre, terracotta, emerald green, gold and indigo. No text."
+ },
+ "afro/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride in an emerald and gold gown with a gele headwrap and the groom in an agbada seen from behind under string lights. No faces visible. No text."
+ },
+ "afro/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the couple's hands with gold bracelets and rings holding kola nuts in a carved calabash. No faces visible. No text."
+ },
+ "afro/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind jumping over a decorated broom, guests clapping around. No faces visible. No text."
+ },
+ "afro/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "2K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of talking drums and colourful kente fabric at a wedding. No faces visible. No text."
+ },
+ "afro/scene2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@afro/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, vibrant contemporary African painting style with bold wax print and kente patterns: warm ochre, terracotta, emerald green, gold and indigo: close-up of the bride's and groom's hands with gold bracelets holding a decorated calabash. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "afro/scene3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@afro/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, vibrant contemporary African painting style with bold wax print and kente patterns: warm ochre, terracotta, emerald green, gold and indigo: the bride and groom seen from behind jumping the broom under a pavilion draped with kente. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "afro/scene4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "9:16",
+  "size": "2K",
+  "ref": "@afro/hero",
+  "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, vibrant contemporary African painting style with bold wax print and kente patterns: warm ochre, terracotta, emerald green, gold and indigo: a joyful dance under string lights with drummers, everyone seen from behind. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
  }
 }
