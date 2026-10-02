@@ -106,8 +106,9 @@
     const c={nm:lt?T.color:'#fff',ey:lt?(T.ey||T.color):'#fff',tx:lt?(T.tx||T.color):'#fff'};
     const body=inner(c,lt);
     // le décor n'est pas dans la page : un calque fixe par scène (plusieurs pages d'affilée peuvent partager la même scène,
-    // le décor reste alors en place et seul un voile apparaît sous le texte : aucune coupure)
-    pages.push({n,lt,veil:opts.veil?(lt?'rgba(255,253,248,.7)':'rgba(10,10,14,.4)'):'',
+    // le décor reste alors en place : aucune coupure). Pas de voile sombre sous le texte : il « apparaissait » au swipe
+    // sans que l'image change, l'utilisateur l'a fait retirer (voir CLAUDE.md).
+    pages.push({n,lt,
       html:`<section class="pg${lt?' light':''}${opts.cls?' '+opts.cls:''}" data-img="${img(n)}" style="${esc(opts.style||'')}">${body}</section>`});
   }
   const cdHtml=(big,col)=>`<div class="cd${big?' big':''}" style="color:${col}">${['d','h','m','s'].map((u,i)=>`<div><b data-u="${u}">0</b><span>${[S.days,S.hours,S.min,S.sec][i]}</span></div>`).join('')}</div>`;
@@ -140,18 +141,18 @@
     head(c,P.eyebrow||S.parents,'')+
     (P.names&&P.names.length?rv('fams',c.tx,P.names.map(x=>`<span>${esc(x)}</span>`).join('<i>&amp;</i>')):'')+
     rv('tx',c.tx,esc(P.text||''))+
-    rv('nm',null,`${esc(n1)} &amp; ${esc(n2)}`,esc(nmCss(.7,c.nm))),{veil:true});
+    rv('nm',null,`${esc(n1)} &amp; ${esc(n2)}`,esc(nmCss(.7,c.nm))),{});
 
   // 3. notre histoire
   const ST=I.story;
   if(ST) page(1,(c,lt)=>
     head(c,ST.eyebrow||S.story,ST.title||'',.6)+
     (ST.photos&&ST.photos.length?rv('ph',null,ST.photos.slice(0,3).map((u,k)=>`<img src="${esc(u)}" alt="" loading="lazy" style="--r:${[-4,3,-2][k]}deg">`).join('')):'')+
-    rv('st',c.tx,(ST.items||[]).map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')),{veil:true,cls:'tall'});
+    rv('st',c.tx,(ST.items||[]).map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')),{cls:'tall'});
 
   // 4. compte à rebours sur une page
   if(I.countdown==='page') page(1,(c)=>
-    head(c,S.soon,S.left,.8)+rv('',null,cdHtml(true,c.tx))+rv('dl',c.tx,`<i></i><span>${esc(fmtDay(main))}</span><i></i>`),{veil:true});
+    head(c,S.soon,S.left,.8)+rv('',null,cdHtml(true,c.tx))+rv('dl',c.tx,`<i></i><span>${esc(fmtDay(main))}</span><i></i>`),{});
 
   // 5. événements
   events.forEach((e,i)=>{
@@ -170,42 +171,42 @@
   const PR=I.program;
   if(PR) page(lastScene,(c,lt)=>
     head(c,PR.eyebrow||S.program,PR.title||'',.6)+
-    rv('card tl',c.tx,(PR.items||[]).map(x=>`<div class="it"><b>${esc(x.time)}</b><div><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+    rv('card tl',c.tx,(PR.items||[]).map(x=>`<div class="it"><b>${esc(x.time)}</b><div><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   // 7. infos pratiques, dress code, hébergement, questions, liste, photos, table : sur le décor de la réponse
   if(I.infos&&I.infos.length) page(4,(c,lt)=>
     head(c,I.infosTitle||S.infos,'')+
-    rv('card',c.tx,I.infos.map(x=>`<div class="it">${ic[x.icon]||ic.info}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+    rv('card',c.tx,I.infos.map(x=>`<div class="it">${ic[x.icon]||ic.info}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const DR=I.dress;
   if(DR) page(4,(c)=>
     head(c,DR.eyebrow||S.dress,DR.title||'',.7)+
     (DR.colors&&DR.colors.length?rv('sw',null,DR.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')):'')+
-    rv('tx',c.tx,esc(DR.text||'')),{veil:true});
+    rv('tx',c.tx,esc(DR.text||'')),{});
 
   const SY=I.stay;
   if(SY) page(4,(c,lt)=>
     head(c,SY.eyebrow||S.stay,SY.title||'',.6)+
-    rv('card',c.tx,(SY.items||[]).map(x=>`<div class="it">${ic[x.icon]||ic.hotel}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+    rv('card',c.tx,(SY.items||[]).map(x=>`<div class="it">${ic[x.icon]||ic.hotel}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const FQ=I.faq;
   if(FQ) page(4,(c,lt)=>
     head(c,FQ.eyebrow||S.faq,FQ.title||'',.6)+
-    rv('card qa',c.tx,(FQ.items||[]).map(x=>`<div class="it"><div><h4>${esc(x.q)}</h4><p>${esc(x.a)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+    rv('card qa',c.tx,(FQ.items||[]).map(x=>`<div class="it"><div><h4>${esc(x.q)}</h4><p>${esc(x.a)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const GF=I.gifts;
   if(GF) page(4,(c)=>
     head(c,GF.eyebrow||S.gifts,GF.title||'',.7)+rv('tx',c.tx,esc(GF.text||''))+
-    (GF.url?rv('acts',c.tx,`<a class="b" ${lnk(GF.url)}>${ic.gift}${esc(GF.label||S.giftsBtn)}</a>`):''),{veil:true});
+    (GF.url?rv('acts',c.tx,`<a class="b" ${lnk(GF.url)}>${ic.gift}${esc(GF.label||S.giftsBtn)}</a>`):''),{});
 
   const PH=I.photos;
   if(PH) page(4,(c)=>
     head(c,PH.eyebrow||S.photos,PH.title||'',.7)+rv('tx',c.tx,esc(PH.text||''))+
-    (PH.url?rv('acts',c.tx,`<a class="b" ${lnk(PH.url)}>${ic.cam}${esc(PH.label||S.photosBtn)}</a>`):''),{veil:true});
+    (PH.url?rv('acts',c.tx,`<a class="b" ${lnk(PH.url)}>${ic.cam}${esc(PH.label||S.photosBtn)}</a>`):''),{});
 
   // la table n'apparaît que sur le lien personnel d'une famille qui a une table
   if(fam&&fam.table) page(4,(c)=>
-    head(c,S.dayJ,S.table,.7)+rv('tbl',c.tx,esc(fam.table))+rv('tx',c.tx,esc(I.tableText||S.tableTx)),{veil:true});
+    head(c,S.dayJ,S.table,.7)+rv('tbl',c.tx,esc(fam.table))+rv('tx',c.tx,esc(I.tableText||S.tableTx)),{});
 
   // 8. réponse
   const R=I.rsvp||{};
@@ -283,7 +284,7 @@
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app';
   app.innerHTML=`
-    <div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}<div class="film" id="film"></div>${LG?'':pages.map(p=>`<div class="vl" style="${p.veil?'background:'+p.veil:'display:none'}"></div>`).join('')}</div>
+    <div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}<div class="film" id="film"></div></div>
     <div class="sc${LG?' sc-long':''}" id="sc">${LG?longHtml():pages.map(p=>p.html).join('')}</div>
     ${LG&&I.demo?`<a class="lg-want" href="/#prix">${S.want}</a>`:''}
     <canvas id="fx"></canvas>
@@ -300,7 +301,7 @@
     <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
   const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${LG?LG.base+'/'+LG.hero.src:img(1)}')`;
   document.body.append(bd,app);
-  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], veils=[...$('#bgs').querySelectorAll('.vl')], film=$('#film');
+  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], film=$('#film');
 
   /* ---------- apparition + parallaxe ---------- */
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -358,7 +359,6 @@
     } else if(filmOn){ film.style.opacity=0; filmOn=false; }
     secs.forEach((s,i)=>{
       const d=D[i];
-      if(pages[i].veil) veils[i].style.opacity=Math.max(0,Math.min(1,(1-Math.abs(d))*1.6)).toFixed(3);
       if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.12)*1.9)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
     });
   }

@@ -247,11 +247,8 @@
   .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
   .pv-scroll::-webkit-scrollbar{display:none}
   /* même échelle de lecture que le moteur (invite.css) : chapeaux 13 px, texte 17 px et plus, rien sous 11 px */
-  .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff;--halo:rgba(8,8,14,.5)}
-  .pv-sc.light{--halo:rgba(255,253,248,.74)}
-  /* halo de lisibilité local derrière le bloc de texte, comme dans le moteur */
-  .pv-sc::before{content:"";position:absolute;left:-15%;right:-15%;top:-4%;height:72%;pointer-events:none;background:radial-gradient(ellipse 74% 72% at 50% 30%,var(--halo) 0%,transparent 74%)}
-  .pv-sc:first-child::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16%;pointer-events:none;background:linear-gradient(transparent,var(--halo))}
+  .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
+  /* comme dans le moteur : pas de halo sombre derrière le texte (il traçait une ligne entre deux pages au glissement) */
   .pv-sc.light .ey,.pv-sc.light .nm,.pv-sc.light .tx,.pv-sc.light .bt,.pv-sc.light .pv-hint{text-shadow:none}
   .pv-sc.light .bt{background:transparent;backdrop-filter:none}
   .pv-sc>*{position:relative}
@@ -301,7 +298,6 @@
   .cd span{font:500 11px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
   .cd.big{gap:18px;margin-top:26px}
   .cd.big b{font-size:42px}
-  .cd-veil{position:absolute;inset:0;pointer-events:none}
   .chip.x{font-size:12px;padding:8px 12px}
   .pv-card{position:relative;width:100%;max-width:260px;margin-top:20px;padding:6px 12px;text-align:left;font:400 15px/1.4 "Cormorant Garamond",Georgia,serif;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
   .pv-card div{display:grid;grid-template-columns:44px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid rgba(127,127,127,.3)}
@@ -311,7 +307,6 @@
   .pv-sws{position:relative;display:flex;gap:10px;margin:16px 0 14px}
   .pv-sws i{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.75)}
   .pv-fam{position:relative;font:500 17px/1.35 "Cormorant Garamond",Georgia,serif;margin:14px 0 10px}
-  .pv-sc>.cd-veil{position:absolute}
   .cp-dl{display:flex;align-items:center;gap:12px;margin-top:16px;font:500 17px/1.2 "Cormorant Garamond",Georgia,serif}
   .cp-dl i{display:block;width:26px;height:1px;background:currentColor;opacity:.75}
   .cp-phone .pv-hint{z-index:1}
@@ -930,16 +925,16 @@
       pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc(`background-image:url('img/seals/${SEAL[0]}.webp')`)}"><b style="${esc(`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`)}">${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}</b></div>`}<div class="ey" style="color:${c.ey}">${esc(t.scenes[0][0])}</div><div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}<div class="cp-dl" style="color:${pg.lt?p.c:'#fff'}"><i></i><span>${esc(ds)}</span><i></i></div>${C.cd==='debut'?cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':''):''}<div class="pv-hint" style="color:${c.ey}">Faites défiler ↓</div>`)); }
     const scene=(idx,withCd)=>{ const [e,main,x,bt,mode]=t.scenes[idx]; const pg=page(idx+1,mode);
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?`<span class="bt" style="color:${c.tx};border-color:${c.tx}">${esc(bt)}</span>`:''}`); };
-    // écrans en option (contenu d'exemple), sur le décor de la scène voisine avec un voile
+    // écrans en option (contenu d'exemple), sur le décor de la scène voisine, sans voile (comme le moteur)
     const xp=(id,img,mode,inner)=>{ if(!C.x.has(id)) return; const pg=page(img,mode);
-      pages.push(pg.html(c=>`<div class="cd-veil" style="background:${pg.lt?'rgba(255,253,248,.66)':'rgba(10,10,15,.4)'}"></div>`+inner(c,pg.lt)).replace('<section ',`<section data-x="${id}" `)); };
+      pages.push(pg.html(c=>inner(c,pg.lt)).replace('<section ',`<section data-x="${id}" `)); };
     const card=(c,lt,rows,one)=>`<div class="pv-card${one?' one':''}" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${rows.map(r=>`<div>${r[0]?`<b>${r[0]}</b>`:''}<span>${r[1]}</span></div>`).join('')}</div>`;
     const hd=(c,ey,title)=>`<div class="ey" style="color:${c.ey};position:relative">${ey}</div>`+(title?`<div class="nm" style="${esc(nmCss(base*.62,c.nm))};position:relative">${title}</div>`:'');
     xp('parents',1,'',c=>hd(c,'Avec leurs familles','')+`<div class="pv-fam" style="color:${c.tx}">Famille Martin &amp; Famille Bernard</div><div class="tx" style="color:${c.tx};position:relative">ont la joie de vous convier au mariage de leurs enfants</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
     xp('story',1,'',(c,lt)=>hd(c,'Notre histoire','Il était une fois')+card(c,lt,[['2018','La rencontre, un jeudi soir'],['2022','Le premier appartement'],['2026','La demande, sous les tilleuls']]));
     pages.push(scene(1,false));
     // page dediee au compte a rebours
-    if(C.cd==='page'){ const pg=page(1,''); pages.push(pg.html(c=>`<div class="cd-veil" style="background:${pg.lt?'rgba(255,253,248,.62)':'rgba(10,10,15,.45)'}"></div><div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
+    if(C.cd==='page'){ const pg=page(1,''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
     pages.push(scene(2,false));
     xp('program',3,t.scenes[2][4],(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,[['15h00','La cérémonie'],['17h00','Vin d’honneur'],['19h30','Le dîner'],['23h00','On danse']]));
     const m4=t.scenes[3][4];

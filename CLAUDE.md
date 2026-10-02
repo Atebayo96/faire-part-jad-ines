@@ -11,11 +11,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 
 1. **Contraste mesuré, jamais supposé.** Tout texte posé sur une image ou une couleur doit atteindre un rapport
    de contraste WCAG d'au moins **4,5:1** sur le fond réel (le plus clair ou le plus sombre de la zone, pas la moyenne).
-   Un texte blanc sur un ciel pastel, de l'or sur du beige, du gris clair sur du blanc : interdit sans halo.
+   Un texte blanc sur un ciel pastel, de l'or sur du beige, du gris clair sur du blanc : interdit.
    Vérifier avec `python3 business/tools/check_images.py` pour les décors de scènes.
-2. **Un halo, pas un voile.** Quand l'image ne donne pas le contraste, on ajoute un **halo local** derrière le bloc de
-   texte (`.pg::before` dans invite.css, variable `--halo`), sombre sur les scènes sombres, crème sur les thèmes clairs.
-   Jamais de voile plein écran qui éteint l'image (l'utilisateur l'a fait retirer).
+2. **Ni voile, ni halo dans la page.** L'utilisateur a fait retirer le voile plein écran qui éteignait l'image, puis le
+   halo local derrière le bloc de texte (`.pg::before`) : coupé au bord de la page par `overflow:hidden`, il traçait une
+   ligne sombre qui séparait les deux pages pendant le glissement. Rien de sombre ne doit être posé **dans** une page
+   (tout ce qui est dans `.pg` glisse avec elle et se coupe à son bord). La lisibilité vient de l'image (règles 6 et 7)
+   et des ombres portées des textes ; si ça ne suffit pas, on refait l'image.
 3. **Rien sous 11 px.** Échelle unique (variables `--fs-*` dans invite.css, reprises dans l'aperçu de la vitrine) :
    chapeaux 13 px, texte courant 18 px et plus, horaires 17 px et plus, boutons 12,5 px, mentions 11,5 px.
    L'aperçu de la vitrine et le configurateur doivent afficher **les mêmes tailles** que le vrai faire-part.
@@ -34,7 +36,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
    explicitement, et `check_images.py` le vérifie (agitation < 8, contraste ≥ 4,5 sur le pire quart de la zone).
 7. **Le contraste est dans l'image.** Thèmes sombres : la zone de texte est **sombre** (ciel de nuit, pénombre), pas
    un couchant pastel. Thèmes clairs : la zone de texte est **claire et unie** (papier, crème), le texte est de couleur
-   foncée. Le halo CSS est un filet de sécurité, pas la solution.
+   foncée. Il n'y a plus de filet de sécurité en CSS : une image qui ne porte pas son texte est refaite.
 8. **Images d'aperçu (og.jpg) et vignettes** : mêmes règles, le texte se pose sur une bande calme et contrastée.
 9. **Personnes et scènes « vraies » (vitrine, étapes, témoignages)** : soit de **vraies photos libres de droits**
    (Unsplash, Pexels, licence vérifiée et notée dans `business/landing/music/CREDITS.md` ou un `CREDITS.md` d'images),
@@ -53,7 +55,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
     questions : *est-ce lisible sans effort ? est-ce aéré ? le texte est-il sur une zone calme ?*
-13. Une seule source pour chaque réglage visuel : l'échelle de texte et les halos sont définis dans `invite.css`
+13. Une seule source pour chaque réglage visuel : l'échelle de texte est définie dans `invite.css`
     et recopiés tels quels dans l'aperçu de la vitrine. Toute nouvelle taille ou marge passe par une variable.
 14. Les règles de design apprises sont écrites ici, pas seulement appliquées. Un retour de l'utilisateur sur un
     écran est un retour sur **le pattern** : on corrige partout où il se produit, pas seulement sur l'écran montré.

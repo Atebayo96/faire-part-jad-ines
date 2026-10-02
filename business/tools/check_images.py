@@ -8,7 +8,7 @@ là où le moteur (invite.js) pose le chapeau, les prénoms, la phrase et la dat
     une façade ou des fleurs dans la zone dépassent 8.
   - contraste : rapport WCAG entre la couleur du texte du thème (blanc sur les thèmes sombres, t.color sur les clairs)
     et la zone, mesuré sur le fond LE PLUS DÉFAVORABLE (le quart des pixels le plus proche de la couleur du texte).
-    Objectif : 4,5 (texte courant) ; en dessous de 3, le texte ne tient que par le halo CSS.
+    Objectif : 4,5 (texte courant) ; en dessous de 3, le texte ne tient plus (il n'y a plus de halo CSS).
 
 Usage : python3 business/tools/check_images.py [--dir business/landing/img/hd] [--json]
 Sortie : un tableau par thème et par scène, et la liste des images à refaire. Code de sortie 1 s'il y a des échecs.
@@ -22,7 +22,7 @@ B = os.path.join(ROOT, 'business')
 ZONE = (.10, .10, .90, .55)      # x0, y0, x1, y1 en fraction de l'image
 AGIT_MAX = 8.0                  # au-delà : fond trop chargé pour y poser du texte
 CONTRAST_MIN = 4.5              # WCAG AA texte courant
-CONTRAST_WARN = 3.0             # en dessous : illisible sans halo
+CONTRAST_WARN = 3.0             # en dessous : illisible
 
 
 def themes():
@@ -91,9 +91,9 @@ def main():
             if r['agitation'] > AGIT_MAX:
                 r['issues'].append('zone de texte chargée')
             if r['contrast'] < CONTRAST_WARN:
-                r['issues'].append('contraste insuffisant même avec halo')
+                r['issues'].append('contraste insuffisant')
             elif r['contrast'] < CONTRAST_MIN:
-                r['issues'].append('contraste faible (le halo CSS est nécessaire)')
+                r['issues'].append('contraste faible (plus de halo CSS : image à refaire)')
             rows.append(r)
             if r['issues']:
                 fails.append(r)
