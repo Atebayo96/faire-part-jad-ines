@@ -69,9 +69,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 
 ## Ouvertures : tout s'enchaîne, jamais de temps mort sur la lumière
 
-15. **La lumière part au toucher, en même temps que le mouvement, et la page est déjà là derrière.** Rideau,
-    portes et voile : au toucher, le geste commence lentement ET la lumière commence à monter (`flash: 0` dans
-    `SEQ`, l'utilisateur a refusé qu'elle n'arrive qu'une fois les portes ou le rideau déjà en mouvement) ; elle
+15. **La lumière arrive avec l'entrebâillement, et la page est déjà là derrière.** Rideau : la lumière part au
+    toucher (`flash: 0`). Portes et voile : l'utilisateur a d'abord refusé une lumière qui n'arrivait qu'une fois les
+    battants bien ouverts, puis une lumière qui partait « presque au clic, c'est pas ouf, faut attendre un petit
+    peu » : elle part quand les battants ou les pans s'entrouvrent (`flash: 500` portes, `flash: 400` voile, lueur
+    `opGlow` à 0,5 s) ; elle
     grandit avec l'ouverture (pic à mi-course : `.flash.door` 0,45 à 1,4 s, `.flash.soft` 0,75 à 0,9 s), jamais un
     écran blanc. La page est montée tout de suite (`on` ≈ 150–320 ms) et se voit à travers l'entrebâillement ; les
     battants, le rideau ou les pans s'effacent pendant qu'ils finissent de s'ouvrir. L'utilisateur a aussi refusé
@@ -81,6 +83,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     - **Voile** = un grand rideau **opaque** (le tissu du thème, `img/open/<thème>-rideau.webp`, coupé en deux
       pans) qui s'ouvre **par le milieu**, les pans se tassant en plis vers les bords. La version en gaze
       translucide a été refusée (« un vrai voile opaque, comme des rideaux »).
+      Le mouvement est **un seul geste** sur une seule courbe (`opSheerL/R`, `scale` + `translate`), l'ondulation du
+      tissu étant une animation à part (`opWaveL/R`, `skewY`) : la version en étapes (petit recul vers le centre puis
+      ouverture, chaque étape freinant à zéro) « se fait en 2 parties, le mouvement n'est pas fluide ». Pans effacés
+      à 1,5 s (fondu 0,8 s).
     - **Pas d'objets 3D.** Une version three.js (portes épaisses sur gonds, tissus maillés à plis, ressort amorti) a été
       construite et mise en ligne, puis refusée par l'utilisateur (« j'aime pas trop, reviens sur ce qu'on avait
       avant ») : commits annulés. Les ouvertures restent en CSS (images du thème, transformations et courbes
