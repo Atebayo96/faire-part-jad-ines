@@ -17,6 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&family=Cinzel+Decorative:wght@400&family=Aref+Ruqaa&family=Italiana&family=Limelight&family=Parisienne&family=Jost:wght@300;400&family=Shrikhand&family=DM+Serif+Display:ital@0;1&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="reveal.css">
 <style>
   /* Direction : galerie blanche. Noir, blanc, gris. Une seule famille sans-serif.
      Pas de dore, pas de creme, pas de serif : c'est le produit (les scenes peintes) qui apporte la couleur. */
@@ -113,6 +114,23 @@
   @media (max-width:900px){ .people figure:first-child img{aspect-ratio:16/10;height:auto} }
   .people figcaption{margin-top:14px;color:var(--muted);font-size:15px;line-height:1.5}
   .people figcaption b{display:block;color:var(--ink);font:500 20px/1.2 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em;margin-bottom:6px}
+
+  /* la date a decouvrir */
+  .jeux{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+  @media (max-width:900px){ .jeux{grid-template-columns:1fr;max-width:420px;margin:0 auto} }
+  .jeux figure{margin:0;min-width:0}
+  .jeu-sc{position:relative;aspect-ratio:4/5;border-radius:6px;overflow:hidden;background:#222 center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8% 6%;color:#fff}
+  .jeu-sc::before{content:"";position:absolute;inset:0;background:rgba(10,10,15,.32)}
+  .jeu-sc.light::before{background:rgba(255,253,248,.55)}
+  .jeu-sc>*{position:relative}
+  .jeu-sc .ey{font:500 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+  .jeu-sc .nm{font-size:clamp(30px,3.4vw,40px);line-height:1.05;margin:8px 0 2px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+  .jeu-sc.light .ey,.jeu-sc.light .nm{text-shadow:none}
+  .jeu-sc .cp-dl{margin-top:12px}
+  .jeux figcaption{margin-top:14px;color:var(--muted);font-size:15px;line-height:1.5}
+  .jeux figcaption b{display:block;color:var(--ink);font:500 20px/1.2 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em;margin-bottom:6px}
+  .jeu-acts{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:12px}
+  .jeu-acts a{color:var(--ink);font-size:14px}
 
   /* modeles */
   .models{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
@@ -483,9 +501,19 @@
     <div class="head"><h2>Comment ça marche</h2><p>Trois étapes, et votre faire-part est prêt à partir.</p></div>
     <div class="steps">
       <div><img src="img/people/choisir.webp" alt="Un couple sur un canapé regarde les thèmes de faire-part sur une tablette" loading="lazy" width="720" height="900"><b>01</b><h3>Choisissez votre thème</h3><p>Douze thèmes dans huit styles : peinture, art déco, aquarelle, bohème… Vous pouvez tous les essayer avec vos prénoms.</p></div>
-      <div><img src="img/people/parametrer.webp" alt="Deux mains l'une sur l'autre, un téléphone affiche le faire-part avec son sceau" loading="lazy" width="720" height="900"><b>02</b><h3>Paramétrez-le</h3><p>L'ouverture (enveloppe, rideau ou grandes portes), vos prénoms, la date, les couleurs, la police, la musique, le compte à rebours, vos événements et vos lieux.</p></div>
+      <div><img src="img/people/parametrer.webp" alt="Deux mains l'une sur l'autre, un téléphone affiche le faire-part avec son sceau" loading="lazy" width="720" height="900"><b>02</b><h3>Paramétrez-le</h3><p>L'ouverture (enveloppe, rideau ou grandes portes), vos prénoms, la date et sa révélation (à gratter, roue ou jackpot), les couleurs, la police, la musique, le compte à rebours, vos événements et vos lieux.</p></div>
       <div><img src="img/people/mamie.webp" alt="Une grand-mère émue ouvre le faire-part sur son téléphone" loading="lazy" width="720" height="900"><b>03</b><h3>Recevez votre lien</h3><p>Un lien prêt à envoyer sur WhatsApp, un par famille si vous voulez. Les réponses de vos invités arrivent dans votre tableau de bord.</p></div>
     </div>
+  </div>
+</section>
+
+<section id="date">
+  <div class="wrap">
+    <div class="head">
+      <h2>La date, ils la découvrent.</h2>
+      <p>Avant même la date, un petit jeu : vos invités grattent, font tourner la roue ou tentent le jackpot pour découvrir le grand jour. Essayez, c'est en vrai.</p>
+    </div>
+    <div class="jeux" id="jeux"></div>
   </div>
 </section>
 
@@ -508,7 +536,7 @@
   <div class="wrap">
     <div class="head">
       <h2>Essayez avec vos prénoms.</h2>
-      <p>Choisissez l'ouverture, le style, les couleurs, la police et le compte à rebours. Faites défiler le faire-part : il se met à jour en direct.</p>
+      <p>Choisissez l'ouverture, la révélation de la date, le style, les couleurs, la police et le compte à rebours. Faites défiler le faire-part : il se met à jour en direct.</p>
     </div>
     <div class="comp">
       <form class="comp-form" id="compForm" autocomplete="off">
@@ -517,6 +545,7 @@
           <div class="names"><input type="text" id="cN1" value="Emma" maxlength="20" aria-label="Premier prénom"><b>&amp;</b><input type="text" id="cN2" value="Louis" maxlength="20" aria-label="Second prénom"></div>
         </label>
         <label class="fld"><span>Date du mariage</span><input type="date" id="cDate" value="2027-06-12"></label>
+        <div class="fld"><span>Révélation de la date</span><div class="opts" id="cReveal"></div></div>
         <div class="fld"><span>Style</span><div class="opts" id="cStyles"></div></div>
         <div class="fld"><span>Couleurs</span><div class="opts" id="cPal"></div><div class="sw-name" id="cPalName"></div></div>
         <div class="fld"><span>Police</span><div class="opts" id="cFonts"></div></div>
@@ -647,7 +676,7 @@
       <input type="text" name="name" id="fNames" placeholder="Vos prénoms" required autocomplete="name" aria-label="Vos prénoms">
       <input type="email" name="email" id="fEmail" placeholder="E-mail" required autocomplete="email" aria-label="E-mail">
       <input type="text" name="date" id="fDate" placeholder="Date du mariage" onfocus="this.type='date'" aria-label="Date du mariage">
-      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="palette" id="fPal"><input type="hidden" name="font" id="fFont"><input type="hidden" name="opening" id="fOpen"><input type="hidden" name="countdown" id="fCount"><input type="hidden" name="screens" id="fScreens">
+      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="palette" id="fPal"><input type="hidden" name="font" id="fFont"><input type="hidden" name="opening" id="fOpen"><input type="hidden" name="countdown" id="fCount"><input type="hidden" name="reveal" id="fReveal"><input type="hidden" name="screens" id="fScreens">
       <select name="plan" id="planSel" aria-label="Formule">
         <option value="signature">Signature</option>
         <option value="essentiel">Essentiel</option>
@@ -667,6 +696,7 @@
 </footer>
 
 <script src="themes.js"></script>
+<script src="reveal.js"></script>
 <script>window.SCEAU_DEMOS=[]/*DEMOS*/;</script>
 <script>
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',()=>{ document.getElementById('planSel').value=a.dataset.plan; }));
@@ -753,9 +783,9 @@
 
   /* catalogue avec filtre par style */
   const models=document.getElementById('models'), filters=document.getElementById('filters');
-  const DEMOS=window.SCEAU_DEMOS||[], OPN={env:'Enveloppe',cur:'Rideau',door:'Grandes portes'};
+  const DEMOS=window.SCEAU_DEMOS||[], OPN={env:'Enveloppe',cur:'Rideau',door:'Grandes portes'}, RVN={scratch:'Date à gratter',wheel:'Roue de la date',slot:'Jackpot'};
   const card=(d,t,title,style,sub,img1,img2)=>{ const M=(window.SCEAU_MUSIC||{})[d.music]||{};
-    const tags=[d.special?'':OPN[d.opening], M.name?'♪ '+M.name:'', d.lang==='en'?'en anglais':''].filter(Boolean);
+    const tags=[d.special?'':OPN[d.opening], RVN[d.reveal]||'', M.name?'♪ '+M.name:'', d.lang==='en'?'en anglais':''].filter(Boolean);
     const m=document.createElement('a'); m.className='model'; m.href='/d/'+d.slug+'/'; m.target='_blank'; m.rel='noopener'; m.dataset.theme=d.theme; m.dataset.style=style;
     m.setAttribute('aria-label','Ouvrir la démo '+title+' : '+d.couple);
     m.innerHTML=`<div class="pic"><img src="${esc(img1)}" alt="" loading="lazy">${img2?`<img class="pic2" src="${esc(img2)}" alt="" loading="lazy" aria-hidden="true">`:''}<span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(d.couple)}</span></div><div class="meta"><div><h3>${esc(title)}</h3><p class="style">${esc(sub)}</p><p>${esc(tags.join(' · '))}</p></div><span class="tag">Ouvrir</span></div>`;
@@ -769,17 +799,40 @@
     b.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); models.querySelectorAll('.model').forEach(m=>{ m.hidden=!(st==='Tous'||m.dataset.style===st||m.dataset.style==='*'); }); };
     filters.appendChild(b); });
 
+  /* la date a decouvrir : un jeu par carte, avec le decor, les prenoms et la couleur de la demo correspondante */
+  { const JEUX=[
+      {kind:'scratch',k:'conte',slug:'emma-louis',date:'2027-06-05T15:00',pal:'#b8975a',title:'À gratter',text:'Comme un ticket : la date apparaît sous une feuille d\'or, à la couleur de votre cire.'},
+      {kind:'wheel',k:'dolcevita',slug:'giulia-hugo',date:'2027-08-28T17:00',pal:'#b8975a',title:'La roue',text:'Elle tourne, ralentit… et s\'arrête toujours sur votre date.'},
+      {kind:'slot',k:'pop',slug:'lou-max',date:'2027-07-03T16:00',pal:'#e2457a',title:'Le jackpot',text:'On tire le levier : le jour, le mois puis l\'année tombent un par un.'}];
+    const box=document.getElementById('jeux');
+    const longDate=v=>{ const x=new Date(v+':00+02:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Europe/Paris'}); return x.charAt(0).toUpperCase()+x.slice(1); };
+    JEUX.forEach(j=>{ const t=THEMES[j.k], lt=t.light&&t.scenes[0][4]!=='dark', ey=lt?(t.ey||t.color):'#fff', nm=lt?t.color:'#fff';
+      const fig=document.createElement('figure');
+      fig.innerHTML=`<div class="jeu-sc${lt?' light':''}" style="background-image:url('img/themes/${j.k}-1.webp')"><div class="ey" style="color:${ey}">${esc(t.scenes[0][0])}</div>`+
+        `<div class="nm" style="${esc(nameStyle(Object.assign({},t,{color:nm}),.62))};font-size:clamp(28px,3.2vw,38px)">${esc(t.couple)}</div><div class="jeu-host" style="width:100%;color:${lt?(t.tx||t.color):'#fff'}"></div>`+
+        (j.kind==='wheel'?`<div class="cp-dl rvl-later" style="color:${lt?j.pal:'#fff'};font-size:20px"><i></i><span>${esc(longDate(j.date))}</span><i></i></div>`:'')+`</div>`+
+        `<figcaption><b>${esc(j.title)}</b>${esc(j.text)}<div class="jeu-acts"><button type="button" class="chip">Rejouer</button><a href="/d/${j.slug}/" target="_blank" rel="noopener">Dans la démo ${esc(t.couple)} →</a></div></figcaption>`;
+      box.appendChild(fig);
+      const host=fig.querySelector('.jeu-host'), play=()=>SceauReveal.mount(host,{kind:j.kind,date:new Date(j.date+':00+02:00'),pal:j.pal,light:lt});
+      if(window.SceauReveal) play();
+      fig.querySelector('figcaption button').onclick=play;
+    });
+  }
+
   /* composer : prenoms, date, style, palette, police -> apercu en direct */
   const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'}];
   const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
-  const C={k:'conte',pal:'or',font:'theme',op:'env',cd:'debut',x:new Set()};
+  const C={k:'conte',pal:'or',font:'theme',op:'env',cd:'debut',rvl:'non',x:new Set()};
   const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Hébergement'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'}];
   const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
+  const REVEALS=[{id:'non',name:'Aucune',sub:'La date s\'affiche'},{id:'scratch',name:'À gratter',sub:'Comme un ticket'},{id:'wheel',name:'La roue',sub:'Elle s\'arrête sur la date'},{id:'slot',name:'Jackpot',sub:'Jour, mois, année'}];
   const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
   const $=id=>document.getElementById(id);
   function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
   function opt(box,items,key,label,draw){ items.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.dataset.id=it.id||it; draw(b,it); b.onclick=()=>{ C[key]=b.dataset.id; if(key==='k') C.font='theme'; paint(); }; box.appendChild(b); }); }
   opt($('cOpen'),OPENS,'op','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  opt($('cReveal'),REVEALS,'rvl','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
   opt($('cStyles'),KEYS,'k','',(b,k)=>{ b.className='chip'; b.textContent=THEMES[k].name; });
   opt($('cPal'),PALS,'pal','',(b,p)=>{ b.className='sw'; b.style.background=p.c; b.setAttribute('aria-label',p.name); });
   opt($('cFonts'),FONTS,'font','',(b,f)=>{ b.className='fo'; b.innerHTML=`<b>Aa</b><small>${f.name}</small>`; });
@@ -798,7 +851,7 @@
   function paint(){
     const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
     $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
-    [['cStyles','k'],['cOpen','op'],['cPal','pal'],['cCount','cd']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
+    [['cStyles','k'],['cOpen','op'],['cPal','pal'],['cCount','cd'],['cReveal','rvl']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
     $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
     $('cPalName').textContent=p.name;
     $('cpTint').style.background=p.c;
@@ -819,11 +872,11 @@
     const page=(img,mode,inner,extra)=>{ const dk=mode==='dark', lt=t.light&&!dk;
       const c={nm:lt?t.color:'#fff',ey:lt?(t.ey||t.color):'#fff',tx:lt?(t.tx||t.color):'#fff'};
       return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" style="${esc(`background-image:url('img/themes/${C.k}-${img}.webp');${extra||''}`)}">${h(c)}</section>`}; };
-    const pages=[];
+    const pages=[], rv=C.rvl!=='non'?C.rvl:null;
     // 1. prenoms + date (+ compte a rebours au debut)
     { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');
       const oval=!!t.top1;
-      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc('background:'+sealBg)}">${esc(ini)}</div>`}<div class="ey" style="color:${c.ey}">${esc(t.scenes[0][0])}</div><div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}<div class="cp-dl" style="color:${p.c}"><i></i><span>${esc(ds)}</span><i></i></div>${C.cd==='debut'?cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':''):''}<div class="pv-hint" style="color:${c.ey}">Faites défiler ↓</div>`)); }
+      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc('background:'+sealBg)}">${esc(ini)}</div>`}<div class="ey" style="color:${c.ey}">${esc(t.scenes[0][0])}</div><div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}${rv?`<div class="cp-rvl" style="width:100%;color:${c.tx}"></div>`:''}${!rv||rv==='wheel'?`<div class="cp-dl${rv?' rvl-later':''}" style="color:${p.c}"><i></i><span>${esc(ds)}</span><i></i></div>`:''}${C.cd==='debut'?`<div class="${rv?'rvl-later':''}">${cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':'')}</div>`:''}<div class="pv-hint${rv?' rvl-later':''}" style="color:${c.ey}">Faites défiler ↓</div>`)); }
     const scene=(idx,withCd)=>{ const [e,main,x,bt,mode]=t.scenes[idx]; const pg=page(idx+1,mode);
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?`<span class="bt" style="color:${c.tx};border-color:${c.tx}">${esc(bt)}</span>`:''}`); };
     // écrans en option (contenu d'exemple), sur le décor de la scène voisine avec un voile
@@ -847,7 +900,8 @@
     xp('table',4,m4,c=>hd(c,'Le jour J','Votre table')+`<div class="tx" style="color:${c.tx};position:relative;font-size:26px;margin-top:6px">La table des Roses</div><div class="tx" style="color:${c.tx};position:relative;font-size:13px">Chaque famille voit sa table sur son lien personnel.</div>`);
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML=pages.join(''); sc.scrollTop=st; tick();
-    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; if($('cN1').value!==$('cN1').defaultValue||$('cN2').value!==$('cN2').defaultValue) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', '); if($('cDate').value&&$('cDate').value!==$('cDate').defaultValue){ $('fDate').type='date'; $('fDate').value=$('cDate').value; }
+    { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=REVEALS.find(o=>o.id===C.rvl).name; if($('cN1').value!==$('cN1').defaultValue||$('cN2').value!==$('cN2').defaultValue) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', '); if($('cDate').value&&$('cDate').value!==$('cDate').defaultValue){ $('fDate').type='date'; $('fDate').value=$('cDate').value; }
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
   /* lecture de l'ouverture : fermee -> 'opening' -> 'gone' */

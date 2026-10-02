@@ -34,7 +34,7 @@ _Mis à jour le 1er octobre 2026, après l'audit « qu'est-ce qui manque pour ê
 
 Transitions filmées d'une scène à l'autre : `python3 business/tools/frames.py --trans <theme>-1-2=<vidéo>` (vidéo avec image de début = scène 1 et image de fin = scène 2). Elles sont jouées pendant le glissement, dans les deux sens ; au repos, l'image d'origine en pleine définition est affichée.
 
-Les options : `opening` = `env` | `cur` | `door` ; `countdown` = `debut` | `page` | `fin` | `non` ; `music` = `nocturne` | `valse` | `ragtime` | `marine` | `scheherazade` | `raga` | `funiculi` | `none` (ou `musicUrl` pour le morceau du client) ; `font` = `script` | `classique` | `moderne` | `deco` (sinon celle du thème) ; `lang` = `fr` | `en` ; `tz` = fuseau horaire si le mariage n'est pas en France.
+Les options : `opening` = `env` | `cur` | `door` ; `countdown` = `debut` | `page` | `fin` | `non` ; `reveal` = `scratch` (date à gratter) | `wheel` (roue qui s'arrête sur la date) | `slot` (jackpot jour, mois, année), absent = la date s'affiche directement ; `music` = `nocturne` | `valse` | `ragtime` | `marine` | `scheherazade` | `raga` | `funiculi` | `none` (ou `musicUrl` pour le morceau du client) ; `font` = `script` | `classique` | `moderne` | `deco` (sinon celle du thème) ; `lang` = `fr` | `en` ; `tz` = fuseau horaire si le mariage n'est pas en France.
 
 ## Encore à faire (jaune, ensuite)
 

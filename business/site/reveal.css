@@ -1,0 +1,84 @@
+/* Sceau : la date à découvrir (ticket à gratter, roue, jackpot). Voir reveal.js.
+   Les tailles suivent la largeur de la page (cqw) : même rendu dans le faire-part et dans les aperçus de la vitrine. */
+.rvl-later{display:none!important}
+.rvl-shown{animation:rvlIn .8s cubic-bezier(.22,.61,.36,1) both}
+@keyframes rvlIn{from{opacity:0;transform:translateY(10px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+
+.rvl{position:relative;width:100%;container-type:inline-size;display:flex;flex-direction:column;align-items:center;margin-top:14px;
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;transition:opacity .5s ease,transform .5s ease}
+.rvl.fold{opacity:0;transform:scale(.92)}
+.rvl-call{font:500 10px/1.4 Inter,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;text-shadow:0 1px 8px rgba(0,0,0,.5);transition:opacity .4s}
+.rvl.light .rvl-call{text-shadow:none}
+.rvl.done .rvl-call{animation:rvlIn .6s both}
+.rvl-game{position:relative;display:flex;flex-direction:column;align-items:center}
+.rvl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ticket à gratter */
+.rvl-card{position:relative;width:min(84cqw,300px);aspect-ratio:3/1.05;border-radius:10px;background:linear-gradient(160deg,#fffdf7,#f6efe0);
+  box-shadow:0 10px 26px -8px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.35) inset;overflow:hidden}
+.rvl-under{position:absolute;inset:0;display:grid;place-content:center;gap:4px;text-align:center;color:var(--pd)}
+.rvl-under small{font:600 max(9px,2.6cqw)/1 Inter,Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
+.rvl-under b{font:500 min(8cqw,30px)/1.1 "Cormorant Garamond",Georgia,serif}
+.rvl-foil{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:pointer;transition:opacity .8s ease}
+.rvl-foil.gone{opacity:0;pointer-events:none}
+.rvl-foil:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.rvl-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.5) 50%,transparent 62%) 0 0/260% 100% no-repeat;animation:rvlShine 2.8s ease-in-out infinite}
+.rvl.touched .rvl-card::after,.rvl.done .rvl-card::after{display:none}
+@keyframes rvlShine{0%{background-position:120% 0}60%,100%{background-position:-60% 0}}
+
+/* roue */
+.rvl-wheel{position:relative;width:min(64cqw,240px);aspect-ratio:1;filter:drop-shadow(0 12px 20px rgba(0,0,0,.35))}
+.rvl-wheel svg{display:block;width:100%;height:100%}
+.rvl-rot{transform-box:view-box;transform-origin:0 0}
+.rvl-wheel text{text-anchor:middle;dominant-baseline:middle}
+.rvl-d{font:500 21px/1 "Cormorant Garamond",Georgia,serif}
+.rvl-m{font:600 8.5px/1 Inter,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.rvl-bulb{fill:#fff6da;animation:rvlBulb 1.2s steps(1) infinite}
+.rvl-bulb:nth-child(odd){animation-delay:.6s}
+@keyframes rvlBulb{0%{fill:#fff6da}50%{fill:rgba(255,246,218,.35)}}
+.rvl-pin{position:absolute;left:50%;top:-6px;z-index:2;width:0;height:0;margin-left:-11px;border:11px solid transparent;border-bottom:0;border-top:20px solid var(--pd);filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+.rvl-pin::after{content:"";position:absolute;left:-4px;top:-26px;width:8px;height:8px;border-radius:50%;background:#fff6da}
+.rvl-hub{position:absolute;left:50%;top:50%;width:34%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;padding:0;border:3px solid var(--pl);
+  background:radial-gradient(circle at 38% 32%,#fffdf7,#f1e6cc 70%,#dccb9f);color:var(--pd);font:700 max(8px,2.3cqw)/1 Inter,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:0 4px 12px rgba(0,0,0,.35),inset 0 -2px 4px rgba(0,0,0,.12);animation:rvlPulse 2s ease-in-out infinite;cursor:pointer}
+.rvl-hub:disabled{animation:none;cursor:default}
+.rvl-hub:focus-visible,.rvl-btn:focus-visible,.rvl-lever:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+@keyframes rvlPulse{0%,100%{box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 0 rgba(255,246,218,.6)}50%{box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 9px rgba(255,246,218,0)}}
+.rvl-wheel.won .rvl-win path{animation:rvlWin .5s ease-in-out 3 alternate}
+@keyframes rvlWin{to{filter:brightness(1.35)}}
+
+/* jackpot */
+.rvl-slot{display:flex;align-items:flex-end;gap:min(2cqw,8px)}
+.rvl-box{position:relative;padding:min(3cqw,11px);border-radius:14px;background:linear-gradient(160deg,var(--pl),var(--p) 45%,var(--pd));
+  box-shadow:0 12px 24px -6px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 0 rgba(0,0,0,.2);
+  outline:2px dotted rgba(255,246,218,.9);outline-offset:-5px;animation:rvlLights 1s steps(1) infinite}
+@keyframes rvlLights{50%{outline-color:rgba(255,246,218,.35)}}
+.rvl-box.won{animation:rvlLights .25s steps(1) 8}
+.rvl-reels{--h:min(13cqw,48px);display:flex;gap:min(1.5cqw,6px);padding:min(1.5cqw,6px);border-radius:8px;background:var(--pd);box-shadow:inset 0 2px 6px rgba(0,0,0,.45)}
+.rvl-reel{position:relative;height:var(--h);overflow:hidden;border-radius:5px;background:#fffdf7;width:min(15cqw,56px)}
+.rvl-reel.m{width:min(29cqw,108px)}
+.rvl-reel.y{width:min(19cqw,72px)}
+.rvl-reel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(0,0,0,.28),transparent 30%,transparent 70%,rgba(0,0,0,.28))}
+.rvl-strip{will-change:transform}
+.rvl-strip div{height:var(--h);display:grid;place-items:center;color:var(--pd);font:600 min(7cqw,26px)/1 "Cormorant Garamond",Georgia,serif;white-space:nowrap}
+.rvl-reel.m .rvl-strip div{font-size:min(5.6cqw,21px)}
+.rvl-lever{position:relative;width:min(6cqw,22px);height:min(24cqw,90px);margin-bottom:min(4cqw,14px);padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 100%}
+.rvl-lever::before{content:"";position:absolute;left:50%;bottom:0;top:min(4cqw,14px);width:4px;margin-left:-2px;border-radius:2px;background:linear-gradient(90deg,#8d8a83,#f4f1ea,#7d7a73)}
+.rvl-lever::after{content:"";position:absolute;left:0;top:0;width:100%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--pl),var(--p) 55%,var(--pd));box-shadow:0 3px 6px rgba(0,0,0,.4)}
+.rvl-lever.pull{animation:rvlPull .75s cubic-bezier(.4,0,.3,1)}
+@keyframes rvlPull{40%{transform:scaleY(-.75)}100%{transform:none}}
+.rvl-btn{margin-top:14px;display:inline-flex;align-items:center;border:1px solid currentColor;padding:9px 18px;border-radius:2px;background:rgba(0,0,0,.18);color:inherit;
+  font:500 11px/1 Inter,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.rvl.light .rvl-btn{background:rgba(255,255,255,.45)}
+.rvl-btn:disabled{opacity:0;pointer-events:none;transition:opacity .4s}
+
+/* confettis */
+.rvl-burst{position:absolute;left:50%;top:55%;width:0;height:0;pointer-events:none;z-index:5}
+.rvl-burst i{position:absolute;width:var(--w);height:calc(var(--w) * 1.7);margin:-5px -3px;background:var(--c);border-radius:1px;opacity:0;
+  animation:rvlBurst 1.5s cubic-bezier(.15,.6,.35,1) var(--dl) forwards}
+@keyframes rvlBurst{0%{opacity:1;transform:translate(0,0) rotate(0)}75%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+
+@media (prefers-reduced-motion:reduce){
+  .rvl-card::after,.rvl-bulb,.rvl-hub,.rvl-box{animation:none}
+  .rvl-shown{animation-duration:.2s}
+}

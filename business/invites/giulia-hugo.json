@@ -11,6 +11,7 @@
   "opening": "cur",
   "palette": "#b8975a",
   "countdown": "debut",
+  "reveal": "wheel",
   "music": "funiculi",
   "intro": {
     "eyebrow": "Ci sposiamo"

@@ -241,3 +241,6 @@ a{color:inherit}
   .hint,.op>.op-tap{animation:none}
   .rv{filter:none}
 }
+
+/* date à découvrir : voir reveal.css ; l'invitation à défiler garde son petit rebond une fois apparue */
+.hint.rvl-shown{animation:rvlIn .8s both,hint 2.4s ease-in-out .8s infinite}

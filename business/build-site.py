@@ -121,11 +121,13 @@ PAGE = """<!doctype html>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Great+Vibes{gf}{fontx}&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="/img/hd/{theme}-1.webp">
 <link rel="stylesheet" href="/invite.css">
+<link rel="stylesheet" href="/reveal.css">
 </head>
 <body>
 <noscript><p style="padding:24px;font-family:sans-serif">{title}. Activez JavaScript pour ouvrir le faire-part.</p></noscript>
 <script>window.INVITE={data};</script>
 <script src="/themes.js"></script>
+<script src="/reveal.js"></script>
 <script src="/invite.js"></script>
 </body>
 </html>
@@ -276,7 +278,7 @@ def main():
     for fn in sorted(os.listdir(os.path.join(B, 'invites'))):
         inv = json.load(open(os.path.join(B, 'invites', fn), encoding='utf-8'))
         if inv.get('demo'):
-            demos.append({'slug': inv['slug'], 'theme': inv['theme'], 'couple': ' & '.join(inv['couple']), 'opening': inv.get('opening', 'env'),
+            demos.append({'slug': inv['slug'], 'theme': inv['theme'], 'couple': ' & '.join(inv['couple']), 'opening': inv.get('opening', 'env'), 'reveal': inv.get('reveal'),
                           'events': len(inv['events']), 'families': bool(inv.get('families')), 'lang': inv.get('lang', 'fr'),
                           'music': inv.get('music') or T[inv['theme']].get('music'), 'thumb': f"img/themes/{inv['theme']}-2.webp"})
     p = os.path.join(SITE, 'index.html')

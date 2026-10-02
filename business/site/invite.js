@@ -1,6 +1,6 @@
 /* Sceau : moteur de faire-part.
    Lit window.INVITE (fiche du couple, voir business/invites/*.json) et window.SCEAU_THEMES (themes.js),
-   puis construit : ouverture, pages animées, musique, compte à rebours, itinéraires, calendrier, réponses. */
+   puis construit : ouverture, pages animées, date à découvrir (reveal.js), musique, compte à rebours, itinéraires, calendrier, réponses. */
 (function(){
   const I=window.INVITE, T=window.SCEAU_THEMES[I.theme];
   const $=s=>document.querySelector(s);
@@ -113,6 +113,7 @@
   }
   const cdHtml=(big,col)=>`<div class="cd${big?' big':''}" style="color:${col}">${['d','h','m','s'].map((u,i)=>`<div><b data-u="${u}">0</b><span>${[S.days,S.hours,S.min,S.sec][i]}</span></div>`).join('')}</div>`;
   const oval=!!T.top1, compact=!!T.compact;
+  const RVL=window.SceauReveal&&SceauReveal.kinds.includes(I.reveal)?I.reveal:null;
 
   // 1. accueil
   page(1,(c)=>{
@@ -122,9 +123,11 @@
       `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(I.intro&&I.intro.eyebrow||T.scenes[0][0])}</div>`+
       `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(T.stack?.82:1,c.nm))}">${names}</div>`+
       (oval||compact?'':`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${esc(I.intro&&I.intro.text||S.joy)}</div>`)+
-      `<div class="rv dl" style="--i:${rvI++};color:${T.light?pal:'#fff'}"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>`+
-      (I.countdown==='debut'?`<div class="rv" style="--i:${rvI++}">${cdHtml(false,c.tx)}</div>`:'')+
-      `<div class="hint" style="color:${c.ey}">${S.scroll} ↓</div>`;
+      // date à découvrir (grattage, roue, jackpot) : le compte à rebours et l'invitation à défiler n'apparaissent qu'une fois la date trouvée
+      (RVL?`<div class="rv" data-rvl style="--i:${rvI++};width:100%;color:${c.tx}"></div>`:'')+
+      (!RVL||RVL==='wheel'?`<div class="rv dl${RVL?' rvl-later':''}" style="--i:${rvI++};color:${T.light?pal:'#fff'}"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>`:'')+
+      (I.countdown==='debut'?`<div class="rv${RVL?' rvl-later':''}" style="--i:${rvI++}">${cdHtml(false,c.tx)}</div>`:'')+
+      `<div class="hint${RVL?' rvl-later':''}" style="color:${c.ey}">${S.scroll} ↓</div>`;
   },{style:oval?'padding-top:'+T.top1:''});
 
   const evImg=(e,i)=>e.scene||[2,3][i%2];
@@ -243,6 +246,10 @@
   const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${img(1)}')`;
   document.body.append(bd,app);
   const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], veils=[...$('#bgs').querySelectorAll('.vl')], film=$('#film');
+
+  /* ---------- date à découvrir ---------- */
+  const rvlHost=secs[0].querySelector('[data-rvl]');
+  if(rvlHost) SceauReveal.mount(rvlHost,{kind:RVL,date:main,tz:TZ,lang:L,pal,light:pages[0].lt,scope:secs[0],onDone:()=>requestAnimationFrame(frame)});
 
   /* ---------- apparition + parallaxe ---------- */
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;

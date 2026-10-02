@@ -10,6 +10,7 @@
   "opening": "cur",
   "palette": "#e2457a",
   "countdown": "fin",
+  "reveal": "slot",
   "music": "ragtime",
   "intro": {
     "eyebrow": "On se marie !",
