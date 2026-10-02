@@ -468,44 +468,76 @@
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
 
-  /* ---------- particules ---------- */
+  /* ---------- particules ----------
+     Des choses peintes qui tombent (ou montent) : pétales, feuilles, confettis d'or, œillets d'Inde, fleurs,
+     graines de pissenlit, lanternes. Chaque particule est un vrai sprite peint (img/fx/<famille>-<i>.webp,
+     découpés par business/tools/fx-sprites.py à partir d'une planche gemini.py), posé avec de la profondeur
+     (les lointains sont plus petits, plus pâles et plus lents), une culbute (le sprite se retourne sur lui-même),
+     un balancement propre et un vent commun qui va et vient. Le mouvement est en temps réel (indépendant du
+     nombre d'images par seconde). */
   function startFx(){
     const kind=I.particles||T.particles||'none'; if(kind==='none'||reduce) return;
-    const cv=$('#fx'), cx=cv.getContext('2d'); let W,H,dpr;
+    const cv=$('#fx'), cx=cv.getContext('2d'); let W=0,H=0,dpr=1;
     function size(){ dpr=Math.min(2,devicePixelRatio||1); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
     size(); addEventListener('resize',size);
+    // réglages par famille : nombre, taille (px, au premier plan), vitesse verticale (px/s, négatif = monte),
+    // balancement, culbute (vitesse de retournement), lumineux (scintillement, halo dans le sprite)
     const P={
-      petals:{n:20,col:['#f6d5dc','#fbe9ec','#f1c1cc','#fff6f2'],up:false,sz:[4,8],sp:[.35,.8]},
-      confetti:{n:30,col:['#e2c275','#d4af37','#f3e3a8','#b8933f'],up:false,sz:[3,7],sp:[.5,1.1]},
-      marigold:{n:26,col:['#f39c12','#f7b733','#e67e22','#ffd166','#e84a5f'],up:false,sz:[4,8],sp:[.4,.9]},
-      seeds:{n:18,col:['#fff4e6','#f5e1c8','#ffffff'],up:true,sz:[2,4],sp:[.15,.35]},
-      leaves:{n:16,col:['#c9a14a','#9bb36b','#d98b3a','#b6c48a'],up:false,sz:[6,10],sp:[.35,.7]},
-      daisies:{n:18,col:['#ffffff','#ffd23f','#ff6b9a','#3ec1d3','#ff9f1c'],up:false,sz:[5,9],sp:[.4,.9]},
-      blossoms:{n:18,col:['#ffffff','#fff8e1','#fde2e4'],up:false,sz:[4,8],sp:[.3,.7]},
-      lanterns:{n:16,col:['#ffd27a','#ffb547','#ffe3a3'],up:true,sz:[2,4],sp:[.2,.45]}
+      petals:  {n:14,sz:[22,44],sp:[26,58],sway:1,  tumble:1},
+      roses:   {n:12,sz:[26,52],sp:[30,64],sway:.9, tumble:1},
+      confetti:{n:22,sz:[10,20],sp:[45,95],sway:.8, tumble:1.7},
+      marigold:{n:12,sz:[24,52],sp:[34,74],sway:.7, tumble:.8,flipMin:.5},
+      seeds:   {n:9, sz:[36,64],sp:[-9,-24],sway:1.6,tumble:.25,flipMin:.8},
+      leaves:  {n:10,sz:[30,60],sp:[30,68],sway:1.3,tumble:1.1},
+      daisies: {n:12,sz:[26,54],sp:[34,70],sway:.7, tumble:.7,flipMin:.55},
+      blossoms:{n:11,sz:[22,48],sp:[26,58],sway:.9, tumble:.8,flipMin:.4},
+      lanterns:{n:7, sz:[42,96],sp:[-7,-20],sway:.5,tumble:0,flipMin:1,glow:true}
     }[kind]; if(!P) return;
     const R=(a,b)=>a+Math.random()*(b-a);
-    const mk=(init)=>({x:R(0,W),y:init?R(0,H):(P.up?H+20:-20),s:R(...P.sz),v:R(...P.sp),a:R(0,6.28),va:R(-.03,.03),w:R(.6,1.6),ph:R(0,6.28),c:P.col[Math.floor(R(0,P.col.length))],o:R(.4,.85)});
-    const ps=Array.from({length:P.n},()=>mk(true));
-    let t=0, run=true;
-    document.addEventListener('visibilitychange',()=>{ run=!document.hidden; if(run) requestAnimationFrame(loop); });
-    function shape(p){
-      cx.fillStyle=p.c; cx.globalAlpha=p.o;
-      if(kind==='lanterns'||kind==='seeds'){ const g=cx.createRadialGradient(0,0,0,0,0,p.s*3); g.addColorStop(0,p.c); g.addColorStop(1,'rgba(255,220,150,0)'); cx.fillStyle=g; cx.beginPath(); cx.arc(0,0,p.s*3,0,7); cx.fill(); return; }
-      if(kind==='confetti'){ cx.fillRect(-p.s/2,-p.s,p.s,p.s*2*Math.abs(Math.cos(p.a*2))+1); return; }
-      if(kind==='daisies'&&p.c==='#ffffff'){ for(let k=0;k<6;k++){ cx.rotate(1.047); cx.beginPath(); cx.ellipse(p.s*.55,0,p.s*.5,p.s*.22,0,0,7); cx.fill(); } cx.fillStyle='#ffd23f'; cx.beginPath(); cx.arc(0,0,p.s*.28,0,7); cx.fill(); return; }
-      if(kind==='blossoms'){ for(let k=0;k<5;k++){ cx.rotate(1.2566); cx.beginPath(); cx.arc(p.s*.45,0,p.s*.32,0,7); cx.fill(); } return; }
-      cx.beginPath(); cx.ellipse(0,0,p.s,p.s*.55,0,0,7); cx.fill();
-    }
-    function loop(){
-      if(!run) return; t+=1; cx.clearRect(0,0,W,H);
-      ps.forEach((p,i)=>{
-        p.y+=P.up?-p.v:p.v; p.x+=Math.sin(t*.012*p.w+p.ph)*.45; p.a+=p.va;
-        if(kind==='lanterns') p.o=.5+.4*Math.sin(t*.03+p.ph);
-        if(P.up?p.y<-30:p.y>H+30) ps[i]=mk(false);
-        cx.save(); cx.translate(p.x,p.y); cx.rotate(p.a); shape(p); cx.restore();
-      });
-      cx.globalAlpha=1; requestAnimationFrame(loop);
+    // les sprites : index.json dit combien il y en a par famille ; on les charge et on dessine ceux qui sont prêts
+    let imgs=[];
+    fetch('/img/fx/index.json').then(r=>r.json()).then(idx=>{
+      const n=idx[kind]||0; imgs=Array.from({length:n},(_,i)=>{ const im=new Image(); im.src=`/img/fx/${kind}-${i}.webp`; return im; });
+    }).catch(()=>{});
+    const up=P.sp[0]<0;
+    const mk=(init)=>{
+      const z=R(0,1);                                   // profondeur : 0 = lointain, 1 = premier plan
+      const s=R(...P.sz)*(.45+.55*z);
+      return {z,s,x:R(-s,W+s),y:init?R(-s,H+s):(up?H+s:-s),v:R(...P.sp)*(.5+.5*z),
+        a:R(0,6.28),va:R(-.9,.9)*(P.tumble||.4),             // rotation dans le plan (rad/s)
+        tp:R(0,6.28),tv:R(.6,1.6)*P.tumble,                   // culbute : le sprite se retourne autour de son axe
+        wp:R(0,6.28),wf:R(.5,1.1),                            // balancement propre (phase, fréquence)
+        i:Math.floor(R(0,999)),o:P.glow?1:(.55+.45*z),born:0,age:0};
+    };
+    const ps=Array.from({length:P.n},()=>mk(true)).sort((a,b)=>a.z-b.z);   // les lointains se dessinent sous les proches
+    let run=true, last=performance.now(), t=0;
+    document.addEventListener('visibilitychange',()=>{ run=!document.hidden; if(run){ last=performance.now(); requestAnimationFrame(loop); } });
+    function loop(now){
+      if(!run) return;
+      const dt=Math.min(.05,(now-last)/1000); last=now; t+=dt;
+      const wind=Math.sin(t*.21)*14+Math.sin(t*.07)*10;      // vent commun, qui va et vient lentement (px/s)
+      cx.clearRect(0,0,W,H);
+      for(let k=0;k<ps.length;k++){
+        const p=ps[k]; p.age+=dt;
+        p.y+=p.v*dt;
+        p.x+=(wind*(.4+.6*p.z)+Math.sin(t*p.wf*1.9+p.wp)*22*P.sway*p.z)*dt;
+        p.a+=p.va*dt; p.tp+=p.tv*dt;
+        if(up?p.y<-p.s*1.2:p.y>H+p.s*1.2){ ps[k]=mk(false); continue; }
+        if(p.x<-p.s*1.5) p.x=W+p.s; else if(p.x>W+p.s*1.5) p.x=-p.s;
+        const n=imgs.length; if(!n) continue;
+        const im=imgs[p.i%n]; if(!im.complete||!im.naturalWidth) continue;
+        const w=p.s, h=p.s*im.naturalHeight/im.naturalWidth;
+        // culbute : de profil, un pétale n'est plus qu'un fil (.18) ; une fleur ou une lanterne ne s'aplatit pas autant (flipMin)
+        let flip=Math.cos(p.tp); const fm=P.flipMin||.18; if(Math.abs(flip)<fm) flip=flip<0?-fm:fm;
+        let o=p.o*Math.min(1,p.age/.9);                                        // apparition en fondu
+        if(P.glow) o*=.78+.22*Math.sin(t*2.1+p.wp);                            // scintillement des lanternes
+        cx.save(); cx.translate(p.x,p.y); cx.rotate(p.a); cx.scale(flip,1); cx.globalAlpha=o;
+        // thèmes clairs : une ombre portée douce, sinon une graine blanche ou un pétale pâle se perd sur le papier
+        if(T.light&&!P.glow){ cx.shadowColor='rgba(70,45,20,.38)'; cx.shadowBlur=3+7*p.z; cx.shadowOffsetY=2+3*p.z; }
+        cx.drawImage(im,-w/2,-h/2,w,h); cx.restore();
+      }
+      cx.globalAlpha=1;
+      requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
   }
