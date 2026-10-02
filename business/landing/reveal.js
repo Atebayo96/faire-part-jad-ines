@@ -55,7 +55,7 @@
       cx.strokeStyle='rgba(255,255,255,.55)'; cx.lineWidth=1; cx.setLineDash([3,4]); cx.strokeRect(7.5,7.5,W-15,H-15); cx.setLineDash([]);
       cx.fillStyle='rgba(255,255,255,.95)'; cx.textAlign='center'; cx.textBaseline='middle';
       cx.shadowColor='rgba(0,0,0,.25)'; cx.shadowBlur=3;
-      cx.font=`600 ${Math.max(10,Math.round(H*.12))}px Inter,Arial,sans-serif`;
+      cx.font=`600 ${Math.max(11,Math.round(H*.12))}px Inter,Arial,sans-serif`;
       cx.fillText(S.here.toUpperCase().split('').join(' '),W/2,H/2+H*.14);
       cx.font=`${Math.round(H*.28)}px Georgia,serif`; cx.fillText('✦',W/2,H/2-H*.14);
       cx.shadowBlur=0; cx.globalCompositeOperation='destination-out';

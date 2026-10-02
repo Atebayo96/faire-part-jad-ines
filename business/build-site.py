@@ -117,8 +117,7 @@ PAGE = """<!doctype html>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#111111">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Great+Vibes{gf}{fontx}&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/polices/polices.css">
 <link rel="preload" as="image" href="/img/hd/{theme}-1.webp">
 <link rel="stylesheet" href="/invite.css">
 <link rel="stylesheet" href="/reveal.css">
@@ -210,7 +209,7 @@ def site_og(T):
     d = ImageDraw.Draw(im)
     f1 = ImageFont.truetype(os.path.join(FONTS, 'Inter_wght_500.ttf'), 30)
     f2 = ImageFont.truetype(os.path.join(FONTS, 'Cormorant_Garamond_ital_wght_1_400.ttf'), 92)
-    for txt, f, y, sp in [('S C E A U', f1, 222, 0), ("Le faire-part qui s'ouvre.", f2, 272, 0)]:
+    for txt, f, y, sp in [('S C E A U', f1, 222, 0), ("Votre mariage, peint et animé.", f2, 272, 0)]:
         w = d.textlength(txt, font=f)
         d.text(((W - w) / 2, y), txt, font=f, fill=(255, 255, 255))
     im.save(os.path.join(SITE, 'og-sceau.jpg'), 'JPEG', quality=84, optimize=True)
@@ -230,6 +229,12 @@ def main():
         shutil.move(keep, src)
     l = open(os.path.join(SITE, 'index.html'), encoding='utf-8').read()
     l = l.replace('<meta name="robots" content="noindex">\n', '')
+    l = l.replace('<link rel="icon" href="/favicon.svg" type="image/svg+xml">', f'<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n<link rel="canonical" href="{SITE_URL}/">', 1)
+    # référencement : la vitrine et les pages légales ; les faire-part, tableaux de bord et l'admin restent hors des moteurs
+    open(os.path.join(SITE, 'robots.txt'), 'w').write(f"User-agent: *\nDisallow: /d/\nDisallow: /tableau/\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: {SITE_URL}/sitemap.xml\n")
+    today = __import__('datetime').date.today().isoformat()
+    urls = ''.join(f'  <url><loc>{SITE_URL}{u}</loc><lastmod>{today}</lastmod></url>\n' for u in ['/', '/mentions-legales/', '/cgv/', '/confidentialite/'])
+    open(os.path.join(SITE, 'sitemap.xml'), 'w').write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
     open(os.path.join(SITE, 'index.html'), 'w', encoding='utf-8').write(l)
 
     T = themes()
@@ -251,7 +256,13 @@ def main():
         desc = ('You are invited. Open our wedding invitation.' if lang == 'en' else 'Vous êtes invités. Ouvrez notre faire-part.')
         # scènes animées disponibles (images tirées des vidéos, voir business/tools/frames.py)
         inv['anim'] = [n for n in range(1, 5) if os.path.isdir(os.path.join(SITE, 'img', 'frames', f"{inv['theme']}-{n}"))]
+        # mise en page continue : description des images du thème (business/tools/long-assets.py)
+        if inv.get('layout') == 'long':
+            inv['long'] = json.load(open(os.path.join(B, 'landing', 'img', 'long', inv['theme'], 'meta.json')))
         # transitions filmées disponibles pour ce thème (img/trans/<theme>-<a>-<b>/)
+        # portiers devant les grandes portes : seulement sur demande ("doormen": true) et si le thème a son image
+        # (img/open/<thème>-portier.webp). Retirés des démos : l'utilisateur les a trouvés « pas ouf pour l'instant ».
+        inv['doormen'] = inv.get('doormen') is True and inv.get('opening') == 'door' and os.path.exists(os.path.join(SITE, 'img', 'open', f"{inv['theme']}-portier.webp"))
         inv['trans'] = sorted(k[len(inv['theme'])+1:] for k in os.listdir(os.path.join(SITE, 'img', 'trans')) if k.startswith(inv['theme'] + '-')) if os.path.isdir(os.path.join(SITE, 'img', 'trans')) else []
         data = json.dumps(inv, ensure_ascii=False).replace('</', '<\\/')
         page = PAGE.format(lang=lang, title=html.escape(title), desc=html.escape(desc), site=SITE_URL, slug=slug, gf='' if t['gf'] == 'Great+Vibes' else '&family=' + t['gf'],
@@ -278,7 +289,7 @@ def main():
     for fn in sorted(os.listdir(os.path.join(B, 'invites'))):
         inv = json.load(open(os.path.join(B, 'invites', fn), encoding='utf-8'))
         if inv.get('demo'):
-            demos.append({'slug': inv['slug'], 'theme': inv['theme'], 'couple': ' & '.join(inv['couple']), 'opening': inv.get('opening', 'env'), 'reveal': inv.get('reveal'),
+            demos.append({'slug': inv['slug'], 'theme': inv['theme'], 'couple': ' & '.join(inv['couple']), 'opening': inv.get('opening', 'env'), 'layout': inv.get('layout', 'pages'), 'reveal': inv.get('reveal'),
                           'events': len(inv['events']), 'families': bool(inv.get('families')), 'lang': inv.get('lang', 'fr'),
                           'music': inv.get('music') or T[inv['theme']].get('music'), 'thumb': f"img/themes/{inv['theme']}-2.webp"})
     p = os.path.join(SITE, 'index.html')

@@ -10,7 +10,7 @@ _Mis à jour le 1er octobre 2026, après l'audit « qu'est-ce qui manque pour ê
 | Pages légales | Mentions légales, CGV, confidentialité, avec les champs à compléter **[entre crochets]** surlignés en jaune | `legal/*.md` → `python3 business/legal-template.py` |
 | Allégations corrigées | Plus de « Le plus choisi », de « TTC », de « Prêt tout de suite » ni de « 4 saisons » ; langues FR · EN | `landing/index.html` |
 | Aperçu WhatsApp et icône | Image d'aperçu pour la vitrine et pour chaque faire-part | `og-sceau.jpg`, `d/<slug>/og.jpg`, `favicon.svg` |
-| **Moteur de faire-part** | Ouverture (enveloppe, rideau, portes), défilement page par page comme notre faire-part (un swipe = la scène suivante, calée plein écran), décors animés au défilement (720 px), pages animées (zoom lent, parallaxe, apparition des textes, particules par thème), musique, compte à rebours (début, page dédiée, fin, aucun), itinéraire, ajout au calendrier (Google, Apple, Outlook), infos pratiques, réponses des invités, **liens par famille** (`?f=famille-martin` : message d'accueil et événements filtrés), FR et EN | `landing/invite.js`, `landing/invite.css` |
+| **Moteur de faire-part** | Ouverture (enveloppe, rideau, voile opaque qui s'ouvre par le milieu, grandes portes), défilement page par page comme notre faire-part (un swipe = la scène suivante, calée plein écran), décors animés au défilement (720 px), pages animées (zoom lent, parallaxe, apparition des textes, particules par thème), musique, compte à rebours (début, page dédiée, fin, aucun), itinéraire, ajout au calendrier (Google, Apple, Outlook), infos pratiques, réponses des invités, **liens par famille** (`?f=famille-martin` : message d'accueil et événements filtrés), FR et EN | `landing/invite.js`, `landing/invite.css` |
 | Démos | 12 démos, une par thème, plus Yasmine & Karim (notre faire-part réel, avec une musique libre) | `invites/*.json` → `/d/<slug>/` |
 | Réponses des invités | Enregistrées en Europe (Paris), une seule réponse gardée par personne, supprimées automatiquement 90 jours après le mariage | `/api/rsvp`, `/api/purge` (tous les jours à 4 h) |
 | Tableau de bord des mariés | Totaux, détail par événement, liens par famille à copier, recherche, export CSV pour le traiteur | `/tableau/` (exemple : `/tableau/?demo=emma-louis`) |
@@ -22,6 +22,17 @@ _Mis à jour le 1er octobre 2026, après l'audit « qu'est-ce qui manque pour ê
 1. **Créer le stockage (1 minute).** Sans lui, le formulaire et les réponses affichent une erreur. Sur vercel.com : projet **sceau-faire-part** → onglet **Storage** → **Create** → **Blob** → nom `sceau-donnees`, accès **Private**, région **Paris (cdg1)** → **Connect** au projet (Production et Preview). Ensuite, redéployer (ou me le demander).
 2. **Compléter les pages légales :** nom, adresse, SIRET, e-mail de contact, statut TVA, médiateur de la consommation. Dans `business/legal/*.md`, puis `python3 business/legal-template.py` et `python3 business/build-site.py`.
 3. **Récupérer la clé admin :** dans Vercel, Settings → Environment Variables → `SCEAU_SECRET`. C'est elle qui ouvre `/admin/`. Ne la partage pas.
+
+## Paiement Stripe (à faire une fois)
+
+1. Créer le compte sur stripe.com (statut auto-entrepreneur, IBAN pro). Dans Paramètres → Informations publiques, indiquer l'adresse des CGV : `https://sceau-faire-part.vercel.app/cgv/`.
+2. Catalogue de produits : créer **Essentiel** (99 €) et **Signature** (229 €), paiement unique.
+3. Pour chacun : **Créer un lien de paiement** → onglet « Après le paiement » → **Ne pas afficher la page de confirmation, rediriger vers votre site** : `https://sceau-faire-part.vercel.app/merci/`. Activer « Autoriser les codes promotionnels » si on fait l'offre de lancement (code créé dans Produits → Coupons).
+4. Copier les deux liens (`https://buy.stripe.com/...`, ce ne sont pas des secrets) dans `business/landing/paiement.js`, puis `python3 business/build-site.py`, commit et déploiement. Les boutons « Choisir » ouvrent alors la commande : récapitulatif, conditions de vente et renonciation au délai de rétractation cochées (gardées avec la demande dans `/admin/`, marquée « commande » avec sa référence), puis la page Stripe avec l'e-mail pré-rempli. La même référence apparaît dans Stripe (« client_reference_id »).
+
+## Réponses des invités
+
+Chaque invité peut changer sa réponse : sur le même téléphone, la fenêtre est pré-remplie ; après l'envoi, il reçoit un lien personnel (`?r=…`) qui permet de la modifier depuis un autre téléphone. La nouvelle réponse remplace l'ancienne dans le tableau de bord.
 
 ## Créer le faire-part d'un client
 
@@ -40,7 +51,6 @@ Les options : `opening` = `env` | `cur` | `door` ; `countdown` = `debut` | `page
 
 - Statut (micro-entreprise), compte pro, **Stripe** (liens de paiement) et factures.
 - Vérifier « Sceau » à l'INPI, acheter le nom de domaine, e-mail pro, WhatsApp Business.
-- Héberger les polices sur notre serveur au lieu de Google Fonts (RGPD).
 - Mesure d'audience sans cookie (Vercel Analytics ou Plausible).
 - Photos du couple (bloc à ajouter au moteur), version arabe (affichage de droite à gauche).
 - Faire relire les CGV par un juriste avant les premières ventes.

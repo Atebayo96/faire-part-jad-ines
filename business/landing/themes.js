@@ -50,12 +50,18 @@ window.SCEAU_THEMES={
     americaine:{gf:"Playfair+Display:ital@0;1",particles:"leaves",music:"marine",mono:["#8a6a2c","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]},
     pop:{gf:"Shrikhand",particles:"daisies",music:"ragtime",mono:["#ffffff","0 2px 0 #c2185b,0 6px 16px rgba(0,0,0,.35)"]},
     ceramique:{gf:"DM+Serif+Display",particles:"blossoms",music:"funiculi",mono:["#1f4fa3","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]},
-    nuits:{gf:"Aref+Ruqaa",particles:"lanterns",music:"scheherazade"},
+    nuits:{gf:"Aref+Ruqaa",particles:"roses",music:"scheherazade"},
     gravure:{gf:"IM+Fell+English:ital@0;1",particles:"none",music:"nocturne",mono:["#2a2620","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]},
     dolcevita:{gf:"Italiana",particles:"blossoms",music:"funiculi",mono:["#7a5a1c","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]}
   };
   for(const k in X) Object.assign(T[k],X[k]);
 })(window.SCEAU_THEMES);
+/* « Bismillah » s'écrit en arabe, en calligraphie : la ligature basmala (U+FDFD « ﷽ ») de la police Amiri hébergée dans
+   polices/, exactement comme sur le faire-part d'Inès & Jad (pas la phrase lettre à lettre). Dans le faire-part comme dans la vitrine.
+   Retourne le texte à afficher et s'il est en arabe (classe .ar, dir="rtl"). */
+window.SCEAU_BASMALA='﷽';
+window.SCEAU_BASMALA_LABEL='Bismillah ar-Rahman ar-Rahim';
+window.sceauEy=function(t){ t=t==null?'':String(t); return /^\s*(bismillah|bismillah\s+ar-?rahman\s+ar-?rahim|basmala)\s*$/i.test(t)?{ar:true,text:window.SCEAU_BASMALA}:{ar:false,text:t}; };
 window.SCEAU_MUSIC={
   nocturne:{name:"Nocturne",by:"Chopin"},
   valse:{name:"Grande Valse brillante",by:"Chopin"},

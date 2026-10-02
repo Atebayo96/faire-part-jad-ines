@@ -15,7 +15,8 @@
       demoNote:'Ceci est une démo : votre réponse n’est pas enregistrée.',demoDash:'Voir le tableau de bord des mariés',
       fail:'L’envoi n’a pas fonctionné. Vérifiez votre connexion et réessayez.',need:'Indiquez votre nom et votre réponse pour chaque événement.',
       privacy:'Vos réponses ne sont visibles que par les mariés et sont supprimées après le mariage.',
-      calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le',demoLink:'Dans votre faire-part, ce bouton ouvre votre propre lien : liste de mariage, cagnotte, album photo ou réservation d’hôtel.',
+      calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le',celebr:'Les célébrations',know:'Bon à savoir',cdEnd:'Le compte à rebours a commencé',want:'Je veux ce faire-part',already:'Vous avez déjà répondu. Vous pouvez modifier votre réponse ci-dessous.',editT:'Pour modifier votre réponse depuis un autre téléphone, gardez ce lien :',copy:'Copier le lien',copied:'Lien copié',
+      demoLink:'Dans votre faire-part, ce bouton ouvre votre propre lien : liste de mariage, cagnotte, album photo ou réservation d’hôtel.',
       parents:'Avec la bénédiction de leurs familles',story:'Notre histoire',program:'Le programme',dress:'Dress code',stay:'Hébergement et accès',faq:'Vos questions',
       gifts:'Liste de mariage',giftsBtn:'Voir la liste',photos:'Vos photos',photosBtn:'Partager mes photos',dayJ:'Le jour J',table:'Votre table',tableTx:'Le plan de salle sera aussi affiché à l’entrée.',site:'Ouvrir'},
     en:{tap:'Tap to open',tapSeal:'Tap the seal to open',scroll:'Scroll down',route:'Directions',cal:'Calendar',reply:'RSVP',days:'days',hours:'hours',min:'min',sec:'sec',
@@ -26,7 +27,8 @@
       demoNote:'This is a demo: your reply is not saved.',demoDash:'See the couple’s dashboard',
       fail:'Sending failed. Please check your connection and try again.',need:'Please enter your name and a reply for each event.',
       privacy:'Only the couple can see your reply, and it is deleted after the wedding.',
-      calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before',demoLink:'In your invitation, this button opens your own link: gift list, honeymoon fund, photo album or hotel booking.',
+      calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before',celebr:'The celebrations',know:'Good to know',cdEnd:'The countdown has begun',want:'I want this invitation',already:'You have already replied. You can change your reply below.',editT:'To change your reply from another phone, keep this link:',copy:'Copy link',copied:'Link copied',
+      demoLink:'In your invitation, this button opens your own link: gift list, honeymoon fund, photo album or hotel booking.',
       parents:'Together with their families',story:'Our story',program:'The day',dress:'Dress code',stay:'Where to stay',faq:'Questions',
       gifts:'Gift list',giftsBtn:'View the list',photos:'Your photos',photosBtn:'Share my photos',dayJ:'On the day',table:'Your table',tableTx:'The seating plan will also be displayed at the entrance.',site:'Open'}
   }[L];
@@ -56,11 +58,8 @@
   const main=zoned(I.date,TZ);
   const multiDay=new Set(events.map(e=>e.start.slice(0,10))).size>1;
   const n1=I.couple[0], n2=I.couple[1];
-  const ini=(n1[0]+n2[0]).toUpperCase();
   const pal=I.palette||'#b8975a';
-  function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
-  const sealBg=`radial-gradient(circle at 35% 30%, ${shade(pal,1.25)}, ${pal} 58%, ${shade(pal,.6)})`;
-  // sceau de cire : la couleur de cire la plus proche de la palette du couple (ou I.seal), initiales gravées dans la cire
+  // sceau de cire (enveloppe et accueil) : la couleur de cire la plus proche de la palette du couple (ou I.seal), initiales gravées dans la cire
   // dégradé du relief des initiales (clair, moyen, sombre) pour chaque cire
   const SEALS={or:['#fbe3a0','#c99a3a','#6e4a12'],bordeaux:['#d8737b','#8e2430','#3f0b10'],bleu:['#9bb4e8','#2f4f94','#0c1a3d'],
     sauge:['#e4ecd6','#8fa37f','#3f4d36'],terracotta:['#f5b085','#c0643f','#4f1f0c'],rose:['#fff0f2','#d99aa6','#7a4250']};
@@ -107,20 +106,23 @@
     const c={nm:lt?T.color:'#fff',ey:lt?(T.ey||T.color):'#fff',tx:lt?(T.tx||T.color):'#fff'};
     const body=inner(c,lt);
     // le décor n'est pas dans la page : un calque fixe par scène (plusieurs pages d'affilée peuvent partager la même scène,
-    // le décor reste alors en place et seul un voile apparaît sous le texte : aucune coupure)
-    pages.push({n,lt,veil:opts.veil?(lt?'rgba(255,253,248,.7)':'rgba(10,10,14,.4)'):'',
+    // le décor reste alors en place : aucune coupure). Pas de voile sombre sous le texte : il « apparaissait » au swipe
+    // sans que l'image change, l'utilisateur l'a fait retirer (voir CLAUDE.md).
+    pages.push({n,lt,
       html:`<section class="pg${lt?' light':''}${opts.cls?' '+opts.cls:''}" data-img="${img(n)}" style="${esc(opts.style||'')}">${body}</section>`});
   }
   const cdHtml=(big,col)=>`<div class="cd${big?' big':''}" style="color:${col}">${['d','h','m','s'].map((u,i)=>`<div><b data-u="${u}">0</b><span>${[S.days,S.hours,S.min,S.sec][i]}</span></div>`).join('')}</div>`;
   const oval=!!T.top1, compact=!!T.compact;
   const RVL=window.SceauReveal&&SceauReveal.kinds.includes(I.reveal)?I.reveal:null;
+  // chapeau de l'accueil : « Bismillah » s'écrit en arabe, en calligraphie (ligature basmala, voir themes.js), de droite à gauche
+  const eyHtml=(cls,t,st)=>{ const e=window.sceauEy(t); return `<div class="${cls}${e.ar?' ar':''}"${e.ar?` lang="ar" dir="rtl" aria-label="${esc(window.SCEAU_BASMALA_LABEL)}"`:''} style="${st}">${esc(e.text)}</div>`; };
 
   // 1. accueil
   page(1,(c)=>{
     const names=T.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
     return (fam&&fam.label?`<div class="rv greet" style="--i:${rvI++};color:${c.tx}">${esc(fam.label)}</div>`:'')+
-      (oval||compact?'':`<div class="rv seal" style="--i:${rvI++};background:${sealBg}">${esc(ini)}</div>`)+
-      `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(I.intro&&I.intro.eyebrow||T.scenes[0][0])}</div>`+
+      (oval||compact?'':`<div class="rv seal" style="--i:${rvI++};background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div>`)+
+      eyHtml('rv ey',I.intro&&I.intro.eyebrow||T.scenes[0][0],`--i:${rvI++};color:${c.ey}`)+
       `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(T.stack?.82:1,c.nm))}">${names}</div>`+
       (oval||compact?'':`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${esc(I.intro&&I.intro.text||S.joy)}</div>`)+
       // date à découvrir (grattage, roue, jackpot) : le compte à rebours et l'invitation à défiler n'apparaissent qu'une fois la date trouvée
@@ -144,18 +146,18 @@
     head(c,P.eyebrow||S.parents,'')+
     (P.names&&P.names.length?rv('fams',c.tx,P.names.map(x=>`<span>${esc(x)}</span>`).join('<i>&amp;</i>')):'')+
     rv('tx',c.tx,esc(P.text||''))+
-    rv('nm',null,`${esc(n1)} &amp; ${esc(n2)}`,esc(nmCss(.7,c.nm))),{veil:true});
+    rv('nm',null,`${esc(n1)} &amp; ${esc(n2)}`,esc(nmCss(.7,c.nm))),{});
 
   // 3. notre histoire
   const ST=I.story;
   if(ST) page(1,(c,lt)=>
     head(c,ST.eyebrow||S.story,ST.title||'',.6)+
     (ST.photos&&ST.photos.length?rv('ph',null,ST.photos.slice(0,3).map((u,k)=>`<img src="${esc(u)}" alt="" loading="lazy" style="--r:${[-4,3,-2][k]}deg">`).join('')):'')+
-    rv('st',c.tx,(ST.items||[]).map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')),{veil:true,cls:'tall'});
+    rv('st',c.tx,(ST.items||[]).map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')),{cls:'tall'});
 
   // 4. compte à rebours sur une page
   if(I.countdown==='page') page(1,(c)=>
-    head(c,S.soon,S.left,.8)+rv('',null,cdHtml(true,c.tx))+rv('dl',c.tx,`<i></i><span>${esc(fmtDay(main))}</span><i></i>`),{veil:true});
+    head(c,S.soon,S.left,.8)+rv('',null,cdHtml(true,c.tx))+rv('dl',c.tx,`<i></i><span>${esc(fmtDay(main))}</span><i></i>`),{});
 
   // 5. événements
   events.forEach((e,i)=>{
@@ -174,42 +176,42 @@
   const PR=I.program;
   if(PR) page(lastScene,(c,lt)=>
     head(c,PR.eyebrow||S.program,PR.title||'',.6)+
-    rv('card tl',c.tx,(PR.items||[]).map(x=>`<div class="it"><b>${esc(x.time)}</b><div><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+    rv('card tl',c.tx,(PR.items||[]).map(x=>`<div class="it"><b>${esc(x.time)}</b><div><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   // 7. infos pratiques, dress code, hébergement, questions, liste, photos, table : sur le décor de la réponse
   if(I.infos&&I.infos.length) page(4,(c,lt)=>
     head(c,I.infosTitle||S.infos,'')+
-    rv('card',c.tx,I.infos.map(x=>`<div class="it">${ic[x.icon]||ic.info}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+    rv('card',c.tx,I.infos.map(x=>`<div class="it">${ic[x.icon]||ic.info}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const DR=I.dress;
   if(DR) page(4,(c)=>
     head(c,DR.eyebrow||S.dress,DR.title||'',.7)+
     (DR.colors&&DR.colors.length?rv('sw',null,DR.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')):'')+
-    rv('tx',c.tx,esc(DR.text||'')),{veil:true});
+    rv('tx',c.tx,esc(DR.text||'')),{});
 
   const SY=I.stay;
   if(SY) page(4,(c,lt)=>
     head(c,SY.eyebrow||S.stay,SY.title||'',.6)+
-    rv('card',c.tx,(SY.items||[]).map(x=>`<div class="it">${ic[x.icon]||ic.hotel}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+    rv('card',c.tx,(SY.items||[]).map(x=>`<div class="it">${ic[x.icon]||ic.hotel}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const FQ=I.faq;
   if(FQ) page(4,(c,lt)=>
     head(c,FQ.eyebrow||S.faq,FQ.title||'',.6)+
-    rv('card qa',c.tx,(FQ.items||[]).map(x=>`<div class="it"><div><h4>${esc(x.q)}</h4><p>${esc(x.a)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{veil:true,cls:'tall'});
+    rv('card qa',c.tx,(FQ.items||[]).map(x=>`<div class="it"><div><h4>${esc(x.q)}</h4><p>${esc(x.a)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const GF=I.gifts;
   if(GF) page(4,(c)=>
     head(c,GF.eyebrow||S.gifts,GF.title||'',.7)+rv('tx',c.tx,esc(GF.text||''))+
-    (GF.url?rv('acts',c.tx,`<a class="b" ${lnk(GF.url)}>${ic.gift}${esc(GF.label||S.giftsBtn)}</a>`):''),{veil:true});
+    (GF.url?rv('acts',c.tx,`<a class="b" ${lnk(GF.url)}>${ic.gift}${esc(GF.label||S.giftsBtn)}</a>`):''),{});
 
   const PH=I.photos;
   if(PH) page(4,(c)=>
     head(c,PH.eyebrow||S.photos,PH.title||'',.7)+rv('tx',c.tx,esc(PH.text||''))+
-    (PH.url?rv('acts',c.tx,`<a class="b" ${lnk(PH.url)}>${ic.cam}${esc(PH.label||S.photosBtn)}</a>`):''),{veil:true});
+    (PH.url?rv('acts',c.tx,`<a class="b" ${lnk(PH.url)}>${ic.cam}${esc(PH.label||S.photosBtn)}</a>`):''),{});
 
   // la table n'apparaît que sur le lien personnel d'une famille qui a une table
   if(fam&&fam.table) page(4,(c)=>
-    head(c,S.dayJ,S.table,.7)+rv('tbl',c.tx,esc(fam.table))+rv('tx',c.tx,esc(I.tableText||S.tableTx)),{veil:true});
+    head(c,S.dayJ,S.table,.7)+rv('tbl',c.tx,esc(fam.table))+rv('tx',c.tx,esc(I.tableText||S.tableTx)),{});
 
   // 8. réponse
   const R=I.rsvp||{};
@@ -222,6 +224,64 @@
     `<div class="rv acts" style="--i:${rvI++};color:${c.tx}"><button type="button" class="b" data-rsvp style="color:${c.tx}">${ic.mail}${S.reply}</button></div>`+
     `<a class="made" href="/" target="_blank" rel="noopener" style="color:${c.ey}">${S.made} <b>SCEAU</b></a>`);
 
+  /* ---------- mise en page continue (comme un long rouleau peint) ----------
+     une grande illustration qu'on descend, qui se fond dans des fonds texturés aux couleurs du thème ;
+     entre deux parties, une guirlande à cheval sur la limite cache le changement de fond (aucune coupure) */
+  const LG=I.layout==='long'&&I.long?I.long:null;
+  function longHtml(){
+    const X=LG, sec=X.sec, R0=I.rsvp||{};
+    const nm=(k,col)=>esc(nmCss(k,col));
+    const blk=(i,inner,cls='')=>`<section class="lg-s${cls?' '+cls:''}" style="--ink:${sec[i].ink};--ac:${sec[i].accent};background-image:url('${X.base}/${sec[i].tex}')">${inner}</section>`;
+    const band=(i)=>`<div class="lg-band" aria-hidden="true"><img src="${X.base}/${X.bands[i]}" alt="" data-sp="-.10"></div>`;
+    const ttl=(t,i)=>`<h2 class="rv lg-h" style="${nm(.62,sec[i].accent)}">${esc(t)}</h2>`;
+    // 1. l'illustration d'ouverture et l'invitation
+    const P0=I.parents||null, names=`${esc(n1)} <i>&amp;</i> ${esc(n2)}`;
+    const hero=`<div class="lg-hero"><img class="lg-hero-img" src="${X.base}/${X.hero.src}" alt="" style="aspect-ratio:${X.hero.w}/${X.hero.h}">
+      <div class="lg-hero-txt" data-sp=".35" style="color:${X.hero.ink};--sh:${X.hero.shadow||'none'};--top:${X.hero.top||'14%'}">
+        ${fam&&fam.label?`<div class="greet">${esc(fam.label)}</div>`:''}
+        ${eyHtml('ey',I.intro&&I.intro.eyebrow||T.scenes[0][0],'')}
+        <div class="lg-names" style="${nm(1.05,X.hero.ink)}">${names}</div>
+        <div class="dl"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>
+        <div class="lg-hint">${S.scroll} ↓</div>
+      </div></div>`;
+    const evs=events.map((e,i)=>{ const d=zoned(e.start,e.tz), inner=X.ev[(I.events||[]).indexOf(e)]||X.ev[i%X.ev.length];
+      const when=fmtDayShort(d,e.tz)+' · '+fmtTime(d,e.tz);
+      return `<article class="lg-ev rv">
+        <div class="lg-fr" style="aspect-ratio:${X.frame.w}/${X.frame.h}"><img class="in" src="${X.base}/${inner}" alt="" style="-webkit-mask-image:url('${X.base}/${X.frame.mask}');mask-image:url('${X.base}/${X.frame.mask}')"><img class="fr" src="${X.base}/${X.frame.src}" alt=""></div>
+        <div class="ey">${esc(e.eyebrow||'')}</div><div class="lg-evt" style="${nm(.62,sec[0].ink)}">${esc(e.title)}</div>
+        <div class="when">${esc(when)}</div>${e.place?`<div class="tx">${esc(e.place)}</div>`:''}${e.note?`<div class="tx small">${esc(e.note)}</div>`:''}
+        <div class="acts">${e.address?`<a class="b" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${S.route}</a>`:''}<button type="button" class="b" data-cal="${esc(e.id)}">${ic.cal}${S.cal}</button></div>
+      </article>`; }).join('');
+    const s1=`<div class="lg-a" style="background-image:url('${X.base}/${sec[0].tex}');--ink:${sec[0].ink};--ac:${sec[0].accent}">${hero}
+      <div class="lg-in">
+        ${P0?`<div class="rv ey">${esc(P0.eyebrow||S.parents)}</div><div class="rv lg-fams">${(P0.names||[]).map(x=>`<span>${esc(x)}</span>`).join('<i>&amp;</i>')}</div><p class="rv tx">${esc(P0.text||'')}</p>`:''}
+        <div class="rv lg-names2" style="${nm(.8,sec[0].accent)}">${names}</div>
+        <p class="rv tx">${esc(I.intro&&I.intro.text||S.joy)}</p>
+        ${I.countdown==='debut'?`<div class="rv">${cdHtml(false,sec[0].ink)}</div>`:''}
+        ${ttl(S.celebr,0)}${evs}
+      </div></div>`;
+    // 2. notre histoire, photos, dress code
+    const ST0=I.story, DR0=I.dress, phs=X.photos||[];
+    const s2=blk(1,`<div class="lg-in">${ttl(ST0&&ST0.title||S.story,1)}
+        ${ST0&&ST0.items?`<div class="rv st lg-st">${ST0.items.map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')}</div>`:''}
+      </div>
+      ${phs.length?`<div class="rv lg-ph" aria-hidden="true"><div class="lg-ph-in">${[...phs,...phs].map((u,k)=>`<img src="${X.base}/${u}" alt="" loading="lazy" style="--r:${[-3,2,-1.5,3][k%4]}deg">`).join('')}</div></div>`:''}
+      ${DR0?`<div class="lg-in">${ttl(DR0.eyebrow||S.dress,1)}${DR0.title?`<div class="rv lg-sub">${esc(DR0.title)}</div>`:''}${DR0.colors?`<div class="rv sw">${DR0.colors.map(c=>`<i style="background:${esc(c)}"></i>`).join('')}</div>`:''}<p class="rv tx">${esc(DR0.text||'')}</p></div>`:''}`);
+    // 3. bon à savoir, liste, réponse, compte à rebours
+    const infos=[...(I.infos||[]),...((I.stay&&I.stay.items)||[])];
+    const GF0=I.gifts;
+    const s3=blk(2,`<div class="lg-in">
+        ${infos.length?ttl(S.know,2)+`<div class="lg-grid">${infos.map(x=>`<div class="rv lg-it">${ic[x.icon]||ic.info}<h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div>`).join('')}</div>`:''}
+        ${GF0?ttl(GF0.eyebrow||S.gifts,2)+`<p class="rv tx">${esc(GF0.text||'')}</p>${GF0.url?`<div class="rv acts"><a class="b" ${lnk(GF0.url)}>${ic.gift}${esc(GF0.label||S.giftsBtn)}</a></div>`:''}`:''}
+        <div class="rv ey lg-gap">${esc(R0.eyebrow||S.rsvpT)}</div><div class="rv lg-sub" style="${nm(.7,sec[2].accent)}">${esc(R0.title||T.scenes[3][1])}</div>
+        ${R0.deadline?`<p class="rv tx">${S.before} ${esc(er(zoned(R0.deadline+'T23:59',TZ).toLocaleDateString(LOC,{day:'numeric',month:'long',timeZone:TZ})))}</p>`:''}
+        <div class="rv acts"><button type="button" class="b solid" data-rsvp>${ic.mail}${S.reply}</button></div>
+        ${I.countdown!=='non'?`<div class="rv ey lg-gap">${S.cdEnd}</div><div class="rv">${cdHtml(true,sec[2].ink)}</div>`:''}
+        <a class="lg-made" href="/" target="_blank" rel="noopener">${S.made} <b>SCEAU</b></a>
+      </div>`,'lg-end');
+    return `<div class="lg">${s1}${band(0)}${s2}${band(1)}${s3}</div>`;
+  }
+
   /* ---------- montage ---------- */
   const runs=[], runOf=[];
   pages.forEach((p,i)=>{ const r=runs[runs.length-1]; if(r&&r.n===p.n) r.b=i; else runs.push({n:p.n,lt:p.lt,a:i,b:i}); runOf[i]=runs.length-1; });
@@ -229,26 +289,26 @@
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app';
   app.innerHTML=`
-    <div class="bgs" id="bgs">${runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}<div class="film" id="film"></div>${pages.map(p=>`<div class="vl" style="${p.veil?'background:'+p.veil:'display:none'}"></div>`).join('')}</div>
-    <div class="sc" id="sc">${pages.map(p=>p.html).join('')}</div>
-    <canvas id="fx"></canvas>
+    <div class="sc${LG?' sc-long':''}" id="sc"><div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
+    ${LG&&I.demo?`<a class="lg-want" href="/#prix">${S.want}</a>`:''}
     ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
-    <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp')">
+    <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp');--pal:${pal}${I.doormen?`;--man:url('/img/open/${I.theme}-portier.webp')`:''}">
       <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div></div></div></div>
       <div class="op-cur"><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${esc(n1[0])} &amp; ${esc(n2[0])}</div><div class="op-cur-edge"></div></div>
-      <div class="op-doors"><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l"></div><div class="op-leaf r"></div><div class="op-seam"></div></div></div>
+      <div class="op-doors"><div class="op-room"></div><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l">${I.doormen?'<div class="op-man"></div>':''}</div><div class="op-leaf r">${I.doormen?'<div class="op-man"></div>':''}</div></div></div>
+      <div class="op-voile"><div class="op-sheer l"></div><div class="op-sheer r"></div><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${esc(n1[0])} &amp; ${esc(n2[0])}</div></div>
       ${fam&&fam.label?`<div class="op-to">${esc(fam.label)}</div>`:''}
       <div class="op-tap">${(I.opening||'env')==='env'?S.tapSeal:S.tap}</div>
     </div>
     <div class="flash" id="flash" aria-hidden="true"></div>
     <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
-  const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${img(1)}')`;
+  const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${LG?LG.base+'/'+LG.hero.src:img(1)}')`;
   document.body.append(bd,app);
-  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], veils=[...$('#bgs').querySelectorAll('.vl')], film=$('#film');
+  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], bgs=$('#bgs'), fxc=$('#fx');
 
   /* ---------- date à découvrir ---------- */
-  const rvlHost=secs[0].querySelector('[data-rvl]');
+  const rvlHost=secs[0]&&secs[0].querySelector('[data-rvl]');
   if(rvlHost) SceauReveal.mount(rvlHost,{kind:RVL,date:main,tz:TZ,lang:L,pal,light:pages[0].lt,scope:secs[0],onDone:()=>requestAnimationFrame(frame)});
 
   /* ---------- apparition + parallaxe ---------- */
@@ -258,66 +318,50 @@
     if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); layers[runOf[i]].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
   }),{root:sc,threshold:[.45,.8]});
   secs.forEach(s=>io.observe(s));
-  // comme le faire-part d'Inès & Jad : pendant le glissement d'une page à l'autre,
-  // le décor suivant apparaît en fondu PAR-DESSUS le précédent (jamais de trait ni de trou noir),
-  // les textes de la page se fondent et glissent doucement selon sa position
-  const ease=x=>x*x*(3-2*x);
-  // décors animés au défilement, comme notre faire-part : 24 images tirées d'une courte vidéo de chaque scène,
-  // qui avancent et reculent avec le doigt. Chargées juste avant d'arriver sur la scène.
-  const ANIM=new Set(I.anim||[]), FR=24, frames={};
-  const frameUrl=(n,k)=>`/img/frames/${I.theme}-${n}/f${String(k+1).padStart(2,'0')}.webp`;
-  function preload(key,count,url){
-    if(frames[key]) return; const f=frames[key]={ready:false}; let ok=0;
-    for(let k=0;k<count;k++){ const im=new Image(); im.onload=im.onerror=()=>{ if(++ok===count) f.ready=true; }; im.src=url(k); }
-  }
-  // transitions filmées d'une scène à la suivante : la caméra passe d'un décor à l'autre pendant le glissement,
-  // sans fondu ni coupure. Au repos, c'est toujours l'image d'origine en pleine définition qui est affichée.
-  const TRANS=new Set(I.trans||[]), FT=32;
-  const transUrl=(key,k)=>`/img/trans/${I.theme}-${key}/f${String(k+1).padStart(2,'0')}.webp`;
-  const transOf=(a,b)=>TRANS.has(a+'-'+b)?{key:a+'-'+b,rev:false}:TRANS.has(b+'-'+a)?{key:b+'-'+a,rev:true}:null;
-  const setBg=(L,u)=>{ if(L._u!==u){ L._u=u; L.firstElementChild.style.backgroundImage=`url('${u}')`; } };
-  let ticking=false, filmOn=false;
-  function frame(){
-    ticking=false;
-    const h=sc.clientHeight, mid=sc.scrollTop+h/2;
-    const D=secs.map(s=>(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h);   // 0 = page centrée, <0 = page encore en dessous
-    let film_=null;
+  /* ---------- fond continu ----------
+     Le décor n'est pas fixe derrière des pages qui glissent (l'utilisateur voyait « un changement de page, c'est
+     moche »). Il est DANS le conteneur qui défile : une bande (#bgs) avec, pour chaque suite de pages de même scène,
+     un cadre (.bgl) de la hauteur de ces pages et dedans l'image (.bg, position: sticky) à la taille d'un écran.
+     Tant que ses pages défilent, l'image reste en place ; quand la scène suivante arrive, sa propre image monte
+     avec le doigt et vient recouvrir la précédente (qui est poussée au même rythme), son bord haut fondu sur
+     OVK = 12 % d'un écran : un seul mouvement continu, le décor change sans qu'on sente une page. Aucune image
+     n'est étirée sur plusieurs écrans (jamais de zoom). Les positions sont recalculées à chaque changement de
+     taille (une page fait un écran, une page « tall » davantage). */
+  const OVK=.12;
+  function layoutStrip(){
+    const h=sc.clientHeight; fxc.style.height=h+'px'; if(LG) return;
+    const ov=Math.round(h*OVK);
+    bgs.style.height=sc.scrollHeight+'px';
     runs.forEach((r,ri)=>{
-      const L=layers[ri], d0=D[r.a], d1=D[r.b], nx=runs[ri+1];
-      L.style.opacity=ri===0?1:ease(Math.max(0,Math.min(1,1+d0*1.15))).toFixed(3);
-      if(!reduce&&d0>-1.3&&d1<1.3) L.style.transform=`translate3d(0,${(-(d0<0?d0:d1>0?d1:0)*3).toFixed(2)}%,0)`;
-      const tr=nx&&opened&&!reduce?transOf(r.n,nx.n):null;
-      if(tr){
-        if(d0>-2.2&&d1<1.2) preload('t'+tr.key,FT,k=>transUrl(tr.key,k));
-        if(d1>0&&d1<1) film_={tr,f:d1};
-      }
-      // sans transition filmée : la scène s'anime en partant (au repos, l'image d'origine reste nette)
-      if(!tr&&ANIM.has(r.n)&&opened&&!reduce){
-        if(d0>-2.2&&d1<1.2) preload(r.n,FR,k=>frameUrl(r.n,k));
-        const pr=Math.max(0,Math.min(1,d1/.9));
-        setBg(L,frames[r.n]&&frames[r.n].ready&&pr>0?frameUrl(r.n,Math.round(pr*(FR-1))):img(r.n));
-      }
+      const top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight, L=layers[ri], B=L.firstElementChild;
+      const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px';
+      B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
+      const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
     });
-    // la pellicule couvre l'écran pendant le passage, et s'efface aux deux bouts sur l'image d'origine (identique)
-    const fr=film_&&frames['t'+film_.tr.key];
-    if(fr&&fr.ready){
-      const f=film_.tr.rev?1-film_.f:film_.f, k=Math.round(f*(FT-1));
-      const u=transUrl(film_.tr.key,k); if(film._u!==u){ film._u=u; film.style.backgroundImage=`url('${u}')`; }
-      film.style.opacity=Math.min(1,film_.f/.08,(1-film_.f)/.08).toFixed(3); filmOn=true;
-    } else if(filmOn){ film.style.opacity=0; filmOn=false; }
+    frame();
+  }
+  let ticking=false;
+  function frame(){
+    ticking=false; if(LG) return;
+    const h=sc.clientHeight, y=sc.scrollTop, mid=y+h/2;
+    const D=secs.map(s=>(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h);   // 0 = page centrée, <0 = page encore en dessous
+    // les textes restent lisibles pendant la plus grande partie du glissement et ne s'estompent que près du bord :
+    // on ne doit pas sentir un « changement de page », seulement le décor qui change
     secs.forEach((s,i)=>{
       const d=D[i];
-      if(pages[i].veil) veils[i].style.opacity=Math.max(0,Math.min(1,(1-Math.abs(d))*1.6)).toFixed(3);
-      if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.12)*1.9)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
+      if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.35)*2.2)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
     });
   }
   sc.addEventListener('scroll',()=>{ if(!ticking){ ticking=true; requestAnimationFrame(frame); } },{passive:true});
-  frame();
+  layoutStrip(); addEventListener('load',layoutStrip); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layoutStrip);
 
-  /* ---------- pagination, comme le faire-part d'Inès & Jad ----------
-     un swipe (ou un cran de molette, ou une flèche) = la scène suivante glisse en douceur
-     et se cale pile en plein écran ; une page plus haute que l'écran se lit en plusieurs crans */
-  const PAGE_DUR=900, PAGE_DUR_FILM=1600, easePage=t=>1-Math.pow(1-t,3), easeFilm=t=>.5-Math.cos(Math.PI*t)/2;
+  /* ---------- pagination ----------
+     Tactile : défilement natif, CONTINU. Le doigt entraîne la page, l'élan la porte, et elle se cale doucement en
+     plein écran grâce au scroll-snap « proximity » (invite.css). Le geste n'est jamais bloqué ni remplacé par un saut
+     animé : l'utilisateur a refusé le swipe brusque (« comme si c'était en continu, avec des changements de décor »).
+     Molette et clavier : un cran = la scène suivante, en un glissement lent qui démarre et finit en douceur ;
+     une page plus haute que l'écran se lit en plusieurs crans */
+  const PAGE_DUR=1100, easePage=t=>.5-Math.cos(Math.PI*t)/2;
   let paging=false;
   function stops(){
     const h=sc.clientHeight, max=sc.scrollHeight-h, out=[];
@@ -325,49 +369,66 @@
       if(H>h*1.05){ for(let y=t+h*.85;y<t+H-h;y+=h*.85) out.push(Math.round(y)); out.push(t+H-h); } });
     return [...new Set(out.map(y=>Math.max(0,Math.min(max,Math.round(y)))))].sort((a,b)=>a-b);
   }
-  function glide(to,slow){
+  function glide(to){
     const from=sc.scrollTop; if(Math.abs(to-from)<2) return;
-    // un passage filmé d'un décor à l'autre prend un peu plus de temps, pour qu'on voie le voyage
-    paging=true; const t0=performance.now(), dur=reduce?1:slow?PAGE_DUR_FILM:PAGE_DUR;
-    const ez=slow?easeFilm:easePage;
-    (function step(now){ const p=Math.min(1,(now-t0)/dur); sc.scrollTop=from+(to-from)*ez(p);
-      if(p<1) requestAnimationFrame(step); else paging=false; })(t0);
+    // pendant le glissement, le snap natif est coupé : sinon il « saute » sur la page dès qu'on s'en approche
+    paging=true; sc.style.scrollSnapType='none'; const t0=performance.now(), dur=reduce?1:PAGE_DUR;
+    (function step(now){ const p=Math.min(1,(now-t0)/dur); sc.scrollTop=from+(to-from)*easePage(p);
+      if(p<1) requestAnimationFrame(step); else { paging=false; sc.style.scrollSnapType=''; } })(t0);
   }
   function go(dir){
     if(!opened||paging) return;
     const cur=sc.scrollTop, st=stops();
     const to=dir>0?st.find(y=>y>cur+4):st.slice().reverse().find(y=>y<cur-4);
     if(to===undefined) return;
-    const at=y=>{ let k=0; secs.forEach((s,i)=>{ if(s.offsetTop<=y+4) k=i; }); return runOf[k]; };
-    const ra=at(cur), rb=at(to);
-    glide(to,ra!==rb&&!!transOf(runs[ra].n,runs[rb].n));
+    glide(to);
   }
-  function settle(){ if(!opened||paging) return; const cur=sc.scrollTop, st=stops(); glide(st.reduce((b,y)=>Math.abs(y-cur)<Math.abs(b-cur)?y:b,st[0])); }
-  // tactile : le défilement natif est bloqué, c'est le relâcher du swipe qui lance le glissement
-  let tY=null, tX=null;
-  sc.addEventListener('touchstart',e=>{ tY=e.touches[0].clientY; tX=e.touches[0].clientX; },{passive:true});
-  sc.addEventListener('touchmove',e=>{ if(opened) e.preventDefault(); },{passive:false});
-  sc.addEventListener('touchend',e=>{
-    if(tY===null) return; const dy=tY-e.changedTouches[0].clientY, dx=tX-e.changedTouches[0].clientX; tY=tX=null;
-    if(Math.abs(dy)<32||Math.abs(dy)<Math.abs(dx)) return;   // tap ou geste horizontal : on ne bouge pas
-    go(dy>0?1:-1);
-  },{passive:true});
+  // calage : on termine le mouvement dans le sens du geste (dès 12 % de chemin parcouru), sinon vers la page la plus proche
+  let lastTop=0, dir=1;
+  function settle(){
+    if(!opened||paging||LG) return; const cur=sc.scrollTop, st=stops();
+    const prev=st.slice().reverse().find(y=>y<=cur+2), next=st.find(y=>y>cur+2); let to;
+    if(prev==null) to=next; else if(next==null) to=prev; else { const f=(cur-prev)/(next-prev); to=dir>0?(f>.12?next:prev):(f<.88?prev:next); }
+    if(to!=null) glide(to);
+  }
+  // tactile : le défilement natif fait le travail (le doigt entraîne la page, l'élan la porte, le snap « proximity »
+  // la cale quand elle est proche d'une page). Si le geste s'arrête entre deux pages, un calage doux (le même
+  // glissement lent que la molette) termine le mouvement une fois le doigt levé et l'élan fini : jamais de page
+  // à moitié. Avant l'ouverture, on ne défile pas.
+  let touching=false, settleT=null;
+  const armSettle=()=>{ clearTimeout(settleT); settleT=setTimeout(()=>{ if(!touching&&!paging&&opened&&!LG) settle(); },160); };
+  sc.addEventListener('touchstart',()=>{ touching=true; clearTimeout(settleT); },{passive:true});
+  sc.addEventListener('touchmove',e=>{ if(!opened) e.preventDefault(); },{passive:false});
+  sc.addEventListener('touchend',()=>{ touching=false; armSettle(); },{passive:true});
+  sc.addEventListener('touchcancel',()=>{ touching=false; armSettle(); },{passive:true});
+  sc.addEventListener('scroll',()=>{ const t=sc.scrollTop; if(t!==lastTop) dir=t>lastTop?1:-1; lastTop=t; if(!touching&&!paging) armSettle(); },{passive:true});
   // molette / trackpad : un geste = une page (l'inertie du trackpad ne fait pas sauter plusieurs pages)
   let lastWheel=0, wheelUsed=false;
   sc.addEventListener('wheel',e=>{
-    if(!opened) return; e.preventDefault();
+    if(!opened||LG) return; e.preventDefault();
     const now=performance.now(); if(now-lastWheel>220) wheelUsed=false; lastWheel=now;
     if(wheelUsed||paging||Math.abs(e.deltaY)<6) return;
     wheelUsed=true; go(e.deltaY>0?1:-1);
   },{passive:false});
   addEventListener('keydown',e=>{
-    if(!opened||sheet.classList.contains('on')||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')) return;
+    if(!opened||LG||sheet.classList.contains('on')||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')) return;
     if(['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); go(1); }
     else if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); go(-1); }
   });
-  addEventListener('resize',()=>{ frame(); settle(); });
+  addEventListener('resize',()=>{ layoutStrip(); settle(); });
   // précharge les images des pages suivantes
   [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
+
+  function longStart(){
+    const rio=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('on'); rio.unobserve(en.target); } }),{root:sc,threshold:.18});
+    sc.querySelectorAll('.lg .rv').forEach(el=>rio.observe(el));
+    const sp=[...sc.querySelectorAll('[data-sp]')]; let tk=false;
+    const par=()=>{ tk=false; if(reduce) return; const vh=sc.clientHeight;
+      sp.forEach(el=>{ const r=el.parentNode.getBoundingClientRect(); if(r.bottom<-vh||r.top>2*vh) return;
+        const k=+el.dataset.sp, off=el.classList.contains('lg-hero-txt')?sc.scrollTop*k:((r.top+r.height/2)-vh/2)*k;
+        el.style.transform=el.closest('.lg-band')?`translate3d(0,calc(-50% + ${off.toFixed(1)}px),0)`:`translate3d(0,${off.toFixed(1)}px,0)`; }); };
+    sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(par); } },{passive:true}); par();
+  }
 
   /* ---------- compte à rebours ---------- */
   function tick(){
@@ -389,61 +450,97 @@
   // une seule arche continue, comme le faire-part d'Inès & Jad : l'ouverture commence, la lumière monte,
   // le passage vers la première page se fait sous le pic blanc, puis la lumière se retire et dévoile la page déjà nette
   // enveloppe : la lumière monte à 1 s et la page apparaît sous le pic, comme le faire-part d'Inès & Jad.
-  // portes et rideau : tout se fait PENDANT le mouvement, en une seule dynamique continue :
-  // la page est déjà vivante derrière l'ouverture, la lumière monte tout de suite, et les battants (ou le rideau)
-  // s'effacent en fondu alors qu'ils sont encore en train de s'ouvrir.
-  const SEQ={env:{flash:1000,on:1530,gone:1560,soft:false},cur:{flash:420,on:320,gone:760,soft:true},door:{flash:0,on:1050,gone:1150,soft:true}};
+  // rideau, portes et voile : la lumière part AU TOUCHER (flash:0), en même temps que le mouvement, et monte
+  // doucement avec lui (jamais de plein écran blanc) ; la page est déjà vivante derrière (on la voit à travers
+  // l'entrebâillement, ou dès que les pans s'écartent), et le rideau / les battants s'effacent en fondu alors
+  // qu'ils finissent de s'ouvrir : tout s'enchaîne, aucun temps mort sur de la lumière (voir CLAUDE.md, règle 15).
+  const SEQ={env:{flash:1000,on:1530,gone:1560},cur:{flash:0,on:320,gone:760,cls:'soft'},door:{flash:0,on:200,gone:1950,cls:'door'},voile:{flash:0,on:150,gone:1700,cls:'door'}};
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
-    if(q.soft) flash.classList.add('soft');
-    if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash);
-    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; secs[0].classList.add('on'); layers[0].classList.add('on'); startFx(); setTimeout(frame,1500); },q.on);
+    if(q.cls) flash.classList.add(q.cls);
+    if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash); else flash.classList.add('bloom');
+    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); if(LG) longStart(); },q.on);
     setTimeout(()=>op.classList.add('gone'),q.gone);
-    setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1600,q.gone+1200));
+    setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1800,q.gone+1400));
   }
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
 
-  /* ---------- particules ---------- */
+  /* ---------- particules ----------
+     Des choses peintes qui tombent (ou montent) : pétales, feuilles, confettis d'or, œillets d'Inde, fleurs,
+     graines de pissenlit, lanternes. Chaque particule est un vrai sprite peint (img/fx/<famille>-<i>.webp,
+     découpés par business/tools/fx-sprites.py à partir d'une planche gemini.py), posé avec de la profondeur
+     (les lointains sont plus petits, plus pâles et plus lents), une culbute (le sprite se retourne sur lui-même),
+     un balancement propre et un vent commun qui va et vient. Le mouvement est en temps réel (indépendant du
+     nombre d'images par seconde). */
+  // particules désactivées pour l'instant (« retire les fleurs, pétales, tout ça qui descend, on n'y est pas encore ») :
+  // le code reste, PARTICLES_ON passera à true quand les sprites seront au niveau
+  const PARTICLES_ON=false;
   function startFx(){
-    const kind=I.particles||T.particles||'none'; if(kind==='none'||reduce) return;
-    const cv=$('#fx'), cx=cv.getContext('2d'); let W,H,dpr;
-    function size(){ dpr=Math.min(2,devicePixelRatio||1); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
+    const kind=I.particles||T.particles||'none'; if(!PARTICLES_ON||kind==='none'||reduce) return;
+    const cv=$('#fx'), cx=cv.getContext('2d'); let W=0,H=0,dpr=1;
+    function size(){ dpr=Math.min(2,devicePixelRatio||1); cv.style.height=sc.clientHeight+'px'; W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
     size(); addEventListener('resize',size);
+    // réglages par famille : nombre, taille (px, au premier plan), vitesse verticale (px/s, négatif = monte),
+    // balancement, culbute (vitesse de retournement), lumineux (scintillement, halo dans le sprite)
     const P={
-      petals:{n:20,col:['#f6d5dc','#fbe9ec','#f1c1cc','#fff6f2'],up:false,sz:[4,8],sp:[.35,.8]},
-      confetti:{n:30,col:['#e2c275','#d4af37','#f3e3a8','#b8933f'],up:false,sz:[3,7],sp:[.5,1.1]},
-      marigold:{n:26,col:['#f39c12','#f7b733','#e67e22','#ffd166','#e84a5f'],up:false,sz:[4,8],sp:[.4,.9]},
-      seeds:{n:18,col:['#fff4e6','#f5e1c8','#ffffff'],up:true,sz:[2,4],sp:[.15,.35]},
-      leaves:{n:16,col:['#c9a14a','#9bb36b','#d98b3a','#b6c48a'],up:false,sz:[6,10],sp:[.35,.7]},
-      daisies:{n:18,col:['#ffffff','#ffd23f','#ff6b9a','#3ec1d3','#ff9f1c'],up:false,sz:[5,9],sp:[.4,.9]},
-      blossoms:{n:18,col:['#ffffff','#fff8e1','#fde2e4'],up:false,sz:[4,8],sp:[.3,.7]},
-      lanterns:{n:16,col:['#ffd27a','#ffb547','#ffe3a3'],up:true,sz:[2,4],sp:[.2,.45]}
+      petals:  {n:14,sz:[22,44],sp:[26,58],sway:1,  tumble:1},
+      roses:   {n:12,sz:[26,52],sp:[30,64],sway:.9, tumble:1},
+      confetti:{n:22,sz:[10,20],sp:[45,95],sway:.8, tumble:1.7},
+      marigold:{n:12,sz:[24,52],sp:[34,74],sway:.7, tumble:.8,flipMin:.5},
+      seeds:   {n:9, sz:[36,64],sp:[-9,-24],sway:1.6,tumble:.25,flipMin:.8},
+      leaves:  {n:10,sz:[30,60],sp:[30,68],sway:1.3,tumble:1.1},
+      daisies: {n:12,sz:[26,54],sp:[34,70],sway:.7, tumble:.7,flipMin:.55},
+      blossoms:{n:11,sz:[22,48],sp:[26,58],sway:.9, tumble:.8,flipMin:.4},
+      lanterns:{n:7, sz:[42,96],sp:[-7,-20],sway:.5,tumble:0,flipMin:1,glow:true}
     }[kind]; if(!P) return;
     const R=(a,b)=>a+Math.random()*(b-a);
-    const mk=(init)=>({x:R(0,W),y:init?R(0,H):(P.up?H+20:-20),s:R(...P.sz),v:R(...P.sp),a:R(0,6.28),va:R(-.03,.03),w:R(.6,1.6),ph:R(0,6.28),c:P.col[Math.floor(R(0,P.col.length))],o:R(.4,.85)});
-    const ps=Array.from({length:P.n},()=>mk(true));
-    let t=0, run=true;
-    document.addEventListener('visibilitychange',()=>{ run=!document.hidden; if(run) requestAnimationFrame(loop); });
-    function shape(p){
-      cx.fillStyle=p.c; cx.globalAlpha=p.o;
-      if(kind==='lanterns'||kind==='seeds'){ const g=cx.createRadialGradient(0,0,0,0,0,p.s*3); g.addColorStop(0,p.c); g.addColorStop(1,'rgba(255,220,150,0)'); cx.fillStyle=g; cx.beginPath(); cx.arc(0,0,p.s*3,0,7); cx.fill(); return; }
-      if(kind==='confetti'){ cx.fillRect(-p.s/2,-p.s,p.s,p.s*2*Math.abs(Math.cos(p.a*2))+1); return; }
-      if(kind==='daisies'&&p.c==='#ffffff'){ for(let k=0;k<6;k++){ cx.rotate(1.047); cx.beginPath(); cx.ellipse(p.s*.55,0,p.s*.5,p.s*.22,0,0,7); cx.fill(); } cx.fillStyle='#ffd23f'; cx.beginPath(); cx.arc(0,0,p.s*.28,0,7); cx.fill(); return; }
-      if(kind==='blossoms'){ for(let k=0;k<5;k++){ cx.rotate(1.2566); cx.beginPath(); cx.arc(p.s*.45,0,p.s*.32,0,7); cx.fill(); } return; }
-      cx.beginPath(); cx.ellipse(0,0,p.s,p.s*.55,0,0,7); cx.fill();
-    }
-    function loop(){
-      if(!run) return; t+=1; cx.clearRect(0,0,W,H);
-      ps.forEach((p,i)=>{
-        p.y+=P.up?-p.v:p.v; p.x+=Math.sin(t*.012*p.w+p.ph)*.45; p.a+=p.va;
-        if(kind==='lanterns') p.o=.5+.4*Math.sin(t*.03+p.ph);
-        if(P.up?p.y<-30:p.y>H+30) ps[i]=mk(false);
-        cx.save(); cx.translate(p.x,p.y); cx.rotate(p.a); shape(p); cx.restore();
-      });
-      cx.globalAlpha=1; requestAnimationFrame(loop);
+    // les sprites : index.json dit combien il y en a par famille ; on les charge et on dessine ceux qui sont prêts
+    let imgs=[];
+    fetch('/img/fx/index.json').then(r=>r.json()).then(idx=>{
+      const n=idx[kind]||0; imgs=Array.from({length:n},(_,i)=>{ const im=new Image(); im.src=`/img/fx/${kind}-${i}.webp`; return im; });
+    }).catch(()=>{});
+    const up=P.sp[0]<0;
+    const mk=(init)=>{
+      const z=R(0,1);                                   // profondeur : 0 = lointain, 1 = premier plan
+      const s=R(...P.sz)*(.45+.55*z);
+      return {z,s,x:R(-s,W+s),y:init?R(-s,H+s):(up?H+s:-s),v:R(...P.sp)*(.5+.5*z),
+        a:R(0,6.28),va:R(-.9,.9)*(P.tumble||.4),             // rotation dans le plan (rad/s)
+        tp:R(0,6.28),tv:R(.6,1.6)*P.tumble,                   // culbute : le sprite se retourne autour de son axe
+        wp:R(0,6.28),wf:R(.5,1.1),                            // balancement propre (phase, fréquence)
+        i:Math.floor(R(0,999)),o:P.glow?1:(.55+.45*z),born:0,age:0};
+    };
+    const ps=Array.from({length:P.n},()=>mk(true)).sort((a,b)=>a.z-b.z);   // les lointains se dessinent sous les proches
+    let run=true, last=performance.now(), t=0;
+    document.addEventListener('visibilitychange',()=>{ run=!document.hidden; if(run){ last=performance.now(); requestAnimationFrame(loop); } });
+    function loop(now){
+      if(!run) return;
+      const dt=Math.min(.05,(now-last)/1000); last=now; t+=dt;
+      const wind=Math.sin(t*.21)*14+Math.sin(t*.07)*10;      // vent commun, qui va et vient lentement (px/s)
+      cx.clearRect(0,0,W,H);
+      for(let k=0;k<ps.length;k++){
+        const p=ps[k]; p.age+=dt;
+        p.y+=p.v*dt;
+        p.x+=(wind*(.4+.6*p.z)+Math.sin(t*p.wf*1.9+p.wp)*22*P.sway*p.z)*dt;
+        p.a+=p.va*dt; p.tp+=p.tv*dt;
+        if(up?p.y<-p.s*1.2:p.y>H+p.s*1.2){ ps[k]=mk(false); continue; }
+        if(p.x<-p.s*1.5) p.x=W+p.s; else if(p.x>W+p.s*1.5) p.x=-p.s;
+        const n=imgs.length; if(!n) continue;
+        const im=imgs[p.i%n]; if(!im.complete||!im.naturalWidth) continue;
+        const w=p.s, h=p.s*im.naturalHeight/im.naturalWidth;
+        // culbute : de profil, un pétale n'est plus qu'un fil (.18) ; une fleur ou une lanterne ne s'aplatit pas autant (flipMin)
+        let flip=Math.cos(p.tp); const fm=P.flipMin||.18; if(Math.abs(flip)<fm) flip=flip<0?-fm:fm;
+        let o=p.o*Math.min(1,p.age/.9);                                        // apparition en fondu
+        if(P.glow) o*=.78+.22*Math.sin(t*2.1+p.wp);                            // scintillement des lanternes
+        cx.save(); cx.translate(p.x,p.y); cx.rotate(p.a); cx.scale(flip,1); cx.globalAlpha=o;
+        // thèmes clairs : une ombre portée douce, sinon une graine blanche ou un pétale pâle se perd sur le papier
+        if(T.light&&!P.glow){ cx.shadowColor='rgba(70,45,20,.38)'; cx.shadowBlur=3+7*p.z; cx.shadowOffsetY=2+3*p.z; }
+        cx.drawImage(im,-w/2,-h/2,w,h); cx.restore();
+      }
+      cx.globalAlpha=1;
+      requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
   }
@@ -469,13 +566,20 @@
 
   /* ---------- réponse (RSVP) ---------- */
   const KEY='sceau-rsvp-'+I.slug+(fid?'-'+fid:'');
+  // lien personnel d'un invité (?r=identifiant.clé) : on récupère sa réponse pour la pré-remplir sur ce téléphone
+  const rParam=new URLSearchParams(location.search).get('r');
+  if(rParam&&!I.demo) fetch(`/api/rsvp?invite=${encodeURIComponent(I.slug)}&r=${encodeURIComponent(rParam)}`).then(r=>r.ok?r.json():null).then(j=>{
+    if(!j||!j.reply) return; const [rid,rkey]=rParam.split('.');
+    try{ localStorage.setItem(KEY,JSON.stringify(Object.assign({},j.reply,{rid,rkey}))); }catch(e){}
+  }).catch(()=>{});
+  const editUrl=p=>{ const u=new URL(location.href); u.search=''; u.hash=''; if(fid) u.searchParams.set('f',fid); u.searchParams.set('r',p.rid+'.'+p.rkey); return u.toString(); };
   function rsvpSheet(){
     let prev=null; try{ prev=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
     const max=(fam&&fam.seats)||R.maxGuests||6;
     const evRows=events.map(e=>{ const d=zoned(e.start,e.tz); return `<div class="ev"><b>${esc(e.eyebrow||e.title)}</b><small>${esc(e.title)} · ${esc(fmtDayShort(d,e.tz))}</small><div class="yn">`+
       `<label><input type="radio" name="ev-${esc(e.id)}" value="1" ${prev&&prev.events&&prev.events[e.id]===true?'checked':''}><span>${S.present}</span></label>`+
       `<label><input type="radio" name="ev-${esc(e.id)}" value="0" ${prev&&prev.events&&prev.events[e.id]===false?'checked':''}><span>${S.absent}</span></label></div></div>`; }).join('');
-    openSheet(`<h3>${S.rsvpT}</h3><p class="sub">${esc(R.subtitle||S.rsvpSub)}</p>
+    openSheet(`<h3>${S.rsvpT}</h3><p class="sub">${esc(prev&&prev.name?S.already:(R.subtitle||S.rsvpSub))}</p>
       <form id="rf" novalidate>
         <label class="f"><span>${S.name}</span><input name="name" autocomplete="name" required maxlength="120" value="${esc(prev?prev.name:(fam&&fam.name)||'')}"></label>
         ${evRows}
@@ -490,18 +594,22 @@
     $('#rf').addEventListener('submit',async ev=>{
       ev.preventDefault();
       const f=ev.currentTarget, fd=new FormData(f), err=$('#rerr');
-      const data={invite:I.slug,family:fid||null,name:(fd.get('name')||'').trim(),guests:+fd.get('guests')||1,diet:(fd.get('diet')||'').trim(),message:(fd.get('message')||'').trim(),website:fd.get('website')||'',events:{}};
+      const data={invite:I.slug,rid:prev&&prev.rid||undefined,rkey:prev&&prev.rkey||undefined,family:fid||null,name:(fd.get('name')||'').trim(),guests:+fd.get('guests')||1,diet:(fd.get('diet')||'').trim(),message:(fd.get('message')||'').trim(),website:fd.get('website')||'',events:{}};
       let ok=!!data.name; events.forEach(e=>{ const v=fd.get('ev-'+e.id); if(v==null) ok=false; else data.events[e.id]=v==='1'; });
       if(!ok){ err.textContent=S.need; err.hidden=false; return; }
       const btn=f.querySelector('.go'); btn.disabled=true; btn.textContent=S.sending; err.hidden=true;
       try{
-        if(!I.demo){ const r=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); if(!r.ok) throw new Error(r.status); }
-        try{ localStorage.setItem(KEY,JSON.stringify(data)); }catch(e){}
+        if(!I.demo){ const r=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); if(!r.ok) throw new Error(r.status);
+          const j=await r.json().catch(()=>({})); if(j.rid){ data.rid=j.rid; data.rkey=j.rkey; } }
+        delete data.website; try{ localStorage.setItem(KEY,JSON.stringify(data)); }catch(e){}
         const yes=Object.values(data.events).some(Boolean);
-        sheetBody.innerHTML=`<div class="done-msg"><div class="big">${S.thanks}</div><p>${esc(yes?(R.yesText||''):(R.noText||''))}</p><p class="note">${S.saved}</p>${I.demo?`<p class="note">${S.demoNote}</p><p><a class="b" style="color:#2a2620" href="/tableau/?demo=${esc(I.slug)}" target="_blank" rel="noopener">${S.demoDash}</a></p>`:''}</div>`;
+        sheetBody.innerHTML=`<div class="done-msg"><div class="big">${S.thanks}</div><p>${esc(yes?(R.yesText||''):(R.noText||''))}</p><p class="note">${S.saved}</p>${data.rid?`<div class="edit-link"><p class="note">${S.editT}</p><input readonly value="${esc(editUrl(data))}" aria-label="Lien"><button type="button" class="b" data-copy style="color:#2a2620">${S.copy}</button></div>`:''}${I.demo?`<p class="note">${S.demoNote}</p><p><a class="b" style="color:#2a2620" href="/tableau/?demo=${esc(I.slug)}" target="_blank" rel="noopener">${S.demoDash}</a></p>`:''}</div>`;
       }catch(e){ btn.disabled=false; btn.textContent=S.send; err.textContent=S.fail; err.hidden=false; }
     });
   }
+  // lien de modification de la réponse : bouton « Copier » dans la fenêtre de réponse
+  sheetBody.addEventListener('click',e=>{ const b=e.target.closest('[data-copy]'); if(!b) return; const inp=b.parentNode.querySelector('input');
+    (navigator.clipboard?navigator.clipboard.writeText(inp.value):Promise.reject()).catch(()=>{ inp.select(); document.execCommand('copy'); }).finally(()=>{ b.textContent=S.copied; }); });
   sc.addEventListener('click',e=>{
     const c=e.target.closest('[data-cal]'); if(c){ calSheet(c.dataset.cal); return; }
     if(e.target.closest('[data-rsvp]')) rsvpSheet();

@@ -1,4 +1,5 @@
 /* Sceau : la date à découvrir (ticket à gratter, roue, jackpot). Voir reveal.js.
+   Tailles de texte : jamais sous 11 px (règle 3 de CLAUDE.md), échelle --fs-* d'invite.css quand elle est là.
    Les tailles suivent la largeur de la page (cqw) : même rendu dans le faire-part et dans les aperçus de la vitrine. */
 .rvl-later{display:none!important}
 .rvl-shown{animation:rvlIn .8s cubic-bezier(.22,.61,.36,1) both}
@@ -7,9 +8,9 @@
 .rvl{position:relative;width:100%;container-type:inline-size;display:flex;flex-direction:column;align-items:center;margin-top:14px;
   -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;transition:opacity .5s ease,transform .5s ease}
 .rvl.fold{opacity:0;transform:scale(.92)}
-.rvl-call{font:500 10px/1.4 Inter,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;text-shadow:0 1px 8px rgba(0,0,0,.5);transition:opacity .4s}
-.rvl.light .rvl-call{text-shadow:none}
-.rvl.done .rvl-call{animation:rvlIn .6s both}
+.rvl-call{max-width:100%;text-align:center;font:500 var(--fs-ey,12px)/1.4 Inter,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;text-shadow:0 1px 8px rgba(0,0,0,.5);transition:opacity .4s}
+.rvl.light .rvl-call{max-width:100%;text-align:center;text-shadow:none}
+.rvl.done .rvl-call{max-width:100%;text-align:center;animation:rvlIn .6s both}
 .rvl-game{position:relative;display:flex;flex-direction:column;align-items:center}
 .rvl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
@@ -17,7 +18,7 @@
 .rvl-card{position:relative;width:min(84cqw,300px);aspect-ratio:3/1.05;border-radius:10px;background:linear-gradient(160deg,#fffdf7,#f6efe0);
   box-shadow:0 10px 26px -8px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.35) inset;overflow:hidden}
 .rvl-under{position:absolute;inset:0;display:grid;place-content:center;gap:4px;text-align:center;color:var(--pd)}
-.rvl-under small{font:600 max(9px,2.6cqw)/1 Inter,Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
+.rvl-under small{font:600 max(11px,2.8cqw)/1 Inter,Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
 .rvl-under b{font:500 min(8cqw,30px)/1.1 "Cormorant Garamond",Georgia,serif}
 .rvl-foil{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:pointer;transition:opacity .8s ease}
 .rvl-foil.gone{opacity:0;pointer-events:none}
@@ -31,15 +32,15 @@
 .rvl-wheel svg{display:block;width:100%;height:100%}
 .rvl-rot{transform-box:view-box;transform-origin:0 0}
 .rvl-wheel text{text-anchor:middle;dominant-baseline:middle}
-.rvl-d{font:500 21px/1 "Cormorant Garamond",Georgia,serif}
-.rvl-m{font:600 8.5px/1 Inter,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.rvl-d{font:500 22px/1 "Cormorant Garamond",Georgia,serif}
+.rvl-m{font:600 10px/1 Inter,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase}
 .rvl-bulb{fill:#fff6da;animation:rvlBulb 1.2s steps(1) infinite}
 .rvl-bulb:nth-child(odd){animation-delay:.6s}
 @keyframes rvlBulb{0%{fill:#fff6da}50%{fill:rgba(255,246,218,.35)}}
 .rvl-pin{position:absolute;left:50%;top:-6px;z-index:2;width:0;height:0;margin-left:-11px;border:11px solid transparent;border-bottom:0;border-top:20px solid var(--pd);filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
 .rvl-pin::after{content:"";position:absolute;left:-4px;top:-26px;width:8px;height:8px;border-radius:50%;background:#fff6da}
-.rvl-hub{position:absolute;left:50%;top:50%;width:34%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;padding:0;border:3px solid var(--pl);
-  background:radial-gradient(circle at 38% 32%,#fffdf7,#f1e6cc 70%,#dccb9f);color:var(--pd);font:700 max(8px,2.3cqw)/1 Inter,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;
+.rvl-hub{position:absolute;left:50%;top:50%;width:max(34%,68px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;padding:0;border:3px solid var(--pl);
+  background:radial-gradient(circle at 38% 32%,#fffdf7,#f1e6cc 70%,#dccb9f);color:var(--pd);font:700 max(11px,2.6cqw)/1 Inter,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;
   box-shadow:0 4px 12px rgba(0,0,0,.35),inset 0 -2px 4px rgba(0,0,0,.12);animation:rvlPulse 2s ease-in-out infinite;cursor:pointer}
 .rvl-hub:disabled{animation:none;cursor:default}
 .rvl-hub:focus-visible,.rvl-btn:focus-visible,.rvl-lever:focus-visible{outline:2px solid currentColor;outline-offset:3px}
@@ -68,7 +69,7 @@
 .rvl-lever.pull{animation:rvlPull .75s cubic-bezier(.4,0,.3,1)}
 @keyframes rvlPull{40%{transform:scaleY(-.75)}100%{transform:none}}
 .rvl-btn{margin-top:14px;display:inline-flex;align-items:center;border:1px solid currentColor;padding:9px 18px;border-radius:2px;background:rgba(0,0,0,.18);color:inherit;
-  font:500 11px/1 Inter,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+  font:500 var(--fs-btn,12.5px)/1 Inter,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .rvl.light .rvl-btn{background:rgba(255,255,255,.45)}
 .rvl-btn:disabled{opacity:0;pointer-events:none;transition:opacity .4s}
 
