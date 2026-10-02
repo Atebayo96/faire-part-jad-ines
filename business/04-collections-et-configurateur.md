@@ -25,7 +25,7 @@ La vitrine présente **5 thèmes**, des univers forts et faciles à choisir (com
 
 ### Mise à jour du 02/10/2026 : 12 thèmes, 8 styles, 4 ouvertures
 - **Styles** : Peinture (Conte de fées, À l'américaine, Bollywood, Mille et une nuits, Dolce Vita), Art déco, Aquarelle, Trait (minimal), Pop rétro, Bohème, Céramique (Azulejos), Gravure. Chaque thème a sa police et ses couleurs.
-- **Ouvertures au choix** : enveloppe au sceau (aux initiales), rideau de théâtre qui se lève, voile (deux pans de gaze qui s'écartent comme à une porte de riad), grandes portes qui s'ouvrent, avec en option des portiers qui les poussent (Mille et une nuits, Art déco pour l'instant).
+- **Ouvertures au choix** : enveloppe au sceau (aux initiales), rideau de théâtre qui se lève, voile (un grand rideau opaque, dans le tissu du thème, qui s'ouvre par le milieu), grandes portes qui s'ouvrent. Pour le rideau, le voile et les portes, la lumière part dès le toucher et monte avec le mouvement. (Des portiers qui poussent les portes existent en option `doormen`, désactivée pour l'instant.)
 - **Basmala** : quand le chapeau d'accueil est « Bismillah », il s'écrit en arabe (police Amiri hébergée chez nous).
 - **Personnalisation sur la vitrine** : ouverture, prénoms, date, style, 5 palettes, 5 polices, avec un aperçu en direct.
 - Pistes pour la suite : Hiver enchanté, Tropical, Japonais, Marin, Photo éditoriale, Gothique romantique.

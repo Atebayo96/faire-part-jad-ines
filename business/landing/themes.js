@@ -56,9 +56,11 @@ window.SCEAU_THEMES={
   };
   for(const k in X) Object.assign(T[k],X[k]);
 })(window.SCEAU_THEMES);
-/* « Bismillah » s'écrit en arabe (la basmala, police Amiri hébergée dans polices/) : dans le faire-part comme dans la vitrine.
+/* « Bismillah » s'écrit en arabe, en calligraphie : la ligature basmala (U+FDFD « ﷽ ») de la police Amiri hébergée dans
+   polices/, exactement comme sur le faire-part d'Inès & Jad (pas la phrase lettre à lettre). Dans le faire-part comme dans la vitrine.
    Retourne le texte à afficher et s'il est en arabe (classe .ar, dir="rtl"). */
-window.SCEAU_BASMALA='بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ';
+window.SCEAU_BASMALA='﷽';
+window.SCEAU_BASMALA_LABEL='Bismillah ar-Rahman ar-Rahim';
 window.sceauEy=function(t){ t=t==null?'':String(t); return /^\s*(bismillah|bismillah\s+ar-?rahman\s+ar-?rahim|basmala)\s*$/i.test(t)?{ar:true,text:window.SCEAU_BASMALA}:{ar:false,text:t}; };
 window.SCEAU_MUSIC={
   nocturne:{name:"Nocturne",by:"Chopin"},

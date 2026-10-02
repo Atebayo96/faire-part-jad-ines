@@ -95,9 +95,9 @@
   @keyframes rollPan{0%,6%{transform:translateY(0)}94%,100%{transform:translateY(calc(var(--car-w) * 19.5 / 9 - 14px - 100%))}}
   .roll-txt{position:absolute;left:0;right:0;top:11%;text-align:center;padding:0 8%}
   .roll-txt .ey{font:500 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.92}
-  /* « Bismillah » s'écrit en arabe (basmala, Amiri), comme dans le faire-part (invite.css, .ey.ar) */
-  .ey.ar{font:400 clamp(26px,3.6vh,32px)/1.55 "Amiri","Scheherazade New",serif!important;letter-spacing:0!important;text-transform:none!important;direction:rtl;white-space:nowrap}
-  .roll-txt .ey.ar{font-size:22px!important}
+  /* « Bismillah » s'écrit en arabe, en calligraphie (ligature basmala « ﷽ » d'Amiri), comme dans le faire-part (invite.css, .ey.ar) */
+  .ey.ar{font:400 clamp(22px,6.6vw,29px)/1.5 "Amiri","Scheherazade New",serif!important;letter-spacing:0!important;text-transform:none!important;direction:rtl;white-space:nowrap}
+  .roll-txt .ey.ar{font-size:calc(var(--car-w) * .066)!important}
   .roll-txt .nm{margin:10px 0 6px;line-height:1.05}
   .roll-txt .tx{font:italic 400 clamp(13px,1.8vh,16px)/1.35 "Cormorant Garamond",Georgia,serif}
   @media (prefers-reduced-motion:reduce){ .roll img{animation:none} }
@@ -410,10 +410,11 @@
   .cp-flash{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;
     background:radial-gradient(130% 110% at 50% 44%,#fffdf7 0%,rgba(255,250,238,.98) 44%,rgba(250,242,224,.82) 100%)}
   .cp-flash.bloom{animation:flashBloom 1.1s cubic-bezier(.4,0,.2,1) forwards}
-  .cp-flash.soft.bloom{animation:flashSoft 1.5s cubic-bezier(.35,0,.25,1) forwards}
-  @keyframes flashSoft{0%{opacity:0}38%{opacity:.8}100%{opacity:0}}
-  .cp-flash.door.bloom{animation:flashDoor 1.7s cubic-bezier(.35,0,.25,1) forwards}
-  @keyframes flashDoor{0%{opacity:0}45%{opacity:.42}100%{opacity:0}}
+  /* rideau, portes et voile : la lumière part au toucher et monte avec le mouvement (mêmes courbes que invite.css) */
+  .cp-flash.soft.bloom{animation:flashSoft 2s cubic-bezier(.35,0,.25,1) forwards}
+  @keyframes flashSoft{0%{opacity:0}45%{opacity:.75}100%{opacity:0}}
+  .cp-flash.door.bloom{animation:flashDoor 2.6s cubic-bezier(.35,0,.25,1) forwards}
+  @keyframes flashDoor{0%{opacity:0}55%{opacity:.45}100%{opacity:0}}
   .op[data-type="cur"].gone{transition:opacity .95s cubic-bezier(.4,0,.6,1),visibility .95s}
   .op[data-type="door"].gone,.op[data-type="voile"].gone{transition:opacity 1.1s cubic-bezier(.4,0,.6,1),visibility 1.1s}
   @keyframes flashBloom{0%{opacity:0}44%{opacity:1}54%{opacity:1}100%{opacity:0}}
@@ -445,7 +446,7 @@
   .op-seam{position:absolute;top:0;bottom:0;left:50%;width:12px;margin-left:-6px;background:linear-gradient(90deg,transparent,rgba(255,240,205,.95),transparent);filter:blur(1.5px);opacity:0;z-index:3}
   .op-glow{position:absolute;inset:0;z-index:1;background:radial-gradient(60% 50% at 50% 50%,#fffdf7 0%,rgba(255,240,205,.9) 38%,rgba(255,220,160,.25) 70%,transparent 85%);opacity:0;pointer-events:none;will-change:opacity,transform}
   /* les portiers (option « doormen », image img/open/<thème>-portier.webp) : un de chaque côté, les mains sur son battant ;
-     ils avancent avec la porte qu'ils poussent (enfants du battant), en marquant le pas */
+     ils avancent avec la porte qu'ils poussent (enfants du battant), en marquant le pas. Désactivés pour l'instant (DOORMEN vide) */
   .op-man{position:absolute;bottom:0;width:74%;aspect-ratio:460/880;background:var(--man) center bottom/contain no-repeat;z-index:2;
     filter:drop-shadow(0 8px 10px rgba(0,0,0,.45));backface-visibility:hidden;transform-origin:50% 100%;animation:manIdle 3.4s ease-in-out infinite}
   .op-leaf.l .op-man{right:2%}
@@ -475,27 +476,23 @@
   /* le portier se penche dans la poussée, puis fait trois pas avec la porte */
   @keyframes manPush{0%{translate:0 0;scale:1}10%{translate:0 .4%;scale:1 .985}30%{translate:0 -.5%;scale:1 1}50%{translate:0 .3%}70%{translate:0 -.5%}90%{translate:0 .3%}100%{translate:0 0}}
 
-  /* voile : deux pans de gaze ivoire suspendus comme à une porte de riad ; on devine déjà la page au travers
-     (flou et voile clair), puis ils s'écartent chacun de son côté, en se ramassant, d'un geste lent qui s'étire */
-  .op-voile{--veil:color-mix(in srgb,#fffaf0 84%,var(--pal,#b8975a));overflow:hidden}
-  .op-sheer{position:absolute;top:0;bottom:0;width:52%;will-change:transform;
-    background:
-      linear-gradient(180deg,rgba(255,255,255,.22),transparent 8%,transparent 92%,rgba(90,70,40,.16)),
-      repeating-linear-gradient(90deg,rgba(255,255,255,.26) 0 7px,rgba(255,255,255,0) 7px 19px,rgba(70,55,30,.09) 19px 26px,rgba(255,255,255,0) 26px 34px),
-      var(--veil);
-    background-blend-mode:normal,soft-light,normal;opacity:.7;
-    backdrop-filter:blur(10px) saturate(1.05);-webkit-backdrop-filter:blur(10px) saturate(1.05)}
-  .op-sheer::after{content:"";position:absolute;top:0;bottom:0;width:30%;background:linear-gradient(90deg,rgba(255,255,255,.35),transparent)}
-  .op-sheer.l{left:0;transform-origin:0 50%}
-  .op-sheer.r{right:0;transform-origin:100% 50%}
-  .op-sheer.l::after{right:0;background:linear-gradient(270deg,rgba(80,62,34,.14),transparent)}
-  .op-sheer.r::after{left:0;background:linear-gradient(90deg,rgba(80,62,34,.14),transparent)}
-  .op-voile .op-mono{color:#3f3221;text-shadow:0 1px 0 rgba(255,255,255,.75),0 2px 14px rgba(255,255,255,.65)}
-  .op.opening .op-sheer.l{animation:opSheerL 2.3s cubic-bezier(.55,0,.2,1) both}
-  .op.opening .op-sheer.r{animation:opSheerR 2.3s cubic-bezier(.55,0,.2,1) .06s both}
+  /* voile : un grand rideau OPAQUE (le tissu du thème, coupé en deux pans) qui s'ouvre par le milieu, les pans se tassent
+     chacun vers son bord, en plis (mêmes règles que invite.css) */
+  .op-voile{overflow:hidden}
+  .op-sheer{position:absolute;top:0;bottom:0;width:50%;background:var(--cur,url("img/open/rideau.webp")) no-repeat;background-size:200% 100%;
+    will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
+  .op-sheer.l{left:0;background-position:0 0;transform-origin:0 50%}
+  .op-sheer.r{right:0;background-position:100% 0;transform-origin:100% 50%}
+  .op-sheer::after{content:"";position:absolute;top:0;bottom:0;width:22%;opacity:0}
+  .op-sheer.l::after{right:0;background:linear-gradient(270deg,rgba(0,0,0,.45),transparent)}
+  .op-sheer.r::after{left:0;background:linear-gradient(90deg,rgba(0,0,0,.45),transparent)}
+  .op-voile .op-mono{top:40%}
+  .op.opening .op-sheer.l{animation:opSheerL 2.4s cubic-bezier(.5,0,.2,1) both}
+  .op.opening .op-sheer.r{animation:opSheerR 2.4s cubic-bezier(.5,0,.2,1) .05s both}
+  .op.opening .op-sheer::after{animation:opShade 1.6s ease-in .3s both}
   .op.opening .op-voile .op-mono{opacity:0;transform:translateY(-6px) scale(.97)}
-  @keyframes opSheerL{0%{transform:translate3d(0,0,0) scaleX(1)}12%{transform:translate3d(1.5%,0,0) scaleX(1.02)}100%{transform:translate3d(-104%,0,0) scaleX(.55) skewY(-2deg)}}
-  @keyframes opSheerR{0%{transform:translate3d(0,0,0) scaleX(1)}12%{transform:translate3d(-1.5%,0,0) scaleX(1.02)}100%{transform:translate3d(104%,0,0) scaleX(.55) skewY(2deg)}}
+  @keyframes opSheerL{0%{transform:scaleX(1)}10%{transform:scaleX(1.012)}100%{transform:translate3d(-3%,0,0) scaleX(.14)}}
+  @keyframes opSheerR{0%{transform:scaleX(1)}10%{transform:scaleX(1.012)}100%{transform:translate3d(3%,0,0) scaleX(.14)}}
   .replay{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font:inherit;font-size:13px;cursor:pointer}
   @media (prefers-reduced-motion:reduce){ .op-flap,.op-env,.op-cur,.op-leaf{transition-duration:.01s!important;transition-delay:0s!important} .op-man{animation:none} .op.opening .op-leaf,.op.opening .op-doors,.op.opening .op-room,.op.opening .op-sheer,.op.opening .op-man,.op.opening .op-doors-in,.op.opening .op-seam,.op.opening .op-glow,.op.opening .op-leaf::after,.op.opening .op-flap{animation-duration:.01s!important} }
 
@@ -628,7 +625,7 @@
     <div class="head"><h2>Comment ça marche</h2><p>Trois étapes, et votre faire-part est prêt à partir.</p></div>
     <div class="steps">
       <div><img src="img/people/choisir.webp" alt="Un couple sur un canapé regarde les thèmes de faire-part sur une tablette" loading="lazy" width="720" height="900"><b>01</b><h3>Choisissez votre thème</h3><p>Douze thèmes dans huit styles : peinture, art déco, aquarelle, bohème… Vous pouvez tous les essayer avec vos prénoms.</p></div>
-      <div><img src="img/people/parametrer.webp" alt="Deux mains l'une sur l'autre, un téléphone affiche le faire-part avec son sceau" loading="lazy" width="720" height="900"><b>02</b><h3>Paramétrez-le</h3><p>L'ouverture (enveloppe, rideau, voile ou grandes portes, avec ou sans portiers), vos prénoms, la date, les couleurs, la police, la musique, le compte à rebours, vos événements et vos lieux.</p></div>
+      <div><img src="img/people/parametrer.webp" alt="Deux mains l'une sur l'autre, un téléphone affiche le faire-part avec son sceau" loading="lazy" width="720" height="900"><b>02</b><h3>Paramétrez-le</h3><p>L'ouverture (enveloppe, rideau, voile ou grandes portes), vos prénoms, la date, les couleurs, la police, la musique, le compte à rebours, vos événements et vos lieux.</p></div>
       <div><img src="img/people/mamie.webp" alt="Une grand-mère émue ouvre le faire-part sur son téléphone" loading="lazy" width="720" height="900"><b>03</b><h3>Recevez votre lien</h3><p>Un lien prêt à envoyer sur WhatsApp, un par famille si vous voulez. Les réponses de vos invités arrivent dans votre tableau de bord.</p></div>
     </div>
   </div>
@@ -910,7 +907,7 @@
   const THEMES=window.SCEAU_THEMES;
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   // chapeau : « Bismillah » s'écrit en arabe (basmala, voir themes.js), de droite à gauche, comme dans le faire-part
-  function eyHtml(cls,t,st){ const e=window.sceauEy(t); return `<div class="${cls}${e.ar?' ar':''}"${e.ar?' lang="ar" dir="rtl"':''} style="${st}">${esc(e.text)}</div>`; }
+  function eyHtml(cls,t,st){ const e=window.sceauEy(t); return `<div class="${cls}${e.ar?' ar':''}"${e.ar?` lang="ar" dir="rtl" aria-label="${esc(window.SCEAU_BASMALA_LABEL)}"`:''} style="${st}">${esc(e.text)}</div>`; }
   function nameStyle(t,scale){
     const sz=(t.size||1)*scale;
     return `font-family:${t.font};color:${t.color};font-size:clamp(${Math.round(34*sz)}px,${(5.2*sz).toFixed(2)}vh,${Math.round(54*sz)}px);${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.14em;font-weight:300;':''}`;
@@ -1025,9 +1022,10 @@
   const C={k:'conte',pal:'or',font:'theme',op:'env',cd:'debut',x:new Set()};
   const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Hébergement'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'}];
   const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
-  const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'voile',name:'Voile',sub:'Deux pans de gaze s\'écartent'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
-  // thèmes qui ont leurs portiers (img/open/<thème>-portier.webp) : ils apparaissent devant les grandes portes
-  const DOORMEN=['nuits','artdeco'];
+  const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'voile',name:'Voile',sub:'Il s\'ouvre par le milieu'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
+  // thèmes qui ont leurs portiers (img/open/<thème>-portier.webp) : ils apparaîtraient devant les grandes portes.
+  // Vide pour l'instant : l'utilisateur les a trouvés « pas ouf », ils sont retirés (images conservées).
+  const DOORMEN=[];
   const $=id=>document.getElementById(id);
   function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
   function opt(box,items,key,label,draw){ items.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.dataset.id=it.id||it; draw(b,it); b.onclick=()=>{ C[key]=b.dataset.id; if(key==='k') C.font='theme'; paint(); }; box.appendChild(b); }); }
@@ -1104,13 +1102,14 @@
   /* lecture de l'ouverture : fermee -> 'opening' -> 'gone' */
   const op=$('cpOp'); let opT=null;
   // meme sequence que le faire-part d'Ines & Jad : ouverture, la lumiere monte, la page apparait dessous
-  // enveloppe : lumiere a 1 s ; rideau : tout pendant le mouvement ; portes et voile : le mouvement part lentement,
-  // la page se voit a travers, la lumiere vient tard et douce (memes valeurs que invite.js)
-  const cpFlash=$('cpFlash'), SEQ={env:{flash:1000,gone:1560},cur:{flash:420,gone:760,cls:'soft'},door:{flash:900,gone:1750,cls:'door'},voile:{flash:700,gone:1500,cls:'door'}}; let opT2=[];
+  // enveloppe : lumiere a 1 s ; rideau, portes et voile : la lumiere part au toucher (flash:0) et monte avec le mouvement,
+  // la page se voit a travers (memes valeurs que invite.js)
+  const cpFlash=$('cpFlash'), SEQ={env:{flash:1000,gone:1560},cur:{flash:0,gone:760,cls:'soft'},door:{flash:0,gone:1750,cls:'door'},voile:{flash:0,gone:1500,cls:'door'}}; let opT2=[];
   function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
     op.style.setProperty('--door',`url('img/open/${C.k}-portes.webp')`); op.style.setProperty('--cur',`url('img/open/${C.k}-rideau.webp')`);
     const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth; }
   function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
+    if(!q.flash) cpFlash.classList.add('bloom');
     opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ op.classList.add('gone'); $('cpScroll').scrollTop=0; },q.gone)]; }
   function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
   op.addEventListener('click',playOp);

@@ -113,8 +113,8 @@
   }
   const cdHtml=(big,col)=>`<div class="cd${big?' big':''}" style="color:${col}">${['d','h','m','s'].map((u,i)=>`<div><b data-u="${u}">0</b><span>${[S.days,S.hours,S.min,S.sec][i]}</span></div>`).join('')}</div>`;
   const oval=!!T.top1, compact=!!T.compact;
-  // chapeau de l'accueil : « Bismillah » s'écrit en arabe (basmala, voir themes.js), de droite à gauche
-  const eyHtml=(cls,t,st)=>{ const e=window.sceauEy(t); return `<div class="${cls}${e.ar?' ar':''}"${e.ar?' lang="ar" dir="rtl"':''} style="${st}">${esc(e.text)}</div>`; };
+  // chapeau de l'accueil : « Bismillah » s'écrit en arabe, en calligraphie (ligature basmala, voir themes.js), de droite à gauche
+  const eyHtml=(cls,t,st)=>{ const e=window.sceauEy(t); return `<div class="${cls}${e.ar?' ar':''}"${e.ar?` lang="ar" dir="rtl" aria-label="${esc(window.SCEAU_BASMALA_LABEL)}"`:''} style="${st}">${esc(e.text)}</div>`; };
 
   // 1. accueil
   page(1,(c)=>{
@@ -454,20 +454,17 @@
   // une seule arche continue, comme le faire-part d'Inès & Jad : l'ouverture commence, la lumière monte,
   // le passage vers la première page se fait sous le pic blanc, puis la lumière se retire et dévoile la page déjà nette
   // enveloppe : la lumière monte à 1 s et la page apparaît sous le pic, comme le faire-part d'Inès & Jad.
-  // rideau : tout se fait PENDANT le mouvement, en une seule dynamique continue :
-  // la page est déjà vivante derrière l'ouverture, la lumière monte tout de suite, et le rideau
-  // s'efface en fondu alors qu'il est encore en train de monter.
-  // portes et voile : le mouvement part lentement et bien AVANT la lumière ; la page est déjà vivante derrière
-  // (on la voit à travers l'entrebâillement, ou à travers le voile), la lumière vient tard et douce (jamais
-  // de plein écran blanc), et les battants s'effacent pendant qu'ils finissent de s'ouvrir : tout s'enchaîne,
-  // aucun temps mort sur de la lumière (retour de l'utilisateur sur la démo Nour & Ilyes, voir CLAUDE.md).
-  const SEQ={env:{flash:1000,on:1530,gone:1560},cur:{flash:420,on:320,gone:760,cls:'soft'},door:{flash:900,on:200,gone:1750,cls:'door'},voile:{flash:700,on:150,gone:1500,cls:'door'}};
+  // rideau, portes et voile : la lumière part AU TOUCHER (flash:0), en même temps que le mouvement, et monte
+  // doucement avec lui (jamais de plein écran blanc) ; la page est déjà vivante derrière (on la voit à travers
+  // l'entrebâillement, ou dès que les pans s'écartent), et le rideau / les battants s'effacent en fondu alors
+  // qu'ils finissent de s'ouvrir : tout s'enchaîne, aucun temps mort sur de la lumière (voir CLAUDE.md, règle 15).
+  const SEQ={env:{flash:1000,on:1530,gone:1560},cur:{flash:0,on:320,gone:760,cls:'soft'},door:{flash:0,on:200,gone:1750,cls:'door'},voile:{flash:0,on:150,gone:1500,cls:'door'}};
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
     if(q.cls) flash.classList.add(q.cls);
-    if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash);
+    if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash); else flash.classList.add('bloom');
     setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); setTimeout(frame,1500); if(LG) longStart(); },q.on);
     setTimeout(()=>op.classList.add('gone'),q.gone);
     setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1800,q.gone+1400));

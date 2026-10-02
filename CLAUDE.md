@@ -66,13 +66,26 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 
 ## Ouvertures : tout s'enchaîne, jamais de temps mort sur la lumière
 
-15. **Le mouvement part avant la lumière, et la page est déjà là derrière.** Portes et voile : le geste commence
-    lentement dès le toucher, la page est montée tout de suite (`on` ≈ 150–200 ms) et se voit à travers
-    l'entrebâillement ou la gaze ; la lumière blanche vient tard et douce (`.flash.door`, pic à 0,42, jamais un
-    écran blanc), les battants s'effacent pendant qu'ils finissent de s'ouvrir. L'utilisateur a refusé la version
-    où l'on restait une seconde sur un écran de lumière avant de voir la page (démo Nour & Ilyes). Toute nouvelle
-    ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à aucun moment
-    l'écran ne doit être vide ou tout blanc.
+15. **La lumière part au toucher, en même temps que le mouvement, et la page est déjà là derrière.** Rideau,
+    portes et voile : au toucher, le geste commence lentement ET la lumière commence à monter (`flash: 0` dans
+    `SEQ`, l'utilisateur a refusé qu'elle n'arrive qu'une fois les portes ou le rideau déjà en mouvement) ; elle
+    grandit avec l'ouverture (pic à mi-course : `.flash.door` 0,45 à 1,4 s, `.flash.soft` 0,75 à 0,9 s), jamais un
+    écran blanc. La page est montée tout de suite (`on` ≈ 150–320 ms) et se voit à travers l'entrebâillement ; les
+    battants, le rideau ou les pans s'effacent pendant qu'ils finissent de s'ouvrir. L'utilisateur a aussi refusé
+    la version où l'on restait une seconde sur un écran de lumière avant de voir la page (démo Nour & Ilyes).
+    Toute nouvelle ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à
+    aucun moment l'écran ne doit être vide ou tout blanc.
+    - **Voile** = un grand rideau **opaque** (le tissu du thème, `img/open/<thème>-rideau.webp`, coupé en deux
+      pans) qui s'ouvre **par le milieu**, les pans se tassant en plis vers les bords. La version en gaze
+      translucide a été refusée (« un vrai voile opaque, comme des rideaux »).
+    - **Portiers** (`doormen`) : retirés des démos (« pas ouf pour l'instant »), activables seulement avec
+      `"doormen": true` dans la fiche. Les images `img/open/<thème>-portier.webp` restent.
+17. **La basmala est une calligraphie, pas une phrase.** « Bismillah » s'affiche avec la ligature `U+FDFD` (« ﷽ »)
+    de la police Amiri, comme sur le faire-part d'Inès & Jad (`window.SCEAU_BASMALA` dans `themes.js`), jamais
+    lettre à lettre ni en capitales espacées.
+18. **Tout bloc centré l'est explicitement.** Dans la mise en page continue, `.lg-hero-txt` n'est pas une colonne
+    flex : une ligne `display:flex` (la date entre ses deux filets) s'y collait au bord gauche. Toujours vérifier le
+    centrage sur une capture, à 390 px **et** à 440 px (la date tient alors sur une ligne).
 16. **Une seule séquence par ouverture**, définie dans `invite.js` (`SEQ`) et recopiée telle quelle dans le
     configurateur de la vitrine (`index.html`, `SEQ`) ; même chose pour le CSS des ouvertures.
 
