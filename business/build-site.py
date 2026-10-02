@@ -258,6 +258,8 @@ def main():
         if inv.get('layout') == 'long':
             inv['long'] = json.load(open(os.path.join(B, 'landing', 'img', 'long', inv['theme'], 'meta.json')))
         # transitions filmées disponibles pour ce thème (img/trans/<theme>-<a>-<b>/)
+        # portiers devant les grandes portes : actifs dès que le thème a son image (img/open/<thème>-portier.webp), sauf "doormen": false
+        inv['doormen'] = inv.get('doormen', True) is not False and inv.get('opening') == 'door' and os.path.exists(os.path.join(SITE, 'img', 'open', f"{inv['theme']}-portier.webp"))
         inv['trans'] = sorted(k[len(inv['theme'])+1:] for k in os.listdir(os.path.join(SITE, 'img', 'trans')) if k.startswith(inv['theme'] + '-')) if os.path.isdir(os.path.join(SITE, 'img', 'trans')) else []
         data = json.dumps(inv, ensure_ascii=False).replace('</', '<\\/')
         page = PAGE.format(lang=lang, title=html.escape(title), desc=html.escape(desc), site=SITE_URL, slug=slug, gf='' if t['gf'] == 'Great+Vibes' else '&family=' + t['gf'],

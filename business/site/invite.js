@@ -113,13 +113,15 @@
   }
   const cdHtml=(big,col)=>`<div class="cd${big?' big':''}" style="color:${col}">${['d','h','m','s'].map((u,i)=>`<div><b data-u="${u}">0</b><span>${[S.days,S.hours,S.min,S.sec][i]}</span></div>`).join('')}</div>`;
   const oval=!!T.top1, compact=!!T.compact;
+  // chapeau de l'accueil : « Bismillah » s'écrit en arabe (basmala, voir themes.js), de droite à gauche
+  const eyHtml=(cls,t,st)=>{ const e=window.sceauEy(t); return `<div class="${cls}${e.ar?' ar':''}"${e.ar?' lang="ar" dir="rtl"':''} style="${st}">${esc(e.text)}</div>`; };
 
   // 1. accueil
   page(1,(c)=>{
     const names=T.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
     return (fam&&fam.label?`<div class="rv greet" style="--i:${rvI++};color:${c.tx}">${esc(fam.label)}</div>`:'')+
       (oval||compact?'':`<div class="rv seal" style="--i:${rvI++};background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div>`)+
-      `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(I.intro&&I.intro.eyebrow||T.scenes[0][0])}</div>`+
+      eyHtml('rv ey',I.intro&&I.intro.eyebrow||T.scenes[0][0],`--i:${rvI++};color:${c.ey}`)+
       `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(T.stack?.82:1,c.nm))}">${names}</div>`+
       (oval||compact?'':`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${esc(I.intro&&I.intro.text||S.joy)}</div>`)+
       `<div class="rv dl" style="--i:${rvI++};color:${T.light?pal:'#fff'}"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>`+
@@ -234,7 +236,7 @@
     const hero=`<div class="lg-hero"><img class="lg-hero-img" src="${X.base}/${X.hero.src}" alt="" style="aspect-ratio:${X.hero.w}/${X.hero.h}">
       <div class="lg-hero-txt" data-sp=".35" style="color:${X.hero.ink};--sh:${X.hero.shadow||'none'};--top:${X.hero.top||'14%'}">
         ${fam&&fam.label?`<div class="greet">${esc(fam.label)}</div>`:''}
-        <div class="ey">${esc(I.intro&&I.intro.eyebrow||T.scenes[0][0])}</div>
+        ${eyHtml('ey',I.intro&&I.intro.eyebrow||T.scenes[0][0],'')}
         <div class="lg-names" style="${nm(1.05,X.hero.ink)}">${names}</div>
         <div class="dl"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>
         <div class="lg-hint">${S.scroll} ↓</div>
@@ -290,10 +292,11 @@
     <canvas id="fx"></canvas>
     ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
-    <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp')">
+    <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp');--pal:${pal}${I.doormen?`;--man:url('/img/open/${I.theme}-portier.webp')`:''}">
       <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div></div></div></div>
       <div class="op-cur"><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${esc(n1[0])} &amp; ${esc(n2[0])}</div><div class="op-cur-edge"></div></div>
-      <div class="op-doors"><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l"></div><div class="op-leaf r"></div><div class="op-seam"></div></div></div>
+      <div class="op-doors"><div class="op-room"></div><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l">${I.doormen?'<div class="op-man"></div>':''}</div><div class="op-leaf r">${I.doormen?'<div class="op-man"></div>':''}</div><div class="op-seam"></div></div></div>
+      <div class="op-voile"><div class="op-sheer l"></div><div class="op-sheer r"></div><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${esc(n1[0])} &amp; ${esc(n2[0])}</div></div>
       ${fam&&fam.label?`<div class="op-to">${esc(fam.label)}</div>`:''}
       <div class="op-tap">${(I.opening||'env')==='env'?S.tapSeal:S.tap}</div>
     </div>
@@ -451,19 +454,23 @@
   // une seule arche continue, comme le faire-part d'Inès & Jad : l'ouverture commence, la lumière monte,
   // le passage vers la première page se fait sous le pic blanc, puis la lumière se retire et dévoile la page déjà nette
   // enveloppe : la lumière monte à 1 s et la page apparaît sous le pic, comme le faire-part d'Inès & Jad.
-  // portes et rideau : tout se fait PENDANT le mouvement, en une seule dynamique continue :
-  // la page est déjà vivante derrière l'ouverture, la lumière monte tout de suite, et les battants (ou le rideau)
-  // s'effacent en fondu alors qu'ils sont encore en train de s'ouvrir.
-  const SEQ={env:{flash:1000,on:1530,gone:1560,soft:false},cur:{flash:420,on:320,gone:760,soft:true},door:{flash:0,on:1050,gone:1150,soft:true}};
+  // rideau : tout se fait PENDANT le mouvement, en une seule dynamique continue :
+  // la page est déjà vivante derrière l'ouverture, la lumière monte tout de suite, et le rideau
+  // s'efface en fondu alors qu'il est encore en train de monter.
+  // portes et voile : le mouvement part lentement et bien AVANT la lumière ; la page est déjà vivante derrière
+  // (on la voit à travers l'entrebâillement, ou à travers le voile), la lumière vient tard et douce (jamais
+  // de plein écran blanc), et les battants s'effacent pendant qu'ils finissent de s'ouvrir : tout s'enchaîne,
+  // aucun temps mort sur de la lumière (retour de l'utilisateur sur la démo Nour & Ilyes, voir CLAUDE.md).
+  const SEQ={env:{flash:1000,on:1530,gone:1560},cur:{flash:420,on:320,gone:760,cls:'soft'},door:{flash:900,on:200,gone:1750,cls:'door'},voile:{flash:700,on:150,gone:1500,cls:'door'}};
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
-    if(q.soft) flash.classList.add('soft');
+    if(q.cls) flash.classList.add(q.cls);
     if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash);
     setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); setTimeout(frame,1500); if(LG) longStart(); },q.on);
     setTimeout(()=>op.classList.add('gone'),q.gone);
-    setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1600,q.gone+1200));
+    setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1800,q.gone+1400));
   }
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });

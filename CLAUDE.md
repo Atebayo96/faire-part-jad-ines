@@ -51,6 +51,18 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     clair/moyen/sombre de la cire, voir `.op-seal b`). Jamais un disque plat en CSS avec des lettres blanches.
     Même rendu sur l'enveloppe, l'accueil du faire-part, le configurateur.
 
+## Ouvertures : tout s'enchaîne, jamais de temps mort sur la lumière
+
+15. **Le mouvement part avant la lumière, et la page est déjà là derrière.** Portes et voile : le geste commence
+    lentement dès le toucher, la page est montée tout de suite (`on` ≈ 150–200 ms) et se voit à travers
+    l'entrebâillement ou la gaze ; la lumière blanche vient tard et douce (`.flash.door`, pic à 0,42, jamais un
+    écran blanc), les battants s'effacent pendant qu'ils finissent de s'ouvrir. L'utilisateur a refusé la version
+    où l'on restait une seconde sur un écran de lumière avant de voir la page (démo Nour & Ilyes). Toute nouvelle
+    ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à aucun moment
+    l'écran ne doit être vide ou tout blanc.
+16. **Une seule séquence par ouverture**, définie dans `invite.js` (`SEQ`) et recopiée telle quelle dans le
+    configurateur de la vitrine (`index.html`, `SEQ`) ; même chose pour le CSS des ouvertures.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
