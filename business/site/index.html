@@ -1171,7 +1171,7 @@
     const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth;
     // objets 3D (open3d.js) : remontés à chaque fermeture avec les images du thème choisi
     if(cp3d){ cp3d.dispose(); cp3d=null; }
-    if(window.SceauOpen3D&&C.op!=='env') cp3d=window.SceauOpen3D.mount({op,type:C.op,doorUrl:`img/open/${C.k}-portes.webp`,curUrl:`img/open/${C.k}-rideau.webp`,doorBox:THEMES[C.k].doorBox||null,params:THEMES[C.k].open3d||null}); }
+    if(window.SceauOpen3D&&C.op!=='env') cp3d=window.SceauOpen3D.mount({op,type:C.op,doorUrl:`img/open/${C.k}-portes.webp`,curUrl:`img/open/${C.k}-rideau.webp`,doorBox:THEMES[C.k].doorBox||null}); }
   let cp3d=null; document.addEventListener('sceau3d',()=>{ if(!op.classList.contains('opening')) closeOp(); },{once:true});
   function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); if(cp3d) cp3d.play(); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
     if(!q.flash) cpFlash.classList.add('bloom');

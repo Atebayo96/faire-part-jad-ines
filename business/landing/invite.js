@@ -461,7 +461,7 @@
   // ouverture en vrais objets 3D (open3d.js, three.js) quand WebGL est là : la version CSS reste en dessous, en secours
   let three=null;
   const mount3d=()=>{ const t=I.opening||'env'; if(reduce||t==='env'||!window.SceauOpen3D||opened) return;
-    three=window.SceauOpen3D.mount({op,type:t,doorUrl:`/img/open/${I.theme}-portes.webp`,curUrl:`/img/open/${I.theme}-rideau.webp`,doorBox:T.doorBox||null,params:T.open3d||null}); };
+    three=window.SceauOpen3D.mount({op,type:t,doorUrl:`/img/open/${I.theme}-portes.webp`,curUrl:`/img/open/${I.theme}-rideau.webp`,doorBox:T.doorBox||null}); };
   if(window.SceauOpen3D) mount3d(); else document.addEventListener('sceau3d',mount3d,{once:true});
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
