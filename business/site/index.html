@@ -88,6 +88,16 @@
   .car-item[data-f="3"] .film{transform:translateY(-75%)}
   .film .pv-sc{height:25%;flex:none}
   .film .pv-sc>.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  /* faire-part en continu : un seul long tableau, que le telephone descend lentement tout seul */
+  .roll{position:absolute;inset:0;overflow:hidden}
+  .roll img{display:block;width:100%;height:auto;will-change:transform;animation:rollPan 16s cubic-bezier(.45,.05,.55,.95) infinite alternate;animation-play-state:paused}
+  .car-item.on .roll img{animation-play-state:running}
+  @keyframes rollPan{0%,6%{transform:translateY(0)}94%,100%{transform:translateY(calc(var(--car-w) * 19.5 / 9 - 14px - 100%))}}
+  .roll-txt{position:absolute;left:0;right:0;top:11%;text-align:center;padding:0 8%}
+  .roll-txt .ey{font:500 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.92}
+  .roll-txt .nm{margin:10px 0 6px;line-height:1.05}
+  .roll-txt .tx{font:italic 400 clamp(13px,1.8vh,16px)/1.35 "Cormorant Garamond",Georgia,serif}
+  @media (prefers-reduced-motion:reduce){ .roll img{animation:none} }
   .car-tag{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:max-content;max-width:88%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:500 9.5px/1 Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;
     color:#fff;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .4s}
   .car-item.on .car-tag{opacity:1}
@@ -516,8 +526,8 @@
     </div>
     <div class="car" id="car" aria-roledescription="carrousel" aria-label="Nos créations">
       <div class="kinds" id="kinds" role="tablist" aria-label="Type de création">
-        <button type="button" role="tab" aria-selected="true" data-kind="themes">Nos 12 thèmes</button>
-        <button type="button" role="tab" aria-selected="false" data-kind="lieux">Vos lieux, peints</button>
+        <button type="button" role="tab" aria-selected="true" data-kind="long">En continu</button>
+        <button type="button" role="tab" aria-selected="false" data-kind="pages">Page par page</button>
       </div>
       <div class="car-view"><div class="car-rail" id="carRail"></div></div>
       <div class="car-nav">
@@ -526,7 +536,7 @@
         <button type="button" class="car-arrow" id="carNext" aria-label="Création suivante">→</button>
       </div>
       <div class="car-dots" id="carDots"></div>
-      <p class="car-hint" id="carHint">Glissez pour changer de thème · Touchez le téléphone pour ouvrir la démo</p>
+      <p class="car-hint" id="carHint">Un seul long tableau qu'on descend du doigt · Touchez le téléphone pour ouvrir l'exemple</p>
     </div>
     <div class="hero-more">
       <div class="ctas">
@@ -767,7 +777,7 @@
 
 <script src="paiement.js"></script>
 <script src="themes.js"></script>
-<script>window.SCEAU_DEMOS=[{"slug": "yasmine-karim", "theme": "nuits", "couple": "Yasmine & Karim", "special": "Lieux réels peints et animés", "events": 2, "music": "scheherazade", "thumb": "d/yasmine-karim/thumb.webp"}, {"slug": "alice-theo", "theme": "aquarelle", "couple": "Alice & Théo", "opening": "env", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/aquarelle-2.webp"}, {"slug": "ananya-rohan", "theme": "bollywood", "couple": "Ananya & Rohan", "opening": "cur", "events": 3, "families": true, "lang": "fr", "music": "raga", "thumb": "img/themes/bollywood-2.webp"}, {"slug": "chiara-lucas", "theme": "dolcevita", "couple": "Chiara & Lucas", "opening": "env", "events": 3, "families": false, "lang": "fr", "music": "funiculi", "thumb": "img/themes/dolcevita-2.webp"}, {"slug": "chloe-nathan", "theme": "americaine", "couple": "Chloé & Nathan", "opening": "env", "events": 2, "families": false, "lang": "en", "music": "marine", "thumb": "img/themes/americaine-2.webp"}, {"slug": "claire-thomas", "theme": "gravure", "couple": "Claire & Thomas", "opening": "env", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/gravure-2.webp"}, {"slug": "emma-louis", "theme": "conte", "couple": "Emma & Louis", "opening": "env", "events": 2, "families": true, "lang": "fr", "music": "valse", "thumb": "img/themes/conte-2.webp"}, {"slug": "giulia-hugo", "theme": "dolcevita", "couple": "Giulia & Hugo", "opening": "cur", "events": 2, "families": false, "lang": "fr", "music": "funiculi", "thumb": "img/themes/dolcevita-2.webp"}, {"slug": "lena-adam", "theme": "boheme", "couple": "Léna & Adam", "opening": "cur", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/boheme-2.webp"}, {"slug": "lou-max", "theme": "pop", "couple": "Lou & Max", "opening": "cur", "events": 2, "families": false, "lang": "fr", "music": "ragtime", "thumb": "img/themes/pop-2.webp"}, {"slug": "margaux-victor", "theme": "artdeco", "couple": "Margaux & Victor", "opening": "door", "events": 2, "families": false, "lang": "fr", "music": "ragtime", "thumb": "img/themes/artdeco-2.webp"}, {"slug": "nour-ilyes", "theme": "nuits", "couple": "Nour & Ilyes", "opening": "door", "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "img/themes/nuits-2.webp"}, {"slug": "priya-arjun", "theme": "bollywood", "couple": "Priya & Arjun", "opening": "cur", "events": 3, "families": true, "lang": "fr", "music": "raga", "thumb": "img/themes/bollywood-2.webp"}, {"slug": "salma-rayan", "theme": "nuits", "couple": "Salma & Rayan", "opening": "door", "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "img/themes/nuits-2.webp"}, {"slug": "sarah-yanis", "theme": "minimal", "couple": "Sarah & Yanis", "opening": "env", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/minimal-2.webp"}, {"slug": "sofia-nuno", "theme": "ceramique", "couple": "Sofia & Nuno", "opening": "env", "events": 2, "families": false, "lang": "fr", "music": "funiculi", "thumb": "img/themes/ceramique-2.webp"}];</script>
+<script>window.SCEAU_DEMOS=[{"slug": "yasmine-karim", "theme": "nuits", "couple": "Yasmine & Karim", "special": "Lieux réels peints et animés", "events": 2, "music": "scheherazade", "thumb": "d/yasmine-karim/thumb.webp"}, {"slug": "alice-theo", "theme": "aquarelle", "couple": "Alice & Théo", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/aquarelle-2.webp"}, {"slug": "ananya-rohan", "theme": "bollywood", "couple": "Ananya & Rohan", "opening": "cur", "layout": "long", "events": 3, "families": true, "lang": "fr", "music": "raga", "thumb": "img/themes/bollywood-2.webp"}, {"slug": "chiara-lucas", "theme": "dolcevita", "couple": "Chiara & Lucas", "opening": "env", "layout": "long", "events": 3, "families": false, "lang": "fr", "music": "funiculi", "thumb": "img/themes/dolcevita-2.webp"}, {"slug": "chloe-nathan", "theme": "americaine", "couple": "Chloé & Nathan", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "en", "music": "marine", "thumb": "img/themes/americaine-2.webp"}, {"slug": "claire-thomas", "theme": "gravure", "couple": "Claire & Thomas", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/gravure-2.webp"}, {"slug": "emma-louis", "theme": "conte", "couple": "Emma & Louis", "opening": "env", "layout": "pages", "events": 2, "families": true, "lang": "fr", "music": "valse", "thumb": "img/themes/conte-2.webp"}, {"slug": "giulia-hugo", "theme": "dolcevita", "couple": "Giulia & Hugo", "opening": "cur", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "funiculi", "thumb": "img/themes/dolcevita-2.webp"}, {"slug": "lena-adam", "theme": "boheme", "couple": "Léna & Adam", "opening": "cur", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/boheme-2.webp"}, {"slug": "lou-max", "theme": "pop", "couple": "Lou & Max", "opening": "cur", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "ragtime", "thumb": "img/themes/pop-2.webp"}, {"slug": "margaux-victor", "theme": "artdeco", "couple": "Margaux & Victor", "opening": "door", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "ragtime", "thumb": "img/themes/artdeco-2.webp"}, {"slug": "nour-ilyes", "theme": "nuits", "couple": "Nour & Ilyes", "opening": "door", "layout": "long", "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "img/themes/nuits-2.webp"}, {"slug": "priya-arjun", "theme": "bollywood", "couple": "Priya & Arjun", "opening": "cur", "layout": "pages", "events": 3, "families": true, "lang": "fr", "music": "raga", "thumb": "img/themes/bollywood-2.webp"}, {"slug": "salma-rayan", "theme": "nuits", "couple": "Salma & Rayan", "opening": "door", "layout": "pages", "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "img/themes/nuits-2.webp"}, {"slug": "sarah-yanis", "theme": "minimal", "couple": "Sarah & Yanis", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "img/themes/minimal-2.webp"}, {"slug": "sofia-nuno", "theme": "ceramique", "couple": "Sofia & Nuno", "opening": "env", "layout": "pages", "events": 2, "families": false, "lang": "fr", "music": "funiculi", "thumb": "img/themes/ceramique-2.webp"}];</script>
 <script>
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',e=>{ document.getElementById('planSel').value=a.dataset.plan;
     // formule payable en ligne : on ouvre la commande au lieu du formulaire de contact
@@ -841,14 +851,25 @@
     }).join('')+'</div>';
   }
 
-  /* carrousel du haut : deux types de creations (nos themes, vos lieux peints), rail natif, un film par telephone */
+  /* carrousel du haut : deux types de creations. « En continu » : un seul long tableau qu'on descend (3 exemples).
+     « Page par page » : nos 12 themes (une scene par ecran) et notre faire-part reel (lieux peints). Rail natif, un film par telephone. */
   const KEYS=Object.keys(THEMES), DEMOS0=window.SCEAU_DEMOS||[];
-  const CREAS=KEYS.map(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim');
-    return Object.assign({},t,{kind:'themes',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`img/themes/${k}-${i}.webp`}); });
+  const LONGS=[
+    {slug:'nour-ilyes',k:'nuits',couple:'Nour & Ilyes',ey:'Bismillah',date:'Du 8 au 10 juillet 2027 · Marrakech',ink:'#f6eedb',shadow:'0 2px 14px rgba(0,0,0,.55)',desc:'Henné, cérémonie et fête dans le désert'},
+    {slug:'ananya-rohan',k:'bollywood',couple:'Ananya & Rohan',ey:'Shubh Vivah',date:'Les 17 et 18 septembre 2027',ink:'#6b1230',shadow:'0 1px 10px rgba(255,236,214,.7)',desc:'Mehndi, mandap et sangeet'},
+    {slug:'chiara-lucas',k:'dolcevita',couple:'Chiara & Lucas',ey:'Ci sposiamo',date:'Samedi 5 juin 2027 · Ravello',ink:'#193f64',shadow:'0 1px 12px rgba(255,255,255,.8)',desc:'Aperitivo, chapelle et dîner face à la mer'}
+  ];
+  const CREAS=LONGS.map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:'En continu',font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`img/reel/long-${l.k}.webp`}); });
+  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long');
+    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`img/themes/${k}-${i}.webp`})); });
   // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
-  CREAS.push({kind:'lieux',k:'yk',label:'Yasmine & Karim',desc:'Leur mairie, leur salle, leur ville : peintes et animées pour eux',href:'/d/yasmine-karim/',tag:'Vos lieux, peints',
+  CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
     couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`img/reel/yk-${i}.webp`,
     scenes:[["Ils se marient","NAMES","Samedi 12 juin 2027"],["Cérémonie civile","Hôtel de Ville de Nanterre","À 14h00","Itinéraire","dark"],["Réception","Le Palacio","Dès 19h · cocktail, dîner et soirée","Itinéraire","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre","dark"]]});
+  function roll(c,eager){
+    const tt={font:c.font,color:c.ink,size:c.size,italic:c.italic,upper:c.upper};
+    return `<div class="roll"><img src="${esc(c.img())}" alt="" width="540" height="2176" decoding="async"${eager?'':' loading="lazy"'}></div><div class="roll-txt" style="color:${c.ink};text-shadow:${c.shadow}"><div class="ey">${esc(c.ey)}</div><div class="nm" style="${esc(nameStyle(tt,1))}">${esc(c.couple)}</div><div class="tx">${esc(c.date)}</div></div>`;
+  }
   const rail=document.getElementById('carRail'), dots=document.getElementById('carDots'), kinds=document.getElementById('kinds');
   const prevB=document.getElementById('carPrev'), nextB=document.getElementById('carNext');
   const noMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -856,7 +877,7 @@
   const items=CREAS.map((c,i)=>{
     const it=document.createElement('a'); it.className='car-item'; it.dataset.kind=c.kind; it.dataset.f=0; it.setAttribute('aria-label','Ouvrir la démo '+c.label);
     it.href=c.href||'#modeles'; if(c.href){ it.target='_blank'; it.rel='noopener'; }
-    it.innerHTML=film(c,i<2)+`<span class="car-tag">${esc(c.tag)}</span>`;
+    it.innerHTML=(c.kind==='long'?roll(c,i<2):film(c,i<5))+`<span class="car-tag">${esc(c.tag)}</span>`;
     it.addEventListener('click',e=>{ if(it!==items[cur]){ e.preventDefault(); center(it,true); } });
     rail.appendChild(it); return it;
   });
@@ -872,6 +893,7 @@
   // charge les 4 scenes d'un telephone des qu'il approche du centre
   const warm=it=>it&&it.querySelectorAll('img[loading]').forEach(im=>im.removeAttribute('loading'));
   function startFilm(){ clearInterval(filmT); if(noMotion) return;
+    if(CREAS[cur]&&CREAS[cur].kind==='long') return;
     filmT=setInterval(()=>{ if(document.hidden||!inView) return; const it=items[cur]; if(it) it.dataset.f=((+it.dataset.f||0)+1)%4; },2800); }
   function setActive(it){
     if(!it||it===items[cur]) return;
@@ -894,13 +916,13 @@
     items.forEach(it=>{ it.hidden=it.dataset.kind!==kind; });
     const v=visible(); dots.innerHTML=''; dots.hidden=v.length<2;
     v.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label',CREAS[items.indexOf(it)].label); b.onclick=()=>{ center(it,true); setActive(it); }; dots.appendChild(b); });
-    document.getElementById('carHint').textContent=v.length>1?'Glissez pour changer de thème · Touchez le téléphone pour ouvrir la démo':'Leur mairie, leur salle, leur ville, peintes pour eux · Touchez le téléphone pour ouvrir la démo';
+    document.getElementById('carHint').textContent=kind==='long'?'Un seul long tableau qu\'on descend du doigt · Glissez pour changer d\'exemple, touchez le téléphone pour l\'ouvrir':'Une scène par écran, qu\'on passe d\'un geste · Glissez pour changer de thème, touchez le téléphone pour ouvrir la démo';
     if(items[cur]){ items[cur].classList.remove('on'); items[cur].dataset.f=0; }
     cur=-1; center(v[0],false); setActive(v[0]);
   }
   kinds.addEventListener('click',e=>{ const b=e.target.closest('button[data-kind]'); if(b) showKind(b.dataset.kind); });
   if('IntersectionObserver' in window) new IntersectionObserver(es=>{ es.forEach(en=>{ inView=en.isIntersecting; }); },{threshold:.2}).observe(rail);
-  showKind('themes');
+  showKind('long');
   addEventListener('resize',()=>{ if(items[cur]) center(items[cur],false); });
 
   /* catalogue avec filtre par style */
@@ -914,7 +936,7 @@
     models.appendChild(m); };
   const yk=DEMOS.find(d=>d.slug==='yasmine-karim');
   if(yk) card(yk,THEMES.nuits,'Notre faire-part réel','Peinture','Lieux réels peints et animés',yk.thumb,'');
-  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'); if(d) card(d,t,t.name,t.style,t.style,`img/themes/${k}-1.webp`,`img/themes/${k}-2.webp`); });
+  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long'); if(d) card(d,t,t.name,t.style,t.style,`img/themes/${k}-1.webp`,`img/themes/${k}-2.webp`); });
   const sm=document.createElement('div'); sm.className='model'; sm.dataset.style='*'; sm.innerHTML='<div class="pic"><span class="soon">Votre thème</span></div><div class="meta"><div><h3>Sur-mesure</h3><p class="style">Couture</p><p>Un univers rien qu\'à vous.</p></div></div>'; models.appendChild(sm);
   const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
   STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
