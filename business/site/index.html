@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sceau — Faire-part animés</title>
-<meta name="description" content="Le faire-part qui s'ouvre. Vos lieux peints et animés, envoyés en un lien. Réponses des invités, calendrier, itinéraire, musique.">
+<title>Sceau — Votre mariage, peint et animé</title>
+<meta name="description" content="Votre mariage, peint et animé. Votre mairie, votre salle, votre ville, peintes d'après vos photos, dans un faire-part qui s'ouvre, joue votre musique et recueille les réponses. Prêt en 48 h à 5 jours, dès 99 €.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Sceau · Le faire-part qui s'ouvre">
-<meta property="og:description" content="Faire-part de mariage numériques, peints et animés. Ouvrez une démo.">
+<meta property="og:title" content="Sceau · Votre mariage, peint et animé">
+<meta property="og:description" content="Vos lieux peints d'après vos photos, dans un faire-part de mariage animé, envoyé en un lien. Ouvrez une démo.">
 <meta property="og:image" content="https://sceau-faire-part.vercel.app/og-sceau.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -59,7 +59,7 @@
   .hero-more{grid-area:more;align-self:start}
   .car{grid-area:car}
   @media (max-width:900px){ .hero .grid{grid-template-columns:1fr;grid-template-areas:"copy" "car" "more";gap:0} .hero-copy{margin-bottom:28px} }
-  .hero h1{font-size:clamp(48px,9vw,112px)}
+  .hero h1{font-size:clamp(44px,7.4vw,88px);max-width:8.5em}
   .hero p{color:var(--muted);font-size:18px;max-width:30em;margin:28px 0 0}
   .hero .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
   .facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:56px;border-top:1px solid var(--line)}
@@ -98,6 +98,13 @@
   .roll-txt .nm{margin:10px 0 6px;line-height:1.05}
   .roll-txt .tx{font:italic 400 clamp(13px,1.8vh,16px)/1.35 "Cormorant Garamond",Georgia,serif}
   @media (prefers-reduced-motion:reduce){ .roll img{animation:none} }
+  /* pourquoi nous, et pas un modele, un studio, une IA */
+  .why{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink)}
+  @media (max-width:820px){ .why{grid-template-columns:1fr} }
+  .why div{padding:22px 28px 26px 0;border-bottom:1px solid var(--line);min-width:0}
+  .why h3{font-size:24px;margin:14px 0 12px;max-width:14em}
+  .why p:not(.label){margin:0;color:var(--muted)}
+
   .car-tag{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:max-content;max-width:88%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:500 9.5px/1 Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;
     color:#fff;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .4s}
   .car-item.on .car-tag{opacity:1}
@@ -473,8 +480,9 @@
     .pv-tabs::-webkit-scrollbar{display:none}
     .pv-tabs button{flex:none}
     .pv-side{width:100%}
-    .cmp{min-width:0}
-    .cmp th:nth-child(3),.cmp td:nth-child(3){display:none}
+    .cmp-wrap .cmp{min-width:0}
+    /* sur mobile : fait soi-même contre Sceau, c'est la comparaison qui compte */
+    .cmp th:nth-child(2),.cmp td:nth-child(2),.cmp th:nth-child(4),.cmp td:nth-child(4){display:none}
     .cmp th,.cmp td{padding-right:10px;font-size:14px}
     .amount{font-size:46px}
     .cta h2{font-size:36px}
@@ -515,9 +523,9 @@
 <header class="hero">
   <div class="wrap grid">
     <div class="hero-copy">
-      <p class="label">Faire-part numériques</p>
-      <h1 style="margin-top:18px">Le faire-part qui s'ouvre.</h1>
-      <p>Vos lieux peints et animés, qu'on fait défiler du bout du doigt. Un seul lien sur WhatsApp, les réponses de vos invités au même endroit.</p>
+      <p class="label">Faire-part de mariage animés</p>
+      <h1 style="margin-top:18px">Votre mariage, peint et animé.</h1>
+      <p>Votre mairie, votre salle, votre ville d'origine, peintes d'après vos photos et animées scène après scène. Pas un modèle, pas une image générée en dix secondes : un vrai faire-part qui s'ouvre, joue votre musique et recueille les réponses. Vous donnez 10 minutes, on fait le reste.</p>
     </div>
     <div class="car" id="car" aria-roledescription="carrousel" aria-label="Nos créations">
       <div class="kinds" id="kinds" role="tablist" aria-label="Type de création">
@@ -539,13 +547,39 @@
         <a class="btn" href="#continu">Voir les modèles</a>
       </div>
       <div class="facts">
-        <div><b>1 lien</b><span>pour tous vos invités</span></div>
-        <div><b>0 papier</b><span>ni timbre, ni adresse</span></div>
-        <div><b>FR · EN</b><span>et d'autres langues sur demande</span></div>
+        <div><b>Vos lieux</b><span>peints d'après photo : deux couples n'ont jamais le même</span></div>
+        <div><b>48 h à 5 j</b><span>prêt à envoyer, dès 99 €, invités illimités</span></div>
+        <div><b>1 lien</b><span>WhatsApp, réponses, calendrier, FR · EN</span></div>
       </div>
     </div>
   </div>
 </header>
+
+<section id="pourquoi">
+  <div class="wrap">
+    <div class="head">
+      <h2>Pourquoi Sceau, et pas…</h2>
+      <p>Il y a trois autres façons de faire un faire-part numérique. Voici ce qu'elles ne vous donnent pas.</p>
+    </div>
+    <div class="why">
+      <div>
+        <p class="label">… un modèle gratuit</p>
+        <h3>Ils montrent un château générique. Nous, votre mairie.</h3>
+        <p>Canva, Etsy, les sites de modèles : le même décor pour tout le monde, un PDF à transférer, et des réponses à suivre dans un tableur. Ici, vos lieux sont peints d'après vos photos et animés dans le style que vous choisissez. Deux couples n'ont jamais le même faire-part.</p>
+      </div>
+      <div>
+        <p class="label">… un studio sur-mesure</p>
+        <h3>La même qualité, sans les trois semaines ni les centaines d'euros.</h3>
+        <p>Les studios qui recréent votre lieu à la main travaillent bien, mais facturent plusieurs centaines d'euros et livrent en deux à trois semaines. Nos thèmes et notre bibliothèque de lieux sont prêts à l'avance : votre faire-part part en 48 h à 5 jours, dès 99 €, quel que soit le nombre d'invités.</p>
+      </div>
+      <div>
+        <p class="label">… une IA et un dimanche après-midi</p>
+        <h3>Une image, une IA vous la fait en dix secondes. Un faire-part, non.</h3>
+        <p>Il manque tout le reste : l'enveloppe qui s'ouvre au sceau de vos initiales, quatre scènes cohérentes dans le même style, la musique qui démarre, un lien qui s'affiche bien sur WhatsApp et s'ouvre sur le téléphone de votre grand-mère, les réponses par événement, un lien par famille, et quelqu'un à qui écrire la veille du mariage. C'est ce qu'on a mis au point en 47 versions sur notre propre faire-part. Vous, vous donnez 10 minutes.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="comment">
   <div class="wrap">
@@ -659,14 +693,16 @@
     </div>
     <div class="cmp-wrap">
       <table class="cmp">
-        <thead><tr><th scope="col"></th><th scope="col">Papier</th><th scope="col">Modèle gratuit en ligne</th><th scope="col" class="us">Sceau</th></tr></thead>
+        <thead><tr><th scope="col"></th><th scope="col">Papier</th><th scope="col">Fait soi-même (modèle ou IA)</th><th scope="col">Studio sur-mesure</th><th scope="col" class="us">Sceau</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Prix pour 300 invités</th><td>500 à 900 € avec l'envoi</td><td>0 à 30 €</td><td class="us">dès 99 €</td></tr>
-          <tr><th scope="row">Famille à l'étranger</th><td>Des semaines, parfois jamais</td><td>Oui</td><td class="us">En une seconde, dans sa langue</td></tr>
-          <tr><th scope="row">Réponses des invités</th><td>Coupons à relancer</td><td>À suivre à la main</td><td class="us">Tableau de bord et relances</td></tr>
-          <tr><th scope="row">Modifier après l'envoi</th><td>Impossible</td><td>Rarement</td><td class="us">Oui, jusqu'au jour J</td></tr>
-          <tr><th scope="row">Vos lieux, peints</th><td>Non</td><td>Non</td><td class="us">Oui</td></tr>
-          <tr><th scope="row">Votre temps</th><td>Des soirées</td><td>Des heures</td><td class="us">10 minutes</td></tr>
+          <tr><th scope="row">Prix pour 300 invités</th><td>500 à 900 € avec l'envoi</td><td>0 à 30 €, plus vos soirées</td><td>200 à 1 000 €</td><td class="us">dès 99 €</td></tr>
+          <tr><th scope="row">Délai</th><td>3 à 6 semaines</td><td>Quand vous avez fini</td><td>2 à 3 semaines</td><td class="us">48 h à 5 jours</td></tr>
+          <tr><th scope="row">Vos lieux, peints</th><td>Non</td><td>Une image, si vous y arrivez</td><td>Oui, en option</td><td class="us">Oui, d'après vos photos</td></tr>
+          <tr><th scope="row">Ouverture, scènes, musique</th><td>Non</td><td>Une image ou une vidéo</td><td>Oui</td><td class="us">Oui, scène après scène</td></tr>
+          <tr><th scope="row">Réponses des invités</th><td>Coupons à relancer</td><td>À suivre à la main</td><td>Formulaire</td><td class="us">Tableau de bord, un lien par famille</td></tr>
+          <tr><th scope="row">Famille à l'étranger</th><td>Des semaines, parfois jamais</td><td>Oui</td><td>Oui</td><td class="us">En une seconde, dans sa langue</td></tr>
+          <tr><th scope="row">Modifier après l'envoi</th><td>Impossible</td><td>À refaire et renvoyer</td><td>Sur demande</td><td class="us">Oui, jusqu'au jour J</td></tr>
+          <tr><th scope="row">Votre temps</th><td>Des soirées</td><td>Des week-ends</td><td>Des allers-retours</td><td class="us">10 minutes</td></tr>
         </tbody>
       </table>
     </div>

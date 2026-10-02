@@ -3,24 +3,52 @@
 ## 1. Positionnement
 
 > **Pour les couples** qui veulent un faire-part aussi beau que leur mariage, sans le coût ni la lenteur du papier,
-> **Sceau** est **le faire-part qui s'ouvre comme un film** :
-> **vos lieux, peints et animés**, qu'on fait défiler du bout du doigt, envoyés en un lien sur WhatsApp,
-> avec tout le pratique intégré (RSVP, calendrier, itinéraire, plusieurs langues).
-> **Contrairement** aux modèles génériques (Canva, Etsy) et aux faire-part numériques « à portes et rideaux »,
-> **chaque faire-part Sceau est unique**, parce qu'il montre *votre* mairie, *votre* salle, *votre* ville.
+> **Sceau** est **votre mariage, peint et animé** :
+> **votre mairie, votre salle, votre ville d'origine**, peintes d'après vos photos et animées scène après scène,
+> dans un vrai faire-part qui s'ouvre, joue votre musique et recueille les réponses, envoyé en un lien sur WhatsApp.
+> **Contrairement** aux modèles génériques (Canva, Etsy, Weddinvita), aux studios sur-mesure (plusieurs centaines d'euros, 2 à 3 semaines)
+> et à l'image qu'on génère soi-même avec une IA, **chaque faire-part Sceau est unique et complet** : vos lieux, et tout ce qui va autour,
+> prêt en 48 h à 5 jours, dès 99 €.
 
-### Accroches possibles
-- « Touchez le sceau. »
-- « Votre mariage, peint. Votre faire-part, animé. »
+### L'accroche retenue (vitrine, `landing/index.html`)
+
+_« Le faire-part qui s'ouvre. »_ a été abandonné le 2 octobre 2026 : c'est joli mais ça ne dit ni pourquoi nous, ni pourquoi pas un concurrent, ni pourquoi pas le faire soi-même.
+L'ouverture existe chez The Digital Yes et Perfect Yes, et n'importe quelle vidéo IA « s'ouvre ». Ce n'est pas un élément différenciant.
+
+| Bloc du HERO | Texte | Ce qu'il porte |
+|---|---|---|
+| Titre | **Votre mariage, peint et animé.** | « Votre » = pas un modèle. « Peint et animé » = le rendu que les modèles n'ont pas |
+| Sous-titre | Votre mairie, votre salle, votre ville d'origine, peintes d'après vos photos et animées scène après scène. Pas un modèle, pas une image générée en dix secondes : un vrai faire-part qui s'ouvre, joue votre musique et recueille les réponses. Vous donnez 10 minutes, on fait le reste. | Les lieux (contre les modèles), le produit complet (contre l'IA faite maison), le temps du couple |
+| 3 preuves | **Vos lieux** peints d'après photo · **48 h à 5 j** dès 99 €, invités illimités · **1 lien** WhatsApp, réponses, calendrier, FR · EN | Unique, rapide et pas cher (contre les studios), complet |
+
+Juste sous le HERO, une section **« Pourquoi Sceau, et pas… »** reprend les trois alternatives une par une (voir le § 2 bis), et le comparatif de la section « Ce que vous achetez » a maintenant 4 colonnes : Papier · Fait soi-même (modèle ou IA) · Studio sur-mesure · Sceau.
+
+### Autres accroches gardées sous le coude
+- « Touchez le sceau. » (geste, pour les vidéos TikTok)
 - « Le faire-part qu'on ne jette pas. On le rouvre. »
 - « De la mairie à la salle, ils vivront la journée avant même d'y être. »
-- En anglais : *« Break the seal. »*
+- « Une image, une IA vous la fait en dix secondes. Un faire-part, non. » (utilisée dans la section Pourquoi)
+- En anglais : *« Your wedding, painted and animated. »*, *« Break the seal. »*
 
 ## 2. La promesse en 3 bénéfices
 
 | Émotionnel | Pratique | Économique |
 |---|---|---|
 | Un vrai **moment d'ouverture** (sceau, enveloppe, musique). Les invités **vivent** la journée scène après scène. Les parents sont fiers de l'envoyer dans le groupe famille | RSVP par événement, calendrier, itinéraire, langues, modifiable jusqu'au jour J, **aucune adresse postale nécessaire** | **Prix fixe, invités illimités**. Moins cher que le papier dès ~100 invités. Rien à envoyer par la poste |
+
+## 2 bis. Pourquoi nous, et pas… (les trois alternatives du couple)
+
+Un couple qui hésite a trois autres options. Pour chacune, ce qu'elle fait bien, ce qu'elle ne donne pas, et notre réponse en une phrase. C'est le texte de la section « Pourquoi Sceau, et pas… » de la vitrine.
+
+| Alternative | Ce qu'elle fait bien | Ce qu'elle ne donne pas | Notre réponse |
+|---|---|---|---|
+| **Un modèle gratuit ou à 10–30 €** (Canva, Etsy, Joy, Weddinvita à 149 €) | Gratuit ou presque, tout de suite | Un décor générique (le même château pour tout le monde), un PDF ou une page figée, pas d'animation, réponses à suivre dans un tableur, « ça fait cheap » pour les parents | **Vos lieux, peints d'après vos photos.** Deux couples n'ont jamais le même faire-part |
+| **Un studio sur-mesure** (The Digital Yes 175–975 €, Perfect Yes 199–499 €) | Beau, enveloppe à sceau, lieu recréé, service humain | 2 à 3 semaines de délai, plusieurs centaines d'euros dès qu'on veut son lieu, allers-retours par e-mail | **La même qualité, prête à l'avance.** Thèmes et bibliothèque de lieux déjà produits : 48 h à 5 jours, dès 99 €, invités illimités |
+| **Le faire soi-même avec une IA** (ChatGPT, Canva AI, Kling, Higgsfield, un dimanche après-midi) | Une belle image ou une vidéo de 5 secondes, en dix secondes, pour rien | Tout le reste : l'ouverture, 4 scènes cohérentes dans le même style, la musique qui démarre, l'aperçu WhatsApp, un lien qui marche sur un vieux téléphone en 4G, les réponses par événement, un lien par famille, les données des invités hébergées proprement, les modifications jusqu'au jour J, quelqu'un à qui écrire la veille | **Une image, une IA vous la fait en dix secondes. Un faire-part, non.** C'est 47 versions sur notre propre faire-part. Le couple donne 10 minutes |
+
+Ce qui ressort : notre différence n'est pas « ça s'ouvre » ni même « c'est animé » (une IA grand public le fait). C'est **(1) vos lieux, uniques par construction, (2) un produit complet et fiable, pas une image, (3) rapide et pas cher parce que tout est produit à l'avance.** Les trois doivent être lisibles dans le HERO, et c'est le cas depuis le 2 octobre 2026.
+
+> **Argument face à l'IA, à garder en tête pour le discours et les vidéos :** on ne nie pas l'IA, on dit que l'image est la partie facile. Ce qui se paie, c'est l'intégration et la fiabilité (RSVP, familles, langues, performance, aperçu WhatsApp, SAV), exactement ce que le SWOT identifie comme notre avance durable (doc 02, menace « Les couples le font eux-mêmes avec l'IA »).
 
 ## 3. Les 7 leviers pour se démarquer
 
