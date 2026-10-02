@@ -98,6 +98,17 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 14. Les règles de design apprises sont écrites ici, pas seulement appliquées. Un retour de l'utilisateur sur un
     écran est un retour sur **le pattern** : on corrige partout où il se produit, pas seulement sur l'écran montré.
 
+## Mise en production : chaque push va en prod
+
+- Le projet Vercel `sceau-faire-part` (racine `business/site`) est relié au dépôt GitHub. Un push sur une branche de
+  travail `claude/...` ne crée qu'un **aperçu** (`target: null`) : la prod (`sceau-faire-part.vercel.app`) ne bougeait
+  pas, l'utilisateur l'a constaté. La prod se déploie depuis la branche de production de Vercel (`main`).
+- Règle : **à chaque push, pousser aussi `main`** en avance rapide sur le même commit :
+  `git push origin HEAD:main` (après `git push -u origin <branche>`). `main` doit toujours être un ancêtre de la branche
+  de travail ; si ce n'est plus le cas, fusionner d'abord `main` dans la branche (jamais de force-push).
+- Si la prod doit partir sans attendre, l'API Vercel (`create_deployment`, `target: production`, `gitSource` = le commit)
+  déploie ce commit en production ; `request_promote` d'un aperçu est refusé (422) sur ce projet.
+
 ## Confidentialité
 
 - `GEMINI_API_KEY` vient de l'environnement, jamais du dépôt ni du chat. La musique du mariage (`assets/music.mp3`)
