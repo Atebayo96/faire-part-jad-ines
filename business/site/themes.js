@@ -40,7 +40,9 @@ window.SCEAU_THEMES={
 
 /* complements utilises par le moteur de faire-part (invite.js) et le build.
    doorBox : zone des battants dans l'image des portes (fractions x0,y0,x1,y1), pour l'ouverture 3D (open3d.js) ;
-   sans doorBox, toute l'image est les deux battants. */
+   sans doorBox, toute l'image est les deux battants.
+   open3d : réglages 3D propres au thème, par objet (door, cur, voile), qui surchargent PARAMS d'open3d.js.
+   Exemple : open3d:{door:{k:4.5,c:3.4,angle:95},voile:{pleats:18,amp:40}} (ressort moins vif, plus de plis). */
 (function(T){
   const X={
     conte:{gf:"Great+Vibes",particles:"petals",music:"valse"},

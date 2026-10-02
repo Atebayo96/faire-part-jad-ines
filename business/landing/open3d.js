@@ -35,9 +35,13 @@ class Spring{
 }
 const smooth=x=>x<0?0:x>1?1:x*x*(3-2*x);
 
+// réglages effectifs : PARAMS, surchargés par ceux du thème (themes.js, clé open3d : {door:{...},cur:{...},voile:{...}})
+function withOverrides(ov){ const P={}; for(const k in PARAMS) P[k]=Object.assign({},PARAMS[k],ov&&ov[k]||{}); return P; }
+
 export function mount(o){
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) return null;
   const op=o.op, type=o.type; if(!['door','cur','voile'].includes(type)) return null;
+  const PARAMS=withOverrides(o.params);
   const canvas=document.createElement('canvas'); canvas.className='op-3d'; op.prepend(canvas);
   let renderer; try{ renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'}); }catch(e){ canvas.remove(); return null; }
   renderer.setClearColor(0x000000,0);
