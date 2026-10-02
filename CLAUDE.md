@@ -81,6 +81,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     - **Voile** = un grand rideau **opaque** (le tissu du thème, `img/open/<thème>-rideau.webp`, coupé en deux
       pans) qui s'ouvre **par le milieu**, les pans se tassant en plis vers les bords. La version en gaze
       translucide a été refusée (« un vrai voile opaque, comme des rideaux »).
+    - **Pas d'objets 3D.** Une version three.js (portes épaisses sur gonds, tissus maillés à plis, ressort amorti) a été
+      construite et mise en ligne, puis refusée par l'utilisateur (« j'aime pas trop, reviens sur ce qu'on avait
+      avant ») : commits annulés. Les ouvertures restent en CSS (images du thème, transformations et courbes
+      ci-dessous). Ne pas y revenir sans demande explicite.
     - **Mouvements naturels.** Un objet qui s'ouvre a un poids : il part lentement (inertie), accélère, ralentit,
       dépasse un peu sa position et s'y repose (porte : `opDoorL/R`, dépassement à 103°) ; un tissu tiré se ramasse
       d'abord, ondule pendant la traction (`skewY`) puis se pose (`opSheerL/R`). Jamais une courbe uniforme d'un bout
