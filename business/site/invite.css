@@ -23,14 +23,12 @@ a{color:inherit}
 #app{position:fixed;top:0;bottom:0;left:50%;width:min(100vw,calc(100svh * .5625));transform:translateX(-50%);overflow:hidden;background:#111;box-shadow:0 0 80px rgba(0,0,0,.45)}
 @media (max-width:600px){ #app{width:100vw} }
 
-/* défilement page par page, mais CONTINU : le doigt entraîne la page (défilement natif, avec son élan), le décor suivant
-   se fond par-dessus le précédent pendant le glissement, et la page se cale doucement en plein écran (scroll-snap
-   « proximity », jamais « mandatory » ni blocage du geste : l'utilisateur a refusé le swipe brusque qui saute d'une page
-   à l'autre). Molette et clavier : un cran = la page suivante, en un glissement lent qui démarre et finit en douceur. */
+/* défilement libre et continu (même pour les faire-part en scènes) : aucun calage en plein écran, le doigt, la molette et
+   le clavier font défiler normalement ; seul le décor change, fondu sur une longue bande (layoutStrip dans invite.js).
+   L'utilisateur ne veut plus sentir de pages (« tu ne te rends pas compte que tu changes de page »). */
 .sc{position:absolute;inset:0;z-index:2;overflow-y:auto;scrollbar-width:none;overscroll-behavior:none;-webkit-overflow-scrolling:touch}
-.sc:not(.sc-long){scroll-snap-type:y proximity}
 .sc::-webkit-scrollbar{display:none}
-.pg{position:relative;height:100%;min-height:100%;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:13% 8% 0;will-change:opacity,transform;scroll-snap-align:start}
+.pg{position:relative;height:100%;min-height:100%;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:13% 8% 0;}
 .pg.tall{height:auto;min-height:100%}
 /* pas de halo ni de voile sombre dans la page : coupé au bord de la page par overflow:hidden, il faisait une ligne
    qui séparait les deux pages pendant le glissement (retiré à la demande de l'utilisateur, voir CLAUDE.md).

@@ -303,10 +303,10 @@
   .pv-close{position:absolute;top:14px;right:16px;background:none;border:0;color:var(--ink);font:300 34px/1 Inter,sans-serif;cursor:pointer}
   .pv-phone{height:min(86vh,760px);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);background:#000;flex:none}
   /* défilement continu : le doigt entraîne la page, elle se cale doucement (proximity, jamais mandatory : « swipe brusque ») */
-  .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y proximity;scrollbar-width:none;overscroll-behavior:contain}
+  .pv-scroll{height:100%;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain}
   .pv-scroll::-webkit-scrollbar{display:none}
   /* même échelle de lecture que le moteur (invite.css) : chapeaux 13 px, texte 17 px et plus, rien sous 11 px */
-  .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
+  .pv-sc{position:relative;height:100%;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
   /* comme dans le moteur : pas de halo sombre derrière le texte (il traçait une ligne entre deux pages au glissement) */
   .pv-sc.light .ey,.pv-sc.light .nm,.pv-sc.light .tx,.pv-sc.light .bt,.pv-sc.light .pv-hint{text-shadow:none}
   .pv-sc.light .bt{background:transparent;backdrop-filter:none}
@@ -1114,33 +1114,16 @@
   /* fond continu de l'aperçu, comme le moteur (invite.js, layoutStrip() et frame()) : une bande de décors qui défile avec
      les pages, deux scènes voisines se chevauchent et se fondent par un masque en dégradé (30 % d'un écran) ;
      les textes glissent avec la page et ne s'estompent que près du bord. Rien ne saute, on ne « change pas de page ». */
-  let cpRuns=[], cpTick=false;
+  let cpRuns=[];
   function cpLayout(){
-    const sc=$('cpScroll'), h=sc.clientHeight, bgs=$('cpBgs'); if(!h||!bgs) return; const ov=Math.round(h*.12), secs=[...sc.querySelectorAll('.pv-sc')], layers=[...bgs.children];
+    const sc=$('cpScroll'), h=sc.clientHeight, bgs=$('cpBgs'); if(!h||!bgs) return; const ov=Math.round(h*.45), secs=[...sc.querySelectorAll('.pv-sc')], layers=[...bgs.children];
     bgs.style.height=sc.scrollHeight+'px';
     cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!L) return; const B=L.firstElementChild, top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight;
       const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px'; B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
       const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m; });
-    cpFrame();
   }
-  function cpFrame(){
-    cpTick=false; const sc=$('cpScroll'), h=sc.clientHeight; if(!h) return;
-    const secs=[...sc.querySelectorAll('.pv-sc')], y=sc.scrollTop, mid=y+h/2;
-    const D=secs.map(s=>(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h);
-    secs.forEach((s,i)=>{ const d=D[i]; if(s.offsetHeight<=h*1.05){ s.style.opacity=Math.max(0,Math.min(1,1-(Math.abs(d)-.35)*2.2)).toFixed(3); s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; } });
-  }
-  $('cpScroll').addEventListener('scroll',()=>{ if(!cpTick){ cpTick=true; requestAnimationFrame(cpFrame); } },{passive:true});
   addEventListener('resize',cpLayout); addEventListener('load',cpLayout);
-  // si le geste s'arrête entre deux pages (le snap « proximity » ne cale que près d'une page) : calage doux une fois le doigt levé
-  // (dans le sens du geste dès 12 % de chemin parcouru, sinon vers la page la plus proche ; mêmes règles que invite.js)
-  { const sc=$('cpScroll'); let touching=false, st=null, lastTop=0, dir=1;
-    const arm=()=>{ clearTimeout(st); st=setTimeout(()=>{ if(touching) return; const y=sc.scrollTop, tops=[...sc.querySelectorAll('.pv-sc')].map(s=>s.offsetTop);
-      const prev=tops.slice().reverse().find(t=>t<=y+2), next=tops.find(t=>t>y+2); let to;
-      if(prev==null) to=next; else if(next==null) to=prev; else { const f=(y-prev)/(next-prev); to=dir>0?(f>.12?next:prev):(f<.88?prev:next); }
-      if(to!=null&&Math.abs(to-y)>2) sc.scrollTo({top:to,behavior:'smooth'}); },180); };
-    sc.addEventListener('touchstart',()=>{ touching=true; clearTimeout(st); },{passive:true});
-    sc.addEventListener('touchend',()=>{ touching=false; arm(); },{passive:true});
-    sc.addEventListener('scroll',()=>{ const t=sc.scrollTop; if(t!==lastTop) dir=t>lastTop?1:-1; lastTop=t; if(!touching) arm(); },{passive:true}); }
+  // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
   function paint(){
     const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
     $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));

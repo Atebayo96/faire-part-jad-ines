@@ -309,7 +309,7 @@
 
   /* ---------- date à découvrir ---------- */
   const rvlHost=secs[0]&&secs[0].querySelector('[data-rvl]');
-  if(rvlHost) SceauReveal.mount(rvlHost,{kind:RVL,date:main,tz:TZ,lang:L,pal,light:pages[0].lt,scope:secs[0],onDone:()=>requestAnimationFrame(frame)});
+  if(rvlHost) SceauReveal.mount(rvlHost,{kind:RVL,date:main,tz:TZ,lang:L,pal,light:pages[0].lt,scope:secs[0],onDone:()=>requestAnimationFrame(layoutStrip)});
 
   /* ---------- apparition + parallaxe ---------- */
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -324,10 +324,10 @@
      un cadre (.bgl) de la hauteur de ces pages et dedans l'image (.bg, position: sticky) à la taille d'un écran.
      Tant que ses pages défilent, l'image reste en place ; quand la scène suivante arrive, sa propre image monte
      avec le doigt et vient recouvrir la précédente (qui est poussée au même rythme), son bord haut fondu sur
-     OVK = 12 % d'un écran : un seul mouvement continu, le décor change sans qu'on sente une page. Aucune image
+     OVK = 45 % d'un écran : un long fondu, le décor change sans qu'on sente une page. Aucune image
      n'est étirée sur plusieurs écrans (jamais de zoom). Les positions sont recalculées à chaque changement de
      taille (une page fait un écran, une page « tall » davantage). */
-  const OVK=.12;
+  const OVK=.45;
   function layoutStrip(){
     const h=sc.clientHeight; fxc.style.height=h+'px'; if(LG) return;
     const ov=Math.round(h*OVK);
@@ -338,84 +338,22 @@
       B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
       const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
     });
-    frame();
   }
-  let ticking=false;
-  function frame(){
-    ticking=false; if(LG) return;
-    const h=sc.clientHeight, y=sc.scrollTop, mid=y+h/2;
-    const D=secs.map(s=>(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h);   // 0 = page centrée, <0 = page encore en dessous
-    // les textes restent lisibles pendant la plus grande partie du glissement et ne s'estompent que près du bord :
-    // on ne doit pas sentir un « changement de page », seulement le décor qui change
-    secs.forEach((s,i)=>{
-      const d=D[i];
-      if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.35)*2.2)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
-    });
-  }
-  sc.addEventListener('scroll',()=>{ if(!ticking){ ticking=true; requestAnimationFrame(frame); } },{passive:true});
+  // les textes défilent avec la page, sans fondu ni décalage : rien ne signale un « changement de page »
   layoutStrip(); addEventListener('load',layoutStrip); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layoutStrip);
 
-  /* ---------- pagination ----------
-     Tactile : défilement natif, CONTINU. Le doigt entraîne la page, l'élan la porte, et elle se cale doucement en
-     plein écran grâce au scroll-snap « proximity » (invite.css). Le geste n'est jamais bloqué ni remplacé par un saut
-     animé : l'utilisateur a refusé le swipe brusque (« comme si c'était en continu, avec des changements de décor »).
-     Molette et clavier : un cran = la scène suivante, en un glissement lent qui démarre et finit en douceur ;
-     une page plus haute que l'écran se lit en plusieurs crans */
-  const PAGE_DUR=1100, easePage=t=>.5-Math.cos(Math.PI*t)/2;
-  let paging=false;
-  function stops(){
-    const h=sc.clientHeight, max=sc.scrollHeight-h, out=[];
-    secs.forEach(s=>{ const t=s.offsetTop, H=s.offsetHeight; out.push(t);
-      if(H>h*1.05){ for(let y=t+h*.85;y<t+H-h;y+=h*.85) out.push(Math.round(y)); out.push(t+H-h); } });
-    return [...new Set(out.map(y=>Math.max(0,Math.min(max,Math.round(y)))))].sort((a,b)=>a-b);
-  }
-  function glide(to){
-    const from=sc.scrollTop; if(Math.abs(to-from)<2) return;
-    // pendant le glissement, le snap natif est coupé : sinon il « saute » sur la page dès qu'on s'en approche
-    paging=true; sc.style.scrollSnapType='none'; const t0=performance.now(), dur=reduce?1:PAGE_DUR;
-    (function step(now){ const p=Math.min(1,(now-t0)/dur); sc.scrollTop=from+(to-from)*easePage(p);
-      if(p<1) requestAnimationFrame(step); else { paging=false; sc.style.scrollSnapType=''; } })(t0);
-  }
-  function go(dir){
-    if(!opened||paging) return;
-    const cur=sc.scrollTop, st=stops();
-    const to=dir>0?st.find(y=>y>cur+4):st.slice().reverse().find(y=>y<cur-4);
-    if(to===undefined) return;
-    glide(to);
-  }
-  // calage : on termine le mouvement dans le sens du geste (dès 12 % de chemin parcouru), sinon vers la page la plus proche
-  let lastTop=0, dir=1;
-  function settle(){
-    if(!opened||paging||LG) return; const cur=sc.scrollTop, st=stops();
-    const prev=st.slice().reverse().find(y=>y<=cur+2), next=st.find(y=>y>cur+2); let to;
-    if(prev==null) to=next; else if(next==null) to=prev; else { const f=(cur-prev)/(next-prev); to=dir>0?(f>.12?next:prev):(f<.88?prev:next); }
-    if(to!=null) glide(to);
-  }
-  // tactile : le défilement natif fait le travail (le doigt entraîne la page, l'élan la porte, le snap « proximity »
-  // la cale quand elle est proche d'une page). Si le geste s'arrête entre deux pages, un calage doux (le même
-  // glissement lent que la molette) termine le mouvement une fois le doigt levé et l'élan fini : jamais de page
-  // à moitié. Avant l'ouverture, on ne défile pas.
-  let touching=false, settleT=null;
-  const armSettle=()=>{ clearTimeout(settleT); settleT=setTimeout(()=>{ if(!touching&&!paging&&opened&&!LG) settle(); },160); };
-  sc.addEventListener('touchstart',()=>{ touching=true; clearTimeout(settleT); },{passive:true});
+  /* ---------- défilement ----------
+     Libre et continu, comme la mise en page continue : le doigt, la molette et le clavier font défiler normalement,
+     sans calage en plein écran. L'utilisateur ne veut plus sentir de pages : « l'idée c'est que ce soit en continu,
+     mais tu ne te rends pas compte que tu changes de page ». Seul le décor change, fondu sur une longue bande.
+     Avant l'ouverture, on ne défile pas. */
   sc.addEventListener('touchmove',e=>{ if(!opened) e.preventDefault(); },{passive:false});
-  sc.addEventListener('touchend',()=>{ touching=false; armSettle(); },{passive:true});
-  sc.addEventListener('touchcancel',()=>{ touching=false; armSettle(); },{passive:true});
-  sc.addEventListener('scroll',()=>{ const t=sc.scrollTop; if(t!==lastTop) dir=t>lastTop?1:-1; lastTop=t; if(!touching&&!paging) armSettle(); },{passive:true});
-  // molette / trackpad : un geste = une page (l'inertie du trackpad ne fait pas sauter plusieurs pages)
-  let lastWheel=0, wheelUsed=false;
-  sc.addEventListener('wheel',e=>{
-    if(!opened||LG) return; e.preventDefault();
-    const now=performance.now(); if(now-lastWheel>220) wheelUsed=false; lastWheel=now;
-    if(wheelUsed||paging||Math.abs(e.deltaY)<6) return;
-    wheelUsed=true; go(e.deltaY>0?1:-1);
-  },{passive:false});
   addEventListener('keydown',e=>{
     if(!opened||LG||sheet.classList.contains('on')||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')) return;
-    if(['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); go(1); }
-    else if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); go(-1); }
+    const k={ArrowDown:.35,ArrowUp:-.35,PageDown:.85,PageUp:-.85,' ':.85}[e.key];
+    if(k){ e.preventDefault(); sc.scrollBy({top:sc.clientHeight*k,behavior:reduce?'auto':'smooth'}); }
   });
-  addEventListener('resize',()=>{ layoutStrip(); settle(); });
+  addEventListener('resize',layoutStrip);
   // précharge les images des pages suivantes
   [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
 

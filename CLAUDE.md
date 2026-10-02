@@ -106,16 +106,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 17. **La basmala est une calligraphie, pas une phrase.** « Bismillah » s'affiche avec la ligature `U+FDFD` (« ﷽ »)
     de la police Amiri, comme sur le faire-part d'Inès & Jad (`window.SCEAU_BASMALA` dans `themes.js`), jamais
     lettre à lettre ni en capitales espacées.
-18. **Page par page = continu avec des changements de décor, jamais un saut.** Sur tactile, le doigt entraîne la page
-    (défilement natif, élan compris) et elle se cale doucement (`scroll-snap-type: y proximity`, jamais `mandatory`,
-    jamais de `preventDefault` sur le geste suivi d'un saut animé : l'utilisateur a refusé le « swipe brusque »).
-    Le décor est une **bande continue qui défile avec les pages** (comme le rouleau de la mise en page continue) :
-    une image par suite de pages de même scène, deux scènes voisines se chevauchent sur 30 % d'un écran et se
-    fondent par un masque en dégradé (`layoutStrip()` dans invite.js, `cpLayout()` dans le configurateur). Jamais un
-    décor fixe derrière des pages qui glissent, ni un fondu d'opacité entre décors fixes : l'utilisateur y voyait
-    encore « un changement de page, c'est moche ». Les textes restent lisibles jusqu'à |d| ≈ 0,8 et glissent avec la page.
-    Molette et clavier : un glissement lent (1,1 s) qui démarre et finit en douceur. Même règle dans l'aperçu du
-    configurateur (`.pv-scroll`).
+18. **Tout défile en continu, on ne sent jamais de page.** Même les faire-part en scènes (anciennement « page par
+    page ») défilent librement : aucun calage en plein écran (pas de `scroll-snap`, pas de « calage doux » après le
+    geste), molette et clavier natifs, textes sans fondu ni décalage pendant le défilement. Historique : l'utilisateur
+    a d'abord refusé le « swipe brusque », puis le décor fixe (« un changement de page, c'est moche »), puis a tranché :
+    « le plus stylé c'est continu ; l'idée c'est que ce soit en continu mais tu ne te rends pas compte que tu changes
+    de page ». On garde les illustrations par scène ; le décor est une **bande continue qui défile avec les pages**
+    (`layoutStrip()` dans invite.js, `cpLayout()` dans le configurateur) : une image par suite de pages de même
+    scène, deux scènes voisines se chevauchent sur **45 %** d'un écran et se fondent par un masque en dégradé.
+    Jamais un décor fixe derrière des pages qui glissent. Même règle dans l'aperçu du configurateur (`.pv-scroll`).
 19. **Tout bloc centré l'est explicitement.** Dans la mise en page continue, `.lg-hero-txt` n'est pas une colonne
     flex : une ligne `display:flex` (la date entre ses deux filets) s'y collait au bord gauche. Toujours vérifier le
     centrage sur une capture, à 390 px **et** à 440 px (la date tient alors sur une ligne).
