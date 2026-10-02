@@ -632,9 +632,9 @@
   <div class="wrap">
     <div class="head"><h2>Comment ça marche</h2><p>Trois étapes, et votre faire-part est prêt à partir.</p></div>
     <div class="steps">
-      <div><img src="img/people/choisir.webp" alt="Un couple sur un canapé regarde les thèmes de faire-part sur une tablette" loading="lazy" width="720" height="900"><b>01</b><h3>Choisissez votre thème</h3><p>Douze thèmes dans huit styles : peinture, art déco, aquarelle, bohème… Vous pouvez tous les essayer avec vos prénoms.</p></div>
-      <div><img src="img/people/parametrer.webp" alt="Deux mains l'une sur l'autre, un téléphone affiche le faire-part avec son sceau" loading="lazy" width="720" height="900"><b>02</b><h3>Paramétrez-le</h3><p>L'ouverture (enveloppe, rideau, voile ou grandes portes), vos prénoms, la date et sa révélation (à gratter, roue ou jackpot), les couleurs, la police, la musique, le compte à rebours, vos événements et vos lieux.</p></div>
-      <div><img src="img/people/mamie.webp" alt="Une grand-mère émue ouvre le faire-part sur son téléphone" loading="lazy" width="720" height="900"><b>03</b><h3>Recevez votre lien</h3><p>Un lien prêt à envoyer sur WhatsApp, un par famille si vous voulez. Les réponses de vos invités arrivent dans votre tableau de bord.</p></div>
+      <div><img src="img/people/choisir-photo.webp" alt="Un couple sur un canapé regarde les thèmes de faire-part sur une tablette" loading="lazy" width="720" height="900"><b>01</b><h3>Choisissez votre thème</h3><p>Douze thèmes dans huit styles : peinture, art déco, aquarelle, bohème… Vous pouvez tous les essayer avec vos prénoms.</p></div>
+      <div><img src="img/people/parametrer-photo.webp" alt="Deux mains l'une sur l'autre, un téléphone affiche le faire-part avec son sceau" loading="lazy" width="720" height="900"><b>02</b><h3>Paramétrez-le</h3><p>L'ouverture (enveloppe, rideau, voile ou grandes portes), vos prénoms, la date et sa révélation (à gratter, roue ou jackpot), les couleurs, la police, la musique, le compte à rebours, vos événements et vos lieux.</p></div>
+      <div><img src="img/people/mamie-photo.webp" alt="Une grand-mère émue ouvre le faire-part sur son téléphone" loading="lazy" width="720" height="900"><b>03</b><h3>Recevez votre lien</h3><p>Un lien prêt à envoyer sur WhatsApp, un par famille si vous voulez. Les réponses de vos invités arrivent dans votre tableau de bord.</p></div>
     </div>
   </div>
 </section>
@@ -712,9 +712,9 @@
       <p>Un faire-part, c'est d'abord un moment entre vous et les vôtres. On l'a pensé pour qu'il arrive partout, chez tout le monde, le même jour.</p>
     </div>
     <div class="people">
-      <figure><img src="img/people/famille.webp" alt="Un grand-père, une maman et deux enfants regardent le faire-part sur une tablette" loading="lazy" width="720" height="900"><figcaption><b>Toute la famille autour de l'écran</b>Les enfants le rejouent dix fois, les grands-parents l'ouvrent d'un doigt, sans rien installer.</figcaption></figure>
-      <figure><img src="img/people/amis.webp" alt="Trois amis en terrasse rient en découvrant le faire-part sur un téléphone" loading="lazy" width="720" height="900"><figcaption><b>Vos amis le partagent</b>Un lien dans le groupe WhatsApp, et la nouvelle fait le tour, d'ici à l'étranger.</figcaption></figure>
-      <figure><img src="img/people/reponses.webp" alt="Un couple enlacé dans sa cuisine lit les réponses des invités" loading="lazy" width="720" height="900"><figcaption><b>Et vous, vous voyez les « oui » arriver</b>Chaque réponse s'affiche dans votre tableau de bord, avec le nombre de personnes et les messages.</figcaption></figure>
+      <figure><img src="img/people/famille-photo.webp" alt="Un grand-père, une maman et deux enfants regardent le faire-part sur une tablette" loading="lazy" width="720" height="900"><figcaption><b>Toute la famille autour de l'écran</b>Les enfants le rejouent dix fois, les grands-parents l'ouvrent d'un doigt, sans rien installer.</figcaption></figure>
+      <figure><img src="img/people/amis-photo.webp" alt="Trois amis en terrasse rient en découvrant le faire-part sur un téléphone" loading="lazy" width="720" height="900"><figcaption><b>Vos amis le partagent</b>Un lien dans le groupe WhatsApp, et la nouvelle fait le tour, d'ici à l'étranger.</figcaption></figure>
+      <figure><img src="img/people/reponses-photo.webp" alt="Un couple enlacé dans sa cuisine lit les réponses des invités" loading="lazy" width="720" height="900"><figcaption><b>Et vous, vous voyez les « oui » arriver</b>Chaque réponse s'affiche dans votre tableau de bord, avec le nombre de personnes et les messages.</figcaption></figure>
     </div>
   </div>
 </section>
@@ -953,7 +953,7 @@
   document.getElementById('contGrid').innerHTML=LONGS.map(l=>`<a class="cont" href="/d/${l.slug}/" target="_blank" rel="noopener"><div class="pic"><img src="img/long/${l.k}/thumb.webp" alt="${esc('Le faire-part '+THEMES[l.k].name+' : '+l.alt)}" loading="lazy" width="480" height="768"></div><div class="txt"><b>${esc(THEMES[l.k].name)}</b><span>${esc(l.couple+' · '+l.desc)}</span><em>Ouvrir l'exemple →</em></div></a>`).join('');
   const CREAS=LONGS.map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:t.name,font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`img/reel/long-${l.k}.webp`}); });
   KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long');
-    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`img/themes/${k}-${i}.webp`})); });
+    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`img/themes/${k}-${i}.webp?v=2`})); });
   // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
   CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
     couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`img/reel/yk-${i}.webp`,
@@ -1003,7 +1003,7 @@
     models.appendChild(m); };
   const yk=DEMOS.find(d=>d.slug==='yasmine-karim');
   if(yk) card(yk,THEMES.nuits,'Notre faire-part réel','Peinture','Lieux réels peints et animés',yk.thumb,'');
-  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long'); if(d) card(d,t,t.name,t.style,t.style,`img/themes/${k}-1.webp`,`img/themes/${k}-2.webp`); });
+  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long'); if(d) card(d,t,t.name,t.style,t.style,`img/themes/${k}-1.webp?v=2`,`img/themes/${k}-2.webp?v=2`); });
   const sm=document.createElement('div'); sm.className='model'; sm.dataset.style='*'; sm.innerHTML='<div class="pic"><span class="soon">Votre thème</span></div><div class="meta"><div><h3>Sur-mesure</h3><p class="style">Couture</p><p>Un univers rien qu\'à vous.</p></div></div>'; models.appendChild(sm);
   const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
   STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
@@ -1077,7 +1077,7 @@
     const names=t.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
     const page=(img,mode,inner,extra)=>{ const dk=mode==='dark', lt=t.light&&!dk;
       const c={nm:lt?t.color:'#fff',ey:lt?(t.ey||t.color):'#fff',tx:lt?(t.tx||t.color):'#fff'};
-      return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(`img/themes/${C.k}-${img}.webp`)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
+      return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(`img/themes/${C.k}-${img}.webp?v=2`)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     const pages=[], rv=C.rvl!=='non'?C.rvl:null;
     // 1. prenoms + date (+ compte a rebours au debut)
     { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');

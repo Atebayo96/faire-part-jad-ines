@@ -143,6 +143,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 - Si la prod doit partir sans attendre, l'API Vercel (`create_deployment`, `target: production`, `gitSource` = le commit)
   déploie ce commit en production ; `request_promote` d'un aperçu est refusé (422) sur ce projet.
 
+## Cache des images
+
+- Les images (`/img/…`) sont servies avec `max-age=0, must-revalidate` (vercel.json) : le navigateur vérifie à chaque
+  visite si elles ont changé. Avant, elles étaient gardées 7 jours : l'utilisateur voyait encore les anciennes photos
+  en prod après leur remplacement. Pour les navigateurs qui ont gardé une ancienne copie, une image remplacée change
+  d'adresse : nouveau nom de fichier, ou `?v=` augmenté (`IMGV` dans invite.js, `?v=` des décors dans index.html).
+
 ## Confidentialité
 
 - `GEMINI_API_KEY` vient de l'environnement, jamais du dépôt ni du chat. La musique du mariage (`assets/music.mp3`)
