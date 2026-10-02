@@ -419,10 +419,11 @@
   /* rideau, portes et voile : la lumière part au toucher et monte avec le mouvement (mêmes courbes que invite.css) */
   .cp-flash.soft.bloom{animation:flashSoft 2s cubic-bezier(.35,0,.25,1) forwards}
   @keyframes flashSoft{0%{opacity:0}45%{opacity:.75}100%{opacity:0}}
-  .cp-flash.door.bloom{animation:flashDoor 2.9s cubic-bezier(.35,0,.25,1) forwards}
-  @keyframes flashDoor{0%{opacity:0}55%{opacity:.45}100%{opacity:0}}
+  .cp-flash.door.bloom{animation:flashDoor 1.9s cubic-bezier(.35,0,.25,1) forwards}
+  @keyframes flashDoor{0%{opacity:0}42%{opacity:.45}100%{opacity:0}}
   .op[data-type="cur"].gone{transition:opacity .95s cubic-bezier(.4,0,.6,1),visibility .95s}
-  .op[data-type="door"].gone,.op[data-type="voile"].gone{transition:opacity 1.1s cubic-bezier(.4,0,.6,1),visibility 1.1s}
+  .op[data-type="door"].gone{transition:opacity .7s cubic-bezier(.4,0,.6,1),visibility .7s}
+  .op[data-type="voile"].gone{transition:opacity 1.1s cubic-bezier(.4,0,.6,1),visibility 1.1s}
   @keyframes flashBloom{0%{opacity:0}44%{opacity:1}54%{opacity:1}100%{opacity:0}}
 
   /* rideau : il se tasse un instant, puis monte d'un seul geste (lent, accélère, ralentit), en se plissant légèrement */

@@ -468,8 +468,11 @@
      (les lointains sont plus petits, plus pâles et plus lents), une culbute (le sprite se retourne sur lui-même),
      un balancement propre et un vent commun qui va et vient. Le mouvement est en temps réel (indépendant du
      nombre d'images par seconde). */
+  // particules désactivées pour l'instant (« retire les fleurs, pétales, tout ça qui descend, on n'y est pas encore ») :
+  // le code reste, PARTICLES_ON passera à true quand les sprites seront au niveau
+  const PARTICLES_ON=false;
   function startFx(){
-    const kind=I.particles||T.particles||'none'; if(kind==='none'||reduce) return;
+    const kind=I.particles||T.particles||'none'; if(!PARTICLES_ON||kind==='none'||reduce) return;
     const cv=$('#fx'), cx=cv.getContext('2d'); let W=0,H=0,dpr=1;
     function size(){ dpr=Math.min(2,devicePixelRatio||1); cv.style.height=sc.clientHeight+'px'; W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
     size(); addEventListener('resize',size);

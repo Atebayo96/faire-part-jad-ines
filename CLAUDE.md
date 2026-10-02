@@ -47,6 +47,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 
 ## Ce qui tombe : les particules
 
+- **Désactivées pour l'instant** (`PARTICLES_ON=false` dans invite.js) : l'utilisateur a demandé de retirer « les fleurs,
+  pétales, tout ça qui descend, on n'y est pas encore ». Les règles ci-dessous valent pour le jour où on les rallume.
+
 - **Jamais de forme dessinée en code** (ellipse, rectangle, rond flou) : l'utilisateur l'a jugée « V0 ». Chaque particule
   est un **sprite peint** dans le style du thème : `business/landing/img/fx/<famille>-<i>.webp`, découpé par
   `business/tools/fx-sprites.py` depuis une planche `gemini.py` (fond vert uni pour les objets opaques, **fond noir et
@@ -83,6 +86,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
       d'abord, ondule pendant la traction (`skewY`) puis se pose (`opSheerL/R`). Jamais une courbe uniforme d'un bout
       à l'autre : l'utilisateur trouvait les mouvements « pas naturels », « un détail qui a son importance ».
       Portes 10 % plus lentes (2,9 s) et sans trait lumineux vertical entre les battants (retiré, « moche »).
+      La lumière des portes ne traîne pas : 1,9 s en tout (pic à 0,8 s), finie quand les battants commencent à
+      s'effacer (`gone` 1,95 s, fondu 0,7 s) : « dès que ça commence à partir, plus d'animation ».
     - **Portiers** (`doormen`) : retirés des démos (« pas ouf pour l'instant »), activables seulement avec
       `"doormen": true` dans la fiche. Les images `img/open/<thème>-portier.webp` restent.
 17. **La basmala est une calligraphie, pas une phrase.** « Bismillah » s'affiche avec la ligature `U+FDFD` (« ﷽ »)
