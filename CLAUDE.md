@@ -81,6 +81,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     - **Voile** = un grand rideau **opaque** (le tissu du thème, `img/open/<thème>-rideau.webp`, coupé en deux
       pans) qui s'ouvre **par le milieu**, les pans se tassant en plis vers les bords. La version en gaze
       translucide a été refusée (« un vrai voile opaque, comme des rideaux »).
+    - **Objets 3D, construits une fois** (`business/landing/open3d.js`, three.js hébergé dans `vendor/`, MIT). Portes,
+      rideau et voile ne sont plus des images plates déformées en CSS : des objets (mur troué + deux battants épais
+      sur leurs gonds ; plans de tissu finement maillés, déformés sommet par sommet, normales recalculées donc plis
+      éclairés) animés par une physique (ressort amorti `Spring` : inertie au départ, accélération, léger dépassement,
+      repos ; ourlet qui traîne, ondulation). Tout est paramétrable dans `PARAMS` (raideur, amortissement, plis,
+      amplitude…) et par thème (`doorBox` dans themes.js : zone des battants dans l'image, pour que le mur et l'arche
+      ne tournent pas avec la porte : Mille et une nuits, Art déco). La version CSS reste en secours (sans WebGL,
+      ou `prefers-reduced-motion`). Le module s'annonce par l'événement `sceau3d` ; le configurateur l'utilise aussi.
+      L'utilisateur l'a demandé ainsi : « créer des objets 3D pour bien animer leurs mouvements, paramétrables ».
     - **Mouvements naturels.** Un objet qui s'ouvre a un poids : il part lentement (inertie), accélère, ralentit,
       dépasse un peu sa position et s'y repose (porte : `opDoorL/R`, dépassement à 103°) ; un tissu tiré se ramasse
       d'abord, ondule pendant la traction (`skewY`) puis se pose (`opSheerL/R`). Jamais une courbe uniforme d'un bout

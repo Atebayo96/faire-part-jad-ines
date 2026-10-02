@@ -126,6 +126,7 @@ PAGE = """<!doctype html>
 <script>window.INVITE={data};</script>
 <script src="/themes.js"></script>
 <script src="/invite.js"></script>
+<script type="module" src="/open3d.js"></script>
 </body>
 </html>
 """

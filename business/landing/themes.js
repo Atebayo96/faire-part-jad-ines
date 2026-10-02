@@ -38,11 +38,13 @@ window.SCEAU_THEMES={
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
 };
 
-/* complements utilises par le moteur de faire-part (invite.js) et le build */
+/* complements utilises par le moteur de faire-part (invite.js) et le build.
+   doorBox : zone des battants dans l'image des portes (fractions x0,y0,x1,y1), pour l'ouverture 3D (open3d.js) ;
+   sans doorBox, toute l'image est les deux battants. */
 (function(T){
   const X={
     conte:{gf:"Great+Vibes",particles:"petals",music:"valse"},
-    artdeco:{gf:"Limelight",particles:"confetti",music:"ragtime"},
+    artdeco:{gf:"Limelight",particles:"confetti",music:"ragtime",doorBox:[.2,.26,.8,1]},
     aquarelle:{gf:"Parisienne",particles:"petals",music:"nocturne",mono:["#4f6b5a","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]},
     bollywood:{gf:"Cinzel+Decorative",particles:"marigold",music:"raga"},
     minimal:{gf:"Jost:wght@300;400",particles:"none",music:"nocturne",mono:["#1d1d1b","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]},
@@ -50,7 +52,7 @@ window.SCEAU_THEMES={
     americaine:{gf:"Playfair+Display:ital@0;1",particles:"leaves",music:"marine",mono:["#8a6a2c","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]},
     pop:{gf:"Shrikhand",particles:"daisies",music:"ragtime",mono:["#ffffff","0 2px 0 #c2185b,0 6px 16px rgba(0,0,0,.35)"]},
     ceramique:{gf:"DM+Serif+Display",particles:"blossoms",music:"funiculi",mono:["#1f4fa3","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]},
-    nuits:{gf:"Aref+Ruqaa",particles:"roses",music:"scheherazade"},
+    nuits:{gf:"Aref+Ruqaa",particles:"roses",music:"scheherazade",doorBox:[.13,.02,.87,1]},
     gravure:{gf:"IM+Fell+English:ital@0;1",particles:"none",music:"nocturne",mono:["#2a2620","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]},
     dolcevita:{gf:"Italiana",particles:"blossoms",music:"funiculi",mono:["#7a5a1c","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]}
   };

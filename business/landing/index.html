@@ -389,6 +389,13 @@
   .op[data-type="cur"] .op-to,.op[data-type="door"] .op-to{color:#f3e2bb;text-shadow:0 1px 10px rgba(0,0,0,.7)}
   .op.opening .op-tap,.op.opening .op-to{opacity:0;transition:opacity .2s ease}
 
+  /* ouverture 3D (open3d.js), comme dans le moteur : le canvas couvre l'ouverture, l'objet CSS se cache quand elle est montée */
+  .op-3d{position:absolute;inset:0;width:100%;height:100%;z-index:1;display:none;pointer-events:none}
+  .op.three .op-3d{display:block}
+  .op.three .op-doors>*,.op.three .op-cur,.op.three .op-voile>.op-sheer{visibility:hidden}
+  .op.three .op-cur .op-mono{visibility:visible;z-index:2}
+  .op.three .op-voile .op-mono{position:absolute;z-index:2}
+
   /* enveloppe */
   .op-env{perspective:2400px;perspective-origin:50% 30%;transform-style:preserve-3d;background:linear-gradient(175deg,#ece3ce 0%,#e2d7bd 55%,#d6c9a9 100%)}
   .op-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(135% 105% at 30% 16%,rgba(255,253,244,.34) 0%,transparent 44%,transparent 66%,rgba(84,60,28,.22) 100%)}
@@ -867,6 +874,7 @@
 
 <script src="paiement.js"></script>
 <script src="themes.js"></script>
+<script type="module" src="open3d.js"></script>
 <script>window.SCEAU_DEMOS=[]/*DEMOS*/;</script>
 <script>
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',e=>{ document.getElementById('planSel').value=a.dataset.plan;
@@ -1157,11 +1165,15 @@
   // meme sequence que le faire-part d'Ines & Jad : ouverture, la lumiere monte, la page apparait dessous
   // enveloppe : lumiere a 1 s ; rideau, portes et voile : la lumiere part au toucher (flash:0) et monte avec le mouvement,
   // la page se voit a travers (memes valeurs que invite.js)
-  const cpFlash=$('cpFlash'), SEQ={env:{flash:1000,gone:1560},cur:{flash:0,gone:760,cls:'soft'},door:{flash:0,gone:1950,cls:'door'},voile:{flash:0,gone:1700,cls:'door'}}; let opT2=[];
+  const cpFlash=$('cpFlash'), SEQ={env:{flash:1000,gone:1560},cur:{flash:0,gone:1000,cls:'soft'},door:{flash:0,gone:1950,cls:'door'},voile:{flash:0,gone:1700,cls:'door'}}; let opT2=[];
   function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
     op.style.setProperty('--door',`url('img/open/${C.k}-portes.webp')`); op.style.setProperty('--cur',`url('img/open/${C.k}-rideau.webp')`);
-    const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth; }
-  function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
+    const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth;
+    // objets 3D (open3d.js) : remontés à chaque fermeture avec les images du thème choisi
+    if(cp3d){ cp3d.dispose(); cp3d=null; }
+    if(window.SceauOpen3D&&C.op!=='env') cp3d=window.SceauOpen3D.mount({op,type:C.op,doorUrl:`img/open/${C.k}-portes.webp`,curUrl:`img/open/${C.k}-rideau.webp`,doorBox:THEMES[C.k].doorBox||null}); }
+  let cp3d=null; document.addEventListener('sceau3d',()=>{ if(!op.classList.contains('opening')) closeOp(); },{once:true});
+  function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); if(cp3d) cp3d.play(); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
     if(!q.flash) cpFlash.classList.add('bloom');
     opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ op.classList.add('gone'); $('cpScroll').scrollTop=0; },q.gone)]; }
   function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
