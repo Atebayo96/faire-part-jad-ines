@@ -207,7 +207,7 @@ def site_og(T):
     d = ImageDraw.Draw(im)
     f1 = ImageFont.truetype(os.path.join(FONTS, 'Inter_wght_500.ttf'), 30)
     f2 = ImageFont.truetype(os.path.join(FONTS, 'Cormorant_Garamond_ital_wght_1_400.ttf'), 92)
-    for txt, f, y, sp in [('S C E A U', f1, 222, 0), ("Le faire-part qui s'ouvre.", f2, 272, 0)]:
+    for txt, f, y, sp in [('S C E A U', f1, 222, 0), ("Votre mariage, peint et animé.", f2, 272, 0)]:
         w = d.textlength(txt, font=f)
         d.text(((W - w) / 2, y), txt, font=f, fill=(255, 255, 255))
     im.save(os.path.join(SITE, 'og-sceau.jpg'), 'JPEG', quality=84, optimize=True)
