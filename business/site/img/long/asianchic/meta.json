@@ -1,0 +1,49 @@
+{
+ "base": "/img/long/asianchic",
+ "sec": [
+  {
+   "tex": "tex1.webp",
+   "ink": "#f2e7cf",
+   "accent": "#d8b469"
+  },
+  {
+   "tex": "tex2.webp",
+   "ink": "#1e1d19",
+   "accent": "#2a6152"
+  },
+  {
+   "tex": "tex3.webp",
+   "ink": "#f3ead6",
+   "accent": "#e6c77f"
+  }
+ ],
+ "bands": [
+  "band1.webp",
+  "band2.webp"
+ ],
+ "ev": [
+  "ev1.webp",
+  "ev2.webp",
+  "ev3.webp"
+ ],
+ "photos": [
+  "ph1.webp",
+  "ph2.webp",
+  "ph3.webp",
+  "ph4.webp"
+ ],
+ "hero": {
+  "src": "hero.webp",
+  "w": 900,
+  "h": 3628,
+  "ink": "#f2e7cf",
+  "shadow": "0 2px 14px rgba(0,0,0,.7)",
+  "top": "12%"
+ },
+ "frame": {
+  "src": "frame.webp",
+  "mask": "frame-mask.png",
+  "w": 720,
+  "h": 972
+ }
+}

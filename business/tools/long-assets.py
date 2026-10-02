@@ -1,5 +1,5 @@
 """Prépare les images des faire-part « en continu » (layout long) à partir des images générées (business/tools/long-prompts.json).
-Usage : python3 business/tools/long-assets.py <dossier des images brutes>
+Usage : python3 business/tools/long-assets.py <dossier des images brutes> [<thème> ...]  (sans thème : tous)
 Résultat : business/landing/img/long/<thème>/ (illustration d'ouverture, fonds, guirlandes détourées, cadre + masque, photos, scènes) et meta.json."""
 import json, os, sys
 import numpy as np
@@ -20,6 +20,28 @@ THEMES = {
   'dolcevita': dict(thumb=.2, hero=dict(ink='#193f64', shadow='0 1px 12px rgba(255,255,255,.8)', top='14%'), frame='magenta',
                 sec=[dict(ink='#2f3b4f', accent='#2b6598'), dict(ink='#fbf5e6', accent='#fbf4d9'), dict(ink='#3d3a2a', accent='#265a88')],
                 bands=[('band1', 'blue', .9), ('band2', 'magenta', 1.0)], ev=['dolcevita-2', 'dolcevita-3', 'dolcevita-4'], photos=[1, 2, 3, 4]),
+  # styles par communauté : scènes des événements générées avec le reste (long-gen.py), rangées dans la banque
+  'chinois': dict(thumb=.1, hero=dict(ink='#fbeedd', shadow='0 2px 14px rgba(0,0,0,.6)', top='12%'), frame='magenta',
+                sec=[dict(ink='#fbeedd', accent='#e9c37a'), dict(ink='#4a1a16', accent='#a3161f'), dict(ink='#fff1dc', accent='#f2cf7e')],
+                bands=[('band1', 'blue', 1.0), ('band2', 'magenta', 1.0)], ev=['chinois-2', 'chinois-3', 'chinois-4'], photos=[1, 2, 3, 4]),
+  'japonais': dict(thumb=.08, hero=dict(ink='#2b2830', shadow='0 1px 10px rgba(255,250,240,.85)', top='12%'), frame='magenta',
+                sec=[dict(ink='#2b2b33', accent='#b8382a'), dict(ink='#f4eee2', accent='#f2c4cc'), dict(ink='#3a2830', accent='#a8322e')],
+                bands=[('band1', 'blue', 1.0), ('band2', 'magenta', 1.0)], ev=['japonais-2', 'japonais-3', 'japonais-4'], photos=[1, 2, 3, 4]),
+  'gzhel': dict(thumb=.08, hero=dict(ink='#1d3f9a', shadow='0 1px 10px rgba(255,255,255,.9)', top='12%'), frame='magenta',
+                sec=[dict(ink='#1d3f9a', accent='#2448a8'), dict(ink='#f5f7fb', accent='#d6e1ff'), dict(ink='#1a2f73', accent='#2448a8')],
+                bands=[('band1', 'magenta', 1.0), ('band2', 'magenta', 1.0)], ev=['gzhel-2', 'gzhel-3', 'gzhel-4'], photos=[1, 2, 3, 4]),
+  'asianchic': dict(thumb=.08, hero=dict(ink='#f2e7cf', shadow='0 2px 14px rgba(0,0,0,.7)', top='12%'), frame='magenta',
+                sec=[dict(ink='#f2e7cf', accent='#d8b469'), dict(ink='#1e1d19', accent='#2a6152'), dict(ink='#f3ead6', accent='#e6c77f')],
+                bands=[('band1', 'blue', 1.0), ('band2', 'magenta', 1.0)], ev=['asianchic-2', 'asianchic-3', 'asianchic-4'], photos=[1, 2, 3, 4]),
+  'y2k': dict(thumb=.08, hero=dict(ink='#4a1640', shadow='0 1px 10px rgba(255,240,248,.85)', top='12%'), frame='magenta',
+                sec=[dict(ink='#4a1f45', accent='#b0156e'), dict(ink='#2a1d4a', accent='#5a2fb0'), dict(ink='#1d3550', accent='#215f9e')],
+                bands=[('band1', 'blue', 1.0), ('band2', 'magenta', 1.0)], ev=['y2k-2', 'y2k-3', 'y2k-4'], photos=[1, 2, 3, 4]),
+  'oldmoney': dict(thumb=.08, hero=dict(ink='#1f2b44', shadow='0 1px 10px rgba(255,252,244,.9)', top='12%'), frame='magenta',
+                sec=[dict(ink='#1f2b44', accent='#2f4a36'), dict(ink='#f2ecdf', accent='#d2b475'), dict(ink='#f3eee2', accent='#e0c890')],
+                bands=[('band1', 'blue', 1.0), ('band2', 'magenta', 1.0)], ev=['oldmoney-2', 'oldmoney-3', 'oldmoney-4'], photos=[1, 2, 3, 4]),
+  'afro': dict(thumb=.08, hero=dict(ink='#fbeedb', shadow='0 2px 14px rgba(0,0,0,.6)', top='12%'), frame='magenta',
+                sec=[dict(ink='#fbeedb', accent='#f2b440'), dict(ink='#2b1a10', accent='#9a3a18'), dict(ink='#f6ecd6', accent='#f2c14e')],
+                bands=[('band1', 'blue', 1.0), ('band2', 'magenta', 1.0)], ev=['afro-2', 'afro-3', 'afro-4'], photos=[1, 2, 3, 4]),
 }
 
 def key_alpha(a, key, lo=70, hi=150):
@@ -37,7 +59,9 @@ def save_rgba(rgb, alpha, path, width, q=82):
     im.save(path, 'WEBP', quality=q, method=6)
     return im.size
 
+ONLY = sys.argv[2:]
 for t, c in THEMES.items():
+    if ONLY and t not in ONLY: continue
     d = os.path.join(OUT, t); os.makedirs(d, exist_ok=True)
     meta = dict(base=f'/img/long/{t}', sec=[], bands=[], ev=[], photos=[])
     # illustration d'ouverture

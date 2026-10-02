@@ -38,6 +38,32 @@ window.SCEAU_THEMES={
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
 };
 
+/* styles par communauté : uniquement en mise en page continue (long:true), hors du configurateur « scène après scène »
+   (ils n'ont pas de décors de scènes img/hd). Images : business/landing/img/long/<thème>/ (tools/long-gen.py puis long-assets.py). */
+Object.assign(window.SCEAU_THEMES,{
+  chinois:{name:"Double bonheur",style:"Chinois",short:"Lanternes rouges, pavillon, pruniers",desc:"Pavillon aux lanternes rouges, pont sur l'étang aux lotus, pruniers en fleurs. Pour un mariage chinois ou le Nouvel an.",couple:"Lin & Wei",long:true,
+    font:'"Cinzel",serif',color:"#fff",upper:true,size:.8,gf:"Cinzel",music:"nocturne",particles:"none",
+    scenes:[["Nous nous marions","NAMES",""],["La cérémonie du thé","",""],["Le banquet","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
+  japonais:{name:"Sakura",style:"Japonais",short:"Cerisiers, torii, ombrelle rouge",desc:"Cerisiers en fleurs, torii vermillon et mont Fuji, dans la douceur d'une estampe.",couple:"Hana & Kenji",long:true,light:true,
+    font:'"Zen Old Mincho",serif',color:"#2b2830",size:.82,gf:"Zen+Old+Mincho",music:"nocturne",particles:"none",
+    scenes:[["Nous nous marions","NAMES",""],["La cérémonie","",""],["La réception","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
+  gzhel:{name:"Gzhel",style:"Russe",short:"Porcelaine bleu cobalt, troïka, bouleaux",desc:"Tout en bleu cobalt sur porcelaine blanche : église à bulbes, troïka et roses de Gzhel.",couple:"Anastasia & Nikolaï",long:true,light:true,
+    font:'"Cormorant Garamond",Georgia,serif',italic:true,color:"#1d3f9a",gf:"Cormorant+Garamond:ital,wght@0,500;1,400",music:"valse",particles:"none",
+    scenes:[["Nous nous marions","NAMES",""],["La cérémonie","",""],["Le dîner","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
+  asianchic:{name:"Laque & or",style:"Asian chic",short:"Laque noire, feuille d'or, orchidées",desc:"Laque noire, feuille d'or, jade et orchidées blanches : un chic asiatique moderne et épuré.",couple:"Linh & Thomas",long:true,
+    font:'"Bodoni Moda",serif',color:"#fff",italic:true,size:.86,gf:"Bodoni+Moda:ital@0;1",music:"nocturne",particles:"none",
+    scenes:[["Save the date","NAMES",""],["La cérémonie","",""],["Le dîner","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
+  y2k:{name:"Y2K",style:"Y2K",short:"Rose bonbon, chrome, papillons",desc:"Rose bonbon, chrome et papillons, décapotable rose : les années 2000 en version mariage.",couple:"Jade & Enzo",long:true,light:true,
+    font:'"Pacifico",cursive',color:"#4a1640",size:.8,gf:"Pacifico",music:"ragtime",particles:"none",
+    scenes:[["On se marie !","NAMES",""],["La cérémonie","",""],["La soirée","",""],["Tu viens ?","Serez-vous des nôtres ?",""]]},
+  oldmoney:{name:"Old money",style:"Old money",short:"Manoir, voiture ancienne, buis taillés",desc:"Un manoir anglais, une voiture ancienne et des buis taillés : l'élégance discrète.",couple:"Victoire & Charles",long:true,light:true,
+    font:'"Playfair Display",Georgia,serif',italic:true,color:"#1f2b44",size:.86,gf:"Playfair+Display:ital@0;1",music:"valse",particles:"none",
+    scenes:[["Ils se marient","NAMES",""],["La cérémonie","",""],["Le dîner","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
+  afro:{name:"Kente",style:"Afro",short:"Kente, wax, baobab au crépuscule",desc:"Kente et wax, baobab au crépuscule, calebasses et cauris : la fête aux couleurs de l'Afrique.",couple:"Fatou & Kwame",long:true,
+    font:'"Abril Fatface",serif',color:"#fff",size:.82,gf:"Abril+Fatface",music:"marine",particles:"none",
+    scenes:[["Nous nous marions","NAMES",""],["La cérémonie","",""],["La fête","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]}
+});
+
 /* complements utilises par le moteur de faire-part (invite.js) et le build */
 (function(T){
   const X={

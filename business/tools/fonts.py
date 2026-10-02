@@ -3,7 +3,8 @@ Usage : python3 business/tools/fonts.py  ->  business/landing/polices/*.woff2 + 
 import os, re, urllib.request, hashlib
 FAMILIES = ['Inter:wght@400;500;600', 'Inter+Tight:wght@400;500;600', 'Cormorant+Garamond:ital,wght@0,500;1,400', 'Great+Vibes',
             'Playfair+Display:ital,wght@0,400;1,400', 'Cinzel+Decorative:wght@400', 'Aref+Ruqaa', 'Italiana', 'Limelight', 'Parisienne',
-            'Jost:wght@300;400', 'Shrikhand', 'DM+Serif+Display:ital@0;1', 'IM+Fell+English:ital@0;1', 'Amiri']
+            'Jost:wght@300;400', 'Shrikhand', 'DM+Serif+Display:ital@0;1', 'IM+Fell+English:ital@0;1', 'Amiri',
+            'Cinzel:wght@400;500', 'Zen+Old+Mincho:wght@400;600', 'Bodoni+Moda:ital,wght@0,400;1,400', 'Pacifico', 'Abril+Fatface']
 # sous-ensemble arabe gardé pour ces familles (basmala en arabe dans les faire-part)
 ARABIC = {'Amiri'}
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'landing', 'polices')

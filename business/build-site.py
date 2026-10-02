@@ -118,7 +118,7 @@ PAGE = """<!doctype html>
 <meta name="theme-color" content="#111111">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/polices/polices.css">
-<link rel="preload" as="image" href="/img/hd/{theme}-1.webp">
+<link rel="preload" as="image" href="{preload}">
 <link rel="stylesheet" href="/invite.css">
 <link rel="stylesheet" href="/reveal.css">
 </head>
@@ -266,9 +266,14 @@ def main():
         inv['trans'] = sorted(k[len(inv['theme'])+1:] for k in os.listdir(os.path.join(SITE, 'img', 'trans')) if k.startswith(inv['theme'] + '-')) if os.path.isdir(os.path.join(SITE, 'img', 'trans')) else []
         data = json.dumps(inv, ensure_ascii=False).replace('</', '<\\/')
         page = PAGE.format(lang=lang, title=html.escape(title), desc=html.escape(desc), site=SITE_URL, slug=slug, gf='' if t['gf'] == 'Great+Vibes' else '&family=' + t['gf'],
-                           fontx=EXTRA_FONTS.get(inv.get('font'), ''), theme=inv['theme'], data=data)
+                           fontx=EXTRA_FONTS.get(inv.get('font'), ''), theme=inv['theme'], data=data,
+                           preload=inv['long']['base'] + '/' + inv['long']['hero']['src'] if inv.get('long') else f"/img/hd/{inv['theme']}-1.webp")
         open(os.path.join(out, 'index.html'), 'w', encoding='utf-8').write(page)
-        og_image(os.path.join(SITE, 'img', 'hd', f"{inv['theme']}-1.webp"), os.path.join(out, 'og.jpg'), couple, dt, inv['theme'], t)
+        # aperçu WhatsApp : le haut de la scène d'accueil, ou, pour les styles qui n'existent qu'en grand tableau, le ciel de l'illustration
+        if t.get('long'):
+            og_image(os.path.join(SITE, 'img', 'long', inv['theme'], 'hero.webp'), os.path.join(out, 'og.jpg'), couple, dt, inv['theme'], t, x={'crop': .01})
+        else:
+            og_image(os.path.join(SITE, 'img', 'hd', f"{inv['theme']}-1.webp"), os.path.join(out, 'og.jpg'), couple, dt, inv['theme'], t)
         fams = inv.get('families') or {}
         invites[slug] = {
             'demo': bool(inv.get('demo')), 'couple': couple, 'date': to_utc(inv['date'], tz).isoformat(),

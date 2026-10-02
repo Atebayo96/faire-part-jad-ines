@@ -1,0 +1,49 @@
+{
+ "base": "/img/long/japonais",
+ "sec": [
+  {
+   "tex": "tex1.webp",
+   "ink": "#2b2b33",
+   "accent": "#b8382a"
+  },
+  {
+   "tex": "tex2.webp",
+   "ink": "#f4eee2",
+   "accent": "#f2c4cc"
+  },
+  {
+   "tex": "tex3.webp",
+   "ink": "#3a2830",
+   "accent": "#a8322e"
+  }
+ ],
+ "bands": [
+  "band1.webp",
+  "band2.webp"
+ ],
+ "ev": [
+  "ev1.webp",
+  "ev2.webp",
+  "ev3.webp"
+ ],
+ "photos": [
+  "ph1.webp",
+  "ph2.webp",
+  "ph3.webp",
+  "ph4.webp"
+ ],
+ "hero": {
+  "src": "hero.webp",
+  "w": 900,
+  "h": 3628,
+  "ink": "#2b2830",
+  "shadow": "0 1px 10px rgba(255,250,240,.85)",
+  "top": "12%"
+ },
+ "frame": {
+  "src": "frame.webp",
+  "mask": "frame-mask.png",
+  "w": 720,
+  "h": 758
+ }
+}

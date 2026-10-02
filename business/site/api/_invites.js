@@ -59,6 +59,45 @@ export default {
    "collegues": "Chers collègues"
   }
  },
+ "anastasia-nikolai": {
+  "demo": true,
+  "couple": "Anastasia & Nikolaï",
+  "date": "2027-01-16T14:00:00+00:00",
+  "events": [
+   "ceremonie",
+   "pain",
+   "diner"
+  ],
+  "eventList": [
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "pain",
+    "label": "Le pain et le sel"
+   },
+   {
+    "id": "diner",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {
+   "famille-petrov": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "diner"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-petrov": "Chère famille Petrov",
+   "amis": "Chers amis"
+  }
+ },
  "chiara-lucas": {
   "demo": true,
   "couple": "Chiara & Lucas",
@@ -160,6 +199,45 @@ export default {
    "famille-bernard": "Chers Paul et Anne"
   }
  },
+ "fatou-kwame": {
+  "demo": true,
+  "couple": "Fatou & Kwame",
+  "date": "2027-08-21T12:00:00+00:00",
+  "events": [
+   "dot",
+   "ceremonie",
+   "fete"
+  ],
+  "eventList": [
+   {
+    "id": "dot",
+    "label": "La dot"
+   },
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "fete",
+    "label": "La fête"
+   }
+  ],
+  "families": {
+   "famille-mensah": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "fete"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-mensah": "Chère famille Mensah",
+   "amis": "Chers amis"
+  }
+ },
  "giulia-hugo": {
   "demo": true,
   "couple": "Giulia & Hugo",
@@ -181,6 +259,77 @@ export default {
   "families": {},
   "familyLabels": {}
  },
+ "hana-kenji": {
+  "demo": true,
+  "couple": "Hana & Kenji",
+  "date": "2027-04-03T05:00:00+00:00",
+  "events": [
+   "ceremonie",
+   "photos",
+   "reception"
+  ],
+  "eventList": [
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "photos",
+    "label": "Le hanami"
+   },
+   {
+    "id": "reception",
+    "label": "La réception"
+   }
+  ],
+  "families": {
+   "famille-moreau": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "photos",
+     "reception"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-moreau": "Chère famille Moreau",
+   "amis": "Chers amis"
+  }
+ },
+ "jade-enzo": {
+  "demo": true,
+  "couple": "Jade & Enzo",
+  "date": "2027-06-26T14:00:00+00:00",
+  "events": [
+   "ceremonie",
+   "apero",
+   "soiree"
+  ],
+  "eventList": [
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "apero",
+    "label": "L’apéro"
+   },
+   {
+    "id": "soiree",
+    "label": "La soirée"
+   }
+  ],
+  "families": {
+   "amis": {
+    "events": null
+   }
+  },
+  "familyLabels": {
+   "amis": "Les potes"
+  }
+ },
  "lena-adam": {
   "demo": true,
   "couple": "Léna & Adam",
@@ -201,6 +350,77 @@ export default {
   ],
   "families": {},
   "familyLabels": {}
+ },
+ "lin-wei": {
+  "demo": true,
+  "couple": "Lin & Wei",
+  "date": "2027-02-13T10:00:00+00:00",
+  "events": [
+   "the",
+   "ceremonie",
+   "banquet"
+  ],
+  "eventList": [
+   {
+    "id": "the",
+    "label": "La cérémonie du thé"
+   },
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "banquet",
+    "label": "Le banquet"
+   }
+  ],
+  "families": {
+   "famille-chen": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "banquet"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-chen": "Chère famille Chen",
+   "amis": "Chers amis"
+  }
+ },
+ "linh-thomas": {
+  "demo": true,
+  "couple": "Linh & Thomas",
+  "date": "2027-09-18T15:00:00+00:00",
+  "events": [
+   "ceremonie",
+   "cocktail",
+   "diner"
+  ],
+  "eventList": [
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "cocktail",
+    "label": "Le cocktail"
+   },
+   {
+    "id": "diner",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {
+   "famille-nguyen": {
+    "events": null
+   }
+  },
+  "familyLabels": {
+   "famille-nguyen": "Chère famille Nguyen"
+  }
  },
  "lou-max": {
   "demo": true,
@@ -401,5 +621,44 @@ export default {
   ],
   "families": {},
   "familyLabels": {}
+ },
+ "victoire-charles": {
+  "demo": true,
+  "couple": "Victoire & Charles",
+  "date": "2027-06-12T13:00:00+00:00",
+  "events": [
+   "ceremonie",
+   "cocktail",
+   "diner"
+  ],
+  "eventList": [
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "cocktail",
+    "label": "Le cocktail"
+   },
+   {
+    "id": "diner",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {
+   "famille-whitmore": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "cocktail",
+     "diner"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-whitmore": "Chère famille Whitmore",
+   "amis": "Chers amis"
+  }
  }
 };

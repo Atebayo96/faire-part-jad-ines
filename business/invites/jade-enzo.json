@@ -1,0 +1,113 @@
+{
+  "slug": "jade-enzo",
+  "demo": true,
+  "layout": "long",
+  "theme": "y2k",
+  "couple": [
+    "Jade",
+    "Enzo"
+  ],
+  "date": "2027-06-26T16:00",
+  "tz": "Europe/Paris",
+  "opening": "env",
+  "palette": "#e2457a",
+  "countdown": "fin",
+  "music": "ragtime",
+  "intro": {
+    "eyebrow": "On se marie !",
+    "text": "Et on veut faire la fête avec toi, comme en 2003.",
+    "dateText": "Samedi 26 juin 2027 · Marseille"
+  },
+  "events": [
+    {
+      "id": "ceremonie",
+      "eyebrow": "La cérémonie",
+      "title": "Le oui",
+      "start": "2027-06-26T16:00",
+      "place": "Mairie du 7e, Marseille",
+      "address": "Boulevard Charles-Livon, 13007 Marseille"
+    },
+    {
+      "id": "apero",
+      "eyebrow": "L’apéro",
+      "title": "Au soleil",
+      "start": "2027-06-26T18:00",
+      "place": "Le rooftop",
+      "address": "Quai de Rive-Neuve, 13007 Marseille"
+    },
+    {
+      "id": "soiree",
+      "eyebrow": "La soirée",
+      "title": "Dance floor jusqu’au matin",
+      "start": "2027-06-26T21:00",
+      "place": "Le rooftop",
+      "address": "Quai de Rive-Neuve, 13007 Marseille",
+      "end": "2027-06-27T04:00"
+    }
+  ],
+  "story": {
+    "title": "Notre histoire",
+    "items": [
+      {
+        "when": "2016",
+        "title": "La rencontre",
+        "text": "Un karaoké, Britney, une erreur de micro."
+      },
+      {
+        "when": "2021",
+        "title": "Marseille",
+        "text": "Un appart, un chat, une platine."
+      },
+      {
+        "when": "2026",
+        "title": "La demande",
+        "text": "Dans une décapotable rose, évidemment."
+      }
+    ]
+  },
+  "dress": {
+    "title": "Dress code 2000s",
+    "text": "Rose, chrome, paillettes, papillons dans les cheveux. Tout est permis.",
+    "colors": [
+      "#f7b6d2",
+      "#c9b6f2",
+      "#a9d8f5",
+      "#d9d9e0"
+    ]
+  },
+  "infos": [
+    {
+      "icon": "hotel",
+      "title": "Dormir",
+      "text": "Chambres réservées au Vieux-Port."
+    },
+    {
+      "icon": "car",
+      "title": "Venir",
+      "text": "Métro Vieux-Port, puis 10 minutes à pied."
+    },
+    {
+      "icon": "info",
+      "title": "Playlist",
+      "text": "Envoie-nous ton tube des années 2000."
+    },
+    {
+      "icon": "kids",
+      "title": "Enfants",
+      "text": "Les bienvenus jusqu’à 22 h."
+    }
+  ],
+  "rsvp": {
+    "deadline": "2027-05-15",
+    "eyebrow": "Réponse souhaitée",
+    "title": "Serez-vous des nôtres ?",
+    "yesText": "Trop hâte de danser avec toi !",
+    "noText": "On pensera fort à toi."
+  },
+  "families": {
+    "amis": {
+      "label": "Les potes",
+      "seats": 2
+    }
+  }
+}

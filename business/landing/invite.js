@@ -355,7 +355,7 @@
   });
   addEventListener('resize',layoutStrip);
   // précharge les images des pages suivantes
-  [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
+  if(!LG) [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
 
   function longStart(){
     const rio=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('on'); rio.unobserve(en.target); } }),{root:sc,threshold:.18});

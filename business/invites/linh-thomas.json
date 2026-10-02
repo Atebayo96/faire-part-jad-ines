@@ -1,0 +1,114 @@
+{
+  "slug": "linh-thomas",
+  "demo": true,
+  "layout": "long",
+  "theme": "asianchic",
+  "couple": [
+    "Linh",
+    "Thomas"
+  ],
+  "date": "2027-09-18T17:00",
+  "tz": "Europe/Paris",
+  "opening": "env",
+  "palette": "#c9a24a",
+  "countdown": "fin",
+  "music": "nocturne",
+  "intro": {
+    "eyebrow": "Save the date",
+    "text": "Ont la joie de vous convier à leur mariage.",
+    "dateText": "Samedi 18 septembre 2027 · Paris"
+  },
+  "events": [
+    {
+      "id": "ceremonie",
+      "eyebrow": "La cérémonie",
+      "title": "Au bord de l’eau",
+      "start": "2027-09-18T17:00",
+      "place": "Pavillon d’Armenonville",
+      "address": "Allée de Longchamp, 75016 Paris"
+    },
+    {
+      "id": "cocktail",
+      "eyebrow": "Le cocktail",
+      "title": "Champagne et orchidées",
+      "start": "2027-09-18T18:30",
+      "place": "Les jardins du pavillon",
+      "address": "Allée de Longchamp, 75016 Paris"
+    },
+    {
+      "id": "diner",
+      "eyebrow": "Le dîner",
+      "title": "Black tie",
+      "start": "2027-09-18T20:30",
+      "place": "Grand salon du pavillon",
+      "address": "Allée de Longchamp, 75016 Paris",
+      "end": "2027-09-19T03:00"
+    }
+  ],
+  "story": {
+    "title": "Notre histoire",
+    "items": [
+      {
+        "when": "2018",
+        "title": "La rencontre",
+        "text": "Un vernissage à Hô Chi Minh-Ville."
+      },
+      {
+        "when": "2022",
+        "title": "Paris",
+        "text": "Un appartement, et des phở le dimanche."
+      },
+      {
+        "when": "2026",
+        "title": "La demande",
+        "text": "À Hội An, sous les lanternes."
+      }
+    ]
+  },
+  "dress": {
+    "title": "Black tie",
+    "text": "Smoking et robes longues. Le noir, l’or et le jade à l’honneur.",
+    "colors": [
+      "#15140f",
+      "#c9a24a",
+      "#24564a",
+      "#f2ece0"
+    ]
+  },
+  "infos": [
+    {
+      "icon": "hotel",
+      "title": "Dormir",
+      "text": "Chambres réservées à 5 minutes."
+    },
+    {
+      "icon": "car",
+      "title": "Venir",
+      "text": "Voiturier sur place."
+    },
+    {
+      "icon": "info",
+      "title": "Photos",
+      "text": "Cérémonie débranchée : téléphones rangés, merci."
+    },
+    {
+      "icon": "kids",
+      "title": "Enfants",
+      "text": "Soirée entre adultes."
+    }
+  ],
+  "rsvp": {
+    "deadline": "2027-07-15",
+    "eyebrow": "Réponse souhaitée",
+    "title": "Serez-vous des nôtres ?",
+    "yesText": "Nous avons hâte de vous voir.",
+    "noText": "Vous serez dans nos cœurs."
+  },
+  "families": {
+    "famille-nguyen": {
+      "label": "Chère famille Nguyen",
+      "seats": 4,
+      "table": "Table Orchidée"
+    }
+  }
+}

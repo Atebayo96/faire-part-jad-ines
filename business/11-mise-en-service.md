@@ -54,3 +54,19 @@ Les options : `opening` = `env` | `cur` | `door` ; `countdown` = `debut` | `page
 - Mesure d'audience sans cookie (Vercel Analytics ou Plausible).
 - Photos du couple (bloc à ajouter au moteur), version arabe (affichage de droite à gauche).
 - Faire relire les CGV par un juriste avant les premières ventes.
+
+## Créer un style « grand tableau » (mise en page continue)
+
+Dix styles existent : Mille et une nuits, Bollywood, Dolce Vita, et les styles par communauté Double bonheur (chinois,
+Nouvel an), Sakura (japonais), Gzhel (porcelaine russe), Laque & or (asian chic), Y2K, Old money et Kente (afro).
+Les sept derniers n'existent qu'en grand tableau (`long: true` dans `landing/themes.js`, hors du configurateur).
+
+1. Écrire les consignes du style dans `tools/long-prompts.json` (illustration d'ouverture `hero`, fonds `tex1-3`,
+   guirlandes `band1-2` sur fond bleu ou magenta pur, cadre `frame`, photos `ph1-4`, scènes d'événements `scene2-4`).
+2. Générer : `python3 business/tools/long-gen.py <dossier brut> <thème>` (en parallèle ; ce qui s'appuie sur
+   l'illustration d'ouverture est fait ensuite ; une image refusée est retentée).
+3. Regarder chaque image en grand. Ranger les scènes dans `banque/<thème>-2..4.webp`.
+4. Régler les couleurs du texte du style dans `tools/long-assets.py` (`THEMES`), puis
+   `python3 business/tools/long-assets.py <dossier brut> <thème>` → `landing/img/long/<thème>/`.
+5. Déclarer le style dans `landing/themes.js` (police, couleurs, musique), ajouter sa police à `tools/fonts.py`,
+   créer la fiche de démo `invites/<slug>.json` (`"layout": "long"`) et l'ajouter à la liste `LONGS` de la vitrine.

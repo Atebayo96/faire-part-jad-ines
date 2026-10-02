@@ -1,0 +1,49 @@
+{
+ "base": "/img/long/y2k",
+ "sec": [
+  {
+   "tex": "tex1.webp",
+   "ink": "#4a1f45",
+   "accent": "#b0156e"
+  },
+  {
+   "tex": "tex2.webp",
+   "ink": "#2a1d4a",
+   "accent": "#5a2fb0"
+  },
+  {
+   "tex": "tex3.webp",
+   "ink": "#1d3550",
+   "accent": "#215f9e"
+  }
+ ],
+ "bands": [
+  "band1.webp",
+  "band2.webp"
+ ],
+ "ev": [
+  "ev1.webp",
+  "ev2.webp",
+  "ev3.webp"
+ ],
+ "photos": [
+  "ph1.webp",
+  "ph2.webp",
+  "ph3.webp",
+  "ph4.webp"
+ ],
+ "hero": {
+  "src": "hero.webp",
+  "w": 900,
+  "h": 3628,
+  "ink": "#4a1640",
+  "shadow": "0 1px 10px rgba(255,240,248,.85)",
+  "top": "12%"
+ },
+ "frame": {
+  "src": "frame.webp",
+  "mask": "frame-mask.png",
+  "w": 720,
+  "h": 721
+ }
+}

@@ -935,11 +935,19 @@
 
   /* haut de page : deux types de créations, côte à côte. « Un seul grand tableau » : un long tableau qu'on descend.
      « Scène après scène » : nos thèmes illustrés et notre faire-part réel (lieux peints). Un film par téléphone. */
-  const KEYS=Object.keys(THEMES), DEMOS0=window.SCEAU_DEMOS||[];
+  // les styles « long » n'existent qu'en grand tableau (pas de décors de scènes) : hors des listes scène après scène
+  const KEYS=Object.keys(THEMES).filter(k=>!THEMES[k].long), DEMOS0=window.SCEAU_DEMOS||[];
   const LONGS=[
     {slug:'nour-ilyes',k:'nuits',couple:'Nour & Ilyes',ey:'Bismillah',date:'Du 8 au 10 juillet 2027 · Marrakech',ink:'#f6eedb',shadow:'0 2px 14px rgba(0,0,0,.55)',desc:'Henné, cérémonie et fête dans le désert',alt:'un riad de nuit, le couple de dos sur un balcon'},
     {slug:'ananya-rohan',k:'bollywood',couple:'Ananya & Rohan',ey:'Shubh Vivah',date:'Les 17 et 18 septembre 2027',ink:'#6b1230',shadow:'0 1px 10px rgba(255,236,214,.7)',desc:'Mehndi, mandap et sangeet',alt:'un palais du Rajasthan au crépuscule, le couple de dos'},
-    {slug:'chiara-lucas',k:'dolcevita',couple:'Chiara & Lucas',ey:'Ci sposiamo',date:'Samedi 5 juin 2027 · Ravello',ink:'#193f64',shadow:'0 1px 12px rgba(255,255,255,.8)',desc:'Aperitivo, chapelle et dîner face à la mer',alt:'la côte amalfitaine, le couple de dos sous une pergola de citrons'}
+    {slug:'chiara-lucas',k:'dolcevita',couple:'Chiara & Lucas',ey:'Ci sposiamo',date:'Samedi 5 juin 2027 · Ravello',ink:'#193f64',shadow:'0 1px 12px rgba(255,255,255,.8)',desc:'Aperitivo, chapelle et dîner face à la mer',alt:'la côte amalfitaine, le couple de dos sous une pergola de citrons'},
+    {slug:'lin-wei',k:'chinois',couple:'Lin & Wei',ey:'Double bonheur',date:'Samedi 13 février 2027 · Paris',ink:'#fbeedd',shadow:'0 2px 14px rgba(0,0,0,.6)',desc:'Cérémonie du thé, oui et banquet',alt:'un pavillon aux lanternes rouges, le couple de dos sur un pont'},
+    {slug:'hana-kenji',k:'japonais',couple:'Hana & Kenji',ey:'Nous nous marions',date:'Samedi 3 avril 2027 · Kyoto',ink:'#2b2830',shadow:'0 1px 10px rgba(255,250,240,.85)',desc:'Sanctuaire, hanami et ryokan',alt:'des cerisiers et un torii, le couple de dos sous une ombrelle rouge'},
+    {slug:'anastasia-nikolai',k:'gzhel',couple:'Anastasia & Nikolaï',ey:'Nous nous marions',date:'Samedi 16 janvier 2027 · Paris',ink:'#1d3f9a',shadow:'0 1px 10px rgba(255,255,255,.9)',desc:'Cathédrale, pain et sel, dîner',alt:'une troïka dans la neige, peinte en bleu cobalt'},
+    {slug:'linh-thomas',k:'asianchic',couple:'Linh & Thomas',ey:'Save the date',date:'Samedi 18 septembre 2027 · Paris',ink:'#f2e7cf',shadow:'0 2px 14px rgba(0,0,0,.7)',desc:'Cérémonie au bord de l’eau, dîner black tie',alt:'un pavillon de laque noire et d’or, le couple de dos au bord d’un bassin'},
+    {slug:'jade-enzo',k:'y2k',couple:'Jade & Enzo',ey:'On se marie !',date:'Samedi 26 juin 2027 · Marseille',ink:'#4a1640',shadow:'0 1px 10px rgba(255,240,248,.85)',desc:'Mairie, apéro et dance floor',alt:'une décapotable rose sur un boulevard pastel'},
+    {slug:'victoire-charles',k:'oldmoney',couple:'Victoire & Charles',ey:'Ils se marient',date:'Samedi 12 juin 2027 · Normandie',ink:'#1f2b44',shadow:'0 1px 10px rgba(255,252,244,.9)',desc:'Chapelle, pelouse et dîner sous la tente',alt:'un manoir anglais et une voiture ancienne'},
+    {slug:'fatou-kwame',k:'afro',couple:'Fatou & Kwame',ey:'Nous nous marions',date:'Samedi 21 août 2027 · Paris',ink:'#fbeedb',shadow:'0 2px 14px rgba(0,0,0,.6)',desc:'La dot, le oui et la fête',alt:'un pavillon drapé de kente sous un baobab'}
   ];
   // cartes de la section « Un seul grand tableau » : la même liste
   document.getElementById('contGrid').innerHTML=LONGS.map(l=>`<a class="cont" href="/d/${l.slug}/" target="_blank" rel="noopener"><div class="pic"><img src="img/long/${l.k}/thumb.webp" alt="${esc('Le faire-part '+THEMES[l.k].name+' : '+l.alt)}" loading="lazy" width="480" height="768"></div><div class="txt"><b>${esc(THEMES[l.k].name)}</b><span>${esc(l.couple+' · '+l.desc)}</span><em>Ouvrir l'exemple →</em></div></a>`).join('');

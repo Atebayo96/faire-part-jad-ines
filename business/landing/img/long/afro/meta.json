@@ -1,0 +1,49 @@
+{
+ "base": "/img/long/afro",
+ "sec": [
+  {
+   "tex": "tex1.webp",
+   "ink": "#fbeedb",
+   "accent": "#f2b440"
+  },
+  {
+   "tex": "tex2.webp",
+   "ink": "#2b1a10",
+   "accent": "#9a3a18"
+  },
+  {
+   "tex": "tex3.webp",
+   "ink": "#f6ecd6",
+   "accent": "#f2c14e"
+  }
+ ],
+ "bands": [
+  "band1.webp",
+  "band2.webp"
+ ],
+ "ev": [
+  "ev1.webp",
+  "ev2.webp",
+  "ev3.webp"
+ ],
+ "photos": [
+  "ph1.webp",
+  "ph2.webp",
+  "ph3.webp",
+  "ph4.webp"
+ ],
+ "hero": {
+  "src": "hero.webp",
+  "w": 900,
+  "h": 3628,
+  "ink": "#fbeedb",
+  "shadow": "0 2px 14px rgba(0,0,0,.6)",
+  "top": "12%"
+ },
+ "frame": {
+  "src": "frame.webp",
+  "mask": "frame-mask.png",
+  "w": 720,
+  "h": 950
+ }
+}
