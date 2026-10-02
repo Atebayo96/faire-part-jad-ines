@@ -45,6 +45,19 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 10. **Toute image générée est regardée en grand avant d'être publiée**, et passée dans `check_images.py` si c'est une
     scène. Une image qui échoue est régénérée, pas rafistolée en CSS.
 
+## Ce qui tombe : les particules
+
+- **Jamais de forme dessinée en code** (ellipse, rectangle, rond flou) : l'utilisateur l'a jugée « V0 ». Chaque particule
+  est un **sprite peint** dans le style du thème : `business/landing/img/fx/<famille>-<i>.webp`, découpé par
+  `business/tools/fx-sprites.py` depuis une planche `gemini.py` (fond vert uni pour les objets opaques, **fond noir et
+  `--key luma`** pour les objets clairs ou lumineux : graines, lanternes, où le halo devient une vraie transparence).
+  `img/fx/index.json` dit combien de sprites a chaque famille ; invite.js le lit.
+- Le mouvement a de la **profondeur** (lointains plus petits, plus pâles, plus lents), une **culbute** (le sprite se
+  retourne), un balancement propre et un vent commun ; il est en temps réel (indépendant des images par seconde).
+- Les particules passent **devant le décor et derrière le texte** (`#fx` z 1, `.sc` z 2). Sur les thèmes clairs, une
+  ombre portée douce ; sur les lanternes, fondu additif et scintillement.
+- Le canvas `#fx` a `width:100%;height:100%` : sans ça il garde 300 × 150 px et tout tombe dans un bandeau en haut.
+
 ## Signature : le sceau
 
 11. **Le sceau est toujours un sceau de cire** (`img/seals/<cire>.webp`), avec les initiales **gravées** (dégradé
