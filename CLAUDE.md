@@ -1,0 +1,64 @@
+# Règles du projet (faire-part Inès & Jad, et Sceau)
+
+Ce dépôt contient le faire-part réel (`index.html`, `en.html`) et le produit Sceau (`business/`).
+Le moteur de faire-part est `business/landing/invite.css` + `invite.js`, les thèmes sont dans `business/landing/themes.js`,
+le site se reconstruit avec `python3 business/build-site.py` (il copie `landing/` dans `site/`, ne jamais éditer `site/` à la main).
+
+Les règles ci-dessous viennent des allers-retours avec l'utilisateur. Elles s'appliquent à tout ce qui est visible :
+faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images générées.
+
+## Lisibilité : le texte se lit d'un coup d'œil, par une grand-mère, sur un téléphone au soleil
+
+1. **Contraste mesuré, jamais supposé.** Tout texte posé sur une image ou une couleur doit atteindre un rapport
+   de contraste WCAG d'au moins **4,5:1** sur le fond réel (le plus clair ou le plus sombre de la zone, pas la moyenne).
+   Un texte blanc sur un ciel pastel, de l'or sur du beige, du gris clair sur du blanc : interdit sans halo.
+   Vérifier avec `python3 business/tools/check_images.py` pour les décors de scènes.
+2. **Un halo, pas un voile.** Quand l'image ne donne pas le contraste, on ajoute un **halo local** derrière le bloc de
+   texte (`.pg::before` dans invite.css, variable `--halo`), sombre sur les scènes sombres, crème sur les thèmes clairs.
+   Jamais de voile plein écran qui éteint l'image (l'utilisateur l'a fait retirer).
+3. **Rien sous 11 px.** Échelle unique (variables `--fs-*` dans invite.css, reprises dans l'aperçu de la vitrine) :
+   chapeaux 13 px, texte courant 18 px et plus, horaires 17 px et plus, boutons 12,5 px, mentions 11,5 px.
+   L'aperçu de la vitrine et le configurateur doivent afficher **les mêmes tailles** que le vrai faire-part.
+4. **Aérer.** Trois respirations : 10 px (entre deux lignes liées), 18 px (entre deux éléments), 28 px (avant un bouton,
+   un compte à rebours, une carte). Interligne 1,45 pour le texte courant. On ne tasse jamais le bloc de texte pour
+   « laisser voir l'image » : c'est l'image qui réserve la place au texte (règle 6).
+5. **Ne pas superposer un texte à un motif.** Un chapeau, une date ou un titre ne passe jamais sur un ornement,
+   un lustre, des lanternes ou des fleurs. Si c'est le cas, on déplace le texte ou on refait l'image, on ne réduit
+   pas le texte.
+
+## Images : chaque image réserve la place du texte avant d'être belle
+
+6. **Zone de texte réservée.** Dans toute image de scène (format 9:16), la bande **du haut, de 10 % à 55 % de la
+   hauteur**, est calme : ciel dégagé, mur uni, papier nu, nuit profonde. Pas d'ornement, pas de cadre, pas de sujet.
+   Le sujet (château, arche, mains, couple de dos) vit dans la moitié basse. Le prompt de génération le dit
+   explicitement, et `check_images.py` le vérifie (agitation < 8, contraste ≥ 4,5 sur le pire quart de la zone).
+7. **Le contraste est dans l'image.** Thèmes sombres : la zone de texte est **sombre** (ciel de nuit, pénombre), pas
+   un couchant pastel. Thèmes clairs : la zone de texte est **claire et unie** (papier, crème), le texte est de couleur
+   foncée. Le halo CSS est un filet de sécurité, pas la solution.
+8. **Images d'aperçu (og.jpg) et vignettes** : mêmes règles, le texte se pose sur une bande calme et contrastée.
+9. **Personnes et scènes « vraies » (vitrine, étapes, témoignages)** : soit de **vraies photos libres de droits**
+   (Unsplash, Pexels, licence vérifiée et notée dans `business/landing/music/CREDITS.md` ou un `CREDITS.md` d'images),
+   soit une génération en **rendu photographique natif** (lumière naturelle, optique réelle, grain). Jamais le style
+   « peinture » pour des gens : il paraît artificiel et fait « cheap ».
+10. **Toute image générée est regardée en grand avant d'être publiée**, et passée dans `check_images.py` si c'est une
+    scène. Une image qui échoue est régénérée, pas rafistolée en CSS.
+
+## Signature : le sceau
+
+11. **Le sceau est toujours un sceau de cire** (`img/seals/<cire>.webp`), avec les initiales **gravées** (dégradé
+    clair/moyen/sombre de la cire, voir `.op-seal b`). Jamais un disque plat en CSS avec des lettres blanches.
+    Même rendu sur l'enveloppe, l'accueil du faire-part, le configurateur.
+
+## Méthode
+
+12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
+    questions : *est-ce lisible sans effort ? est-ce aéré ? le texte est-il sur une zone calme ?*
+13. Une seule source pour chaque réglage visuel : l'échelle de texte et les halos sont définis dans `invite.css`
+    et recopiés tels quels dans l'aperçu de la vitrine. Toute nouvelle taille ou marge passe par une variable.
+14. Les règles de design apprises sont écrites ici, pas seulement appliquées. Un retour de l'utilisateur sur un
+    écran est un retour sur **le pattern** : on corrige partout où il se produit, pas seulement sur l'écran montré.
+
+## Confidentialité
+
+- `GEMINI_API_KEY` vient de l'environnement, jamais du dépôt ni du chat. La musique du mariage (`assets/music.mp3`)
+  ne part jamais en ligne (le build le vérifie).

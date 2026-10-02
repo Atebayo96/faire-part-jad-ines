@@ -21,6 +21,70 @@ export default {
   "families": {},
   "familyLabels": {}
  },
+ "ananya-rohan": {
+  "demo": true,
+  "couple": "Ananya & Rohan",
+  "date": "2027-09-18T09:00:00+00:00",
+  "events": [
+   "mehndi",
+   "ceremonie",
+   "sangeet"
+  ],
+  "eventList": [
+   {
+    "id": "mehndi",
+    "label": "Mehndi"
+   },
+   {
+    "id": "ceremonie",
+    "label": "Cérémonie"
+   },
+   {
+    "id": "sangeet",
+    "label": "Sangeet & réception"
+   }
+  ],
+  "families": {
+   "famille-sharma": {
+    "events": null
+   },
+   "collegues": {
+    "events": [
+     "sangeet"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-sharma": "Chère famille Sharma",
+   "collegues": "Chers collègues"
+  }
+ },
+ "chiara-lucas": {
+  "demo": true,
+  "couple": "Chiara & Lucas",
+  "date": "2027-06-05T15:00:00+00:00",
+  "events": [
+   "aperitivo",
+   "ceremonie",
+   "diner"
+  ],
+  "eventList": [
+   {
+    "id": "aperitivo",
+    "label": "La veille"
+   },
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "diner",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {},
+  "familyLabels": {}
+ },
  "chloe-nathan": {
   "demo": true,
   "couple": "Chloé & Nathan",
@@ -179,6 +243,45 @@ export default {
   ],
   "families": {},
   "familyLabels": {}
+ },
+ "nour-ilyes": {
+  "demo": true,
+  "couple": "Nour & Ilyes",
+  "date": "2027-07-10T15:00:00+00:00",
+  "events": [
+   "henne",
+   "ceremonie",
+   "fete"
+  ],
+  "eventList": [
+   {
+    "id": "henne",
+    "label": "Le henné"
+   },
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "fete",
+    "label": "La fête"
+   }
+  ],
+  "families": {
+   "famille-haddad": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "fete"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-haddad": "Chère famille Haddad",
+   "amis": "Chers amis"
+  }
  },
  "priya-arjun": {
   "demo": true,

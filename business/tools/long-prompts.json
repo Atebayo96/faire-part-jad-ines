@@ -1,0 +1,233 @@
+{
+ "nuits/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent, same painterly style and palette as the reference. The top fifth is a calm plain sky where a title will be written. A deep blue starry night sky with a thin crescent moon. Below it, the top of a Moroccan riad with a carved tower and palm trees. In the middle, on a carved cedar-wood balcony covered with jasmine, the bride and groom seen from behind, side by side, her long veil, his cream djellaba, looking out over the night. Lower, the riad walls with horseshoe arches, brass lanterns hanging from the arches, bougainvillea. Lower still, the courtyard with a star-shaped zellige fountain and orange trees. The last tenth of the image is a long turquoise zellige floor that fills the full width with an even deep turquoise tone. Nothing floating in the air: no flying lanterns, no balloons, no birds, no kites; every lamp hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams.",
+  "ref": "landing/img/hd/nuits-1.webp"
+ },
+ "nuits/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone Moroccan zellige star pattern, overall colour deep turquoise #1e6a66. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "nuits/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like warm handmade paper with a very faint tone-on-tone arabesque pattern, overall colour warm sand beige #e9d8b8. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "nuits/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like a velvety night with a very faint tone-on-tone geometric pattern, overall colour deep night blue #15203a. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "nuits/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of white jasmine flowers, green leaves and a few small deep red roses, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "landing/img/hd/nuits-1.webp"
+ },
+ "nuits/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of palm leaves, green foliage and bright bougainvillea flowers with small white jasmine, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "landing/img/hd/nuits-1.webp"
+ },
+ "nuits/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "An ornate Moroccan horseshoe-arch frame: a carved cream plaster arch with a thin border of turquoise and gold zellige mosaic and small jasmine sprigs at its base, front view, symmetrical, filling most of the image. The opening inside the arch and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, painterly gouache style. No text.",
+  "ref": null
+ },
+ "nuits/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind walking hand in hand along a sunlit Marrakech riad corridor with carved arches. No faces visible. No text.",
+  "ref": null
+ },
+ "nuits/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the bride's hands decorated with fine henna and gold rings holding a small glass of mint tea, the groom's hand on hers. No faces visible. No text.",
+  "ref": null
+ },
+ "nuits/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind as silhouettes at sunset in the Agafay desert, her veil lifted by the wind. No faces visible. No text.",
+  "ref": null
+ },
+ "nuits/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the groom's hand holding the bride's hand with henna, her embroidered caftan sleeve, soft blurred riad background. No faces visible. No text.",
+  "ref": null
+ },
+ "bollywood/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent, same painterly style and palette as the reference. The top fifth is a calm plain sky where a title will be written. A plain warm dusk sky, peach to rose. Below it, the domes and chhatris of a Rajasthani palace in sandstone and marble. In the middle, on a jharokha balcony decorated with marigold garlands, the bride in a red and gold lehenga and the groom in an ivory sherwani seen from behind, side by side, looking out at the city. Lower, palace arches with brass bells hanging from them and marigold garlands hung between the columns. Lower still, a courtyard with a lotus pool, rangoli and diyas on the ground. The last tenth of the image is a deep rani-pink painted floor that fills the full width with an even tone. Nothing floating in the air: no flying lanterns, no balloons, no birds, no kites; every lamp hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams.",
+  "ref": "landing/img/hd/bollywood-1.webp"
+ },
+ "bollywood/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone paisley pattern, overall colour deep rani pink #8f1d4c. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "bollywood/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like warm handmade paper with a very faint tone-on-tone floral block-print pattern, overall colour warm saffron #f0b45a. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "bollywood/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone mughal floral pattern, overall colour royal blue #1d2c63. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "bollywood/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A traditional Indian toran: a thick horizontal garland of orange and yellow marigold strands and green mango leaves hanging from a gold cord, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "landing/img/hd/bollywood-1.webp"
+ },
+ "bollywood/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick horizontal garland of white jasmine and deep red roses with small golden bells, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "landing/img/hd/bollywood-1.webp"
+ },
+ "bollywood/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "An ornate Rajasthani jharokha window frame: carved cream marble with gold details, a cusped arch top and a small marigold garland along the top, front view, symmetrical, filling most of the image. The opening of the window and everything outside the frame are perfectly flat pure blue (#0000FF), no shadow, crisp edges, painterly gouache style. No text.",
+  "ref": null
+ },
+ "bollywood/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the bride's hands covered in intricate mehndi with red and gold bangles holding a few marigold flowers. No faces visible. No text.",
+  "ref": null
+ },
+ "bollywood/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride in a red lehenga and the groom in an ivory sherwani seen from behind at golden hour on a palace terrace in Udaipur overlooking a lake. No faces visible. No text.",
+  "ref": null
+ },
+ "bollywood/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the groom's hand holding the bride's hand with mehndi and bangles, red and gold fabric. No faces visible. No text.",
+  "ref": null
+ },
+ "bollywood/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride in a red and gold lehenga with a dupatta over her head and the groom in an ivory sherwani and turban seen from behind, walking hand in hand through a corridor of marigold garlands at dusk. No faces visible. No text.",
+  "ref": null
+ },
+ "dolcevita/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent, same painterly style and palette as the reference. The top fifth is a calm plain sky where a title will be written. A plain bright Mediterranean blue sky with a few soft clouds. One single continuous viewpoint and perspective from top to bottom, with only one horizon line near the top: no repeated landscape, no second horizon. Below the sky, the Amalfi coast: a cliff village with pastel houses and a small chapel dome above the sea. In the middle, on a terrace under a pergola of lemon branches, the bride and groom seen from behind, side by side, looking at the sea. Below the couple, the view goes down the same cliff, closer to us: a stone staircase between lemon trees and bougainvillea leading down to a terrace with hand-painted blue and yellow majolica tiles. The last tenth of the image is a plain warm ivory painted floor that fills the full width with an even tone. Nothing floating in the air: no flying lanterns, no balloons, no birds, no kites; every lamp hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams.",
+  "ref": "landing/img/hd/dolcevita-1.webp"
+ },
+ "dolcevita/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like warm handmade paper with a very faint tone-on-tone lemon leaf pattern, overall colour warm ivory #f4ead6. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "dolcevita/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, with a very faint tone-on-tone majolica tile pattern, overall colour Mediterranean blue #2d6aa0. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "dolcevita/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like warm handmade paper with a very faint tone-on-tone pattern, overall colour soft lemon yellow #f2db86. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "dolcevita/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of lemon branches with ripe lemons, green leaves and small white blossoms, spanning the entire width from the left edge to the right edge, painterly style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "landing/img/hd/dolcevita-1.webp"
+ },
+ "dolcevita/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of olive branches, white daisies and a few lemons, spanning the entire width from the left edge to the right edge, painterly style, isolated on a perfectly flat pure magenta background (#FF00FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "landing/img/hd/dolcevita-1.webp"
+ },
+ "dolcevita/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "An oval frame made of hand-painted Italian majolica tiles in yellow and green with lemons and leaves at the corners, front view, symmetrical, filling most of the image. The opening of the oval and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges. No text.",
+  "ref": null
+ },
+ "dolcevita/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind riding a vintage cream Vespa on the Amalfi coast road at golden hour. No faces visible. No text.",
+  "ref": null
+ },
+ "dolcevita/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the bride's and groom's hands with wedding rings holding fresh lemons with leaves. No faces visible. No text.",
+  "ref": null
+ },
+ "dolcevita/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind on a terrace overlooking Positano at sunset. No faces visible. No text.",
+  "ref": null
+ },
+ "dolcevita/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of two glasses of limoncello clinking above a table with lemons and majolica plates, the sea blurred behind. No faces visible. No text.",
+  "ref": null
+ }
+}

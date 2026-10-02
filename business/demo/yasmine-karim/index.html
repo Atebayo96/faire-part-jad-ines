@@ -551,12 +551,20 @@
 
     let centers=[], vh=window.innerHeight, heroTakeover=false;
     function measure(){ vh=window.innerHeight; centers=acts.map(a=>a.offsetTop+a.offsetHeight/2); }
+    const easeFade=x=>x*x*(3-2*x);   // fondu doux aux deux bouts
     function update(){
       const vc=window.scrollY+vh/2;
-      layers.forEach((l,i)=>{
-        const d=(vc-centers[i])/vh;   // distance fixe (1 écran) -> une scène voisine n'apparaît pas trop tôt
-        l.style.opacity=Math.max(0,1-Math.abs(d)).toFixed(3);
-      });
+      // le décor suivant apparaît en fondu PAR-DESSUS le précédent, qui reste entier jusqu'à être recouvert.
+      // (avant, les deux décors s'effaçaient en même temps et le fond nuit transparaissait au milieu
+      // du glissement : l'image se grisait avant même de changer). Les décors déjà recouverts sont
+      // éteints pour ne pas faire composer cinq plans au téléphone.
+      let covered=false;
+      for(let i=layers.length-1;i>=0;i--){
+        const d=(vc-centers[i])/vh;   // <0 : la scène arrive d'en bas, 0 : centrée, >0 : déjà passée
+        const a=i===0?1:easeFade(Math.max(0,Math.min(1,1+d*1.15)));
+        layers[i].style.opacity=covered?'0':a.toFixed(3);
+        if(a>.995) covered=true;   // (la dernière page peut s'arrêter un cheveu avant le centre)
+      }
       const sy=window.scrollY;
       planes.forEach(p=>{ const r=+p.dataset.rate||0; p.style.transform=`translate3d(0,${(-sy*r).toFixed(1)}px,0)`; });
       // les éléments du hero disparaissent vite quand on quitte la scène de début

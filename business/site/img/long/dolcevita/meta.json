@@ -1,0 +1,49 @@
+{
+ "base": "/img/long/dolcevita",
+ "sec": [
+  {
+   "tex": "tex1.webp",
+   "ink": "#2f3b4f",
+   "accent": "#2b6598"
+  },
+  {
+   "tex": "tex2.webp",
+   "ink": "#fbf5e6",
+   "accent": "#fbf4d9"
+  },
+  {
+   "tex": "tex3.webp",
+   "ink": "#3d3a2a",
+   "accent": "#265a88"
+  }
+ ],
+ "bands": [
+  "band1.webp",
+  "band2.webp"
+ ],
+ "ev": [
+  "ev1.webp",
+  "ev2.webp",
+  "ev3.webp"
+ ],
+ "photos": [
+  "ph1.webp",
+  "ph2.webp",
+  "ph3.webp",
+  "ph4.webp"
+ ],
+ "hero": {
+  "src": "hero.webp",
+  "w": 900,
+  "h": 3628,
+  "ink": "#193f64",
+  "shadow": "0 1px 12px rgba(255,255,255,.8)",
+  "top": "14%"
+ },
+ "frame": {
+  "src": "frame.webp",
+  "mask": "frame-mask.png",
+  "w": 720,
+  "h": 966
+ }
+}

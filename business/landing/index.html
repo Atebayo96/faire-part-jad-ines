@@ -14,9 +14,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&family=Cinzel+Decorative:wght@400&family=Aref+Ruqaa&family=Italiana&family=Limelight&family=Parisienne&family=Jost:wght@300;400&family=Shrikhand&family=DM+Serif+Display:ital@0;1&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/polices/polices.css">
 <style>
   /* Direction : galerie blanche. Noir, blanc, gris. Une seule famille sans-serif.
      Pas de dore, pas de creme, pas de serif : c'est le produit (les scenes peintes) qui apporte la couleur. */
@@ -135,6 +133,18 @@
   .people figcaption b{display:block;color:var(--ink);font:500 20px/1.2 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em;margin-bottom:6px}
 
   /* modeles */
+  .cont-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media (max-width:820px){ .cont-grid{grid-template-columns:1fr;gap:22px} .cont .pic{aspect-ratio:4/5} }
+  a.cont{display:block;color:inherit;text-decoration:none;background:var(--bg-2)}
+  .cont .pic{aspect-ratio:5/8;overflow:hidden}
+  .cont .pic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s ease}
+  a.cont:hover .pic img{transform:scale(1.03)}
+  .cont .txt{display:grid;gap:4px;padding:16px 16px 18px}
+  .cont .txt b{font:500 19px/1.2 Inter,sans-serif;letter-spacing:-.01em}
+  .cont .txt span{color:var(--muted);font-size:14px}
+  .cont .txt em{font-style:normal;font-size:14px;margin-top:6px}
+  .cont-more{margin-top:22px;color:var(--muted)}
+  .cont-more a{color:var(--ink)}
   .models{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
   @media (max-width:1000px){ .models{grid-template-columns:repeat(2,1fr)} }
   .models>.model{min-width:0}
@@ -197,6 +207,18 @@
   input,select{height:56px;padding:0 16px;border:0;border-right:1px solid var(--line);background:var(--bg);color:var(--ink);font:15px Inter,sans-serif;min-width:0;border-radius:0}
   @media (max-width:820px){ input,select{border-right:0;border-bottom:1px solid var(--line)} }
   form .btn{height:56px;border:0}
+  .order{position:fixed;inset:0;z-index:1000;background:rgba(10,10,10,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+  .order[hidden]{display:none}
+  .order-in{position:relative;width:100%;max-width:460px;max-height:calc(100dvh - 32px);overflow:auto;background:#fff;padding:28px 24px 22px;text-align:left}
+  .order-in h3{font:500 28px/1.15 Inter,sans-serif;letter-spacing:-.02em;margin:8px 0 6px}
+  .order-sub,.order-note{color:var(--muted);font-size:14px;margin:0 0 14px}
+  .order-note{margin:12px 0 0;font-size:13px}
+  .order-x{position:absolute;top:10px;right:12px;width:36px;height:36px;border:0;background:none;font-size:26px;line-height:1;color:var(--muted);cursor:pointer}
+  #ordForm{display:grid;grid-template-columns:1fr;gap:10px;border:0;padding:0;max-width:none;margin:0;background:none}
+  #ordForm input[type=text],#ordForm input[type=email],#ordForm input[type=date]{height:48px;border:1px solid var(--line);padding:0 14px;font:inherit;background:#fff;color:var(--ink)}
+  #ordForm .chk{display:grid;grid-template-columns:20px 1fr;gap:10px;font-size:13.5px;line-height:1.45;color:#333;align-items:start}
+  #ordForm .chk input{width:18px;height:18px;margin:1px 0 0}
+  #ordForm .btn{width:100%;height:54px;margin-top:4px}
   .ok{display:none;margin-top:18px}
   /* demos */
   .demos{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
@@ -244,15 +266,21 @@
   .pv-phone{height:min(86vh,760px);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);background:#000;flex:none}
   .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}
   .pv-scroll::-webkit-scrollbar{display:none}
-  .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
+  /* même échelle de lecture que le moteur (invite.css) : chapeaux 13 px, texte 17 px et plus, rien sous 11 px */
+  .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff;--halo:rgba(8,8,14,.5)}
+  .pv-sc.light{--halo:rgba(255,253,248,.74)}
+  /* halo de lisibilité local derrière le bloc de texte, comme dans le moteur */
+  .pv-sc::before{content:"";position:absolute;left:-15%;right:-15%;top:-4%;height:72%;pointer-events:none;background:radial-gradient(ellipse 74% 72% at 50% 30%,var(--halo) 0%,transparent 74%)}
+  .pv-sc:first-child::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16%;pointer-events:none;background:linear-gradient(transparent,var(--halo))}
   .pv-sc.light .ey,.pv-sc.light .nm,.pv-sc.light .tx,.pv-sc.light .bt,.pv-sc.light .pv-hint{text-shadow:none}
   .pv-sc.light .bt{background:transparent;backdrop-filter:none}
   .pv-sc>*{position:relative}
-  .pv-sc .ey{font:500 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.92;text-shadow:0 1px 8px rgba(0,0,0,.5)}
-  .pv-sc .nm{font:400 clamp(38px,5.4vh,54px)/1.05 "Great Vibes",cursive;margin:10px 0 6px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
-  .pv-sc .tx{font:italic 400 clamp(15px,2vh,19px)/1.35 "Cormorant Garamond",Georgia,serif;text-shadow:0 1px 10px rgba(0,0,0,.55);max-width:17em}
-  .pv-sc .bt{margin-top:14px;display:inline-block;border:1px solid rgba(255,255,255,.8);padding:8px 14px;font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;background:rgba(0,0,0,.15);backdrop-filter:blur(2px)}
-  .pv-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font:500 10px Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+  .pv-sc .ey{font:500 13px/1.3 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+  .pv-sc .nm{font:400 clamp(38px,5.4vh,54px)/1.08 "Great Vibes",cursive;margin:16px 0 12px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+  .pv-sc .tx{font:italic 400 clamp(17px,2.4vh,21px)/1.45 "Cormorant Garamond",Georgia,serif;text-shadow:0 1px 10px rgba(0,0,0,.55);max-width:17em}
+  .pv-sc .tx+.tx{margin-top:8px}
+  .pv-sc .bt{margin-top:24px;display:inline-block;border:1px solid rgba(255,255,255,.8);padding:11px 16px;font:500 12.5px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,0,0,.15);backdrop-filter:blur(2px)}
+  .pv-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font:500 11.5px Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6)}
   @media (max-width:760px){ .pv{flex-direction:column;gap:12px} .pv-side{text-align:center;max-width:none} .pv-side p{display:none} .pv-side h3{font-size:24px;margin:0 0 8px} .pv-tabs{justify-content:center} .pv-phone{height:min(72vh,680px)} }
   /* filtres de style */
   .filters{display:flex;flex-wrap:wrap;gap:8px;margin:-16px 0 24px}
@@ -285,37 +313,42 @@
   .cp-tint{position:absolute;inset:0;mix-blend-mode:soft-light;opacity:.55;transition:background .4s;pointer-events:none;z-index:2}
   .cp-phone .pv-scroll{position:absolute;inset:0}
   .cp-phone .pv-sc{padding-top:14%}
-  .cp-phone .pv-sc .nm{margin:8px 0 6px}
-  .cp-phone .pv-sc .tx{font-size:15px}
-  .cd{display:flex;justify-content:center;gap:12px;margin-top:16px}
-  .cd div{display:grid;justify-items:center;gap:4px;min-width:40px}
-  .cd b{font:500 24px/1 "Inter Tight",Inter,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-  .cd span{font:500 8px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
-  .cd.big{gap:14px;margin-top:22px}
-  .cd.big b{font-size:38px}
+  .cp-phone .pv-sc .nm{margin:14px 0 10px}
+  .cp-phone .pv-sc .tx{font-size:17px}
+  .cd{display:flex;justify-content:center;gap:16px;margin-top:24px}
+  .cd div{display:grid;justify-items:center;gap:6px;min-width:44px}
+  .cd b{font:500 28px/1 "Inter Tight",Inter,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .cd span{font:500 11px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
+  .cd.big{gap:18px;margin-top:26px}
+  .cd.big b{font-size:42px}
   .cd-veil{position:absolute;inset:0;pointer-events:none}
   .chip.x{font-size:12px;padding:8px 12px}
-  .pv-card{position:relative;width:100%;max-width:250px;margin-top:12px;padding:4px 12px;text-align:left;font:400 13px/1.35 "Cormorant Garamond",Georgia,serif;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-  .pv-card div{display:grid;grid-template-columns:40px 1fr;gap:8px;padding:7px 0;border-bottom:1px solid rgba(127,127,127,.3)}
+  .pv-card{position:relative;width:100%;max-width:260px;margin-top:20px;padding:6px 12px;text-align:left;font:400 15px/1.4 "Cormorant Garamond",Georgia,serif;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .pv-card div{display:grid;grid-template-columns:44px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid rgba(127,127,127,.3)}
   .pv-card div:last-child{border-bottom:0}
-  .pv-card b{font:500 10px/1.5 Inter,sans-serif;letter-spacing:.04em}
+  .pv-card b{font:500 12px/1.5 Inter,sans-serif;letter-spacing:.04em}
   .pv-card.one div{grid-template-columns:1fr}
-  .pv-sws{position:relative;display:flex;gap:8px;margin:12px 0 8px}
-  .pv-sws i{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.75)}
-  .pv-fam{position:relative;font:500 15px/1.35 "Cormorant Garamond",Georgia,serif;margin:10px 0 6px}
+  .pv-sws{position:relative;display:flex;gap:10px;margin:16px 0 14px}
+  .pv-sws i{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.75)}
+  .pv-fam{position:relative;font:500 17px/1.35 "Cormorant Garamond",Georgia,serif;margin:14px 0 10px}
   .pv-sc>.cd-veil{position:absolute}
-  .cp-dl{display:flex;align-items:center;gap:10px;margin-top:10px;font:500 15px/1.2 "Cormorant Garamond",Georgia,serif}
-  .cp-dl i{display:block;width:24px;height:1px;background:currentColor;opacity:.75}
+  .cp-dl{display:flex;align-items:center;gap:12px;margin-top:16px;font:500 17px/1.2 "Cormorant Garamond",Georgia,serif}
+  .cp-dl i{display:block;width:26px;height:1px;background:currentColor;opacity:.75}
   .cp-phone .pv-hint{z-index:1}
   .cp-scrim{position:absolute;inset:0 0 45% 0;background:linear-gradient(rgba(0,0,0,.35),transparent)}
   .cp-body{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0}
-  .cp-seal{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font:400 26px/1 "Great Vibes",cursive;color:rgba(255,255,255,.9);box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px rgba(0,0,0,.12);margin-bottom:14px;transition:background .4s}
-  .cp-ey{font:500 10px/1.4 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase}
-  .cp-nm{font-size:44px;line-height:1.05;margin:10px 0 8px;word-break:break-word}
-  .cp-tx{font:italic 400 16px/1.35 "Cormorant Garamond",Georgia,serif;max-width:17em}
-  .cp-date{display:flex;align-items:center;gap:10px;margin-top:10px;font:500 15px/1.2 "Cormorant Garamond",Georgia,serif}
+  /* sceau de cire du configurateur : même cire et mêmes initiales gravées que sur l'enveloppe (voir .op-seal) */
+  .cp-seal{width:80px;height:80px;background:center/contain no-repeat;display:grid;place-items:center;container-type:inline-size;margin-bottom:16px;filter:drop-shadow(0 8px 12px rgba(0,0,0,.38))}
+  .cp-seal b{font:400 24cqw/1.15 "Great Vibes",cursive;letter-spacing:-.01em;margin-top:2cqw;padding:0 .08em;white-space:nowrap;
+    background:linear-gradient(165deg,var(--l) 0%,var(--m) 48%,var(--d) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(255,244,214,.55)) drop-shadow(0 -1px .6px rgba(40,22,4,.75)) drop-shadow(0 1.5px 1.5px rgba(40,22,4,.35))}
+  .cp-seal b i{font-style:normal;font-size:.62em;margin:0 .02em}
+  .cp-ey{font:500 13px/1.4 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+  .cp-nm{font-size:44px;line-height:1.08;margin:16px 0 12px;word-break:break-word}
+  .cp-tx{font:italic 400 18px/1.45 "Cormorant Garamond",Georgia,serif;max-width:17em}
+  .cp-date{display:flex;align-items:center;gap:12px;margin-top:16px;font:500 17px/1.2 "Cormorant Garamond",Georgia,serif}
   .cp-date i{display:block;width:26px;height:1px;background:currentColor;opacity:.7}
-  .cp-bt{margin-top:18px;border:1px solid currentColor;padding:8px 14px;font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+  .cp-bt{margin-top:24px;border:1px solid currentColor;padding:11px 16px;font:500 12.5px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase}
 
   /* ouvertures : enveloppe, rideau, grandes portes */
   .op-card{background:var(--bg);border:1px solid var(--line);color:var(--ink);padding:12px 14px;cursor:pointer;display:grid;gap:3px;justify-items:start;text-align:left;min-width:128px}
@@ -467,7 +500,7 @@
   <div class="wrap">
     <a class="logo" href="#">SCEAU</a>
     <div class="links">
-      <a href="#modeles">Modèles</a>
+      <a href="#continu">Modèles</a>
       <a href="#prix">Prix</a>
       <a class="btn solid" href="#commencer">Commencer</a>
     </div>
@@ -498,7 +531,7 @@
     <div class="hero-more">
       <div class="ctas">
         <a class="btn solid" href="#commencer">Créer notre faire-part</a>
-        <a class="btn" href="#modeles">Voir les modèles</a>
+        <a class="btn" href="#continu">Voir les modèles</a>
       </div>
       <div class="facts">
         <div><b>1 lien</b><span>pour tous vos invités</span></div>
@@ -517,6 +550,22 @@
       <div><img src="img/people/parametrer.webp" alt="Deux mains l'une sur l'autre, un téléphone affiche le faire-part avec son sceau" loading="lazy" width="720" height="900"><b>02</b><h3>Paramétrez-le</h3><p>L'ouverture (enveloppe, rideau ou grandes portes), vos prénoms, la date, les couleurs, la police, la musique, le compte à rebours, vos événements et vos lieux.</p></div>
       <div><img src="img/people/mamie.webp" alt="Une grand-mère émue ouvre le faire-part sur son téléphone" loading="lazy" width="720" height="900"><b>03</b><h3>Recevez votre lien</h3><p>Un lien prêt à envoyer sur WhatsApp, un par famille si vous voulez. Les réponses de vos invités arrivent dans votre tableau de bord.</p></div>
     </div>
+  </div>
+</section>
+
+<section id="continu">
+  <div class="wrap">
+    <div class="head">
+      <p class="label">Nouveau</p>
+      <h2>Le faire-part en continu.</h2>
+      <p>Un seul long tableau qu'on descend du bout du doigt : le décor se fond dans vos informations, sans aucune coupure. Voici trois exemples pour vous donner l'idée. Tout se fait ensuite sur mesure : votre style, vos lieux, vos couleurs, le nombre de parties.</p>
+    </div>
+    <div class="cont-grid">
+      <a class="cont" href="/d/nour-ilyes/" target="_blank" rel="noopener"><div class="pic"><img src="img/long/nuits/thumb.webp" alt="Le faire-part Mille et une nuits : un riad de nuit, le couple de dos sur un balcon" loading="lazy" width="480" height="768"></div><div class="txt"><b>Mille et une nuits</b><span>Nour &amp; Ilyes · henné, cérémonie et fête dans le désert de Marrakech</span><em>Ouvrir l'exemple →</em></div></a>
+      <a class="cont" href="/d/ananya-rohan/" target="_blank" rel="noopener"><div class="pic"><img src="img/long/bollywood/thumb.webp" alt="Le faire-part Bollywood : un palais du Rajasthan au crépuscule, le couple de dos" loading="lazy" width="480" height="768"></div><div class="txt"><b>Bollywood</b><span>Ananya &amp; Rohan · mehndi, mandap et sangeet</span><em>Ouvrir l'exemple →</em></div></a>
+      <a class="cont" href="/d/chiara-lucas/" target="_blank" rel="noopener"><div class="pic"><img src="img/long/dolcevita/thumb.webp" alt="Le faire-part Dolce Vita : la côte amalfitaine, le couple de dos sous une pergola de citrons" loading="lazy" width="480" height="768"></div><div class="txt"><b>Dolce Vita</b><span>Chiara &amp; Lucas · aperitivo, chapelle et dîner face à la mer</span><em>Ouvrir l'exemple →</em></div></a>
+    </div>
+    <p class="cont-more">Votre mariage ne ressemble à aucun de ces exemples ? C'est normal. <a href="#commencer" data-plan="couture">Racontez-nous votre projet</a>, on le met en forme pour vous.</p>
   </div>
 </section>
 
@@ -697,10 +746,66 @@
   <div class="wrap"><span>SCEAU · Paris</span><span class="legal"><a href="/mentions-legales/">Mentions légales</a> · <a href="/cgv/">CGV</a> · <a href="/confidentialite/">Confidentialité</a></span></div>
 </footer>
 
+<div class="order" id="order" hidden>
+  <div class="order-in" role="dialog" aria-modal="true" aria-labelledby="ordT">
+    <button type="button" class="order-x" id="ordX" aria-label="Fermer">×</button>
+    <p class="label">Votre commande</p>
+    <h3 id="ordT"></h3>
+    <p class="order-sub" id="ordSub"></p>
+    <form id="ordForm" novalidate>
+      <input type="text" id="oName" placeholder="Vos prénoms" autocomplete="name" aria-label="Vos prénoms">
+      <input type="email" id="oEmail" placeholder="E-mail (pour le reçu et la suite)" autocomplete="email" aria-label="E-mail">
+      <input type="text" id="oDate" placeholder="Date du mariage" onfocus="this.type='date'" aria-label="Date du mariage">
+      <label class="chk"><input type="checkbox" id="oCgv"><span>J'ai lu et j'accepte les <a href="/cgv/" target="_blank" rel="noopener">conditions de vente</a>.</span></label>
+      <label class="chk"><input type="checkbox" id="oWaiver"><span>Je demande que la création de mon faire-part commence dès mon paiement, et je reconnais perdre mon droit de rétractation dès ce commencement (article L221-28 du Code de la consommation).</span></label>
+      <p class="err" id="oErr" hidden></p>
+      <button class="btn solid" type="submit" id="oPay"></button>
+      <p class="order-note" id="ordNote">Paiement sécurisé par Stripe. Vous recevez votre reçu par e-mail, puis nous vous écrivons pour recueillir vos lieux, horaires et textes.</p>
+    </form>
+  </div>
+</div>
+
+<script src="paiement.js"></script>
 <script src="themes.js"></script>
 <script>window.SCEAU_DEMOS=[]/*DEMOS*/;</script>
 <script>
-  document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',()=>{ document.getElementById('planSel').value=a.dataset.plan; }));
+  document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',e=>{ document.getElementById('planSel').value=a.dataset.plan;
+    // formule payable en ligne : on ouvre la commande au lieu du formulaire de contact
+    const pay=(window.SCEAU_PAY||{})[a.dataset.plan]; if(pay){ e.preventDefault(); openOrder(a.dataset.plan,pay); } }));
+
+  /* commande : récapitulatif, conditions de vente et renonciation au délai de rétractation, puis paiement Stripe */
+  const PLANS={essentiel:{name:'Essentiel',price:'99 €'},signature:{name:'Signature',price:'229 €'}};
+  let ordPlan=null, ordLink=null;
+  const ord=document.getElementById('order'), $o=id=>document.getElementById(id);
+  function choicesText(){ const v=id=>($o(id)||{}).value||''; return [v('fStyle')&&'thème '+v('fStyle'), v('fOpen')&&'ouverture '+v('fOpen').toLowerCase(), v('fPal')&&'couleurs '+v('fPal').toLowerCase(), v('fScreens')&&'écrans en plus : '+v('fScreens').toLowerCase()].filter(Boolean).join(' · '); }
+  function openOrder(plan,link){
+    ordPlan=plan; ordLink=link; const P=PLANS[plan];
+    $o('ordT').textContent=`${P.name} · ${P.price}`;
+    const ch=choicesText(); $o('ordSub').textContent=ch?'Vos choix dans l’essai : '+ch+'. Tout reste modifiable ensuite.':'Vous choisirez le thème, les couleurs et les écrans avec nous juste après.';
+    $o('oPay').textContent=`Payer ${P.price} avec Stripe`;
+    const promo=(window.SCEAU_PAY||{}).promo; $o('ordNote').textContent=(promo?`Offre de lancement : saisissez le code ${promo} sur la page de paiement. `:'')+'Paiement sécurisé par Stripe. Vous recevez votre reçu par e-mail, puis nous vous écrivons pour recueillir vos lieux, horaires et textes.';
+    if(!$o('oName').value&&$o('fNames').value) $o('oName').value=$o('fNames').value;
+    ord.hidden=false; document.body.style.overflow='hidden'; setTimeout(()=>$o('oEmail').focus(),50);
+  }
+  function closeOrder(){ ord.hidden=true; document.body.style.overflow=''; }
+  $o('ordX').onclick=closeOrder; ord.addEventListener('click',e=>{ if(e.target===ord) closeOrder(); });
+  addEventListener('keydown',e=>{ if(e.key==='Escape'&&!ord.hidden) closeOrder(); });
+  $o('ordForm').addEventListener('submit',async e=>{
+    e.preventDefault(); const err=$o('oErr'), show=m=>{ err.textContent=m; err.hidden=false; };
+    const email=$o('oEmail').value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return show('Indiquez une adresse e-mail valide.');
+    if(!$o('oCgv').checked) return show('Merci d’accepter les conditions de vente.');
+    if(!$o('oWaiver').checked) return show('Cochez la case pour que nous puissions commencer la création dès votre paiement.');
+    err.hidden=true; const btn=$o('oPay'); btn.disabled=true; btn.textContent='Ouverture du paiement…';
+    const ref='sc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+    const v=id=>($o(id)||{}).value||'';
+    const body={type:'commande',ref,plan:ordPlan,email,name:$o('oName').value,date:$o('oDate').value,consent:true,cgv:true,waiver:true,
+      style:v('fStyle'),palette:v('fPal'),font:v('fFont'),opening:v('fOpen'),countdown:v('fCount'),screens:v('fScreens'),names:$o('oName').value,weddingDate:$o('oDate').value};
+    // on garde la trace de la commande et des cases cochées (preuve de la renonciation), sans bloquer le paiement
+    try{ await Promise.race([fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),new Promise(r=>setTimeout(r,2500))]); }catch(x){}
+    const u=new URL(ordLink); u.searchParams.set('prefilled_email',email); u.searchParams.set('client_reference_id',ref);
+    location.href=u.toString();
+  });
   document.getElementById('waitForm').addEventListener('submit',async e=>{
     e.preventDefault();
     const f=e.currentTarget, fd=new FormData(f), err=document.getElementById('fErr'), btn=f.querySelector('button');
@@ -851,7 +956,6 @@
     $('cpTint').style.background=p.c;
     const n1=($('cN1').value||'Emma').trim(), n2=($('cN2').value||'Louis').trim();
     const ini=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
-    const sealBg=`radial-gradient(circle at 35% 30%, ${shade(p.c,1.25)}, ${p.c} 58%, ${shade(p.c,.6)})`;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250']}[C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('img/seals/${SEAL[0]}.webp')`;
     $('opSealTxt').innerHTML=`${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}`; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
@@ -870,7 +974,7 @@
     // 1. prenoms + date (+ compte a rebours au debut)
     { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');
       const oval=!!t.top1;
-      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc('background:'+sealBg)}">${esc(ini)}</div>`}<div class="ey" style="color:${c.ey}">${esc(t.scenes[0][0])}</div><div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}<div class="cp-dl" style="color:${p.c}"><i></i><span>${esc(ds)}</span><i></i></div>${C.cd==='debut'?cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':''):''}<div class="pv-hint" style="color:${c.ey}">Faites défiler ↓</div>`)); }
+      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc(`background-image:url('img/seals/${SEAL[0]}.webp')`)}"><b style="${esc(`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`)}">${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}</b></div>`}<div class="ey" style="color:${c.ey}">${esc(t.scenes[0][0])}</div><div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}<div class="cp-dl" style="color:${pg.lt?p.c:'#fff'}"><i></i><span>${esc(ds)}</span><i></i></div>${C.cd==='debut'?cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':''):''}<div class="pv-hint" style="color:${c.ey}">Faites défiler ↓</div>`)); }
     const scene=(idx,withCd)=>{ const [e,main,x,bt,mode]=t.scenes[idx]; const pg=page(idx+1,mode);
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?`<span class="bt" style="color:${c.tx};border-color:${c.tx}">${esc(bt)}</span>`:''}`); };
     // écrans en option (contenu d'exemple), sur le décor de la scène voisine avec un voile

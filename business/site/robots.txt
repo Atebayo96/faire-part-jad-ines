@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /d/
+Disallow: /tableau/
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://sceau-faire-part.vercel.app/sitemap.xml

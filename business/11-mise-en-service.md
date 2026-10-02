@@ -23,6 +23,17 @@ _Mis à jour le 1er octobre 2026, après l'audit « qu'est-ce qui manque pour ê
 2. **Compléter les pages légales :** nom, adresse, SIRET, e-mail de contact, statut TVA, médiateur de la consommation. Dans `business/legal/*.md`, puis `python3 business/legal-template.py` et `python3 business/build-site.py`.
 3. **Récupérer la clé admin :** dans Vercel, Settings → Environment Variables → `SCEAU_SECRET`. C'est elle qui ouvre `/admin/`. Ne la partage pas.
 
+## Paiement Stripe (à faire une fois)
+
+1. Créer le compte sur stripe.com (statut auto-entrepreneur, IBAN pro). Dans Paramètres → Informations publiques, indiquer l'adresse des CGV : `https://sceau-faire-part.vercel.app/cgv/`.
+2. Catalogue de produits : créer **Essentiel** (99 €) et **Signature** (229 €), paiement unique.
+3. Pour chacun : **Créer un lien de paiement** → onglet « Après le paiement » → **Ne pas afficher la page de confirmation, rediriger vers votre site** : `https://sceau-faire-part.vercel.app/merci/`. Activer « Autoriser les codes promotionnels » si on fait l'offre de lancement (code créé dans Produits → Coupons).
+4. Copier les deux liens (`https://buy.stripe.com/...`, ce ne sont pas des secrets) dans `business/landing/paiement.js`, puis `python3 business/build-site.py`, commit et déploiement. Les boutons « Choisir » ouvrent alors la commande : récapitulatif, conditions de vente et renonciation au délai de rétractation cochées (gardées avec la demande dans `/admin/`, marquée « commande » avec sa référence), puis la page Stripe avec l'e-mail pré-rempli. La même référence apparaît dans Stripe (« client_reference_id »).
+
+## Réponses des invités
+
+Chaque invité peut changer sa réponse : sur le même téléphone, la fenêtre est pré-remplie ; après l'envoi, il reçoit un lien personnel (`?r=…`) qui permet de la modifier depuis un autre téléphone. La nouvelle réponse remplace l'ancienne dans le tableau de bord.
+
 ## Créer le faire-part d'un client
 
 1. Copier une démo proche : `cp business/invites/emma-louis.json business/invites/prenom1-prenom2.json`.
@@ -40,7 +51,6 @@ Les options : `opening` = `env` | `cur` | `door` ; `countdown` = `debut` | `page
 
 - Statut (micro-entreprise), compte pro, **Stripe** (liens de paiement) et factures.
 - Vérifier « Sceau » à l'INPI, acheter le nom de domaine, e-mail pro, WhatsApp Business.
-- Héberger les polices sur notre serveur au lieu de Google Fonts (RGPD).
 - Mesure d'audience sans cookie (Vercel Analytics ou Plausible).
 - Photos du couple (bloc à ajouter au moteur), version arabe (affichage de droite à gauche).
 - Faire relire les CGV par un juriste avant les premières ventes.

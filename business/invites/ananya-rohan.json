@@ -1,0 +1,134 @@
+{
+  "slug": "ananya-rohan",
+  "demo": true,
+  "layout": "long",
+  "theme": "bollywood",
+  "couple": [
+    "Ananya",
+    "Rohan"
+  ],
+  "date": "2027-09-18T11:00",
+  "opening": "cur",
+  "palette": "#c0392b",
+  "countdown": "fin",
+  "music": "raga",
+  "intro": {
+    "eyebrow": "Shubh Vivah",
+    "text": "Ont la joie de vous inviter à célébrer leur union.",
+    "dateText": "Les 17 et 18 septembre 2027"
+  },
+  "parents": {
+    "names": [
+      "Famille Sharma",
+      "Famille Kapoor"
+    ],
+    "text": "ont l’immense joie de vous inviter aux noces de leurs enfants"
+  },
+  "events": [
+    {
+      "id": "mehndi",
+      "eyebrow": "Mehndi",
+      "title": "L’après-midi du henné",
+      "start": "2027-09-17T14:00",
+      "place": "Domaine de la Roseraie, la cour",
+      "address": "Rambouillet, France",
+      "note": "Couleurs vives bienvenues"
+    },
+    {
+      "id": "ceremonie",
+      "eyebrow": "Cérémonie",
+      "title": "Sous le mandap",
+      "start": "2027-09-18T11:00",
+      "place": "Domaine de la Roseraie, les jardins",
+      "address": "Rambouillet, France",
+      "note": "Arrivée du marié en baraat à 10h30"
+    },
+    {
+      "id": "sangeet",
+      "eyebrow": "Sangeet & réception",
+      "title": "Une nuit de danse",
+      "start": "2027-09-18T19:30",
+      "end": "2027-09-19T03:00",
+      "place": "Domaine de la Roseraie, la grande salle",
+      "address": "Rambouillet, France"
+    }
+  ],
+  "story": {
+    "title": "Notre histoire",
+    "items": [
+      {
+        "when": "2018",
+        "title": "La rencontre",
+        "text": "Le Diwali d’amis communs, une guirlande de lumières qui tombe, deux mains pour la rattraper."
+      },
+      {
+        "when": "2022",
+        "title": "Bombay",
+        "text": "Le premier voyage ensemble, chez les grands-parents."
+      },
+      {
+        "when": "2026",
+        "title": "Oui",
+        "text": "À Udaipur, face au lac, au coucher du soleil."
+      }
+    ]
+  },
+  "dress": {
+    "title": "Toutes les couleurs",
+    "text": "Couleurs vives bienvenues ! Évitez le blanc et le rouge, réservés aux mariés.",
+    "colors": [
+      "#e83f6f",
+      "#ffbf00",
+      "#2a9d8f",
+      "#7b2cbf"
+    ]
+  },
+  "infos": [
+    {
+      "icon": "hotel",
+      "title": "Hébergement",
+      "text": "Chambres au domaine et dans deux hôtels voisins."
+    },
+    {
+      "icon": "car",
+      "title": "Navettes",
+      "text": "Depuis Paris Montparnasse, les deux jours à midi."
+    },
+    {
+      "icon": "info",
+      "title": "Repas",
+      "text": "Cuisine végétarienne et non végétarienne."
+    },
+    {
+      "icon": "kids",
+      "title": "Enfants",
+      "text": "Bienvenus, avec un atelier henné rien que pour eux."
+    }
+  ],
+  "gifts": {
+    "text": "Votre présence est notre plus beau cadeau. Pour ceux qui le souhaitent, une cagnotte pour notre voyage.",
+    "url": "demo",
+    "label": "Participer"
+  },
+  "rsvp": {
+    "deadline": "2027-07-31",
+    "eyebrow": "RSVP",
+    "title": "Serez-vous des nôtres ?",
+    "yesText": "Préparez vos plus belles tenues !",
+    "noText": "Vous nous manquerez."
+  },
+  "families": {
+    "famille-sharma": {
+      "label": "Chère famille Sharma",
+      "seats": 5,
+      "table": "Table Jaipur"
+    },
+    "collegues": {
+      "label": "Chers collègues",
+      "seats": 2,
+      "events": [
+        "sangeet"
+      ]
+    }
+  }
+}
