@@ -39,7 +39,7 @@
 @keyframes rvlBulb{0%{fill:#fff6da}50%{fill:rgba(255,246,218,.35)}}
 .rvl-pin{position:absolute;left:50%;top:-6px;z-index:2;width:0;height:0;margin-left:-11px;border:11px solid transparent;border-bottom:0;border-top:20px solid var(--pd);filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
 .rvl-pin::after{content:"";position:absolute;left:-4px;top:-26px;width:8px;height:8px;border-radius:50%;background:#fff6da}
-.rvl-hub{position:absolute;left:50%;top:50%;width:max(34%,68px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;padding:0;border:3px solid var(--pl);
+.rvl-hub{position:absolute;left:50%;top:50%;width:max(32%,64px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;padding:0;border:3px solid var(--pl);
   background:radial-gradient(circle at 38% 32%,#fffdf7,#f1e6cc 70%,#dccb9f);color:var(--pd);font:700 max(11px,2.6cqw)/1 Inter,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;
   box-shadow:0 4px 12px rgba(0,0,0,.35),inset 0 -2px 4px rgba(0,0,0,.12);animation:rvlPulse 2s ease-in-out infinite;cursor:pointer}
 .rvl-hub:disabled{animation:none;cursor:default}

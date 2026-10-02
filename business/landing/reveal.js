@@ -94,7 +94,7 @@
     const pt=(a,r)=>{ const t=(a-90)*Math.PI/180; return `${(Math.cos(t)*r).toFixed(2)},${(Math.sin(t)*r).toFixed(2)}`; };
     const segs=list.map((d,i)=>{ const a0=i*seg-seg/2, a1=i*seg+seg/2, odd=i%2, fill=odd?ivory:o.pal, ink=odd?dark:ivory;
       return `<g class="rvl-seg${i===win?' rvl-win':''}"><path d="M0,0 L${pt(a0,88)} A88,88 0 0,1 ${pt(a1,88)} Z" fill="${fill}"/>`+
-        `<g transform="rotate(${i*seg})" fill="${ink}"><text y="-63" class="rvl-d">${esc(P.dd(d))}</text><text y="-46" class="rvl-m">${esc(P.short[P.month])}</text></g></g>`; }).join('');
+        `<g transform="rotate(${i*seg})" fill="${ink}"><text y="-71" class="rvl-d">${esc(P.dd(d))}</text><text y="-54" class="rvl-m">${esc(P.short[P.month])}</text></g></g>`; }).join('');
     const bulbs=Array.from({length:16},(_,i)=>`<circle class="rvl-bulb" cx="${pt(i*22.5,94).split(',')[0]}" cy="${pt(i*22.5,94).split(',')[1]}" r="2.6"/>`).join('');
     root.querySelector('.rvl-game').innerHTML=`<div class="rvl-wheel"><div class="rvl-pin"></div>`+
       `<svg viewBox="-100 -100 200 200" aria-hidden="true"><circle r="99" fill="${shade(o.pal,.62)}"/><circle r="94" fill="none" stroke="${tint(o.pal,.35)}" stroke-width="7"/>${bulbs}<g class="rvl-rot">${segs}</g></svg>`+

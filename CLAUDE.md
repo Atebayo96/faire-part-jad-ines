@@ -90,8 +90,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
       d'abord, ondule pendant la traction (`skewY`) puis se pose (`opSheerL/R`). Jamais une courbe uniforme d'un bout
       à l'autre : l'utilisateur trouvait les mouvements « pas naturels », « un détail qui a son importance ».
       Portes 10 % plus lentes (2,9 s) et sans trait lumineux vertical entre les battants (retiré, « moche »).
-      La lumière des portes ne traîne pas : 1,9 s en tout (pic à 0,8 s), finie quand les battants commencent à
-      s'effacer (`gone` 1,95 s, fondu 0,7 s) : « dès que ça commence à partir, plus d'animation ».
+      La lumière des portes ne traîne pas : « dès que ça commence à partir, plus d'animation ». Puis l'utilisateur a
+      encore vu « le halo qui reste » sur la page (démo Nour & Ilyes) : la lueur `.op-glow` montait à 0,9 et y
+      restait jusqu'au fondu final. Désormais **toutes** les lumières des portes s'éteignent d'elles-mêmes avant
+      1,4 s : lueur `opGlow` (monte puis redescend à 0, 1,3 s), salle `opRoom` (1 s), flash `flashDoor` (1,4 s),
+      `gone` 1,4 s avec fondu 0,5 s. Une lumière ne doit jamais rester allumée en `both` à son maximum.
     - **Portiers** (`doormen`) : retirés des démos (« pas ouf pour l'instant »), activables seulement avec
       `"doormen": true` dans la fiche. Les images `img/open/<thème>-portier.webp` restent.
 17. **La basmala est une calligraphie, pas une phrase.** « Bismillah » s'affiche avec la ligature `U+FDFD` (« ﷽ »)
