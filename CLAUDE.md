@@ -83,7 +83,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 17. **La basmala est une calligraphie, pas une phrase.** « Bismillah » s'affiche avec la ligature `U+FDFD` (« ﷽ »)
     de la police Amiri, comme sur le faire-part d'Inès & Jad (`window.SCEAU_BASMALA` dans `themes.js`), jamais
     lettre à lettre ni en capitales espacées.
-18. **Tout bloc centré l'est explicitement.** Dans la mise en page continue, `.lg-hero-txt` n'est pas une colonne
+18. **Page par page = continu avec des changements de décor, jamais un saut.** Sur tactile, le doigt entraîne la page
+    (défilement natif, élan compris) et elle se cale doucement (`scroll-snap-type: y proximity`, jamais `mandatory`,
+    jamais de `preventDefault` sur le geste suivi d'un saut animé : l'utilisateur a refusé le « swipe brusque »).
+    Le décor suivant se fond par-dessus le précédent pendant tout le glissement (calques `.bgl` dans le moteur,
+    `.cp-bg` dans le configurateur), les textes restent lisibles jusqu'à |d| ≈ 0,8 et glissent avec la page.
+    Molette et clavier : un glissement lent (1,1 s) qui démarre et finit en douceur. Même règle dans l'aperçu du
+    configurateur (`.pv-scroll`).
+19. **Tout bloc centré l'est explicitement.** Dans la mise en page continue, `.lg-hero-txt` n'est pas une colonne
     flex : une ligne `display:flex` (la date entre ses deux filets) s'y collait au bord gauche. Toujours vérifier le
     centrage sur une capture, à 390 px **et** à 440 px (la date tient alors sur une ligne).
 16. **Une seule séquence par ouverture**, définie dans `invite.js` (`SEQ`) et recopiée telle quelle dans le
@@ -106,6 +113,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 - Règle : **à chaque push, pousser aussi `main`** en avance rapide sur le même commit :
   `git push origin HEAD:main` (après `git push -u origin <branche>`). `main` doit toujours être un ancêtre de la branche
   de travail ; si ce n'est plus le cas, fusionner d'abord `main` dans la branche (jamais de force-push).
+- **Autorisation permanente** : tant que Sceau ne vend pas encore, toute modification part en prod **sans demander**
+  et sans action manuelle. On ne pose pas la question, on pousse la branche de travail ET `main`, à chaque fois.
 - Si la prod doit partir sans attendre, l'API Vercel (`create_deployment`, `target: production`, `gitSource` = le commit)
   déploie ce commit en production ; `request_promote` d'un aperçu est refusé (422) sur ce projet.
 

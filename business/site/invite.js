@@ -360,18 +360,23 @@
       const u=transUrl(film_.tr.key,k); if(film._u!==u){ film._u=u; film.style.backgroundImage=`url('${u}')`; }
       film.style.opacity=Math.min(1,film_.f/.08,(1-film_.f)/.08).toFixed(3); filmOn=true;
     } else if(filmOn){ film.style.opacity=0; filmOn=false; }
+    // les textes restent lisibles pendant la plus grande partie du glissement et ne s'estompent que près du bord :
+    // on ne doit pas sentir un « changement de page », seulement le décor qui change
     secs.forEach((s,i)=>{
       const d=D[i];
-      if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.12)*1.9)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
+      if(s.offsetHeight<=h*1.05){ const a=Math.max(0,Math.min(1,1-(Math.abs(d)-.35)*2.2)); s.style.opacity=a.toFixed(3); if(!reduce) s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; }
     });
   }
   sc.addEventListener('scroll',()=>{ if(!ticking){ ticking=true; requestAnimationFrame(frame); } },{passive:true});
   frame();
 
-  /* ---------- pagination, comme le faire-part d'Inès & Jad ----------
-     un swipe (ou un cran de molette, ou une flèche) = la scène suivante glisse en douceur
-     et se cale pile en plein écran ; une page plus haute que l'écran se lit en plusieurs crans */
-  const PAGE_DUR=900, PAGE_DUR_FILM=1600, easePage=t=>1-Math.pow(1-t,3), easeFilm=t=>.5-Math.cos(Math.PI*t)/2;
+  /* ---------- pagination ----------
+     Tactile : défilement natif, CONTINU. Le doigt entraîne la page, l'élan la porte, et elle se cale doucement en
+     plein écran grâce au scroll-snap « proximity » (invite.css). Le geste n'est jamais bloqué ni remplacé par un saut
+     animé : l'utilisateur a refusé le swipe brusque (« comme si c'était en continu, avec des changements de décor »).
+     Molette et clavier : un cran = la scène suivante, en un glissement lent qui démarre et finit en douceur ;
+     une page plus haute que l'écran se lit en plusieurs crans */
+  const PAGE_DUR=1100, PAGE_DUR_FILM=1600, easePage=t=>.5-Math.cos(Math.PI*t)/2, easeFilm=t=>.5-Math.cos(Math.PI*t)/2;
   let paging=false;
   function stops(){
     const h=sc.clientHeight, max=sc.scrollHeight-h, out=[];
@@ -381,11 +386,12 @@
   }
   function glide(to,slow){
     const from=sc.scrollTop; if(Math.abs(to-from)<2) return;
-    // un passage filmé d'un décor à l'autre prend un peu plus de temps, pour qu'on voie le voyage
-    paging=true; const t0=performance.now(), dur=reduce?1:slow?PAGE_DUR_FILM:PAGE_DUR;
+    // un passage filmé d'un décor à l'autre prend un peu plus de temps, pour qu'on voie le voyage.
+    // Pendant le glissement, le snap natif est coupé : sinon il « saute » sur la page dès qu'on s'en approche
+    paging=true; sc.style.scrollSnapType='none'; const t0=performance.now(), dur=reduce?1:slow?PAGE_DUR_FILM:PAGE_DUR;
     const ez=slow?easeFilm:easePage;
     (function step(now){ const p=Math.min(1,(now-t0)/dur); sc.scrollTop=from+(to-from)*ez(p);
-      if(p<1) requestAnimationFrame(step); else paging=false; })(t0);
+      if(p<1) requestAnimationFrame(step); else { paging=false; sc.style.scrollSnapType=''; } })(t0);
   }
   function go(dir){
     if(!opened||paging) return;
@@ -396,16 +402,25 @@
     const ra=at(cur), rb=at(to);
     glide(to,ra!==rb&&!!transOf(runs[ra].n,runs[rb].n));
   }
-  function settle(){ if(!opened||paging||LG) return; const cur=sc.scrollTop, st=stops(); glide(st.reduce((b,y)=>Math.abs(y-cur)<Math.abs(b-cur)?y:b,st[0])); }
-  // tactile : le défilement natif est bloqué, c'est le relâcher du swipe qui lance le glissement
-  let tY=null, tX=null;
-  sc.addEventListener('touchstart',e=>{ tY=e.touches[0].clientY; tX=e.touches[0].clientX; },{passive:true});
-  sc.addEventListener('touchmove',e=>{ if(opened&&!LG) e.preventDefault(); },{passive:false});
-  sc.addEventListener('touchend',e=>{
-    if(tY===null||LG) return; const dy=tY-e.changedTouches[0].clientY, dx=tX-e.changedTouches[0].clientX; tY=tX=null;
-    if(Math.abs(dy)<32||Math.abs(dy)<Math.abs(dx)) return;   // tap ou geste horizontal : on ne bouge pas
-    go(dy>0?1:-1);
-  },{passive:true});
+  // calage : on termine le mouvement dans le sens du geste (dès 12 % de chemin parcouru), sinon vers la page la plus proche
+  let lastTop=0, dir=1;
+  function settle(){
+    if(!opened||paging||LG) return; const cur=sc.scrollTop, st=stops();
+    const prev=st.slice().reverse().find(y=>y<=cur+2), next=st.find(y=>y>cur+2); let to;
+    if(prev==null) to=next; else if(next==null) to=prev; else { const f=(cur-prev)/(next-prev); to=dir>0?(f>.12?next:prev):(f<.88?prev:next); }
+    if(to!=null) glide(to);
+  }
+  // tactile : le défilement natif fait le travail (le doigt entraîne la page, l'élan la porte, le snap « proximity »
+  // la cale quand elle est proche d'une page). Si le geste s'arrête entre deux pages, un calage doux (le même
+  // glissement lent que la molette) termine le mouvement une fois le doigt levé et l'élan fini : jamais de page
+  // à moitié. Avant l'ouverture, on ne défile pas.
+  let touching=false, settleT=null;
+  const armSettle=()=>{ clearTimeout(settleT); settleT=setTimeout(()=>{ if(!touching&&!paging&&opened&&!LG) settle(); },160); };
+  sc.addEventListener('touchstart',()=>{ touching=true; clearTimeout(settleT); },{passive:true});
+  sc.addEventListener('touchmove',e=>{ if(!opened) e.preventDefault(); },{passive:false});
+  sc.addEventListener('touchend',()=>{ touching=false; armSettle(); },{passive:true});
+  sc.addEventListener('touchcancel',()=>{ touching=false; armSettle(); },{passive:true});
+  sc.addEventListener('scroll',()=>{ const t=sc.scrollTop; if(t!==lastTop) dir=t>lastTop?1:-1; lastTop=t; if(!touching&&!paging) armSettle(); },{passive:true});
   // molette / trackpad : un geste = une page (l'inertie du trackpad ne fait pas sauter plusieurs pages)
   let lastWheel=0, wheelUsed=false;
   sc.addEventListener('wheel',e=>{

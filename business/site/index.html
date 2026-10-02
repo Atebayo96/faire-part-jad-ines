@@ -284,7 +284,8 @@
   .pv-tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
   .pv-close{position:absolute;top:14px;right:16px;background:none;border:0;color:var(--ink);font:300 34px/1 Inter,sans-serif;cursor:pointer}
   .pv-phone{height:min(86vh,760px);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);background:#000;flex:none}
-  .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}
+  /* défilement continu : le doigt entraîne la page, elle se cale doucement (proximity, jamais mandatory : « swipe brusque ») */
+  .pv-scroll{height:100%;overflow-y:auto;scroll-snap-type:y proximity;scrollbar-width:none;overscroll-behavior:contain}
   .pv-scroll::-webkit-scrollbar{display:none}
   /* même échelle de lecture que le moteur (invite.css) : chapeaux 13 px, texte 17 px et plus, rien sous 11 px */
   .pv-sc{position:relative;height:100%;scroll-snap-align:start;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
@@ -328,8 +329,13 @@
   .comp-prev{display:grid;justify-items:center;gap:16px}
   .cp-phone{position:relative;width:min(300px,78vw);aspect-ratio:9/19.5;border-radius:34px;overflow:hidden;border:8px solid #111;background:#111;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
   .cp-tint{position:absolute;inset:0;mix-blend-mode:soft-light;opacity:.55;transition:background .4s;pointer-events:none;z-index:2}
-  .cp-phone .pv-scroll{position:absolute;inset:0}
-  .cp-phone .pv-sc{padding-top:14%}
+  /* décors du configurateur : des calques fixes derrière les pages, le suivant se fond par-dessus le précédent au fil du
+     défilement (comme le moteur, invite.css .bgl) : on ne « change pas de page », le décor change en continu */
+  .cp-bgs{position:absolute;inset:0;z-index:0;overflow:hidden;background:#111}
+  .cp-bg{position:absolute;inset:-4% 0;background:center/cover no-repeat;opacity:0;will-change:opacity,transform}
+  .cp-bg:first-child{opacity:1}
+  .cp-phone .pv-scroll{position:absolute;inset:0;z-index:1}
+  .cp-phone .pv-sc{padding-top:14%;background:none;will-change:opacity,transform}
   .cp-phone .pv-sc .nm{margin:14px 0 10px}
   .cp-phone .pv-sc .tx{font-size:17px}
   .cd{display:flex;justify-content:center;gap:16px;margin-top:24px}
@@ -683,6 +689,7 @@
       </form>
       <div class="comp-prev">
         <div class="cp-phone" id="cpPhone">
+          <div class="cp-bgs" id="cpBgs" aria-hidden="true"></div>
           <div class="pv-scroll" id="cpScroll" aria-label="Aperçu de votre faire-part"></div>
           <div class="cp-tint" id="cpTint"></div>
           <div class="op" id="cpOp" role="button" tabindex="0" aria-label="Ouvrir le faire-part">
@@ -1045,6 +1052,30 @@
     $('cpScroll').querySelectorAll('.cd b').forEach(b=>{ b.textContent=String(v[b.dataset.u]).padStart(b.dataset.u==='d'?1:2,'0'); });
   }
   setInterval(tick,1000);
+  /* défilement continu de l'aperçu, comme le moteur (invite.js, frame()) : pendant le glissement, le décor suivant se fond
+     par-dessus le précédent et les textes glissent et s'estompent doucement selon leur position. Rien ne saute. */
+  let cpRuns=[], cpTick=false;
+  function cpFrame(){
+    cpTick=false; const sc=$('cpScroll'), h=sc.clientHeight; if(!h) return;
+    const secs=[...sc.querySelectorAll('.pv-sc')], layers=[...$('cpBgs').children], mid=sc.scrollTop+h/2, ease=x=>x*x*(3-2*x);
+    const D=secs.map(s=>(mid-(s.offsetTop+Math.min(s.offsetHeight,h)/2))/h);
+    cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!L) return; const d0=D[r.a], d1=D[r.b];
+      L.style.opacity=ri===0?1:ease(Math.max(0,Math.min(1,1+d0*1.15))).toFixed(3);
+      L.style.transform=`translate3d(0,${(-(d0<0?d0:d1>0?d1:0)*3).toFixed(2)}%,0)`; });
+    secs.forEach((s,i)=>{ const d=D[i]; if(s.offsetHeight<=h*1.05){ s.style.opacity=Math.max(0,Math.min(1,1-(Math.abs(d)-.35)*2.2)).toFixed(3); s.style.transform=`translate3d(0,${(-d*28).toFixed(1)}px,0)`; } });
+  }
+  $('cpScroll').addEventListener('scroll',()=>{ if(!cpTick){ cpTick=true; requestAnimationFrame(cpFrame); } },{passive:true});
+  addEventListener('resize',cpFrame);
+  // si le geste s'arrête entre deux pages (le snap « proximity » ne cale que près d'une page) : calage doux une fois le doigt levé
+  // (dans le sens du geste dès 12 % de chemin parcouru, sinon vers la page la plus proche ; mêmes règles que invite.js)
+  { const sc=$('cpScroll'); let touching=false, st=null, lastTop=0, dir=1;
+    const arm=()=>{ clearTimeout(st); st=setTimeout(()=>{ if(touching) return; const y=sc.scrollTop, tops=[...sc.querySelectorAll('.pv-sc')].map(s=>s.offsetTop);
+      const prev=tops.slice().reverse().find(t=>t<=y+2), next=tops.find(t=>t>y+2); let to;
+      if(prev==null) to=next; else if(next==null) to=prev; else { const f=(y-prev)/(next-prev); to=dir>0?(f>.12?next:prev):(f<.88?prev:next); }
+      if(to!=null&&Math.abs(to-y)>2) sc.scrollTo({top:to,behavior:'smooth'}); },180); };
+    sc.addEventListener('touchstart',()=>{ touching=true; clearTimeout(st); },{passive:true});
+    sc.addEventListener('touchend',()=>{ touching=false; arm(); },{passive:true});
+    sc.addEventListener('scroll',()=>{ const t=sc.scrollTop; if(t!==lastTop) dir=t>lastTop?1:-1; lastTop=t; if(!touching) arm(); },{passive:true}); }
   function paint(){
     const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
     $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
@@ -1067,7 +1098,7 @@
     const names=t.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
     const page=(img,mode,inner,extra)=>{ const dk=mode==='dark', lt=t.light&&!dk;
       const c={nm:lt?t.color:'#fff',ey:lt?(t.ey||t.color):'#fff',tx:lt?(t.tx||t.color):'#fff'};
-      return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" style="${esc(`background-image:url('img/themes/${C.k}-${img}.webp');${extra||''}`)}">${h(c)}</section>`}; };
+      return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(`img/themes/${C.k}-${img}.webp`)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     const pages=[];
     // 1. prenoms + date (+ compte a rebours au debut)
     { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');
@@ -1096,6 +1127,10 @@
     xp('table',4,m4,c=>hd(c,'Le jour J','Votre table')+`<div class="tx" style="color:${c.tx};position:relative;font-size:26px;margin-top:6px">La table des Roses</div><div class="tx" style="color:${c.tx};position:relative;font-size:13px">Chaque famille voit sa table sur son lien personnel.</div>`);
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML=pages.join(''); sc.scrollTop=st; tick();
+    // décors : un calque par suite de pages qui partagent la même image (comme les « runs » du moteur)
+    cpRuns=[]; [...sc.querySelectorAll('.pv-sc')].forEach((s,i)=>{ const r=cpRuns[cpRuns.length-1]; if(r&&r.img===s.dataset.img) r.b=i; else cpRuns.push({img:s.dataset.img,a:i,b:i}); });
+    $('cpBgs').innerHTML=cpRuns.map(r=>`<div class="cp-bg" style="background-image:url('${esc(r.img)}')"></div>`).join('');
+    cpFrame();
     $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; if($('cN1').value!==$('cN1').defaultValue||$('cN2').value!==$('cN2').defaultValue) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', '); if($('cDate').value&&$('cDate').value!==$('cDate').defaultValue){ $('fDate').type='date'; $('fDate').value=$('cDate').value; }
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
