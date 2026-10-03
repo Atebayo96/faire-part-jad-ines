@@ -695,6 +695,9 @@
   .feat li{display:flex;align-items:flex-start;gap:12px;padding:10px 0}
   .feat svg{flex:none;width:22px;height:22px;margin-top:1px;color:var(--ink)}
   .feat span{flex:1} .feat b{font-weight:500}
-  .feat em{font:500 10px/1 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;font-style:normal;color:var(--bg);background:var(--ink);padding:5px 6px;border-radius:2px;margin-top:3px}
-  .feat li:not(.plus) svg{color:var(--muted)}
+  /* « Tout Essentiel + » : la formule précédente est comprise, en bloc, puis la liste de ce qui s'ajoute */
+  .feat li.feat-incl{position:relative;display:flex;align-items:baseline;gap:10px;background:var(--bg-2);padding:14px 16px;margin:0 0 14px;border:0}
+  .feat li.feat-incl b{font:500 16px "Inter Tight",Inter,sans-serif} .feat li.feat-incl span{flex:1;color:var(--muted);font-size:14px}
+  .feat li.feat-incl i{position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);font:500 18px/28px Inter,sans-serif;text-align:center;font-style:normal}
+  .feat li.feat-incl+li{margin-top:14px;border-top:0}
   .next li{font-size:14px} .sum div{font-size:14px}

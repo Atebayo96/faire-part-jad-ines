@@ -175,8 +175,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     le lieu du thème en fond avec un appareil photo dans une pastille blanche, pas une case grise. Le configurateur
     propose **tous** les thèmes, les 10 « sur mesure » dans un second groupe (l'aperçu montre leur tableau avec les
     prénoms, la demande part au contact). L'ouverture se choisit à l'étape 1, avec le thème. Dix couleurs, pas cinq.
-    Les listes des formules portent une icône par ligne et l'étiquette « en plus » sur ce qu'une formule ajoute à la
-    précédente : la différence doit sauter aux yeux sans lire. Plus de section de photos de personnes « Fait pour ceux
+    Les listes des formules portent une icône par ligne ; Signature et Couture commencent par un bloc « Tout Essentiel »
+    / « Tout Signature » suivi d'un rond « + », puis la liste de ce qui s'ajoute (pas d'étiquette « en plus » par ligne,
+    refusée) : on comprend que chaque formule contient la précédente. Plus de section de photos de personnes « Fait pour ceux
     que vous aimez » sur l'accueil (« ne sert plus à rien »).
 
 ## Méthode
