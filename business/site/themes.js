@@ -38,30 +38,30 @@ window.SCEAU_THEMES={
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
 };
 
-/* styles par communauté : uniquement en mise en page continue (long:true), hors du configurateur « scène après scène »
-   (ils n'ont pas de décors de scènes img/hd). Images : business/landing/img/long/<thème>/ (tools/long-gen.py puis long-assets.py). */
+/* univers culturels : d'abord faits en grand tableau continu (long:true, démos dans img/long/<thème>/), ils ont aussi leurs décors de
+   scènes (tools/scenes-long.py) et se composent comme les autres, à partir de la formule Signature (plan). */
 Object.assign(window.SCEAU_THEMES,{
-  chinois:{name:"Double bonheur",style:"Chinois",short:"Lanternes rouges, pavillon, pruniers",desc:"Pavillon aux lanternes rouges, pont sur l'étang aux lotus, pruniers en fleurs. Pour un mariage chinois ou le Nouvel an.",couple:"Lin & Wei",long:true,
+  chinois:{name:"Double bonheur",style:"Chinois",short:"Lanternes rouges, pavillon, pruniers",desc:"Pavillon aux lanternes rouges, pont sur l'étang aux lotus, pruniers en fleurs. Pour un mariage chinois ou le Nouvel an.",couple:"Lin & Wei",long:true,plan:"signature",
     font:'"Cinzel",serif',color:"#fff",upper:true,size:.8,gf:"Cinzel",music:"nocturne",particles:"none",
-    scenes:[["Nous nous marions","NAMES",""],["La cérémonie du thé","",""],["Le banquet","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
-  japonais:{name:"Sakura",style:"Japonais",short:"Cerisiers, torii, ombrelle rouge",desc:"Cerisiers en fleurs, torii vermillon et mont Fuji, dans la douceur d'une estampe.",couple:"Hana & Kenji",long:true,light:true,
+    scenes:[["Nous nous marions", "NAMES", "Samedi 13 février 2027"], ["La cérémonie du thé", "Au pavillon", "11h00 · Pavillon des lotus", "Itinéraire"], ["Le banquet", "Sous les lanternes rouges", "Dès 19h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 janvier", "Répondre"]]},
+  japonais:{name:"Sakura",style:"Japonais",short:"Cerisiers, torii, ombrelle rouge",desc:"Cerisiers en fleurs, torii vermillon et mont Fuji, dans la douceur d'une estampe.",couple:"Hana & Kenji",long:true,plan:"signature",light:true,
     font:'"Zen Old Mincho",serif',color:"#2b2830",size:.82,gf:"Zen+Old+Mincho",music:"nocturne",particles:"none",
-    scenes:[["Nous nous marions","NAMES",""],["La cérémonie","",""],["La réception","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
-  gzhel:{name:"Gzhel",style:"Russe",short:"Porcelaine bleu cobalt, troïka, bouleaux",desc:"Tout en bleu cobalt sur porcelaine blanche : église à bulbes, troïka et roses de Gzhel.",couple:"Anastasia & Nikolaï",long:true,light:true,
+    scenes:[["Nous nous marions", "NAMES", "Samedi 3 avril 2027"], ["La cérémonie", "Au sanctuaire", "14h00 · Sous les cerisiers", "Itinéraire"], ["La réception", "Au ryokan", "Dès 18h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er mars", "Répondre"]]},
+  gzhel:{name:"Gzhel",style:"Russe",short:"Porcelaine bleu cobalt, troïka, bouleaux",desc:"Tout en bleu cobalt sur porcelaine blanche : église à bulbes, troïka et roses de Gzhel.",couple:"Anastasia & Nikolaï",long:true,plan:"signature",light:true,
     font:'"Cormorant Garamond",Georgia,serif',italic:true,color:"#1d3f9a",gf:"Cormorant+Garamond:ital,wght@0,500;1,400",music:"valse",particles:"none",
-    scenes:[["Nous nous marions","NAMES",""],["La cérémonie","",""],["Le dîner","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
-  asianchic:{name:"Laque & or",style:"Asian chic",short:"Laque noire, feuille d'or, orchidées",desc:"Laque noire, feuille d'or, jade et orchidées blanches : un chic asiatique moderne et épuré.",couple:"Linh & Thomas",long:true,
+    scenes:[["Nous nous marions", "NAMES", "Samedi 16 janvier 2027"], ["La cérémonie", "À la cathédrale", "15h00", "Itinéraire"], ["Le dîner", "Pain et sel", "Dès 19h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 décembre", "Répondre"]]},
+  asianchic:{name:"Laque & or",style:"Asian chic",short:"Laque noire, feuille d'or, orchidées",desc:"Laque noire, feuille d'or, jade et orchidées blanches : un chic asiatique moderne et épuré.",couple:"Linh & Thomas",long:true,plan:"signature",
     font:'"Bodoni Moda",serif',color:"#fff",italic:true,size:.86,gf:"Bodoni+Moda:ital@0;1",music:"nocturne",particles:"none",
-    scenes:[["Save the date","NAMES",""],["La cérémonie","",""],["Le dîner","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
-  y2k:{name:"Y2K",style:"Y2K",short:"Rose bonbon, chrome, papillons",desc:"Rose bonbon, chrome et papillons, décapotable rose : les années 2000 en version mariage.",couple:"Jade & Enzo",long:true,light:true,
+    scenes:[["Save the date", "NAMES", "Samedi 18 septembre 2027"], ["La cérémonie", "Au bord de l'eau", "16h00 · Pavillon de laque", "Itinéraire"], ["Le dîner", "Black tie", "Dès 20h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er août", "Répondre"]]},
+  y2k:{name:"Y2K",style:"Y2K",short:"Rose bonbon, chrome, papillons",desc:"Rose bonbon, chrome et papillons, décapotable rose : les années 2000 en version mariage.",couple:"Jade & Enzo",long:true,plan:"signature",light:true,
     font:'"Pacifico",cursive',color:"#4a1640",size:.8,gf:"Pacifico",music:"ragtime",particles:"none",
-    scenes:[["On se marie !","NAMES",""],["La cérémonie","",""],["La soirée","",""],["Tu viens ?","Serez-vous des nôtres ?",""]]},
-  oldmoney:{name:"Old money",style:"Old money",short:"Manoir, voiture ancienne, buis taillés",desc:"Un manoir anglais, une voiture ancienne et des buis taillés : l'élégance discrète.",couple:"Victoire & Charles",long:true,light:true,
+    scenes:[["On se marie !", "NAMES", "Samedi 26 juin 2027"], ["La cérémonie", "Mairie de Marseille", "15h00", "Itinéraire"], ["La soirée", "Rooftop & dance floor", "Dès 20h", "Itinéraire"], ["Tu viens ?", "Serez-vous des nôtres ?", "Avant le 1er juin", "Répondre"]]},
+  oldmoney:{name:"Old money",style:"Old money",short:"Manoir, voiture ancienne, buis taillés",desc:"Un manoir anglais, une voiture ancienne et des buis taillés : l'élégance discrète.",couple:"Victoire & Charles",long:true,plan:"signature",light:true,
     font:'"Playfair Display",Georgia,serif',italic:true,color:"#1f2b44",size:.86,gf:"Playfair+Display:ital@0;1",music:"valse",particles:"none",
-    scenes:[["Ils se marient","NAMES",""],["La cérémonie","",""],["Le dîner","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]},
-  afro:{name:"Kente",style:"Afro",short:"Kente, wax, baobab au crépuscule",desc:"Kente et wax, baobab au crépuscule, calebasses et cauris : la fête aux couleurs de l'Afrique.",couple:"Fatou & Kwame",long:true,
+    scenes:[["Ils se marient", "NAMES", "Samedi 12 juin 2027"], ["La cérémonie", "À la chapelle", "15h00 · Dans le parc", "Itinéraire"], ["Le dîner", "Sous la tente", "Dès 19h30", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er mai", "Répondre"]]},
+  afro:{name:"Kente",style:"Afro",short:"Kente, wax, baobab au crépuscule",desc:"Kente et wax, baobab au crépuscule, calebasses et cauris : la fête aux couleurs de l'Afrique.",couple:"Fatou & Kwame",long:true,plan:"signature",
     font:'"Abril Fatface",serif',color:"#fff",size:.82,gf:"Abril+Fatface",music:"marine",particles:"none",
-    scenes:[["Nous nous marions","NAMES",""],["La cérémonie","",""],["La fête","",""],["Réponse souhaitée","Serez-vous des nôtres ?",""]]}
+    scenes:[["Nous nous marions", "NAMES", "Samedi 21 août 2027"], ["La cérémonie", "Sous le dais de kente", "15h00", "Itinéraire"], ["La fête", "Sous le baobab", "Dès 20h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 juillet", "Répondre"]]}
 });
 
 /* complements utilises par le moteur de faire-part (invite.js) et le build */

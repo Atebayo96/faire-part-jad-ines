@@ -701,3 +701,6 @@
   .feat li.feat-incl i{position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);font:500 18px/28px Inter,sans-serif;text-align:center;font-style:normal}
   .feat li.feat-incl+li{margin-top:14px;border-top:0}
   .next li{font-size:14px} .sum div{font-size:14px}
+
+  .th.sig small{color:var(--ink);font-weight:500}
+  .k-c+.k-c{margin-left:4px}
