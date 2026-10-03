@@ -401,3 +401,12 @@ a{color:inherit}
 
 /* date à découvrir : voir reveal.css ; l'invitation à défiler garde son petit rebond une fois apparue */
 .hint.rvl-shown{animation:rvlIn .8s both,hint 2.4s ease-in-out .8s infinite}
+
+/* fusion rouleau + scène par scène : dans le rouleau continu, un événement qui a son lieu prend tout l'écran ; la scène se
+   fond dans le papier au-dessus et en dessous (masque), le texte se pose sur sa zone calme comme dans le scène par scène */
+.lg-scene{position:relative;min-height:100svh;background:center top/cover no-repeat;margin:4% 0 0;padding:13% 8% 0;display:flex;flex-direction:column;align-items:center;text-align:center;
+  -webkit-mask-image:linear-gradient(transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(transparent 0,#000 7%,#000 93%,transparent 100%)}
+.lg-scene .ey,.lg-scene .nm,.lg-scene .tx,.lg-scene .when{text-shadow:0 1px 10px rgba(0,0,0,.45)}
+.lg-scene.light .ey,.lg-scene.light .nm,.lg-scene.light .tx,.lg-scene.light .when{text-shadow:none}
+.lg-scene .b{color:inherit;border-color:currentColor}
+.lg-scene+.lg-in{padding-top:6%}
