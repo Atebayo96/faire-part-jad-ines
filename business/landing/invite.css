@@ -26,7 +26,9 @@ a{color:inherit}
 /* défilement libre et continu (même pour les faire-part en scènes) : aucun calage en plein écran, le doigt, la molette et
    le clavier font défiler normalement ; seul le décor change, fondu sur une longue bande (layoutStrip dans invite.js).
    L'utilisateur ne veut plus sentir de pages (« tu ne te rends pas compte que tu changes de page »). */
-.sc{position:absolute;inset:0;z-index:2;overflow-y:auto;scrollbar-width:none;overscroll-behavior:none;-webkit-overflow-scrolling:touch}
+.sc{position:absolute;inset:0;z-index:2;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;overscroll-behavior:none;-webkit-overflow-scrolling:touch}
+/* overflow-x:hidden : le décor agrandi (.bg scale) et les guirlandes (.lg-band img, 106 %) dépassent de quelques pixels ;
+   sans ça, sur PC, la molette horizontale décalait la page et montrait une bande noire à droite */
 .sc::-webkit-scrollbar{display:none}
 .pg{position:relative;height:100%;min-height:100%;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:13% 8% 0;}
 .pg.tall{height:auto;min-height:100%}

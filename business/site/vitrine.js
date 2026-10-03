@@ -1,0 +1,312 @@
+  document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',e=>{ document.getElementById('planSel').value=a.dataset.plan;
+    // formule payable en ligne : on ouvre la commande au lieu du formulaire de contact
+    const pay=(window.SCEAU_PAY||{})[a.dataset.plan]; if(pay){ e.preventDefault(); openOrder(a.dataset.plan,pay); } }));
+
+  /* commande : récapitulatif, conditions de vente et renonciation au délai de rétractation, puis paiement Stripe */
+  const PLANS={essentiel:{name:'Essentiel',price:'99 €'},signature:{name:'Signature',price:'229 €'}};
+  let ordPlan=null, ordLink=null;
+  const ord=document.getElementById('order'), $o=id=>document.getElementById(id);
+  function choicesText(){ const v=id=>($o(id)||{}).value||''; return [v('fStyle')&&'thème '+v('fStyle'), v('fOpen')&&'ouverture '+v('fOpen').toLowerCase(), v('fPal')&&'couleurs '+v('fPal').toLowerCase(), v('fEvents')&&'écrans : '+v('fEvents'), v('fScreens')&&'écrans en plus : '+v('fScreens').toLowerCase()].filter(Boolean).join(' · '); }
+  function openOrder(plan,link){
+    ordPlan=plan; ordLink=link; const P=PLANS[plan];
+    $o('ordT').textContent=`${P.name} · ${P.price}`;
+    const ch=choicesText(); $o('ordSub').textContent=ch?'Vos choix dans l’essai : '+ch+'. Tout reste modifiable ensuite.':'Vous choisirez le thème, les couleurs et les écrans avec nous juste après.';
+    $o('oPay').textContent=`Payer ${P.price} avec Stripe`;
+    const promo=(window.SCEAU_PAY||{}).promo; $o('ordNote').textContent=(promo?`Offre de lancement : saisissez le code ${promo} sur la page de paiement. `:'')+'Paiement sécurisé par Stripe. Vous recevez votre reçu par e-mail, puis nous vous écrivons pour recueillir vos lieux, horaires et textes.';
+    if(!$o('oName').value&&$o('fNames').value) $o('oName').value=$o('fNames').value;
+    ord.hidden=false; document.body.style.overflow='hidden'; setTimeout(()=>$o('oEmail').focus(),50);
+  }
+  function closeOrder(){ ord.hidden=true; document.body.style.overflow=''; }
+  $o('ordX').onclick=closeOrder; ord.addEventListener('click',e=>{ if(e.target===ord) closeOrder(); });
+  addEventListener('keydown',e=>{ if(e.key==='Escape'&&!ord.hidden) closeOrder(); });
+  $o('ordForm').addEventListener('submit',async e=>{
+    e.preventDefault(); const err=$o('oErr'), show=m=>{ err.textContent=m; err.hidden=false; };
+    const email=$o('oEmail').value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return show('Indiquez une adresse e-mail valide.');
+    if(!$o('oCgv').checked) return show('Merci d’accepter les conditions de vente.');
+    if(!$o('oWaiver').checked) return show('Cochez la case pour que nous puissions commencer la création dès votre paiement.');
+    err.hidden=true; const btn=$o('oPay'); btn.disabled=true; btn.textContent='Ouverture du paiement…';
+    const ref='sc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+    const v=id=>($o(id)||{}).value||'';
+    const body={type:'commande',ref,plan:ordPlan,email,name:$o('oName').value,date:$o('oDate').value,consent:true,cgv:true,waiver:true,
+      style:v('fStyle'),palette:v('fPal'),font:v('fFont'),opening:v('fOpen'),countdown:v('fCount'),screens:v('fScreens'),events:v('fEvents'),names:$o('oName').value,weddingDate:$o('oDate').value};
+    // on garde la trace de la commande et des cases cochées (preuve de la renonciation), sans bloquer le paiement
+    try{ await Promise.race([fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),new Promise(r=>setTimeout(r,2500))]); }catch(x){}
+    const u=new URL(ordLink); u.searchParams.set('prefilled_email',email); u.searchParams.set('client_reference_id',ref);
+    location.href=u.toString();
+  });
+  document.getElementById('waitForm').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const f=e.currentTarget, fd=new FormData(f), err=document.getElementById('fErr'), btn=f.querySelector('button');
+    const show=m=>{ err.textContent=m; err.hidden=false; };
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fd.get('email')||'')) return show('Indiquez une adresse e-mail valide.');
+    if(!document.getElementById('fConsent').checked) return show('Cochez la case pour que nous puissions vous recontacter.');
+    err.hidden=true; btn.disabled=true; btn.textContent='Envoi…';
+    const body=Object.fromEntries(fd); body.consent=true; body.names=body.name; body.weddingDate=body.date;
+    try{
+      const r=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      if(!r.ok) throw new Error(r.status);
+      f.style.display='none'; document.querySelector('.consent').style.display='none'; document.getElementById('ok').style.display='block';
+    }catch(x){ btn.disabled=false; btn.textContent='Réserver ma place'; show("L'envoi n'a pas fonctionné. Réessayez dans un instant."); }
+  });
+
+  /* apercu des themes : 4 scenes par theme, textes d'exemple */
+  /* 9 themes, 5 styles. font/color = typographie propre au theme ; light = fond clair (texte fonce, pas de voile) */
+  const THEMES=window.SCEAU_THEMES;
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  // chapeau : « Bismillah » s'écrit en arabe (basmala, voir themes.js), de droite à gauche, comme dans le faire-part
+  function eyHtml(cls,t,st){ const e=window.sceauEy(t); return `<div class="${cls}${e.ar?' ar':''}"${e.ar?` lang="ar" dir="rtl" aria-label="${esc(window.SCEAU_BASMALA_LABEL)}"`:''} style="${st}">${esc(e.text)}</div>`; }
+  function nameStyle(t,scale){
+    const sz=(t.size||1)*scale;
+    return `font-family:${t.font};color:${t.color};font-size:clamp(${Math.round(34*sz)}px,${(5.2*sz).toFixed(2)}vh,${Math.round(54*sz)}px);${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.14em;font-weight:300;':''}`;
+  }
+  /* les 4 scenes d'une creation, empilees dans un film (aucun defilement a l'interieur du telephone) */
+  function film(t,eager){
+    const ey=t.ey||t.color, tx=t.tx||t.color;
+    return '<div class="film">'+t.scenes.map((sc,i)=>{
+      const [e,main,x,bt,mode]=sc, dk=mode==='dark';
+      const tt=dk?Object.assign({},t,{color:'#fff'}):t, ey2=dk?'#fff':ey, tx2=dk?'#fff':tx;
+      const nmTxt=main==='NAMES'?(t.stack?t.couple.split(' & ').map(esc).join('<br>&amp; '):esc(t.couple)):esc(main);
+      const big=`<div class="nm" style="${esc(nameStyle(tt,main==='NAMES'?1:.78))}">${nmTxt}</div>`;
+      return `<div class="pv-sc${t.light&&!dk?' light':''}" style="${i===0&&t.top1?'padding-top:'+t.top1:''}"><img class="bg" src="${esc(t.img(i+1))}" alt="" width="540" height="954" decoding="async"${eager&&i===0?'':' loading="lazy"'}>${eyHtml('ey',e,`color:${ey2}`)}${big}<div class="tx" style="color:${tx2}">${esc(x)}</div>${bt?`<span class="bt" style="color:${tx2};border-color:${tx2}">${esc(bt)}</span>`:''}</div>`;
+    }).join('')+'</div>';
+  }
+
+  /* haut de page : tous nos faire-part dans un seul téléphone. L'utilisateur ne veut plus deux types présentés à part
+     (« grand tableau » contre « scène par scène ») : c'est le même produit, plus ou moins dessiné selon les écrans. */
+  // les styles « long » n'existent qu'en grand tableau (pas de décors de scènes) : hors des listes scène après scène
+  const KEYS=Object.keys(THEMES).filter(k=>!THEMES[k].long), DEMOS0=window.SCEAU_DEMOS||[];
+  const LONGS=[
+    {slug:'nour-ilyes',k:'nuits',couple:'Nour & Ilyes',ey:'Bismillah',date:'Du 8 au 10 juillet 2027 · Marrakech',ink:'#f6eedb',shadow:'0 2px 14px rgba(0,0,0,.55)',desc:'Henné, cérémonie et fête dans le désert',alt:'un riad de nuit, le couple de dos sur un balcon'},
+    {slug:'ananya-rohan',k:'bollywood',couple:'Ananya & Rohan',ey:'Shubh Vivah',date:'Les 17 et 18 septembre 2027',ink:'#6b1230',shadow:'0 1px 10px rgba(255,236,214,.7)',desc:'Mehndi, mandap et sangeet',alt:'un palais du Rajasthan au crépuscule, le couple de dos'},
+    {slug:'chiara-lucas',k:'dolcevita',couple:'Chiara & Lucas',ey:'Ci sposiamo',date:'Samedi 5 juin 2027 · Ravello',ink:'#193f64',shadow:'0 1px 12px rgba(255,255,255,.8)',desc:'Aperitivo, chapelle et dîner face à la mer',alt:'la côte amalfitaine, le couple de dos sous une pergola de citrons'},
+    {slug:'lin-wei',k:'chinois',couple:'Lin & Wei',ey:'Double bonheur',date:'Samedi 13 février 2027 · Paris',ink:'#fbeedd',shadow:'0 2px 14px rgba(0,0,0,.6)',desc:'Cérémonie du thé, oui et banquet',alt:'un pavillon aux lanternes rouges, le couple de dos sur un pont'},
+    {slug:'hana-kenji',k:'japonais',couple:'Hana & Kenji',ey:'Nous nous marions',date:'Samedi 3 avril 2027 · Kyoto',ink:'#2b2830',shadow:'0 1px 10px rgba(255,250,240,.85)',desc:'Sanctuaire, hanami et ryokan',alt:'des cerisiers et un torii, le couple de dos sous une ombrelle rouge'},
+    {slug:'anastasia-nikolai',k:'gzhel',couple:'Anastasia & Nikolaï',ey:'Nous nous marions',date:'Samedi 16 janvier 2027 · Paris',ink:'#1d3f9a',shadow:'0 1px 10px rgba(255,255,255,.9)',desc:'Cathédrale, pain et sel, dîner',alt:'une troïka dans la neige, peinte en bleu cobalt'},
+    {slug:'linh-thomas',k:'asianchic',couple:'Linh & Thomas',ey:'Save the date',date:'Samedi 18 septembre 2027 · Paris',ink:'#f2e7cf',shadow:'0 2px 14px rgba(0,0,0,.7)',desc:'Cérémonie au bord de l’eau, dîner black tie',alt:'un pavillon de laque noire et d’or, le couple de dos au bord d’un bassin'},
+    {slug:'jade-enzo',k:'y2k',couple:'Jade & Enzo',ey:'On se marie !',date:'Samedi 26 juin 2027 · Marseille',ink:'#4a1640',shadow:'0 1px 10px rgba(255,240,248,.85)',desc:'Mairie, apéro et dance floor',alt:'une décapotable rose sur un boulevard pastel'},
+    {slug:'victoire-charles',k:'oldmoney',couple:'Victoire & Charles',ey:'Ils se marient',date:'Samedi 12 juin 2027 · Normandie',ink:'#1f2b44',shadow:'0 1px 10px rgba(255,252,244,.9)',desc:'Chapelle, pelouse et dîner sous la tente',alt:'un manoir anglais et une voiture ancienne'},
+    {slug:'fatou-kwame',k:'afro',couple:'Fatou & Kwame',ey:'Nous nous marions',date:'Samedi 21 août 2027 · Paris',ink:'#fbeedb',shadow:'0 2px 14px rgba(0,0,0,.6)',desc:'La dot, le oui et la fête',alt:'un pavillon drapé de kente sous un baobab'}
+  ];
+  // cartes de la section « Un seul grand tableau » : la même liste
+  document.getElementById('contGrid').innerHTML=LONGS.map(l=>`<a class="cont" href="/d/${l.slug}/" target="_blank" rel="noopener"><div class="pic"><img src="/img/long/${l.k}/thumb.webp" alt="${esc('Le faire-part '+THEMES[l.k].name+' : '+l.alt)}" loading="lazy" width="480" height="768"></div><div class="txt"><b>${esc(THEMES[l.k].name)}</b><span>${esc(l.couple+' · '+l.desc)}</span><em>Ouvrir l'exemple →</em></div></a>`).join('');
+  const CREAS=LONGS.map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:t.name,font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`/img/reel/long-${l.k}.webp`}); });
+  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long');
+    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=4`})); });
+  // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
+  CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
+    couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`/img/reel/yk-${i}.webp`,
+    scenes:[["Ils se marient","NAMES","Samedi 12 juin 2027"],["Cérémonie civile","Hôtel de Ville de Nanterre","À 14h00","Itinéraire","dark"],["Réception","Le Palacio","Dès 19h · cocktail, dîner et soirée","Itinéraire","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre","dark"]]});
+  function roll(c,eager){
+    const tt={font:c.font,color:c.ink,size:c.size,italic:c.italic,upper:c.upper};
+    return `<div class="roll"><img src="${esc(c.img())}" alt="" width="540" height="2176" decoding="async"${eager?'':' loading="lazy"'}></div><div class="roll-txt" style="color:${c.ink};text-shadow:${c.shadow}">${eyHtml('ey',c.ey,'')}<div class="nm" style="${esc(nameStyle(tt,1))}">${esc(c.couple)}</div><div class="tx">${esc(c.date)}</div></div>`;
+  }
+  // un seul téléphone pour tous nos faire-part : il montre un exemple à la fois et passe tout seul au suivant
+  const noMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let inView=true;
+  const warm=it=>it&&it.querySelectorAll('img[loading]').forEach(im=>im.removeAttribute('loading'));
+  const cols=[...document.querySelectorAll('.duo-col')].map(col=>{
+    const list=CREAS.filter(c=>col.dataset.kind==='all'||c.kind===col.dataset.kind), ph=col.querySelector('.duo-ph');
+    const items=list.map((c,i)=>{
+      const it=document.createElement('a'); it.className='car-item'; it.dataset.f=0; it.setAttribute('aria-label','Ouvrir la démo '+c.label);
+      it.href=c.href||'#modeles'; if(c.href){ it.target='_blank'; it.rel='noopener'; }
+      it.innerHTML=(c.kind==='long'?roll(c,i===0):film(c,i===0))+`<span class="car-tag">${esc(c.tag)}</span>`;
+      ph.appendChild(it); return it;
+    });
+    const C={list,items,cur:-1,film:null,auto:null,col};
+    C.show=i=>{
+      i=(i+items.length)%items.length; if(i===C.cur) return;
+      if(items[C.cur]){ items[C.cur].classList.remove('on'); items[C.cur].dataset.f=0; }
+      C.cur=i; const it=items[i], c=list[i]; it.classList.add('on'); warm(it); warm(items[(i+1)%items.length]);
+      col.querySelector('.car-label b').textContent=c.label; col.querySelector('.car-label span').textContent=c.desc;
+      const o=col.querySelector('.car-open'); o.hidden=!c.href; if(c.href) o.href=c.href;
+      clearInterval(C.film);
+      if(c.kind!=='long'&&!noMotion) C.film=setInterval(()=>{ if(!document.hidden&&inView) it.dataset.f=((+it.dataset.f||0)+1)%4; },2800);
+    };
+    // passage automatique à l'exemple suivant ; un clic sur une flèche l'arrête
+    C.next=()=>{ if(!document.hidden&&inView) C.show(C.cur+1); };
+    if(!noMotion) C.auto=setInterval(C.next,13000);
+    col.querySelectorAll('.car-arrow').forEach(b=>b.onclick=()=>{ clearInterval(C.auto); C.show(C.cur+ +b.dataset.d); });
+    C.show(0); return C;
+  });
+  if('IntersectionObserver' in window) new IntersectionObserver(es=>{ es.forEach(en=>{ inView=en.isIntersecting; }); },{threshold:.2}).observe(document.getElementById('car'));
+
+  /* catalogue avec filtre par style */
+  const models=document.getElementById('models'), filters=document.getElementById('filters');
+  const DEMOS=window.SCEAU_DEMOS||[], OPN={env:'Enveloppe',cur:'Rideau',voile:'Voile',door:'Grandes portes'}, RVN={scratch:'Date à gratter',wheel:'Roue de la date',slot:'Jackpot'};
+  const card=(d,t,title,style,sub,img1,img2)=>{ const M=(window.SCEAU_MUSIC||{})[d.music]||{};
+    const tags=[d.special?'':OPN[d.opening], RVN[d.reveal]||'', M.name?'♪ '+M.name:'', d.lang==='en'?'en anglais':''].filter(Boolean);
+    const m=document.createElement('a'); m.className='model'; m.href='/d/'+d.slug+'/'; m.target='_blank'; m.rel='noopener'; m.dataset.theme=d.theme; m.dataset.style=style;
+    m.setAttribute('aria-label','Ouvrir la démo '+title+' : '+d.couple);
+    m.innerHTML=`<div class="pic"><img src="${esc(img1)}" alt="" loading="lazy">${img2?`<img class="pic2" src="${esc(img2)}" alt="" loading="lazy" aria-hidden="true">`:''}<span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(d.couple)}</span></div><div class="meta"><div><h3>${esc(title)}</h3><p class="style">${esc(sub)}</p><p>${esc(tags.join(' · '))}</p></div><span class="tag">Ouvrir</span></div>`;
+    models.appendChild(m); };
+  const yk=DEMOS.find(d=>d.slug==='yasmine-karim');
+  if(yk) card(yk,THEMES.nuits,'Notre faire-part réel','Peinture','Lieux réels peints et animés',yk.thumb,'');
+  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long'); if(d) card(d,t,t.name,t.style,t.style,`/img/themes/${k}-1.webp?v=4`,`/img/themes/${k}-2.webp?v=4`); });
+  const sm=document.createElement('div'); sm.className='model'; sm.dataset.style='*'; sm.innerHTML='<div class="pic"><span class="soon">Votre thème</span></div><div class="meta"><div><h3>Sur-mesure</h3><p class="style">Couture</p><p>Un univers rien qu\'à vous.</p></div></div>'; models.appendChild(sm);
+  const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
+  STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
+    b.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); models.querySelectorAll('.model').forEach(m=>{ m.hidden=!(st==='Tous'||m.dataset.style===st||m.dataset.style==='*'); }); };
+    filters.appendChild(b); });
+
+  /* composer : prenoms, date, style, palette, police -> apercu en direct */
+  const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'}];
+  const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
+  const C={k:'conte',pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),
+    ev:[{name:'La cérémonie',time:'15:00',place:'Mairie du 11e',bg:'scene',lieu:'mairie'},{name:'La fête',time:'19:30',place:'Domaine des Roses',bg:'scene',lieu:'salle'}]};
+  // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
+  const LIEUX=[{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'}];
+  const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Hébergement'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'}];
+  const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
+  const REVEALS=[{id:'non',name:'Aucune',sub:'La date s\'affiche'},{id:'scratch',name:'À gratter',sub:'Comme un ticket'},{id:'wheel',name:'La roue',sub:'Elle s\'arrête sur la date'},{id:'slot',name:'Jackpot',sub:'Jour, mois, année'}];
+  const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'voile',name:'Voile',sub:'Il s\'ouvre par le milieu'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
+  // thèmes qui ont leurs portiers (/img/open/<thème>-portier.webp) : ils apparaîtraient devant les grandes portes.
+  // Vide pour l'instant : l'utilisateur les a trouvés « pas ouf », ils sont retirés (images conservées).
+  const DOORMEN=[];
+  const $=id=>document.getElementById(id);
+  function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
+  function opt(box,items,key,label,draw){ items.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.dataset.id=it.id||it; draw(b,it); b.onclick=()=>{ C[key]=b.dataset.id; if(key==='k') C.font='theme'; paint(); }; box.appendChild(b); }); }
+  opt($('cOpen'),OPENS,'op','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  opt($('cReveal'),REVEALS,'rvl','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
+  opt($('cStyles'),KEYS,'k','',(b,k)=>{ b.className='chip'; b.textContent=THEMES[k].name; });
+  opt($('cPal'),PALS,'pal','',(b,p)=>{ b.className='sw'; b.style.background=p.c; b.setAttribute('aria-label',p.name); });
+  opt($('cFonts'),FONTS,'font','',(b,f)=>{ b.className='fo'; b.innerHTML=`<b>Aa</b><small>${f.name}</small>`; });
+  opt($('cCount'),COUNTS,'cd','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  // écrans en option : plusieurs à la fois ; l'aperçu fait défiler jusqu'à l'écran ajouté
+  EXTRAS.forEach(x=>{ const b=document.createElement('button'); b.type='button'; b.className='chip x'; b.dataset.id=x.id; b.textContent=x.name;
+    b.onclick=()=>{ const on=!C.x.has(x.id); on?C.x.add(x.id):C.x.delete(x.id); paint(); if(on){ const el=$('cpScroll').querySelector(`[data-x="${x.id}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); } };
+    $('cExtras').appendChild(b); });
+  // les écrans du faire-part, dans l'ordre (construits une fois : les champs gardent le focus)
+  { const box=$('cStory'), li=(cls,h)=>{ const l=document.createElement('li'); l.className=cls; l.innerHTML=h; box.appendChild(l); return l; };
+    li('fixed','<b>Accueil</b><span>Vos prénoms, la date, le sceau</span>');
+    C.ev.forEach((e,i)=>{
+      const l=li('ev',`<div class="ev-h"><b>Événement ${i+1}</b><small>2 événements inclus</small></div>
+        <div class="ev-f"><input type="text" data-k="name" maxlength="40" aria-label="Nom de l'événement ${i+1}" placeholder="La cérémonie"><input type="time" data-k="time" aria-label="Heure"><input type="text" data-k="place" maxlength="60" aria-label="Lieu" placeholder="Lieu (ex. Mairie du 11e)"></div>
+        <div class="seg" role="group" aria-label="Fond de l'écran"><button type="button" data-bg="simple">Écran simple<small>Texte sur le fond</small></button><button type="button" data-bg="scene">Scène<small>Votre lieu dessiné</small></button></div>
+        <div class="lieux" role="group" aria-label="Choisir le lieu">${LIEUX.map(x=>`<button type="button" data-lieu="${x.id}"><span></span>${x.name}</button>`).join('')}</div>`);
+      l.dataset.i=i;
+      l.querySelectorAll('input').forEach(inp=>{ inp.value=e[inp.dataset.k]; inp.addEventListener('input',()=>{ e[inp.dataset.k]=inp.value; paint(); }); });
+      l.querySelectorAll('[data-bg]').forEach(b=>b.onclick=()=>{ e.bg=b.dataset.bg; paint(); showEv(i); });
+      l.querySelectorAll('[data-lieu]').forEach(b=>b.onclick=()=>{ e.lieu=b.dataset.lieu; e.bg='scene'; paint(); showEv(i); });
+    });
+    li('fixed','<b>Réponse</b><span>« Serez-vous des nôtres ? »</span>'); }
+  // l'aperçu descend jusqu'à l'écran modifié
+  function showEv(i){ const el=$('cpScroll').querySelector(`[data-ev="${i}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); }
+  const hm=v=>{ const m=/^(\d{1,2}):(\d{2})/.exec(v||''); return m?`${+m[1]}h${m[2]}`:''; };
+  const cdHtml=(big,col,extra)=>`<div class="cd${big?' big':''}" style="color:${col};${extra||''}"><div><b data-u="d">0</b><span>jours</span></div><div><b data-u="h">0</b><span>heures</span></div><div><b data-u="m">0</b><span>min</span></div><div><b data-u="s">0</b><span>sec</span></div></div>`;
+  function weddingDate(){ const v=$('cDate').value; const d=v?new Date(v+'T15:00:00'):null; return d&&!isNaN(d)?d:new Date('2027-06-12T15:00:00'); }
+  function tick(){
+    const ms=Math.max(0,weddingDate()-Date.now()), v={d:Math.floor(ms/864e5),h:Math.floor(ms/36e5)%24,m:Math.floor(ms/6e4)%60,s:Math.floor(ms/1e3)%60};
+    $('cpScroll').querySelectorAll('.cd b').forEach(b=>{ b.textContent=String(v[b.dataset.u]).padStart(b.dataset.u==='d'?1:2,'0'); });
+  }
+  setInterval(tick,1000);
+  /* fond continu de l'aperçu, comme le moteur (invite.js, layoutStrip() et frame()) : une bande de décors qui défile avec
+     les pages, deux scènes voisines se chevauchent et se fondent par un masque en dégradé (30 % d'un écran) ;
+     les textes glissent avec la page et ne s'estompent que près du bord. Rien ne saute, on ne « change pas de page ». */
+  let cpRuns=[];
+  function cpLayout(){
+    const sc=$('cpScroll'), h=sc.clientHeight, bgs=$('cpBgs'); if(!h||!bgs) return; const ov=Math.round(h*.45), secs=[...sc.querySelectorAll('.pv-sc')], layers=[...bgs.children];
+    bgs.style.height=sc.scrollHeight+'px';
+    cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!L) return; const B=L.firstElementChild, top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight;
+      const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px'; B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
+      const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
+      // taille de l'écran, pas du cadre agrandi (sinon zoom ~1,8×) : même calcul que fitBg() dans invite.js
+      const bw=Math.ceil(Math.max(sc.clientWidth,h*.566)), y=Math.round((ri>0?ov:0)+(h-bw/.566)/2);
+      B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`; B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px'); });
+  }
+  addEventListener('resize',cpLayout); addEventListener('load',cpLayout);
+  // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
+  function paint(){
+    const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
+    $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
+    [['cStyles','k'],['cOpen','op'],['cPal','pal'],['cCount','cd'],['cReveal','rvl']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
+    $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
+    $('cPalName').textContent=p.name;
+    $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
+      l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
+      l.querySelector('.lieux').hidden=e.bg!=='scene';
+      l.querySelectorAll('[data-lieu]').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.lieu===e.lieu); b.firstChild.style.backgroundImage=`url('/img/lieux/${C.k}-${b.dataset.lieu}.webp')`; }); });
+    $('cpTint').style.background=p.c;
+    const n1=($('cN1').value||'Emma').trim(), n2=($('cN2').value||'Louis').trim();
+    const ini=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
+    const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250']}[C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
+    $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
+    $('opSealTxt').innerHTML=`${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}`; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
+    $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir';
+    { const o=$('cpOp'); o.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); o.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`); o.style.setProperty('--pal',p.c); o.style.setProperty('--man',DOORMEN.includes(C.k)?`url('/img/open/${C.k}-portier.webp')`:'none');
+      $('opMonoC').style.cssText=t.mono?`color:${t.mono[0]};text-shadow:${t.mono[1]}`:''; } $('opMonoC').textContent=$('opMonoV').textContent=(n1[0]||'').toUpperCase()+' & '+(n2[0]||'').toUpperCase();
+    const fam=f.css||t.font, it=f.id==='theme'?t.italic:f.italic, up=f.id==='theme'?t.upper:f.upper;
+    const base=up?24:/Limelight|Cinzel/.test(fam)?30:40;
+    const nmCss=(sz,col)=>`font-family:${fam};font-style:${it?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:${sz}px;color:${col}`;
+    const d=weddingDate(), ds0=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}), ds=ds0.charAt(0).toUpperCase()+ds0.slice(1);
+    const names=t.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
+    const page=(img,mode,inner,extra)=>{ const dk=mode==='dark', lt=t.light&&!dk;
+      const c={nm:lt?t.color:'#fff',ey:lt?(t.ey||t.color):'#fff',tx:lt?(t.tx||t.color):'#fff'};
+      // un numéro = scène du thème ; un nom = lieu de la bibliothèque, ou « fond » pour un écran simple
+      const src=typeof img==='number'?`/img/themes/${C.k}-${img}.webp?v=4`:`/img/lieux/${C.k}-${img}.webp`;
+      return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
+    const pages=[], rv=C.rvl!=='non'?C.rvl:null;
+    // 1. prenoms + date (+ compte a rebours au debut)
+    { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');
+      const oval=!!t.top1;
+      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc(`background-image:url('/img/seals/${SEAL[0]}.webp')`)}"><b style="${esc(`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`)}">${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}</b></div>`}${eyHtml('ey',t.scenes[0][0],`color:${c.ey}`)}<div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}${rv?`<div class="cp-rvl" style="width:100%;color:${c.tx}"></div>`:''}${!rv||rv==='wheel'?`<div class="cp-dl${rv?' rvl-later':''}" style="color:${pg.lt?p.c:'#fff'}"><i></i><span>${esc(ds)}</span><i></i></div>`:''}${C.cd==='debut'?`<div class="${rv?'rvl-later':''}">${cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':'')}</div>`:''}<div class="pv-hint${rv?' rvl-later':''}" style="color:${c.ey}">Faites défiler ↓</div>`)); }
+    const scene=(idx,withCd)=>{ const [e,main,x,bt,mode]=t.scenes[idx]; const pg=page(idx+1,mode);
+      return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?`<span class="bt" style="color:${c.tx};border-color:${c.tx}">${esc(bt)}</span>`:''}`); };
+    // événements : scène = le lieu choisi, écran simple = le fond du tableau (la bande continue les fond l'un dans l'autre)
+    const evPage=i=>{ const e=C.ev[i], pg=page(e.bg==='scene'?e.lieu:'fond','');
+      return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e.name||'Événement '+(i+1))}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(e.place||'')}</div><div class="tx" style="color:${c.tx}">${esc(hm(e.time))}</div><span class="bt" style="color:${c.tx};border-color:${c.tx}">Itinéraire</span>`).replace('<section ',`<section data-ev="${i}" `); };
+    // écrans en option (contenu d'exemple), sur le décor de la scène voisine, sans voile (comme le moteur)
+    const xp=(id,img,mode,inner)=>{ if(!C.x.has(id)) return; const pg=page(img,mode);
+      pages.push(pg.html(c=>inner(c,pg.lt)).replace('<section ',`<section data-x="${id}" `)); };
+    const card=(c,lt,rows,one)=>`<div class="pv-card${one?' one':''}" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${rows.map(r=>`<div>${r[0]?`<b>${r[0]}</b>`:''}<span>${r[1]}</span></div>`).join('')}</div>`;
+    const hd=(c,ey,title)=>`<div class="ey" style="color:${c.ey};position:relative">${ey}</div>`+(title?`<div class="nm" style="${esc(nmCss(base*.62,c.nm))};position:relative">${title}</div>`:'');
+    xp('parents',1,'',c=>hd(c,'Avec leurs familles','')+`<div class="pv-fam" style="color:${c.tx}">Famille Martin &amp; Famille Bernard</div><div class="tx" style="color:${c.tx};position:relative">ont la joie de vous convier au mariage de leurs enfants</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
+    xp('story',1,'',(c,lt)=>hd(c,'Notre histoire','Il était une fois')+card(c,lt,[['2018','La rencontre, un jeudi soir'],['2022','Le premier appartement'],['2026','La demande, sous les tilleuls']]));
+    pages.push(evPage(0));
+    // page dediee au compte a rebours
+    if(C.cd==='page'){ const pg=page('fond',''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
+    pages.push(evPage(1));
+    xp('program','fond','',(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,[['15h00','La cérémonie'],['17h00','Vin d’honneur'],['19h30','Le dîner'],['23h00','On danse']]));
+    const m4=t.scenes[3][4];
+    xp('dress',4,m4,c=>hd(c,'Dress code','Élégance d’été')+`<div class="pv-sws">${['#f3e3c3',p.c,'#7fb4d6','#e58f7a'].map(x=>`<i style="background:${x}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">Lin, soie, couleurs douces.</div>`);
+    xp('stay',4,m4,(c,lt)=>hd(c,'Hébergement et accès','')+card(c,lt,[['Hôtel','Chambres réservées à 5 min'],['Navette','Depuis la gare à 14h15']]));
+    xp('faq',4,m4,(c,lt)=>hd(c,'Vos questions','')+card(c,lt,[['','<b>Les enfants sont-ils invités ?</b><br>Oui, un espace jeux les attend.'],['','<b>Où se garer ?</b><br>Parking sur place.']],true));
+    xp('gifts',4,m4,c=>hd(c,'Liste de mariage','Votre présence suffit')+`<div class="tx" style="color:${c.tx};position:relative">Pour ceux qui le souhaitent, une cagnotte pour notre voyage.</div><span class="bt" style="color:${c.tx};border-color:${c.tx}">Participer</span>`);
+    xp('photos',4,m4,c=>hd(c,'Vos photos','')+`<div class="tx" style="color:${c.tx};position:relative">Partagez vos plus belles photos de la soirée dans notre album commun.</div><span class="bt" style="color:${c.tx};border-color:${c.tx}">Partager mes photos</span>`);
+    xp('table',4,m4,c=>hd(c,'Le jour J','Votre table')+`<div class="tx" style="color:${c.tx};position:relative;font-size:26px;margin-top:6px">La table des Roses</div><div class="tx" style="color:${c.tx};position:relative;font-size:13px">Chaque famille voit sa table sur son lien personnel.</div>`);
+    pages.push(scene(3,C.cd==='fin'));
+    const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML='<div class="cp-bgs" id="cpBgs" aria-hidden="true"></div>'+pages.join(''); sc.scrollTop=st; tick();
+    // décors : un cadre par suite de pages qui partagent la même image (comme les « runs » du moteur), image collante dedans
+    cpRuns=[]; [...sc.querySelectorAll('.pv-sc')].forEach((s,i)=>{ const r=cpRuns[cpRuns.length-1]; if(r&&r.img===s.dataset.img) r.b=i; else cpRuns.push({img:s.dataset.img,a:i,b:i}); });
+    $('cpBgs').innerHTML=cpRuns.map(r=>`<div class="cp-bg"><i style="background-image:url('${esc(r.img)}');--img:url('${esc(r.img)}')"></i></div>`).join('');
+    cpLayout();
+    { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=REVEALS.find(o=>o.id===C.rvl).name; if($('cN1').value!==$('cN1').defaultValue||$('cN2').value!==$('cN2').defaultValue) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ');
+    const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
+    $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place} (${evTxt(e).toLowerCase()})`).join(' ; ');
+    $('cRecap').textContent=`${t.name} · ${C.ev.map(evTxt).join(' puis ')}${C.x.size?` · ${C.x.size} écran${C.x.size>1?'s':''} en plus`:''}.`; if($('cDate').value&&$('cDate').value!==$('cDate').defaultValue){ $('fDate').type='date'; $('fDate').value=$('cDate').value; }
+  }
+  ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
+  /* lecture de l'ouverture : fermee -> 'opening' -> 'gone' */
+  const op=$('cpOp'); let opT=null;
+  // meme sequence que le faire-part d'Ines & Jad : ouverture, la lumiere monte, la page apparait dessous
+  // enveloppe : lumiere a 1 s ; rideau, portes et voile : la lumiere part au toucher (flash:0) et monte avec le mouvement,
+  // la page se voit a travers (memes valeurs que invite.js)
+  const cpFlash=$('cpFlash'), SEQ={env:{flash:1000,gone:1560},cur:{flash:0,gone:760,cls:'soft'},door:{flash:500,gone:1400,cls:'door'},voile:{flash:400,gone:1500,cls:'door'}}; let opT2=[];
+  function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
+    op.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); op.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`);
+    const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth; }
+  function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
+    if(!q.flash) cpFlash.classList.add('bloom');
+    opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ op.classList.add('gone'); $('cpScroll').scrollTop=0; },q.gone)]; }
+  function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
+  op.addEventListener('click',playOp);
+  op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playOp(); } });
+  $('cpReplay').onclick=()=>replayOp(700);
+  $('cOpen').addEventListener('click',e=>{ if(e.target.closest('button')) replayOp(700); });
+  $('cStyles').addEventListener('click',e=>{ if(e.target.closest('button')&&C.op!=='env') replayOp(500); });
+  closeOp();
+  if('IntersectionObserver' in window){ const io=new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting){ setTimeout(playOp,900); io.disconnect(); } }); },{threshold:.6}); io.observe(op); }
+  $('compForm').addEventListener('submit',e=>e.preventDefault());
+  paint();
