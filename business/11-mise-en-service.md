@@ -1,6 +1,6 @@
 # 11 — Mise en service : ce qui est prêt, ce qu'il reste à faire
 
-_Mis à jour le 1er octobre 2026, après l'audit « qu'est-ce qui manque pour être opérationnel »._
+_Mis à jour le 3 octobre 2026 : plan de lancement par priorités._
 
 ## Ce qui est en place
 
@@ -17,11 +17,25 @@ _Mis à jour le 1er octobre 2026, après l'audit « qu'est-ce qui manque pour ê
 | Admin | Demandes reçues et liens des tableaux de bord de chaque faire-part | `/admin/` (clé : variable `SCEAU_SECRET` sur Vercel) |
 | Musique | 7 morceaux libres de droits, sources notées | `landing/music/CREDITS.md` |
 
-## À faire de ton côté (bloquant)
+## Plan de lancement (décidé le 3 octobre 2026)
 
-1. **Créer le stockage (1 minute).** Sans lui, le formulaire et les réponses affichent une erreur. Sur vercel.com : projet **sceau-faire-part** → onglet **Storage** → **Create** → **Blob** → nom `sceau-donnees`, accès **Private**, région **Paris (cdg1)** → **Connect** au projet (Production et Preview). Ensuite, redéployer (ou me le demander).
-2. **Compléter les pages légales :** nom, adresse, SIRET, e-mail de contact, statut TVA, médiateur de la consommation. Dans `business/legal/*.md`, puis `python3 business/legal-template.py` et `python3 business/build-site.py`.
-3. **Récupérer la clé admin :** dans Vercel, Settings → Environment Variables → `SCEAU_SECRET`. C'est elle qui ouvre `/admin/`. Ne la partage pas.
+Fait : stockage Blob `sceau-donnees` branché et testé en prod ; pages légales avec l'éditeur (Jad GHAILAN EI, nom commercial Noctuna, SIRET 100 079 342 00018, TVA non applicable art. 293 B) ; ajout de l'activité « Activités spécialisées de design » (libérale) déposé en brouillon sur le guichet INPI.
+
+| Prio | Sujet | Détail | État |
+|---|---|---|---|
+| 1 | **Stripe** | Nouveau compte « Maison Sceau » dans le Stripe existant (pas le compte du projet heritage, en clés de test), virements vers Shine, 2 Payment Links (Essentiel 99 €, Signature 229 €) → `landing/paiement.js` | en cours |
+| 2 | **Nom de domaine** | `maisonsceau.fr` + `maisonsceau.com` (libres au 3/10/2026), à brancher sur le projet Vercel, puis e-mail `contact@` | à faire |
+| 3 | **Médiateur CM2C** (48 €) | ⚠️ **Obligatoire avant la première vente** : on n'active pas les liens de paiement sur le site tant que le médiateur n'est pas dans les CGV (`legal/cgv.md`, article 11) | à faire |
+| 4 | **Parcours client en libre-service** | Espace client (connexion par lien e-mail), éditeur complet avec aperçu, publication automatique, paiement pour publier. Essentiel 100 % automatique, Signature avec le lieu peint ajouté à la main | à faire |
+| 5 | **Nettoyer la vitrine** | On propose trop de choses : réduire les options, simplifier les formules et l'essai | à faire |
+| 6 | **Simuler 2 ou 3 parcours complets** | De la vitrine au faire-part publié et aux réponses des invités, au format téléphone | à faire |
+
+Ne pas oublier :
+- **Lundi** : France Identité à la mairie, puis signer avec FranceConnect+ le brouillon « ajout activité » sur formalites.entreprises.gouv.fr (délai légal : un mois après la première vente).
+- **E-mail de contact** à mettre dans les 3 pages légales (`legal/*.md`).
+- **Adresse** de l'éditeur : retirée à la demande, mais obligatoire pour vendre à distance (Code de la consommation) : la remettre ou prendre une domiciliation avant la première vente.
+- Déclarer chaque mois le CA Sceau dans la case « prestations de services libérales (BNC) » sur autoentrepreneur.urssaf.fr ; surveiller le seuil de franchise de TVA des services.
+- Clé admin : Vercel → Settings → Environment Variables → `SCEAU_SECRET` (ouvre `/admin/`). Ne la partage pas.
 
 ## Paiement Stripe (à faire une fois)
 
@@ -49,8 +63,8 @@ Les options : `opening` = `env` | `cur` | `door` ; `countdown` = `debut` | `page
 
 ## Encore à faire (jaune, ensuite)
 
-- Statut (micro-entreprise), compte pro, **Stripe** (liens de paiement) et factures.
-- Vérifier « Sceau » à l'INPI, acheter le nom de domaine, e-mail pro, WhatsApp Business.
+- Factures (Stripe ou Abby), WhatsApp Business.
+- Vérifier « Sceau » et « Maison Sceau » à l'INPI (classes 41, 42) et les comptes Instagram / TikTok.
 - Mesure d'audience sans cookie (Vercel Analytics ou Plausible).
 - Photos du couple (bloc à ajouter au moteur), version arabe (affichage de droite à gauche).
 - Faire relire les CGV par un juriste avant les premières ventes.
