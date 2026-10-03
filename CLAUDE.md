@@ -180,6 +180,16 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     refusée) : on comprend que chaque formule contient la précédente. Plus de section de photos de personnes « Fait pour ceux
     que vous aimez » sur l'accueil (« ne sert plus à rien »).
 
+29. **Un seul moteur pour tous les thèmes : le scène par scène** (un événement par écran, en plein écran, défilement continu,
+    comme le faire-part d'Inès & Jad). L'utilisateur tient à « un événement par écran » ; les cadres du grand tableau
+    restent une possibilité du sur mesure, pas la règle. Les 7 univers culturels d'abord faits en grand tableau (Double
+    bonheur, Sakura, Gzhel, Laque & or, Y2K, Old money, Kente) ont désormais leurs 4 scènes, leurs 5 lieux et leur fond
+    dans leur style (`tools/scenes-long.py`, références = leur tableau), leurs portes et rideau (`tools/portes.py`), et
+    sont marqués `plan:"signature"` dans themes.js : dans la liste unique, « dès Signature » ; les choisir en Essentiel
+    fait basculer la formule avec l'explication. Le dernier groupe « sur mesure » du configurateur a disparu.
+    Après toute régénération d'images déjà publiées, augmenter `?v=` (vitrine) et `IMGV` (invite.js), sinon le
+    navigateur garde les anciennes : c'est ce qui faisait croire que Mille et une nuits n'avait pas changé.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
