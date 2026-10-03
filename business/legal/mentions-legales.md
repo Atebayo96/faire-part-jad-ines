@@ -1,10 +1,10 @@
 # Mentions légales
-_Dernière mise à jour : 1er octobre 2026_
+_Dernière mise à jour : 3 octobre 2026_
 ## Éditeur du site
-Le site sceau-faire-part.vercel.app (« Sceau ») est édité par [Prénom NOM ou nom de la société], [statut : entrepreneur individuel (micro-entreprise) ou forme sociale et capital], dont le siège est situé [adresse complète].
-SIRET : [numéro SIRET]. [Numéro de TVA intracommunautaire, ou « TVA non applicable, art. 293 B du CGI »].
-Contact : [adresse email de contact] · [téléphone, facultatif].
-Directeur ou directrice de la publication : [Prénom NOM].
+Le site sceau-faire-part.vercel.app (« Sceau ») est édité par Jad GHAILAN, entrepreneur individuel (EI), nom commercial Noctuna, micro-entreprise immatriculée au Registre national des entreprises.
+SIRET : 100 079 342 00018. TVA non applicable, art. 293 B du CGI.
+Contact : [adresse email de contact].
+Directeur de la publication : Jad GHAILAN.
 ## Hébergement
 Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis. Site : [vercel.com](https://vercel.com).
 Les données des formulaires et les réponses des invités sont stockées dans la région Europe de Vercel (Paris, cdg1).

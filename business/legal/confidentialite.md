@@ -1,8 +1,8 @@
 # Politique de confidentialité
-_Dernière mise à jour : 1er octobre 2026_
+_Dernière mise à jour : 3 octobre 2026_
 Cette page explique quelles données nous collectons, pourquoi, combien de temps nous les gardons et comment exercer vos droits. Le site n'utilise ni cookie publicitaire ni outil de mesure d'audience à ce jour.
 ## Qui est responsable ?
-[Prénom NOM ou nom de la société], [adresse], contact : [adresse email de contact].
+Jad GHAILAN, entrepreneur individuel (EI), nom commercial Noctuna, SIRET 100 079 342 00018, contact : [adresse email de contact].
 ## 1. Si vous demandez une démo ou réservez une place
 **Données :** nom, adresse email, téléphone (facultatif), date du mariage, formule choisie, vos choix dans l'outil d'essai, votre message.
 **Pourquoi :** vous recontacter et préparer votre faire-part. Base légale : mesures précontractuelles à votre demande.

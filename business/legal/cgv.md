@@ -1,12 +1,12 @@
 # Conditions générales de vente
-_Dernière mise à jour : 1er octobre 2026. Version à faire relire par un professionnel du droit avant les premières ventes._
+_Dernière mise à jour : 3 octobre 2026. Version à faire relire par un professionnel du droit avant les premières ventes._
 ## 1. Objet
-Les présentes conditions encadrent la vente de faire-part numériques personnalisés par [Prénom NOM ou nom de la société] (« Sceau ») à des particuliers (« le Client ») : création du faire-part, mise en ligne, recueil des réponses des invités et tableau de bord.
+Les présentes conditions encadrent la vente de faire-part numériques personnalisés par Jad GHAILAN, entrepreneur individuel (EI), nom commercial Noctuna, SIRET 100 079 342 00018 (« Sceau ») à des particuliers (« le Client ») : création du faire-part, mise en ligne, recueil des réponses des invités et tableau de bord.
 ## 2. Formules et prix
 - **Essentiel : 99 €.** Un thème, deux événements, réponses et tableau de bord, calendrier, itinéraire, compte à rebours, musique.
 - **Signature : 229 €.** Tout Essentiel, lieux de notre bibliothèque et un lieu peint d'après photo, jusqu'à six événements, un lien par famille, deux langues, save-the-date.
 - **Couture : à partir de 590 €, sur devis.**
-Les prix sont indiqués en euros, toutes taxes comprises. [Si micro-entreprise : TVA non applicable, art. 293 B du CGI.] Le prix ne dépend pas du nombre d'invités.
+Les prix sont indiqués en euros, toutes taxes comprises. TVA non applicable, art. 293 B du CGI. Le prix ne dépend pas du nombre d'invités.
 ## 3. Commande et paiement
 La commande est passée directement sur le site (choix de la formule, acceptation des présentes conditions, puis paiement sécurisé par Stripe), ou après échange avec le Client (formulaire, email ou messagerie) et validée par le paiement en ligne. Le Client reçoit un reçu par e-mail. Le Client fournit les informations nécessaires : prénoms, dates, lieux, textes, et le cas échéant photos et musique.
 ## 4. Délais
