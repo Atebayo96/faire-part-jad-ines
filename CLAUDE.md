@@ -170,6 +170,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     photo), pas seulement en texte. La fin du configurateur est un récapitulatif ligne par ligne, la formule, « Ensuite »
     en 3 temps, puis le bouton « Commander · formule prix ».
 
+28. **Dans une grille de vignettes, la sélection est une coche** (pastille noire ✓ en haut à droite, les autres vignettes
+    s'estompent à 72 %), jamais un cadre noir autour (« pas ouf »). La vignette « Votre lieu, d'après votre photo » montre
+    le lieu du thème en fond avec un appareil photo dans une pastille blanche, pas une case grise. Le configurateur
+    propose **tous** les thèmes, les 10 « sur mesure » dans un second groupe (l'aperçu montre leur tableau avec les
+    prénoms, la demande part au contact). L'ouverture se choisit à l'étape 1, avec le thème. Dix couleurs, pas cinq.
+    Les listes des formules portent une icône par ligne et l'étiquette « en plus » sur ce qu'une formule ajoute à la
+    précédente : la différence doit sauter aux yeux sans lire. Plus de section de photos de personnes « Fait pour ceux
+    que vous aimez » sur l'accueil (« ne sert plus à rien »).
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

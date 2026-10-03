@@ -144,33 +144,34 @@
   const DEMOS=window.SCEAU_DEMOS||[], OPN={env:'Enveloppe',cur:'Rideau',voile:'Voile',door:'Grandes portes'}, RVN={scratch:'Date à gratter',wheel:'Roue de la date',slot:'Jackpot'};
   // une seule galerie : les 12 thèmes à scènes (composables en ligne) et les 10 styles en grand tableau (composés avec nous)
   const card=(o)=>{ const m=document.createElement('div'); m.className='model'; m.dataset.theme=o.k||''; m.dataset.style=o.style;
-    m.innerHTML=`<a class="pic" href="${esc(o.href)}" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(o.title)}"><img src="${esc(o.img1)}" alt="" loading="lazy">${o.img2?`<img class="pic2" src="${esc(o.img2)}" alt="" loading="lazy" aria-hidden="true">`:''}<span class="cn" style="${esc(`font-family:${o.font};${o.italic?'font-style:italic;':''}${o.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(o.couple)}</span><span class="k ${o.compose?'k-c':'k-n'}">${o.compose?'Composer':'Avec nous'}</span></a><div class="meta"><div><h3>${esc(o.title)}</h3><p class="style">${esc(o.sub)}</p></div><div class="acts"><a href="${esc(o.href)}" target="_blank" rel="noopener">Ouvrir</a>${o.compose?`<a class="go" href="/creer/?theme=${esc(o.k)}">Composer →</a>`:`<a class="go" href="/contact/?plan=signature&theme=${esc(o.k)}">Avec nous →</a>`}</div></div>`;
+    m.innerHTML=`<a class="pic" href="${esc(o.href)}" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(o.title)}"><img src="${esc(o.img1)}" alt="" loading="lazy">${o.img2?`<img class="pic2" src="${esc(o.img2)}" alt="" loading="lazy" aria-hidden="true">`:''}<span class="cn" style="${esc(`font-family:${o.font};${o.italic?'font-style:italic;':''}${o.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(o.couple)}</span><span class="k ${o.compose?'k-c':'k-n'}">${o.compose?'En ligne':'Sur mesure'}</span></a><div class="meta"><div><h3>${esc(o.title)}</h3><p class="style">${esc(o.sub)}</p></div><div class="acts"><a href="${esc(o.href)}" target="_blank" rel="noopener">Ouvrir</a>${o.compose?`<a class="go" href="/creer/?theme=${esc(o.k)}">Composer en ligne →</a>`:`<a class="go" href="/creer/?theme=${esc(o.k)}">Le demander →</a>`}</div></div>`;
     models.appendChild(m); };
   const yk=DEMOS.find(d=>d.slug==='yasmine-karim');
   if(yk) card({k:'',title:'Notre faire-part réel',sub:'Lieux réels peints et animés',style:'Peinture',couple:yk.couple,font:THEMES.nuits.font,href:'/d/yasmine-karim/',img1:yk.thumb,compose:false});
   KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&x.layout!=='long'); if(d) card({k,title:t.name,sub:t.style+' · '+t.short,style:t.style,couple:d.couple,font:t.font,italic:t.italic,upper:t.upper,href:'/d/'+d.slug+'/',img1:`/img/themes/${k}-1.webp?v=4`,img2:`/img/themes/${k}-2.webp?v=4`,compose:true}); });
   // un thème qui existe aussi en scènes n'apparaît qu'une fois (sa carte « Composer »), sinon on le croit en double
   LONGS.filter(l=>!KEYS.includes(l.k)).forEach(l=>{ const t=THEMES[l.k]; card({k:l.k,title:t.name,sub:t.style+' · '+l.desc,style:t.style,couple:l.couple,font:t.font,italic:t.italic,upper:t.upper,href:'/d/'+l.slug+'/',img1:`/img/long/${l.k}/thumb.webp`,compose:false}); });
-  const STYLES=['Tous','À composer','Avec nous',...new Set([...KEYS,...LONGS.map(l=>l.k)].map(k=>THEMES[k].style))];
+  const STYLES=['Tous','En ligne','Sur mesure',...new Set([...KEYS,...LONGS.map(l=>l.k)].map(k=>THEMES[k].style))];
   STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
-    b.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); models.querySelectorAll('.model').forEach(m=>{ const c=!!m.querySelector('.k-c'); m.hidden=!(st==='Tous'||(st==='À composer'&&c)||(st==='Avec nous'&&!c)||m.dataset.style===st); }); };
+    b.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); models.querySelectorAll('.model').forEach(m=>{ const c=!!m.querySelector('.k-c'); m.hidden=!(st==='Tous'||(st==='En ligne'&&c)||(st==='Sur mesure'&&!c)||m.dataset.style===st); }); };
     filters.appendChild(b); });
   }
 
   if(document.getElementById('compForm')){
   /* composer : prenoms, date, style, palette, police -> apercu en direct */
-  const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'}];
+  const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'},{id:'bordeaux',name:'Bordeaux',c:'#7a2e3b'},{id:'lavande',name:'Lavande',c:'#8a7fb5'},{id:'emeraude',name:'Émeraude',c:'#2f6b57'},{id:'ardoise',name:'Ardoise',c:'#4a5560'},{id:'champagne',name:'Champagne',c:'#cdb48a'}];
   const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
   const urlPlan=new URLSearchParams(location.search).get('plan'), urlTheme=new URLSearchParams(location.search).get('theme');
-  const C={k:KEYS.includes(urlTheme)?urlTheme:'conte',pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
+  const LONGK=LONGS.map(l=>l.k).filter(k=>!KEYS.includes(k));
+  const C={k:KEYS.includes(urlTheme)?urlTheme:'conte',ks:LONGK.includes(urlTheme)?urlTheme:null,pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
     ev:[{name:'La cérémonie',time:'15:00',place:'Mairie du 11e',bg:'scene',lieu:'mairie'},{name:'La fête',time:'19:30',place:'Domaine des Roses',bg:'scene',lieu:'salle'}]};
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
-  const LIEUX=[{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu, d’après photo',sig:true}];
+  const LIEUX=[{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
   /* upsell sans frustration : les options de Signature (lieu peint d'après photo, 3e événement et plus, lien par famille,
      anglais) sont proposées au même endroit que les autres, avec l'étiquette « Signature ». On peut les choisir en Essentiel :
      la formule se met d'elle-même sur Signature et le récapitulatif explique pourquoi ; si l'on revient à Essentiel, il dit
      simplement ce qui n'y est pas compris. Jamais de case grisée ni de refus. */
-  const sigNeeds=()=>{ const n=[]; if(C.ev.some(e=>e.bg==='scene'&&e.lieu==='photo')) n.push('votre lieu peint d’après photo');
+  const sigNeeds=()=>{ const n=[]; if(C.ks) n.push(`le thème ${THEMES[C.ks].name}, dessiné sur mesure`); if(C.ev.some(e=>e.bg==='scene'&&e.lieu==='photo')) n.push('votre lieu peint d’après photo');
     if(C.ev.length>2) n.push(`${C.ev.length} événements (2 en Essentiel)`); if(C.x.has('famille')) n.push('un lien par famille'); if(C.x.has('en')) n.push('la version anglaise'); return n; };
   const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Hébergement'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'},{id:'famille',name:'Un lien par famille',sig:true},{id:'en',name:'Version anglaise',sig:true}];
   const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
@@ -186,6 +187,9 @@
   opt($('cReveal'),REVEALS,'rvl','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
   opt($('cStyles'),KEYS,'k','',(b,k)=>{ b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=4')"></span>${esc(THEMES[k].name)}`; });
+  $('cStyles').addEventListener('click',e=>{ if(e.target.closest('button')) C.ks=null; },true);
+  // les styles dessinés sur mesure : on peut les choisir ici aussi (l'aperçu montre leur tableau, la demande part au contact)
+  LONGK.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.className='th'; b.dataset.id=k; b.innerHTML=`<span style="background-image:url('/img/long/${k}/thumb.webp')"></span>${esc(THEMES[k].name)}<small>sur mesure</small>`; b.onclick=()=>{ C.ks=k; paint(); }; $('cStyles2').appendChild(b); });
   const PLANSUB={essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
   $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
@@ -204,7 +208,7 @@
       const l=li('ev',`<div class="ev-h"><b>Événement ${i+1}</b><small>${i<2?'inclus':'<i class="sig-tag">Signature</i>'}${i>=2?' · <a href="#" data-rm>Retirer</a>':''}</small></div>
         <div class="ev-f"><input type="text" data-k="name" maxlength="40" aria-label="Nom de l'événement ${i+1}" placeholder="La cérémonie"><input type="time" data-k="time" aria-label="Heure"><input type="text" data-k="place" maxlength="60" aria-label="Lieu" placeholder="Lieu (ex. Mairie du 11e)"></div>
         <div class="seg" role="group" aria-label="Fond de l'écran"><button type="button" data-bg="simple">Écran simple<small>Texte sur le fond</small></button><button type="button" data-bg="scene">Scène<small>Votre lieu dessiné</small></button></div>
-        <div class="lieux" role="group" aria-label="Choisir le lieu">${LIEUX.map(x=>`<button type="button" data-lieu="${x.id}"${x.sig?' class="sig"':''}><span>${x.sig?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>':''}</span>${x.name}${x.sig?'<i>Signature</i>':''}</button>`).join('')}</div>`);
+        <div class="lieux" role="group" aria-label="Choisir le lieu">${LIEUX.map(x=>`<button type="button" data-lieu="${x.id}"${x.sig?' class="sig"':''}><span>${x.sig?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>':''}</span>${x.name}${x.sig?'<small>d’après votre photo</small><i>Signature</i>':''}</button>`).join('')}</div>`);
       l.dataset.i=i;
       l.querySelectorAll('input').forEach(inp=>{ inp.value=e[inp.dataset.k]; inp.addEventListener('input',()=>{ e[inp.dataset.k]=inp.value; paint(); }); });
       l.querySelectorAll('[data-bg]').forEach(b=>b.onclick=()=>{ e.bg=b.dataset.bg; paint(); showEv(i); });
@@ -244,21 +248,23 @@
     const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
     $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
     [['cStyles','k'],['cOpen','op'],['cPal','pal'],['cCount','cd'],['cReveal','rvl']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
+    if(C.ks) $('cStyles').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',false));
+    $('cStyles2').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.ks));
     $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
     $('cPalName').textContent=p.name;
     const needs=sigNeeds(); if(needs.length&&C.plan==='essentiel'&&!C.planPicked) C.plan='signature';
     $('cPlan').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan));
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
-      ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan; a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
+      ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+(C.ks||C.k); a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
       l.querySelector('.lieux').hidden=e.bg!=='scene';
-      l.querySelectorAll('[data-lieu]').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.lieu===e.lieu); if(b.dataset.lieu!=='photo') b.firstChild.style.backgroundImage=`url('/img/lieux/${C.k}-${b.dataset.lieu}.webp')`; }); });
+      l.querySelectorAll('[data-lieu]').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.lieu===e.lieu); b.firstChild.style.backgroundImage=`url('/img/lieux/${C.k}-${b.dataset.lieu==='photo'?'mairie':b.dataset.lieu}.webp')`; }); });
     $('cAddEv').hidden=C.ev.length>=6;
     $('cpTint').style.background=p.c;
     const n1=($('cN1').value||'Emma').trim(), n2=($('cN2').value||'Louis').trim();
     const ini=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
-    const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250']}[C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
+    const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
     $('opSealTxt').innerHTML=`${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}`; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
     $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir';
@@ -309,6 +315,9 @@
     cpRuns=[]; [...sc.querySelectorAll('.pv-sc')].forEach((s,i)=>{ const r=cpRuns[cpRuns.length-1]; if(r&&r.img===s.dataset.img) r.b=i; else cpRuns.push({img:s.dataset.img,a:i,b:i}); });
     $('cpBgs').innerHTML=cpRuns.map(r=>`<div class="cp-bg"><i style="background-image:url('${esc(r.img)}');--img:url('${esc(r.img)}')"></i></div>`).join('');
     cpLayout();
+    // thème sur mesure choisi : l'aperçu montre son grand tableau avec vos prénoms (il n'a pas de scènes à composer)
+    if(C.ks){ const l=LONGS.find(x=>x.k===C.ks), tl=THEMES[C.ks];
+      sc.innerHTML=`<section class="pv-sc pv-long" style="background:url('/img/long/${C.ks}/hero.webp') center top/cover;color:${l.ink};text-shadow:${l.shadow}">${eyHtml('ey',l.ey,`color:${l.ink}`)}<div class="nm" style="${esc(nameStyle({font:tl.font,color:l.ink,size:tl.size,italic:tl.italic,upper:tl.upper},1))}">${names}</div><div class="tx" style="color:${l.ink}">${esc(ds)}</div><div class="pv-hint" style="color:${l.ink}">Dessiné avec vous</div></section>`; cpRuns=[]; }
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
     $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ');
     const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
@@ -316,7 +325,7 @@
     const needTxt=needs.length?(C.plan==='essentiel'?` Essentiel ne comprend pas ${needs.join(', ')} : vous pourrez les retirer, ou passer en Signature.`:` Avec ${needs.join(', ')}, c'est la formule Signature.`):(C.plan==='essentiel'?' Tout est compris dans Essentiel.':'');
     $('cRecap').textContent=needTxt.trim()||(C.plan==='signature'?'Votre lieu peint d’après photo, un lien par famille, français et anglais.':'');
     // récapitulatif, ligne par ligne
-    const sum=[['Thème',t.name],['Vous',`${n1} & ${n2} · ${ds}`],['Écrans',`Accueil → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
+    const sum=[['Thème',C.ks?THEMES[C.ks].name+' · dessiné sur mesure, avec nous':t.name],['Vous',`${n1} & ${n2} · ${ds}`],['Écrans',`Accueil → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
     $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join(''); if($('fDate')) $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));

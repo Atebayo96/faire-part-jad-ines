@@ -341,7 +341,6 @@
   .lieux[hidden]{display:none}
   .lieux button{border:0;padding:0;background:none;cursor:pointer;display:grid;gap:5px;font:500 11.5px Inter,sans-serif;color:var(--ink);min-width:0}
   .lieux span{display:block;aspect-ratio:9/16;background:#eee center/cover no-repeat;outline:1px solid var(--line)}
-  .lieux button[aria-pressed="true"] span{outline:2px solid var(--ink);outline-offset:2px}
   .recap{display:grid;gap:12px}
   .recap p{margin:0;font-size:14px;color:var(--muted)}
   .recap .btn{justify-self:start}
@@ -632,8 +631,6 @@
   .story .ev-h a{color:var(--muted)}
   .lieux{grid-template-columns:repeat(6,1fr)}
   .lieux button i{display:block;margin-top:2px}
-  .lieux button.sig span{display:grid;place-items:center;background:var(--bg-2);color:var(--muted)}
-  .lieux button.sig svg{width:40%;height:auto}
   .pv-photo{position:relative;margin-top:28px;padding:10px 14px;border:1px dashed currentColor;font:italic 400 14px/1.4 "Cormorant Garamond",Georgia,serif;opacity:.9}
   @media (max-width:560px){ .lieux{grid-template-columns:repeat(3,1fr)} }
   /* configurateur en étapes */
@@ -674,7 +671,6 @@
   @media (max-width:560px){ .opts.themes{grid-template-columns:repeat(3,1fr)} }
   .th{border:0;padding:0;background:none;cursor:pointer;display:grid;gap:6px;font:500 12px Inter,sans-serif;color:var(--ink);min-width:0;text-align:left}
   .th span{display:block;aspect-ratio:3/4;background:#eee center 30%/cover no-repeat;outline:1px solid var(--line)}
-  .th[aria-pressed="true"] span{outline:2px solid var(--ink);outline-offset:2px}
   .fld .hint{margin:0;font-size:13px;color:var(--muted)}
   /* fin du configurateur : récapitulatif et la suite */
   .sum{margin:0;border-top:1px solid var(--ink)}
@@ -683,3 +679,22 @@
   .next{list-style:none;margin:0;padding:0;display:grid;gap:10px}
   .next li{display:flex;gap:12px;align-items:baseline;font-size:15px;color:var(--muted)}
   .next li b{font:italic 400 22px/1 "Cormorant Garamond",Georgia,serif;color:var(--ink);flex:none;width:18px}
+
+  /* vignettes (thèmes, lieux) : la sélection se voit par une coche, pas par un cadre noir ; le reste s'estompe un peu */
+  .th span,.lieux button span{position:relative;transition:opacity .2s}
+  .th[aria-pressed="false"] span,.lieux button[aria-pressed="false"] span{opacity:.72}
+  .th[aria-pressed="true"] span::after,.lieux button[aria-pressed="true"] span::after{content:'✓';position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font:600 12px/22px Inter,sans-serif;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+  .th[aria-pressed="true"]{font-weight:600}
+  .th small,.lieux button small{display:block;font-weight:400;color:var(--muted);font-size:10.5px;margin-top:1px}
+  /* « votre lieu, d'après votre photo » : le lieu du thème en fond, un appareil photo dans une pastille blanche */
+  .lieux button.sig span{display:grid;place-items:center;background-position:center;background-size:cover}
+  .lieux button.sig span::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.28)}
+  .lieux button.sig span svg{position:relative;width:36px;height:36px;padding:9px;border-radius:50%;background:#fff;color:var(--ink);box-shadow:0 1px 6px rgba(0,0,0,.3)}
+  .pv-long{justify-content:flex-start;padding-top:22%!important}
+  /* formules : chaque ligne avec son icône, les nouveautés d'une formule marquées « en plus » */
+  .feat li{display:flex;align-items:flex-start;gap:12px;padding:10px 0}
+  .feat svg{flex:none;width:22px;height:22px;margin-top:1px;color:var(--ink)}
+  .feat span{flex:1} .feat b{font-weight:500}
+  .feat em{font:500 10px/1 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;font-style:normal;color:var(--bg);background:var(--ink);padding:5px 6px;border-radius:2px;margin-top:3px}
+  .feat li:not(.plus) svg{color:var(--muted)}
+  .next li{font-size:14px} .sum div{font-size:14px}
