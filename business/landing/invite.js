@@ -247,18 +247,11 @@
         <div class="dl"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>
         <div class="lg-hint">${S.scroll} ↓</div>
       </div></div>`;
-    const sceneSrc=e=>e.lieu?`/img/hd/${I.theme}-${e.lieu}.webp?v=${IMGV}`:e.scene?img(e.scene):null;
-    const evs=events.map((e,i)=>{ const d=zoned(e.start,e.tz), inner=X.ev[(I.events||[]).indexOf(e)]||X.ev[i%X.ev.length];
-      const when=fmtDayShort(d,e.tz)+' · '+fmtTime(d,e.tz), src=sceneSrc(e);
-      // fusion du rouleau et du scène par scène : la scène du lieu en plein écran, dans le fil du tableau
-      if(src){ const dk=!T.light, c=dk?'#fff':T.color, ey=dk?'#fff':(T.ey||T.color);
-        return `<section class="lg-scene${T.light?' light':''}" style="background-image:url('${src}')">
-          <div class="rv ey" style="color:${ey};text-shadow:${dk?'0 1px 8px rgba(0,0,0,.5)':'none'}">${esc(e.eyebrow||'')}</div><div class="rv nm" style="${esc(nmCss(.74,c))}">${esc(e.title)}</div>
-          <div class="rv when" style="color:${c}">${esc(when)}</div>${e.place?`<div class="rv tx" style="color:${c}">${esc(e.place)}</div>`:''}${e.note?`<div class="rv tx" style="color:${c};font-size:15px;opacity:.9">${esc(e.note)}</div>`:''}
-          <div class="rv acts" style="color:${c}">${e.address?`<a class="b" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${S.route}</a>`:''}<button type="button" class="b" data-cal="${esc(e.id)}">${ic.cal}${S.cal}</button></div>
-        </section>`; }
+    // la bibliothèque de lieux dans le grand tableau : un lieu choisi (lieu) remplit le cadre peint de l'événement
+    const evs=events.map((e,i)=>{ const d=zoned(e.start,e.tz), inner=e.lieu?`/img/hd/${I.theme}-${e.lieu}.webp?v=${IMGV}`:X.base+'/'+(X.ev[(I.events||[]).indexOf(e)]||X.ev[i%X.ev.length]);
+      const when=fmtDayShort(d,e.tz)+' · '+fmtTime(d,e.tz);
       return `<article class="lg-ev rv">
-        <div class="lg-fr" style="aspect-ratio:${X.frame.w}/${X.frame.h}"><img class="in" src="${X.base}/${inner}" alt="" style="-webkit-mask-image:url('${X.base}/${X.frame.mask}');mask-image:url('${X.base}/${X.frame.mask}')"><img class="fr" src="${X.base}/${X.frame.src}" alt=""></div>
+        <div class="lg-fr" style="aspect-ratio:${X.frame.w}/${X.frame.h}"><img class="in" src="${inner}" alt="" style="-webkit-mask-image:url('${X.base}/${X.frame.mask}');mask-image:url('${X.base}/${X.frame.mask}')"><img class="fr" src="${X.base}/${X.frame.src}" alt=""></div>
         <div class="ey">${esc(e.eyebrow||'')}</div><div class="lg-evt" style="${nm(.62,sec[0].ink)}">${esc(e.title)}</div>
         <div class="when">${esc(when)}</div>${e.place?`<div class="tx">${esc(e.place)}</div>`:''}${e.note?`<div class="tx small">${esc(e.note)}</div>`:''}
         <div class="acts">${e.address?`<a class="b" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${S.route}</a>`:''}<button type="button" class="b" data-cal="${esc(e.id)}">${ic.cal}${S.cal}</button></div>
@@ -269,7 +262,7 @@
         <div class="rv lg-names2" style="${nm(.8,sec[0].accent)}">${names}</div>
         <p class="rv tx">${esc(I.intro&&I.intro.text||S.joy)}</p>
         ${I.countdown==='debut'?`<div class="rv">${cdHtml(false,sec[0].ink)}</div>`:''}
-        ${ttl(S.celebr,0)}${evs.replace(/<section class="lg-scene/g,'</div><section class="lg-scene').replace(/<\/section>/g,'</section><div class="lg-in">')}
+        ${ttl(S.celebr,0)}${evs}
       </div></div>`;
     // 2. notre histoire, photos, dress code
     const ST0=I.story, DR0=I.dress, phs=X.photos||[];

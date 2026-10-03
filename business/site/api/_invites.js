@@ -166,6 +166,39 @@ export default {
   "families": {},
   "familyLabels": {}
  },
+ "constance-henri": {
+  "demo": true,
+  "couple": "Constance & Henri",
+  "date": "2027-06-12T13:00:00+00:00",
+  "events": [
+   "ceremonie",
+   "diner"
+  ],
+  "eventList": [
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "diner",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {
+   "famille-martin": {
+    "events": null
+   },
+   "famille-bernard": {
+    "events": [
+     "ceremonie"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-martin": "Chère famille Martin",
+   "famille-bernard": "Chers Paul et Anne"
+  }
+ },
  "emma-louis": {
   "demo": true,
   "couple": "Emma & Louis",
@@ -659,6 +692,39 @@ export default {
   "familyLabels": {
    "famille-whitmore": "Chère famille Whitmore",
    "amis": "Chers amis"
+  }
+ },
+ "yuki-leo": {
+  "demo": true,
+  "couple": "Yuki & Léo",
+  "date": "2027-04-03T12:00:00+00:00",
+  "events": [
+   "ceremonie",
+   "reception"
+  ],
+  "eventList": [
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "reception",
+    "label": "La réception"
+   }
+  ],
+  "families": {
+   "famille-martin": {
+    "events": null
+   },
+   "famille-bernard": {
+    "events": [
+     "ceremonie"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-martin": "Chère famille Martin",
+   "famille-bernard": "Chers Paul et Anne"
   }
  }
 };

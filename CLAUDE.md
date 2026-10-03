@@ -190,6 +190,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Après toute régénération d'images déjà publiées, augmenter `?v=` (vitrine) et `IMGV` (invite.js), sinon le
     navigateur garde les anciennes : c'est ce qui faisait croire que Mille et une nuits n'avait pas changé.
 
+30. **Deux formats, clairs dès le début, sur cinq thèmes.** La « fusion » (scènes plein écran insérées dans le rouleau,
+    essayée sur Victoire & Charles) a été refusée : « on se perd entre deux propositions ». On propose donc **les deux
+    formats, nommés et montrés dès l'accueil** : *scène par scène* (un événement par écran, lieu en plein écran) et
+    *grand tableau* (un rouleau peint, lieux dans des cadres ; un `lieu` de la bibliothèque remplit le cadre). Au
+    lancement, **5 thèmes** (`launch:true` dans themes.js : Mille et une nuits, Dolce Vita, Bollywood, Sakura, Old money),
+    chacun avec une démo dans chaque format ; les autres thèmes restent dans le code et leurs démos en ligne, mais hors
+    galerie et configurateur tant qu'ils n'existent pas dans les deux formats. Le format se choisit à l'étape 1 du
+    configurateur (`C.fmt`, champ `format` dans la demande) ; aucun thème n'est réservé à Signature.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

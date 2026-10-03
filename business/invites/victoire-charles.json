@@ -33,8 +33,7 @@
       "title": "À la chapelle",
       "start": "2027-06-12T15:00",
       "place": "Chapelle du domaine",
-      "address": "Château de Canisy, 50750 Canisy",
-      "lieu": "eglise"
+      "address": "Château de Canisy, 50750 Canisy"
     },
     {
       "id": "cocktail",
@@ -42,8 +41,7 @@
       "title": "Sur la pelouse",
       "start": "2027-06-12T16:30",
       "place": "Jardins du château",
-      "address": "Château de Canisy, 50750 Canisy",
-      "lieu": "jardin"
+      "address": "Château de Canisy, 50750 Canisy"
     },
     {
       "id": "diner",
@@ -52,8 +50,7 @@
       "start": "2027-06-12T20:00",
       "place": "Le parc du château",
       "address": "Château de Canisy, 50750 Canisy",
-      "end": "2027-06-13T02:00",
-      "lieu": "salle"
+      "end": "2027-06-13T02:00"
     }
   ],
   "story": {

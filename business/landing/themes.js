@@ -9,7 +9,7 @@ window.SCEAU_THEMES={
   aquarelle:{name:"Aquarelle",style:"Aquarelle",short:"Pivoines, eucalyptus, papier blanc",desc:"Fleurs à l'aquarelle sur papier blanc, sauge et rose poudré.",couple:"Alice & Théo",light:true,
     font:'"Parisienne",cursive',color:"#3e5a4a",ey:"#7a8f80",tx:"#55695d",
     scenes:[["Nous nous marions","NAMES","Samedi 22 mai 2027"],["La cérémonie","Sous l'arche fleurie","15h30 · Domaine des Roses","Itinéraire"],["Le dîner","Au jardin","Dès 19h, sous la tonnelle"],["RSVP","Serez-vous des nôtres ?","Avant le 15 avril","Répondre"]]},
-  bollywood:{name:"Bollywood",style:"Peinture",short:"Palais, soucis, mille lumières",desc:"Palais rose, soucis et mille lumières, sur plusieurs jours.",couple:"Priya & Arjun",
+  bollywood:{name:"Bollywood",launch:true,style:"Peinture",short:"Palais, soucis, mille lumières",desc:"Palais rose, soucis et mille lumières, sur plusieurs jours.",couple:"Priya & Arjun",
     font:'"Cinzel Decorative",serif',color:"#fff4d6",size:.72,
     scenes:[["Shubh Vivah","NAMES","Du 9 au 11 juillet 2027"],["Mehndi","Vendredi après-midi","14h00 · Cour du palais","Itinéraire"],["Cérémonie","Sous le mandap","Samedi 17h00","Itinéraire"],["Sangeet & réception","Serez-vous des nôtres ?","Samedi, dès 20h","Répondre"]]},
   minimal:{name:"Trait",style:"Minimal",short:"Une ligne, du papier, rien de plus",desc:"Dessin d'un seul trait sur papier crème. Sobre et moderne.",couple:"Sarah & Yanis",light:true,
@@ -27,39 +27,40 @@ window.SCEAU_THEMES={
   ceramique:{name:"Azulejos",style:"Céramique",short:"Carreaux bleus, citrons, océan",desc:"Carreaux bleus et blancs, citronniers et lumière du sud.",couple:"Sofia & Nuno",light:true,
     font:'"DM Serif Display",Georgia,serif',color:"#1f4fa3",ey:"#3d6bb8",tx:"#2c3a55",size:.86,
     scenes:[["Vamos casar","NAMES","Samedi 25 juin 2027"],["La cérémonie","À la chapelle blanche","16h00 · Lisbonne","Itinéraire"],["Le dîner","Face à l'océan","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre"]]},
-  nuits:{name:"Mille et une nuits",style:"Peinture",short:"Riad, zellige, lanternes",desc:"Riad, zellige et lanternes. Henné, cérémonie et nuit étoilée.",couple:"Yasmine & Karim",
+  nuits:{name:"Mille et une nuits",launch:true,style:"Peinture",short:"Riad, zellige, lanternes",desc:"Riad, zellige et lanternes. Henné, cérémonie et nuit étoilée.",couple:"Yasmine & Karim",
     font:'"Aref Ruqaa",serif',color:"#fff3d6",size:.8,
     scenes:[["Bismillah","NAMES","Samedi 12 juin 2027"],["Le henné","Vendredi soir","19h00 · Chez la famille Alaoui","Itinéraire"],["La cérémonie","Au riad","Samedi 14h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 19h","Répondre"]]},
   gravure:{name:"Gravure",style:"Gravure",short:"Encre ancienne, papier vieilli",desc:"Gravure à l'encre sur papier ancien, comme un livre d'autrefois.",couple:"Claire & Thomas",light:true,
     font:'"IM Fell English",Georgia,serif',italic:true,color:"#2a2620",ey:"#6b6152",tx:"#4a443a",size:.74,stack:true,
     scenes:[["Ils se marient","NAMES","Samedi 2 octobre 2027"],["La messe","Église Saint-Martin","15h00","Itinéraire"],["Le dîner","Au château","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
-  dolcevita:{name:"Dolce Vita",style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
+  dolcevita:{name:"Dolce Vita",launch:true,style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
     font:'"Italiana",serif',color:"#fff",size:.85,
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
 };
 
-/* univers culturels : d'abord faits en grand tableau continu (long:true, démos dans img/long/<thème>/), ils ont aussi leurs décors de
-   scènes (tools/scenes-long.py) et se composent comme les autres, à partir de la formule Signature (plan). */
+/* lancement : 5 thèmes (launch:true), chacun dans les deux formats, « scène par scène » (décors img/hd/<thème>-n) et
+   « grand tableau » (img/long/<thème>/). Les autres thèmes restent dans le code, leurs démos restent en ligne, mais ils ne
+   sont ni dans la galerie ni dans le configurateur tant qu'ils n'existent pas dans les deux formats. */
 Object.assign(window.SCEAU_THEMES,{
-  chinois:{name:"Double bonheur",style:"Chinois",short:"Lanternes rouges, pavillon, pruniers",desc:"Pavillon aux lanternes rouges, pont sur l'étang aux lotus, pruniers en fleurs. Pour un mariage chinois ou le Nouvel an.",couple:"Lin & Wei",long:true,plan:"signature",
+  chinois:{name:"Double bonheur",style:"Chinois",short:"Lanternes rouges, pavillon, pruniers",desc:"Pavillon aux lanternes rouges, pont sur l'étang aux lotus, pruniers en fleurs. Pour un mariage chinois ou le Nouvel an.",couple:"Lin & Wei",long:true,
     font:'"Cinzel",serif',color:"#fff",upper:true,size:.8,gf:"Cinzel",music:"nocturne",particles:"none",
     scenes:[["Nous nous marions", "NAMES", "Samedi 13 février 2027"], ["La cérémonie du thé", "Au pavillon", "11h00 · Pavillon des lotus", "Itinéraire"], ["Le banquet", "Sous les lanternes rouges", "Dès 19h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 janvier", "Répondre"]]},
-  japonais:{name:"Sakura",style:"Japonais",short:"Cerisiers, torii, ombrelle rouge",desc:"Cerisiers en fleurs, torii vermillon et mont Fuji, dans la douceur d'une estampe.",couple:"Hana & Kenji",long:true,plan:"signature",light:true,
+  japonais:{name:"Sakura",launch:true,style:"Japonais",short:"Cerisiers, torii, ombrelle rouge",desc:"Cerisiers en fleurs, torii vermillon et mont Fuji, dans la douceur d'une estampe.",couple:"Hana & Kenji",long:true,light:true,
     font:'"Zen Old Mincho",serif',color:"#2b2830",size:.82,gf:"Zen+Old+Mincho",music:"nocturne",particles:"none",
     scenes:[["Nous nous marions", "NAMES", "Samedi 3 avril 2027"], ["La cérémonie", "Au sanctuaire", "14h00 · Sous les cerisiers", "Itinéraire"], ["La réception", "Au ryokan", "Dès 18h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er mars", "Répondre"]]},
-  gzhel:{name:"Gzhel",style:"Russe",short:"Porcelaine bleu cobalt, troïka, bouleaux",desc:"Tout en bleu cobalt sur porcelaine blanche : église à bulbes, troïka et roses de Gzhel.",couple:"Anastasia & Nikolaï",long:true,plan:"signature",light:true,
+  gzhel:{name:"Gzhel",style:"Russe",short:"Porcelaine bleu cobalt, troïka, bouleaux",desc:"Tout en bleu cobalt sur porcelaine blanche : église à bulbes, troïka et roses de Gzhel.",couple:"Anastasia & Nikolaï",long:true,light:true,
     font:'"Cormorant Garamond",Georgia,serif',italic:true,color:"#1d3f9a",gf:"Cormorant+Garamond:ital,wght@0,500;1,400",music:"valse",particles:"none",
     scenes:[["Nous nous marions", "NAMES", "Samedi 16 janvier 2027"], ["La cérémonie", "À la cathédrale", "15h00", "Itinéraire"], ["Le dîner", "Pain et sel", "Dès 19h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 décembre", "Répondre"]]},
-  asianchic:{name:"Laque & or",style:"Asian chic",short:"Laque noire, feuille d'or, orchidées",desc:"Laque noire, feuille d'or, jade et orchidées blanches : un chic asiatique moderne et épuré.",couple:"Linh & Thomas",long:true,plan:"signature",
+  asianchic:{name:"Laque & or",style:"Asian chic",short:"Laque noire, feuille d'or, orchidées",desc:"Laque noire, feuille d'or, jade et orchidées blanches : un chic asiatique moderne et épuré.",couple:"Linh & Thomas",long:true,
     font:'"Bodoni Moda",serif',color:"#fff",italic:true,size:.86,gf:"Bodoni+Moda:ital@0;1",music:"nocturne",particles:"none",
     scenes:[["Save the date", "NAMES", "Samedi 18 septembre 2027"], ["La cérémonie", "Au bord de l'eau", "16h00 · Pavillon de laque", "Itinéraire"], ["Le dîner", "Black tie", "Dès 20h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er août", "Répondre"]]},
-  y2k:{name:"Y2K",style:"Y2K",short:"Rose bonbon, chrome, papillons",desc:"Rose bonbon, chrome et papillons, décapotable rose : les années 2000 en version mariage.",couple:"Jade & Enzo",long:true,plan:"signature",light:true,
+  y2k:{name:"Y2K",style:"Y2K",short:"Rose bonbon, chrome, papillons",desc:"Rose bonbon, chrome et papillons, décapotable rose : les années 2000 en version mariage.",couple:"Jade & Enzo",long:true,light:true,
     font:'"Pacifico",cursive',color:"#4a1640",size:.8,gf:"Pacifico",music:"ragtime",particles:"none",
     scenes:[["On se marie !", "NAMES", "Samedi 26 juin 2027"], ["La cérémonie", "Mairie de Marseille", "15h00", "Itinéraire"], ["La soirée", "Rooftop & dance floor", "Dès 20h", "Itinéraire"], ["Tu viens ?", "Serez-vous des nôtres ?", "Avant le 1er juin", "Répondre"]]},
-  oldmoney:{name:"Old money",style:"Old money",short:"Manoir, voiture ancienne, buis taillés",desc:"Un manoir anglais, une voiture ancienne et des buis taillés : l'élégance discrète.",couple:"Victoire & Charles",long:true,plan:"signature",light:true,
+  oldmoney:{name:"Old money",launch:true,style:"Old money",short:"Manoir, voiture ancienne, buis taillés",desc:"Un manoir anglais, une voiture ancienne et des buis taillés : l'élégance discrète.",couple:"Victoire & Charles",long:true,light:true,
     font:'"Playfair Display",Georgia,serif',italic:true,color:"#1f2b44",size:.86,gf:"Playfair+Display:ital@0;1",music:"valse",particles:"none",
     scenes:[["Ils se marient", "NAMES", "Samedi 12 juin 2027"], ["La cérémonie", "À la chapelle", "15h00 · Dans le parc", "Itinéraire"], ["Le dîner", "Sous la tente", "Dès 19h30", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er mai", "Répondre"]]},
-  afro:{name:"Kente",style:"Afro",short:"Kente, wax, baobab au crépuscule",desc:"Kente et wax, baobab au crépuscule, calebasses et cauris : la fête aux couleurs de l'Afrique.",couple:"Fatou & Kwame",long:true,plan:"signature",
+  afro:{name:"Kente",style:"Afro",short:"Kente, wax, baobab au crépuscule",desc:"Kente et wax, baobab au crépuscule, calebasses et cauris : la fête aux couleurs de l'Afrique.",couple:"Fatou & Kwame",long:true,
     font:'"Abril Fatface",serif',color:"#fff",size:.82,gf:"Abril+Fatface",music:"marine",particles:"none",
     scenes:[["Nous nous marions", "NAMES", "Samedi 21 août 2027"], ["La cérémonie", "Sous le dais de kente", "15h00", "Itinéraire"], ["La fête", "Sous le baobab", "Dès 20h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 juillet", "Répondre"]]}
 });

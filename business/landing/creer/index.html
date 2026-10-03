@@ -34,7 +34,7 @@
   <div class="wrap">
     <div class="head">
       <h2>Composez votre faire-part.</h2>
-      <p>Quatre étapes courtes, l'aperçu à côté. Votre faire-part est un seul grand tableau qu'on descend du doigt.</p>
+      <p>Quatre étapes courtes, l'aperçu à côté.</p>
     </div>
     <div class="comp">
       <form class="comp-form" id="compForm" autocomplete="off">
@@ -51,7 +51,8 @@
             <div class="names"><input type="text" id="cN1" value="Emma" maxlength="20" aria-label="Premier prénom"><b>&amp;</b><input type="text" id="cN2" value="Louis" maxlength="20" aria-label="Second prénom"></div>
           </label>
           <label class="fld"><span>Date du mariage</span><input type="date" id="cDate" value="2027-06-12"></label>
-          <div class="fld"><span>Thème</span><div class="opts themes" id="cStyles"></div><p class="hint">Les thèmes « dès Signature » se composent de la même façon ; ils comptent dans la formule Signature.</p></div>
+          <div class="fld"><span>Thème</span><div class="opts themes" id="cStyles"></div></div>
+          <div class="fld"><span>Format</span><div class="opts fmts" id="cFmt"></div><p class="hint">Même thème, même prix : deux façons de raconter la journée. <a href="/modeles/">Voir les deux en exemple</a>.</p></div>
 <div class="fld"><span>Ouverture</span><div class="opts" id="cOpen"></div></div>
 
         </div>
@@ -78,7 +79,7 @@
             <ol class="next"><li><b>1</b><span>Vous commandez, paiement sécurisé par Stripe.</span></li><li><b>2</b><span>On vous écrit sous 24 h pour vos textes, adresses, horaires et photos. La musique se choisit à ce moment-là.</span></li><li><b>3</b><span>Vous validez l'aperçu : votre lien est prêt sous 48 h (Essentiel) ou 3 à 5 jours (Signature).</span></li></ol>
           </div>
           <div class="recap"><a class="btn solid" href="/contact/?plan=essentiel" id="cGo" data-plan="essentiel">Commander · Essentiel 99 €</a></div>
-          <input type="hidden" name="style" id="fStyle"><input type="hidden" name="palette" id="fPal"><input type="hidden" name="font" id="fFont"><input type="hidden" name="opening" id="fOpen"><input type="hidden" name="countdown" id="fCount"><input type="hidden" name="reveal" id="fReveal"><input type="hidden" name="events" id="fEvents"><input type="hidden" name="screens" id="fScreens"><input type="hidden" id="fNames"><input type="hidden" id="fDate">
+          <input type="hidden" name="style" id="fStyle"><input type="hidden" name="format" id="fFormat"><input type="hidden" name="palette" id="fPal"><input type="hidden" name="font" id="fFont"><input type="hidden" name="opening" id="fOpen"><input type="hidden" name="countdown" id="fCount"><input type="hidden" name="reveal" id="fReveal"><input type="hidden" name="events" id="fEvents"><input type="hidden" name="screens" id="fScreens"><input type="hidden" id="fNames"><input type="hidden" id="fDate">
         </div>
 
         <div class="wz-foot"><button type="button" class="btn" id="wzPrev">← Retour</button><button type="button" class="btn solid" id="wzNext">Suivant →</button></div>

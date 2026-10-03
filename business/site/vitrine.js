@@ -11,7 +11,7 @@
   /* commande : récapitulatif, conditions de vente et renonciation au délai de rétractation, puis paiement Stripe */
   let ordPlan=null, ordLink=null;
   const ord=document.getElementById('order'), $o=id=>document.getElementById(id);
-  function choicesText(){ const v=id=>($o(id)||{}).value||''; return [v('fStyle')&&'thème '+v('fStyle'), v('fOpen')&&'ouverture '+v('fOpen').toLowerCase(), v('fPal')&&'couleurs '+v('fPal').toLowerCase(), v('fEvents')&&'écrans : '+v('fEvents'), v('fScreens')&&'écrans en plus : '+v('fScreens').toLowerCase()].filter(Boolean).join(' · '); }
+  function choicesText(){ const v=id=>($o(id)||{}).value||''; return [v('fStyle')&&'thème '+v('fStyle'), v('fFormat')&&'format '+v('fFormat').toLowerCase(), v('fOpen')&&'ouverture '+v('fOpen').toLowerCase(), v('fPal')&&'couleurs '+v('fPal').toLowerCase(), v('fEvents')&&'écrans : '+v('fEvents'), v('fScreens')&&'écrans en plus : '+v('fScreens').toLowerCase()].filter(Boolean).join(' · '); }
   openOrder=function(plan,link){
     ordPlan=plan; ordLink=link; const P=PLANS[plan];
     $o('ordT').textContent=`${P.name} · ${P.price}`;
@@ -34,7 +34,7 @@
     const ref='sc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
     const v=id=>($o(id)||{}).value||'';
     const body={type:'commande',ref,plan:ordPlan,email,name:$o('oName').value,date:$o('oDate').value,consent:true,cgv:true,waiver:true,
-      style:v('fStyle'),palette:v('fPal'),font:v('fFont'),opening:v('fOpen'),countdown:v('fCount'),screens:v('fScreens'),events:v('fEvents'),names:$o('oName').value,weddingDate:$o('oDate').value};
+      style:v('fStyle'),format:v('fFormat'),palette:v('fPal'),font:v('fFont'),opening:v('fOpen'),countdown:v('fCount'),screens:v('fScreens'),events:v('fEvents'),names:$o('oName').value,weddingDate:$o('oDate').value};
     // on garde la trace de la commande et des cases cochées (preuve de la renonciation), sans bloquer le paiement
     try{ await Promise.race([fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),new Promise(r=>setTimeout(r,2500))]); }catch(x){}
     const u=new URL(ordLink); u.searchParams.set('prefilled_email',email); u.searchParams.set('client_reference_id',ref);
@@ -83,7 +83,8 @@
      (« grand tableau » contre « scène par scène ») : c'est le même produit, plus ou moins dessiné selon les écrans. */
   // les styles « long » n'existent qu'en grand tableau (pas de décors de scènes) : hors des listes scène après scène
   // tous les thèmes ont leurs décors de scènes ; ceux marqués plan:'signature' se composent à partir de Signature
-  const KEYS=Object.keys(THEMES).filter(k=>THEMES[k].scenes), DEMOS0=window.SCEAU_DEMOS||[];
+  // les 5 thèmes du lancement (launch:true), chacun dans les deux formats
+  const KEYS=Object.keys(THEMES).filter(k=>THEMES[k].launch), DEMOS0=window.SCEAU_DEMOS||[];
   const LONGS=[
     {slug:'nour-ilyes',k:'nuits',couple:'Nour & Ilyes',ey:'Bismillah',date:'Du 8 au 10 juillet 2027 · Marrakech',ink:'#f6eedb',shadow:'0 2px 14px rgba(0,0,0,.55)',desc:'Henné, cérémonie et fête dans le désert',alt:'un riad de nuit, le couple de dos sur un balcon'},
     {slug:'ananya-rohan',k:'bollywood',couple:'Ananya & Rohan',ey:'Shubh Vivah',date:'Les 17 et 18 septembre 2027',ink:'#6b1230',shadow:'0 1px 10px rgba(255,236,214,.7)',desc:'Mehndi, mandap et sangeet',alt:'un palais du Rajasthan au crépuscule, le couple de dos'},
@@ -97,8 +98,8 @@
     {slug:'fatou-kwame',k:'afro',couple:'Fatou & Kwame',ey:'Nous nous marions',date:'Samedi 21 août 2027 · Paris',ink:'#fbeedb',shadow:'0 2px 14px rgba(0,0,0,.6)',desc:'La dot, le oui et la fête',alt:'un pavillon drapé de kente sous un baobab'}
   ];
   // cartes de la section « Un seul grand tableau » : la même liste
-  const contGrid=document.getElementById('contGrid'); if(contGrid) contGrid.innerHTML=LONGS.map(l=>`<a class="cont" href="/d/${l.slug}/" target="_blank" rel="noopener"><div class="pic"><img src="/img/long/${l.k}/thumb.webp" alt="${esc('Le faire-part '+THEMES[l.k].name+' : '+l.alt)}" loading="lazy" width="480" height="768"></div><div class="txt"><b>${esc(THEMES[l.k].name)}</b><span>${esc(l.couple+' · '+l.desc)}</span><em>Ouvrir l'exemple →</em></div></a>`).join('');
-  const CREAS=LONGS.map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:t.name,font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`/img/reel/long-${l.k}.webp`}); });
+  const contGrid=document.getElementById('contGrid'); if(contGrid) contGrid.innerHTML=LONGS.filter(l=>KEYS.includes(l.k)).map(l=>`<a class="cont" href="/d/${l.slug}/" target="_blank" rel="noopener"><div class="pic"><img src="/img/long/${l.k}/thumb.webp" alt="${esc('Le faire-part '+THEMES[l.k].name+' : '+l.alt)}" loading="lazy" width="480" height="768"></div><div class="txt"><b>${esc(THEMES[l.k].name)}</b><span>${esc(l.couple+' · '+l.desc)}</span><em>Ouvrir l'exemple →</em></div></a>`).join('');
+  const CREAS=LONGS.filter(l=>KEYS.includes(l.k)).map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:t.name,font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`/img/reel/long-${l.k}.webp`}); });
   // carrousel de l'accueil : un thème qui a sa démo en grand tableau y passe sous cette forme, pas deux fois
   KEYS.filter(k=>!LONGS.some(l=>l.k===k)).forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim');
     CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=5`})); });
@@ -144,18 +145,17 @@
   /* catalogue avec filtre par style */
   const models=document.getElementById('models'), filters=document.getElementById('filters');
   const DEMOS=window.SCEAU_DEMOS||[], OPN={env:'Enveloppe',cur:'Rideau',voile:'Voile',door:'Grandes portes'}, RVN={scratch:'Date à gratter',wheel:'Roue de la date',slot:'Jackpot'};
-  // une seule galerie : les 12 thèmes à scènes (composables en ligne) et les 10 styles en grand tableau (composés avec nous)
-  const card=(o)=>{ const m=document.createElement('div'); m.className='model'; m.dataset.theme=o.k||''; m.dataset.style=o.style;
-    m.innerHTML=`<a class="pic" href="${esc(o.href)}" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(o.title)}"><img src="${esc(o.img1)}" alt="" loading="lazy">${o.img2?`<img class="pic2" src="${esc(o.img2)}" alt="" loading="lazy" aria-hidden="true">`:''}<span class="cn" style="${esc(`font-family:${o.font};${o.italic?'font-style:italic;':''}${o.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(o.couple)}</span><span class="k ${o.compose?'k-c':'k-n'}">${o.compose?(o.sig?'Dès Signature':'Dès Essentiel'):'Sur mesure'}</span></a><div class="meta"><div><h3>${esc(o.title)}</h3><p class="style">${esc(o.sub)}</p></div><div class="acts"><a href="${esc(o.href)}" target="_blank" rel="noopener">Ouvrir</a>${o.compose?`<a class="go" href="/creer/?theme=${esc(o.k)}">Composer →</a>`:`<a class="go" href="/creer/?theme=${esc(o.k)}">Le demander →</a>`}</div></div>`;
+  // une carte par thème, avec ses deux formats : « scène par scène » (démo pages) et « grand tableau » (démo long)
+  const card=(k)=>{ const t=THEMES[k], ds=DEMOS.find(x=>x.theme===k&&x.layout!=='long'), dl=DEMOS.find(x=>x.theme===k&&x.layout==='long');
+    const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style;
+    m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=5" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=5" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
+      <div class="fmts">${ds?`<a href="/d/${esc(ds.slug)}/" target="_blank" rel="noopener"><b>Scène par scène</b><span>${esc(ds.couple)}</span></a>`:''}${dl?`<a href="/d/${esc(dl.slug)}/" target="_blank" rel="noopener"><b>Grand tableau</b><span>${esc(dl.couple)}</span></a>`:''}</div>
+      <div class="acts"><a class="go" href="/creer/?theme=${esc(k)}">Composer →</a></div></div>`;
     models.appendChild(m); };
-  const yk=DEMOS.find(d=>d.slug==='yasmine-karim');
-  if(yk) card({k:'',title:'Notre faire-part réel',sub:'Lieux réels peints et animés',style:'Peinture',couple:yk.couple,font:THEMES.nuits.font,href:'/d/yasmine-karim/',img1:yk.thumb,compose:false});
-  KEYS.forEach(k=>{ const t=THEMES[k], d=DEMOS.find(x=>x.theme===k&&x.slug!=='yasmine-karim'); if(d) card({k,title:t.name,sub:t.style+' · '+t.short,style:t.style,couple:d.couple,font:t.font,italic:t.italic,upper:t.upper,href:'/d/'+d.slug+'/',img1:`/img/themes/${k}-1.webp?v=5`,img2:`/img/themes/${k}-2.webp?v=5`,compose:true,sig:t.plan==='signature'}); });
-  // un thème qui existe aussi en scènes n'apparaît qu'une fois (sa carte « Composer »), sinon on le croit en double
-  LONGS.filter(l=>!KEYS.includes(l.k)).forEach(l=>{ const t=THEMES[l.k]; card({k:l.k,title:t.name,sub:t.style+' · '+l.desc,style:t.style,couple:l.couple,font:t.font,italic:t.italic,upper:t.upper,href:'/d/'+l.slug+'/',img1:`/img/long/${l.k}/thumb.webp`,compose:false}); });
-  const STYLES=['Tous','Dès Essentiel','Dès Signature',...new Set([...KEYS,...LONGS.map(l=>l.k)].map(k=>THEMES[k].style))];
+  KEYS.forEach(card);
+  const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
   STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
-    b.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); models.querySelectorAll('.model').forEach(m=>{ const sig=/Signature/.test((m.querySelector('.k')||{}).textContent||''); m.hidden=!(st==='Tous'||(st==='Dès Essentiel'&&!sig)||(st==='Dès Signature'&&sig)||m.dataset.style===st); }); };
+    b.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); models.querySelectorAll('.model').forEach(m=>{ m.hidden=!(st==='Tous'||m.dataset.style===st); }); };
     filters.appendChild(b); });
   }
 
@@ -164,7 +164,8 @@
   const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'},{id:'bordeaux',name:'Bordeaux',c:'#7a2e3b'},{id:'lavande',name:'Lavande',c:'#8a7fb5'},{id:'emeraude',name:'Émeraude',c:'#2f6b57'},{id:'ardoise',name:'Ardoise',c:'#4a5560'},{id:'champagne',name:'Champagne',c:'#cdb48a'}];
   const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
   const urlPlan=new URLSearchParams(location.search).get('plan'), urlTheme=new URLSearchParams(location.search).get('theme');
-  const C={k:KEYS.includes(urlTheme)?urlTheme:'conte',pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
+  const urlFmt=new URLSearchParams(location.search).get('format');
+  const C={k:KEYS.includes(urlTheme)?urlTheme:'nuits',fmt:urlFmt==='long'?'long':'scenes',pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
     ev:[{name:'La cérémonie',time:'15:00',place:'Mairie du 11e',bg:'scene',lieu:'mairie'},{name:'La fête',time:'19:30',place:'Domaine des Roses',bg:'scene',lieu:'salle'}]};
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
   const LIEUX=[{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
@@ -172,7 +173,7 @@
      anglais) sont proposées au même endroit que les autres, avec l'étiquette « Signature ». On peut les choisir en Essentiel :
      la formule se met d'elle-même sur Signature et le récapitulatif explique pourquoi ; si l'on revient à Essentiel, il dit
      simplement ce qui n'y est pas compris. Jamais de case grisée ni de refus. */
-  const sigNeeds=()=>{ const n=[]; if(THEMES[C.k].plan==='signature') n.push(`le thème ${THEMES[C.k].name}`); if(C.ev.some(e=>e.bg==='scene'&&e.lieu==='photo')) n.push('votre lieu peint d’après photo');
+  const sigNeeds=()=>{ const n=[]; if(C.ev.some(e=>e.bg==='scene'&&e.lieu==='photo')) n.push('votre lieu peint d’après photo');
     if(C.ev.length>2) n.push(`${C.ev.length} événements (2 en Essentiel)`); if(C.x.has('famille')) n.push('un lien par famille'); if(C.x.has('en')) n.push('la version anglaise'); return n; };
   const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Hébergement'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'},{id:'famille',name:'Un lien par famille',sig:true},{id:'en',name:'Version anglaise',sig:true}];
   const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
@@ -187,7 +188,10 @@
   opt($('cOpen'),OPENS,'op','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   opt($('cReveal'),REVEALS,'rvl','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
-  opt($('cStyles'),KEYS,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'+(t.plan==='signature'?' sig':''); b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=5')"></span>${esc(t.name)}${t.plan==='signature'?'<small>dès Signature</small>':''}`; });
+  opt($('cStyles'),KEYS,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=5')"></span>${esc(t.name)}`; });
+  // les deux formats, annoncés dès le début : scène par scène (un événement par écran) ou grand tableau (un seul tableau qu'on descend)
+  const FMTS=[{id:'scenes',name:'Scène par scène',sub:'Un événement par écran, vos lieux en plein écran'},{id:'long',name:'Grand tableau',sub:'Un seul tableau qu’on descend, vos lieux dans des cadres peints'}];
+  opt($('cFmt'),FMTS,'fmt','',(b,o)=>{ b.className='op-card fmt'; b.innerHTML=`<i style="background-image:url('${o.id==='long'?'/img/reel/long-nuits.webp':'/img/themes/nuits-2.webp?v=5'}')"></i><b>${o.name}</b><small>${o.sub}</small>`; });
   const PLANSUB={essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
   $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
@@ -245,7 +249,7 @@
   function paint(){
     const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
     $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
-    [['cStyles','k'],['cOpen','op'],['cPal','pal'],['cCount','cd'],['cReveal','rvl']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
+    [['cStyles','k'],['cFmt','fmt'],['cOpen','op'],['cPal','pal'],['cCount','cd'],['cReveal','rvl']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
     $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
     $('cPalName').textContent=p.name;
     const needs=sigNeeds(); if(needs.length&&C.plan==='essentiel'&&!C.planPicked) C.plan='signature';
@@ -311,14 +315,17 @@
     cpRuns=[]; [...sc.querySelectorAll('.pv-sc')].forEach((s,i)=>{ const r=cpRuns[cpRuns.length-1]; if(r&&r.img===s.dataset.img) r.b=i; else cpRuns.push({img:s.dataset.img,a:i,b:i}); });
     $('cpBgs').innerHTML=cpRuns.map(r=>`<div class="cp-bg"><i style="background-image:url('${esc(r.img)}');--img:url('${esc(r.img)}')"></i></div>`).join('');
     cpLayout();
+    // grand tableau : l'aperçu montre le rouleau peint du thème (on le descend dans le téléphone), avec les prénoms et la date
+    if(C.fmt==='long'){ const l=LONGS.find(x=>x.k===C.k); if(l){ sc.innerHTML=`<div class="roll-prev"><img src="/img/reel/long-${C.k}.webp" alt=""><div class="roll-txt" style="color:${l.ink};text-shadow:${l.shadow}">${eyHtml('ey',l.ey,'')}<div class="nm" style="${esc(nameStyle({font:t.font,color:l.ink,size:t.size,italic:t.italic,upper:t.upper},1))}">${names}</div><div class="tx">${esc(ds)}</div></div></div>`; cpRuns=[]; } }
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
     $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ');
     const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
+    if($('fFormat')) $('fFormat').value=FMTS.find(f=>f.id===C.fmt).name;
     $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place} (${evTxt(e).toLowerCase()})`).join(' ; ');
     const needTxt=needs.length?(C.plan==='essentiel'?` Essentiel ne comprend pas ${needs.join(', ')} : vous pourrez les retirer, ou passer en Signature.`:` Avec ${needs.join(', ')}, c'est la formule Signature.`):(C.plan==='essentiel'?' Tout est compris dans Essentiel.':'');
     $('cRecap').textContent=needTxt.trim()||(C.plan==='signature'?'Votre lieu peint d’après photo, un lien par famille, français et anglais.':'');
     // récapitulatif, ligne par ligne
-    const sum=[['Thème',t.name+(t.plan==='signature'?' · dès Signature':'')],['Vous',`${n1} & ${n2} · ${ds}`],['Écrans',`Accueil → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
+    const sum=[['Thème',t.name],['Format',FMTS.find(f=>f.id===C.fmt).name],['Vous',`${n1} & ${n2} · ${ds}`],['Écrans',`Accueil → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
     $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join(''); if($('fDate')) $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
