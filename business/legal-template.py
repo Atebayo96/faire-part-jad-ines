@@ -4,7 +4,7 @@ import os, re, html
 B = os.path.dirname(os.path.abspath(__file__))
 TPL = """<!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title} · Sceau</title><link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>{title} · Save The Oui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
 body{{margin:0;font:400 16px/1.65 Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;color:#111;background:#fff}}
 header{{border-bottom:1px solid #e6e6e6}} header div{{max-width:760px;margin:0 auto;padding:0 16px;height:60px;display:flex;align-items:center;justify-content:space-between}}
@@ -16,7 +16,7 @@ p,li{{color:#333}} a{{color:#111}} .upd{{color:#6b6b6b;font-size:14px}}
 mark{{background:#fff1c9;padding:0 3px;border-radius:3px}}
 nav{{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-top:40px;padding-top:20px;border-top:1px solid #e6e6e6}}
 </style></head><body>
-<header><div><a href="/">SCEAU</a><a href="/#commencer" style="letter-spacing:0;font-weight:500">Commencer</a></div></header>
+<header><div><a href="/"><span style="letter-spacing:.18em;text-transform:uppercase;font-size:12px">Save the</span> <b style="font:400 24px/1 'Great Vibes',cursive;letter-spacing:0">Oui</b></a><a href="/#commencer" style="letter-spacing:0;font-weight:500">Commencer</a></div></header>
 <main>{body}
 <nav><a href="/mentions-legales/">Mentions légales</a><a href="/cgv/">CGV</a><a href="/confidentialite/">Confidentialité</a></nav></main>
 </body></html>

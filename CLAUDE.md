@@ -152,6 +152,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     pourquoi ; si l'on revient à Essentiel à la main, il dit seulement ce qui n'y est pas compris (« vous pourrez les
     retirer, ou passer en Signature »). Le `.ok` de la vitrine est le message « Merci » caché : ne pas réutiliser ce nom.
 
+24. **La marque s'appelle « Save The Oui »** (depuis le 3 octobre 2026 ; « Sceau » était le nom de travail). Logo :
+    « SAVE THE » en capitales espacées + « Oui » en Great Vibes (`.logo`), favicon = sceau de cire avec un O. Tout ce qui
+    est visible dit Save The Oui ; les identifiants du code (`SCEAU_THEMES`, `sceau-rsvp-…`, `og-sceau.jpg`) ne changent pas.
+25. **Le configurateur avance par étapes** (thème, écrans, détails, formule : `.wz`, `#wzNav`), une seule à l'écran, l'aperçu
+    à côté (collant sur grand écran, au-dessus sur téléphone). L'utilisateur trouvait la page unique « trop complexe ».
+    Tout reste dans la page, seulement masqué : `paint()` tient tout à jour. Les photos de personnes sont prises sur le vif
+    (`tools/people.py`) : rien de posé, personne ne sourit à la caméra, pas de scène de banque d'images.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

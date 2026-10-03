@@ -4,7 +4,7 @@
 > mariage (`../index.html`, `../en.html`) et pose tout ce qu'il faut pour lancer un MVP :
 > étude de marché, SWOT, pain points, positionnement, collections, prix, tech, lancement, juridique, roadmap.
 
-**Nom de travail : « Sceau »** (FR) / **« Sealed »** (international). C'est le geste signature
+**Nom : « Save The Oui »** (choisi le 3 octobre 2026 ; « Sceau » était le nom de travail). C'est le geste signature
 de notre faire-part : *on touche le sceau, l'enveloppe s'ouvre, le film commence*.
 D'autres pistes de nom sont listées dans [03-proposition-de-valeur.md](03-proposition-de-valeur.md#nom-de-marque).
 

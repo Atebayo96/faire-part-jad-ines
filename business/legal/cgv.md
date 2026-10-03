@@ -1,7 +1,7 @@
 # Conditions générales de vente
 _Dernière mise à jour : 3 octobre 2026. Version à faire relire par un professionnel du droit avant les premières ventes._
 ## 1. Objet
-Les présentes conditions encadrent la vente de faire-part numériques personnalisés par Jad GHAILAN, entrepreneur individuel (EI), nom commercial Noctuna, SIRET 100 079 342 00018 (« Sceau ») à des particuliers (« le Client ») : création du faire-part, mise en ligne, recueil des réponses des invités et tableau de bord.
+Les présentes conditions encadrent la vente de faire-part numériques personnalisés par Jad GHAILAN, entrepreneur individuel (EI), nom commercial Noctuna, SIRET 100 079 342 00018 (« Save The Oui ») à des particuliers (« le Client ») : création du faire-part, mise en ligne, recueil des réponses des invités et tableau de bord.
 ## 2. Formules et prix
 - **Essentiel : 99 €.** Un thème, deux événements, réponses et tableau de bord, calendrier, itinéraire, compte à rebours, musique.
 - **Signature : 229 €.** Tout Essentiel, lieux de notre bibliothèque et un lieu peint d'après photo, jusqu'à six événements, un lien par famille, deux langues, save-the-date.
@@ -16,11 +16,11 @@ Les corrections demandées avant validation sont incluses. Après l'envoi, les i
 ## 6. Droit de rétractation
 Le Client dispose en principe de 14 jours pour se rétracter après la commande (article L221-18 du Code de la consommation). Le faire-part étant confectionné selon les demandes du Client et nettement personnalisé, le droit de rétractation ne s'applique pas une fois sa création commencée (article L221-28, 3°) : au moment du paiement, le Client demande expressément que la création commence immédiatement et reconnaît perdre son droit de rétractation dès ce commencement. Si le Client se rétracte avant tout commencement de la création, il est remboursé intégralement sous 14 jours.
 ## 7. Contenus fournis par le Client
-Le Client garantit qu'il a le droit d'utiliser les textes, photos et musiques qu'il nous transmet. Pour une musique importée par le Client, celui-ci est seul responsable des droits d'auteur et des droits voisins. Les musiques de la bibliothèque Sceau sont libres de droits.
+Le Client garantit qu'il a le droit d'utiliser les textes, photos et musiques qu'il nous transmet. Pour une musique importée par le Client, celui-ci est seul responsable des droits d'auteur et des droits voisins. Les musiques de la bibliothèque Save The Oui sont libres de droits.
 ## 8. Mise en ligne et durée
 Le faire-part reste en ligne au moins 12 mois après la date du mariage. Les réponses des invités sont supprimées 90 jours après la date du mariage ; le Client peut les exporter à tout moment depuis son tableau de bord.
 ## 9. Responsabilité
-Sceau s'engage à faire ses meilleurs efforts pour que le faire-part soit accessible en permanence, sans pouvoir garantir l'absence totale d'interruption (maintenance, panne d'un hébergeur, réseau). Sceau n'est pas responsable des informations fausses transmises par le Client.
+Save The Oui s'engage à faire ses meilleurs efforts pour que le faire-part soit accessible en permanence, sans pouvoir garantir l'absence totale d'interruption (maintenance, panne d'un hébergeur, réseau). Save The Oui n'est pas responsable des informations fausses transmises par le Client.
 ## 10. Données personnelles
 Voir la [politique de confidentialité](/confidentialite/).
 ## 11. Réclamations et médiation

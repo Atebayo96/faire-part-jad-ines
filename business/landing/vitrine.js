@@ -317,6 +317,19 @@
     $('cRecap').textContent=`${t.name} · ${C.ev.map(evTxt).join(' puis ')}${C.x.size?` · ${C.x.size} écran${C.x.size>1?'s':''} en plus`:''}.`+needTxt; if($('cDate').value&&$('cDate').value!==$('cDate').defaultValue){ $('fDate').type='date'; $('fDate').value=$('cDate').value; }
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
+  /* étapes : une seule à l'écran (thème, écrans, détails, formule), l'aperçu reste à côté. L'utilisateur trouvait la page
+     unique « trop complexe ». Tout reste dans la page (seulement masqué) : paint() continue de tout tenir à jour. */
+  { const steps=[...document.querySelectorAll('.wz')], tabs=[...document.querySelectorAll('#wzNav button')], prev=$('wzPrev'), next=$('wzNext');
+    let cur=1;
+    const go=n=>{ cur=Math.max(1,Math.min(steps.length,n));
+      steps.forEach(w=>{ w.hidden=+w.dataset.step!==cur; });
+      tabs.forEach(b=>{ const k=+b.dataset.go; b.setAttribute('aria-current',k===cur); b.classList.toggle('done',k<cur); });
+      prev.hidden=cur===1; next.hidden=cur===steps.length;
+      next.textContent=['','Mes écrans →','Les détails →','Ma formule →'][cur]||'Suivant →';
+      const sc=$('cpScroll'); if(cur===2) showEv(0); else if(cur===4||cur===1) sc.scrollTo({top:0,behavior:'smooth'});
+      const top=document.getElementById('composer').getBoundingClientRect().top+scrollY-70; if(scrollY>top+40) scrollTo({top,behavior:'smooth'}); };
+    tabs.forEach(b=>b.onclick=()=>go(+b.dataset.go)); prev.onclick=()=>go(cur-1); next.onclick=()=>go(cur+1);
+    go(1); }
   /* lecture de l'ouverture : fermee -> 'opening' -> 'gone' */
   const op=$('cpOp'); let opT=null;
   // meme sequence que le faire-part d'Ines & Jad : ouverture, la lumiere monte, la page apparait dessous

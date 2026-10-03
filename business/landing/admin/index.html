@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin · Sceau</title>
+<title>Admin · Save The Oui</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
@@ -25,7 +25,7 @@
 </head>
 <body>
 <div class="wrap" id="app">
-  <h1>Admin Sceau</h1>
+  <h1>Admin Save The Oui</h1>
   <p>Entrez la clé secrète du site (variable SCEAU_SECRET sur Vercel).</p>
   <form id="f"><input id="k" type="password" placeholder="Clé secrète" autocomplete="off"><button>Ouvrir</button></form>
 </div>
@@ -36,7 +36,7 @@
     if(!r.ok){ alert(r.status===401?'Clé incorrecte':'Erreur '+r.status); return; }
     try{ sessionStorage.setItem('sceau-k',k); }catch(e){}
     const d=await r.json();
-    document.getElementById('app').innerHTML=`<h1>Admin Sceau</h1>
+    document.getElementById('app').innerHTML=`<h1>Admin Save The Oui</h1>
       ${d.storage?'':'<p class="warn">Le stockage n’est pas encore activé : les demandes et les réponses ne peuvent pas être enregistrées. Créez le store Blob sur Vercel (voir business/11-mise-en-service.md).</p>'}
       <h2>Demandes reçues (${d.leads.length})</h2>
       <div class="tbl"><table><thead><tr><th>Reçu</th><th>Contact</th><th>Formule</th><th>Date du mariage</th><th>Choix dans l’essai</th><th>Message</th></tr></thead><tbody>

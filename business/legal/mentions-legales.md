@@ -1,7 +1,7 @@
 # Mentions légales
 _Dernière mise à jour : 3 octobre 2026_
 ## Éditeur du site
-Le site sceau-faire-part.vercel.app (« Sceau ») est édité par Jad GHAILAN, entrepreneur individuel (EI), nom commercial Noctuna, micro-entreprise immatriculée au Registre national des entreprises.
+Le site sceau-faire-part.vercel.app (« Save The Oui ») est édité par Jad GHAILAN, entrepreneur individuel (EI), nom commercial Noctuna, micro-entreprise immatriculée au Registre national des entreprises.
 SIRET : 100 079 342 00018. TVA non applicable, art. 293 B du CGI.
 Contact : [adresse email de contact].
 Directeur de la publication : Jad GHAILAN.

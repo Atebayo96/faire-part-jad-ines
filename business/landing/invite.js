@@ -225,7 +225,7 @@
     (deadline?`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${S.before} ${esc(er(deadline.toLocaleDateString(LOC,{day:'numeric',month:'long',timeZone:TZ})))}</div>`:'')+
     (I.countdown==='fin'?`<div class="rv" style="--i:${rvI++}">${cdHtml(false,c.tx)}</div>`:'')+
     `<div class="rv acts" style="--i:${rvI++};color:${c.tx}"><button type="button" class="b" data-rsvp style="color:${c.tx}">${ic.mail}${S.reply}</button></div>`+
-    `<a class="made" href="/" target="_blank" rel="noopener" style="color:${c.ey}">${S.made} <b>SCEAU</b></a>`);
+    `<a class="made" href="/" target="_blank" rel="noopener" style="color:${c.ey}">${S.made} <b>Save the Oui</b></a>`);
 
   /* ---------- mise en page continue (comme un long rouleau peint) ----------
      une grande illustration qu'on descend, qui se fond dans des fonds texturés aux couleurs du thème ;
@@ -280,7 +280,7 @@
         ${R0.deadline?`<p class="rv tx">${S.before} ${esc(er(zoned(R0.deadline+'T23:59',TZ).toLocaleDateString(LOC,{day:'numeric',month:'long',timeZone:TZ})))}</p>`:''}
         <div class="rv acts"><button type="button" class="b solid" data-rsvp>${ic.mail}${S.reply}</button></div>
         ${I.countdown!=='non'?`<div class="rv ey lg-gap">${S.cdEnd}</div><div class="rv">${cdHtml(true,sec[2].ink)}</div>`:''}
-        <a class="lg-made" href="/" target="_blank" rel="noopener">${S.made} <b>SCEAU</b></a>
+        <a class="lg-made" href="/" target="_blank" rel="noopener">${S.made} <b>Save the Oui</b></a>
       </div>`,'lg-end');
     return `<div class="lg">${s1}${band(0)}${s2}${band(1)}${s3}</div>`;
   }
@@ -294,7 +294,7 @@
   app.innerHTML=`
     <div class="sc${LG?' sc-long':''}" id="sc"><div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
     ${LG&&I.demo?`<a class="lg-want" href="/formules/">${S.want}</a>`:''}
-    ${I.demo?`<a class="demo-tag" href="/modeles/">${S.demo} · Sceau</a>`:''}
+    ${I.demo?`<a class="demo-tag" href="/modeles/">${S.demo} · Save the Oui</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
     <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp');--pal:${pal}${I.doormen?`;--man:url('/img/open/${I.theme}-portier.webp')`:''}">
       <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div></div></div></div>

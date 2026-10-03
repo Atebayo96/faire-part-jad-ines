@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Créer notre faire-part — Sceau</title>
+<title>Créer notre faire-part — Save The Oui</title>
 <meta name="description" content="Composez votre faire-part en trois étapes : votre thème, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Créer notre faire-part — Sceau">
+<meta property="og:title" content="Créer notre faire-part — Save The Oui">
 <meta property="og:description" content="Composez votre faire-part en trois étapes : votre thème, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
 <meta property="og:image" content="https://sceau-faire-part.vercel.app/og-sceau.jpg">
 <meta property="og:image:width" content="1200">
@@ -22,10 +22,10 @@
 
 <nav>
   <div class="wrap">
-    <a class="logo" href="/">SCEAU</a>
+    <a class="logo" href="/"><span>Save the</span><b>Oui</b></a>
     <div class="links">
-      <a href="/modeles/">Modèles</a><a href="/formules/">Formules</a>
-      <a class="btn solid" href="/creer/">Commencer</a>
+      <a href="/">Accueil</a><a href="/modeles/">Modèles</a><a href="/formules/">Formules</a><a href="/formules/#faq">Questions</a>
+      <a class="btn solid" href="/creer/"><span>Créer notre faire-part</span><em>Créer</em></a>
     </div>
   </div>
 </nav>
@@ -34,39 +34,52 @@
   <div class="wrap">
     <div class="head">
       <h2>Composez votre faire-part.</h2>
-      <p>Trois étapes. Votre faire-part est un seul grand tableau qu'on descend du doigt : pour chaque écran, vous choisissez votre texte sur le décor, ou une scène dessinée de votre lieu.</p>
+      <p>Quatre étapes courtes, l'aperçu à côté. Votre faire-part est un seul grand tableau qu'on descend du doigt.</p>
     </div>
     <div class="comp">
       <form class="comp-form" id="compForm" autocomplete="off">
-        <div class="step"><b>1</b><h3>Votre thème</h3></div>
-        <label class="fld"><span>Vos prénoms</span>
-          <div class="names"><input type="text" id="cN1" value="Emma" maxlength="20" aria-label="Premier prénom"><b>&amp;</b><input type="text" id="cN2" value="Louis" maxlength="20" aria-label="Second prénom"></div>
-        </label>
-        <label class="fld"><span>Date du mariage</span><input type="date" id="cDate" value="2027-06-12"></label>
-        <div class="fld"><span>Thème</span><div class="opts" id="cStyles"></div></div>
-        <details class="more">
-          <summary><span>Plus de réglages <small>· facultatif</small></span></summary>
-          <div class="more-in">
-            <p style="margin:0;font-size:13px;color:var(--muted)">Chaque thème a déjà ses réglages. Changez-les seulement si vous le souhaitez.</p>
-            <div class="fld"><span>Ouverture</span><div class="opts" id="cOpen"></div></div>
-            <div class="fld"><span>Couleurs</span><div class="opts" id="cPal"></div><div class="sw-name" id="cPalName"></div></div>
-            <div class="fld"><span>Police</span><div class="opts" id="cFonts"></div></div>
-            <div class="fld"><span>Révélation de la date</span><div class="opts" id="cReveal"></div></div>
-            <div class="fld"><span>Compte à rebours</span><div class="opts" id="cCount"></div></div>
-          </div>
-        </details>
+        <ol class="wz-nav" id="wzNav" aria-label="Étapes">
+          <li><button type="button" data-go="1"><b>1</b><span>Thème</span></button></li>
+          <li><button type="button" data-go="2"><b>2</b><span>Écrans</span></button></li>
+          <li><button type="button" data-go="3"><b>3</b><span>Détails</span></button></li>
+          <li><button type="button" data-go="4"><b>4</b><span>Formule</span></button></li>
+        </ol>
 
-        <div class="step"><b>2</b><h3>Vos écrans</h3><p>Écran simple : votre texte sur le fond du tableau. Scène : votre lieu, dessiné dans le thème.</p></div>
-        <ol class="story" id="cStory"></ol>
-        <div class="fld"><span>Ajouter des écrans simples <small style="font-weight:400;text-transform:none;letter-spacing:0">(facultatif)</small></span><div class="opts" id="cExtras"></div></div>
-
-        <div class="step"><b>3</b><h3>Votre formule</h3><p>Essentiel suffit pour la plupart des mariages. Signature ajoute votre vrai lieu, peint d'après photo.</p></div>
-        <div class="fld"><span>Formule</span><div class="opts" id="cPlan"></div></div>
-        <div class="recap">
-          <p id="cRecap"></p>
-          <p>La musique, la vôtre ou la nôtre, se règle avec vous après la commande. Prêt sous 48 h.</p>
-          <a class="btn solid" href="#commencer" id="cGo" data-plan="essentiel">Je veux celui-ci · Essentiel 99 €</a>
+        <div class="wz" data-step="1">
+          <div class="step"><h3>Votre thème</h3><p>Vos prénoms, la date, et le style de votre faire-part. L'aperçu se met à jour en direct.</p></div>
+          <label class="fld"><span>Vos prénoms</span>
+            <div class="names"><input type="text" id="cN1" value="Emma" maxlength="20" aria-label="Premier prénom"><b>&amp;</b><input type="text" id="cN2" value="Louis" maxlength="20" aria-label="Second prénom"></div>
+          </label>
+          <label class="fld"><span>Date du mariage</span><input type="date" id="cDate" value="2027-06-12"></label>
+          <div class="fld"><span>Thème</span><div class="opts" id="cStyles"></div></div>
         </div>
+
+        <div class="wz" data-step="2" hidden>
+          <div class="step"><h3>Vos écrans</h3><p>Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.</p></div>
+          <ol class="story" id="cStory"></ol>
+        </div>
+
+        <div class="wz" data-step="3" hidden>
+          <div class="step"><h3>Les détails</h3><p>Tout est déjà réglé pour votre thème. Ajoutez des écrans ou changez ce que vous voulez, puis passez à la suite.</p></div>
+          <div class="fld"><span>Écrans en plus <small style="font-weight:400;text-transform:none;letter-spacing:0">(facultatif)</small></span><div class="opts" id="cExtras"></div></div>
+          <div class="fld"><span>Ouverture</span><div class="opts" id="cOpen"></div></div>
+          <div class="fld"><span>Couleurs</span><div class="opts" id="cPal"></div><div class="sw-name" id="cPalName"></div></div>
+          <div class="fld"><span>Police</span><div class="opts" id="cFonts"></div></div>
+          <div class="fld"><span>Révélation de la date</span><div class="opts" id="cReveal"></div></div>
+          <div class="fld"><span>Compte à rebours</span><div class="opts" id="cCount"></div></div>
+        </div>
+
+        <div class="wz" data-step="4" hidden>
+          <div class="step"><h3>Votre formule</h3><p>Essentiel suffit pour la plupart des mariages. Signature ajoute votre vrai lieu, peint d'après photo.</p></div>
+          <div class="fld"><span>Formule</span><div class="opts" id="cPlan"></div></div>
+          <div class="recap">
+            <p id="cRecap"></p>
+            <p>La musique, la vôtre ou la nôtre, se règle avec vous après la commande. Prêt sous 48 h.</p>
+            <a class="btn solid" href="#commencer" id="cGo" data-plan="essentiel">Je veux celui-ci · Essentiel 99 €</a>
+          </div>
+        </div>
+
+        <div class="wz-foot"><button type="button" class="btn" id="wzPrev">← Retour</button><button type="button" class="btn solid" id="wzNext">Suivant →</button></div>
       </form>
       <div class="comp-prev">
         <div class="cp-phone" id="cpPhone">
@@ -133,7 +146,7 @@
 
 
 <footer>
-  <div class="wrap"><span>SCEAU · Paris</span><span class="legal"><a href="/mentions-legales/">Mentions légales</a> · <a href="/cgv/">CGV</a> · <a href="/confidentialite/">Confidentialité</a></span></div>
+  <div class="wrap"><span class="logo small"><span>Save the</span><b>Oui</b> · Paris</span><span class="legal"><a href="/mentions-legales/">Mentions légales</a> · <a href="/cgv/">CGV</a> · <a href="/confidentialite/">Confidentialité</a></span></div>
 </footer>
 
 <script src="/paiement.js"></script>
