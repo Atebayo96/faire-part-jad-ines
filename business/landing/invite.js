@@ -133,7 +133,9 @@
       `<div class="hint${RVL?' rvl-later':''}" style="color:${c.ey}">${S.scroll} ↓</div>`;
   },{style:oval?'padding-top:'+T.top1:''});
 
-  const evImg=(e,i)=>e.scene||[2,3][i%2];
+  // décor d'un événement : un lieu de la bibliothèque du thème (lieu: 'mairie' | 'eglise' | 'salle' | 'jardin' | 'plage'),
+  // bg: 'simple' = écran simple, le texte sur le fond du tableau (img/hd/<thème>-fond.webp), ou une scène du thème (scene: 2)
+  const evImg=(e,i)=>e.bg==='simple'?'fond':(e.lieu||e.scene||[2,3][i%2]);
   const rv=(cls,col,inner,st='')=>`<div class="rv ${cls}" style="--i:${rvI++};${col?'color:'+col+';':''}${st}">${inner}</div>`;
   const head=(c,ey,title,k=.74)=>rv('ey',c.ey,esc(ey))+(title?rv('nm',null,esc(title),esc(nmCss(k,c.nm))):'');
   // dans les démos, les liens externes (liste, album, hôtel) ouvrent une explication au lieu d'un faux site

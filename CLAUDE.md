@@ -121,6 +121,19 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 16. **Une seule séquence par ouverture**, définie dans `invite.js` (`SEQ`) et recopiée telle quelle dans le
     configurateur de la vitrine (`index.html`, `SEQ`) ; même chose pour le CSS des ouvertures.
 
+## Un seul produit : le grand tableau, plus ou moins dessiné
+
+20. **« Un seul grand tableau » et « scène par scène », c'est la même chose.** L'utilisateur ne veut plus deux types de
+    faire-part présentés à part (vitrine en deux colonnes, deux sections) : « l'idée c'est d'avoir une continuité ;
+    des fois tu dessines plus, des fois tu mets des trucs blancs et tu mets du texte ». Chaque écran est soit une
+    **scène** (un lieu dessiné), soit un **écran simple** (le texte sur le fond du tableau). La vitrine montre un seul
+    téléphone et parle d'un seul produit.
+21. **Le moins de choix possible.** Configurateur Essentiel en 3 étapes : 1) prénoms, date, thème (ouverture, couleurs,
+    police, révélation et compte à rebours rangés dans « Plus de réglages », fermé) ; 2) pour chaque événement :
+    écran simple ou scène, et si scène, le lieu (mairie, église, salle, jardin, plage) parmi les vignettes du thème ;
+    3) récapitulatif et commande. Bibliothèque : `img/hd/<thème>-<lieu>.webp` et `<thème>-fond.webp`
+    (`business/tools/lieux.py`, contrôlés comme les décors).
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

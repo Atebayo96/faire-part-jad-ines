@@ -1,4 +1,4 @@
-"""Contrôle de lisibilité des décors de scènes (business/landing/img/hd/<theme>-<n>.webp).
+"""Contrôle de lisibilité des décors de scènes (business/landing/img/hd/<theme>-<n>.webp, et les lieux <theme>-<lieu>.webp).
 
 Pour chaque image, on regarde la ZONE DE TEXTE (du haut : 10 % à 55 % de la hauteur, 10 % à 90 % de la largeur),
 là où le moteur (invite.js) pose le chapeau, les prénoms, la phrase et la date :
@@ -80,11 +80,12 @@ def main():
     rows, fails = [], []
     for k, t in T.items():
         text = hex_rgb(t['color']) if t.get('light') else (255, 255, 255)
-        for n in range(1, 5):
+        # scènes 1 à 4 du thème, puis la bibliothèque de lieux et le fond des écrans simples (tools/lieux.py)
+        for n in [1, 2, 3, 4, 'mairie', 'eglise', 'salle', 'jardin', 'plage', 'fond']:
             p = os.path.join(d, f'{k}-{n}.webp')
             if not os.path.exists(p):
                 continue
-            dark_page = (t['scenes'][n - 1] + [None] * 5)[4] == 'dark'   # page forcée en texte blanc
+            dark_page = isinstance(n, int) and (t['scenes'][n - 1] + [None] * 5)[4] == 'dark'   # page forcée en texte blanc
             r = analyse(p, (255, 255, 255) if dark_page else text)
             r.update(theme=k, scene=n, file=os.path.relpath(p, ROOT))
             r['issues'] = []
@@ -100,9 +101,9 @@ def main():
     if '--json' in args:
         print(json.dumps(rows, ensure_ascii=False, indent=1))
         return
-    print(f"{'thème':12} {'sc':>2} {'agit.':>6} {'contr.':>7}  remarques")
+    print(f"{'thème':12} {'sc':>6} {'agit.':>6} {'contr.':>7}  remarques")
     for r in rows:
-        print(f"{r['theme']:12} {r['scene']:>2} {r['agitation']:>6} {r['contrast']:>7}  {', '.join(r['issues'])}")
+        print(f"{r['theme']:12} {str(r['scene']):>6} {r['agitation']:>6} {r['contrast']:>7}  {', '.join(r['issues'])}")
     hard = [r for r in fails if any('chargée' in i or 'même avec' in i for i in r['issues'])]
     print(f"\n{len(rows)} images, {len(fails)} à surveiller, {len(hard)} à refaire :")
     for r in hard:
