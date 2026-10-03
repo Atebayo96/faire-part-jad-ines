@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Créer notre faire-part — Sceau</title>
+<meta name="description" content="Composez votre faire-part en trois étapes : votre thème, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Créer notre faire-part — Sceau">
+<meta property="og:description" content="Composez votre faire-part en trois étapes : votre thème, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
+<meta property="og:image" content="https://sceau-faire-part.vercel.app/og-sceau.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/polices/polices.css">
+<link rel="stylesheet" href="/reveal.css">
+<link rel="stylesheet" href="/vitrine.css">
+</head>
+<body data-page="creer">
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="/">SCEAU</a>
+    <div class="links">
+      <a href="/modeles/">Modèles</a><a href="/formules/">Formules</a>
+      <a class="btn solid" href="/creer/">Commencer</a>
+    </div>
+  </div>
+</nav>
+
+<section id="composer">
+  <div class="wrap">
+    <div class="head">
+      <h2>Composez votre faire-part.</h2>
+      <p>Trois étapes. Votre faire-part est un seul grand tableau qu'on descend du doigt : pour chaque écran, vous choisissez votre texte sur le décor, ou une scène dessinée de votre lieu.</p>
+    </div>
+    <div class="comp">
+      <form class="comp-form" id="compForm" autocomplete="off">
+        <div class="step"><b>1</b><h3>Votre thème</h3></div>
+        <label class="fld"><span>Vos prénoms</span>
+          <div class="names"><input type="text" id="cN1" value="Emma" maxlength="20" aria-label="Premier prénom"><b>&amp;</b><input type="text" id="cN2" value="Louis" maxlength="20" aria-label="Second prénom"></div>
+        </label>
+        <label class="fld"><span>Date du mariage</span><input type="date" id="cDate" value="2027-06-12"></label>
+        <div class="fld"><span>Thème</span><div class="opts" id="cStyles"></div></div>
+        <details class="more">
+          <summary><span>Plus de réglages <small>· facultatif</small></span></summary>
+          <div class="more-in">
+            <p style="margin:0;font-size:13px;color:var(--muted)">Chaque thème a déjà ses réglages. Changez-les seulement si vous le souhaitez.</p>
+            <div class="fld"><span>Ouverture</span><div class="opts" id="cOpen"></div></div>
+            <div class="fld"><span>Couleurs</span><div class="opts" id="cPal"></div><div class="sw-name" id="cPalName"></div></div>
+            <div class="fld"><span>Police</span><div class="opts" id="cFonts"></div></div>
+            <div class="fld"><span>Révélation de la date</span><div class="opts" id="cReveal"></div></div>
+            <div class="fld"><span>Compte à rebours</span><div class="opts" id="cCount"></div></div>
+          </div>
+        </details>
+
+        <div class="step"><b>2</b><h3>Vos écrans</h3><p>Écran simple : votre texte sur le fond du tableau. Scène : votre lieu, dessiné dans le thème.</p></div>
+        <ol class="story" id="cStory"></ol>
+        <div class="fld"><span>Ajouter des écrans simples <small style="font-weight:400;text-transform:none;letter-spacing:0">(facultatif)</small></span><div class="opts" id="cExtras"></div></div>
+
+        <div class="step"><b>3</b><h3>Votre formule</h3><p>Essentiel suffit pour la plupart des mariages. Signature ajoute votre vrai lieu, peint d'après photo.</p></div>
+        <div class="fld"><span>Formule</span><div class="opts" id="cPlan"></div></div>
+        <div class="recap">
+          <p id="cRecap"></p>
+          <p>La musique, la vôtre ou la nôtre, se règle avec vous après la commande. Prêt sous 48 h.</p>
+          <a class="btn solid" href="#commencer" id="cGo" data-plan="essentiel">Je veux celui-ci · Essentiel 99 €</a>
+        </div>
+      </form>
+      <div class="comp-prev">
+        <div class="cp-phone" id="cpPhone">
+          <div class="pv-scroll" id="cpScroll" aria-label="Aperçu de votre faire-part"></div>
+          <div class="cp-tint" id="cpTint"></div>
+          <div class="op" id="cpOp" role="button" tabindex="0" aria-label="Ouvrir le faire-part">
+            <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" id="opSeal"><b id="opSealTxt"></b></div></div></div></div>
+            <div class="op-cur"><div class="op-mono" id="opMonoC"></div><div class="op-cur-edge"></div></div>
+            <div class="op-doors"><div class="op-room"></div><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l"><div class="op-man"></div></div><div class="op-leaf r"><div class="op-man"></div></div></div></div>
+            <div class="op-voile"><div class="op-sheer l"></div><div class="op-sheer r"></div><div class="op-mono" id="opMonoV"></div></div>
+            <div class="op-tap" id="opTap">Touchez pour ouvrir</div>
+          </div>
+          <div class="cp-flash" id="cpFlash" aria-hidden="true"></div>
+        </div>
+        <button type="button" class="replay" id="cpReplay">Rejouer l'ouverture</button>
+        <a class="btn solid" href="#commencer" id="cpGo" data-plan="essentiel">Je veux celui-ci</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="commencer" class="cta">
+  <div class="wrap">
+    <p class="label">Plutôt nous écrire ?</p>
+    <h2 style="margin-top:16px">Racontez-nous votre mariage,<br>on vous répond sous 48 h.</h2>
+    <p style="margin-top:18px;color:var(--muted)">Pour Couture, ou pour toute question. Lancement : −40 % sur Signature pour les dix premiers couples.</p>
+    <form id="waitForm" novalidate>
+      <input type="text" name="name" id="fNames" placeholder="Vos prénoms" required autocomplete="name" aria-label="Vos prénoms">
+      <input type="email" name="email" id="fEmail" placeholder="E-mail" required autocomplete="email" aria-label="E-mail">
+      <input type="text" name="date" id="fDate" placeholder="Date du mariage" onfocus="this.type='date'" aria-label="Date du mariage">
+      <input type="hidden" name="style" id="fStyle"><input type="hidden" name="palette" id="fPal"><input type="hidden" name="font" id="fFont"><input type="hidden" name="opening" id="fOpen"><input type="hidden" name="countdown" id="fCount"><input type="hidden" name="reveal" id="fReveal"><input type="hidden" name="events" id="fEvents"><input type="hidden" name="screens" id="fScreens">
+      <select name="plan" id="planSel" aria-label="Formule">
+        <option value="signature">Signature</option>
+        <option value="essentiel">Essentiel</option>
+        <option value="couture">Couture</option>
+      </select>
+      <label class="hp" aria-hidden="true">Site<input name="website" tabindex="-1" autocomplete="off"></label>
+      <button class="btn solid" type="submit">Réserver ma place</button>
+    </form>
+    <label class="consent"><input type="checkbox" id="fConsent" required> J'accepte d'être recontacté·e au sujet de ma demande. <a href="/confidentialite/">Confidentialité</a></label>
+    <p class="err" id="fErr" hidden></p>
+    <p class="ok" id="ok">Merci ! Votre demande est bien reçue. Nous vous écrivons sous 48 h.</p>
+  </div>
+</section>
+
+<div class="order" id="order" hidden>
+  <div class="order-in" role="dialog" aria-modal="true" aria-labelledby="ordT">
+    <button type="button" class="order-x" id="ordX" aria-label="Fermer">×</button>
+    <p class="label">Votre commande</p>
+    <h3 id="ordT"></h3>
+    <p class="order-sub" id="ordSub"></p>
+    <form id="ordForm" novalidate>
+      <input type="text" id="oName" placeholder="Vos prénoms" autocomplete="name" aria-label="Vos prénoms">
+      <input type="email" id="oEmail" placeholder="E-mail (pour le reçu et la suite)" autocomplete="email" aria-label="E-mail">
+      <input type="text" id="oDate" placeholder="Date du mariage" onfocus="this.type='date'" aria-label="Date du mariage">
+      <label class="chk"><input type="checkbox" id="oCgv"><span>J'ai lu et j'accepte les <a href="/cgv/" target="_blank" rel="noopener">conditions de vente</a>.</span></label>
+      <label class="chk"><input type="checkbox" id="oWaiver"><span>Je demande que la création de mon faire-part commence dès mon paiement, et je reconnais perdre mon droit de rétractation dès ce commencement (article L221-28 du Code de la consommation).</span></label>
+      <p class="err" id="oErr" hidden></p>
+      <button class="btn solid" type="submit" id="oPay"></button>
+      <p class="order-note" id="ordNote">Paiement sécurisé par Stripe. Vous recevez votre reçu par e-mail, puis nous vous écrivons pour recueillir vos lieux, horaires et textes.</p>
+    </form>
+  </div>
+</div>
+
+
+<footer>
+  <div class="wrap"><span>SCEAU · Paris</span><span class="legal"><a href="/mentions-legales/">Mentions légales</a> · <a href="/cgv/">CGV</a> · <a href="/confidentialite/">Confidentialité</a></span></div>
+</footer>
+
+<script src="/paiement.js"></script>
+<script src="/themes.js"></script>
+<script src="/reveal.js"></script>
+<script>window.SCEAU_DEMOS=[]/*DEMOS*/;</script>
+<script src="/vitrine.js"></script>
+</body>
+</html>

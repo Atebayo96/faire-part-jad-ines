@@ -293,8 +293,8 @@
   const app=document.createElement('div'); app.id='app';
   app.innerHTML=`
     <div class="sc${LG?' sc-long':''}" id="sc"><div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
-    ${LG&&I.demo?`<a class="lg-want" href="/#prix">${S.want}</a>`:''}
-    ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
+    ${LG&&I.demo?`<a class="lg-want" href="/formules/">${S.want}</a>`:''}
+    ${I.demo?`<a class="demo-tag" href="/modeles/">${S.demo} · Sceau</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
     <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp');--pal:${pal}${I.doormen?`;--man:url('/img/open/${I.theme}-portier.webp')`:''}">
       <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div></div></div></div>

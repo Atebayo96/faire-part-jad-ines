@@ -139,6 +139,18 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     écran simple ou scène, et si scène, le lieu (mairie, église, salle, jardin, plage) parmi les vignettes du thème ;
     3) récapitulatif et commande. Bibliothèque : `img/hd/<thème>-<lieu>.webp` et `<thème>-fond.webp`
     (`business/tools/lieux.py`, contrôlés comme les décors).
+22. **La vitrine est en quatre pages, pas une page à ancres** : `/` (accueil : ce qu'on vend, les exemples dans un
+    téléphone, deux boutons vers `/creer/` et `/modeles/`, puis trois infographies courtes), `/modeles/`, `/formules/`
+    (cartes, **tableau de ce qui change d'une formule à l'autre**, ce qui est dans toutes, comparaison avec le papier,
+    questions), `/creer/` (configurateur, formulaire de contact, commande). Elles partagent `vitrine.css` et
+    `vitrine.js` (chaque bloc du script ne tourne que si sa page a ses éléments ; chemins absolus `/img/…`).
+    L'utilisateur a refusé les gros blocs de texte (« Pourquoi Sceau, et pas… ») : on explique par des infographies
+    simples (étapes numérotées, tableaux), pas par des paragraphes. `build-site.py` traite les quatre pages.
+23. **Upsell sans frustration.** Dans le configurateur, les options de Signature (lieu peint d'après photo, 3e événement
+    et plus, lien par famille, anglais) sont proposées au même endroit que les autres, avec l'étiquette « Signature »,
+    jamais grisées. Si on les choisit en Essentiel, la formule passe d'elle-même sur Signature et le récapitulatif dit
+    pourquoi ; si l'on revient à Essentiel à la main, il dit seulement ce qui n'y est pas compris (« vous pourrez les
+    retirer, ou passer en Signature »). Le `.ok` de la vitrine est le message « Merci » caché : ne pas réutiliser ce nom.
 
 ## Méthode
 

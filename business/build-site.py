@@ -227,15 +227,19 @@ def main():
     shutil.copytree(os.path.join(B, 'landing'), SITE, ignore=shutil.ignore_patterns('CREDITS.md', 'node_modules'))
     for keep, src in kept:
         shutil.move(keep, src)
-    l = open(os.path.join(SITE, 'index.html'), encoding='utf-8').read()
-    l = l.replace('<meta name="robots" content="noindex">\n', '')
-    l = l.replace('<link rel="icon" href="/favicon.svg" type="image/svg+xml">', f'<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n<link rel="canonical" href="{SITE_URL}/">', 1)
+    # la vitrine est en quatre pages (accueil, modèles, formules, créer) qui partagent vitrine.css et vitrine.js
+    PAGES = ['/', '/modeles/', '/formules/', '/creer/']
+    for u in PAGES:
+        fp = os.path.join(SITE, u.strip('/'), 'index.html')
+        l = open(fp, encoding='utf-8').read()
+        l = l.replace('<meta name="robots" content="noindex">\n', '')
+        l = l.replace('<link rel="icon" href="/favicon.svg" type="image/svg+xml">', f'<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n<link rel="canonical" href="{SITE_URL}{u}">', 1)
+        open(fp, 'w', encoding='utf-8').write(l)
     # référencement : la vitrine et les pages légales ; les faire-part, tableaux de bord et l'admin restent hors des moteurs
     open(os.path.join(SITE, 'robots.txt'), 'w').write(f"User-agent: *\nDisallow: /d/\nDisallow: /tableau/\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: {SITE_URL}/sitemap.xml\n")
     today = __import__('datetime').date.today().isoformat()
-    urls = ''.join(f'  <url><loc>{SITE_URL}{u}</loc><lastmod>{today}</lastmod></url>\n' for u in ['/', '/mentions-legales/', '/cgv/', '/confidentialite/'])
+    urls = ''.join(f'  <url><loc>{SITE_URL}{u}</loc><lastmod>{today}</lastmod></url>\n' for u in PAGES + ['/mentions-legales/', '/cgv/', '/confidentialite/'])
     open(os.path.join(SITE, 'sitemap.xml'), 'w').write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
-    open(os.path.join(SITE, 'index.html'), 'w', encoding='utf-8').write(l)
 
     T = themes()
     invites = {}
@@ -290,17 +294,18 @@ def main():
     build_yk()
     # liste des démos pour la vitrine
     demos = [{'slug': 'yasmine-karim', 'theme': 'nuits', 'couple': 'Yasmine & Karim', 'special': 'Lieux réels peints et animés', 'events': 2,
-              'music': 'scheherazade', 'thumb': 'd/yasmine-karim/thumb.webp'}]
+              'music': 'scheherazade', 'thumb': '/d/yasmine-karim/thumb.webp'}]
     for fn in sorted(os.listdir(os.path.join(B, 'invites'))):
         inv = json.load(open(os.path.join(B, 'invites', fn), encoding='utf-8'))
         if inv.get('demo'):
             demos.append({'slug': inv['slug'], 'theme': inv['theme'], 'couple': ' & '.join(inv['couple']), 'opening': inv.get('opening', 'env'), 'layout': inv.get('layout', 'pages'), 'reveal': inv.get('reveal'),
                           'events': len(inv['events']), 'families': bool(inv.get('families')), 'lang': inv.get('lang', 'fr'),
-                          'music': inv.get('music') or T[inv['theme']].get('music'), 'thumb': f"img/themes/{inv['theme']}-2.webp"})
-    p = os.path.join(SITE, 'index.html')
-    l = open(p, encoding='utf-8').read()
-    assert '[]/*DEMOS*/' in l
-    open(p, 'w', encoding='utf-8').write(l.replace('[]/*DEMOS*/', json.dumps(demos, ensure_ascii=False)))
+                          'music': inv.get('music') or T[inv['theme']].get('music'), 'thumb': f"/img/themes/{inv['theme']}-2.webp"})
+    for u in PAGES:
+        p = os.path.join(SITE, u.strip('/'), 'index.html')
+        l = open(p, encoding='utf-8').read()
+        assert '[]/*DEMOS*/' in l, p
+        open(p, 'w', encoding='utf-8').write(l.replace('[]/*DEMOS*/', json.dumps(demos, ensure_ascii=False)))
     site_og(T)
     print('site ->', SITE, '|', len(invites), 'faire-part')
 
