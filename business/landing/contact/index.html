@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nous écrire — Save The Oui</title>
+<meta name="description" content="Racontez-nous votre mariage : on vous répond sous 48 h. Pour Couture, une question, ou pour tout faire avec nous.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nous écrire — Save The Oui">
+<meta property="og:description" content="Racontez-nous votre mariage : on vous répond sous 48 h. Pour Couture, une question, ou pour tout faire avec nous.">
+<meta property="og:image" content="https://sceau-faire-part.vercel.app/og-sceau.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/polices/polices.css">
+<link rel="stylesheet" href="/vitrine.css">
+</head>
+<body data-page="contact">
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="/"><span>Save the</span><b>Oui</b></a>
+    <div class="links">
+      <a href="/">Accueil</a><a href="/modeles/">Modèles</a><a href="/formules/">Formules</a><a href="/questions/">Questions</a>
+      <a class="btn solid" href="/creer/"><span>Créer notre faire-part</span><em>Créer</em></a>
+    </div>
+  </div>
+</nav>
+
+<section id="commencer" class="cta" style="border-top:0">
+  <div class="wrap">
+    <p class="label">Nous écrire</p>
+    <h2 style="margin-top:16px">Racontez-nous votre mariage,<br>on vous répond sous 48 h.</h2>
+    <p style="margin-top:18px;color:var(--muted)">Pour un faire-part Couture, une question, ou si vous préférez tout faire avec nous. Lancement : −40 % sur Signature pour les dix premiers couples.</p>
+    <form id="waitForm" novalidate>
+      <input type="text" name="name" id="fNames" placeholder="Vos prénoms" required autocomplete="name" aria-label="Vos prénoms">
+      <input type="email" name="email" id="fEmail" placeholder="E-mail" required autocomplete="email" aria-label="E-mail">
+      <input type="text" name="date" id="fDate" placeholder="Date du mariage" onfocus="this.type='date'" aria-label="Date du mariage">
+      <input type="hidden" name="plan_url" id="fPlanUrl">
+      <select name="plan" id="planSel" aria-label="Formule">
+        <option value="signature">Signature</option>
+        <option value="essentiel">Essentiel</option>
+        <option value="couture">Couture</option>
+      </select>
+      <label class="hp" aria-hidden="true">Site<input name="website" tabindex="-1" autocomplete="off"></label>
+      <button class="btn solid" type="submit">Réserver ma place</button>
+    </form>
+    <label class="consent"><input type="checkbox" id="fConsent" required> J'accepte d'être recontacté·e au sujet de ma demande. <a href="/confidentialite/">Confidentialité</a></label>
+    <p class="err" id="fErr" hidden></p>
+    <p class="ok" id="ok">Merci ! Votre demande est bien reçue. Nous vous écrivons sous 48 h.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><span class="logo small"><span>Save the</span><b>Oui</b> · Paris</span><span class="legal"><a href="/contact/">Nous écrire</a> · <a href="/mentions-legales/">Mentions légales</a> · <a href="/cgv/">CGV</a> · <a href="/confidentialite/">Confidentialité</a></span></div>
+</footer>
+
+<script src="/paiement.js"></script>
+<script src="/themes.js"></script>
+<script>window.SCEAU_DEMOS=[]/*DEMOS*/;</script>
+<script src="/vitrine.js"></script>
+</body>
+</html>

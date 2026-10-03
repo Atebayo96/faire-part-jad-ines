@@ -228,7 +228,7 @@ def main():
     for keep, src in kept:
         shutil.move(keep, src)
     # la vitrine est en quatre pages (accueil, modèles, formules, créer) qui partagent vitrine.css et vitrine.js
-    PAGES = ['/', '/modeles/', '/formules/', '/creer/']
+    PAGES = ['/', '/modeles/', '/formules/', '/creer/', '/questions/', '/contact/']
     for u in PAGES:
         fp = os.path.join(SITE, u.strip('/'), 'index.html')
         l = open(fp, encoding='utf-8').read()

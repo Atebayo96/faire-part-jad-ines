@@ -650,3 +650,36 @@
   .wz-foot button[hidden]{display:none}
   .wz-foot #wzNext{margin-left:auto}
   @media (max-width:560px){ .wz-nav button span{font-size:12px} }
+
+  /* galerie des thèmes : une seule liste, étiquette « Composer » ou « Avec nous » */
+  .model .pic{display:block;color:inherit;text-decoration:none}
+  .k{display:inline-block;font:500 10.5px/1 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:6px 8px;border-radius:2px;vertical-align:middle}
+  .k-c{background:var(--ink);color:var(--bg)} .k-n{background:var(--bg);color:var(--ink);border:1px solid var(--ink)}
+  .model .pic .k{position:absolute;left:10px;bottom:10px;z-index:2}
+  .model .meta{flex-direction:column;gap:12px}
+  .model .acts{display:flex;gap:16px;font-size:14px} .model .acts a{color:var(--muted)} .model .acts a.go{color:var(--ink);font-weight:500}
+  /* formules : la composition type de chaque formule, en vignettes */
+  .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:18px 0 6px}
+  .strip figure{margin:0;position:relative;min-width:0}
+  .strip img{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--bg-2)}
+  .strip figcaption{font:500 11.5px/1.3 Inter,sans-serif;margin-top:6px} .strip figcaption small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+  .strip .ph{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;box-shadow:0 1px 4px rgba(0,0,0,.25)} .strip .ph svg{width:14px;height:14px}
+  .strip-l{margin:0 0 6px;font-size:13px;color:var(--muted)}
+  /* étapes : le numéro en italique à côté du mot */
+  .wz-nav button{display:flex;align-items:baseline;gap:8px}
+  .wz-nav button b{font:italic 400 24px/1 "Cormorant Garamond",Georgia,serif;letter-spacing:0;color:var(--ink)}
+  .wz-nav button[aria-current="true"] span{font-weight:500}
+  /* thèmes en vignettes dans le configurateur */
+  .opts.themes{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+  @media (max-width:560px){ .opts.themes{grid-template-columns:repeat(3,1fr)} }
+  .th{border:0;padding:0;background:none;cursor:pointer;display:grid;gap:6px;font:500 12px Inter,sans-serif;color:var(--ink);min-width:0;text-align:left}
+  .th span{display:block;aspect-ratio:3/4;background:#eee center 30%/cover no-repeat;outline:1px solid var(--line)}
+  .th[aria-pressed="true"] span{outline:2px solid var(--ink);outline-offset:2px}
+  .fld .hint{margin:0;font-size:13px;color:var(--muted)}
+  /* fin du configurateur : récapitulatif et la suite */
+  .sum{margin:0;border-top:1px solid var(--ink)}
+  .sum div{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}
+  .sum dt{font:500 12px/1.5 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)} .sum dd{margin:0}
+  .next{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .next li{display:flex;gap:12px;align-items:baseline;font-size:15px;color:var(--muted)}
+  .next li b{font:italic 400 22px/1 "Cormorant Garamond",Georgia,serif;color:var(--ink);flex:none;width:18px}

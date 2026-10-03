@@ -160,6 +160,16 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Tout reste dans la page, seulement masqué : `paint()` tient tout à jour. Les photos de personnes sont prises sur le vif
     (`tools/people.py`) : rien de posé, personne ne sourit à la caméra, pas de scène de banque d'images.
 
+26. **Une seule galerie de thèmes** (`/modeles/`) : les 22 univers dans la même grille, chaque carte avec son étiquette
+    « Composer » (12 thèmes à scènes, bouton vers `/creer/?theme=…`) ou « Avec nous » (10 styles en grand tableau, vers
+    `/contact/`). Jamais deux sections (« nos faire-part à ouvrir » puis « 12 thèmes ») : l'utilisateur s'y perdait, et
+    un thème présent dans les deux versions n'apparaît qu'une fois. Le configurateur montre les mêmes vignettes.
+27. **Chaque chose à sa page** : les questions sur `/questions/`, le formulaire de contact sur `/contact/` (plus dans le
+    configurateur), le tableau de bord en lien depuis « Les réponses arrivent » (accueil) et « Dans toutes les formules ».
+    Les formules se comparent **en images** (bande de 4 vignettes par formule, badge appareil photo = peint d'après votre
+    photo), pas seulement en texte. La fin du configurateur est un récapitulatif ligne par ligne, la formule, « Ensuite »
+    en 3 temps, puis le bouton « Commander · formule prix ».
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
