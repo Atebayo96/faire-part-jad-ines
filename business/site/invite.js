@@ -79,7 +79,7 @@
   const base=up?30:/Limelight|Cinzel/.test(fam1)?38:52;
   const nmCss=(k,col)=>`font-family:${fam1};font-style:${ital?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:clamp(${Math.round(base*k*.72)}px,${(base*k/16.5).toFixed(2)}vh,${Math.round(base*k*1.1)}px);color:${col}`;
   // ?v= : à augmenter quand on remplace des décors, pour que les navigateurs ne gardent pas l'ancienne image
-  const IMGV=3, img=n=>`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  const IMGV=4, img=n=>`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
   const isDark=n=>(T.scenes[n-1]||[])[4]==='dark';
 
   /* ---------- icônes ---------- */
@@ -292,7 +292,7 @@
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app';
   app.innerHTML=`
-    <div class="sc${LG?' sc-long':''}" id="sc"><div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
+    <div class="sc${LG?' sc-long':''}" id="sc"><div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
     ${LG&&I.demo?`<a class="lg-want" href="/#prix">${S.want}</a>`:''}
     ${I.demo?`<a class="demo-tag" href="/#demos">${S.demo} · Sceau</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
@@ -331,6 +331,14 @@
      n'est étirée sur plusieurs écrans (jamais de zoom). Les positions sont recalculées à chaque changement de
      taille (une page fait un écran, une page « tall » davantage). */
   const OVK=.45;
+  // taille du décor : celle de l'écran (cover sur l'écran, pas sur le cadre agrandi de la bande de fondu, sinon l'image
+  // apparaît zoomée ~1,8×). Image centrée sur l'écran ; au-dessus, sa première bande étirée remplit la bande de fondu.
+  const IR=.566; // largeur / hauteur des décors (1080 × 1909)
+  function fitBg(B,w,h,ov){
+    const bw=Math.ceil(Math.max(w,h*IR)), ih=bw/IR, y=Math.round(ov+(h-ih)/2);
+    B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`;
+    B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px');
+  }
   function layoutStrip(){
     const h=sc.clientHeight; fxc.style.height=h+'px'; if(LG) return;
     const ov=Math.round(h*OVK);
@@ -339,6 +347,7 @@
       const top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight, L=layers[ri], B=L.firstElementChild;
       const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px';
       B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
+      fitBg(B,sc.clientWidth,h,ri>0?ov:0);
       const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
     });
   }

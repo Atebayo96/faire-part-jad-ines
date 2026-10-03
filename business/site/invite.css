@@ -42,6 +42,10 @@ a{color:inherit}
 .bgs{position:absolute;left:0;right:0;top:0;z-index:0;background:#111}
 .bgl{position:absolute;left:0;right:0}
 .bg{position:sticky;top:0;display:block;width:100%;height:100%;background:center/cover no-repeat;transform:scale(1.015);transition:transform 9s cubic-bezier(.2,.6,.3,1)}
+/* l'image garde la taille de l'écran (fitBg() règle --bs et la position) : la bande de fondu au-dessus d'elle est
+   remplie par la toute première bande de l'image (1,5 % de sa hauteur, son ciel) étirée vers le haut, retournée pour que
+   la jonction soit exacte. Un miroir de tout le haut faisait un pli sombre (le dégradé du ciel s'inversait). */
+.bg::before{content:'';position:absolute;left:0;right:0;top:0;height:var(--strip,0px);background:var(--img) center top/var(--bs,cover) no-repeat;transform:scaleY(-1)}
 .bgl.on .bg{transform:scale(1.04)}
 .pg{z-index:2}
 .pg>*{position:relative;z-index:2}

@@ -115,6 +115,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     (`layoutStrip()` dans invite.js, `cpLayout()` dans le configurateur) : une image par suite de pages de même
     scène, deux scènes voisines se chevauchent sur **45 %** d'un écran et se fondent par un masque en dégradé.
     Jamais un décor fixe derrière des pages qui glissent. Même règle dans l'aperçu du configurateur (`.pv-scroll`).
+    **Le décor garde la taille de l'écran** : le cadre d'une scène est plus haut que l'écran (bande de fondu de 45 %),
+    et un `cover` sur ce cadre agrandissait l'image d'environ 1,8× (« ça fait un zoom »). `fitBg()` (invite.js) et
+    `cpLayout()` dimensionnent l'image sur l'écran ; la bande de fondu au-dessus est remplie par la première bande de
+    l'image étirée (`::before`). Pas de miroir de tout le haut : il inversait le dégradé du ciel et faisait un pli.
+    Aucune image ne doit avoir de **coupure droite** (un arbre ou une bande qui s'arrête sur une ligne horizontale,
+    reste d'un collage) : on la redessine d'un seul tenant, en vignette sur le papier si besoin.
 19. **Tout bloc centré l'est explicitement.** Dans la mise en page continue, `.lg-hero-txt` n'est pas une colonne
     flex : une ligne `display:flex` (la date entre ses deux filets) s'y collait au bord gauche. Toujours vérifier le
     centrage sur une capture, à 390 px **et** à 440 px (la date tient alors sur une ligne).
