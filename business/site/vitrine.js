@@ -108,7 +108,7 @@
   const CREAS=LONGS.filter(l=>KEYS.includes(l.k)).map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:t.name,font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`/img/reel/long-${l.k}.webp`}); });
   // carrousel de l'accueil : un thème qui a sa démo en grand tableau y passe sous cette forme, pas deux fois
   KEYS.filter(k=>!LONGS.some(l=>l.k===k)).forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim');
-    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=6`})); });
+    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=7`})); });
   // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
   CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
     couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`/img/reel/yk-${i}.webp`,
@@ -154,7 +154,7 @@
   // une carte par thème, avec ses deux formats : « scène par scène » (démo pages) et « grand tableau » (démo long)
   const card=(k)=>{ const t=THEMES[k], ds=DEMOS.find(x=>x.theme===k&&x.layout!=='long'), dl=DEMOS.find(x=>x.theme===k&&x.layout==='long');
     const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style;
-    m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=6" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=6" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
+    m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=7" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=7" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
       <div class="fmts">${ds?`<a href="/d/${esc(ds.slug)}/" target="_blank" rel="noopener"><b>Scène par scène</b><span>${esc(ds.couple)}</span></a>`:''}${dl?`<a href="/d/${esc(dl.slug)}/" target="_blank" rel="noopener"><b>Grand tableau</b><span>${esc(dl.couple)}</span></a>`:''}</div>
       <div class="acts"><a class="go" href="/creer/?theme=${esc(k)}">Composer →</a></div></div>`;
     models.appendChild(m); };
@@ -194,10 +194,10 @@
   opt($('cOpen'),OPENS,'op','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   opt($('cReveal'),REVEALS,'rvl','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
-  opt($('cStyles'),KEYS,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=6')"></span>${esc(t.name)}`; });
+  opt($('cStyles'),KEYS,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=7')"></span>${esc(t.name)}`; });
   // les deux formats, annoncés dès le début : scène par scène (un événement par écran) ou grand tableau (un seul tableau qu'on descend)
   const FMTS=[{id:'scenes',name:'Scène par scène',sub:'Un événement par écran, vos lieux en plein écran'},{id:'long',name:'Grand tableau',sub:'Un seul tableau qu’on descend, vos lieux dans des cadres peints'}];
-  opt($('cFmt'),FMTS,'fmt','',(b,o)=>{ b.className='op-card fmt'; b.innerHTML=`<i style="background-image:url('${o.id==='long'?'/img/reel/long-nuits.webp':'/img/themes/nuits-2.webp?v=6'}')"></i><b>${o.name}</b><small>${o.sub}</small>`; });
+  opt($('cFmt'),FMTS,'fmt','',(b,o)=>{ b.className='op-card fmt'; b.innerHTML=`<i style="background-image:url('${o.id==='long'?'/img/reel/long-nuits.webp':'/img/themes/nuits-2.webp?v=7'}')"></i><b>${o.name}</b><small>${o.sub}</small>`; });
   const PLANSUB={essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
   $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
@@ -268,7 +268,7 @@
       $('wz2Sub').textContent=long?'Dans le grand tableau, chaque événement a son cadre peint : choisissez le lieu qui s’y affiche (notre bibliothèque, ou votre photo), ou laissez le cadre sans lieu.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';
       document.querySelectorAll('#cStory [data-bg="simple"]').forEach(b=>b.innerHTML=long?'Sans lieu<small>Le cadre peint du thème</small>':'Écran simple<small>Texte sur le fond</small>');
       document.querySelectorAll('#cStory [data-bg="scene"]').forEach(b=>b.innerHTML=long?'Un lieu<small>Dans le cadre</small>':'Scène<small>Votre lieu dessiné</small>'); }
-    $('cFmt').querySelectorAll('button').forEach(b=>{ b.firstChild.style.backgroundImage=`url('${b.dataset.id==='long'?`/img/reel/long-${C.k}.webp`:`/img/themes/${C.k}-2.webp?v=6`}')`; });
+    $('cFmt').querySelectorAll('button').forEach(b=>{ b.firstChild.style.backgroundImage=`url('${b.dataset.id==='long'?`/img/reel/long-${C.k}.webp`:`/img/themes/${C.k}-2.webp?v=7`}')`; });
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
       l.querySelector('.lieux').hidden=e.bg!=='scene';
@@ -293,8 +293,8 @@
       // un numéro = scène du thème ; un nom = lieu de la bibliothèque, ou « fond » pour un écran simple
       // calque : le sujet détouré est posé entier au bas de l'écran sur le fond du thème (même rendu que le moteur)
       const hasCal=((window.SCEAU_CALQUES||{})[C.k]||[]).includes(String(img));
-      const src=hasCal?`/img/lieux/${C.k}-fond.webp`:typeof img==='number'?`/img/themes/${C.k}-${img}.webp?v=6`:`/img/lieux/${C.k}-${img}.webp`;
-      const sub=hasCal?`/img/calques/${C.k}-${img}.webp?v=7`:'';
+      const src=hasCal?`/img/lieux/${C.k}-fond.webp`:typeof img==='number'?`/img/themes/${C.k}-${img}.webp?v=7`:`/img/lieux/${C.k}-${img}.webp`;
+      const sub=hasCal?`/img/calques/${C.k}-${img}.webp?v=8`:'';
       return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" data-sub="${esc(sub)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     const pages=[], rv=C.rvl!=='non'?C.rvl:null;
     // 1. prenoms + date (+ compte a rebours au debut)
