@@ -245,6 +245,7 @@
     bgs.style.height=sc.scrollHeight+'px';
     cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!L) return; const B=L.firstElementChild, top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight;
       const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px'; B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
+      if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage=''; return; }
       const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
       // taille de l'écran, pas du cadre agrandi (sinon zoom ~1,8×) : même calcul que fitBg() dans invite.js
       const bw=Math.ceil(Math.max(sc.clientWidth,h*.566)), y=Math.round((ri>0?ov:0)+(h-bw/.566)/2);
@@ -290,8 +291,11 @@
     const page=(img,mode,inner,extra)=>{ const dk=mode==='dark', lt=t.light&&!dk;
       const c={nm:lt?t.color:'#fff',ey:lt?(t.ey||t.color):'#fff',tx:lt?(t.tx||t.color):'#fff'};
       // un numéro = scène du thème ; un nom = lieu de la bibliothèque, ou « fond » pour un écran simple
-      const src=typeof img==='number'?`/img/themes/${C.k}-${img}.webp?v=6`:`/img/lieux/${C.k}-${img}.webp`;
-      return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
+      // calque : le sujet détouré est posé entier au bas de l'écran sur le fond du thème (même rendu que le moteur)
+      const hasCal=((window.SCEAU_CALQUES||{})[C.k]||[]).includes(String(img));
+      const src=hasCal?`/img/lieux/${C.k}-fond.webp`:typeof img==='number'?`/img/themes/${C.k}-${img}.webp?v=6`:`/img/lieux/${C.k}-${img}.webp`;
+      const sub=hasCal?`/img/calques/${C.k}-${img}.webp?v=7`:'';
+      return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" data-sub="${esc(sub)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     const pages=[], rv=C.rvl!=='non'?C.rvl:null;
     // 1. prenoms + date (+ compte a rebours au debut)
     { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');
@@ -324,8 +328,10 @@
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML='<div class="cp-bgs" id="cpBgs" aria-hidden="true"></div>'+pages.join(''); sc.scrollTop=st; tick();
     // décors : un cadre par suite de pages qui partagent la même image (comme les « runs » du moteur), image collante dedans
-    cpRuns=[]; [...sc.querySelectorAll('.pv-sc')].forEach((s,i)=>{ const r=cpRuns[cpRuns.length-1]; if(r&&r.img===s.dataset.img) r.b=i; else cpRuns.push({img:s.dataset.img,a:i,b:i}); });
-    $('cpBgs').innerHTML=cpRuns.map(r=>`<div class="cp-bg"><i style="background-image:url('${esc(r.img)}');--img:url('${esc(r.img)}')"></i></div>`).join('');
+    cpRuns=[]; [...sc.querySelectorAll('.pv-sc')].forEach((s,i)=>{ const r=cpRuns[cpRuns.length-1]; if(r&&r.img===s.dataset.img&&r.sub===(s.dataset.sub||'')) r.b=i; else cpRuns.push({img:s.dataset.img,sub:s.dataset.sub||'',a:i,b:i}); });
+    $('cpBgs').innerHTML=cpRuns.map(r=>r.sub?`<div class="cp-bg cal"><i><img class="sub" src="${esc(r.sub)}" alt=""></i></div>`:`<div class="cp-bg"><i style="background-image:url('${esc(r.img)}');--img:url('${esc(r.img)}')"></i></div>`).join('');
+    // calques : le fond du thème est peint une fois derrière tout (comme .sc.cal dans invite.css)
+    const anyCal=cpRuns.some(r=>r.sub); sc.classList.toggle('cal',anyCal); sc.style.backgroundImage=anyCal?`url('/img/lieux/${C.k}-fond.webp')`:'';
     cpLayout();
     // grand tableau : l'aperçu montre le rouleau peint du thème (on le descend dans le téléphone), avec les prénoms et la date
     if(C.fmt==='long'){ const l=LONGS.find(x=>x.k===C.k); if(l){ sc.innerHTML=`<div class="roll-prev"><img src="/img/reel/long-${C.k}.webp" alt=""><div class="roll-txt" style="color:${l.ink};text-shadow:${l.shadow}">${eyHtml('ey',l.ey,'')}<div class="nm" style="${esc(nameStyle({font:t.font,color:l.ink,size:t.size,italic:t.italic,upper:t.upper},1))}">${names}</div><div class="tx">${esc(ds)}</div></div></div>`; cpRuns=[]; } }

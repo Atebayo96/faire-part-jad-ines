@@ -79,7 +79,10 @@
   const base=up?30:/Limelight|Cinzel/.test(fam1)?38:52;
   const nmCss=(k,col)=>`font-family:${fam1};font-style:${ital?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:clamp(${Math.round(base*k*.72)}px,${(base*k/16.5).toFixed(2)}vh,${Math.round(base*k*1.1)}px);color:${col}`;
   // ?v= : à augmenter quand on remplace des décors, pour que les navigateurs ne gardent pas l'ancienne image
-  const IMGV=6, img=n=>`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  const IMGV=7, img=n=>`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  // calques : pour les scènes qui en ont (build-site.py liste img/calques/<thème>-<n>.webp), le décor est le fond calme du
+  // thème et le sujet détouré est posé ENTIER en bas de l'écran (plus de rognage selon le téléphone), avec un peu de profondeur
+  const CAL=new Set(I.calques||[]), hasCal=n=>CAL.has(String(n)), fond=`/img/hd/${I.theme}-fond.webp?v=${IMGV}`, cal=n=>`/img/calques/${I.theme}-${n}.webp?v=${IMGV}`;
   const isDark=n=>(T.scenes[n-1]||[])[4]==='dark';
 
   /* ---------- icônes ---------- */
@@ -293,7 +296,7 @@
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app';
   app.innerHTML=`
-    <div class="sc${LG?' sc-long':''}" id="sc"><div class="bgs" id="bgs">${LG?'':runs.map(r=>`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
+    <div class="sc${LG?' sc-long':''}${!LG&&CAL.size?' cal':''}" id="sc"${!LG&&CAL.size?` style="background-image:url('${fond}')"`:''}><div class="bgs" id="bgs">${LG?'':runs.map(r=>hasCal(r.n)?`<div class="bgl${r.lt?' light':''} cal"><div class="bg"><img class="sub" src="${cal(r.n)}" alt="" decoding="async"></div></div>`:`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
     ${LG&&I.demo?`<a class="lg-want" href="/formules/">${S.want}</a>`:''}
     ${I.demo?`<a class="demo-tag" href="/modeles/">${S.demo} · Save the Oui</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
@@ -348,6 +351,9 @@
       const top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight, L=layers[ri], B=L.firstElementChild;
       const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px';
       B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
+      // calque : pas de fond ni de fondu dans le cadre (le fond du thème est derrière tout, sur .sc) ; le sujet détouré
+      // monte avec les pages et passe devant le sujet précédent, qui reste en place jusqu'à être poussé
+      if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage=''; return; }
       fitBg(B,sc.clientWidth,h,ri>0?ov:0);
       const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
     });
@@ -367,8 +373,14 @@
     if(k){ e.preventDefault(); sc.scrollBy({top:sc.clientHeight*k,behavior:reduce?'auto':'smooth'}); }
   });
   addEventListener('resize',layoutStrip);
+  // profondeur des calques : le sujet détouré glisse un peu moins vite que les pages (jamais plus de 6 % d'un écran)
+  { const subs=layers.map((L,ri)=>({L,S:L.querySelector('.sub'),ri})).filter(x=>x.S); let tk=false;
+    const par=()=>{ tk=false; if(reduce) return; const h=sc.clientHeight, st=sc.scrollTop;
+      subs.forEach(({L,S})=>{ const t=L.offsetTop, b=t+L.offsetHeight; if(b<st-h||t>st+2*h) return;
+        const off=Math.max(-h*.06,Math.min(h*.06,(st-t)*.05)); S.style.transform=`translate3d(0,${off.toFixed(1)}px,0)`; }); };
+    if(subs.length){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(par); } },{passive:true}); par(); } }
   // précharge les images des pages suivantes
-  if(!LG) [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=img(n); });
+  if(!LG) [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=hasCal(n)?cal(n):img(n); });
 
   function longStart(){
     const rio=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('on'); rio.unobserve(en.target); } }),{root:sc,threshold:.18});

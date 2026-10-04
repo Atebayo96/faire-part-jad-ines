@@ -44,6 +44,18 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
    « peinture » pour des gens : il paraît artificiel et fait « cheap ».
 10. **Toute image générée est regardée en grand avant d'être publiée**, et passée dans `check_images.py` si c'est une
     scène. Une image qui échoue est régénérée, pas rafistolée en CSS.
+10b. **Scène par scène = des calques, jamais une image rognée.** Une image 9:16 posée en `cover` sur un téléphone 9:19,5
+    perd ses côtés (« tt les scène par scène t'as coupé c pas ouf ») : l'utilisateur a demandé « un détourage sur les objets,
+    en plusieurs calques ». Désormais chaque scène ou lieu a son **sujet détouré** (`img/calques/<thème>-<clé>.webp`, RGBA,
+    1080 px de large, `business/tools/calques.py` : Gemini repeint le sujet sur fond vert, incrustation, contrôles : haut vide,
+    sujet jusqu'au bord bas, pas de bord supérieur rectiligne ; `--hint` pour recomposer une scène trop dense) et le
+    **fond calme du thème** (`<thème>-fond.webp`) est peint **une fois derrière tout** (`.sc.cal`, `#cpScroll.cal`). Le
+    sujet est posé **entier**, toute la largeur, au bas de l'écran (`.bg .sub`, `object-fit: contain`, jamais de zoom), il
+    monte avec ses pages et passe devant le précédent (pas de masque de fondu sur ces cadres : le fondu de 45 % en fond uni
+    délavait le sujet du bas de la page précédente). Légère profondeur au défilement (5 %, plafonnée à 6 % d'un écran).
+    Pas de `will-change: transform` sur le sujet : dans un cadre collant masqué, Chromium ne le repeignait pas après un saut.
+    `build-site.py` liste les calques existants (`inv.calques`, `window.SCEAU_CALQUES`) ; sans calque, une scène garde
+    l'ancien rendu plein cadre. Un calque échoué se régénère, on ne réduit pas le sujet pour le faire tenir.
 
 ## Ce qui tombe : les particules
 

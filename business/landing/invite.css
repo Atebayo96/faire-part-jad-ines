@@ -49,6 +49,14 @@ a{color:inherit}
    la jonction soit exacte. Un miroir de tout le haut faisait un pli sombre (le dégradé du ciel s'inversait). */
 .bg::before{content:'';position:absolute;left:0;right:0;top:0;height:var(--strip,0px);background:var(--img) center top/var(--bs,cover) no-repeat;transform:scaleY(-1)}
 .bgl.on .bg{transform:scale(1.04)}
+/* calques : le fond calme du thème est peint une fois derrière tout (sur .sc, il ne bouge pas : papier ou ciel uni) ; chaque
+   cadre .bgl.cal ne porte que le sujet détouré, posé entier au bas de l'écran (toute la largeur, jamais rogné), sans fondu :
+   le sujet suivant monte avec les pages et passe devant le précédent, comme des calques. Pas de zoom. */
+.sc.cal{background:center/cover no-repeat}
+.sc.cal .bgs{background:none}
+.bgl.cal .bg,.bgl.cal.on .bg{transform:none;background:none}
+.bgl.cal .bg::before{display:none}
+.bg .sub{position:absolute;left:0;bottom:0;width:100%;height:auto;max-height:100%;object-fit:contain;object-position:center bottom;pointer-events:none;display:block}
 .pg{z-index:2}
 .pg>*{position:relative;z-index:2}
 

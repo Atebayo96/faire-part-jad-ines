@@ -243,6 +243,12 @@ def main():
 
     T = themes()
     invites = {}
+    # calques disponibles par thème (img/calques/<thème>-<clé>.webp, business/tools/calques.py)
+    calques = {}
+    cdir = os.path.join(SITE, 'img', 'calques')
+    for f in (sorted(os.listdir(cdir)) if os.path.isdir(cdir) else []):
+        th, key = f[:-5].rsplit('-', 1)
+        calques.setdefault(th, []).append(key)
     os.makedirs(os.path.join(SITE, 'tableau', 'demo'), exist_ok=True)
     for fn in sorted(os.listdir(os.path.join(B, 'invites'))):
         if not fn.endswith('.json'):
@@ -260,6 +266,8 @@ def main():
         desc = ('You are invited. Open our wedding invitation.' if lang == 'en' else 'Vous êtes invités. Ouvrez notre faire-part.')
         # scènes animées disponibles (images tirées des vidéos, voir business/tools/frames.py)
         inv['anim'] = [n for n in range(1, 5) if os.path.isdir(os.path.join(SITE, 'img', 'frames', f"{inv['theme']}-{n}"))]
+        # calques : sujets détourés posés sur le fond du thème (business/tools/calques.py)
+        inv['calques'] = calques.get(inv['theme'], [])
         # mise en page continue : description des images du thème (business/tools/long-assets.py)
         if inv.get('layout') == 'long':
             inv['long'] = json.load(open(os.path.join(B, 'landing', 'img', 'long', inv['theme'], 'meta.json')))
@@ -304,8 +312,8 @@ def main():
     for u in PAGES:
         p = os.path.join(SITE, u.strip('/'), 'index.html')
         l = open(p, encoding='utf-8').read()
-        assert '[]/*DEMOS*/' in l, p
-        open(p, 'w', encoding='utf-8').write(l.replace('[]/*DEMOS*/', json.dumps(demos, ensure_ascii=False)))
+        assert '[]/*DEMOS*/' in l and '{}/*CALQUES*/' in l, p
+        open(p, 'w', encoding='utf-8').write(l.replace('[]/*DEMOS*/', json.dumps(demos, ensure_ascii=False)).replace('{}/*CALQUES*/', json.dumps(calques)))
     site_og(T)
     print('site ->', SITE, '|', len(invites), 'faire-part')
 
