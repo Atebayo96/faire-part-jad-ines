@@ -771,3 +771,8 @@
   .car-open{padding:8px 0;margin-top:4px}
   .flow p a,.offer p a,.price-note a,.head p a{display:inline-block;padding:6px 0}
   .cta .ctx[hidden]{display:none}
+  /* Safari iOS : rien ne doit permettre de « pousser » la page vers la gauche (un débordement invisible suffisait) */
+  html,body{overflow-x:hidden;overflow-x:clip;max-width:100%}
+  /* vignettes de thème (3:4 dans une image 9:16) : on cadre sur le sujet, en bas, pas sur le ciel vide */
+  .th span{background-position:center 88%}
+  .model .pic img{object-position:center 80%}

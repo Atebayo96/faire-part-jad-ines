@@ -210,6 +210,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     En format « grand tableau », l'étape 2 change de mots (« Vos événements », « Sans lieu / Un lieu dans le cadre »).
     Les vignettes du choix de format suivent le thème choisi (`paint()`). Les vignettes qui
     illustrent un format montrent la **scène** (`object-position: center 72 %`), pas le ciel vide du haut de l'image.
+    Toute vignette plus courte que 9:16 (tuiles de thème 3:4, cartes 4:5) se cadre sur le **bas** de l'image
+    (`center 80–88 %`), là où est le sujet : centrée, elle coupait le torii et le manoir. `html,body{overflow-x:clip}` :
+    sur Safari iOS, un débordement invisible suffisait à « pousser » la page vers la gauche.
 
 ## Méthode
 
