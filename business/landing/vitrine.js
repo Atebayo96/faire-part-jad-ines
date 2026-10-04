@@ -256,6 +256,7 @@
     $('cPlan').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan));
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
       ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k; a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
+    $('cFmt').querySelectorAll('button').forEach(b=>{ b.firstChild.style.backgroundImage=`url('${b.dataset.id==='long'?`/img/reel/long-${C.k}.webp`:`/img/themes/${C.k}-2.webp?v=6`}')`; });
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
       l.querySelector('.lieux').hidden=e.bg!=='scene';
@@ -330,7 +331,9 @@
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
   // téléphone : l'aperçu réduit collé en haut s'agrandit en plein écran, et se referme
-  { const pv=document.querySelector('.comp-prev'), big=$('cpBig'), cl=$('cpClose');
+  { const pv=document.querySelector('.comp-prev'), big=$('cpBig'), cl=$('cpClose'), nav=$('wzNav'), side=$('cpMiniSteps'), home=nav.parentNode, mq=matchMedia('(max-width:720px)');
+    const place=()=>{ if(mq.matches){ if(nav.parentNode!==side) side.appendChild(nav); } else if(nav.parentNode!==home) home.insertBefore(nav,home.firstChild); };
+    place(); mq.addEventListener('change',place);
     const set=on=>{ pv.classList.toggle('big',on); document.body.style.overflow=on?'hidden':''; if(on) requestAnimationFrame(cpLayout); };
     if(big) big.onclick=()=>set(true); if(cl) cl.onclick=()=>set(false);
     addEventListener('keydown',e=>{ if(e.key==='Escape'&&pv.classList.contains('big')) set(false); }); }

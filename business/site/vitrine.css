@@ -545,10 +545,15 @@
     .hero .ctas .btn{flex:1 1 auto}
     /* sur téléphone : l'aperçu reste collé en haut, en petit, pendant qu'on configure (plus besoin de remonter) ;
        « Agrandir » l'ouvre en plein écran */
-    .comp-prev{order:-1;position:sticky;top:60px;z-index:7;background:var(--bg);border-bottom:1px solid var(--line);margin:0 -16px 8px;padding:8px 16px;display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;justify-items:start;height:196px}
-    .comp-prev .cp-phone{width:300px;transform:scale(.3);transform-origin:top left;margin:0;height:650px;position:absolute;top:8px;left:16px}
+    .comp-prev{order:-1;position:sticky;top:60px;z-index:7;background:var(--bg);border-bottom:1px solid var(--line);margin:0 -16px 8px;padding:8px 16px;display:grid;grid-template-columns:72px 1fr;gap:10px;align-items:start;justify-items:stretch;height:150px}
+    .comp-prev .cp-phone{width:300px;transform:scale(.21);transform-origin:top left;margin:0;height:650px;position:absolute;top:8px;left:16px}
     .comp-prev .replay,.comp-prev #cpGo{display:none}
-    .cp-mini-side{grid-column:2;display:grid;gap:6px;font-size:13px;color:var(--muted)} .cp-mini-side b{color:var(--ink);font-weight:500;font-size:14px} .cp-mini-side .btn{height:36px;padding:0 14px;font-size:13px;margin-top:4px}
+    .cp-mini-side{grid-column:2;display:grid;gap:4px;align-content:start;min-width:0}
+    .cp-mini-side .lk{background:none;border:0;padding:0;font:500 12.5px Inter,sans-serif;color:var(--ink);text-decoration:underline;cursor:pointer;justify-self:start}
+    /* les étapes dans le bandeau : 2 x 2, compactes */
+    #cpMiniSteps .wz-nav{position:static;grid-template-columns:1fr 1fr;gap:4px 10px;padding:0;margin:0;border:0;background:none}
+    #cpMiniSteps .wz-nav button{padding:6px 0 0;gap:6px;display:flex;align-items:baseline;font-size:12.5px}
+    #cpMiniSteps .wz-nav button b{font-size:18px}
     .cp-close{display:none}
     .comp-prev.big{position:fixed;inset:0;top:0;z-index:40;height:auto;margin:0;padding:24px 16px;display:grid;grid-template-columns:1fr;justify-items:center;align-content:center;gap:12px;border:0}
     .comp-prev.big .cp-phone{position:relative;top:auto;left:auto;transform:none;width:min(300px,78vw);height:auto;margin:0}
@@ -738,4 +743,4 @@
   @media (min-width:721px){ .cp-mini-side,.cp-close{display:none} }
   /* la barre des étapes reste visible tout le temps : collée sous le menu (et sous l'aperçu réduit sur téléphone) */
   .wz-nav{position:sticky;top:60px;z-index:6;background:var(--bg);padding-top:6px;margin-top:-6px}
-  @media (max-width:720px){ .wz-nav{top:256px;padding-bottom:6px;border-bottom:1px solid var(--line)} .wz-nav button span{font-size:12px} .wz-nav button{gap:2px;padding-top:8px} }
+

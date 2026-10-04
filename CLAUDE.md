@@ -202,7 +202,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 31. **Configurateur sur téléphone** : l'aperçu reste **collé en haut, réduit** (téléphone à 30 %, `position:sticky`,
     196 px) pendant qu'on configure, avec un bouton « Agrandir » qui l'ouvre en plein écran (`.comp-prev.big`, croix pour
     fermer). L'utilisateur devait sinon remonter à chaque réglage pour voir le résultat. Le téléphone agrandi reste
-    `position:relative` (ses calques sont absolus : en `static`, ils s'étalaient sur tout l'écran). Les vignettes qui
+    `position:relative` (ses calques sont absolus : en `static`, ils s'étalaient sur tout l'écran). Le bandeau fait
+    150 px au total : téléphone à 21 % et, à côté, **les quatre étapes** (déplacées là par JS sous 720 px) et le lien
+    « Agrandir l'aperçu » ; la première version à 196 px + barre d'étapes séparée « prenait trop d'espace ».
+    Les vignettes du choix de format suivent le thème choisi (`paint()`). Les vignettes qui
     illustrent un format montrent la **scène** (`object-position: center 72 %`), pas le ciel vide du haut de l'image.
 
 ## Méthode
