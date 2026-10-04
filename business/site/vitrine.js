@@ -41,7 +41,13 @@
     location.href=u.toString();
   });
   }
-  { const sel=document.getElementById('planSel'), up=new URLSearchParams(location.search).get('plan'); if(sel&&up&&[...sel.options].some(o=>o.value===up)) sel.value=up; }
+  { const q=new URLSearchParams(location.search), sel=document.getElementById('planSel'), up=q.get('plan'); if(sel&&up&&[...sel.options].some(o=>o.value===up)) sel.value=up;
+    // depuis le configurateur : prénoms, date, thème et format déjà remplis
+    const fn=document.getElementById('fNames'), fd=document.getElementById('fDate'), pu=document.getElementById('fPlanUrl');
+    if(fn&&fn.tagName==='INPUT'&&fn.type==='text'&&q.get('names')) fn.value=q.get('names');
+    if(fd&&fd.tagName==='INPUT'&&q.get('date')){ fd.type='date'; fd.value=q.get('date'); }
+    if(pu) pu.value=[q.get('plan'),q.get('theme'),q.get('format')].filter(Boolean).join(' · ');
+    const intro=document.getElementById('ctxLine'); if(intro&&q.get('theme')&&window.SCEAU_THEMES&&window.SCEAU_THEMES[q.get('theme')]){ intro.hidden=false; intro.textContent=`Votre composition : ${window.SCEAU_THEMES[q.get('theme')].name}${q.get('format')?' · '+(q.get('format')==='long'?'grand tableau':'scène par scène'):''}${up?' · '+up.charAt(0).toUpperCase()+up.slice(1):''}. On la retrouve avec votre message.`; } }
   if(document.getElementById('waitForm')) document.getElementById('waitForm').addEventListener('submit',async e=>{
     e.preventDefault();
     const f=e.currentTarget, fd=new FormData(f), err=document.getElementById('fErr'), btn=f.querySelector('button');
@@ -54,7 +60,7 @@
       const r=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       if(!r.ok) throw new Error(r.status);
       f.style.display='none'; document.querySelector('.consent').style.display='none'; document.getElementById('ok').style.display='block';
-    }catch(x){ btn.disabled=false; btn.textContent='Réserver ma place'; show("L'envoi n'a pas fonctionné. Réessayez dans un instant."); }
+    }catch(x){ btn.disabled=false; btn.textContent='Envoyer ma demande'; show("L'envoi n'a pas fonctionné. Réessayez dans un instant."); }
   });
 
   /* apercu des themes : 4 scenes par theme, textes d'exemple */
@@ -255,7 +261,7 @@
     const needs=sigNeeds(); if(needs.length&&C.plan==='essentiel'&&!C.planPicked) C.plan='signature';
     $('cPlan').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan));
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
-      ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k; a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
+      ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k+'&format='+C.fmt+'&names='+encodeURIComponent(($('cN1').value||'Emma').trim()+' & '+($('cN2').value||'Louis').trim())+'&date='+encodeURIComponent($('cDate').value||''); a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
     { const long=C.fmt==='long';
       $('wz2Title').textContent=long?'Vos événements':'Vos écrans';
       $('wz2Sub').textContent=long?'Dans le grand tableau, chaque événement a son cadre peint : choisissez le lieu qui s’y affiche (notre bibliothèque, ou votre photo), ou laissez le cadre sans lieu.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';

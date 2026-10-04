@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     ...(order ? { cgvAcceptees: true, renonciationRetractation: true } : {}),
     name: clean(b.name, 120), phone: clean(b.phone, 40), date: clean(b.date, 20), plan: clean(b.plan, 30),
     message: clean(b.message, 2000),
-    choix: { style: clean(b.style, 40), format: clean(b.format, 30), palette: clean(b.palette, 40), police: clean(b.font, 40), ouverture: clean(b.opening, 40), compte: clean(b.countdown, 40), revelation: clean(b.reveal, 40), ecrans: clean(b.screens, 300), evenements: clean(b.events, 400), prenoms: clean(b.names, 80), dateMariage: clean(b.weddingDate, 20) },
+    choix: { style: clean(b.style, 40), format: clean(b.format, 30), composition: clean(b.plan_url, 80), palette: clean(b.palette, 40), police: clean(b.font, 40), ouverture: clean(b.opening, 40), compte: clean(b.countdown, 40), revelation: clean(b.reveal, 40), ecrans: clean(b.screens, 300), evenements: clean(b.events, 400), prenoms: clean(b.names, 80), dateMariage: clean(b.weddingDate, 20) },
     source: clean(req.headers.referer, 200)
   };
   await save('leads/' + id() + '.json', lead);

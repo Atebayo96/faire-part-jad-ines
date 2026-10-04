@@ -32,8 +32,9 @@
 <section id="commencer" class="cta" style="border-top:0">
   <div class="wrap">
     <p class="label">Nous écrire</p>
-    <h2 style="margin-top:16px">Racontez-nous votre mariage,<br>on vous répond sous 48 h.</h2>
+    <h1 class="h2" style="margin-top:16px">Racontez-nous votre mariage,<br>on vous répond sous 48 h.</h1>
     <p style="margin-top:18px;color:var(--muted)">Pour un faire-part Couture, une question, ou si vous préférez tout faire avec nous. Lancement : −40 % sur Signature pour les dix premiers couples.</p>
+    <p class="ctx" id="ctxLine" hidden></p>
     <form id="waitForm" novalidate>
       <input type="text" name="name" id="fNames" placeholder="Vos prénoms" required autocomplete="name" aria-label="Vos prénoms">
       <input type="email" name="email" id="fEmail" placeholder="E-mail" required autocomplete="email" aria-label="E-mail">
@@ -45,7 +46,7 @@
         <option value="couture">Couture</option>
       </select>
       <label class="hp" aria-hidden="true">Site<input name="website" tabindex="-1" autocomplete="off"></label>
-      <button class="btn solid" type="submit">Réserver ma place</button>
+      <button class="btn solid" type="submit">Envoyer ma demande</button>
     </form>
     <label class="consent"><input type="checkbox" id="fConsent" required> J'accepte d'être recontacté·e au sujet de ma demande. <a href="/confidentialite/">Confidentialité</a></label>
     <p class="err" id="fErr" hidden></p>

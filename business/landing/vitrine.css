@@ -22,7 +22,7 @@
   .btn:hover{opacity:.85}
   section{padding:88px 0;border-top:1px solid var(--line)}
   .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px;margin-bottom:40px}
-  .head h2{font-size:clamp(32px,5vw,56px);max-width:14em}
+  .head h2,.head h1.h2{font-size:clamp(32px,5vw,56px);max-width:14em}
   .head p{max-width:26em;color:var(--muted);margin:0}
 
   /* nav */
@@ -201,7 +201,7 @@
   details p{color:var(--muted);margin:10px 0 0;max-width:46em}
 
   /* cta */
-  .cta h2{font-size:clamp(40px,7vw,88px)}
+  .cta h2,.cta h1.h2{font-size:clamp(40px,7vw,88px)}
   form{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:0;margin-top:36px;border:1px solid var(--ink)}
   @media (max-width:820px){ form{grid-template-columns:1fr} }
   input,select{height:56px;padding:0 16px;border:0;border-right:1px solid var(--line);background:var(--bg);color:var(--ink);font:15px Inter,sans-serif;min-width:0;border-radius:0}
@@ -600,7 +600,7 @@
   nav .links a[aria-current]{color:var(--ink);font-weight:500;border-bottom:1px solid var(--ink);padding-bottom:2px}
   nav .links{gap:22px}
   @media (max-width:720px){ nav .links{gap:12px} nav .links a:not(.btn){font-size:12.5px} nav .btn{padding:0 12px;font-size:13px} .logo b{font-size:23px} .logo span{font-size:10.5px;letter-spacing:.14em} }
-  @media (max-width:720px){ nav .links a[href="/"],nav .links a[href="/formules/#faq"]{display:none} .logo{margin-right:10px} } /* sur téléphone : le logo vaut Accueil, Questions est dans Formules */
+  @media (max-width:720px){ nav .links a[href="/"]{display:none} .logo{margin-right:10px} } /* sur téléphone : le logo vaut Accueil, Questions est dans Formules */
   /* « ce que vous recevez » : quatre temps, numérotés, reliés par des flèches */
   .flow{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);counter-reset:f}
   @media (max-width:820px){ .flow{grid-template-columns:1fr 1fr} }
@@ -749,3 +749,25 @@
 
 
   @media (min-width:721px){ .cp-sum{display:none} }
+
+  /* recette : rien sous 11 px, et des cibles tactiles d'au moins 32 px sur téléphone */
+  .k{font-size:11px}
+  .chip.sig i,.sig-tag,.lieux button i{font-size:11px}
+  .roll-txt .ey{font-size:11px}
+  .th small,.lieux button small{font-size:11px}
+  .cta .ctx{margin:14px auto 0;max-width:34em;font-size:14px;color:var(--ink);background:var(--bg-2);padding:10px 14px;display:inline-block}
+  @media (max-width:720px){
+    .logo span{font-size:11px}
+    nav .links a:not(.btn):not([href="/"]){display:inline-flex;align-items:center;min-height:36px;padding:0 2px}
+    footer .legal a,.fld .hint a,.cont-more a,.model .acts a{display:inline-block;padding:8px 0}
+    .cp-mini-side .lk{min-height:32px;display:inline-flex;align-items:center}
+    #cpMiniSteps .wz-nav button{min-height:32px}
+  }
+  .fld small{font-size:11px}
+  .cp-phone .op-tap{font-size:11px}
+  /* recette : le menu tient dans 390 px sans défilement horizontal ; liens d'un doigt */
+  nav .wrap,nav .links{min-width:0} nav .links{flex-wrap:nowrap}
+  @media (max-width:420px){ nav .links{gap:8px} nav .links a:not(.btn):not([href="/"]){font-size:12px;padding:0} nav .btn{padding:0 10px} .logo{margin-right:6px} }
+  .car-open{padding:8px 0;margin-top:4px}
+  .flow p a,.offer p a,.price-note a,.head p a{display:inline-block;padding:6px 0}
+  .cta .ctx[hidden]{display:none}
