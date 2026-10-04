@@ -56,6 +56,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Pas de `will-change: transform` sur le sujet : dans un cadre collant masqué, Chromium ne le repeignait pas après un saut.
     `build-site.py` liste les calques existants (`inv.calques`, `window.SCEAU_CALQUES`) ; sans calque, une scène garde
     l'ancien rendu plein cadre. Un calque échoué se régénère, on ne réduit pas le sujet pour le faire tenir.
+    La **vignette** d'une scène en calques (`img/themes` et `img/hd`, cartes de la vitrine, carrousel, configurateur) se
+    recompose avec `business/tools/vignettes.py <thème>-<clé>` (fond + sujet) : la peinture d'origine pouvait garder une
+    bande sombre collée sur la scène (« c'est coupé, c'est moche » sur la carte « Scène par scène »).
 
 ## Ce qui tombe : les particules
 
