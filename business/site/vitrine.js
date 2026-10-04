@@ -256,6 +256,11 @@
     $('cPlan').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan));
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
       ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k; a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
+    { const long=C.fmt==='long';
+      $('wz2Title').textContent=long?'Vos événements':'Vos écrans';
+      $('wz2Sub').textContent=long?'Dans le grand tableau, chaque événement a son cadre peint : choisissez le lieu qui s’y affiche (notre bibliothèque, ou votre photo), ou laissez le cadre sans lieu.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';
+      document.querySelectorAll('#cStory [data-bg="simple"]').forEach(b=>b.innerHTML=long?'Sans lieu<small>Le cadre peint du thème</small>':'Écran simple<small>Texte sur le fond</small>');
+      document.querySelectorAll('#cStory [data-bg="scene"]').forEach(b=>b.innerHTML=long?'Un lieu<small>Dans le cadre</small>':'Scène<small>Votre lieu dessiné</small>'); }
     $('cFmt').querySelectorAll('button').forEach(b=>{ b.firstChild.style.backgroundImage=`url('${b.dataset.id==='long'?`/img/reel/long-${C.k}.webp`:`/img/themes/${C.k}-2.webp?v=6`}')`; });
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
@@ -327,7 +332,8 @@
     $('cRecap').textContent=needTxt.trim()||(C.plan==='signature'?'Votre lieu peint d’après photo, un lien par famille, français et anglais.':'');
     // récapitulatif, ligne par ligne
     const sum=[['Thème',t.name],['Format',FMTS.find(f=>f.id===C.fmt).name],['Vous',`${n1} & ${n2} · ${ds}`],['Écrans',`Accueil → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
-    $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join(''); if($('fDate')) $('fDate').value=$('cDate').value;
+    $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
+    { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b> · ${esc(FMTS.find(f=>f.id===C.fmt).name)}<br>${esc(n1)} &amp; ${esc(n2)} · ${esc(ds)}<br>${C.ev.map(e=>esc(evTxt(e))).join(' → ')}${C.x.size?` · +${C.x.size}`:''}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
   // téléphone : l'aperçu réduit collé en haut s'agrandit en plein écran, et se referme

@@ -204,7 +204,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     fermer). L'utilisateur devait sinon remonter à chaque réglage pour voir le résultat. Le téléphone agrandi reste
     `position:relative` (ses calques sont absolus : en `static`, ils s'étalaient sur tout l'écran). Le bandeau fait
     150 px au total : téléphone à 21 % et, à côté, **les quatre étapes** (déplacées là par JS sous 720 px) et le lien
-    « Agrandir l'aperçu » ; la première version à 196 px + barre d'étapes séparée « prenait trop d'espace ».
+    « Agrandir l'aperçu » ; la première version à 196 px + barre d'étapes séparée « prenait trop d'espace ». Puis
+    l'utilisateur a voulu le téléphone **plus grand** avec **un résumé des choix** à côté (`#cpSum` : thème · format,
+    prénoms · date, lieux, formule), les étapes en dessous sur une ligne : bandeau à 214 px, téléphone à 31 %.
+    En format « grand tableau », l'étape 2 change de mots (« Vos événements », « Sans lieu / Un lieu dans le cadre »).
     Les vignettes du choix de format suivent le thème choisi (`paint()`). Les vignettes qui
     illustrent un format montrent la **scène** (`object-position: center 72 %`), pas le ciel vide du haut de l'image.
 
