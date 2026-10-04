@@ -329,6 +329,11 @@
     $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join(''); if($('fDate')) $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
+  // téléphone : l'aperçu réduit collé en haut s'agrandit en plein écran, et se referme
+  { const pv=document.querySelector('.comp-prev'), big=$('cpBig'), cl=$('cpClose');
+    const set=on=>{ pv.classList.toggle('big',on); document.body.style.overflow=on?'hidden':''; if(on) requestAnimationFrame(cpLayout); };
+    if(big) big.onclick=()=>set(true); if(cl) cl.onclick=()=>set(false);
+    addEventListener('keydown',e=>{ if(e.key==='Escape'&&pv.classList.contains('big')) set(false); }); }
   /* étapes : une seule à l'écran (thème, écrans, détails, formule), l'aperçu reste à côté. L'utilisateur trouvait la page
      unique « trop complexe ». Tout reste dans la page (seulement masqué) : paint() continue de tout tenir à jour. */
   { const steps=[...document.querySelectorAll('.wz')], tabs=[...document.querySelectorAll('#wzNav button')], prev=$('wzPrev'), next=$('wzNext');

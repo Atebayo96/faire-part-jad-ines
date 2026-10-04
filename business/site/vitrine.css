@@ -372,7 +372,7 @@
   .pv-sws{position:relative;display:flex;gap:10px;margin:16px 0 14px}
   .pv-sws i{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.75)}
   .pv-fam{position:relative;font:500 17px/1.35 "Cormorant Garamond",Georgia,serif;margin:14px 0 10px}
-  .cp-dl{display:flex;align-items:center;gap:12px;margin-top:16px;font:500 17px/1.2 "Cormorant Garamond",Georgia,serif}
+  .cp-dl{display:flex;align-items:center;gap:10px;margin-top:14px;font:500 14px/1.2 "Cormorant Garamond",Georgia,serif;white-space:nowrap}
   .cp-dl i{display:block;width:26px;height:1px;background:currentColor;opacity:.75}
   .cp-phone .pv-hint{z-index:1}
   .cp-scrim{position:absolute;inset:0 0 45% 0;background:linear-gradient(rgba(0,0,0,.35),transparent)}
@@ -543,8 +543,18 @@
     .facts span{font-size:12px;line-height:1.35;display:block;margin-top:4px}
     .facts div{padding-right:8px}
     .hero .ctas .btn{flex:1 1 auto}
-    .comp-prev{order:-1}
-    .cp-phone{width:min(250px,70vw)}
+    /* sur téléphone : l'aperçu reste collé en haut, en petit, pendant qu'on configure (plus besoin de remonter) ;
+       « Agrandir » l'ouvre en plein écran */
+    .comp-prev{order:-1;position:sticky;top:60px;z-index:7;background:var(--bg);border-bottom:1px solid var(--line);margin:0 -16px 8px;padding:8px 16px;display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;justify-items:start;height:196px}
+    .comp-prev .cp-phone{width:300px;transform:scale(.3);transform-origin:top left;margin:0;height:650px;position:absolute;top:8px;left:16px}
+    .comp-prev .replay,.comp-prev #cpGo{display:none}
+    .cp-mini-side{grid-column:2;display:grid;gap:6px;font-size:13px;color:var(--muted)} .cp-mini-side b{color:var(--ink);font-weight:500;font-size:14px} .cp-mini-side .btn{height:36px;padding:0 14px;font-size:13px;margin-top:4px}
+    .cp-close{display:none}
+    .comp-prev.big{position:fixed;inset:0;top:0;z-index:40;height:auto;margin:0;padding:24px 16px;display:grid;grid-template-columns:1fr;justify-items:center;align-content:center;gap:12px;border:0}
+    .comp-prev.big .cp-phone{position:relative;top:auto;left:auto;transform:none;width:min(300px,78vw);height:auto;margin:0}
+    .comp-prev.big .replay,.comp-prev.big #cpGo{display:inline-flex}
+    .comp-prev.big .cp-mini-side{display:none}
+    .comp-prev.big .cp-close{display:grid;place-items:center;position:absolute;top:12px;right:12px;z-index:50;width:40px;height:40px;border:1px solid var(--line);background:var(--bg);font-size:22px;cursor:pointer;border-radius:50%}
     .op-card{min-width:0;flex:1 1 30%;padding:10px}
     .fo{min-width:0;flex:1 1 30%}
     .pv-tabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:100vw;padding:0 16px 4px;scrollbar-width:none}
@@ -711,7 +721,8 @@
   .fmts a b{font-weight:500} .fmts a span{color:var(--muted);font-size:12px}
   .opts.fmts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .op-card.fmt{display:grid;grid-template-columns:44px 1fr;gap:4px 12px;align-items:start;min-width:0}
-  .op-card.fmt i{grid-row:1/3;width:44px;aspect-ratio:9/16;background:#eee center top/cover no-repeat;outline:1px solid var(--line)}
+  .op-card.fmt i{grid-row:1/3;width:44px;aspect-ratio:9/16;background:#eee center 72%/cover no-repeat;outline:1px solid var(--line)}
+  .op-card.fmt[data-id="long"] i{background-position:center top}
   .op-card.fmt small{white-space:normal;line-height:1.35}
   .roll-prev{position:relative} .roll-prev img{display:block;width:100%;height:auto}
   .roll-prev .roll-txt{position:absolute;left:0;right:0;top:0;padding:16% 8% 0;text-align:center}
@@ -719,6 +730,9 @@
   .fmt2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media (max-width:720px){ .fmt2{grid-template-columns:1fr} }
   .fmt2 a{display:grid;grid-template-columns:120px 1fr;gap:20px;align-items:center;padding:18px;background:var(--bg-2);color:inherit;text-decoration:none}
-  .fmt2 img{width:120px;aspect-ratio:9/16;object-fit:cover;object-position:top;border-radius:10px;border:4px solid #111}
+  .fmt2 img{width:120px;aspect-ratio:9/16;object-fit:cover;object-position:center 72%;border-radius:10px;border:4px solid #111}
+  .fmt2 a:last-child img{object-position:top}
   .fmt2 b{display:block;font:500 22px/1.2 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em;margin-bottom:8px}
   .fmt2 p{margin:0 0 10px;color:var(--muted);font-size:15px} .fmt2 em{font-style:normal;font-size:14px}
+
+  @media (min-width:721px){ .cp-mini-side,.cp-close{display:none} }

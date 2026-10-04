@@ -199,6 +199,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     galerie et configurateur tant qu'ils n'existent pas dans les deux formats. Le format se choisit à l'étape 1 du
     configurateur (`C.fmt`, champ `format` dans la demande) ; aucun thème n'est réservé à Signature.
 
+31. **Configurateur sur téléphone** : l'aperçu reste **collé en haut, réduit** (téléphone à 30 %, `position:sticky`,
+    196 px) pendant qu'on configure, avec un bouton « Agrandir » qui l'ouvre en plein écran (`.comp-prev.big`, croix pour
+    fermer). L'utilisateur devait sinon remonter à chaque réglage pour voir le résultat. Le téléphone agrandi reste
+    `position:relative` (ses calques sont absolus : en `static`, ils s'étalaient sur tout l'écran). Les vignettes qui
+    illustrent un format montrent la **scène** (`object-position: center 72 %`), pas le ciel vide du haut de l'image.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
