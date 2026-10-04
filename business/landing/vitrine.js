@@ -294,7 +294,7 @@
       // calque : le sujet détouré est posé entier au bas de l'écran sur le fond du thème (même rendu que le moteur)
       const hasCal=((window.SCEAU_CALQUES||{})[C.k]||[]).includes(String(img));
       const src=hasCal?`/img/lieux/${C.k}-fond.webp`:typeof img==='number'?`/img/themes/${C.k}-${img}.webp?v=7`:`/img/lieux/${C.k}-${img}.webp`;
-      const sub=hasCal?`/img/calques/${C.k}-${img}.webp?v=7`:'';
+      const sub=hasCal?`/img/calques/${C.k}-${img}.webp?v=8`:'';
       return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" data-sub="${esc(sub)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     const pages=[], rv=C.rvl!=='non'?C.rvl:null;
     // 1. prenoms + date (+ compte a rebours au debut)
