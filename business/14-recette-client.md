@@ -22,6 +22,6 @@ Script : `/tmp/…/audit.js` (Playwright) ; à rejouer après chaque grosse évo
 
 1. **Paiement** : `paiement.js` n'a pas encore les liens Stripe. « Commander » envoie donc vers le contact, avec la composition. Dès que les liens existent, le même bouton ouvre le paiement.
 2. **Aperçu du grand tableau dans le configurateur** : il montre le rouleau de la démo du thème, pas encore les lieux choisis dans les cadres (le vrai faire-part, lui, les affiche).
-3. **Domaine** : toujours `sceau-faire-part.vercel.app` ; l'aperçu WhatsApp (`og-sceau.jpg`) dit déjà Save The Oui.
+3. **Domaine** : `savetheoui.fr` acheté le 4 octobre 2026 et rattaché au projet Vercel (`www` redirige vers l'apex) ; le site, les aperçus WhatsApp, le sitemap et les mentions légales pointent dessus. Reste à faire côté registrar : enregistrement A `@` → `76.76.21.21` et CNAME `www` → `cname.vercel-dns.com`, puis rediriger `sceau-faire-part.vercel.app` vers le nouveau domaine.
 4. **Après l'envoi du formulaire**, pas d'e-mail de confirmation au client (la demande arrive dans l'admin). À brancher quand on aura l'expéditeur.
 5. **Les 14 autres thèmes** restent hors galerie tant qu'ils n'existent pas dans les deux formats.

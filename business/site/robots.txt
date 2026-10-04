@@ -4,4 +4,4 @@ Disallow: /tableau/
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://sceau-faire-part.vercel.app/sitemap.xml
+Sitemap: https://savetheoui.fr/sitemap.xml

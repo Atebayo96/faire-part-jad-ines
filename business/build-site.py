@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-SITE_URL = 'https://sceau-faire-part.vercel.app'
+SITE_URL = 'https://savetheoui.fr'
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 B = os.path.join(ROOT, 'business')
 SITE = os.path.join(B, 'site')
