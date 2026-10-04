@@ -79,7 +79,7 @@
   const base=up?30:/Limelight|Cinzel/.test(fam1)?38:52;
   const nmCss=(k,col)=>`font-family:${fam1};font-style:${ital?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:clamp(${Math.round(base*k*.72)}px,${(base*k/16.5).toFixed(2)}vh,${Math.round(base*k*1.1)}px);color:${col}`;
   // ?v= : à augmenter quand on remplace des décors, pour que les navigateurs ne gardent pas l'ancienne image
-  const IMGV=5, img=n=>`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  const IMGV=6, img=n=>`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
   const isDark=n=>(T.scenes[n-1]||[])[4]==='dark';
 
   /* ---------- icônes ---------- */

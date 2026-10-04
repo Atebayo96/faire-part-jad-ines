@@ -736,3 +736,6 @@
   .fmt2 p{margin:0 0 10px;color:var(--muted);font-size:15px} .fmt2 em{font-style:normal;font-size:14px}
 
   @media (min-width:721px){ .cp-mini-side,.cp-close{display:none} }
+  /* la barre des étapes reste visible tout le temps : collée sous le menu (et sous l'aperçu réduit sur téléphone) */
+  .wz-nav{position:sticky;top:60px;z-index:6;background:var(--bg);padding-top:6px;margin-top:-6px}
+  @media (max-width:720px){ .wz-nav{top:256px;padding-bottom:6px;border-bottom:1px solid var(--line)} .wz-nav button span{font-size:12px} .wz-nav button{gap:2px;padding-top:8px} }
