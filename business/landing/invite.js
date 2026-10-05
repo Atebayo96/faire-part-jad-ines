@@ -345,7 +345,7 @@
      OVK = 45 % d'un écran : un long fondu, le décor change sans qu'on sente une page. Aucune image
      n'est étirée sur plusieurs écrans (jamais de zoom). Les positions sont recalculées à chaque changement de
      taille (une page fait un écran, une page « tall » davantage). */
-  const OVK=.45;
+  const OVK=.45, CALF=.25;
   // taille du décor : celle de l'écran (cover sur l'écran, pas sur le cadre agrandi de la bande de fondu, sinon l'image
   // apparaît zoomée ~1,8×). Image centrée sur l'écran ; au-dessus, sa première bande étirée remplit la bande de fondu.
   const IR=.566; // largeur / hauteur des décors (1080 × 1909)
@@ -364,7 +364,11 @@
       B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
       // calque : pas de fond ni de fondu dans le cadre (le fond du thème est derrière tout, sur .sc) ; le sujet détouré
       // monte avec les pages et passe devant le sujet précédent, qui reste en place jusqu'à être poussé
-      if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage=''; return; }
+      // Le bas du sujet (le sol) traçait une ligne droite sur le fond en remontant : le cadre déborde de CALF d'un écran
+      // sur la page suivante (le sujet reste posé un peu plus longtemps) et ce débord est fondu, le sol s'efface en partant.
+      if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage='';
+        const ext=ri<runs.length-1?Math.round(h*CALF):0, m=ext?`linear-gradient(to bottom,#000 calc(100% - ${ext}px),transparent)`:'';
+        L.style.height=(bot-t+ext)+'px'; L.style.webkitMaskImage=L.style.maskImage=m; return; }
       fitBg(B,sc.clientWidth,h,ri>0?ov:0);
       const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
     });

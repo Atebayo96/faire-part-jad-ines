@@ -346,7 +346,11 @@
     bgs.style.height=sc.scrollHeight+'px';
     cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!L) return; const B=L.firstElementChild, top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight;
       const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px'; B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
-      if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage=''; return; }
+      // calque : le cadre déborde d'un quart d'écran sur la suite et ce débord est fondu (comme layoutStrip() du moteur) :
+      // le sol du sujet s'efface en remontant au lieu de tracer une ligne droite
+      if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage='';
+        const ext=ri<cpRuns.length-1?Math.round(h*.25):0, m=ext?`linear-gradient(to bottom,#000 calc(100% - ${ext}px),transparent)`:'';
+        L.style.height=(bot-t+ext)+'px'; L.style.webkitMaskImage=L.style.maskImage=m; return; }
       const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
       // taille de l'écran, pas du cadre agrandi (sinon zoom ~1,8×) : même calcul que fitBg() dans invite.js
       const bw=Math.ceil(Math.max(sc.clientWidth,h*.566)), y=Math.round((ri>0?ov:0)+(h-bw/.566)/2);

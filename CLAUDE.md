@@ -62,6 +62,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     sujet est posé **entier**, toute la largeur, au bas de l'écran (`.bg .sub`, `object-fit: contain`, jamais de zoom), il
     monte avec ses pages et passe devant le précédent (pas de masque de fondu sur ces cadres : le fondu de 45 % en fond uni
     délavait le sujet du bas de la page précédente). Légère profondeur au défilement (5 %, plafonnée à 6 % d'un écran).
+    En partant, le bas du sujet (le sol) traçait une ligne droite sur le fond (« des lignes nettes, c'est moche ») : le
+    cadre d'un calque déborde d'un quart d'écran sur la suite et ce débord est fondu (`CALF` dans `layoutStrip()`, même
+    chose dans `cpLayout()`), le sol s'efface en remontant. Le dernier cadre ne déborde pas.
     Pas de `will-change: transform` sur le sujet : dans un cadre collant masqué, Chromium ne le repeignait pas après un saut.
     `build-site.py` liste les calques existants (`inv.calques`, `window.SCEAU_CALQUES`) ; sans calque, une scène garde
     l'ancien rendu plein cadre. Un calque échoué se régénère, on ne réduit pas le sujet pour le faire tenir.
