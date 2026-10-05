@@ -258,12 +258,11 @@
     const addEv=(e,i)=>{
       const l=li('ev',`<div class="ev-h"><b>Événement ${i+1}</b><small>${i<2?'inclus':'<i class="sig-tag">Signature</i>'}${i>=2?' · <a href="#" data-rm>Retirer</a>':''}</small></div>
         <div class="ev-f"><input type="text" data-k="name" maxlength="40" aria-label="Nom de l'événement ${i+1}" placeholder="La cérémonie"><input type="time" data-k="time" aria-label="Heure"><input type="text" data-k="place" maxlength="60" aria-label="Lieu" placeholder="Lieu (ex. Mairie du 11e)"></div>
-        <div class="seg" role="group" aria-label="Fond de l'écran"><button type="button" data-bg="simple">Écran simple<small>Texte sur le fond</small></button><button type="button" data-bg="scene">Scène<small>Votre lieu dessiné</small></button></div>
-        <div class="lieux" role="group" aria-label="Choisir le lieu">${LIEUX.map(x=>`<button type="button" data-lieu="${x.id}"${x.sig?' class="sig"':''}><span>${x.sig?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>':''}</span>${x.name}${x.sig?'<small>d’après votre photo</small><i>Signature</i>':''}</button>`).join('')}</div>`);
+        <div class="lieux" role="group" aria-label="Le décor de cet écran"><button type="button" data-lieu="simple"><span></span><em>Texte seul</em></button>${LIEUX.map(x=>`<button type="button" data-lieu="${x.id}"${x.sig?' class="sig"':''}><span>${x.sig?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>':''}</span>${x.sig?'Votre lieu<i>Signature</i>':x.name}</button>`).join('')}</div>`);
       l.dataset.i=i;
       l.querySelectorAll('input').forEach(inp=>{ inp.value=e[inp.dataset.k]; inp.addEventListener('input',()=>{ e[inp.dataset.k]=inp.value; paint(); }); });
       l.querySelectorAll('[data-bg]').forEach(b=>b.onclick=()=>{ e.bg=b.dataset.bg; paint(); showEv(i); });
-      l.querySelectorAll('[data-lieu]').forEach(b=>b.onclick=()=>{ e.lieu=b.dataset.lieu; e.bg='scene'; paint(); showEv(i); });
+      l.querySelectorAll('[data-lieu]').forEach(b=>b.onclick=()=>{ if(b.dataset.lieu==='simple') e.bg='simple'; else { e.lieu=b.dataset.lieu; e.bg='scene'; } paint(); showEv(i); });
       const rm=l.querySelector('[data-rm]'); if(rm) rm.onclick=ev=>{ ev.preventDefault(); C.ev.splice(i,1); l.remove(); [...box.querySelectorAll('li.ev')].forEach((x,k)=>{ x.dataset.i=k; }); paint(); };
       box.insertBefore(l,more); return l; };
     C.ev.forEach(addEv);
@@ -382,7 +381,6 @@
     { const long=C.fmt==='long';
       $('wz2Title').textContent=long?'Votre tableau':'Vos écrans';
       $('wz2Sub').textContent=long?'Un seul tableau peint qu’on descend, en trois parties. Chaque événement a son cadre : la scène peinte du thème, un lieu de notre bibliothèque, ou votre lieu d’après photo.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';
-      document.querySelectorAll('#cStory [data-bg="simple"]').forEach(b=>b.innerHTML=long?'La scène du thème<small>Peinte dans le cadre</small>':'Écran simple<small>Texte sur le fond</small>');
       $('wzNav3').textContent=long?'Tableau':'Écrans';
       $('cStory').classList.toggle('long',long);
       $('cStory').querySelector('.home').innerHTML=long?'<b>L’illustration d’ouverture</b><span>Vos prénoms et la date, en haut du tableau</span>':'<b>Accueil</b><span>Vos prénoms, la date, le sceau</span>';
@@ -397,15 +395,16 @@
       if(long&&C.cd==='page'){ C.cd='fin'; $('cCount').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.cd)); }
       $('cCount').querySelector('[data-id="page"]').hidden=long;
       $('fldReveal').hidden=long;
-      document.querySelectorAll('#cStory [data-bg="scene"]').forEach(b=>b.innerHTML=long?'Un lieu<small>Dans le cadre</small>':'Scène<small>Votre lieu dessiné</small>'); }
+    }
     $('cFmt').querySelectorAll('button').forEach(b=>{ const v=b.firstChild, key=b.dataset.id+C.k; if(v.dataset.k===key) return; v.dataset.k=key;
       // grand tableau : la vraie page, de haut en bas, qui défile derrière un téléphone (on voit que c'est un seul tableau)
       v.innerHTML=b.dataset.id==='long'?(TABLEAU.includes(C.k)?`<i class="tb" style="background-image:url('/img/reel/tableau-${C.k}.webp')"></i><i class="tbp"></i>`:`<i class="roll" style="background-image:url('/img/long/${C.k}/thumb.webp')"></i>`):[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${C.k}-${n}.webp?v=9')"></i>`).join(''); });
     $('cStoryT').textContent=C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
-      l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
-      l.querySelector('.lieux').hidden=e.bg!=='scene';
-      l.querySelectorAll('[data-lieu]').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.lieu===e.lieu); b.firstChild.style.backgroundImage=b.dataset.lieu==='s2'?`url('/img/themes/${C.k}-2.webp?v=9')`:`url('/img/lieux/${C.k}-${b.dataset.lieu==='photo'?'mairie':b.dataset.lieu}.webp')`; }); });
+      // « Texte seul » : écran simple (scène par scène), ou la scène peinte du thème dans le cadre (grand tableau)
+      const sim=l.querySelector('[data-lieu="simple"] em'); if(sim) sim.textContent=C.fmt==='long'?'Scène du thème':'Texte seul';
+      l.querySelectorAll('[data-lieu]').forEach(b=>{ const id=b.dataset.lieu; b.setAttribute('aria-pressed',id==='simple'?e.bg!=='scene':e.bg==='scene'&&id===e.lieu);
+        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=9')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=9')`:`url('/img/lieux/${C.k}-fond.webp')`):`url('/img/lieux/${C.k}-${id==='photo'?'mairie':id}.webp')`; }); });
     $('cAddEv').hidden=C.ev.length>=6||C.occ!=='mariage';
     $('cpTint').style.background=p.c;
     const n1=nm1(), n2=nm2(), solo=isSolo(), oneShot=C.occ!=='mariage';
@@ -417,7 +416,7 @@
     $('fldSexe').hidden=C.occ!=='sbou3'; $('cNamesL').textContent=OCC[C.occ].label;
     [$('cN1'),$('cN2')].forEach((inp,i)=>{ inp.setAttribute('aria-label',OCC[C.occ].l[i]); inp.placeholder=OCC[C.occ].ph[i]; });
     $('cNamesF').classList.toggle('sbou3',C.occ==='sbou3');
-    $('cStory').querySelectorAll('[data-lieu]').forEach(b=>{ const L0=LIEUX.find(x=>x.id===b.dataset.lieu); b.hidden=!!(L0.occ&&L0.occ!==C.occ)||(L0.fam!==undefined&&L0.fam!==(THEMES[C.k].family||'')); });
+    $('cStory').querySelectorAll('[data-lieu]').forEach(b=>{ const L0=LIEUX.find(x=>x.id===b.dataset.lieu); if(!L0) return; b.hidden=!!(L0.occ&&L0.occ!==C.occ)||(L0.fam!==undefined&&L0.fam!==(THEMES[C.k].family||'')); });
     $('cExtras').querySelector('[data-id="story"]').hidden=C.occ==='sbou3'||C.fmt==='long';
     if($('fOcc')) $('fOcc').value=OCCS.find(o=>o.id===C.occ).name;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];

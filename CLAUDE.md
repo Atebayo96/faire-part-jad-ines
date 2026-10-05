@@ -168,7 +168,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     téléphone et parle d'un seul produit.
 21. **Le moins de choix possible.** Configurateur Essentiel (aujourd'hui en 5 étapes, règle 33) : 1) prénoms, date, thème (ouverture, couleurs,
     police, révélation et compte à rebours rangés dans « Plus de réglages », fermé) ; 2) pour chaque événement :
-    écran simple ou scène, et si scène, le lieu (mairie, église, salle, jardin, plage) parmi les vignettes du thème ;
+    son nom, son heure, son adresse, et **une seule rangée de vignettes qu'on fait glisser** : « Texte seul » (écran simple ;
+    « Scène du thème » en grand tableau), puis les lieux du thème, puis « Votre lieu » (Signature). Plus de bouton séparé
+    « Écran simple / Scène » ni de grande grille (« pas évident, faut un truc très très simple », 5 octobre 2026) ;
     3) récapitulatif et commande. Bibliothèque : `img/hd/<thème>-<lieu>.webp` et `<thème>-fond.webp`
     (`business/tools/lieux.py`, contrôlés comme les décors).
 22. **La vitrine est en quatre pages, pas une page à ancres** : `/` (accueil : ce qu'on vend, les exemples dans un
