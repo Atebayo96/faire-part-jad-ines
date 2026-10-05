@@ -41,7 +41,14 @@
     "deadline": "2027-07-01",
     "title": "Serez-vous des nôtres ?",
     "yesText": "A presto in Italia !",
-    "noText": "Grazie, on pensera à vous."
+    "noText": "Grazie, on pensera à vous.",
+    "menu": [
+      "Poisson",
+      "Viande",
+      "Végétarien"
+    ],
+    "question": "Une chanson qui vous fera danser ?",
+    "whatsapp": "+33612345678"
   },
   "stay": {
     "items": [

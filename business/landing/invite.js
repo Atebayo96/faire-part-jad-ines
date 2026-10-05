@@ -18,7 +18,9 @@
       calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le',celebr:'Les célébrations',know:'Bon à savoir',cdEnd:'Le compte à rebours a commencé',want:'Je veux ce faire-part',already:'Vous avez déjà répondu. Vous pouvez modifier votre réponse ci-dessous.',editT:'Pour modifier votre réponse depuis un autre téléphone, gardez ce lien :',copy:'Copier le lien',copied:'Lien copié',
       demoLink:'Dans votre faire-part, ce bouton ouvre votre propre lien : liste de mariage, cagnotte, album photo ou réservation d’hôtel.',
       parents:'Avec la bénédiction de leurs familles',story:'Notre histoire',program:'Le programme',dress:'Dress code',stay:'Hébergement et accès',faq:'Vos questions',
-      gifts:'Liste de mariage',giftsBtn:'Voir la liste',photos:'Vos photos',photosBtn:'Partager mes photos',dayJ:'Le jour J',table:'Votre table',tableTx:'Le plan de salle sera aussi affiché à l’entrée.',site:'Ouvrir',give:'Je l’offre',given:'Déjà offert',giveT:'Vous offrez',giveName:'Votre prénom',giveGo:'C’est noté',giveOk:'Ce cadeau est réservé à votre nom, personne d’autre ne pourra le choisir.',giveTaken:'Quelqu’un vient de le réserver. Choisissez-en un autre.',giveErr:'Impossible de réserver pour l’instant. Réessayez dans un moment.',copyLink:'Copier le lien',scan:'Scannez ou copiez le lien',kitty:'Participer'},
+      gifts:'Liste de mariage',giftsBtn:'Voir la liste',photos:'Vos photos',photosBtn:'Partager mes photos',dayJ:'Le jour J',table:'Votre table',tableTx:'Le plan de salle sera aussi affiché à l’entrée.',site:'Ouvrir',give:'Je l’offre',given:'Déjà offert',giveT:'Vous offrez',giveName:'Votre prénom',giveGo:'C’est noté',giveOk:'Ce cadeau est réservé à votre nom, personne d’autre ne pourra le choisir.',giveTaken:'Quelqu’un vient de le réserver. Choisissez-en un autre.',giveErr:'Impossible de réserver pour l’instant. Réessayez dans un moment.',copyLink:'Copier le lien',scan:'Scannez ou copiez le lien',kitty:'Participer',
+      who:'Qui vous accompagne ?',person:'Prénom et nom',menu:'Menu',addPerson:'+ Une personne',rm:'Retirer',waT:'Vous préférez répondre de vive voix ?',wa:'Répondre sur WhatsApp',waMsg:'Bonjour, c’est {name}. Pour votre mariage : ',
+      later:'Pas maintenant ?',remind:'Me rappeler de répondre',remindT:'Répondre au faire-part de {names}',remindTx:'Une réponse par foyer suffit : ',menuPick:'Choisir'},
     en:{tap:'Tap to open',tapSeal:'Tap the seal to open',scroll:'Scroll down',route:'Directions',cal:'Calendar',reply:'RSVP',days:'days',hours:'hours',min:'min',sec:'sec',
       soon:'The big day is coming',left:'Only',infos:'Good to know',joy:'Request the pleasure of your company at their wedding',
       rsvpT:'Your reply',rsvpSub:'One reply per household is enough.',name:'Your full name(s)',present:'Attending',absent:'Not attending',guests:'Number of guests',
@@ -30,7 +32,9 @@
       calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before',celebr:'The celebrations',know:'Good to know',cdEnd:'The countdown has begun',want:'I want this invitation',already:'You have already replied. You can change your reply below.',editT:'To change your reply from another phone, keep this link:',copy:'Copy link',copied:'Link copied',
       demoLink:'In your invitation, this button opens your own link: gift list, honeymoon fund, photo album or hotel booking.',
       parents:'Together with their families',story:'Our story',program:'The day',dress:'Dress code',stay:'Where to stay',faq:'Questions',
-      gifts:'Gift list',giftsBtn:'View the list',photos:'Your photos',photosBtn:'Share my photos',dayJ:'On the day',table:'Your table',tableTx:'The seating plan will also be displayed at the entrance.',site:'Open',give:'I’ll give it',given:'Already taken',giveT:'You are giving',giveName:'Your name',giveGo:'Confirm',giveOk:'This gift is reserved in your name, nobody else can pick it.',giveTaken:'Someone just reserved it. Please choose another one.',giveErr:'Could not reserve right now. Please try again shortly.',copyLink:'Copy the link',scan:'Scan or copy the link',kitty:'Contribute'}
+      gifts:'Gift list',giftsBtn:'View the list',photos:'Your photos',photosBtn:'Share my photos',dayJ:'On the day',table:'Your table',tableTx:'The seating plan will also be displayed at the entrance.',site:'Open',give:'I’ll give it',given:'Already taken',giveT:'You are giving',giveName:'Your name',giveGo:'Confirm',giveOk:'This gift is reserved in your name, nobody else can pick it.',giveTaken:'Someone just reserved it. Please choose another one.',giveErr:'Could not reserve right now. Please try again shortly.',copyLink:'Copy the link',scan:'Scan or copy the link',kitty:'Contribute',
+      who:'Who is coming with you?',person:'First and last name',menu:'Menu',addPerson:'+ Add a person',rm:'Remove',waT:'Prefer to reply in person?',wa:'Reply on WhatsApp',waMsg:'Hello, it’s {name}. About your wedding: ',
+      later:'Not now?',remind:'Remind me to reply',remindT:'Reply to {names}’s invitation',remindTx:'One reply per household is enough: ',menuPick:'Choose'}
   }[L];
   const TZ=I.tz||'Europe/Paris', LOC=L==='en'?'en-GB':'fr-FR';
   const FONTS={script:{css:'"Great Vibes",cursive'},classique:{css:'"Playfair Display",Georgia,serif',italic:true},moderne:{css:'"Jost",sans-serif',upper:true},deco:{css:'"Limelight",serif'}};
@@ -568,13 +572,20 @@
 
   /* ---------- calendrier ---------- */
   const stamp=d=>d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+  const icsTxt=s=>String(s||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/[,;]/g,'\\$&');
+  function icsUrl(o){
+    const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Save The Oui//FR','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:${o.uid}@savetheoui`,`DTSTAMP:${stamp(new Date())}`,`DTSTART:${stamp(o.start)}`,`DTEND:${stamp(o.end)}`,
+      `SUMMARY:${icsTxt(o.title)}`,o.loc?`LOCATION:${icsTxt(o.loc)}`:'',o.desc?`DESCRIPTION:${icsTxt(o.desc)}`:'',`URL:${o.url}`,
+      o.alarm?'BEGIN:VALARM\r\nACTION:DISPLAY\r\nTRIGGER:PT0S\r\nDESCRIPTION:'+icsTxt(o.title)+'\r\nEND:VALARM':'','END:VEVENT','END:VCALENDAR'].filter(Boolean).join('\r\n');
+    return URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+  }
   function calSheet(id){
     const e=events.find(x=>x.id===id), d=zoned(e.start,e.tz), end=e.end?zoned(e.end,e.tz):new Date(+d+3*36e5);
     const title=`${e.calTitle||e.eyebrow||e.title} · ${solo?n1:n1+' & '+n2}`, loc=e.address||e.place||'';
-    const g=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${stamp(d)}/${stamp(end)}&location=${encodeURIComponent(loc)}&details=${encodeURIComponent(location.href.split('#')[0])}`;
-    const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Sceau//FR','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:${I.slug}-${e.id}@sceau`,`DTSTAMP:${stamp(new Date())}`,`DTSTART:${stamp(d)}`,`DTEND:${stamp(end)}`,
-      `SUMMARY:${title.replace(/[,;]/g,'\\$&')}`,`LOCATION:${loc.replace(/[,;]/g,'\\$&')}`,`URL:${location.href.split('#')[0]}`,'END:VEVENT','END:VCALENDAR'].join('\r\n');
-    const href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+    // le lieu et le lien du faire-part sont dans l'événement : le jour J, l'itinéraire est à un toucher depuis le calendrier du téléphone
+    const link=location.href.split('#')[0], details=[e.place,e.note,link].filter(Boolean).join('\n');
+    const g=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${stamp(d)}/${stamp(end)}&location=${encodeURIComponent(loc)}&details=${encodeURIComponent(details)}`;
+    const href=icsUrl({uid:`${I.slug}-${e.id}`,start:d,end,title,loc,desc:details,url:link});
     openSheet(`<h3>${S.calT}</h3><p class="sub">${esc(e.title)} · ${esc(fmtDayShort(d,e.tz))}, ${esc(fmtTime(d,e.tz))}</p><div class="cal"><a href="${g}" target="_blank" rel="noopener">${S.gcal}<span>→</span></a><a href="${href}" download="${esc(I.slug+'-'+e.id)}.ics">${S.ical}<span>→</span></a></div>`);
   }
 
@@ -587,31 +598,74 @@
     try{ localStorage.setItem(KEY,JSON.stringify(Object.assign({},j.reply,{rid,rkey}))); }catch(e){}
   }).catch(()=>{});
   const editUrl=p=>{ const u=new URL(location.href); u.search=''; u.hash=''; if(fid) u.searchParams.set('f',fid); u.searchParams.set('r',p.rid+'.'+p.rkey); return u.toString(); };
+  // ouverture d'un lien par famille : on le note (première et dernière fois, nombre) pour que les mariés sachent qui a vu
+  // sans répondre, et ne relancent que ceux-là (api/seen.js ; rien dans les démos)
+  if(fam&&!I.demo){ try{ fetch('/api/seen',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:JSON.stringify({invite:I.slug,f:fid})}).catch(()=>{}); }catch(e){} }
+  const pageUrl=()=>{ const u=new URL(location.href); u.search=''; u.hash=''; if(fid) u.searchParams.set('f',fid); return u.toString(); };
+  // « Me rappeler de répondre » : un rappel dans le calendrier de l'invité (dans 3 jours à 19 h, ou une semaine avant la
+  // date limite si elle est plus proche), avec le lien du faire-part : sans numéro à collecter ni SMS payant
+  function remindUrl(){
+    let d=new Date(); d.setDate(d.getDate()+3); d.setHours(19,0,0,0);
+    if(deadline){ const w=new Date(deadline.getTime()-7*864e5); w.setHours(19,0,0,0); if(w<d&&w>Date.now()) d=w; }
+    if(d<Date.now()) d=new Date(Date.now()+864e5);
+    return icsUrl({uid:I.slug+'-rappel-'+(fid||'x'),start:d,end:new Date(+d+18e5),title:S.remindT.replace('{names}',solo?n1:n1+' & '+n2),desc:S.remindTx+pageUrl(),url:pageUrl(),alarm:true});
+  }
   function rsvpSheet(){
     let prev=null; try{ prev=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
-    const max=(fam&&fam.seats)||R.maxGuests||6;
+    const max=(fam&&fam.seats)||R.maxGuests||6, menus=Array.isArray(R.menu)?R.menu.filter(Boolean).slice(0,8):[];
     const evRows=events.map(e=>{ const d=zoned(e.start,e.tz); return `<div class="ev"><b>${esc(e.eyebrow||e.title)}</b><small>${esc(e.title)} · ${esc(fmtDayShort(d,e.tz))}</small><div class="yn">`+
       `<label><input type="radio" name="ev-${esc(e.id)}" value="1" ${prev&&prev.events&&prev.events[e.id]===true?'checked':''}><span>${S.present}</span></label>`+
       `<label><input type="radio" name="ev-${esc(e.id)}" value="0" ${prev&&prev.events&&prev.events[e.id]===false?'checked':''}><span>${S.absent}</span></label></div></div>`; }).join('');
+    /* qui vient : chaque personne est nommée (le traiteur et le plan de table en ont besoin, pas seulement un nombre) ; si le
+       couple a défini des menus, chacun choisit le sien. La première ligne est celui qui répond ; les autres n'apparaissent
+       que s'il vient à au moins un événement. Le nombre de personnes en découle. */
+    const menuSel=(name,val)=>menus.length?`<select name="${name}" aria-label="${S.menu}"><option value="">${S.menu}…</option>${menus.map(m=>`<option ${m===val?'selected':''}>${esc(m)}</option>`).join('')}</select>`:'';
+    const prevP=(prev&&prev.people||[]).slice(1);
+    const pRow=(p,i)=>`<div class="pr"><input name="p-name" maxlength="80" placeholder="${S.person}" aria-label="${S.person} ${i+2}" value="${esc(p&&p.name||'')}">${menuSel('p-menu',p&&p.menu)}<button type="button" class="pr-x" data-prm aria-label="${S.rm}">×</button></div>`;
     openSheet(`<h3>${S.rsvpT}</h3><p class="sub">${esc(prev&&prev.name?S.already:(R.subtitle||S.rsvpSub))}</p>
       <form id="rf" novalidate>
         <label class="f"><span>${S.name}</span><input name="name" autocomplete="name" required maxlength="120" value="${esc(prev?prev.name:(fam&&fam.name)||'')}"></label>
         ${evRows}
-        <label class="f"><span>${S.guests}</span><select name="guests">${Array.from({length:max},(_,i)=>`<option ${prev&&+prev.guests===i+1?'selected':''}>${i+1}</option>`).join('')}</select></label>
+        <div class="ppl" id="ppl" hidden>
+          ${menus.length?`<label class="f"><span>${S.menu} · ${L==='en'?'you':'vous'}</span>${menuSel('menu0',prev&&prev.people&&prev.people[0]&&prev.people[0].menu)}</label>`:''}
+          <div class="f"><span>${S.who}</span><div id="prs">${prevP.map(pRow).join('')}</div><button type="button" class="pr-add" id="prAdd">${S.addPerson}</button></div>
+        </div>
         ${R.diet!==false?`<label class="f"><span>${S.diet}</span><input name="diet" maxlength="200" value="${esc(prev?prev.diet||'':'')}"></label>`:''}
+        ${R.question?`<label class="f"><span>${esc(R.question)}</span><input name="answer" maxlength="300" value="${esc(prev?prev.answer||'':'')}"></label>`:''}
         <label class="f"><span>${S.msg}</span><textarea name="message" maxlength="1000">${esc(prev?prev.message||'':'')}</textarea></label>
         <label class="hp" aria-hidden="true">Site<input name="website" tabindex="-1" autocomplete="off"></label>
         <button class="go" type="submit">${S.send}</button>
         <p class="err" id="rerr" hidden></p>
+        <div class="alt">
+          ${R.whatsapp?`<p>${S.waT} <a class="wa" id="waLink" href="https://wa.me/${esc(String(R.whatsapp).replace(/\D/g,''))}" target="_blank" rel="noopener">${S.wa}</a></p>`:''}
+          <p>${S.later} <a class="rem" href="#" id="remLink" download="${esc(I.slug)}-rappel.ics">${S.remind}</a></p>
+        </div>
         <p class="note">${I.demo?S.demoNote+' ':''}${S.privacy} <a href="/confidentialite/" target="_blank" rel="noopener">${L==='en'?'Privacy':'Confidentialité'}</a></p>
       </form>`);
-    $('#rf').addEventListener('submit',async ev=>{
+    const f=$('#rf'), ppl=$('#ppl'), prs=$('#prs'), add=$('#prAdd');
+    const attending=()=>events.some(e=>f.querySelector(`input[name="ev-${e.id}"][value="1"]`)&&f.querySelector(`input[name="ev-${e.id}"][value="1"]`).checked);
+    const syncPpl=()=>{ ppl.hidden=!attending(); add.hidden=prs.children.length>=max-1; };
+    f.addEventListener('change',e=>{ if(e.target.type==='radio') syncPpl(); });
+    add.onclick=()=>{ if(prs.children.length>=max-1) return; prs.insertAdjacentHTML('beforeend',pRow(null,prs.children.length)); syncPpl(); prs.lastElementChild.querySelector('input').focus(); };
+    prs.addEventListener('click',e=>{ const b=e.target.closest('[data-prm]'); if(b){ b.parentNode.remove(); syncPpl(); } });
+    syncPpl();
+    // WhatsApp : le message commence par le nom tapé, le couple n'a plus qu'à lire
+    const wa=$('#waLink'); if(wa){ const base=wa.href; const upd=()=>{ wa.href=base+'?text='+encodeURIComponent(S.waMsg.replace('{name}',f.name.value.trim()||'…')); }; f.name.addEventListener('input',upd); upd(); }
+    const rem=$('#remLink'); rem.addEventListener('click',()=>{ rem.href=remindUrl(); });
+    f.addEventListener('submit',async ev=>{
       ev.preventDefault();
-      const f=ev.currentTarget, fd=new FormData(f), err=$('#rerr');
-      const data={invite:I.slug,rid:prev&&prev.rid||undefined,rkey:prev&&prev.rkey||undefined,family:fid||null,name:(fd.get('name')||'').trim(),guests:+fd.get('guests')||1,diet:(fd.get('diet')||'').trim(),message:(fd.get('message')||'').trim(),website:fd.get('website')||'',events:{}};
+      const fd=new FormData(f), err=$('#rerr');
+      const data={invite:I.slug,rid:prev&&prev.rid||undefined,rkey:prev&&prev.rkey||undefined,family:fid||null,name:(fd.get('name')||'').trim(),guests:1,people:[],diet:(fd.get('diet')||'').trim(),answer:(fd.get('answer')||'').trim(),message:(fd.get('message')||'').trim(),website:fd.get('website')||'',events:{}};
       let ok=!!data.name; events.forEach(e=>{ const v=fd.get('ev-'+e.id); if(v==null) ok=false; else data.events[e.id]=v==='1'; });
       if(!ok){ err.textContent=S.need; err.hidden=false; return; }
+      if(attending()){
+        data.people=[{name:data.name,menu:fd.get('menu0')||''}];
+        const names=fd.getAll('p-name'), ms=fd.getAll('p-menu');
+        names.forEach((n,i)=>{ n=String(n).trim(); if(n) data.people.push({name:n,menu:ms[i]||''}); });
+        data.guests=Math.min(max,data.people.length);
+      }
       const btn=f.querySelector('.go'); btn.disabled=true; btn.textContent=S.sending; err.hidden=true;
+      // noms saisis mais pas de menu choisi pour l'un d'eux : on envoie quand même, le menu reste « à préciser » côté mariés
       try{
         if(!I.demo){ const r=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); if(!r.ok) throw new Error(r.status);
           const j=await r.json().catch(()=>({})); if(j.rid){ data.rid=j.rid; data.rkey=j.rkey; } }

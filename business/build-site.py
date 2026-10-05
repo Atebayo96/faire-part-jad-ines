@@ -141,10 +141,13 @@ MSGS = ['Trop hâte !', 'Félicitations à vous deux ❤️', 'On sera là, évi
 
 
 def demo_dashboard(inv):
-    """Réponses fictives, clairement présentées comme un exemple, pour le tableau de bord de démo."""
+    """Réponses fictives, clairement présentées comme un exemple, pour le tableau de bord de démo
+    (personnes nommées et leur menu, réponse à la question, ouvertures des liens par famille)."""
     rnd = random.Random(inv['slug'])
     evs = [e['id'] for e in inv['events']]
     fams = inv.get('families') or {}
+    R = inv.get('rsvp') or {}
+    menus, question = R.get('menu') or [], R.get('question') or ''
     rows = []
     start = to_utc(inv['date'], inv.get('tz', 'Europe/Paris')) - timedelta(days=120)
     for i in range(rnd.randint(26, 38)):
@@ -152,14 +155,29 @@ def demo_dashboard(inv):
         allowed = (fams.get(fam) or {}).get('events') or evs
         yes = rnd.random() > .16
         ev = {e: (yes and rnd.random() > .1) for e in allowed}
-        rows.append({'at': (start + timedelta(hours=rnd.randint(0, 24 * 70))).isoformat().replace('+00:00', 'Z'),
-                     'name': f"{rnd.choice(FIRST)} {rnd.choice(LAST)}", 'family': fam, 'guests': rnd.choice([1, 2, 2, 2, 3, 4]) if yes else 1,
-                     'events': ev, 'diet': rnd.choice(['', '', '', '', 'Végétarien', 'Sans gluten', 'Allergie aux fruits à coque', 'Halal']),
+        last = rnd.choice(LAST)
+        n = rnd.choice([1, 2, 2, 2, 3, 4]) if yes else 1
+        people = [{'name': f"{rnd.choice(FIRST)} {last}", 'menu': rnd.choice(menus) if menus else ''} for _ in range(n)]
+        rows.append({'rid': f"demo-{i}", 'at': (start + timedelta(hours=rnd.randint(0, 24 * 70))).isoformat().replace('+00:00', 'Z'),
+                     'name': people[0]['name'], 'family': fam, 'guests': n, 'events': ev, 'people': people if yes else [],
+                     'diet': rnd.choice(['', '', '', '', 'Végétarien', 'Sans gluten', 'Allergie aux fruits à coque', 'Halal']),
+                     'answer': rnd.choice(['', '', 'Dancing Queen', 'Quelque chose de Stromae', 'Aïcha, Khaled', 'Un peu de Céline Dion']) if question else '',
                      'message': rnd.choice(MSGS)})
     rows.sort(key=lambda r: r['at'])
+    # ouvertures des liens par famille : l'exemple montre les trois états (répondu, ouvert sans réponse, pas encore ouvert)
+    seen = {}
+    for i, f in enumerate(fams):
+        state = i % 3
+        if state:
+            rows = [r for r in rows if r['family'] != f]
+        if state == 2:
+            continue
+        first = start + timedelta(hours=rnd.randint(0, 24 * 20))
+        seen[f] = {'first': first.isoformat().replace('+00:00', 'Z'), 'last': (first + timedelta(hours=rnd.randint(0, 24 * 30))).isoformat().replace('+00:00', 'Z'), 'n': rnd.randint(1, 5)}
     return {'demo': True, 'invite': {'slug': inv['slug'], 'couple': ' & '.join(inv['couple']),
                                      'events': [{'id': e['id'], 'label': e.get('eyebrow') or e['title']} for e in inv['events']],
-                                     'families': {k: v.get('label', k) for k, v in fams.items()}}, 'responses': rows}
+                                     'families': {k: v.get('label', k) for k, v in fams.items()}, 'menu': menus, 'question': question},
+            'responses': rows, 'seen': seen}
 
 
 def build_yk():
@@ -295,6 +313,9 @@ def main():
             'eventList': [{'id': e['id'], 'label': e.get('eyebrow') or e['title']} for e in inv['events']],
             'families': {k: {'events': v.get('events')} for k, v in fams.items()},
             'familyLabels': {k: v.get('label', k) for k, v in fams.items()},
+            # réponse enrichie : les menus au choix et la question libre du couple (api/rsvp.js vérifie le menu, le tableau de bord les affiche)
+            'rsvpMenu': [str(m) for m in ((inv.get('rsvp') or {}).get('menu') or [])][:8],
+            'rsvpQuestion': (inv.get('rsvp') or {}).get('question') or '',
             # liste de mariage chez nous : les cadeaux qu'on peut réserver (api/gifts.js)
             'gifts': [x.get('id') or f'g{k}' for k, x in enumerate((inv.get('gifts') or {}).get('items') or [])] if (inv.get('gifts') or {}).get('mode') == 'liste' else [],
             'giftLabels': {(x.get('id') or f'g{k}'): x.get('name', '') for k, x in enumerate((inv.get('gifts') or {}).get('items') or [])},

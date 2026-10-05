@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   if (!ready()) return res.status(200).json({ skipped: 'storage' });
   const done = [];
   for (const [slug, v] of Object.entries(INVITES)) {
-    if (Date.now() > new Date(v.date).getTime() + 90 * 864e5) { await removeAll(`rsvp/${slug}/`); done.push(slug); }
+    if (Date.now() > new Date(v.date).getTime() + 90 * 864e5) { await removeAll(`rsvp/${slug}/`); await removeAll(`seen/${slug}/`); done.push(slug); }
   }
   res.status(200).json({ purged: done });
 }

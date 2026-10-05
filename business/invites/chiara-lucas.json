@@ -100,6 +100,32 @@
     "eyebrow": "Réponse souhaitée",
     "title": "Venez fêter avec nous",
     "yesText": "A presto in Italia !",
-    "noText": "Vous nous manquerez."
+    "noText": "Vous nous manquerez.",
+    "menu": [
+      "Poisson du jour",
+      "Osso buco",
+      "Végétarien"
+    ],
+    "question": "Une chanson qui vous fera danser ?",
+    "whatsapp": "+33612345678"
+  },
+  "families": {
+    "famille-rossi": {
+      "label": "Chère famille Rossi",
+      "seats": 6,
+      "table": "Table Amalfi"
+    },
+    "famille-martin": {
+      "label": "Chère famille Martin",
+      "seats": 5
+    },
+    "amis": {
+      "label": "Chers amis",
+      "seats": 2,
+      "events": [
+        "ceremonie",
+        "diner"
+      ]
+    }
   }
 }

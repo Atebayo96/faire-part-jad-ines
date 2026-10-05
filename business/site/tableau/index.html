@@ -8,7 +8,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/polices/polices.css">
 <style>
-  :root{--ink:#111;--muted:#6b6b6b;--line:#e6e6e6;--bg:#fff;--bg-2:#f6f5f2;--ok:#2f7a4f;--no:#a3402a}
+  :root{--ink:#111;--muted:#6b6b6b;--line:#e6e6e6;--bg:#fff;--bg-2:#f6f5f2;--ok:#2f7a4f;--no:#a3402a;--wait:#8a6a1d}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 Inter,-apple-system,"Helvetica Neue",Arial,sans-serif}
   .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
@@ -24,6 +24,7 @@
   .stats b{display:block;font:500 34px/1 "Inter Tight",sans-serif;letter-spacing:-.02em}
   .stats span{color:var(--muted);font-size:13px}
   h2{font:500 22px/1.2 "Inter Tight",sans-serif;letter-spacing:-.02em;margin:40px 0 14px}
+  h2 small{font:400 14px Inter;color:var(--muted);margin-left:10px}
   .evs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
   .ev{border:1px solid var(--line);padding:16px;border-radius:6px}
   .ev h3{margin:0 0 10px;font:500 16px "Inter Tight",sans-serif}
@@ -31,22 +32,55 @@
   .bar i{display:block;height:100%;background:var(--ink)}
   .ev p{margin:0;color:var(--muted);font-size:13px}
   .ev p b{color:var(--ink);font-weight:500}
+  .menus{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .menus span{border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-size:14px}
+  .menus span b{font-weight:500;margin-right:6px}
   .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
   .tools input{flex:1 1 220px;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:6px}
-  .btn{font:500 14px Inter;padding:10px 14px;border:1px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:6px;cursor:pointer;text-decoration:none;display:inline-block}
+  .btn{font:500 14px Inter;padding:10px 14px;border:1px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:6px;cursor:pointer;text-decoration:none;display:inline-block;line-height:1.3}
   .btn.solid{background:var(--ink);color:#fff}
+  .btn.sm{padding:7px 10px;font-size:13px}
+  .btn.wa{border-color:#1d8a4e;color:#1d8a4e}
   .tbl{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:6px}
   table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
   th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
   th{font:500 11px Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--bg-2);cursor:pointer;white-space:nowrap}
   tr:last-child td{border-bottom:0}
-  .y{color:var(--ok);font-weight:500}.n{color:var(--no)}
+  .y{color:var(--ok);font-weight:500}.n{color:var(--no)}.w{color:var(--wait);font-weight:500}.g{color:var(--muted)}
   td small{display:block;color:var(--muted)}
-  .links{display:grid;gap:8px}
-  .link{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:6px;padding:10px 12px}
-  .link code{font-size:13px;color:var(--muted);word-break:break-all}
+  td .ppl{margin:0;padding:0;list-style:none}
+  td .ppl li{white-space:nowrap}
+  td .ppl li i{color:var(--muted);font-style:normal}
+  .st{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+  .st::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
+  .acts{display:flex;flex-wrap:wrap;gap:6px}
+  .lnk{font-size:12px;color:var(--muted);word-break:break-all}
+  /* sur téléphone, les familles s'empilent en cartes : le bouton « Relancer » reste visible, pas caché dans un tableau qui défile */
+  @media (max-width:720px){
+    .fam table{min-width:0}
+    .fam thead{display:none}
+    .fam table,.fam tbody,.fam tr,.fam td{display:block}
+    .fam tr{padding:10px 12px;border-bottom:1px solid var(--line)}
+    .fam tr:last-child{border-bottom:0}
+    .fam td{padding:3px 0;border:0}
+  }
   .msg{padding:40px 0;color:var(--muted)}
   footer{margin:60px 0 30px;color:var(--muted);font-size:13px}
+  /* ajouter ou corriger une réponse à la main : l'oncle qui a répondu par téléphone, la famille qui a répondu sur WhatsApp */
+  .man{border:1px solid var(--line);border-radius:6px;padding:16px;margin-top:12px;background:var(--bg-2)}
+  .man[hidden]{display:none}
+  .man h3{margin:0 0 12px;font:500 16px "Inter Tight",sans-serif}
+  .man .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px}
+  .man label{display:grid;gap:4px;font-size:12px;color:var(--muted)}
+  .man input,.man select,.man textarea{font:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);width:100%}
+  .man .yn{display:flex;gap:6px}
+  .man .yn button{flex:1;font:500 13px Inter;padding:8px;border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer}
+  .man .yn button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .man .pr{display:grid;grid-template-columns:1fr auto auto;gap:6px;margin-bottom:6px}
+  .man .pr:not(:has(select)){grid-template-columns:1fr auto}
+  .man .pr button{border:1px solid var(--line);background:#fff;border-radius:6px;width:36px;cursor:pointer;color:var(--muted)}
+  .man .foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+  .man .err{color:var(--no);font-size:13px;margin:0}
 </style>
 </head>
 <body>
@@ -73,52 +107,128 @@
     }
   }catch(e){ main.innerHTML='<p class="msg">Impossible de charger les réponses. Vérifiez votre connexion.</p>'; return; }
 
-  const inv=data.invite, evs=inv.events, R=data.responses, fams=inv.families||{};
+  const inv=data.invite, evs=inv.events, fams=inv.families||{}, seen=data.seen||{}, menus=inv.menu||[], question=inv.question||'';
+  let R=data.responses;
   document.title='Réponses · '+inv.couple;
   document.getElementById('who').textContent=inv.couple;
   const attending=r=>Object.values(r.events).some(Boolean);
-  const yes=R.filter(attending), no=R.filter(r=>!attending(r));
-  const people=yes.reduce((s,r)=>s+(+r.guests||1),0);
-  const diets=R.filter(r=>r.diet).length;
-  const perEv=evs.map(e=>{ const asked=R.filter(r=>e.id in r.events), y=asked.filter(r=>r.events[e.id]); return {e,asked:asked.length,yes:y.length,people:y.reduce((s,r)=>s+(+r.guests||1),0)}; });
+  const nb=r=>attending(r)?Math.max(1,(r.people||[]).length||+r.guests||1):0;
   const fmt=s=>new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
   const base=location.origin+'/d/'+inv.slug+'/';
+  const famUrl=f=>base+(f?'?f='+encodeURIComponent(f):'');
+  // relance en un toucher : WhatsApp s'ouvre avec le message et le lien de la famille, les mariés choisissent le contact
+  const waMsg=f=>`Bonjour ! Avez-vous bien reçu notre faire-part ? Voici votre lien pour répondre : ${famUrl(f)}\nMerci, à très vite !\n${inv.couple}`;
+  const waUrl=f=>'https://wa.me/?text='+encodeURIComponent(waMsg(f));
+
+  function stats(){
+    const yes=R.filter(attending), no=R.filter(r=>!attending(r));
+    const people=yes.reduce((s,r)=>s+nb(r),0), diets=R.filter(r=>r.diet).length;
+    const perEv=evs.map(e=>{ const asked=R.filter(r=>e.id in r.events), y=asked.filter(r=>r.events[e.id]); return {e,asked:asked.length,yes:y.length,people:y.reduce((s,r)=>s+nb(r),0)}; });
+    // menus : le compte par plat, et ceux qui n'ont pas choisi
+    const mc={}; let none=0; yes.forEach(r=>(r.people||[]).forEach(p=>{ if(p.menu) mc[p.menu]=(mc[p.menu]||0)+1; else none++; }));
+    document.getElementById('stats').innerHTML=`
+      <div><b>${R.length}</b><span>réponses reçues</span></div>
+      <div><b>${people}</b><span>personnes attendues</span></div>
+      <div><b>${no.length}</b><span>ne pourront pas venir</span></div>
+      <div><b>${diets}</b><span>régimes ou allergies</span></div>`;
+    document.getElementById('perEv').innerHTML=perEv.map(x=>`<div class="ev"><h3>${esc(x.e.label)}</h3><div class="bar"><i style="width:${x.asked?Math.round(x.yes/x.asked*100):0}%"></i></div><p><b>${x.people}</b> personnes · ${x.yes} foyers sur ${x.asked}</p></div>`).join('');
+    const m=document.getElementById('menus'); if(m) m.innerHTML=menus.map(k=>`<span><b>${mc[k]||0}</b>${esc(k)}</span>`).join('')+(none?`<span class="g"><b>${none}</b>à préciser</span>`:'');
+  }
+  /* par famille : qui a ouvert son lien, qui a répondu. Trois états, et la relance ne va qu'à ceux qui ne l'ont pas fait. */
+  function famRows(){
+    const el=document.getElementById('famRows'); if(!el) return;
+    const rows=Object.keys(fams).map(f=>{
+      const rs=R.filter(r=>r.family===f), s=seen[f];
+      const st=rs.length?`<span class="st y">Répondu</span><small>${rs.length} foyer${rs.length>1?'s':''} · ${rs.reduce((a,r)=>a+nb(r),0)} pers.</small>`
+        :s?`<span class="st w">Ouvert, sans réponse</span><small>${s.n} fois · dernière le ${fmt(s.last)}</small>`:`<span class="st g">Pas encore ouvert</span>`;
+      return `<tr><td><b>${esc(fams[f])}</b><br><span class="lnk">${esc(famUrl(f))}</span></td><td>${st}</td><td><div class="acts">${rs.length?'':`<a class="btn sm wa" href="${waUrl(f)}" target="_blank" rel="noopener">Relancer sur WhatsApp</a>`}<button class="btn sm" data-copy="${esc(famUrl(f))}">Copier le lien</button></div></td></tr>`; });
+    el.innerHTML=rows.join('')||'';
+    const open=Object.keys(fams).filter(f=>!R.some(r=>r.family===f)), c=document.getElementById('famCount'); if(c) c.textContent=open.length?`${open.length} famille${open.length>1?'s':''} à relancer`:'tout le monde a répondu';
+  }
+  const pplHtml=r=>(r.people||[]).length?`<ul class="ppl">${r.people.map(p=>`<li>${esc(p.name)}${p.menu?` <i>· ${esc(p.menu)}</i>`:(menus.length?' <i>· menu à préciser</i>':'')}</li>`).join('')}</ul>`:(attending(r)?`${r.guests} pers.`:'');
 
   main.innerHTML=`
     <h1>${esc(inv.couple)}${data.demo?'<span class="tag">Exemple</span>':''}</h1>
     <p class="sub">${data.demo?'Voici le tableau de bord que reçoivent les mariés. Les réponses ci-dessous sont fictives.':'Les réponses de vos invités, en temps réel.'}</p>
-    <div class="stats">
-      <div><b>${R.length}</b><span>réponses reçues</span></div>
-      <div><b>${people}</b><span>personnes attendues</span></div>
-      <div><b>${no.length}</b><span>ne pourront pas venir</span></div>
-      <div><b>${diets}</b><span>régimes ou allergies</span></div>
-    </div>
+    <div class="stats" id="stats"></div>
     <h2>Par événement</h2>
-    <div class="evs">${perEv.map(x=>`<div class="ev"><h3>${esc(x.e.label)}</h3><div class="bar"><i style="width:${x.asked?Math.round(x.yes/x.asked*100):0}%"></i></div><p><b>${x.people}</b> personnes · ${x.yes} foyers sur ${x.asked}</p></div>`).join('')}</div>
-    ${Object.keys(fams).length?`<h2>Liens par famille</h2><div class="links">${['',...Object.keys(fams)].map(f=>{ const u=base+(f?'?f='+encodeURIComponent(f):''); return `<div class="link"><div><b>${f?esc(fams[f]):'Lien général'}</b><br><code>${esc(u)}</code></div><button class="btn" data-copy="${esc(u)}">Copier</button></div>`; }).join('')}</div>`:''}
+    <div class="evs" id="perEv"></div>
+    ${menus.length?`<h2>Les menus<small>ce que chacun a choisi</small></h2><div class="menus" id="menus"></div>`:''}
+    ${Object.keys(fams).length?`<h2>Par famille<small id="famCount"></small></h2>
+      <div class="tbl fam"><table><thead><tr><th>Famille et lien</th><th>Où ils en sont</th><th>Relancer</th></tr></thead><tbody id="famRows"></tbody></table></div>
+      <p class="lnk" style="margin:8px 0 0">Lien général (sans famille) : ${esc(base)} <button class="btn sm" data-copy="${esc(base)}">Copier</button></p>`:''}
     ${(data.gifts||[]).length?`<h2>Liste de cadeaux</h2><div class="tbl"><table><thead><tr><th>Cadeau</th><th>Offert par</th><th>Le</th></tr></thead><tbody>${data.gifts.map(g=>`<tr><td>${esc(g.label)}</td><td>${esc(g.name)}</td><td>${fmt(g.at)}</td></tr>`).join('')}</tbody></table></div>`:''}
     <h2>Toutes les réponses</h2>
-    <div class="tools"><input id="q" type="search" placeholder="Chercher un nom, un message…" aria-label="Chercher"><button class="btn" id="csv">Exporter (CSV)</button>${data.demo?'':'<button class="btn" id="reload">Actualiser</button>'}</div>
-    <div class="tbl"><table><thead><tr><th data-s="name">Nom</th><th data-s="guests">Pers.</th>${evs.map(e=>`<th>${esc(e.label)}</th>`).join('')}<th>Régime</th><th>Message</th><th data-s="at">Reçu</th></tr></thead><tbody id="rows"></tbody></table></div>`;
+    <div class="tools"><input id="q" type="search" placeholder="Chercher un nom, un message…" aria-label="Chercher"><button class="btn" id="csv">Exporter (CSV)</button><button class="btn" id="addMan">+ Ajouter une réponse à la main</button>${data.demo?'':'<button class="btn" id="reload">Actualiser</button>'}</div>
+    <div class="man" id="man" hidden></div>
+    <div class="tbl"><table><thead><tr><th data-s="name">Nom</th><th data-s="guests">Pers.</th>${evs.map(e=>`<th>${esc(e.label)}</th>`).join('')}<th>Qui vient</th><th>Régime</th>${question?`<th>${esc(question)}</th>`:''}<th>Message</th><th data-s="at">Reçu</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>`;
 
   let sortK='at', dir=-1;
   function draw(){
     const qq=(document.getElementById('q').value||'').toLowerCase();
-    const rows=R.filter(r=>!qq||[r.name,r.message,r.diet,fams[r.family]].join(' ').toLowerCase().includes(qq))
+    const rows=R.filter(r=>!qq||[r.name,r.message,r.diet,r.answer,fams[r.family],...(r.people||[]).map(p=>p.name+' '+p.menu)].join(' ').toLowerCase().includes(qq))
       .sort((a,b)=>(a[sortK]>b[sortK]?1:a[sortK]<b[sortK]?-1:0)*dir);
-    document.getElementById('rows').innerHTML=rows.map(r=>`<tr><td>${esc(r.name)}${r.family?`<small>${esc(fams[r.family]||r.family)}</small>`:''}</td><td>${attending(r)?r.guests:'–'}</td>${evs.map(e=>`<td>${e.id in r.events?(r.events[e.id]?'<span class="y">Oui</span>':'<span class="n">Non</span>'):'<small>–</small>'}</td>`).join('')}<td>${esc(r.diet)}</td><td>${esc(r.message)}</td><td><small>${fmt(r.at)}</small></td></tr>`).join('')||`<tr><td colspan="${5+evs.length}" style="color:var(--muted)">Aucune réponse pour le moment.</td></tr>`;
+    document.getElementById('rows').innerHTML=rows.map(r=>`<tr><td>${esc(r.name)}${r.family?`<small>${esc(fams[r.family]||r.family)}</small>`:''}${r.manual?'<small>saisie à la main</small>':''}</td><td>${attending(r)?nb(r):'–'}</td>${evs.map(e=>`<td>${e.id in r.events?(r.events[e.id]?'<span class="y">Oui</span>':'<span class="n">Non</span>'):'<small>–</small>'}</td>`).join('')}<td>${pplHtml(r)}</td><td>${esc(r.diet)}</td>${question?`<td>${esc(r.answer)}</td>`:''}<td>${esc(r.message)}</td><td><small>${fmt(r.at)}</small></td><td><button class="btn sm" data-edit="${esc(r.rid||'')}">Corriger</button></td></tr>`).join('')||`<tr><td colspan="${7+evs.length+(question?1:0)}" style="color:var(--muted)">Aucune réponse pour le moment.</td></tr>`;
+    stats(); famRows();
   }
   draw();
   document.getElementById('q').addEventListener('input',draw);
   main.querySelectorAll('th[data-s]').forEach(th=>th.onclick=()=>{ const k=th.dataset.s; dir=sortK===k?-dir:(k==='name'?1:-1); sortK=k; draw(); });
   document.getElementById('csv').onclick=()=>{
-    const head=['Nom','Famille','Personnes',...evs.map(e=>e.label),'Régime','Message','Reçu le'];
+    const head=['Nom','Famille','Personnes','Qui vient (menu)',...evs.map(e=>e.label),'Régime',...(question?[question]:[]),'Message','Reçu le'];
     const cell=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
-    const lines=[head,...R.map(r=>[r.name,fams[r.family]||'',attending(r)?r.guests:0,...evs.map(e=>e.id in r.events?(r.events[e.id]?'Oui':'Non'):''),r.diet,r.message,new Date(r.at).toLocaleString('fr-FR')])].map(l=>l.map(cell).join(';'));
+    const lines=[head,...R.map(r=>[r.name,fams[r.family]||'',nb(r),(r.people||[]).map(p=>p.name+(p.menu?' ('+p.menu+')':'')).join(' / '),...evs.map(e=>e.id in r.events?(r.events[e.id]?'Oui':'Non'):''),r.diet,...(question?[r.answer||'']:[]),r.message,new Date(r.at).toLocaleString('fr-FR')])].map(l=>l.map(cell).join(';'));
     const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv'})); a.download='reponses-'+inv.slug+'.csv'; a.click();
   };
   const rl=document.getElementById('reload'); if(rl) rl.onclick=()=>location.reload();
-  main.addEventListener('click',e=>{ const b=e.target.closest('[data-copy]'); if(!b) return; navigator.clipboard.writeText(b.dataset.copy).then(()=>{ b.textContent='Copié'; setTimeout(()=>b.textContent='Copier',1500); }); });
+  main.addEventListener('click',e=>{ const b=e.target.closest('[data-copy]'); if(!b) return; navigator.clipboard.writeText(b.dataset.copy).then(()=>{ const t=b.textContent; b.textContent='Copié'; setTimeout(()=>b.textContent=t,1500); }); });
+
+  /* saisie à la main : ajouter (l'oncle qui a répondu par téléphone) ou corriger une réponse. Même format que la réponse
+     d'un invité ; envoyée à /api/rsvp avec la clé du tableau de bord (« manual »). En démo, elle reste dans la page. */
+  const man=document.getElementById('man');
+  function openMan(r){
+    const ev={}; evs.forEach(e=>{ ev[e.id]=r&&e.id in r.events?r.events[e.id]:null; });
+    const people=r&&r.people&&r.people.length?r.people.slice():[{name:r?r.name:'',menu:''}];
+    const sel=(name,val)=>menus.length?`<select name="${name}"><option value="">Menu…</option>${menus.map(m=>`<option ${m===val?'selected':''}>${esc(m)}</option>`).join('')}</select>`:'';
+    const pr=(p,i)=>`<div class="pr"><input name="pn" placeholder="Prénom et nom" maxlength="80" value="${esc(p.name)}">${sel('pm',p.menu)}<button type="button" data-prm aria-label="Retirer">×</button></div>`;
+    man.hidden=false;
+    man.innerHTML=`<h3>${r?'Corriger la réponse de '+esc(r.name):'Ajouter une réponse à la main'}</h3>
+      <form id="mf">
+        <div class="row"><label>Nom du foyer (qui répond)<input name="name" required maxlength="120" value="${esc(r?r.name:'')}"></label>
+        ${Object.keys(fams).length?`<label>Famille<select name="family"><option value="">—</option>${Object.keys(fams).map(f=>`<option value="${esc(f)}" ${r&&r.family===f?'selected':''}>${esc(fams[f])}</option>`).join('')}</select></label>`:''}</div>
+        <div class="row">${evs.map(e=>`<label>${esc(e.label)}<div class="yn" data-ev="${esc(e.id)}"><button type="button" data-v="1" aria-pressed="${ev[e.id]===true}">Oui</button><button type="button" data-v="0" aria-pressed="${ev[e.id]===false}">Non</button></div></label>`).join('')}</div>
+        <label style="margin-bottom:10px">Qui vient<div id="mprs">${people.map(pr).join('')}</div><button type="button" class="btn sm" id="mAdd" style="justify-self:start">+ Une personne</button></label>
+        <div class="row"><label>Régime ou allergie<input name="diet" maxlength="200" value="${esc(r?r.diet:'')}"></label>${question?`<label>${esc(question)}<input name="answer" maxlength="300" value="${esc(r?r.answer||'':'')}"></label>`:''}</div>
+        <label>Message<textarea name="message" rows="2" maxlength="1000">${esc(r?r.message:'')}</textarea></label>
+        <div class="foot"><button class="btn solid" type="submit">${r?'Enregistrer la correction':'Ajouter'}</button><button class="btn" type="button" id="mCancel">Annuler</button><p class="err" id="mErr"></p></div>
+      </form>`;
+    man.scrollIntoView({behavior:'smooth',block:'nearest'});
+    const f=document.getElementById('mf');
+    f.querySelectorAll('.yn').forEach(g=>g.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); }));
+    document.getElementById('mAdd').onclick=()=>document.getElementById('mprs').insertAdjacentHTML('beforeend',pr({name:'',menu:''}));
+    document.getElementById('mprs').addEventListener('click',e=>{ const b=e.target.closest('[data-prm]'); if(b&&document.getElementById('mprs').children.length>1) b.parentNode.remove(); });
+    document.getElementById('mCancel').onclick=()=>{ man.hidden=true; man.innerHTML=''; };
+    f.onsubmit=async e=>{
+      e.preventDefault(); const fd=new FormData(f), err=document.getElementById('mErr');
+      const events={}; let ok=true; f.querySelectorAll('.yn').forEach(g=>{ const on=g.querySelector('[aria-pressed="true"]'); if(on) events[g.dataset.ev]=on.dataset.v==='1'; });
+      if(!Object.keys(events).length) ok=false;
+      const name=(fd.get('name')||'').trim(); if(!name) ok=false;
+      if(!ok){ err.textContent='Indiquez le nom et au moins une réponse à un événement.'; return; }
+      const ns=fd.getAll('pn'), ms=fd.getAll('pm'), yes=Object.values(events).some(Boolean);
+      const people=yes?ns.map((n,i)=>({name:String(n).trim(),menu:ms[i]||''})).filter(p=>p.name):[];
+      if(yes&&!people.length) people.push({name,menu:''});
+      const row={invite:inv.slug,manual:true,rid:r&&r.rid||undefined,name,family:fd.get('family')||null,events,people,guests:people.length||1,diet:(fd.get('diet')||'').trim(),answer:(fd.get('answer')||'').trim(),message:(fd.get('message')||'').trim()};
+      try{
+        if(!data.demo){ const res=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(row)}); if(!res.ok) throw 0; const j=await res.json(); row.rid=j.rid; }
+        else row.rid=r&&r.rid||'demo-'+Date.now();
+        row.at=new Date().toISOString(); delete row.invite;
+        R=R.filter(x=>x.rid!==row.rid); R.push(row);
+        man.hidden=true; man.innerHTML=''; draw();
+      }catch(x){ err.textContent='Impossible d’enregistrer. Vérifiez votre connexion et réessayez.'; }
+    };
+  }
+  document.getElementById('addMan').onclick=()=>openMan(null);
+  main.addEventListener('click',e=>{ const b=e.target.closest('[data-edit]'); if(!b) return; openMan(R.find(r=>r.rid===b.dataset.edit)||null); });
 })();
 </script>
 </body>
