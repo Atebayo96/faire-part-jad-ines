@@ -810,11 +810,17 @@
   /* le rouleau est plus haut que la carte : on en voit le haut, il file vers le bas et s'efface dans le fond de la carte */
   .fmtc .fv i.roll{position:absolute;top:18px;left:50%;transform:translateX(-50%);height:270px;width:auto;aspect-ratio:10/16;background-position:center top;border-radius:6px 6px 0 0}
   .fmtc .fv:has(.roll)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(transparent,var(--bg-2));pointer-events:none}
+  /* grand tableau : la vraie page défile lentement derrière un téléphone ; au-dessus et en dessous, le reste du tableau, estompé */
+  .fmtc .fv:has(.tb){padding:0;align-items:center}
+  .fmtc .fv i.tb{width:72px;height:100%;aspect-ratio:auto;border-radius:0;box-shadow:none;flex:none;background:center top/100% auto no-repeat;animation:tbRoll 18s ease-in-out infinite alternate}
+  .fmtc .fv i.tbp{aspect-ratio:auto;background:none;position:absolute;left:50%;top:50%;width:78px;height:156px;transform:translate(-50%,-50%);border:3px solid #1d1d1b;border-radius:14px;box-shadow:0 0 0 400px color-mix(in srgb,var(--bg-2) 62%,transparent),0 10px 22px -10px rgba(0,0,0,.5);pointer-events:none}
+  @keyframes tbRoll{from{background-position:center top}to{background-position:center bottom}}
+  @media (prefers-reduced-motion:reduce){ .fmtc .fv i.tb{animation:none} }
   .fmtc b{padding:0 14px;font:500 16px/1.25 "Inter Tight",Inter,sans-serif}
   .fmtc small{padding:0 14px;font-size:12.5px;line-height:1.4;color:var(--muted)}
   .fmtc[aria-pressed="true"]::after{content:'✓';position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font:600 13px/24px Inter,sans-serif;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.3)}
   .opts.fmtv:has([aria-pressed="true"]) .fmtc[aria-pressed="false"]{opacity:.72}
-  @media (max-width:560px){ .fmtc .fv{height:150px;gap:6px;padding:14px 8px 0} .fmtc .fv i:nth-child(3){display:none} .fmtc .fv i.roll{top:14px;height:210px} .fmtc b{font-size:15px} }
+  @media (max-width:560px){ .fmtc .fv i.tb{width:58px} .fmtc .fv i.tbp{width:64px;height:126px} .fmtc .fv{height:150px;gap:6px;padding:14px 8px 0} .fmtc .fv i:nth-child(3){display:none} .fmtc .fv i.roll{top:14px;height:210px} .fmtc b{font-size:15px} }
   @media (max-width:560px){ .story>li.fixed{flex-direction:column;gap:3px} .story .ev-h{flex-wrap:wrap} }
   .opts .sw.th-end{margin-right:14px} /* les couleurs du thème, puis les couleurs communes */
   /* le téléphone de l'aperçu fait 284 px : la basmala y garde la même place que sur un vrai téléphone (5,2 % de la largeur), entière */

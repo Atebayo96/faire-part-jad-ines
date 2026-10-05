@@ -33,7 +33,7 @@ window.SCEAU_THEMES={
   gravure:{name:"Gravure",style:"Gravure",short:"Encre ancienne, papier vieilli",desc:"Gravure à l'encre sur papier ancien, comme un livre d'autrefois.",couple:"Claire & Thomas",light:true,
     font:'"IM Fell English",Georgia,serif',italic:true,color:"#2a2620",ey:"#6b6152",tx:"#4a443a",size:.74,stack:true,
     scenes:[["Ils se marient","NAMES","Samedi 2 octobre 2027"],["La messe","Église Saint-Martin","15h00","Itinéraire"],["Le dîner","Au château","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
-  dolcevita:{name:"Dolce Vita",launch:true,compose:true,style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
+  dolcevita:{name:"Dolce Vita",launch:true,compose:true,nocal:true,style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
     font:'"Italiana",serif',color:"#fff",size:.85,
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
 };

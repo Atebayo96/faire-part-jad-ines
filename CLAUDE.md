@@ -263,6 +263,18 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `tools/vignette-papier.py`), puis, pour remettre les deux variantes, `desert-2`, `emeraude-1` à `emeraude-4`
     (`variantes-nuits.py <thème> --only … --force`, consigne : scène d'un seul tenant, ciel ou mur qui descend derrière
     le sujet). Rien d'autre : l'utilisateur veut qu'on reste concentré, pas qu'on régénère pour régénérer.
+32b. **Depuis le 5 octobre 2026, le configurateur ne propose que Dolce Vita** (« pour l'instant on se focus sur ça »).
+    Ce que le configurateur propose est marqué `compose:true` dans themes.js (indépendant de `launch`, qui garde la galerie
+    et l'accueil). Sans thème de la famille `nuits` dans le configurateur, seule l'occasion « Mariage » existe (le choix
+    est masqué), le lieu est « Église » (« Mosquée » seulement pour `family:"nuits"`), les exemples pré-remplis sont
+    neutres (familles Martin et Rossi, chic d'été). Dans la galerie, une carte d'un thème qui ne se compose pas en ligne
+    mène au contact (« Avec nous → »). Les boutons disent « Créer **votre** faire-part », jamais « notre ».
+    **Dolce Vita garde ses peintures entières, sans calques** (`nocal:true` dans themes.js, lu par `build-site.py`) :
+    l'utilisateur a trouvé la version en calques « sombre » (le sujet détouré sur le ciel nu) et veut les scènes déjà
+    peintes, crépuscule et lumières comprises (« elles sont belles, faut pas les détourer ») ; **pas de nouvelle image**.
+    Les calques restent dans `img/calques/` sans être utilisés. `tools/dolcevita-jour.py` (version de jour) existe mais
+    n'est pas à lancer sans demande.
+
 33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la
     révélation de la date. Arriver sur l'onglet rejoue l'ouverture dans l'aperçu.
 34. **En grand tableau, l'étape 3 décrit le tableau, pas des écrans** (« Votre tableau ») : l'illustration d'ouverture,
@@ -291,10 +303,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 37. **Le grand compte à rebours tient dans l'écran** : `clamp(28px, 10.5vw, 46px)` (invite.css), 32 px dans le téléphone de
     l'aperçu. À 46 px fixes, « 250 04 42 20 » débordait des deux côtés d'un écran de 300 px.
 
-38. **Le format se choisit à l'étape des écrans** (étape 3, « Comment raconter votre journée ? »), pas à l'étape 1 :
-    c'est là qu'on décide quoi mettre. Deux cartes avec un **visuel entier, jamais rogné** (« c'est moche parce que c'est
-    coupé ») : trois écrans 9:16 du thème pour le scène par scène, le haut du rouleau qui s'efface vers le bas pour le grand
-    tableau ; sélection par la coche (règle 28). Dessous, « Vos écrans, dans l'ordre » ou « Le tableau, de haut en bas ».
+38. **Le format se choisit à l'étape 1, juste sous le thème** (« Comment raconter votre journée ? ») : l'utilisateur l'a
+    redemandé le 5 octobre 2026 (il était à l'étape 3) ; l'étape 3 change ensuite de mots selon le format. Deux cartes avec un **visuel entier, jamais rogné** (« c'est moche parce que c'est
+    coupé ») : trois écrans 9:16 du thème pour le scène par scène ; pour le grand tableau, « les gens ne comprennent pas la
+    différence » : la **vraie page de la démo, de haut en bas** (`img/reel/tableau-<thème>.webp`, capture de la démo en grand
+    tableau, `TABLEAU` dans vitrine.js) défile lentement derrière un cadre de téléphone, le reste du tableau estompé
+    au-dessus et en dessous (sans démo capturée : le haut du rouleau, comme avant) ; sélection par la coche (règle 28). Dessous, « Vos écrans, dans l'ordre » ou « Le tableau, de haut en bas ».
 
 39. **Les couleurs suivent le thème.** Chaque thème de la famille porte ses couleurs (`pals` dans themes.js : 3 teintes et
     la cire de sceau qui va avec), proposées en premier et choisies par défaut, puis les dix couleurs communes. Elles colorent

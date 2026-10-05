@@ -224,6 +224,7 @@
   $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
   opt($('cStyles'),CK,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=9')"></span>${esc(t.name)}${t.variant?`<small>${esc(t.variant)}</small>`:''}`; });
   // les deux formats, annoncés dès le début : scène par scène (un événement par écran) ou grand tableau (un seul tableau qu'on descend)
+  const TABLEAU=['dolcevita']; // img/reel/tableau-<thème>.webp : capture de la démo en grand tableau, toute la page
   const FMTS=[{id:'scenes',name:'Scène par scène',sub:'Un événement par écran, vos lieux en plein écran'},{id:'long',name:'Grand tableau',sub:'Un seul tableau qu’on descend, vos lieux dans des cadres peints'}];
   // le format se choisit à l'étape des écrans : c'est là qu'on décide quoi mettre. Visuels entiers, jamais rognés :
   // trois écrans 9:16 pour le scène par scène, un rouleau qui file vers le bas pour le grand tableau
@@ -398,7 +399,8 @@
       $('fldReveal').hidden=long;
       document.querySelectorAll('#cStory [data-bg="scene"]').forEach(b=>b.innerHTML=long?'Un lieu<small>Dans le cadre</small>':'Scène<small>Votre lieu dessiné</small>'); }
     $('cFmt').querySelectorAll('button').forEach(b=>{ const v=b.firstChild, key=b.dataset.id+C.k; if(v.dataset.k===key) return; v.dataset.k=key;
-      v.innerHTML=b.dataset.id==='long'?`<i class="roll" style="background-image:url('/img/long/${C.k}/thumb.webp')"></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${C.k}-${n}.webp?v=9')"></i>`).join(''); });
+      // grand tableau : la vraie page, de haut en bas, qui défile derrière un téléphone (on voit que c'est un seul tableau)
+      v.innerHTML=b.dataset.id==='long'?(TABLEAU.includes(C.k)?`<i class="tb" style="background-image:url('/img/reel/tableau-${C.k}.webp')"></i><i class="tbp"></i>`:`<i class="roll" style="background-image:url('/img/long/${C.k}/thumb.webp')"></i>`):[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${C.k}-${n}.webp?v=9')"></i>`).join(''); });
     $('cStoryT').textContent=C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));

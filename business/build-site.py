@@ -248,6 +248,8 @@ def main():
     cdir = os.path.join(SITE, 'img', 'calques')
     for f in (sorted(os.listdir(cdir)) if os.path.isdir(cdir) else []):
         th, key = f[:-5].rsplit('-', 1)
+        # nocal:true (themes.js) : le thème garde ses peintures entières, sans détourage (Dolce Vita, 5 octobre 2026)
+        if T.get(th, {}).get('nocal'): continue
         calques.setdefault(th, []).append(key)
     os.makedirs(os.path.join(SITE, 'tableau', 'demo'), exist_ok=True)
     for fn in sorted(os.listdir(os.path.join(B, 'invites'))):

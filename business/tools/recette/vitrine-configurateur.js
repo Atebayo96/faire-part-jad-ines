@@ -31,8 +31,8 @@ async function audit(p){ return p.evaluate(()=>{
     const p=await b.newPage({viewport:{width:w,height:h}}); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
     await p.goto(`${B}/creer/?theme=${k}`); await p.waitForTimeout(900);
     if(await p.$(`#cOcc [data-id="${occ}"]:visible`)){ await p.click(`#cOcc [data-id="${occ}"]`); await p.waitForTimeout(200); }
+    await p.click(`#cFmt [data-id="${fmt}"]`); await p.waitForTimeout(300); // le format se choisit à l'étape 1
     for(const st of [2,3]){ await p.click(`#wzNav [data-go="${st}"]`); await p.waitForTimeout(250); }
-    await p.click(`#cFmt [data-id="${fmt}"]`); await p.waitForTimeout(300);
     // tout cocher, puis vérifier qu'un cadre de réglages apparaît pour chaque partie réglable
     let eds=0, want=0;
     if(fmt==='long'){ for(const x of await p.$$('#cStory [data-x]:not([hidden])')){ await x.click(); await p.waitForTimeout(60); } want=await p.$$eval('#cStory [data-x]:not([hidden])',x=>x.filter(b=>b.dataset.x!=='album').length+x.filter(b=>b.dataset.x==='album').length); eds=await p.$$eval('#cStory .ed',x=>x.length); }
