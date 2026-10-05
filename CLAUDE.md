@@ -65,6 +65,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     En partant, le bas du sujet (le sol) traçait une ligne droite sur le fond (« des lignes nettes, c'est moche ») : le
     cadre d'un calque déborde d'un quart d'écran sur la suite et ce débord est fondu (`CALF` dans `layoutStrip()`, même
     chose dans `cpLayout()`), le sol s'efface en remontant. Le dernier cadre ne déborde pas.
+    Derrière les calques, le décor est le **ciel nu** (`<thème>-ciel.webp`, `tools/ciel.py` : le haut calme du fond étiré
+    sur toute la hauteur), pas `<thème>-fond.webp` : son jardin du bas (fleurs, sable, lanternes) restait fixe sous chaque
+    scène et son bord de sable faisait une ligne droite. `-fond` reste l'image des écrans simples.
     Pas de `will-change: transform` sur le sujet : dans un cadre collant masqué, Chromium ne le repeignait pas après un saut.
     `build-site.py` liste les calques existants (`inv.calques`, `window.SCEAU_CALQUES`) ; sans calque, une scène garde
     l'ancien rendu plein cadre. Un calque échoué se régénère, on ne réduit pas le sujet pour le faire tenir.
@@ -251,8 +254,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     les guirlandes des variantes ; leur grand tableau s'ouvre sur leur scène 1 et reprend les guirlandes du riad
     (`hero_hd`, `bands_from` dans long-assets.py) ; la scène se fond sur 40 % de sa hauteur (`hero.fade`) dans le vrai fond du thème, sans teinter ce fond de la couleur du sol (Émeraude finissait sur un taupe « coupé, moche »). Dès que le quota revient : `long-gen.py /tmp/longraw alhambra desert
     emeraude` puis `long-assets.py`, et les calques (`calques.py`).
+    **Nuit du désert et Émeraude & or sont retirés** (`pending:true`, 5 octobre 2026 : « c'est pas encore propre ») ;
+    au lancement, le configurateur propose le riad et l'Andalou.
     **À repeindre en priorité** (coupure droite dans l'image, un ciel collé sur une scène d'intérieur, relevée par
-    l'utilisateur le 5 octobre 2026) : `alhambra-2`, `alhambra-4`, `desert-2`, `emeraude-1` à `emeraude-4`
+    l'utilisateur le 5 octobre 2026) : `alhambra-2`, `alhambra-4` (en attendant, fondues en vignette sur le papier par
+    `tools/vignette-papier.py`), puis, pour remettre les deux variantes, `desert-2`, `emeraude-1` à `emeraude-4`
     (`variantes-nuits.py <thème> --only … --force`, consigne : scène d'un seul tenant, ciel ou mur qui descend derrière
     le sujet). Rien d'autre : l'utilisateur veut qu'on reste concentré, pas qu'on régénère pour régénérer.
 33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la

@@ -109,7 +109,7 @@
   const CREAS=LONGS.filter(l=>KEYS.includes(l.k)).map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:t.name,font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`/img/reel/long-${l.k}.webp`}); });
   // carrousel de l'accueil : un thème qui a sa démo en grand tableau y passe sous cette forme, pas deux fois
   KEYS.filter(k=>!LONGS.some(l=>l.k===k)).forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&!x.kind);
-    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=8`})); });
+    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=9`})); });
   // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
   CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
     couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`/img/reel/yk-${i}.webp`,
@@ -155,7 +155,7 @@
   // une carte par thème, avec ses deux formats : « scène par scène » (démo pages) et « grand tableau » (démo long)
   const card=(k)=>{ const t=THEMES[k], ds=DEMOS.find(x=>x.theme===k&&x.layout!=='long'&&!x.kind), dl=DEMOS.find(x=>x.theme===k&&x.layout==='long'&&!x.kind);
     const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style;
-    m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=8" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=8" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
+    m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=9" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=9" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
       <div class="fmts">${ds?`<a href="/d/${esc(ds.slug)}/" target="_blank" rel="noopener"><b>Scène par scène</b><span>${esc(ds.couple)}</span></a>`:''}${dl?`<a href="/d/${esc(dl.slug)}/" target="_blank" rel="noopener"><b>Grand tableau</b><span>${esc(dl.couple)}</span></a>`:''}</div>
       <div class="acts"><a class="go" href="/creer/?theme=${esc(k)}">Composer →</a></div></div>`;
     models.appendChild(m); };
@@ -163,7 +163,7 @@
   // faire-part d'un seul événement (« one shot ») : le henné, le sbouâ ; chacun avec sa démo et son lien vers le configurateur
   const one=document.getElementById('oneShots');
   if(one) one.innerHTML=[['henne','Henné','L’invitation à la soirée henné, seule ou en plus du mariage.'],['sbou3','Sbouâ','La naissance de votre enfant, fêtée au septième jour.']].map(([id,nm,tx])=>{ const d=DEMOS.find(x=>x.kind===id); if(!d) return ''; const t=THEMES[d.theme];
-    return `<div class="model one"><a class="pic" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><img src="/img/themes/${esc(d.theme)}-${id==='henne'?2:1}.webp?v=8" alt="" loading="lazy"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}`)}">${esc(d.couple)}</span></a>
+    return `<div class="model one"><a class="pic" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><img src="/img/themes/${esc(d.theme)}-${id==='henne'?2:1}.webp?v=9" alt="" loading="lazy"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}`)}">${esc(d.couple)}</span></a>
       <div class="meta"><div><h3>${nm}</h3><p class="style">${esc(t.name)} · un seul événement</p><p>${tx}</p></div></div>
       <div class="fmts"><a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><b>Voir l’exemple</b><span>${esc(d.couple)}</span></a></div>
       <div class="acts"><a class="go" href="/creer/?occasion=${id}&theme=${esc(d.theme)}">Composer →</a></div></div>`; }).join('');
@@ -220,7 +220,7 @@
   opt($('cOpen'),OPENS,'op','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   opt($('cReveal'),REVEALS,'rvl','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
-  opt($('cStyles'),CK,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=8')"></span>${esc(t.name)}${t.variant?`<small>${esc(t.variant)}</small>`:''}`; });
+  opt($('cStyles'),CK,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=9')"></span>${esc(t.name)}${t.variant?`<small>${esc(t.variant)}</small>`:''}`; });
   // les deux formats, annoncés dès le début : scène par scène (un événement par écran) ou grand tableau (un seul tableau qu'on descend)
   const FMTS=[{id:'scenes',name:'Scène par scène',sub:'Un événement par écran, vos lieux en plein écran'},{id:'long',name:'Grand tableau',sub:'Un seul tableau qu’on descend, vos lieux dans des cadres peints'}];
   // le format se choisit à l'étape des écrans : c'est là qu'on décide quoi mettre. Visuels entiers, jamais rognés :
@@ -389,12 +389,12 @@
       $('fldReveal').hidden=long;
       document.querySelectorAll('#cStory [data-bg="scene"]').forEach(b=>b.innerHTML=long?'Un lieu<small>Dans le cadre</small>':'Scène<small>Votre lieu dessiné</small>'); }
     $('cFmt').querySelectorAll('button').forEach(b=>{ const v=b.firstChild, key=b.dataset.id+C.k; if(v.dataset.k===key) return; v.dataset.k=key;
-      v.innerHTML=b.dataset.id==='long'?`<i class="roll" style="background-image:url('/img/long/${C.k}/thumb.webp')"></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${C.k}-${n}.webp?v=8')"></i>`).join(''); });
+      v.innerHTML=b.dataset.id==='long'?`<i class="roll" style="background-image:url('/img/long/${C.k}/thumb.webp')"></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${C.k}-${n}.webp?v=9')"></i>`).join(''); });
     $('cStoryT').textContent=C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
       l.querySelector('.lieux').hidden=e.bg!=='scene';
-      l.querySelectorAll('[data-lieu]').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.lieu===e.lieu); b.firstChild.style.backgroundImage=b.dataset.lieu==='s2'?`url('/img/themes/${C.k}-2.webp?v=8')`:`url('/img/lieux/${C.k}-${b.dataset.lieu==='photo'?'mairie':b.dataset.lieu}.webp')`; }); });
+      l.querySelectorAll('[data-lieu]').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.lieu===e.lieu); b.firstChild.style.backgroundImage=b.dataset.lieu==='s2'?`url('/img/themes/${C.k}-2.webp?v=9')`:`url('/img/lieux/${C.k}-${b.dataset.lieu==='photo'?'mairie':b.dataset.lieu}.webp')`; }); });
     $('cAddEv').hidden=C.ev.length>=6||C.occ!=='mariage';
     $('cpTint').style.background=p.c;
     const n1=nm1(), n2=nm2(), solo=isSolo(), oneShot=C.occ!=='mariage';
@@ -425,8 +425,8 @@
       // un numéro = scène du thème ; un nom = lieu de la bibliothèque, ou « fond » pour un écran simple
       // calque : le sujet détouré est posé entier au bas de l'écran sur le fond du thème (même rendu que le moteur)
       const hasCal=((window.SCEAU_CALQUES||{})[C.k]||[]).includes(String(img));
-      const src=hasCal?`/img/lieux/${C.k}-fond.webp`:typeof img==='number'?`/img/themes/${C.k}-${img}.webp?v=8`:`/img/lieux/${C.k}-${img}.webp`;
-      const sub=hasCal?`/img/calques/${C.k}-${img}.webp?v=8`:'';
+      const src=hasCal?`/img/lieux/${C.k}-ciel.webp`:typeof img==='number'?`/img/themes/${C.k}-${img}.webp?v=9`:`/img/lieux/${C.k}-${img}.webp`;
+      const sub=hasCal?`/img/calques/${C.k}-${img}.webp?v=9`:'';
       return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" data-sub="${esc(sub)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     // boutons de l'aperçu : même pastille que le faire-part (invite.css .b), icône dans un médaillon à la couleur choisie
     const BT_IC={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>',gift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M3 9h18M12 9v11M12 9c-2-4-6-4-6-1.5S10 9 12 9zm0 0c2-4 6-4 6-1.5S14 9 12 9z"/></svg>',cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'};
@@ -469,7 +469,7 @@
     cpRuns=[]; [...sc.querySelectorAll('.pv-sc')].forEach((s,i)=>{ const r=cpRuns[cpRuns.length-1]; if(r&&r.img===s.dataset.img&&r.sub===(s.dataset.sub||'')) r.b=i; else cpRuns.push({img:s.dataset.img,sub:s.dataset.sub||'',a:i,b:i}); });
     $('cpBgs').innerHTML=cpRuns.map(r=>r.sub?`<div class="cp-bg cal"><i><img class="sub" src="${esc(r.sub)}" alt=""></i></div>`:`<div class="cp-bg"><i style="background-image:url('${esc(r.img)}');--img:url('${esc(r.img)}')"></i></div>`).join('');
     // calques : le fond du thème est peint une fois derrière tout (comme .sc.cal dans invite.css)
-    const anyCal=cpRuns.some(r=>r.sub); sc.classList.toggle('cal',anyCal); sc.style.backgroundImage=anyCal?`url('/img/lieux/${C.k}-fond.webp')`:'';
+    const anyCal=cpRuns.some(r=>r.sub); sc.classList.toggle('cal',anyCal); sc.style.backgroundImage=anyCal?`url('/img/lieux/${C.k}-ciel.webp')`:''; // le ciel nu (tools/ciel.py), pas le fond et son jardin
     cpLayout();
     // grand tableau : l'aperçu est le vrai faire-part (invite.js) construit avec vos choix, dans le téléphone
     sc.hidden=C.fmt==='long';
