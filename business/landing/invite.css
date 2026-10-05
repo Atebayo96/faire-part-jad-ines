@@ -47,7 +47,7 @@ a{color:inherit}
 /* l'image garde la taille de l'écran (fitBg() règle --bs et la position) : la bande de fondu au-dessus d'elle est
    remplie par la toute première bande de l'image (1,5 % de sa hauteur, son ciel) étirée vers le haut, retournée pour que
    la jonction soit exacte. Un miroir de tout le haut faisait un pli sombre (le dégradé du ciel s'inversait). */
-.bg::before{content:'';position:absolute;left:0;right:0;top:0;height:var(--strip,0px);background:var(--img) center top/var(--bs,cover) no-repeat;transform:scaleY(-1)}
+.bg::before{content:'';position:absolute;left:0;right:0;top:0;height:calc(var(--strip,0px) + 2px);background:var(--img) center top/var(--bs,cover) no-repeat;transform:scaleY(-1)} /* +2 px : recouvre l arrondi, sinon un trait fin entre le ciel étiré et l image */
 .bgl.on .bg{transform:scale(1.04)}
 /* calques : le fond calme du thème est peint une fois derrière tout (sur .sc, il ne bouge pas : papier ou ciel uni) ; chaque
    cadre .bgl.cal ne porte que le sujet détouré, posé entier au bas de l'écran (toute la largeur, jamais rogné), sans fondu :

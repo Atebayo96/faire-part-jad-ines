@@ -393,7 +393,11 @@
     if(on('gifts')) o.push(`${giftName().toLowerCase()} (${{liste:'liste chez nous',cagnotte:'cagnotte',lien:'liste ailleurs'}[d.gifts.mode]}) : ${d.gifts.text}${d.gifts.mode==='liste'?' · '+d.gifts.items.filter(x=>x.name).map(x=>x.name+(x.price?' '+x.price+' €':'')).join(', '):d.gifts.url?' '+d.gifts.url:''}`);
     return o.join(' ; '); };
   // l'aperçu descend jusqu'à l'écran modifié
-  function showEv(i){ const el=$('cpScroll').querySelector(`[data-ev="${i}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); }
+  // l'aperçu va à l'écran de l'événement et s'y pose exactement : un défilement doux interrompu par un nouveau rendu
+  // s'arrêtait quelques pixels avant, et le « Faites défiler » de l'accueil restait en haut de l'écran
+  let evT=null;
+  function showEv(i){ const sc=$('cpScroll'), el=sc.querySelector(`[data-ev="${i}"]`); if(!el) return; sc.scrollTo({top:el.offsetTop,behavior:'smooth'});
+    clearTimeout(evT); evT=setTimeout(()=>{ const e2=sc.querySelector(`[data-ev="${i}"]`); if(e2&&Math.abs(sc.scrollTop-e2.offsetTop)>1) sc.scrollTo({top:e2.offsetTop,behavior:'smooth'}); },700); }
   const hm=v=>{ const m=/^(\d{1,2}):(\d{2})/.exec(v||''); return m?`${+m[1]}h${m[2]}`:''; };
   const cdHtml=(big,col,extra)=>`<div class="cd${big?' big':''}" style="color:${col};${extra||''}"><div><b data-u="d">0</b><span>jours</span></div><div><b data-u="h">0</b><span>heures</span></div><div><b data-u="m">0</b><span>min</span></div><div><b data-u="s">0</b><span>sec</span></div></div>`;
   function weddingDate(){ const v=$('cDate').value; const d=v?new Date(v+'T15:00:00'):null; return d&&!isNaN(d)?d:new Date('2027-06-12T15:00:00'); }
@@ -418,7 +422,8 @@
       if(cal){ B.style.webkitMaskImage=B.style.maskImage=''; return; }
       B.style.webkitMaskImage=B.style.maskImage='';
       // taille de l'écran, pas du cadre agrandi (sinon zoom ~1,8×) : même calcul que fitBg() dans invite.js
-      const bw=Math.ceil(Math.max(sc.clientWidth,h*.566)), y=Math.round((h-bw/.566)/2);
+      // toute la largeur, posée en bas, le haut rempli par le ciel étiré : comme fitBg() (rien de coupé sur les côtés)
+      const bw=Math.ceil(sc.clientWidth), y=Math.round(h-bw/.566);
       B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`; B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px'); });
     cpFade();
   }

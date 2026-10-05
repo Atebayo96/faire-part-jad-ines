@@ -367,8 +367,11 @@
   // taille du décor : celle de l'écran (cover sur l'écran, pas sur le cadre agrandi de la bande de fondu, sinon l'image
   // apparaît zoomée ~1,8×). Image centrée sur l'écran ; au-dessus, sa première bande étirée remplit la bande de fondu.
   const IR=.566; // largeur / hauteur des décors (1080 × 1909)
+  /* la peinture prend toute la largeur de l'écran et se pose en bas : rien n'est coupé sur les côtés (« dans église t'as
+     encore le truc coupé ») ; sur un téléphone plus allongé que 9:16, le haut libre est rempli par le ciel de l'image
+     étiré (::before, --strip). Avant, elle était agrandie à la hauteur de l'écran et perdait ses bords. */
   function fitBg(B,w,h,ov){
-    const bw=Math.ceil(Math.max(w,h*IR)), ih=bw/IR, y=Math.round(ov+(h-ih)/2);
+    const bw=Math.ceil(w), ih=bw/IR, y=Math.round(ov+(h-ih));
     B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`;
     B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px');
   }

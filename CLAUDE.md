@@ -299,6 +299,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     cadre dure un écran de plus). Plus de bande de ciel qui monte avec un bord, ni de trou sombre : « au moment où tu
     défiles, tu vois que c'est pas vraiment continu ». `layoutStrip()` et le fondu dans invite.js, `cpLayout()`/`cpFade()`
     dans vitrine.js ; les calques gardent leur rendu (sujet qui monte).
+    **Les peintures entières prennent toute la largeur et se posent en bas de l'écran** (`fitBg()`, `cpLayout()`) : agrandies
+    à la hauteur d'un téléphone 9:19,5, elles perdaient leurs côtés (« dans église t'as encore le truc coupé, c'est moche »).
+    Le haut libre est rempli par le ciel de l'image étiré (`::before`, recouvrement de 2 px : sinon un trait fin).
+    L'aperçu du configurateur se pose exactement sur l'écran de l'événement (`showEv()` corrige un défilement doux
+    interrompu, qui laissait le « Faites défiler » de l'accueil en haut de l'écran).
     **Lieux de « Plein jour »** : Église (la chapelle) et Jardin (la pergola) seulement ; le dîner comme « Salle » ne
     voulait rien dire. `lieuAlt` remplace un lieu absent (mairie → église, salle et plage → jardin). **À peindre dès que
     Gemini revient** : Mairie, Salle, Plage en plein jour, dans le style des peintures du tableau.
