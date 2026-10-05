@@ -370,6 +370,28 @@ export default {
    "amis": "Chers amis"
   }
  },
+ "henne-yasmine": {
+  "demo": true,
+  "couple": "Yasmine",
+  "date": "2027-06-11T17:30:00+00:00",
+  "events": [
+   "henne"
+  ],
+  "eventList": [
+   {
+    "id": "henne",
+    "label": "Le henné"
+   }
+  ],
+  "families": {
+   "amis": {
+    "events": null
+   }
+  },
+  "familyLabels": {
+   "amis": "Chères amies"
+  }
+ },
  "hiba-anas": {
   "demo": true,
   "couple": "Hiba & Anas",
@@ -828,6 +850,28 @@ export default {
   ],
   "families": {},
   "familyLabels": {}
+ },
+ "sbou3-lina": {
+  "demo": true,
+  "couple": "Lina",
+  "date": "2027-07-03T13:00:00+00:00",
+  "events": [
+   "sbou3"
+  ],
+  "eventList": [
+   {
+    "id": "sbou3",
+    "label": "Le sbouâ"
+   }
+  ],
+  "families": {
+   "famille-alaoui": {
+    "events": null
+   }
+  },
+  "familyLabels": {
+   "famille-alaoui": "Chère famille Alaoui"
+  }
  },
  "sofia-hamza": {
   "demo": true,

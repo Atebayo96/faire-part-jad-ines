@@ -57,7 +57,12 @@
   const events=(I.events||[]).filter(e=>!fam||!fam.events||fam.events.includes(e.id));
   const main=zoned(I.date,TZ);
   const multiDay=new Set(events.map(e=>e.start.slice(0,10))).size>1;
-  const n1=I.couple[0], n2=I.couple[1];
+  const n1=I.couple[0], n2=I.couple[1]||'';
+  /* un seul prénom : faire-part d'un seul événement (le sbouâ de l'enfant, le henné de la mariée), voir CLAUDE.md règle 35 */
+  const solo=!n2;
+  const namesH=(sep='&amp;')=>solo?esc(n1):`${esc(n1)} ${sep} ${esc(n2)}`;
+  const iniH=()=>solo?esc(n1[0].toUpperCase()):`${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}`;
+  const monoT=solo?esc(n1[0]):`${esc(n1[0])} &amp; ${esc(n2[0])}`;
   const pal=I.palette||'#b8975a';
   // sceau de cire (enveloppe et accueil) : la couleur de cire la plus proche de la palette du couple (ou I.seal), initiales gravées dans la cire
   // dégradé du relief des initiales (clair, moyen, sombre) pour chaque cire
@@ -123,9 +128,9 @@
 
   // 1. accueil
   page(1,(c)=>{
-    const names=T.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
+    const names=T.stack&&!solo?`${esc(n1)}<br>&amp; ${esc(n2)}`:namesH();
     return (fam&&fam.label?`<div class="rv greet" style="--i:${rvI++};color:${c.tx}">${esc(fam.label)}</div>`:'')+
-      (oval||compact?'':`<div class="rv seal" style="--i:${rvI++};background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div>`)+
+      (oval||compact?'':`<div class="rv seal" style="--i:${rvI++};background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${iniH()}</b></div>`)+
       eyHtml('rv ey',I.intro&&I.intro.eyebrow||T.scenes[0][0],`--i:${rvI++};color:${c.ey}`)+
       `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(T.stack?.82:1,c.nm))}">${names}</div>`+
       (oval||compact?'':`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${esc(I.intro&&I.intro.text||S.joy)}</div>`)+
@@ -152,7 +157,7 @@
     head(c,P.eyebrow||S.parents,'')+
     (P.names&&P.names.length?rv('fams',c.tx,P.names.map(x=>`<span>${esc(x)}</span>`).join('<i>&amp;</i>')):'')+
     rv('tx',c.tx,esc(P.text||''))+
-    rv('nm',null,`${esc(n1)} &amp; ${esc(n2)}`,esc(nmCss(.7,c.nm))),{});
+    rv('nm',null,namesH(),esc(nmCss(.7,c.nm))),{});
 
   // 3. notre histoire
   const ST=I.story;
@@ -246,7 +251,7 @@
     const band=(i)=>`<div class="lg-band" aria-hidden="true"><img src="${X.base}/${X.bands[i]}" alt="" data-sp="-.10"></div>`;
     const ttl=(t,i)=>`<h2 class="rv lg-h" style="${nm(.62,sec[i].accent)}">${esc(t)}</h2>`;
     // 1. l'illustration d'ouverture et l'invitation
-    const P0=I.parents||null, names=`${esc(n1)} <i>&amp;</i> ${esc(n2)}`;
+    const P0=I.parents||null, names=namesH('<i>&amp;</i>');
     const hero=`<div class="lg-hero"><img class="lg-hero-img" src="${X.base}/${X.hero.src}" alt="" style="aspect-ratio:${X.hero.w}/${X.hero.h}">
       <div class="lg-hero-txt" data-sp=".35" style="color:${X.hero.ink};--sh:${X.hero.shadow||'none'};--top:${X.hero.top||'14%'}">
         ${fam&&fam.label?`<div class="greet">${esc(fam.label)}</div>`:''}
@@ -297,7 +302,7 @@
   /* ---------- montage ---------- */
   const runs=[], runOf=[];
   pages.forEach((p,i)=>{ const r=runs[runs.length-1]; if(r&&r.n===p.n) r.b=i; else runs.push({n:p.n,lt:p.lt,a:i,b:i}); runOf[i]=runs.length-1; });
-  document.title=I.title||`${n1} & ${n2}`;
+  document.title=I.title||(solo?n1:`${n1} & ${n2}`);
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app'; app.style.setProperty('--pal',pal);
   app.innerHTML=`
@@ -306,10 +311,10 @@
     ${I.demo?`<a class="demo-tag" href="/modeles/">${S.demo} · Save the Oui</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
     <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp');--pal:${pal}${I.doormen?`;--man:url('/img/open/${I.theme}-portier.webp')`:''}">
-      <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${esc(n1[0].toUpperCase())}<i>&amp;</i>${esc(n2[0].toUpperCase())}</b></div></div></div></div>
-      <div class="op-cur"><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${esc(n1[0])} &amp; ${esc(n2[0])}</div><div class="op-cur-edge"></div></div>
+      <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${iniH()}</b></div></div></div></div>
+      <div class="op-cur"><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${monoT}</div><div class="op-cur-edge"></div></div>
       <div class="op-doors"><div class="op-room"></div><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l">${I.doormen?'<div class="op-man"></div>':''}</div><div class="op-leaf r">${I.doormen?'<div class="op-man"></div>':''}</div></div></div>
-      <div class="op-voile"><div class="op-sheer l"></div><div class="op-sheer r"></div><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${esc(n1[0])} &amp; ${esc(n2[0])}</div></div>
+      <div class="op-voile"><div class="op-sheer l"></div><div class="op-sheer r"></div><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${monoT}</div></div>
       ${fam&&fam.label?`<div class="op-to">${esc(fam.label)}</div>`:''}
       <div class="op-tap">${(I.opening||'env')==='env'?S.tapSeal:S.tap}</div>
     </div>
@@ -524,7 +529,7 @@
   const stamp=d=>d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
   function calSheet(id){
     const e=events.find(x=>x.id===id), d=zoned(e.start,e.tz), end=e.end?zoned(e.end,e.tz):new Date(+d+3*36e5);
-    const title=`${e.calTitle||e.eyebrow||e.title} · ${n1} & ${n2}`, loc=e.address||e.place||'';
+    const title=`${e.calTitle||e.eyebrow||e.title} · ${solo?n1:n1+' & '+n2}`, loc=e.address||e.place||'';
     const g=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${stamp(d)}/${stamp(end)}&location=${encodeURIComponent(loc)}&details=${encodeURIComponent(location.href.split('#')[0])}`;
     const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Sceau//FR','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:${I.slug}-${e.id}@sceau`,`DTSTAMP:${stamp(new Date())}`,`DTSTART:${stamp(d)}`,`DTEND:${stamp(end)}`,
       `SUMMARY:${title.replace(/[,;]/g,'\\$&')}`,`LOCATION:${loc.replace(/[,;]/g,'\\$&')}`,`URL:${location.href.split('#')[0]}`,'END:VEVENT','END:VCALENDAR'].join('\r\n');

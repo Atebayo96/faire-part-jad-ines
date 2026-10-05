@@ -11,6 +11,7 @@ D={'chinois':"a pair of red lacquered Chinese doors with gold studs and round br
    'y2k':"a pair of glossy bubblegum-pink doors with chrome trim, butterfly handles, holographic sheen",
    'oldmoney':"a pair of dark green painted panelled doors with brass lion knockers, boxwood topiary carved in relief",
    'afro':"a pair of carved wooden doors with kente and wax patterns painted in warm orange and indigo, cowrie-shell handles",
+   'maghreb':"a pair of studded cobalt blue medina doors with black iron nails and a brass hand-of-Fatima knocker, in a whitewashed horseshoe arch",
    'alhambra':"a pair of tall Andalusian cedar doors with carved geometric star patterns, set in an ivory stucco horseshoe arch, bronze handles",
    'desert':"a pair of caidal tent flaps in heavy ochre and indigo embroidered cloth with geometric Berber motifs and gold tassels, closed in the middle",
    'emeraude':"a pair of monumental palace doors in deep emerald lacquer with chiselled gold geometric star inlays and heavy gold ring knockers"}
@@ -21,6 +22,7 @@ R={'chinois':"a heavy red silk curtain with gold embroidery and tassels, double-
    'y2k':"a shiny bubblegum-pink satin curtain with chrome rings and butterfly embroidery",
    'oldmoney':"a deep green velvet curtain with brass rings and an understated gold braid",
    'afro':"a kente-patterned curtain in orange, gold and indigo with cowrie fringes",
+   'maghreb':"a white cotton curtain with cobalt blue Berber geometric embroidery and blue tassels",
    'alhambra':"an ivory silk curtain with fine gold arabesque embroidery and a border of small orange blossoms",
    'desert':"a heavy indigo curtain of woven Berber cloth with ochre geometric motifs and long gold tassels",
    'emeraude':"a deep emerald velvet curtain with gold embroidered arabesques and heavy gold tassels"}

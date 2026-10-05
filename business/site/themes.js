@@ -69,9 +69,14 @@ Object.assign(window.SCEAU_THEMES,{
    pour la communauté arabe et musulmane. Même peinture que le riad de nuit, d'autres lieux et d'autres lumières. */
 window.SCEAU_THEMES.nuits.family="nuits"; window.SCEAU_THEMES.nuits.variant="Riad de nuit";
 Object.assign(window.SCEAU_THEMES,{
-  alhambra:{name:"Alhambra",family:"nuits",variant:"Palais andalou",launch:true,style:"Peinture",short:"Palais andalou, arcades, bassin",desc:"Un palais andalou baigné de lumière : arcades ciselées, bassin et orangers. La douceur d'un mariage de jour.",couple:"Leïla & Mehdi",light:true,
+  alhambra:{name:"Andalou",family:"nuits",variant:"Palais de l'Alhambra",launch:true,style:"Peinture",short:"Palais andalou, arcades, bassin",desc:"Un palais andalou baigné de lumière : arcades ciselées, bassin et orangers. La douceur d'un mariage de jour.",couple:"Leïla & Mehdi",light:true,
     font:'"Amiri",serif',color:"#5b2a1c",ey:"#7a4a26",tx:"#5a3a28",size:.8,gf:"Amiri",music:"scheherazade",particles:"none",mono:["#5b2a1c","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],
     scenes:[["Bismillah","NAMES","Samedi 4 septembre 2027"],["La cérémonie","Au palais","15h00 · Cour des orangers","Itinéraire"],["Le dîner","Sous les arcades","Dès 19h30","Itinéraire"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er août","Répondre"]]},
+  /* en attente d'images (quota Gemini) : pending:true le garde hors du configurateur et de la galerie.
+     Générer avec business/tools/theme-nuits.sh maghreb, puis retirer pending et passer launch:true. */
+  maghreb:{name:"Maghrébin",family:"nuits",variant:"Médina blanche et bleue",pending:true,style:"Peinture",short:"Médina blanche, portes bleues, zellige",desc:"Une médina blanchie à la chaux, portes bleues cloutées, zellige et bougainvilliers : le Maghreb, de Chefchaouen à Sidi Bou Saïd.",couple:"Nour & Walid",light:true,
+    font:'"DM Serif Display",Georgia,serif',color:"#1d3f73",ey:"#2f5c9a",tx:"#2c3a55",size:.86,gf:"DM+Serif+Display",music:"scheherazade",particles:"none",mono:["#1d3f73","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],
+    scenes:[["Bismillah","NAMES","Samedi 21 août 2027"],["Le henné","Vendredi soir","20h00 · Dans la cour","Itinéraire"],["La cérémonie","Dans la médina","Samedi 16h00","Itinéraire"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 15 juillet","Répondre"]]},
   desert:{name:"Nuit du désert",family:"nuits",variant:"Dunes et tente caïdale",launch:true,style:"Peinture",short:"Dunes, tente caïdale, lanternes",desc:"Les dunes sous les étoiles, une tente caïdale et des lanternes posées sur le sable.",couple:"Amira & Youssef",
     font:'"Cinzel",serif',color:"#f6e7c8",upper:true,size:.74,gf:"Cinzel",music:"scheherazade",particles:"none",
     scenes:[["Bismillah","NAMES","Samedi 18 septembre 2027"],["Le henné","Vendredi soir","20h00 · Sous la tente","Itinéraire"],["La cérémonie","Dans les dunes","Samedi 17h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 20h","Répondre"]]},

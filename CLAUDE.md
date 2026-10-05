@@ -258,6 +258,21 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     dans un `iframe` `srcdoc`, nourri d'une fiche faite des choix (`lgInvite()` dans vitrine.js) : l'utilisateur avait vu
     que l'étape ne changeait pas quand il choisissait le grand tableau, « c'est plus du tout la même chose ».
 
+35. **Faire-part d'un seul événement (« one shot ») : henné et sbouâ.** Étape 1 du configurateur, « Pour quelle
+    occasion ? » : Mariage, Henné (la mariée, le marié facultatif ; un seul événement, la scène 2 du thème « Le henné »
+    proposée comme lieu `s2`), Sbouâ (le prénom de l'enfant, les parents, fille ou garçon ; un écran simple « À la
+    maison » par défaut). Un seul événement, pas de « + Ajouter un événement ». Le moteur accepte **un seul prénom**
+    (`couple: ["Lina"]` : sceau et monogramme à une initiale, `solo` dans invite.js) et une fiche peut porter
+    `"kind": "henne" | "sbou3"` : ces démos (`henne-yasmine`, `sbou3-lina`) sont dans la section « Un seul événement » de
+    /modeles/, jamais prises comme démo principale d'un thème. Le champ `occasion` part avec la demande.
+    À faire quand le quota Gemini revient : des scènes propres au sbouâ (berceau, plateau de dattes et de lait, bougies),
+    aujourd'hui l'accueil et la réponse reprennent les scènes du thème.
+36. **Andalou et Maghrébin.** « Andalou » est le nom affiché du thème `alhambra`. « Maghrébin » (`maghreb` : médina
+    blanche, portes bleues, zellige, de Chefchaouen à Sidi Bou Saïd, thème clair) est défini partout (themes.js, scènes,
+    portes, grand tableau) mais `pending:true` tant que ses images n'existent pas :
+    `bash business/tools/theme-nuits.sh maghreb`, regarder les images, retirer `pending`, mettre `launch:true`, ajouter
+    ses deux démos.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

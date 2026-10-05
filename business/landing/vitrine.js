@@ -11,7 +11,7 @@
   /* commande : récapitulatif, conditions de vente et renonciation au délai de rétractation, puis paiement Stripe */
   let ordPlan=null, ordLink=null;
   const ord=document.getElementById('order'), $o=id=>document.getElementById(id);
-  function choicesText(){ const v=id=>($o(id)||{}).value||''; return [v('fStyle')&&'thème '+v('fStyle'), v('fFormat')&&'format '+v('fFormat').toLowerCase(), v('fOpen')&&'ouverture '+v('fOpen').toLowerCase(), v('fPal')&&'couleurs '+v('fPal').toLowerCase(), v('fEvents')&&'écrans : '+v('fEvents'), v('fScreens')&&'écrans en plus : '+v('fScreens').toLowerCase()].filter(Boolean).join(' · '); }
+  function choicesText(){ const v=id=>($o(id)||{}).value||''; return [v('fOcc')&&v('fOcc')!=='Mariage'&&'occasion '+v('fOcc').toLowerCase(), v('fStyle')&&'thème '+v('fStyle'), v('fFormat')&&'format '+v('fFormat').toLowerCase(), v('fOpen')&&'ouverture '+v('fOpen').toLowerCase(), v('fPal')&&'couleurs '+v('fPal').toLowerCase(), v('fEvents')&&'écrans : '+v('fEvents'), v('fScreens')&&'écrans en plus : '+v('fScreens').toLowerCase()].filter(Boolean).join(' · '); }
   openOrder=function(plan,link){
     ordPlan=plan; ordLink=link; const P=PLANS[plan];
     $o('ordT').textContent=`${P.name} · ${P.price}`;
@@ -46,8 +46,9 @@
     const fn=document.getElementById('fNames'), fd=document.getElementById('fDate'), pu=document.getElementById('fPlanUrl');
     if(fn&&fn.tagName==='INPUT'&&fn.type==='text'&&q.get('names')) fn.value=q.get('names');
     if(fd&&fd.tagName==='INPUT'&&q.get('date')){ fd.type='date'; fd.value=q.get('date'); }
-    if(pu) pu.value=[q.get('plan'),q.get('theme'),q.get('format')].filter(Boolean).join(' · ');
-    const intro=document.getElementById('ctxLine'); if(intro&&q.get('theme')&&window.SCEAU_THEMES&&window.SCEAU_THEMES[q.get('theme')]){ intro.hidden=false; intro.textContent=`Votre composition : ${window.SCEAU_THEMES[q.get('theme')].name}${q.get('format')?' · '+(q.get('format')==='long'?'grand tableau':'scène par scène'):''}${up?' · '+up.charAt(0).toUpperCase()+up.slice(1):''}. On la retrouve avec votre message.`; } }
+    const OCN={henne:'henné',sbou3:'sbouâ'};
+    if(pu) pu.value=[q.get('plan'),OCN[q.get('occasion')],q.get('theme'),q.get('format')].filter(Boolean).join(' · ');
+    const intro=document.getElementById('ctxLine'); if(intro&&q.get('theme')&&window.SCEAU_THEMES&&window.SCEAU_THEMES[q.get('theme')]){ intro.hidden=false; intro.textContent=`Votre composition : ${OCN[q.get('occasion')]?'faire-part de '+OCN[q.get('occasion')]+' · ':''}${window.SCEAU_THEMES[q.get('theme')].name}${q.get('format')?' · '+(q.get('format')==='long'?'grand tableau':'scène par scène'):''}${up?' · '+up.charAt(0).toUpperCase()+up.slice(1):''}. On la retrouve avec votre message.`; } }
   if(document.getElementById('waitForm')) document.getElementById('waitForm').addEventListener('submit',async e=>{
     e.preventDefault();
     const f=e.currentTarget, fd=new FormData(f), err=document.getElementById('fErr'), btn=f.querySelector('button');
@@ -107,7 +108,7 @@
   const contGrid=document.getElementById('contGrid'); if(contGrid) contGrid.innerHTML=LONGS.filter(l=>KEYS.includes(l.k)).map(l=>`<a class="cont" href="/d/${l.slug}/" target="_blank" rel="noopener"><div class="pic"><img src="/img/long/${l.k}/thumb.webp" alt="${esc('Le faire-part '+THEMES[l.k].name+' : '+l.alt)}" loading="lazy" width="480" height="768"></div><div class="txt"><b>${esc(THEMES[l.k].name)}</b><span>${esc(l.couple+' · '+l.desc)}</span><em>Ouvrir l'exemple →</em></div></a>`).join('');
   const CREAS=LONGS.filter(l=>KEYS.includes(l.k)).map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:t.name,font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`/img/reel/long-${l.k}.webp`}); });
   // carrousel de l'accueil : un thème qui a sa démo en grand tableau y passe sous cette forme, pas deux fois
-  KEYS.filter(k=>!LONGS.some(l=>l.k===k)).forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim');
+  KEYS.filter(k=>!LONGS.some(l=>l.k===k)).forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&!x.kind);
     CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=7`})); });
   // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
   CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
@@ -152,13 +153,20 @@
   const models=document.getElementById('models'), filters=document.getElementById('filters');
   const DEMOS=window.SCEAU_DEMOS||[], OPN={env:'Enveloppe',cur:'Rideau',voile:'Voile',door:'Grandes portes'}, RVN={scratch:'Date à gratter',wheel:'Roue de la date',slot:'Jackpot'};
   // une carte par thème, avec ses deux formats : « scène par scène » (démo pages) et « grand tableau » (démo long)
-  const card=(k)=>{ const t=THEMES[k], ds=DEMOS.find(x=>x.theme===k&&x.layout!=='long'), dl=DEMOS.find(x=>x.theme===k&&x.layout==='long');
+  const card=(k)=>{ const t=THEMES[k], ds=DEMOS.find(x=>x.theme===k&&x.layout!=='long'&&!x.kind), dl=DEMOS.find(x=>x.theme===k&&x.layout==='long'&&!x.kind);
     const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style;
     m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=7" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=7" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
       <div class="fmts">${ds?`<a href="/d/${esc(ds.slug)}/" target="_blank" rel="noopener"><b>Scène par scène</b><span>${esc(ds.couple)}</span></a>`:''}${dl?`<a href="/d/${esc(dl.slug)}/" target="_blank" rel="noopener"><b>Grand tableau</b><span>${esc(dl.couple)}</span></a>`:''}</div>
       <div class="acts"><a class="go" href="/creer/?theme=${esc(k)}">Composer →</a></div></div>`;
     models.appendChild(m); };
   KEYS.forEach(card);
+  // faire-part d'un seul événement (« one shot ») : le henné, le sbouâ ; chacun avec sa démo et son lien vers le configurateur
+  const one=document.getElementById('oneShots');
+  if(one) one.innerHTML=[['henne','Henné','L’invitation à la soirée henné, seule ou en plus du mariage.'],['sbou3','Sbouâ','La naissance de votre enfant, fêtée au septième jour.']].map(([id,nm,tx])=>{ const d=DEMOS.find(x=>x.kind===id); if(!d) return ''; const t=THEMES[d.theme];
+    return `<div class="model one"><a class="pic" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><img src="/img/themes/${esc(d.theme)}-${id==='henne'?2:1}.webp?v=7" alt="" loading="lazy"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}`)}">${esc(d.couple)}</span></a>
+      <div class="meta"><div><h3>${nm}</h3><p class="style">${esc(t.name)} · un seul événement</p><p>${tx}</p></div></div>
+      <div class="fmts"><a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><b>Voir l’exemple</b><span>${esc(d.couple)}</span></a></div>
+      <div class="acts"><a class="go" href="/creer/?occasion=${id}&theme=${esc(d.theme)}">Composer →</a></div></div>`; }).join('');
   const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
   STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
     b.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); models.querySelectorAll('.model').forEach(m=>{ m.hidden=!(st==='Tous'||m.dataset.style===st); }); };
@@ -170,14 +178,25 @@
   const PALS=[{id:'or',name:'Or & ivoire',c:'#b8975a'},{id:'sauge',name:'Sauge',c:'#7d9275'},{id:'terracotta',name:'Terracotta',c:'#c0643f'},{id:'nuit',name:'Bleu nuit',c:'#2e4a7d'},{id:'rose',name:'Rose poudré',c:'#d59aa3'},{id:'bordeaux',name:'Bordeaux',c:'#7a2e3b'},{id:'lavande',name:'Lavande',c:'#8a7fb5'},{id:'emeraude',name:'Émeraude',c:'#2f6b57'},{id:'ardoise',name:'Ardoise',c:'#4a5560'},{id:'champagne',name:'Champagne',c:'#cdb48a'}];
   const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
   const urlPlan=new URLSearchParams(location.search).get('plan'), urlTheme=new URLSearchParams(location.search).get('theme');
-  const urlFmt=new URLSearchParams(location.search).get('format');
+  const urlFmt=new URLSearchParams(location.search).get('format'), urlOcc=new URLSearchParams(location.search).get('occasion');
+  /* occasion : le mariage (tous ses événements) ou un faire-part d'un seul événement, « one shot » : l'invitation au henné,
+     ou le sbouâ (la naissance, 7e jour). Un seul prénom possible : celui de l'enfant, ou de la mariée pour son henné. */
+  const OCCS=[{id:'mariage',name:'Mariage',sub:'Tous vos événements, du henné à la fête'},{id:'henne',name:'Henné',sub:'Une invitation pour la soirée henné'},{id:'sbou3',name:'Sbouâ',sub:'La naissance de votre enfant'}];
+  const OCC={
+    mariage:{n:['Emma','Louis'],l:['Premier prénom','Second prénom'],ph:['',''],label:'Vos prénoms',ev:()=>[{name:'La cérémonie',time:'15:00',place:'Mairie du 11e',bg:'scene',lieu:'mairie'},{name:'La fête',time:'19:30',place:'Domaine des Roses',bg:'scene',lieu:'salle'}]},
+    henne:{n:['Yasmine',''],l:['Prénom de la mariée','Prénom du marié (facultatif)'],ph:['Yasmine','Le marié (facultatif)'],label:'Le henné de',ev:()=>[{name:'Le henné',time:'19:30',place:'Chez la famille Alaoui',bg:'scene',lieu:'s2'}]},
+    sbou3:{n:['Lina','Yasmine & Karim'],l:['Prénom de l’enfant','Les parents'],ph:['Prénom de l’enfant','Les parents (ex. Yasmine & Karim)'],label:'Le sbouâ de',ev:()=>[{name:'Le sbouâ',time:'15:00',place:'À la maison',bg:'simple',lieu:'salle'}]}};
+  const nm1=()=>($('cN1').value.trim()||OCC[C.occ].n[0]), nm2=()=>(C.occ==='henne'?$('cN2').value.trim():($('cN2').value.trim()||OCC[C.occ].n[1]));
+  const isSolo=()=>C.occ==='sbou3'||!nm2();
+  const whoTxt=()=>C.occ==='sbou3'?`${nm1()} · parents ${nm2()}`:isSolo()?nm1():`${nm1()} & ${nm2()}`;
+  const introTxt=()=>C.occ==='henne'?(isSolo()?'A la joie de vous convier à sa soirée henné':'Ont la joie de vous convier à leur soirée henné'):C.occ==='sbou3'?`${nm2()} vous convient au sbouâ de leur ${C.sexe==='fils'?'fils':'fille'}`:'Ont la joie de vous convier à leur mariage';
   /* au lancement, le configurateur se concentre sur Mille et une nuits et ses variantes (family:'nuits' dans themes.js),
      pour la communauté arabe et musulmane ; les autres thèmes restent dans la galerie et le code */
-  const CK=Object.keys(THEMES).filter(k=>THEMES[k].family==='nuits');
-  const C={k:CK.includes(urlTheme)?urlTheme:'nuits',fmt:urlFmt==='long'?'long':'scenes',pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
-    ev:[{name:'La cérémonie',time:'15:00',place:'Mairie du 11e',bg:'scene',lieu:'mairie'},{name:'La fête',time:'19:30',place:'Domaine des Roses',bg:'scene',lieu:'salle'}]};
+  const CK=Object.keys(THEMES).filter(k=>THEMES[k].family==='nuits'&&!THEMES[k].pending);
+  const C={occ:OCC[urlOcc]?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:'nuits',fmt:urlFmt==='long'?'long':'scenes',pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
+    ev:null}; C.ev=OCC[C.occ].ev();
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
-  const LIEUX=[{id:'mairie',name:'Mairie'},{id:'mosquee',name:'Mosquée'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
+  const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'mosquee',name:'Mosquée'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
   /* upsell sans frustration : les options de Signature (lieu peint d'après photo, 3e événement et plus, lien par famille,
      anglais) sont proposées au même endroit que les autres, avec l'étiquette « Signature ». On peut les choisir en Essentiel :
      la formule se met d'elle-même sur Signature et le récapitulatif explique pourquoi ; si l'on revient à Essentiel, il dit
@@ -215,6 +234,7 @@
   EXTRAS.forEach(x=>{ const b=document.createElement('button'); b.type='button'; b.className='chip x'+(x.sig?' sig':''); b.dataset.id=x.id; b.innerHTML=esc(x.name)+(x.sig?'<i>Signature</i>':'');
     b.onclick=()=>{ const on=!C.x.has(x.id); on?C.x.add(x.id):C.x.delete(x.id); paint(); if(on){ const el=$('cpScroll').querySelector(`[data-x="${x.id}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); } };
     $('cExtras').appendChild(b); });
+  let resetEv=()=>{};
   // les écrans du faire-part, dans l'ordre (construits une fois : les champs gardent le focus)
   { const box=$('cStory'), li=(cls,h)=>{ const l=document.createElement('li'); l.className=cls; l.innerHTML=h; box.appendChild(l); return l; };
     li('fixed home','<b>Accueil</b><span>Vos prénoms, la date, le sceau</span>');
@@ -235,11 +255,20 @@
       const rm=l.querySelector('[data-rm]'); if(rm) rm.onclick=ev=>{ ev.preventDefault(); C.ev.splice(i,1); l.remove(); [...box.querySelectorAll('li.ev')].forEach((x,k)=>{ x.dataset.i=k; }); paint(); };
       box.insertBefore(l,more); return l; };
     C.ev.forEach(addEv);
+    resetEv=()=>{ box.querySelectorAll('li.ev').forEach(l=>l.remove()); C.ev.forEach(addEv); };
     $('cAddEv').onclick=()=>{ if(C.ev.length>=6) return; const e={name:['','','La soirée','Le brunch','Le henné','La bénédiction'][C.ev.length]||'',time:'21:00',place:'',bg:'simple',lieu:'salle'}; C.ev.push(e); addEv(e,C.ev.length-1); paint(); showEv(C.ev.length-1); };
     part('Deuxième partie','facultatif',[['story','Notre histoire'],['album','Bande de photos'],['dress','Dress code']]);
     part('Troisième partie','facultatif',[['stay','Bon à savoir'],['gifts','Liste de mariage']]);
     li('fixed rsvp','<b>Réponse</b><span>« Serez-vous des nôtres ? »</span>');
     box.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{ const id=b.dataset.x; C.x.has(id)?C.x.delete(id):C.x.add(id); paint(); }); }
+  // choix de l'occasion : prénoms, événements et textes par défaut de l'occasion (les prénoms tapés à la main restent)
+  opt($('cOcc'),OCCS,'occ','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  $('cOcc').addEventListener('click',e=>{ if(!e.target.closest('button')) return;
+    const all=Object.values(OCC).flatMap(o=>o.n);
+    [$('cN1'),$('cN2')].forEach((inp,i)=>{ if(!inp.value.trim()||all.includes(inp.value.trim())) inp.value=OCC[C.occ].n[i]; });
+    C.ev=OCC[C.occ].ev(); resetEv(); paint(); });
+  if(C.occ!=='mariage'){ $('cN1').value=OCC[C.occ].n[0]; $('cN2').value=OCC[C.occ].n[1]; }
+  opt($('cSexe'),[{id:'fille',name:'Une fille'},{id:'fils',name:'Un garçon'}],'sexe','',(b,o)=>{ b.className='chip'; b.textContent=o.name; });
   // l'aperçu descend jusqu'à l'écran modifié
   function showEv(i){ const el=$('cpScroll').querySelector(`[data-ev="${i}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); }
   const hm=v=>{ const m=/^(\d{1,2}):(\d{2})/.exec(v||''); return m?`${+m[1]}h${m[2]}`:''; };
@@ -276,7 +305,7 @@
     const needs=sigNeeds(); if(needs.length&&C.plan==='essentiel'&&!C.planPicked) C.plan='signature';
     $('cPlan').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan));
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
-      ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k+'&format='+C.fmt+'&names='+encodeURIComponent(($('cN1').value||'Emma').trim()+' & '+($('cN2').value||'Louis').trim())+'&date='+encodeURIComponent($('cDate').value||''); a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
+      ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k+'&format='+C.fmt+'&occasion='+C.occ+'&names='+encodeURIComponent(whoTxt())+'&date='+encodeURIComponent($('cDate').value||''); a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
     { const long=C.fmt==='long';
       $('wz2Title').textContent=long?'Votre tableau':'Vos écrans';
       $('wz2Sub').textContent=long?'Un seul tableau peint qu’on descend, en trois parties. Chaque événement a son cadre : la scène peinte du thème, un lieu de notre bibliothèque, ou votre lieu d’après photo.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';
@@ -299,22 +328,32 @@
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
       l.querySelector('.lieux').hidden=e.bg!=='scene';
-      l.querySelectorAll('[data-lieu]').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.lieu===e.lieu); b.firstChild.style.backgroundImage=`url('/img/lieux/${C.k}-${b.dataset.lieu==='photo'?'mairie':b.dataset.lieu}.webp')`; }); });
-    $('cAddEv').hidden=C.ev.length>=6;
+      l.querySelectorAll('[data-lieu]').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.lieu===e.lieu); b.firstChild.style.backgroundImage=b.dataset.lieu==='s2'?`url('/img/themes/${C.k}-2.webp?v=7')`:`url('/img/lieux/${C.k}-${b.dataset.lieu==='photo'?'mairie':b.dataset.lieu}.webp')`; }); });
+    $('cAddEv').hidden=C.ev.length>=6||C.occ!=='mariage';
     $('cpTint').style.background=p.c;
-    const n1=($('cN1').value||'Emma').trim(), n2=($('cN2').value||'Louis').trim();
-    const ini=(n1[0]||'').toUpperCase()+(n2[0]||'').toUpperCase();
+    const n1=nm1(), n2=nm2(), solo=isSolo(), oneShot=C.occ!=='mariage';
+    const ini=(n1[0]||'').toUpperCase()+(solo?'':(n2[0]||'').toUpperCase());
+    const iniH=solo?esc((n1[0]||'').toUpperCase()):`${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}`;
+    // occasion : libellés des prénoms, fille ou garçon pour le sbouâ, un seul événement pour un « one shot »
+    $('cOcc').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.occ));
+    $('cSexe').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.sexe));
+    $('fldSexe').hidden=C.occ!=='sbou3'; $('cNamesL').textContent=OCC[C.occ].label;
+    [$('cN1'),$('cN2')].forEach((inp,i)=>{ inp.setAttribute('aria-label',OCC[C.occ].l[i]); inp.placeholder=OCC[C.occ].ph[i]; });
+    $('cNamesF').classList.toggle('sbou3',C.occ==='sbou3');
+    $('cStory').querySelectorAll('[data-lieu]').forEach(b=>{ const L0=LIEUX.find(x=>x.id===b.dataset.lieu); b.hidden=!!(L0.occ&&L0.occ!==C.occ); });
+    $('cExtras').querySelector('[data-id="story"]').hidden=C.occ==='sbou3'||C.fmt==='long';
+    if($('fOcc')) $('fOcc').value=OCCS.find(o=>o.id===C.occ).name;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
-    $('opSealTxt').innerHTML=`${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}`; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
+    $('opSealTxt').innerHTML=iniH; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
     $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir';
     { const o=$('cpOp'); o.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); o.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`); o.style.setProperty('--pal',p.c); o.style.setProperty('--man',DOORMEN.includes(C.k)?`url('/img/open/${C.k}-portier.webp')`:'none');
-      $('opMonoC').style.cssText=t.mono?`color:${t.mono[0]};text-shadow:${t.mono[1]}`:''; } $('opMonoC').textContent=$('opMonoV').textContent=(n1[0]||'').toUpperCase()+' & '+(n2[0]||'').toUpperCase();
+      $('opMonoC').style.cssText=t.mono?`color:${t.mono[0]};text-shadow:${t.mono[1]}`:''; } $('opMonoC').textContent=$('opMonoV').textContent=solo?(n1[0]||'').toUpperCase():(n1[0]||'').toUpperCase()+' & '+(n2[0]||'').toUpperCase();
     const fam=f.css||t.font, it=f.id==='theme'?t.italic:f.italic, up=f.id==='theme'?t.upper:f.upper;
     const base=up?24:/Limelight|Cinzel/.test(fam)?30:40;
     const nmCss=(sz,col)=>`font-family:${fam};font-style:${it?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:${sz}px;color:${col}`;
     const d=weddingDate(), ds0=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}), ds=ds0.charAt(0).toUpperCase()+ds0.slice(1);
-    const names=t.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
+    const names=solo?esc(n1):t.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
     const page=(img,mode,inner,extra)=>{ const dk=mode==='dark', lt=t.light&&!dk;
       const c={nm:lt?t.color:'#fff',ey:lt?(t.ey||t.color):'#fff',tx:lt?(t.tx||t.color):'#fff'};
       // un numéro = scène du thème ; un nom = lieu de la bibliothèque, ou « fond » pour un écran simple
@@ -330,11 +369,11 @@
     // 1. prenoms + date (+ compte a rebours au debut)
     { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');
       const oval=!!t.top1;
-      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc(`background-image:url('/img/seals/${SEAL[0]}.webp')`)}"><b style="${esc(`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`)}">${esc((n1[0]||'').toUpperCase())}<i>&amp;</i>${esc((n2[0]||'').toUpperCase())}</b></div>`}${eyHtml('ey',t.scenes[0][0],`color:${c.ey}`)}<div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">Ont la joie de vous convier à leur mariage</div>`}${rv?`<div class="cp-rvl" style="width:100%;color:${c.tx}"></div>`:''}${!rv||rv==='wheel'?`<div class="cp-dl${rv?' rvl-later':''}" style="color:${pg.lt?p.c:'#fff'}"><i></i><span>${esc(ds)}</span><i></i></div>`:''}${C.cd==='debut'?`<div class="${rv?'rvl-later':''}">${cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':'')}</div>`:''}<div class="pv-hint${rv?' rvl-later':''}" style="color:${c.ey}">Faites défiler ↓</div>`)); }
-    const scene=(idx,withCd)=>{ const [e,main,x,bt,mode]=t.scenes[idx]; const pg=page(idx+1,mode);
+      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc(`background-image:url('/img/seals/${SEAL[0]}.webp')`)}"><b style="${esc(`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`)}">${iniH}</b></div>`}${eyHtml('ey',t.scenes[0][0],`color:${c.ey}`)}<div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">${esc(introTxt())}</div>`}${rv?`<div class="cp-rvl" style="width:100%;color:${c.tx}"></div>`:''}${!rv||rv==='wheel'?`<div class="cp-dl${rv?' rvl-later':''}" style="color:${pg.lt?p.c:'#fff'}"><i></i><span>${esc(ds)}</span><i></i></div>`:''}${C.cd==='debut'?`<div class="${rv?'rvl-later':''}">${cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':'')}</div>`:''}<div class="pv-hint${rv?' rvl-later':''}" style="color:${c.ey}">Faites défiler ↓</div>`)); }
+    const scene=(idx,withCd)=>{ let [e,main,x,bt,mode]=t.scenes[idx]; if(oneShot&&idx===3){ e='Réponse souhaitée'; main='Serez-vous des nôtres ?'; } const pg=page(idx+1,mode);
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?btn(c,bt,/R[ée]pondre|RSVP/i.test(bt)?'mail':'pin'):''}`); };
     // événements : scène = le lieu choisi, écran simple = le fond du tableau (la bande continue les fond l'un dans l'autre)
-    const evPage=i=>{ const e=C.ev[i], photo=e.bg==='scene'&&e.lieu==='photo', pg=page(e.bg==='scene'&&!photo?e.lieu:'fond','');
+    const evPage=i=>{ const e=C.ev[i], photo=e.bg==='scene'&&e.lieu==='photo', pg=page(e.bg==='scene'&&!photo?(e.lieu==='s2'?2:e.lieu):'fond','');
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e.name||'Événement '+(i+1))}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(e.place||'')}</div><div class="tx" style="color:${c.tx}">${esc(hm(e.time))}</div>${btn(c,'Itinéraire','pin')}${photo?`<div class="pv-photo" style="color:${c.tx};border-color:${c.tx}">Ici, votre lieu<br>peint d’après votre photo</div>`:''}`).replace('<section ',`<section data-ev="${i}" `); };
     // écrans en option (contenu d'exemple), sur le décor de la scène voisine, sans voile (comme le moteur)
     const xp=(id,img,mode,inner)=>{ if(!C.x.has(id)) return; const pg=page(img,mode);
@@ -346,7 +385,7 @@
     pages.push(evPage(0));
     // page dediee au compte a rebours
     if(C.cd==='page'){ const pg=page('fond',''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
-    pages.push(evPage(1));
+    C.ev.forEach((_,i)=>{ if(i) pages.push(evPage(i)); });
     xp('program','fond','',(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,[['15h00','La cérémonie'],['17h00','Vin d’honneur'],['19h30','Le dîner'],['23h00','On danse']]));
     const m4=t.scenes[3][4];
     xp('dress',4,m4,c=>hd(c,'Dress code','Élégance d’été')+`<div class="pv-sws">${['#f3e3c3',p.c,'#7fb4d6','#e58f7a'].map(x=>`<i style="background:${x}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">Lin, soie, couleurs douces.</div>`);
@@ -367,16 +406,16 @@
     sc.hidden=C.fmt==='long';
     if(C.fmt==='long') lgRender(lgInvite(t,p,f,n1,n2,ds)); else lgClear();
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
-    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=C.fmt==='long'?'Aucune':REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.name).join(', ');
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=C.fmt==='long'?'Aucune':REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=whoTxt(); $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.name).join(', ');
     const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
     if($('fFormat')) $('fFormat').value=FMTS.find(f=>f.id===C.fmt).name;
     $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place} (${evTxt(e).toLowerCase()})`).join(' ; ');
     const needTxt=needs.length?(C.plan==='essentiel'?` Essentiel ne comprend pas ${needs.join(', ')} : vous pourrez les retirer, ou passer en Signature.`:` Avec ${needs.join(', ')}, c'est la formule Signature.`):(C.plan==='essentiel'?' Tout est compris dans Essentiel.':'');
     $('cRecap').textContent=needTxt.trim()||(C.plan==='signature'?'Votre lieu peint d’après photo, un lien par famille, français et anglais.':'');
     // récapitulatif, ligne par ligne
-    const sum=[['Thème',t.name],['Format',FMTS.find(f=>f.id===C.fmt).name],['Vous',`${n1} & ${n2} · ${ds}`],[C.fmt==='long'?'Tableau':'Écrans',`${C.fmt==='long'?'Illustration':'Accueil'} → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',xOn().map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'&&C.fmt!=='long'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
+    const sum=[['Occasion',OCCS.find(o=>o.id===C.occ).name+(C.occ==='sbou3'?(C.sexe==='fils'?' · un garçon':' · une fille'):'')],['Thème',t.name],['Format',FMTS.find(f=>f.id===C.fmt).name],['Vous',`${whoTxt()} · ${ds}`],[C.fmt==='long'?'Tableau':'Écrans',`${C.fmt==='long'?'Illustration':'Accueil'} → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',xOn().map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'&&C.fmt!=='long'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
     $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
-    { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b> · ${esc(FMTS.find(f=>f.id===C.fmt).name)}<br>${esc(n1)} &amp; ${esc(n2)} · ${esc(ds)}<br>${C.ev.map(e=>esc(evTxt(e))).join(' → ')}${xOn().length?` · +${xOn().length}`:''}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
+    { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b> · ${esc(FMTS.find(f=>f.id===C.fmt).name)}<br>${esc(whoTxt())} · ${esc(ds)}<br>${C.ev.map(e=>esc(evTxt(e))).join(' → ')}${xOn().length?` · +${xOn().length}`:''}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
   /* aperçu du grand tableau : une fiche de faire-part (comme business/invites/*.json) faite des choix du configurateur,
@@ -385,11 +424,11 @@
   const lgMeta={};
   function lgInvite(t,p,f,n1,n2,ds){
     const day=$('cDate').value||'2027-06-12', dl=new Date(weddingDate().getTime()-30*864e5).toISOString().slice(0,10);
-    return {slug:'apercu',demo:true,layout:'long',theme:C.k,couple:[n1,n2],date:day+'T15:00',tz:'Europe/Paris',opening:'cur',music:'none',
+    return {slug:'apercu',demo:true,layout:'long',theme:C.k,couple:isSolo()?[n1]:[n1,n2],date:day+'T15:00',tz:'Europe/Paris',opening:'cur',music:'none',
       palette:p.c,font:f.id==='theme'?undefined:f.id,countdown:C.cd==='page'?'fin':C.cd,calques:[],anim:[],trans:[],families:{},album:C.x.has('album'),
-      intro:{eyebrow:t.scenes[0][0],text:'Ont la joie de vous convier à leur mariage',dateText:ds},
+      intro:{eyebrow:t.scenes[0][0],text:introTxt(),dateText:ds},
       parents:C.x.has('parents')?{eyebrow:'Avec leurs familles',names:['Famille Alaoui','Famille Haddad'],text:'ont la joie de vous convier au mariage de leurs enfants'}:null,
-      events:C.ev.map((e,i)=>({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||e.name||'',start:day+'T'+(e.time||'15:00'),address:e.place||'',lieu:e.bg==='scene'&&e.lieu!=='photo'?e.lieu:undefined,note:e.bg==='scene'&&e.lieu==='photo'?'Ici, votre lieu peint d’après votre photo':undefined})),
+      events:C.ev.map((e,i)=>({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||e.name||'',start:day+'T'+(e.time||'15:00'),address:e.place||'',lieu:e.bg==='scene'&&!['photo','s2'].includes(e.lieu)?e.lieu:undefined,note:e.bg==='scene'&&e.lieu==='photo'?'Ici, votre lieu peint d’après votre photo':undefined})),
       story:C.x.has('story')?{title:'Notre histoire',items:[{when:'2018',title:'La rencontre',text:'Un mariage de cousins, deux places voisines.'},{when:'2022',title:'Paris',text:'Un premier appartement, le thé du dimanche.'},{when:'2026',title:'La demande',text:'Sur une terrasse, au coucher du soleil.'}]}:null,
       dress:C.x.has('dress')?{eyebrow:'Dress code',title:'Tenue de fête',text:'Caftans, takchitas et djellabas bienvenus.',colors:['#0f5e4c','#d4af37','#f2e6d0',p.c]}:null,
       infos:C.x.has('stay')?[{icon:'hotel',title:'Dormir',text:'Chambres réservées à 5 min.'},{icon:'car',title:'Navettes',text:'Depuis la gare à 14h15.'}]:[],

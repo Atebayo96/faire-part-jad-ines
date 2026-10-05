@@ -790,3 +790,8 @@
   .story>li.part .opts{display:flex;flex-wrap:wrap;gap:6px}
   .cp-phone iframe.cp-lg{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1;background:#111;transition:opacity .25s}
   .pv-scroll[hidden]{display:none}
+  /* sbouâ : le prénom de l'enfant puis les parents, l'un sous l'autre, sans « & » entre les deux */
+  .names.sbou3{grid-template-columns:1fr;display:grid;gap:8px}
+  .names.sbou3>b{display:none}
+  .head.one-h{margin-top:72px}
+  .fld[hidden]{display:none}

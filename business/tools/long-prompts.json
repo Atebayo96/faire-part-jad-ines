@@ -1083,5 +1083,82 @@
   "size": "1K",
   "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of two gold rings on an emerald velvet cushion with white roses. No faces visible. No text.",
   "ref": null
+ },
+ "maghreb/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "ref": "business/landing/img/hd/maghreb-1.webp",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent, same painterly style and palette as the reference. The top fifth is a calm plain pale sky, almost white, where a dark blue title will be written. Below it, the whitewashed rooftops and a square minaret of a Maghreb medina in soft morning light. In the middle, on a white rooftop terrace with blue railings and bougainvillea, the bride in a white and gold caftan and the groom in a cream djellaba seen from behind, side by side, looking over the medina. Lower, a white alley with studded cobalt blue doors, blue zellige steps and terracotta pots with geraniums. Lower still, a white patio with a blue zellige fountain and orange trees. The last tenth of the image is a pale whitewashed floor that fills the full width with an even pale tone. Nothing floating in the air: no flying lanterns, no balloons, no birds, no kites; every lamp hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams."
+ },
+ "maghreb/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like whitewashed lime plaster with a very faint tone-on-tone zellige star pattern, overall colour off-white #f5f2ea. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "maghreb/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like deep blue painted plaster with a very faint tone-on-tone geometric pattern, overall colour cobalt blue #1f3f7a. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "maghreb/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like warm terracotta plaster with a very faint tone-on-tone arabesque pattern, overall colour pale terracotta #f0d8c2. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "maghreb/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of magenta bougainvillea, green leaves and small white jasmine, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "business/landing/img/hd/maghreb-1.webp"
+ },
+ "maghreb/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of orange blossoms, small oranges, olive leaves and white jasmine, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "business/landing/img/hd/maghreb-1.webp"
+ },
+ "maghreb/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "An ornate Maghreb horseshoe-arch frame: a whitewashed plaster arch with a border of cobalt blue and green zellige and small bougainvillea sprigs at its base, front view, symmetrical, filling most of the image. The opening inside the arch and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, painterly gouache style. No text.",
+  "ref": null
+ },
+ "maghreb/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind walking hand in hand in a whitewashed medina alley with blue doors. No faces visible. No text.",
+  "ref": null
+ },
+ "maghreb/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the bride's hands with fine henna holding a glass of mint tea over blue zellige, the groom's hand on hers. No faces visible. No text.",
+  "ref": null
+ },
+ "maghreb/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind on a white rooftop terrace overlooking the medina at golden hour. No faces visible. No text.",
+  "ref": null
+ },
+ "maghreb/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of two gold rings on a blue zellige tile with jasmine flowers. No faces visible. No text.",
+  "ref": null
  }
 }
