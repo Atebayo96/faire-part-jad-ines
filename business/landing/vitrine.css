@@ -817,17 +817,21 @@
   /* le rouleau est plus haut que la carte : on en voit le haut, il file vers le bas et s'efface dans le fond de la carte */
   .fmtc .fv i.roll{position:absolute;top:18px;left:50%;transform:translateX(-50%);height:270px;width:auto;aspect-ratio:10/16;background-position:center top;border-radius:6px 6px 0 0}
   .fmtc .fv:has(.roll)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(transparent,var(--bg-2));pointer-events:none}
-  /* grand tableau : la vraie page défile lentement derrière un téléphone ; au-dessus et en dessous, le reste du tableau, estompé */
-  .fmtc .fv:has(.tb){padding:0;align-items:center}
-  .fmtc .fv i.tb{width:72px;height:100%;aspect-ratio:auto;border-radius:0;box-shadow:none;flex:none;background:center top/100% auto no-repeat;animation:tbRoll 18s ease-in-out infinite alternate}
-  .fmtc .fv i.tbp{aspect-ratio:auto;background:none;position:absolute;left:50%;top:50%;width:78px;height:156px;transform:translate(-50%,-50%);border:3px solid #1d1d1b;border-radius:14px;box-shadow:0 0 0 400px color-mix(in srgb,var(--bg-2) 62%,transparent),0 10px 22px -10px rgba(0,0,0,.5);pointer-events:none}
-  @keyframes tbRoll{from{background-position:center top}to{background-position:center bottom}}
+  /* les deux formats : la vraie démo défile DANS un téléphone, rien ne dépasse de l'écran (règle 38).
+     Scène par scène : arrêt sur chaque écran (7 écrans de la démo) ; grand tableau : une seule descente continue. */
+  .fmtc .fv:has(.tbp){padding:0;align-items:center;height:236px}
+  .fmtc .fv i.tbp{position:relative;display:block;height:206px;width:auto;aspect-ratio:390/844;flex:none;border:4px solid #1d1d1b;border-radius:16px;overflow:hidden;background:#1d1d1b;box-shadow:0 12px 24px -12px rgba(0,0,0,.55);transform:none}
+  .fmtc .fv i.tb{position:absolute;inset:0;display:block;height:auto;aspect-ratio:auto;border-radius:0;box-shadow:none;background:center top/100% auto no-repeat;transform:none}
+  .fmtc .fv i.tb.scenes{animation:tbScenes 18.2s ease-in-out infinite}
+  .fmtc .fv i.tb.long{animation:tbLong 22s linear infinite}
+  @keyframes tbScenes{0.0%{background-position:center 0.00%}9.9%{background-position:center 0.00%}14.3%{background-position:center 16.67%}24.2%{background-position:center 16.67%}28.6%{background-position:center 33.33%}38.5%{background-position:center 33.33%}42.9%{background-position:center 50.00%}52.7%{background-position:center 50.00%}57.1%{background-position:center 66.67%}67.0%{background-position:center 66.67%}71.4%{background-position:center 83.33%}81.3%{background-position:center 83.33%}85.7%{background-position:center 100.00%}95.6%{background-position:center 100.00%}100.0%{background-position:center 0.00%}}
+  @keyframes tbLong{0%,4%{background-position:center 0%}92%,96%{background-position:center 100%}100%{background-position:center 0%}}
   @media (prefers-reduced-motion:reduce){ .fmtc .fv i.tb{animation:none} }
   .fmtc b{padding:0 14px;font:500 16px/1.25 "Inter Tight",Inter,sans-serif}
   .fmtc small{padding:0 14px;font-size:12.5px;line-height:1.4;color:var(--muted)}
   .fmtc[aria-pressed="true"]::after{content:'✓';position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font:600 13px/24px Inter,sans-serif;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.3)}
   .opts.fmtv:has([aria-pressed="true"]) .fmtc[aria-pressed="false"]{opacity:.72}
-  @media (max-width:560px){ .fmtc .fv i.tb{width:58px} .fmtc .fv i.tbp{width:64px;height:126px} .fmtc .fv{height:150px;gap:6px;padding:14px 8px 0} .fmtc .fv i:nth-child(3){display:none} .fmtc .fv i.roll{top:14px;height:210px} .fmtc b{font-size:15px} }
+  @media (max-width:560px){ .fmtc .fv:has(.tbp){height:196px} .fmtc .fv i.tbp{height:170px;border-width:3px;border-radius:13px} .fmtc .fv{height:150px;gap:6px;padding:14px 8px 0} .fmtc .fv i:nth-child(3){display:none} .fmtc .fv i.roll{top:14px;height:210px} .fmtc b{font-size:15px} }
   @media (max-width:560px){ .story>li.fixed{flex-direction:column;gap:3px} .story .ev-h{flex-wrap:wrap} }
   .opts .sw.th-end{margin-right:14px} /* les couleurs du thème, puis les couleurs communes */
   /* le téléphone de l'aperçu fait 284 px : la basmala y garde la même place que sur un vrai téléphone (5,2 % de la largeur), entière */
@@ -850,3 +854,60 @@
   .ed-add{justify-self:start;border:1px dashed var(--line);background:none;padding:8px 12px;font:500 13px Inter,sans-serif;cursor:pointer;color:var(--ink)}
   .ed-n{margin:0;font-size:13px;color:var(--muted)}
   @media (max-width:560px){ .ed-row,.ed-row.s{grid-template-columns:1fr} .ed-x{justify-self:end} }
+
+/* Ouverture et révélation : chaque carte rejoue son effet en boucle dans un petit téléphone (5 s), avec les images du thème */
+.op-card.anim{position:relative;padding:0 0 12px;gap:2px;min-width:0;overflow:hidden}
+.op-card.anim b,.op-card.anim small{padding:0 12px}
+.op-card.anim .ov{display:grid;place-items:center;width:100%;height:116px;margin-bottom:8px;background:var(--bg-2)}
+.op-card.anim .ph{position:relative;width:52px;height:100px;border:3px solid #1d1d1b;border-radius:10px;overflow:hidden;background:#1d1d1b;perspective:160px}
+.op-card.anim .ph i,.op-card.anim .ph em{position:absolute;display:block}
+.op-card.anim .ph .sc{inset:0;background:var(--sc) center 72%/cover no-repeat}
+.op-card.anim[aria-pressed="true"]{border-color:var(--line);box-shadow:none}
+.op-card.anim[aria-pressed="true"]::after{content:'✓';position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font:600 12px/22px Inter,sans-serif;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.opts:has(.op-card.anim[aria-pressed="true"]) .op-card.anim[aria-pressed="false"] .ov{opacity:.72}
+#cOpen,#cReveal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media (max-width:560px){ #cOpen,#cReveal{grid-template-columns:repeat(2,minmax(0,1fr))} }
+/* enveloppe : le sceau saute, le rabat se lève, l'enveloppe descend et découvre la scène */
+.op-card.anim .ov-env .eb{inset:0;background:#efe6d6;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);animation:ovEnvB 5s ease-in-out infinite}
+.op-card.anim .ov-env .ef{left:0;right:0;top:0;height:52%;background:#e4d8c3;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;animation:ovEnvF 5s ease-in-out infinite}
+.op-card.anim .ov-env .es{left:50%;top:44%;width:20px;height:20px;margin:-10px 0 0 -10px;background:var(--seal) center/contain no-repeat;animation:ovEnvS 5s ease-in-out infinite}
+@keyframes ovEnvS{0%,14%{transform:scale(1);opacity:1}22%,96%{transform:scale(1.35);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes ovEnvF{0%,20%{transform:rotateX(0)}38%,96%{transform:rotateX(178deg)}100%{transform:rotateX(0)}}
+@keyframes ovEnvB{0%,36%{transform:translateY(0)}58%,96%{transform:translateY(170%)}100%{transform:translateY(0)}}
+/* rideau : il se lève sur la scène */
+.ov-cur .cu{inset:0;background:var(--ri) center/cover no-repeat;animation:ovCur 5s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes ovCur{0%,18%{transform:translateY(0)}52%,92%{transform:translateY(-102%)}100%{transform:translateY(0)}}
+/* voile : deux pans opaques qui s'ouvrent par le milieu et se tassent vers les bords */
+.ov-voile .vl,.ov-voile .vr{top:0;bottom:0;width:50%;background:var(--ri) no-repeat;background-size:200% 100%}
+.ov-voile .vl{left:0;background-position:left center;transform-origin:left;animation:ovVoile 5s cubic-bezier(.55,0,.3,1) infinite}
+.ov-voile .vr{right:0;background-position:right center;transform-origin:right;animation:ovVoile 5s cubic-bezier(.55,0,.3,1) infinite}
+@keyframes ovVoile{0%,18%{transform:scaleX(1)}55%,92%{transform:scaleX(.14)}100%{transform:scaleX(1)}}
+/* grandes portes : deux battants sur gonds, la lumière passe */
+.ov-door .dl,.ov-door .dr{top:0;bottom:0;width:50%;background:var(--op) no-repeat;background-size:200% 100%;backface-visibility:hidden}
+.ov-door .dl{left:0;background-position:left center;transform-origin:left;animation:ovDoorL 5s cubic-bezier(.5,0,.25,1) infinite}
+.ov-door .dr{right:0;background-position:right center;transform-origin:right;animation:ovDoorR 5s cubic-bezier(.5,0,.25,1) infinite}
+.ov-door .fl{inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,244,214,.95),rgba(255,236,190,0) 70%);opacity:0;animation:ovFlash 5s ease-in-out infinite}
+@keyframes ovDoorL{0%,18%{transform:rotateY(0)}58%,92%{transform:rotateY(-100deg)}100%{transform:rotateY(0)}}
+@keyframes ovDoorR{0%,18%{transform:rotateY(0)}58%,92%{transform:rotateY(100deg)}100%{transform:rotateY(0)}}
+@keyframes ovFlash{0%,24%{opacity:0}38%{opacity:.85}56%,100%{opacity:0}}
+/* révélation de la date */
+.op-card.anim .ph .dt{left:0;right:0;top:30%;text-align:center;font:italic 500 11px/1.2 "Cormorant Garamond",Georgia,serif;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.ov-non .dt{animation:ovDate 5s ease-in-out infinite}
+@keyframes ovDate{0%,10%{opacity:0;transform:translateY(4px)}28%,90%{opacity:1;transform:none}100%{opacity:0}}
+.ov-scratch .fo{left:7px;right:7px;top:calc(30% - 4px);height:20px;border-radius:3px;background:linear-gradient(135deg,color-mix(in srgb,var(--pc) 70%,#fff),var(--pc) 55%,color-mix(in srgb,var(--pc) 60%,#000));animation:ovFoil 5s linear infinite}
+.ov-scratch .coin{top:calc(30% - 2px);left:6px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6d8,#c9a35a 60%,#8a6a2c);box-shadow:0 1px 3px rgba(0,0,0,.5);animation:ovCoin 5s linear infinite}
+@keyframes ovFoil{0%,16%{clip-path:inset(0 0 0 0)}60%,92%{clip-path:inset(0 0 0 100%)}100%{clip-path:inset(0 0 0 0)}}
+@keyframes ovCoin{0%,16%{transform:translate(0,0);opacity:1}26%{transform:translate(8px,6px)}36%{transform:translate(16px,-3px)}46%{transform:translate(24px,5px)}60%{transform:translate(34px,0);opacity:1}66%,100%{opacity:0;transform:translate(34px,0)}}
+.ov-wheel .wh{left:50%;top:22%;width:38px;height:38px;margin-left:-19px;border-radius:50%;border:2px solid #f3e6c4;background:conic-gradient(var(--pc) 0 45deg,#fbf3df 45deg 90deg,var(--pc) 90deg 135deg,#fbf3df 135deg 180deg,var(--pc) 180deg 225deg,#fbf3df 225deg 270deg,var(--pc) 270deg 315deg,#fbf3df 315deg);box-shadow:0 2px 6px rgba(0,0,0,.5);animation:ovWheel 5s cubic-bezier(.15,.6,.2,1) infinite}
+.ov-wheel .pin{left:50%;top:calc(22% - 5px);width:0;height:0;margin-left:-4px;border:4px solid transparent;border-top:7px solid #fff}
+@keyframes ovWheel{0%,10%{transform:rotate(0)}70%,94%{transform:rotate(1462deg)}100%{transform:rotate(1462deg)}}
+.op-card.anim .ov-slot .sl{left:3px;right:3px;top:28%;height:18px;display:flex !important;gap:2px}
+.op-card.anim .ov-slot .sl>i{position:relative;flex:1;height:18px;overflow:hidden;border-radius:2px;background:#fbf3df;box-shadow:inset 0 0 0 1px var(--pc)}
+.op-card.anim .ov-slot .sl>i>i{position:absolute;left:0;right:0;top:0;animation:ovSlot 5s cubic-bezier(.3,0,.2,1) infinite}
+.op-card.anim .ov-slot .sl>i:nth-child(2)>i{animation-name:ovSlot2}
+.op-card.anim .ov-slot .sl>i:nth-child(3)>i{animation-name:ovSlot3}
+.op-card.anim .ov-slot .sl b{padding:0;display:block;height:18px;font:600 9.5px/18px Inter,sans-serif;letter-spacing:-.02em;text-align:center;color:#1d1d1b}
+@keyframes ovSlot{0%,12%{transform:translateY(0)}40%,94%{transform:translateY(-90px)}100%{transform:translateY(0)}}
+@keyframes ovSlot2{0%,12%{transform:translateY(0)}52%,94%{transform:translateY(-90px)}100%{transform:translateY(0)}}
+@keyframes ovSlot3{0%,12%{transform:translateY(0)}64%,94%{transform:translateY(-90px)}100%{transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){ .op-card.anim .ph *{animation:none !important} }

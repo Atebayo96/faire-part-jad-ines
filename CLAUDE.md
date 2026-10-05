@@ -279,6 +279,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 
 33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la
     révélation de la date. Arriver sur l'onglet rejoue l'ouverture dans l'aperçu.
+    **Chaque carte montre son effet**, en boucle de 5 s, dans un petit téléphone aux images du thème (`OV` dans vitrine.js,
+    `.op-card.anim` et `ov*` dans vitrine.css) : enveloppe (sceau, rabat, descente), rideau qui se lève, voile qui s'ouvre
+    par le milieu, portes sur gonds avec la lumière, date qui apparaît, ticket gratté par une pièce, roue qui tourne,
+    jackpot 28 · 08 · 27. « Les gens voient direct l'impact, sans attendre le téléphone à droite. » Sélection par la coche.
 34. **En grand tableau, l'étape 3 décrit le tableau, pas des écrans** (« Votre tableau ») : l'illustration d'ouverture,
     le mot des familles, les événements dans leurs cadres (la scène peinte du thème, un lieu de la bibliothèque ou votre
     photo), puis les parties facultatives (histoire, bande de photos, dress code ; bon à savoir, liste), la réponse et le
@@ -308,9 +312,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 38. **Le format se choisit à l'étape 1, juste sous le thème** (« Comment raconter votre journée ? ») : l'utilisateur l'a
     redemandé le 5 octobre 2026 (il était à l'étape 3) ; l'étape 3 change ensuite de mots selon le format. Deux cartes avec un **visuel entier, jamais rogné** (« c'est moche parce que c'est
     coupé ») : trois écrans 9:16 du thème pour le scène par scène ; pour le grand tableau, « les gens ne comprennent pas la
-    différence » : la **vraie page de la démo, de haut en bas** (`img/reel/tableau-<thème>.webp`, capture de la démo en grand
-    tableau, `TABLEAU` dans vitrine.js) défile lentement derrière un cadre de téléphone, le reste du tableau estompé
-    au-dessus et en dessous (sans démo capturée : le haut du rouleau, comme avant) ; sélection par la coche (règle 28). Dessous, « Vos écrans, dans l'ordre » ou « Le tableau, de haut en bas ».
+    différence » : les deux cartes montrent **la vraie démo du thème qui défile dans un téléphone**, coupée net au bord de
+    l'écran (rien ne dépasse) : `img/reel/scenes-<thème>.webp` et `tableau-<thème>.webp`, captures pleine page des deux démos
+    (`REEL` dans vitrine.js). **La différence se voit au rythme** : le scène par scène s'arrête sur chaque écran
+    (`tbScenes`, 7 arrêts = les 7 écrans de 844 px de la démo ; à refaire si la démo change), le grand tableau descend
+    d'un trait (`tbLong`). Sous-titres : « Un moment par écran, chaque lieu en grand. Le plus spectaculaire. » /
+    « Tout sur un seul tableau qu'on déroule, lieux dans des cadres. Le plus proche du papier. » (sans capture : les
+    vignettes et le haut du rouleau, comme avant) ; sélection par la coche (règle 28). Dessous, « Vos écrans, dans l'ordre » ou « Le tableau, de haut en bas ».
 
 39. **Les couleurs suivent le thème.** Chaque thème de la famille porte ses couleurs (`pals` dans themes.js : 3 teintes et
     la cire de sceau qui va avec), proposées en premier et choisies par défaut, puis les dix couleurs communes. Elles colorent

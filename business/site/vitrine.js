@@ -219,13 +219,22 @@
   const $=id=>document.getElementById(id);
   function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
   function opt(box,items,key,label,draw){ items.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.dataset.id=it.id||it; draw(b,it); b.onclick=()=>{ C[key]=b.dataset.id; if(key==='k') C.font='theme'; paint(); }; box.appendChild(b); }); }
-  opt($('cOpen'),OPENS,'op','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
-  opt($('cReveal'),REVEALS,'rvl','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  /* chaque ouverture et chaque révélation se montre sur sa carte, en boucle (« les gens voient direct l'impact, sans
+     attendre le téléphone à droite ») ; les images suivent le thème (variables --sc, --op, --seal, --pc posées par paint) */
+  const OV={env:'<i class="sc"></i><i class="eb"><i class="ef"></i><i class="es"></i></i>',cur:'<i class="sc"></i><i class="cu"></i>',
+    voile:'<i class="sc"></i><i class="vl"></i><i class="vr"></i>',door:'<i class="sc"></i><i class="dl"></i><i class="dr"></i><i class="fl"></i>',
+    non:'<i class="sc"></i><em class="dt">28 · 08</em>',scratch:'<i class="sc"></i><em class="dt">28 · 08</em><i class="fo"></i><i class="coin"></i>',
+    wheel:'<i class="sc"></i><i class="wh"></i><i class="pin"></i>',slot:'<i class="sc"></i><i class="sl">'+[0,1,2].map(i=>`<i><i>${['13 07 21 19 04','05 11 02 09 12','29 31 26 30 28'][i].split(' ').map(x=>`<b>${x}</b>`).join('')}<b>${['28','08','27'][i]}</b></i></i>`).join('')+'</i>'};
+  const ovCard=(b,o)=>{ b.className='op-card anim'; b.innerHTML=`<span class="ov ov-${o.id}" aria-hidden="true"><span class="ph">${OV[o.id]}</span></span><b>${o.name}</b><small>${o.sub}</small>`; };
+  opt($('cOpen'),OPENS,'op','',ovCard);
+  opt($('cReveal'),REVEALS,'rvl','',ovCard);
   $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
   opt($('cStyles'),CK,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=9')"></span>${esc(t.name)}${t.variant?`<small>${esc(t.variant)}</small>`:''}`; });
   // les deux formats, annoncés dès le début : scène par scène (un événement par écran) ou grand tableau (un seul tableau qu'on descend)
-  const TABLEAU=['dolcevita']; // img/reel/tableau-<thème>.webp : capture de la démo en grand tableau, toute la page
-  const FMTS=[{id:'scenes',name:'Scène par scène',sub:'Un événement par écran, vos lieux en plein écran'},{id:'long',name:'Grand tableau',sub:'Un seul tableau qu’on descend, vos lieux dans des cadres peints'}];
+  // img/reel/scenes-<thème>.webp et tableau-<thème>.webp : captures des deux démos du thème, toute la page (7 écrans de 844 px
+  // pour le scène par scène : les arrêts de tbScenes dans vitrine.css)
+  const REEL=['dolcevita'];
+  const FMTS=[{id:'scenes',name:'Scène par scène',sub:'Un moment par écran, chaque lieu en grand. Le plus spectaculaire.'},{id:'long',name:'Grand tableau',sub:'Tout sur un seul tableau qu’on déroule, lieux dans des cadres. Le plus proche du papier.'}];
   // le format se choisit à l'étape des écrans : c'est là qu'on décide quoi mettre. Visuels entiers, jamais rognés :
   // trois écrans 9:16 pour le scène par scène, un rouleau qui file vers le bas pour le grand tableau
   opt($('cFmt'),FMTS,'fmt','',(b,o)=>{ b.className='fmtc'; b.innerHTML=`<span class="fv"></span><b>${o.name}</b><small>${o.sub}</small>`; });
@@ -398,7 +407,9 @@
     }
     $('cFmt').querySelectorAll('button').forEach(b=>{ const v=b.firstChild, key=b.dataset.id+C.k; if(v.dataset.k===key) return; v.dataset.k=key;
       // grand tableau : la vraie page, de haut en bas, qui défile derrière un téléphone (on voit que c'est un seul tableau)
-      v.innerHTML=b.dataset.id==='long'?(TABLEAU.includes(C.k)?`<i class="tb" style="background-image:url('/img/reel/tableau-${C.k}.webp')"></i><i class="tbp"></i>`:`<i class="roll" style="background-image:url('/img/long/${C.k}/thumb.webp')"></i>`):[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${C.k}-${n}.webp?v=9')"></i>`).join(''); });
+      // les deux formats montrés pareil : la vraie démo qui défile DANS un téléphone (rien ne dépasse de l'écran).
+      // La différence se voit au rythme : le scène par scène s'arrête sur chaque moment, le grand tableau descend d'un trait.
+      v.innerHTML=REEL.includes(C.k)?`<i class="tbp"><i class="tb ${b.dataset.id}" style="background-image:url('/img/reel/${b.dataset.id==='long'?'tableau':'scenes'}-${C.k}.webp')"></i></i>`:b.dataset.id==='long'?`<i class="roll" style="background-image:url('/img/long/${C.k}/thumb.webp')"></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${C.k}-${n}.webp?v=9')"></i>`).join(''); });
     $('cStoryT').textContent=C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       // « Texte seul » : écran simple (scène par scène), ou la scène peinte du thème dans le cadre (grand tableau)
@@ -421,6 +432,7 @@
     if($('fOcc')) $('fOcc').value=OCCS.find(o=>o.id===C.occ).name;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
+    [$('cOpen'),$('cReveal')].forEach(x=>{ x.style.setProperty('--sc',`url('/img/themes/${C.k}-1.webp?v=9')`); x.style.setProperty('--op',`url('/img/open/${C.k}-portes.webp')`); x.style.setProperty('--ri',`url('/img/open/${C.k}-rideau.webp')`); x.style.setProperty('--seal',`url('/img/seals/${SEAL[0]}.webp')`); x.style.setProperty('--pc',p.c); });
     $('opSealTxt').innerHTML=iniH; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
     $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir';
     { const o=$('cpOp'); o.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); o.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`); o.style.setProperty('--pal',p.c); o.style.setProperty('--man',DOORMEN.includes(C.k)?`url('/img/open/${C.k}-portier.webp')`:'none');
