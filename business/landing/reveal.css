@@ -28,7 +28,7 @@
 @keyframes rvlShine{0%{background-position:120% 0}60%,100%{background-position:-60% 0}}
 
 /* roue */
-.rvl-wheel{position:relative;width:min(64cqw,240px);aspect-ratio:1;filter:drop-shadow(0 12px 20px rgba(0,0,0,.35))}
+.rvl-wheel{position:relative;width:min(52cqw,200px);aspect-ratio:1;filter:drop-shadow(0 12px 20px rgba(0,0,0,.35))}
 .rvl-wheel svg{display:block;width:100%;height:100%}
 .rvl-rot{transform-box:view-box;transform-origin:0 0}
 .rvl-wheel text{text-anchor:middle;dominant-baseline:middle}
