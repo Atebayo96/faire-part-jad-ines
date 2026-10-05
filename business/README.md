@@ -43,6 +43,7 @@ D'autres pistes de nom sont listées dans [03-proposition-de-valeur.md](03-propo
 | 10 | [Benchmark des concurrents](10-benchmark-concurrents.md) | Missing Piece (la référence en qualité), The Digital Yes, Perfect Yes, Weddinvita : ce qu'on reprend, où on les bat |
 | 11 | [Mise en service](11-mise-en-service.md) | Ce qui est prêt (moteur, démos, réponses, tableau de bord, légal), ce qu'il reste à faire, comment créer le faire-part d'un client |
 | 13 | [Jeux et interactions](13-jeux-et-interactions.md) | La date à découvrir (gratter, roue, jackpot) et les idées de gestes à développer : bougies, buée, cadenas, « Oui » à signer… |
+| 16 | [Ce que font les Américains](16-benchmark-americains.md) | Paperless Post, Greenvelope, Zola, Joy, Partiful, Etsy, RSVP par texto : leur parcours, leurs prix, ce qu'on leur prend (enveloppe adressée, menus, vu / répondu, relance WhatsApp, album du lendemain) et ce qu'on laisse |
 | — | [`mvp/`](mvp/) | Schéma JSON d'un faire-part, 5 configs d'exemple (une par collection), questionnaire client |
 | — | [`mvp/plan-generation-modeles.md`](mvp/plan-generation-modeles.md) | Plan de production des 6 modèles et de la bibliothèque de lieux (méthode, prompts, outils) |
 | — | [`demo/yasmine-karim/`](demo/yasmine-karim/index.html) | Notre faire-part réel, renommé Yasmine & Karim, pour les démos |
