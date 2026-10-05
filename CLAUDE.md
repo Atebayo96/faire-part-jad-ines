@@ -251,6 +251,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     les guirlandes des variantes ; leur grand tableau s'ouvre sur leur scène 1 et reprend les guirlandes du riad
     (`hero_hd`, `bands_from` dans long-assets.py) ; la scène se fond sur 40 % de sa hauteur (`hero.fade`) dans le vrai fond du thème, sans teinter ce fond de la couleur du sol (Émeraude finissait sur un taupe « coupé, moche »). Dès que le quota revient : `long-gen.py /tmp/longraw alhambra desert
     emeraude` puis `long-assets.py`, et les calques (`calques.py`).
+    **À repeindre en priorité** (coupure droite dans l'image, un ciel collé sur une scène d'intérieur, relevée par
+    l'utilisateur le 5 octobre 2026) : `alhambra-2`, `alhambra-4`, `desert-2`, `emeraude-1` à `emeraude-4`
+    (`variantes-nuits.py <thème> --only … --force`, consigne : scène d'un seul tenant, ciel ou mur qui descend derrière
+    le sujet). Rien d'autre : l'utilisateur veut qu'on reste concentré, pas qu'on régénère pour régénérer.
 33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la
     révélation de la date. Arriver sur l'onglet rejoue l'ouverture dans l'aperçu.
 34. **En grand tableau, l'étape 3 décrit le tableau, pas des écrans** (« Votre tableau ») : l'illustration d'ouverture,
