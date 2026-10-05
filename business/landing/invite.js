@@ -92,7 +92,8 @@
   // calques : pour les scènes qui en ont (build-site.py liste img/calques/<thème>-<n>.webp), le décor est le fond calme du
   // thème et le sujet détouré est posé ENTIER en bas de l'écran (plus de rognage selon le téléphone), avec un peu de profondeur
   const CAL=new Set(I.calques||[]), hasCal=n=>CAL.has(String(n)), fond=`/img/hd/${I.theme}-ciel.webp?v=${IMGV}`, cal=n=>`/img/calques/${I.theme}-${n}.webp?v=${IMGV}`;
-  const isDark=n=>(T.scenes[n-1]||[])[4]==='dark';
+  // texte blanc : une scène marquée 'dark', ou un lieu sombre de la bibliothèque (darkLieux : le dîner de nuit de « Plein jour »)
+  const isDark=n=>/^\d+$/.test(String(n))?(T.scenes[n-1]||[])[4]==='dark':(T.darkLieux||[]).includes(n);
 
   /* ---------- icônes ---------- */
   const ic={
@@ -414,6 +415,13 @@
       subs.forEach(({L,S})=>{ const t=L.offsetTop, b=t+L.offsetHeight; if(b<st-h||t>st+2*h) return;
         const off=Math.max(-h*.06,Math.min(h*.06,(st-t)*.05)); S.style.transform=`translate3d(0,${off.toFixed(1)}px,0)`; }); };
     if(subs.length){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(par); } },{passive:true}); par(); } }
+  /* peintures entières (sans calques) : la scène suivante commence 45 % d'écran plus haut que sa page et s'y fond. Posée,
+     une page ne montre que sa propre scène (le ciel clair de la suivante délavait le bas de l'écran, ambiance « Plein
+     jour ») : la suivante n'apparaît qu'une fois qu'on défile, et elle est entière quand on a parcouru ce fondu. */
+  { const fr=runs.map((r,ri)=>({ri,a:r.a,B:layers[ri]&&layers[ri].firstElementChild})).filter(x=>x.ri>0&&x.B&&!layers[x.ri].classList.contains('cal')); let tk=false;
+    const fade=()=>{ tk=false; const h=sc.clientHeight, st=sc.scrollTop, ov=h*OVK;
+      fr.forEach(({a,B})=>{ const q=Math.max(0,Math.min(1,(st-(secs[a].offsetTop-h))/ov)), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; } }); };
+    if(fr.length&&!LG){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(fade); } },{passive:true}); fade(); addEventListener('resize',fade); } }
   // précharge les images des pages suivantes
   if(!LG) [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=hasCal(n)?cal(n):img(n); });
 

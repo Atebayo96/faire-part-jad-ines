@@ -22,7 +22,7 @@ OGF = {
     'conte': ('Great_Vibes', 1.15, False), 'artdeco': ('Limelight', .8, False), 'aquarelle': ('Parisienne', 1.05, False),
     'bollywood': ('Cinzel_Decorative', .72, False), 'minimal': ('Jost_wght_300', .62, True), 'boheme': ('Cormorant_Garamond_ital_wght_1_400', .95, False),
     'americaine': ('Playfair_Display_ital_1', .85, False), 'pop': ('Shrikhand', .8, False), 'ceramique': ('DM_Serif_Display', .85, False),
-    'nuits': ('Aref_Ruqaa', .85, False), 'gravure': ('IM_Fell_English_ital_1', .8, False), 'dolcevita': ('Italiana', .9, False),
+    'nuits': ('Aref_Ruqaa', .85, False), 'gravure': ('IM_Fell_English_ital_1', .8, False), 'dolcevita': ('Italiana', .9, False), 'dolcevitajour': ('Italiana', .9, False),
 }
 
 

@@ -27,11 +27,11 @@ async function audit(p){ return p.evaluate(()=>{
     add('Démos','/d/'+slug+'/',!errs.length&&!bad.length&&!ow&&rsvp,[errs.join(' | '),bad.join(', '),ow?ow+' éléments hors écran':'',rsvp?'':'feuille Répondre absente'].filter(Boolean).join(' · '));
     await p.close(); }
   // C. configurateur
-  for(const [w,h] of [[1280,900],[390,844]]) for(const occ of ['mariage']) for(const k of ['dolcevita']) for(const fmt of ['scenes','long']){
+  for(const [w,h] of [[1280,900],[390,844]]) for(const occ of ['mariage']) for(const k of ['dolcevita','dolcevitajour','oldmoney']) for(const fmt of ['scenes']){
     const p=await b.newPage({viewport:{width:w,height:h}}); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
     await p.goto(`${B}/creer/?theme=${k}`); await p.waitForTimeout(900);
     if(await p.$(`#cOcc [data-id="${occ}"]:visible`)){ await p.click(`#cOcc [data-id="${occ}"]`); await p.waitForTimeout(200); }
-    await p.click(`#cFmt [data-id="${fmt}"]`); await p.waitForTimeout(300); // le format se choisit à l'étape 1
+    // le grand tableau est retiré : un seul format ; l'ambiance vient du lien (?theme=)
     for(const st of [2,3]){ await p.click(`#wzNav [data-go="${st}"]`); await p.waitForTimeout(250); }
     // tout cocher, puis vérifier qu'un cadre de réglages apparaît pour chaque partie réglable
     let eds=0, want=0;
