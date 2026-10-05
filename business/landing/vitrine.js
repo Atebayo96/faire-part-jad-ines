@@ -304,7 +304,10 @@
     story:[{when:'2018',title:'La rencontre',text:'Un mariage de cousins, deux places voisines.'},{when:'2022',title:'Paris',text:NUITS?'Un premier appartement, le thé du dimanche.':'Un premier appartement, les dimanches au marché.'},{when:'2026',title:'La demande',text:'Sur une terrasse, au coucher du soleil.'}],
     dress:NUITS?{title:'Tenue de fête',text:'Caftans, takchitas et djellabas bienvenus.',colors:['#0f5e4c','#d4af37','#f2e6d0','#7a1f3d']}:{title:'Chic d’été',text:'Lin, couleurs claires et chaussures qui aiment les pavés.',colors:['#1f5f8b','#f3d36b','#f4ede0','#b5562f']},
     stay:[{icon:'hotel',title:'Dormir',text:'Chambres réservées à 5 min.'},{icon:'car',title:'Navettes',text:'Depuis la gare à 14h15.'}],
-    gifts:{text:DEF.gifts[C.occ],url:''}};
+    program:[{time:'15:00',title:'La cérémonie'},{time:'17:00',title:'Vin d’honneur'},{time:'19:30',title:'Le dîner'},{time:'23:00',title:'On danse'}],
+    faq:[{q:'Les enfants sont-ils invités ?',a:'Oui, un espace jeux les attend.'},{q:'Où se garer ?',a:'Un parking gratuit est sur place.'}],
+    /* liste : 'liste' (chez nous, cadeaux réservables), 'cagnotte' (QR code + lien à copier), 'lien' (une liste ailleurs) */
+    gifts:{text:DEF.gifts[C.occ],url:'',mode:'liste',items:NUITS?[{name:'Un service à thé',price:'120'},{name:'Un plateau en cuivre',price:'80'},{name:'Notre voyage de noces',price:''}]:[{name:'Le dîner à Ravello',price:'150'},{name:'Une nuit face à la mer',price:'200'},{name:'Le service à café',price:'80'}]}};
   // l'occasion change : les phrases encore « par défaut » suivent ; ce que l'utilisateur a écrit reste
   const occDefaults=()=>{ [['parents','text'],['gifts','text']].forEach(([k,f])=>{ if(Object.values(DEF[k]).includes(C.data[k][f])) C.data[k][f]=DEF[k][C.occ]; }); };
   const famEy=()=>({henne:'Avec ses parents',sbou3:'Avec ses grands-parents'})[C.occ]||'Avec leurs familles';
@@ -318,16 +321,28 @@
     album:()=>`<p class="ed-n">Vous nous envoyez 4 à 8 photos après la commande. L'aperçu montre des photos d'exemple.</p>`,
     dress:()=>`${fldE('Titre',inpE('dress.title','Tenue de fête',40))}${fldE('Consigne',areaE('dress.text'))}<div class="ed-f"><span>Couleurs suggérées</span><div class="ed-cols">${C.data.dress.colors.map((c,i)=>`<input type="color" data-p="dress.colors.${i}" aria-label="Couleur ${i+1}">`).join('')}</div></div>`,
     stay:()=>C.data.stay.map((x,i)=>`<div class="ed-row s">${fldE('Icône',`<select data-p="stay.${i}.icon">${ICONS.map(([k,n])=>`<option value="${k}">${n}</option>`).join('')}</select>`)}${fldE('Titre',inpE(`stay.${i}.title`,'Dormir',30))}${fldE('Texte',inpE(`stay.${i}.text`,'',140))}${C.data.stay.length>1?`<button type="button" class="ed-x" data-rm="stay.${i}" aria-label="Retirer cette info">×</button>`:''}</div>`).join('')+(C.data.stay.length<4?'<button type="button" class="ed-add" data-add="stay">+ Une info</button>':''),
-    gifts:()=>`${fldE('Votre phrase',areaE('gifts.text'))}${fldE('Lien de la cagnotte ou de la liste (facultatif)','<input type="url" data-p="gifts.url" maxlength="200" placeholder="https://…">')}`};
+    program:()=>C.data.program.map((x,i)=>`<div class="ed-row p"><label class="ed-f"><span>Heure</span><input type="time" data-p="program.${i}.time"></label>${fldE('Moment',inpE(`program.${i}.title`,'Le dîner',40))}${C.data.program.length>1?`<button type="button" class="ed-x" data-rm="program.${i}" aria-label="Retirer ce moment">×</button>`:''}</div>`).join('')+(C.data.program.length<8?'<button type="button" class="ed-add" data-add="program">+ Un moment</button>':''),
+    faq:()=>C.data.faq.map((x,i)=>`<div class="ed-row q">${fldE('Question',inpE(`faq.${i}.q`,'Où se garer ?',80))}${fldE('Réponse',inpE(`faq.${i}.a`,'',160))}${C.data.faq.length>1?`<button type="button" class="ed-x" data-rm="faq.${i}" aria-label="Retirer cette question">×</button>`:''}</div>`).join('')+(C.data.faq.length<6?'<button type="button" class="ed-add" data-add="faq">+ Une question</button>':''),
+    gifts:()=>{ const g=C.data.gifts;
+      return `<div class="seg3" role="group" aria-label="Type de liste">${[['liste','Liste chez nous','Vos invités réservent un cadeau'],['cagnotte','Cagnotte','QR code et lien à copier'],['lien','Liste ailleurs','Un lien vers votre liste']].map(([id,n,sub])=>`<button type="button" data-gmode="${id}" aria-pressed="${g.mode===id}"><b>${n}</b><small>${sub}</small></button>`).join('')}</div>
+        ${fldE('Votre phrase',areaE('gifts.text'))}
+        ${g.mode==='liste'?g.items.map((x,i)=>`<div class="ed-row g">${fldE('Cadeau',inpE(`gifts.items.${i}.name`,'Le service à café',60))}${fldE('Prix (facultatif)',inpE(`gifts.items.${i}.price`,'80',8))}${g.items.length>1?`<button type="button" class="ed-x" data-rm="gifts.items.${i}" aria-label="Retirer ce cadeau">×</button>`:''}</div>`).join('')+(g.items.length<30?'<button type="button" class="ed-add" data-add="gifts.items">+ Un cadeau</button>':'')+'<p class="ed-n">Chaque cadeau ne peut être réservé qu’une fois. Vous voyez qui offre quoi dans votre tableau de bord.</p>'
+          :fldE(g.mode==='cagnotte'?'Lien de la cagnotte':'Lien de votre liste','<input type="url" data-p="gifts.url" maxlength="200" placeholder="https://…">')+(g.mode==='cagnotte'?'<p class="ed-n">Vos invités verront un QR code à scanner et le lien à copier.</p>':'')}`; }};
+  // la phrase par défaut suit le type de liste (tant que l'utilisateur ne l'a pas réécrite)
+  const GIFT_TX={liste:'Votre présence est notre plus beau cadeau. Pour ceux qui le souhaitent, voici quelques idées.',cagnotte:'Votre présence suffit. Pour ceux qui le souhaitent, une cagnotte pour notre voyage.',lien:'Votre présence suffit. Pour ceux qui le souhaitent, notre liste de mariage.'};
+  if(C.occ==='mariage') C.data.gifts.text=GIFT_TX.liste;
   const getP=pa=>pa.split('.').reduce((o,k)=>o==null?o:o[k],C.data);
   const setP=(pa,v)=>{ const ks=pa.split('.'), last=ks.pop(); ks.reduce((o,k)=>o[k],C.data)[last]=v; };
   const edTitle=id=>id==='gifts'?giftName():((LG_PARTS.find(x=>x.id===id)||EXTRAS.find(x=>x.id===id)||{}).name||'');
   // un cadre ne se reconstruit que si ses parties changent (les champs gardent le focus pendant la frappe)
-  function edBox(host,ids){ if(!host) return; const key=ids.join(',')+'|'+C.occ+'|'+C.data.story.length+'|'+C.data.stay.length; if(host.dataset.key===key) return; host.dataset.key=key;
+  function edBox(host,ids){ if(!host) return; const key=ids.join(',')+'|'+C.occ+'|'+C.data.story.length+'|'+C.data.stay.length+'|'+C.data.program.length+'|'+C.data.faq.length+'|'+C.data.gifts.mode+'|'+C.data.gifts.items.length; if(host.dataset.key===key) return; host.dataset.key=key;
     host.innerHTML=ids.map(id=>`<div class="ed" data-ed="${id}"><b class="ed-t">${esc(edTitle(id))}</b>${ED[id]()}</div>`).join('');
     host.querySelectorAll('[data-p]').forEach(el=>{ const v=getP(el.dataset.p); el.value=v==null?'':v; el.addEventListener('input',()=>{ setP(el.dataset.p,el.value); paint(); }); });
-    host.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ const k=b.dataset.add; C.data[k].push(k==='story'?{when:'',title:'',text:''}:{icon:'info',title:'',text:''}); paint(); });
-    host.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ const [k,i]=b.dataset.rm.split('.'); C.data[k].splice(+i,1); paint(); }); }
+    const NEW={story:()=>({when:'',title:'',text:''}),stay:()=>({icon:'info',title:'',text:''}),program:()=>({time:'',title:''}),faq:()=>({q:'',a:''}),'gifts.items':()=>({name:'',price:''})};
+    host.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ const k=b.dataset.add; getP(k).push(NEW[k]()); paint(); });
+    host.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ const pa=b.dataset.rm, j=pa.lastIndexOf('.'); getP(pa.slice(0,j)).splice(+pa.slice(j+1),1); paint(); });
+    host.querySelectorAll('[data-gmode]').forEach(b=>b.onclick=()=>{ const g=C.data.gifts, was=GIFT_TX[g.mode]; g.mode=b.dataset.gmode;
+      if(C.occ==='mariage'&&(g.text===was||Object.values(DEF.gifts).includes(g.text))) g.text=GIFT_TX[g.mode]; paint(); }); }
   function paintEd(long){
     $('cStory').querySelectorAll('li.part').forEach(l=>edBox(l.querySelector('.eds'),long?[...l.querySelectorAll('[data-x]')].map(b=>b.dataset.x).filter(id=>C.x.has(id)&&ED[id]&&!(id==='story'&&C.occ==='sbou3')):[]));
     edBox($('cExtrasEd'),long?[]:EXTRAS.map(x=>x.id).filter(id=>C.x.has(id)&&ED[id]&&!(id==='story'&&C.occ==='sbou3')));
@@ -340,7 +355,9 @@
     if(on('story')&&C.occ!=='sbou3') o.push('histoire : '+d.story.map(x=>[x.when,x.title,x.text].filter(Boolean).join(' ')).join(' / '));
     if(on('dress')) o.push(`dress code : ${d.dress.title}, ${d.dress.text} (${d.dress.colors.join(' ')})`);
     if(on('stay')) o.push('bon à savoir : '+d.stay.map(x=>`${x.title} ${x.text}`).join(' / '));
-    if(on('gifts')) o.push(`${giftName().toLowerCase()} : ${d.gifts.text}${d.gifts.url?' '+d.gifts.url:''}`);
+    if(on('program')) o.push('programme : '+d.program.filter(x=>x.time||x.title).map(x=>`${x.time} ${x.title}`).join(' / '));
+    if(on('faq')) o.push('questions : '+d.faq.filter(x=>x.q).map(x=>`${x.q} ${x.a}`).join(' / '));
+    if(on('gifts')) o.push(`${giftName().toLowerCase()} (${{liste:'liste chez nous',cagnotte:'cagnotte',lien:'liste ailleurs'}[d.gifts.mode]}) : ${d.gifts.text}${d.gifts.mode==='liste'?' · '+d.gifts.items.filter(x=>x.name).map(x=>x.name+(x.price?' '+x.price+' €':'')).join(', '):d.gifts.url?' '+d.gifts.url:''}`);
     return o.join(' ; '); };
   // l'aperçu descend jusqu'à l'écran modifié
   function showEv(i){ const el=$('cpScroll').querySelector(`[data-ev="${i}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); }
@@ -475,16 +492,21 @@
     // page dediee au compte a rebours
     if(C.cd==='page'){ const pg=page('fond',''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
     C.ev.forEach((_,i)=>{ if(i) pages.push(evPage(i)); });
-    xp('program','fond','',(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,[['15h00','La cérémonie'],['17h00','Vin d’honneur'],['19h30','Le dîner'],['23h00','On danse']]));
+    xp('program','fond','',(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,C.data.program.filter(x=>x.time||x.title).map(x=>[esc(hm(x.time)),esc(x.title)])));
     const m4=t.scenes[3][4];
     xp('dress',4,m4,c=>hd(c,'Dress code',esc(C.data.dress.title))+`<div class="pv-sws">${C.data.dress.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.dress.text)}</div>`);
     xp('stay',4,m4,(c,lt)=>hd(c,'Bon à savoir','')+card(c,lt,C.data.stay.map(x=>[esc(x.title),esc(x.text)])));
-    xp('faq',4,m4,(c,lt)=>hd(c,'Vos questions','')+card(c,lt,[['','<b>Les enfants sont-ils invités ?</b><br>Oui, un espace jeux les attend.'],['','<b>Où se garer ?</b><br>Parking sur place.']],true));
-    xp('gifts',4,m4,c=>hd(c,esc(giftName()),'')+`<div class="tx" style="color:${c.tx};position:relative">${esc(C.data.gifts.text)}</div>${btn(c,'Participer','gift')}`);
+    xp('faq',4,m4,(c,lt)=>hd(c,'Vos questions','')+card(c,lt,C.data.faq.filter(x=>x.q).map(x=>['',`<b>${esc(x.q)}</b><br>${esc(x.a)}`]),true));
+    xp('gifts',4,m4,(c,lt)=>{ const g=C.data.gifts;
+      const body=g.mode==='liste'?`<div class="pv-card pv-gl" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${g.items.filter(x=>x.name).map(x=>`<div><span>${esc(x.name)}${x.price?`<small>${esc(x.price)} €</small>`:''}</span><i>Je l’offre</i></div>`).join('')}</div>`
+        :g.mode==='cagnotte'?`<div class="pv-gq" style="color:${c.tx}"><i class="pv-qr" data-qr="${esc(g.url||'https://savetheoui.fr')}"></i><span>Scannez ou copiez le lien<em>Copier le lien</em></span></div>${btn(c,'Participer','gift')}`
+        :btn(c,'Voir la liste','gift');
+      return hd(c,esc(giftName()),'')+`<div class="tx" style="color:${c.tx};position:relative">${esc(g.text)}</div>`+body; });
     xp('photos',4,m4,c=>hd(c,'Vos photos','')+`<div class="tx" style="color:${c.tx};position:relative">Partagez vos plus belles photos de la soirée dans notre album commun.</div>${btn(c,'Partager mes photos','cam')}`);
     xp('table',4,m4,c=>hd(c,'Le jour J','Votre table')+`<div class="tx" style="color:${c.tx};position:relative;font-size:26px;margin-top:6px">La table des Roses</div><div class="tx" style="color:${c.tx};position:relative;font-size:13px">Chaque famille voit sa table sur son lien personnel.</div>`);
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML='<div class="cp-bgs" id="cpBgs" aria-hidden="true"></div>'+pages.join(''); sc.scrollTop=st; tick();
+    drawQr(sc);
     // les prénoms de l'accueil tiennent sur une ligne dans le petit téléphone (comme sur un vrai téléphone, où ils tiennent) :
     // à 40 px, « Emma & Louis » passait sur deux lignes en Amiri et poussait la phrase sur le décor
     { const nm=sc.querySelector('.pv-sc .nm'); if(nm&&!t.stack){ nm.style.whiteSpace='nowrap'; let fs=parseFloat(nm.style.fontSize)||base, w=sc.clientWidth*.86; while(nm.scrollWidth>w&&fs>base*.62){ fs-=1; nm.style.fontSize=fs+'px'; } } }
@@ -527,10 +549,14 @@
       story:C.x.has('story')&&C.occ!=='sbou3'?{title:'Notre histoire',items:C.data.story.filter(x=>x.when||x.title)}:null,
       dress:C.x.has('dress')?{eyebrow:'Dress code',title:C.data.dress.title,text:C.data.dress.text,colors:C.data.dress.colors}:null,
       infos:C.x.has('stay')?C.data.stay.filter(x=>x.title||x.text):[],
-      gifts:C.x.has('gifts')?{eyebrow:giftName(),text:C.data.gifts.text,url:C.data.gifts.url||'#',label:'Participer'}:null,
+      gifts:C.x.has('gifts')?Object.assign({eyebrow:giftName(),text:C.data.gifts.text,mode:C.data.gifts.mode},C.data.gifts.mode==='liste'?{items:C.data.gifts.items.filter(x=>x.name).map((x,i)=>({id:'g'+i,name:x.name,price:x.price}))}:{url:C.data.gifts.url||(C.data.gifts.mode==='cagnotte'?'https://savetheoui.fr':'#')}):null,
       rsvp:{eyebrow:'Réponse souhaitée',title:'Serez-vous des nôtres ?',deadline:dl}};
   }
   let lgKey='', lgT=null;
+  // QR de la cagnotte dans l'aperçu (qrcode.js, chargé une fois, à la première cagnotte)
+  let qrLib=null;
+  function drawQr(root){ const els=root.querySelectorAll('[data-qr]'); if(!els.length) return;
+    (qrLib||(qrLib=new Promise(ok=>{ const s=document.createElement('script'); s.src='/qrcode.js'; s.onload=ok; document.head.appendChild(s); }))).then(()=>els.forEach(el=>{ try{ const q=qrcode(0,'M'); q.addData(el.dataset.qr); q.make(); el.innerHTML=q.createSvgTag({cellSize:4,margin:2,scalable:true}); }catch(e){} })); }
   function lgRender(inv,wait){
     const key=JSON.stringify(inv); if(key===lgKey) return; lgKey=key; clearTimeout(lgT);
     lgT=setTimeout(async()=>{

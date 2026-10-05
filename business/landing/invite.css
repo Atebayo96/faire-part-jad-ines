@@ -435,3 +435,22 @@ a{color:inherit}
 /* date à découvrir : voir reveal.css ; l'invitation à défiler garde son petit rebond une fois apparue */
 .hint.rvl-shown{animation:rvlIn .8s both,hint 2.4s ease-in-out .8s infinite}
 
+
+/* Liste de mariage chez nous : un cadeau par ligne, « Je l'offre » à droite ; réservé : barré doucement, bouton éteint */
+.card.gl .it{grid-template-columns:1fr auto;align-items:center;gap:12px}
+.card.gl h4{text-transform:none;letter-spacing:.01em;font:500 16px/1.3 "Cormorant Garamond",Georgia,serif;font-size:18px}
+.card.gl p{margin:0;font-size:14px;opacity:.85}
+.gl-b{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;font:500 16px/1 "Cormorant Garamond",Georgia,serif;cursor:pointer;white-space:nowrap}
+.gl-b:active{transform:scale(.97)}
+.gl-b:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.gl-it.taken h4{text-decoration:line-through;text-decoration-thickness:1px;opacity:.7}
+.gl-it.taken .gl-b{border-style:dashed;opacity:.75;cursor:default}
+/* Cagnotte : QR code sur fond blanc (lisible par tous les téléphones), lien à copier à côté */
+.gq{display:flex;gap:16px;align-items:center;justify-content:center;margin-top:var(--sp-3);max-width:340px;width:100%;text-align:left}
+.gq-c{flex:none;width:112px;height:112px;padding:6px;border-radius:8px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.gq-c svg{display:block;width:100%;height:100%}
+.gq-r{min-width:0;flex:1;display:grid;gap:8px}
+.gq-r p{margin:0;font-size:14px;line-height:1.4}
+.gq-l{display:grid;gap:6px}
+.gq-l input{width:100%;min-width:0;height:36px;border:1px solid rgba(127,127,127,.4);border-radius:6px;padding:0 8px;font:13px Inter,sans-serif;color:#2a2620;background:rgba(255,255,255,.92)}
+.gq-l button{justify-self:start;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;font:500 13px Inter,sans-serif;cursor:pointer}

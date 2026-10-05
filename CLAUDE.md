@@ -336,6 +336,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Les mots suivent l'occasion : liste de mariage / cagnotte (henné) / liste de naissance (sbouâ), « Avec ses
     grands-parents » et « leur petit-enfant » pour un sbouâ, pas de « Notre histoire » ni de « Les célébrations » pour un
     événement seul ; le cadre d'un sbouâ en écran simple montre le fond du thème, pas le couple.
+    **Le programme et les questions se règlent ligne par ligne** (heure + moment ; question + réponse ; intitulés au-dessus de
+    la première ligne seulement). **La liste de mariage a trois façons** (`gifts.mode`, choix en trois cartes) :
+    *Liste chez nous* (des cadeaux avec un prix facultatif, chacun se réserve une seule fois d'un toucher avec son prénom :
+    `api/gifts.js`, fichiers `gifts/<slug>/<cadeau>.json`, 409 si déjà pris ; les mariés voient qui offre quoi dans le
+    tableau de bord ; démos : réservation gardée dans le navigateur), *Cagnotte* (QR code sur fond blanc, lien à copier,
+    bouton Participer ; `qrcode.js`, MIT, chargé seulement s'il y a un QR) et *Liste ailleurs* (un bouton). La phrase par
+    défaut suit le mode tant qu'on ne l'a pas réécrite.
 
 42. **Recette rejouable** (`business/tools/recette/`, compte rendu `business/15-recette-mille-et-une-nuits.md`) : vitrine,
     configurateur dans toutes les combinaisons, toutes les démos jusqu'au « Merci », accueil du moteur. À rejouer après

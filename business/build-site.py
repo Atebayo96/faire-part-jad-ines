@@ -295,6 +295,9 @@ def main():
             'eventList': [{'id': e['id'], 'label': e.get('eyebrow') or e['title']} for e in inv['events']],
             'families': {k: {'events': v.get('events')} for k, v in fams.items()},
             'familyLabels': {k: v.get('label', k) for k, v in fams.items()},
+            # liste de mariage chez nous : les cadeaux qu'on peut réserver (api/gifts.js)
+            'gifts': [x.get('id') or f'g{k}' for k, x in enumerate((inv.get('gifts') or {}).get('items') or [])] if (inv.get('gifts') or {}).get('mode') == 'liste' else [],
+            'giftLabels': {(x.get('id') or f'g{k}'): x.get('name', '') for k, x in enumerate((inv.get('gifts') or {}).get('items') or [])},
         }
         if inv.get('demo'):
             json.dump(demo_dashboard(inv), open(os.path.join(SITE, 'tableau', 'demo', slug + '.json'), 'w', encoding='utf-8'), ensure_ascii=False)

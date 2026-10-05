@@ -18,7 +18,7 @@
       calT:'Ajouter au calendrier',gcal:'Google Agenda',ical:'Apple, Outlook (.ics)',made:'Faire-part créé avec',demo:'Démo',before:'Avant le',celebr:'Les célébrations',know:'Bon à savoir',cdEnd:'Le compte à rebours a commencé',want:'Je veux ce faire-part',already:'Vous avez déjà répondu. Vous pouvez modifier votre réponse ci-dessous.',editT:'Pour modifier votre réponse depuis un autre téléphone, gardez ce lien :',copy:'Copier le lien',copied:'Lien copié',
       demoLink:'Dans votre faire-part, ce bouton ouvre votre propre lien : liste de mariage, cagnotte, album photo ou réservation d’hôtel.',
       parents:'Avec la bénédiction de leurs familles',story:'Notre histoire',program:'Le programme',dress:'Dress code',stay:'Hébergement et accès',faq:'Vos questions',
-      gifts:'Liste de mariage',giftsBtn:'Voir la liste',photos:'Vos photos',photosBtn:'Partager mes photos',dayJ:'Le jour J',table:'Votre table',tableTx:'Le plan de salle sera aussi affiché à l’entrée.',site:'Ouvrir'},
+      gifts:'Liste de mariage',giftsBtn:'Voir la liste',photos:'Vos photos',photosBtn:'Partager mes photos',dayJ:'Le jour J',table:'Votre table',tableTx:'Le plan de salle sera aussi affiché à l’entrée.',site:'Ouvrir',give:'Je l’offre',given:'Déjà offert',giveT:'Vous offrez',giveName:'Votre prénom',giveGo:'C’est noté',giveOk:'Ce cadeau est réservé à votre nom, personne d’autre ne pourra le choisir.',giveTaken:'Quelqu’un vient de le réserver. Choisissez-en un autre.',giveErr:'Impossible de réserver pour l’instant. Réessayez dans un moment.',copyLink:'Copier le lien',scan:'Scannez ou copiez le lien',kitty:'Participer'},
     en:{tap:'Tap to open',tapSeal:'Tap the seal to open',scroll:'Scroll down',route:'Directions',cal:'Calendar',reply:'RSVP',days:'days',hours:'hours',min:'min',sec:'sec',
       soon:'The big day is coming',left:'Only',infos:'Good to know',joy:'Request the pleasure of your company at their wedding',
       rsvpT:'Your reply',rsvpSub:'One reply per household is enough.',name:'Your full name(s)',present:'Attending',absent:'Not attending',guests:'Number of guests',
@@ -30,7 +30,7 @@
       calT:'Add to calendar',gcal:'Google Calendar',ical:'Apple, Outlook (.ics)',made:'Invitation made with',demo:'Demo',before:'Before',celebr:'The celebrations',know:'Good to know',cdEnd:'The countdown has begun',want:'I want this invitation',already:'You have already replied. You can change your reply below.',editT:'To change your reply from another phone, keep this link:',copy:'Copy link',copied:'Link copied',
       demoLink:'In your invitation, this button opens your own link: gift list, honeymoon fund, photo album or hotel booking.',
       parents:'Together with their families',story:'Our story',program:'The day',dress:'Dress code',stay:'Where to stay',faq:'Questions',
-      gifts:'Gift list',giftsBtn:'View the list',photos:'Your photos',photosBtn:'Share my photos',dayJ:'On the day',table:'Your table',tableTx:'The seating plan will also be displayed at the entrance.',site:'Open'}
+      gifts:'Gift list',giftsBtn:'View the list',photos:'Your photos',photosBtn:'Share my photos',dayJ:'On the day',table:'Your table',tableTx:'The seating plan will also be displayed at the entrance.',site:'Open',give:'I’ll give it',given:'Already taken',giveT:'You are giving',giveName:'Your name',giveGo:'Confirm',giveOk:'This gift is reserved in your name, nobody else can pick it.',giveTaken:'Someone just reserved it. Please choose another one.',giveErr:'Could not reserve right now. Please try again shortly.',copyLink:'Copy the link',scan:'Scan or copy the link',kitty:'Contribute'}
   }[L];
   const TZ=I.tz||'Europe/Paris', LOC=L==='en'?'en-GB':'fr-FR';
   const FONTS={script:{css:'"Great Vibes",cursive'},classique:{css:'"Playfair Display",Georgia,serif',italic:true},moderne:{css:'"Jost",sans-serif',upper:true},deco:{css:'"Limelight",serif'}};
@@ -148,6 +148,18 @@
   const head=(c,ey,title,k=.74)=>rv('ey',c.ey,esc(ey))+(title?rv('nm',null,esc(title),esc(nmCss(k,c.nm))):'');
   // dans les démos, les liens externes (liste, album, hôtel) ouvrent une explication au lieu d'un faux site
   const lnk=u=>u==='demo'?'href="#" data-demo':`href="${esc(u)}" target="_blank" rel="noopener"`;
+  /* liste de mariage, trois façons (gifts.mode) :
+     'liste'    : la liste est chez nous, chaque cadeau se réserve d'un toucher (prénom), une seule fois (/api/gifts) ;
+     'cagnotte' : un QR code à scanner, le lien à copier et le bouton Participer ;
+     'lien'     : un bouton vers une liste tenue ailleurs (comportement d'origine, aussi sans mode). */
+  function giftBody(G,col,lt){
+    if(G.mode==='liste'&&(G.items||[]).length) return rv('card gl',col,G.items.map((x,k)=>{ const id=x.id||'g'+k;
+      return `<div class="it gl-it" data-g="${esc(id)}"><div><h4>${esc(x.name)}</h4>${x.price?`<p>${esc(x.price)}${/\d$/.test(String(x.price))?' €':''}</p>`:''}</div><button type="button" class="gl-b" data-give="${esc(id)}" data-gname="${esc(x.name)}">${S.give}</button></div>`; }).join(''),'background:'+cardBg(lt));
+    if(!G.url) return '';
+    const btn=`<a class="b" ${lnk(G.url)}>${ic.gift}${esc(G.label||(G.mode==='cagnotte'?S.kitty:S.giftsBtn))}</a>`;
+    if(G.mode!=='cagnotte'||G.url==='demo') return rv('acts',col,btn);
+    return rv('gq',col,`<div class="gq-c" data-qr="${esc(G.url)}" role="img" aria-label="${esc(S.scan)}"></div><div class="gq-r"><p>${S.scan}</p><div class="gq-l"><input readonly value="${esc(G.url)}" aria-label="${esc(S.copyLink)}"><button type="button" data-gcopy>${S.copyLink}</button></div></div>`)+rv('acts',col,btn);
+  }
   const cardBg=lt=>lt?'rgba(255,255,255,.55)':'rgba(0,0,0,.28)';
   const lastScene=events.length?evImg(events[events.length-1],events.length-1):2;
 
@@ -211,9 +223,8 @@
     rv('card qa',c.tx,(FQ.items||[]).map(x=>`<div class="it"><div><h4>${esc(x.q)}</h4><p>${esc(x.a)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const GF=I.gifts;
-  if(GF) page(4,(c)=>
-    head(c,GF.eyebrow||S.gifts,GF.title||'',.7)+rv('tx',c.tx,esc(GF.text||''))+
-    (GF.url?rv('acts',c.tx,`<a class="b" ${lnk(GF.url)}>${ic.gift}${esc(GF.label||S.giftsBtn)}</a>`):''),{});
+  if(GF) page(4,(c,lt)=>
+    head(c,GF.eyebrow||S.gifts,GF.title||'',.7)+rv('tx',c.tx,esc(GF.text||''))+giftBody(GF,c.tx,lt),{cls:GF.mode==='liste'&&(GF.items||[]).length>3?'tall':''});
 
   const PH=I.photos;
   if(PH) page(4,(c)=>
@@ -290,7 +301,7 @@
     const GF0=I.gifts;
     const s3=blk(2,`<div class="lg-in">
         ${infos.length?ttl(S.know,2)+`<div class="lg-grid">${infos.map(x=>`<div class="rv lg-it">${ic[x.icon]||ic.info}<h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div>`).join('')}</div>`:''}
-        ${GF0?ttl(GF0.eyebrow||S.gifts,2)+`<p class="rv tx">${esc(GF0.text||'')}</p>${GF0.url?`<div class="rv acts"><a class="b" ${lnk(GF0.url)}>${ic.gift}${esc(GF0.label||S.giftsBtn)}</a></div>`:''}`:''}
+        ${GF0?ttl(GF0.eyebrow||S.gifts,2)+`<p class="rv tx">${esc(GF0.text||'')}</p>${giftBody(GF0,null,true)}`:''}
         <div class="rv ey lg-gap">${esc(R0.eyebrow||S.rsvpT)}</div><div class="rv lg-sub" style="${nm(.7,sec[2].accent)}">${esc(R0.title||T.scenes[3][1])}</div>
         ${R0.deadline?`<p class="rv tx">${S.before} ${esc(er(zoned(R0.deadline+'T23:59',TZ).toLocaleDateString(LOC,{day:'numeric',month:'long',timeZone:TZ})))}</p>`:''}
         <div class="rv acts"><button type="button" class="b solid" data-rsvp>${ic.mail}${S.reply}</button></div>
@@ -529,6 +540,26 @@
   /* ---------- feuilles ---------- */
   const sheet=$('#sheet'), sheetBody=$('#sheetBody');
   function openSheet(html){ sheetBody.innerHTML=html; sheet.classList.add('on'); sheet.setAttribute('aria-hidden','false'); }
+  // liste de mariage : QR de la cagnotte (bibliothèque chargée à la demande), copie du lien, cadeaux réservés
+  { const qrs=document.querySelectorAll('[data-qr]');
+    if(qrs.length){ const sc=document.createElement('script'); sc.src='/qrcode.js'; sc.onload=()=>qrs.forEach(el=>{ try{ const q=qrcode(0,'M'); q.addData(el.dataset.qr); q.make(); el.innerHTML=q.createSvgTag({cellSize:4,margin:2,scalable:true}); }catch(e){} }); document.head.appendChild(sc); } }
+  document.addEventListener('click',e=>{ const b=e.target.closest('[data-gcopy]'); if(!b) return; const inp=b.parentNode.querySelector('input');
+    (navigator.clipboard?navigator.clipboard.writeText(inp.value):Promise.reject()).catch(()=>{ inp.select(); document.execCommand('copy'); }).finally(()=>{ b.textContent=S.copied; setTimeout(()=>{ b.textContent=S.copyLink; },2200); }); });
+  const GKEY='sceau-gifts-'+I.slug;
+  const markGiven=ids=>ids.forEach(id=>document.querySelectorAll(`[data-g="${CSS.escape(id)}"]`).forEach(r=>{ r.classList.add('taken'); const b=r.querySelector('[data-give]'); if(b){ b.disabled=true; b.textContent=S.given; } }));
+  if(document.querySelector('[data-give]')){
+    if(I.demo){ try{ markGiven(JSON.parse(localStorage.getItem(GKEY)||'[]')); }catch(e){} }
+    else fetch('/api/gifts?invite='+encodeURIComponent(I.slug)).then(r=>r.ok?r.json():null).then(j=>{ if(j&&j.taken) markGiven(j.taken); }).catch(()=>{});
+    document.addEventListener('click',e=>{ const b=e.target.closest('[data-give]'); if(!b||b.disabled) return;
+      openSheet(`<h3>${S.giveT}</h3><p class="sub">${esc(b.dataset.gname)}</p><form class="gl-f"><label class="f"><span>${S.giveName}</span><input name="name" required maxlength="80" autocomplete="name"></label><button class="go" type="submit">${S.giveGo}</button><p class="err" hidden></p></form>`);
+      const f=sheetBody.querySelector('.gl-f'), note=f.querySelector('.err');
+      f.onsubmit=async ev=>{ ev.preventDefault(); const name=f.name.value.trim(); if(!name) return; const id=b.dataset.give;
+        try{
+          if(I.demo){ const t=JSON.parse(localStorage.getItem(GKEY)||'[]'); t.push(id); localStorage.setItem(GKEY,JSON.stringify(t)); }
+          else { const r=await fetch('/api/gifts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({invite:I.slug,item:id,name})});
+            if(r.status===409){ markGiven([id]); note.hidden=false; note.textContent=S.giveTaken; return; } if(!r.ok) throw new Error(r.status); }
+          markGiven([id]); sheetBody.innerHTML=`<div class="done-msg"><div class="big">${S.thanks}</div><p>${S.giveOk}</p></div>`;
+        }catch(err){ note.hidden=false; note.textContent=S.giveErr; } }; }); }
   function closeSheet(){ sheet.classList.remove('on'); sheet.setAttribute('aria-hidden','true'); }
   sheet.addEventListener('click',e=>{ if(e.target===sheet||e.target.closest('.x')) closeSheet(); });
   addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });

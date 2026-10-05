@@ -68,6 +68,8 @@
       if(r.status===401){ main.innerHTML='<p class="msg">Ce lien n’est pas valide.</p>'; return; }
       if(r.status===503){ main.innerHTML='<p class="msg">Le stockage des réponses n’est pas encore activé. Revenez dans quelques minutes.</p>'; return; }
       if(!r.ok) throw 0; data=await r.json();
+      // liste de mariage chez nous : qui offre quoi (api/gifts.js) ; rien si le faire-part n'a pas de liste
+      try{ const g=await fetch('/api/gifts?invite='+encodeURIComponent(slug),{headers:{Authorization:'Bearer '+key}}); if(g.ok) data.gifts=(await g.json()).gifts; }catch(e){}
     }
   }catch(e){ main.innerHTML='<p class="msg">Impossible de charger les réponses. Vérifiez votre connexion.</p>'; return; }
 
@@ -94,6 +96,7 @@
     <h2>Par événement</h2>
     <div class="evs">${perEv.map(x=>`<div class="ev"><h3>${esc(x.e.label)}</h3><div class="bar"><i style="width:${x.asked?Math.round(x.yes/x.asked*100):0}%"></i></div><p><b>${x.people}</b> personnes · ${x.yes} foyers sur ${x.asked}</p></div>`).join('')}</div>
     ${Object.keys(fams).length?`<h2>Liens par famille</h2><div class="links">${['',...Object.keys(fams)].map(f=>{ const u=base+(f?'?f='+encodeURIComponent(f):''); return `<div class="link"><div><b>${f?esc(fams[f]):'Lien général'}</b><br><code>${esc(u)}</code></div><button class="btn" data-copy="${esc(u)}">Copier</button></div>`; }).join('')}</div>`:''}
+    ${(data.gifts||[]).length?`<h2>Liste de cadeaux</h2><div class="tbl"><table><thead><tr><th>Cadeau</th><th>Offert par</th><th>Le</th></tr></thead><tbody>${data.gifts.map(g=>`<tr><td>${esc(g.label)}</td><td>${esc(g.name)}</td><td>${fmt(g.at)}</td></tr>`).join('')}</tbody></table></div>`:''}
     <h2>Toutes les réponses</h2>
     <div class="tools"><input id="q" type="search" placeholder="Chercher un nom, un message…" aria-label="Chercher"><button class="btn" id="csv">Exporter (CSV)</button>${data.demo?'':'<button class="btn" id="reload">Actualiser</button>'}</div>
     <div class="tbl"><table><thead><tr><th data-s="name">Nom</th><th data-s="guests">Pers.</th>${evs.map(e=>`<th>${esc(e.label)}</th>`).join('')}<th>Régime</th><th>Message</th><th data-s="at">Reçu</th></tr></thead><tbody id="rows"></tbody></table></div>`;

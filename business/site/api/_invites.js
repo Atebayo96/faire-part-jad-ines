@@ -19,7 +19,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "amira-youssef": {
   "demo": true,
@@ -58,7 +60,9 @@ export default {
   "familyLabels": {
    "famille-amrani": "Chère famille Amrani",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "ananya-rohan": {
   "demo": true,
@@ -96,7 +100,9 @@ export default {
   "familyLabels": {
    "famille-sharma": "Chère famille Sharma",
    "collegues": "Chers collègues"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "anastasia-nikolai": {
   "demo": true,
@@ -135,7 +141,9 @@ export default {
   "familyLabels": {
    "famille-petrov": "Chère famille Petrov",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "chiara-lucas": {
   "demo": true,
@@ -161,7 +169,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "chloe-nathan": {
   "demo": true,
@@ -182,7 +192,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "claire-thomas": {
   "demo": true,
@@ -203,7 +215,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "constance-henri": {
   "demo": true,
@@ -236,7 +250,9 @@ export default {
   "familyLabels": {
    "famille-martin": "Chère famille Martin",
    "famille-bernard": "Chers Paul et Anne"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "emma-louis": {
   "demo": true,
@@ -269,7 +285,9 @@ export default {
   "familyLabels": {
    "famille-martin": "Chère famille Martin",
    "famille-bernard": "Chers Paul et Anne"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "fatou-kwame": {
   "demo": true,
@@ -308,7 +326,9 @@ export default {
   "familyLabels": {
    "famille-mensah": "Chère famille Mensah",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "giulia-hugo": {
   "demo": true,
@@ -329,7 +349,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "hana-kenji": {
   "demo": true,
@@ -368,7 +390,9 @@ export default {
   "familyLabels": {
    "famille-moreau": "Chère famille Moreau",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "henne-yasmine": {
   "demo": true,
@@ -390,7 +414,9 @@ export default {
   },
   "familyLabels": {
    "amis": "Chères amies"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "hiba-anas": {
   "demo": true,
@@ -429,7 +455,9 @@ export default {
   "familyLabels": {
    "famille-tazi": "Chère famille Tazi",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "jade-enzo": {
   "demo": true,
@@ -461,7 +489,9 @@ export default {
   },
   "familyLabels": {
    "amis": "Les potes"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "leila-mehdi": {
   "demo": true,
@@ -500,7 +530,9 @@ export default {
   "familyLabels": {
    "famille-bennani": "Chère famille Bennani",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "lena-adam": {
   "demo": true,
@@ -521,7 +553,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "lin-wei": {
   "demo": true,
@@ -560,7 +594,9 @@ export default {
   "familyLabels": {
    "famille-chen": "Chère famille Chen",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "linh-thomas": {
   "demo": true,
@@ -592,7 +628,9 @@ export default {
   },
   "familyLabels": {
    "famille-nguyen": "Chère famille Nguyen"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "lou-max": {
   "demo": true,
@@ -613,7 +651,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "margaux-victor": {
   "demo": true,
@@ -634,7 +674,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "myriam-bilal": {
   "demo": true,
@@ -673,7 +715,9 @@ export default {
   "familyLabels": {
    "famille-idrissi": "Chère famille Idrissi",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "nour-ilyes": {
   "demo": true,
@@ -712,7 +756,9 @@ export default {
   "familyLabels": {
    "famille-haddad": "Chère famille Haddad",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "priya-arjun": {
   "demo": true,
@@ -750,7 +796,9 @@ export default {
   "familyLabels": {
    "famille-sharma": "Chère famille Sharma",
    "collegues": "Chers collègues"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "rania-ilias": {
   "demo": true,
@@ -789,7 +837,9 @@ export default {
   "familyLabels": {
    "famille-bensaïd": "Chère famille Bensaïd",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "salma-rayan": {
   "demo": true,
@@ -828,7 +878,9 @@ export default {
   "familyLabels": {
    "famille-alaoui": "Chère famille Alaoui",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "sarah-yanis": {
   "demo": true,
@@ -849,7 +901,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "sbou3-lina": {
   "demo": true,
@@ -871,7 +925,9 @@ export default {
   },
   "familyLabels": {
    "famille-alaoui": "Chère famille Alaoui"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "sofia-hamza": {
   "demo": true,
@@ -910,7 +966,9 @@ export default {
   "familyLabels": {
    "famille-chraïbi": "Chère famille Chraïbi",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "sofia-nuno": {
   "demo": true,
@@ -931,7 +989,9 @@ export default {
    }
   ],
   "families": {},
-  "familyLabels": {}
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
  },
  "victoire-charles": {
   "demo": true,
@@ -970,7 +1030,9 @@ export default {
   "familyLabels": {
    "famille-whitmore": "Chère famille Whitmore",
    "amis": "Chers amis"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  },
  "yuki-leo": {
   "demo": true,
@@ -1003,6 +1065,8 @@ export default {
   "familyLabels": {
    "famille-martin": "Chère famille Martin",
    "famille-bernard": "Chers Paul et Anne"
-  }
+  },
+  "gifts": [],
+  "giftLabels": {}
  }
 };
