@@ -19,12 +19,12 @@ const PART=process.argv[3]; const R=[]; const add=(zone,cas,ok,detail='')=>R.pus
     await p.close(); };
     let k=0; await Promise.all(Array.from({length:6},async()=>{ while(k<jobs.length){ const j=jobs[k++]; await one(j).catch(e=>add('Démos',j[0]+' '+j[1][0]+'px',false,'erreur de recette : '+e.message.slice(0,80))); } })); }
   // accueil du moteur : la fin du texte doit rester au-dessus du sujet de la scène (haut du sujet mesuré dans l'image)
-  if(PART==='moteur') for(const theme of (process.argv[4]||'dolcevita').split(',')) for(const occ of (theme==='dolcevita'?['mariage']:['mariage','sbou3'])) for(const rv of [null,'scratch','slot','wheel']) for(const [w,h] of [[390,844],[360,740]]){
+  if(PART==='moteur') for(const theme of (process.argv[4]||'dolcevita,dolcevitajour,oldmoney').split(',')) for(const occ of (theme==='dolcevita'?['mariage']:['mariage','sbou3'])) for(const rv of [null,'scratch','slot','wheel']) for(const [w,h] of [[390,844],[360,740]]){
     const inv=Object.assign(JSON.parse(JSON.stringify(base)),{theme,reveal:rv,countdown:'fin',couple:occ==='sbou3'?['Lina']:['Emma','Louis'],intro:Object.assign({},base.intro,occ==='sbou3'?{text:'Yasmine & Karim vous convient au sbouâ de leur fille'}:{})});
-    inv.calques=['nuits','dolcevita'].includes(theme)?['1','2','3','4']:[];
+    inv.calques=theme==='nuits'?['1','2','3','4']:theme==='oldmoney'?['1','2','3']:[];
     const {p,errs}=await open(b,inv,w,h);
     const m=await p.evaluate(()=>{ const s=document.querySelector('.pg'), H=innerHeight; let bot=0; s.querySelectorAll('.ey,.nm,.tx,.dl,.seal').forEach(e=>{ const r=e.getBoundingClientRect(); if(r.height) bot=Math.max(bot,r.bottom); }); return Math.round(bot/H*100); });
-    const lim=['nuits','dolcevita'].includes(theme)?55:50; // nuits : sujet en calque posé au bas ; les autres : haut du sujet ≥ 50 % (descendre.py)
+    const lim=['nuits','oldmoney'].includes(theme)?55:50; // nuits : sujet en calque posé au bas ; les autres : haut du sujet ≥ 50 % (descendre.py)
     add('Moteur · accueil',`${theme} · ${occ} · ${rv||'date affichée'} · ${w}px`,!errs.length&&m<=lim,`texte jusqu'à ${m} % de l'écran (limite ${lim} %)`+(errs.length?' · '+errs.join(' | '):''));
     if(m>lim) await p.screenshot({path:`${S}/ko-${theme}-${occ}-${rv}-${w}.png`});
     await p.close(); }

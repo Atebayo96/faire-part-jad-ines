@@ -254,6 +254,29 @@ export default {
   "gifts": [],
   "giftLabels": {}
  },
+ "elena-matteo": {
+  "demo": true,
+  "couple": "Elena & Matteo",
+  "date": "2027-08-28T15:00:00+00:00",
+  "events": [
+   "ceremonie",
+   "diner"
+  ],
+  "eventList": [
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "diner",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "gifts": [],
+  "giftLabels": {}
+ },
  "emma-louis": {
   "demo": true,
   "couple": "Emma & Louis",

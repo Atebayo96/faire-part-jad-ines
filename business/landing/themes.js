@@ -58,7 +58,7 @@ Object.assign(window.SCEAU_THEMES,{
   y2k:{name:"Y2K",style:"Y2K",short:"Rose bonbon, chrome, papillons",desc:"Rose bonbon, chrome et papillons, décapotable rose : les années 2000 en version mariage.",couple:"Jade & Enzo",long:true,light:true,
     font:'"Pacifico",cursive',color:"#4a1640",size:.8,gf:"Pacifico",music:"ragtime",particles:"none",
     scenes:[["On se marie !", "NAMES", "Samedi 26 juin 2027"], ["La cérémonie", "Mairie de Marseille", "15h00", "Itinéraire"], ["La soirée", "Rooftop & dance floor", "Dès 20h", "Itinéraire"], ["Tu viens ?", "Serez-vous des nôtres ?", "Avant le 1er juin", "Répondre"]]},
-  oldmoney:{name:"Old money",launch:true,style:"Old money",short:"Manoir, voiture ancienne, buis taillés",desc:"Un manoir anglais, une voiture ancienne et des buis taillés : l'élégance discrète.",couple:"Victoire & Charles",long:true,light:true,
+  oldmoney:{name:"Old money",launch:true,compose:true,style:"Old money",short:"Manoir, voiture ancienne, buis taillés",desc:"Un manoir anglais, une voiture ancienne et des buis taillés : l'élégance discrète.",couple:"Victoire & Charles",long:true,light:true,
     font:'"Playfair Display",Georgia,serif',italic:true,color:"#1f2b44",size:.86,gf:"Playfair+Display:ital@0;1",music:"valse",particles:"none",
     scenes:[["Ils se marient", "NAMES", "Samedi 12 juin 2027"], ["La cérémonie", "À la chapelle", "15h00 · Dans le parc", "Itinéraire"], ["Le dîner", "Sous la tente", "Dès 19h30", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er mai", "Répondre"]]},
   afro:{name:"Kente",style:"Afro",short:"Kente, wax, baobab au crépuscule",desc:"Kente et wax, baobab au crépuscule, calebasses et cauris : la fête aux couleurs de l'Afrique.",couple:"Fatou & Kwame",long:true,
@@ -107,6 +107,14 @@ Object.assign(window.SCEAU_THEMES,{
     dolcevita:{gf:"Italiana",particles:"blossoms",music:"funiculi",mono:["#7a5a1c","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"]}
   };
   for(const k in X) Object.assign(T[k],X[k]);
+  /* ambiances (5 octobre 2026) : le grand tableau est retiré de l'offre, on reste en scène par scène, mais un thème peut
+     avoir deux visuels. Dolce Vita « Crépuscule » (ses scènes du soir) et « Plein jour » (dolcevitajour : les peintures de
+     jour de son grand tableau, tools/ambiance-jour.py). group : le thème affiché ; amb : le nom de l'ambiance ;
+     lieux : les lieux qui existent dans cette ambiance (sinon tous). Le dîner est sous un ciel bleu nuit : texte blanc. */
+  T.dolcevita.group='dolcevita'; T.dolcevita.amb='Crépuscule'; T.dolcevita.ambSub='Les lumières du soir sur la côte';
+  T.dolcevitajour=Object.assign({},T.dolcevita,{amb:'Plein jour',ambSub:'Ciel bleu et mer turquoise',launch:false,light:true,
+    color:"#193f64",ey:"#2f5d86",tx:"#2c3e55",mono:["#193f64","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],lieux:['eglise','jardin','salle'],darkLieux:['salle'],
+    scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]});
 })(window.SCEAU_THEMES);
 /* « Bismillah » s'écrit en arabe, en calligraphie : la ligature basmala (U+FDFD « ﷽ ») de la police Amiri hébergée dans
    polices/, exactement comme sur le faire-part d'Inès & Jad (pas la phrase lettre à lettre). Dans le faire-part comme dans la vitrine.

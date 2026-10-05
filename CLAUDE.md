@@ -277,6 +277,23 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Les calques restent dans `img/calques/` sans être utilisés. `tools/dolcevita-jour.py` (version de jour) existe mais
     n'est pas à lancer sans demande.
 
+32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
+    « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money
+    (`compose:true`). Un thème peut avoir plusieurs **ambiances** (`group` / `amb` / `ambSub` dans themes.js) : Dolce Vita
+    « Crépuscule » (`dolcevita`) et « Plein jour » (`dolcevitajour`, thème clair, texte `#193f64`). Étape 1 : une tuile par
+    thème, puis « Quelle ambiance ? » (à la place de l'ancien choix de format, `#cFmt`, `buildAmb()`), chaque carte avec sa
+    démo qui défile dans un téléphone (`REEL`, captures `img/reel/scenes-<thème>.webp` sans la roue). Masqué s'il n'y a
+    qu'une ambiance (Old money). **« Plein jour » n'a aucune image générée** : ce sont les peintures de jour du grand
+    tableau (`tools/ambiance-jour.py` : découpe 9:16, `descendre.py` pour le dîner et la Vespa, lieux Église = chapelle,
+    Jardin = pergola, Salle = dîner, fond = papier aux citrons) ; toutes passent `check_images.py`. Une ambiance déclare
+    ses lieux (`lieux`, les autres sont masqués et un événement passe sur le premier qui existe) et ses lieux sombres
+    (`darkLieux` : le dîner de nuit est en texte blanc, `isDark()` dans invite.js). Démo : Elena & Matteo.
+    Accueil (« Deux ambiances pour Dolce Vita »), carrousel et galerie (liens par ambiance) ne montrent plus de grand
+    tableau ; les démos en grand tableau restent en ligne, le moteur et l'aperçu `lgInvite` restent dans le code.
+    **Posée, une page ne montre que sa propre scène** aussi pour les peintures entières (sans calques) : la scène suivante,
+    qui commence 45 % d'écran plus haut, est invisible tant que la page est posée et apparaît en défilant (opacité selon
+    le défilement, invite.js et `cpFade()`) ; son ciel clair délavait le bas de l'écran.
+
 33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la
     révélation de la date. Arriver sur l'onglet rejoue l'ouverture dans l'aperçu.
     **Chaque carte montre son effet** dans un petit téléphone aux images du thème : **au repos, ce que l'invité voit en

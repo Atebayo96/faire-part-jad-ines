@@ -106,10 +106,13 @@
   ];
   // cartes de la section « Un seul grand tableau » : la même liste
   const contGrid=document.getElementById('contGrid'); if(contGrid) contGrid.innerHTML=LONGS.filter(l=>KEYS.includes(l.k)).map(l=>`<a class="cont" href="/d/${l.slug}/" target="_blank" rel="noopener"><div class="pic"><img src="/img/long/${l.k}/thumb.webp" alt="${esc('Le faire-part '+THEMES[l.k].name+' : '+l.alt)}" loading="lazy" width="480" height="768"></div><div class="txt"><b>${esc(THEMES[l.k].name)}</b><span>${esc(l.couple+' · '+l.desc)}</span><em>Ouvrir l'exemple →</em></div></a>`).join('');
-  const CREAS=LONGS.filter(l=>KEYS.includes(l.k)).map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:t.name,font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`/img/reel/long-${l.k}.webp`}); });
+  // le grand tableau est retiré de l'offre (5 octobre 2026) : plus de rouleau dans le carrousel
+  const CREAS=[].filter.call(LONGS,()=>false).map(l=>{ const t=THEMES[l.k]; return Object.assign({},l,{kind:'long',label:t.name,desc:l.couple+' · '+l.desc,href:'/d/'+l.slug+'/',tag:t.name,font:t.font,size:t.size,italic:t.italic,upper:t.upper,stack:t.stack,img:()=>`/img/reel/long-${l.k}.webp`}); });
   // carrousel de l'accueil : un thème qui a sa démo en grand tableau y passe sous cette forme, pas deux fois
-  KEYS.filter(k=>!LONGS.some(l=>l.k===k)).forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&!x.kind);
-    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name,desc:(t.style!==t.name?t.style+' · ':'')+t.short,href:d?'/d/'+d.slug+'/':'',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=9`})); });
+  const VARS=k=>Object.keys(THEMES).filter(v=>v===k||THEMES[v].group===k&&v!==k);
+  [...KEYS].sort((a,b)=>!!THEMES[b].compose-!!THEMES[a].compose).forEach(k0=>VARS(k0).forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&!x.kind&&x.layout!=='long');
+    if(!d) return;
+    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name+(t.amb?' · '+t.amb:''),desc:t.amb?t.ambSub:(t.style!==t.name?t.style+' · ':'')+t.short,href:'/d/'+d.slug+'/',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=9`})); }));
   // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
   CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
     couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`/img/reel/yk-${i}.webp`,
@@ -156,7 +159,7 @@
   const card=(k)=>{ const t=THEMES[k], ds=DEMOS.find(x=>x.theme===k&&x.layout!=='long'&&!x.kind), dl=DEMOS.find(x=>x.theme===k&&x.layout==='long'&&!x.kind);
     const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style;
     m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=9" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=9" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
-      <div class="fmts">${ds?`<a href="/d/${esc(ds.slug)}/" target="_blank" rel="noopener"><b>Scène par scène</b><span>${esc(ds.couple)}</span></a>`:''}${dl?`<a href="/d/${esc(dl.slug)}/" target="_blank" rel="noopener"><b>Grand tableau</b><span>${esc(dl.couple)}</span></a>`:''}</div>
+      <div class="fmts">${VARS(k).map(v=>{ const d=DEMOS.find(x=>x.theme===v&&x.layout!=='long'&&!x.kind); return d?`<a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><b>${esc(THEMES[v].amb||'Voir l’exemple')}</b><span>${esc(d.couple)}</span></a>`:''; }).join('')}</div>
       <div class="acts">${t.compose?`<a class="go" href="/creer/?theme=${esc(k)}">Composer →</a>`:`<a class="go" href="/contact/?theme=${esc(k)}">Avec nous →</a>`}</div></div>`;
     models.appendChild(m); };
   [...KEYS].sort((a,b)=>!!THEMES[b].compose-!!THEMES[a].compose).forEach(card); // ce qui se compose en ligne d'abord
@@ -195,7 +198,7 @@
      Le henné et le sbouâ ne sont proposés que si un thème de la famille Mille et une nuits s'y compose. */
   const CK=Object.keys(THEMES).filter(k=>THEMES[k].compose&&!THEMES[k].pending);
   const OCC_ON=CK.some(k=>THEMES[k].family==='nuits')?OCCS:OCCS.filter(o=>o.id==='mariage');
-  const C={occ:OCC_ON.some(o=>o.id===urlOcc)?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:CK[0],fmt:urlFmt==='long'?'long':'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
+  const C={occ:OCC_ON.some(o=>o.id===urlOcc)?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:CK[0],fmt:'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
     ev:null}; C.ev=OCC[C.occ].ev();
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
   const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église',fam:''},{id:'mosquee',name:'Mosquée',fam:'nuits'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
@@ -230,15 +233,31 @@
   opt($('cOpen'),OPENS,'op','',ovCard);
   opt($('cReveal'),REVEALS,'rvl','',ovCard);
   $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
-  opt($('cStyles'),CK,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=9')"></span>${esc(t.name)}${t.variant?`<small>${esc(t.variant)}</small>`:''}`; });
+  /* un thème = une tuile ; s'il a plusieurs ambiances (group dans themes.js : Dolce Vita « Crépuscule » / « Plein jour »),
+     elles se choisissent juste dessous, chacune avec sa démo qui défile dans un téléphone */
+  const grp=k=>THEMES[k].group||k, GRPS=[...new Set(CK.map(grp))];
+  const okLieu=(k,id)=>!THEMES[k].lieux||THEMES[k].lieux.includes(id);
+  // une ambiance qui n'a pas tous les lieux : un lieu absent passe sur le premier qui existe
+  const fixLieux=()=>C.ev.forEach(e=>{ if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=THEMES[C.k].lieux[0]; });
+  fixLieux();
+  GRPS.forEach(g=>{ const k0=CK.find(k=>grp(k)===g), t=THEMES[k0], b=document.createElement('button'); b.type='button'; b.className='th'; b.dataset.id=g;
+    b.innerHTML=`<span style="background-image:url('/img/themes/${k0}-1.webp?v=9')"></span>${esc(t.name)}`;
+    b.onclick=()=>{ if(grp(C.k)!==g){ C.k=k0; C.font='theme'; fixLieux(); } paint(); }; $('cStyles').appendChild(b); });
   // les deux formats, annoncés dès le début : scène par scène (un événement par écran) ou grand tableau (un seul tableau qu'on descend)
   // img/reel/scenes-<thème>.webp et tableau-<thème>.webp : captures des deux démos du thème, toute la page (7 écrans de 844 px
   // pour le scène par scène : les arrêts de tbScenes dans vitrine.css)
-  const REEL=['dolcevita'];
+  const REEL=['dolcevita','dolcevitajour'];
   const FMTS=[{id:'scenes',name:'Scène par scène',sub:'Un moment par écran, chaque lieu en grand. Le plus spectaculaire.'},{id:'long',name:'Grand tableau',sub:'Tout sur un seul tableau qu’on déroule, lieux dans des cadres. Le plus proche du papier.'}];
   // le format se choisit à l'étape des écrans : c'est là qu'on décide quoi mettre. Visuels entiers, jamais rognés :
   // trois écrans 9:16 pour le scène par scène, un rouleau qui file vers le bas pour le grand tableau
-  opt($('cFmt'),FMTS,'fmt','',(b,o)=>{ b.className='fmtc'; b.innerHTML=`<span class="fv"></span><b>${o.name}</b><small>${o.sub}</small>`; });
+  /* le grand tableau est retiré de l'offre (5 octobre 2026) : on reste en scène par scène ; la place du choix de format
+     sert au choix de l'ambiance (rebâtie quand le thème change) */
+  let ambG='';
+  function buildAmb(){ const g=grp(C.k); if(ambG===g) return; ambG=g; const box=$('cFmt'), V=CK.filter(k=>grp(k)===g); box.innerHTML='';
+    box.closest('.fld').hidden=V.length<2;
+    V.forEach(k=>{ const t=THEMES[k], b=document.createElement('button'); b.type='button'; b.className='fmtc'; b.dataset.id=k;
+      b.innerHTML=`<span class="fv">${REEL.includes(k)?`<i class="tbp"><i class="tb scenes" style="background-image:url('/img/reel/scenes-${k}.webp')"></i></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${k}-${n}.webp?v=9')"></i>`).join('')}</span><b>${esc(t.amb||t.name)}</b><small>${esc(t.ambSub||'')}</small>`;
+      b.onclick=()=>{ C.k=k; fixLieux(); paint(); }; box.appendChild(b); }); }
   const PLANSUB={essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
   $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
@@ -391,14 +410,20 @@
   // débord sur la page suivante (un débord fixe montrait deux écrans en un sur la dernière page)
   function cpFade(){ const sc=$('cpScroll'), bgs=$('cpBgs'); if(!sc||!bgs) return; const h=sc.clientHeight, st=sc.scrollTop;
     [...bgs.querySelectorAll('.cp-bg.cal')].forEach(L=>{ const up=st+h-(L.offsetTop+L.offsetHeight), f=up>0?Math.round(Math.min(up*1.2,h*.35)):0;
-      const m=f?`linear-gradient(to bottom,#000 calc(100% - ${f}px),transparent)`:''; if(L._f!==f){ L._f=f; L.style.webkitMaskImage=L.style.maskImage=m; } }); }
+      const m=f?`linear-gradient(to bottom,#000 calc(100% - ${f}px),transparent)`:''; if(L._f!==f){ L._f=f; L.style.webkitMaskImage=L.style.maskImage=m; } });
+    // peintures entières : posée, une page ne montre que sa scène ; la suivante n'apparaît qu'en défilant (comme invite.js)
+    const secs=[...$('cpScroll').querySelectorAll('.pv-sc')], layers=[...bgs.children];
+    cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!ri||!L||L.classList.contains('cal')||!secs[r.a]) return; const B=L.firstElementChild;
+      const q=Math.max(0,Math.min(1,(st-(secs[r.a].offsetTop-h))/(h*.45))), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; } }); }
   { const sc=$('cpScroll'); if(sc){ let tk=false; sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; cpFade(); }); } },{passive:true}); } }
   // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
   function paint(){
     buildPal();
     const t=THEMES[C.k], p=palsOf(C.k).find(x=>x.id===C.pal)||palsOf(C.k)[0], f=FONTS.find(x=>x.id===C.font);
     $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
-    [['cStyles','k'],['cFmt','fmt'],['cOpen','op'],['cPal','pal'],['cCount','cd'],['cReveal','rvl']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
+    buildAmb();
+    $('cStyles').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===grp(C.k)));
+    [['cFmt','k'],['cOpen','op'],['cPal','pal'],['cCount','cd'],['cReveal','rvl']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
     $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
     $('cPalName').textContent=p.name;
     const needs=sigNeeds(); if(needs.length&&C.plan==='essentiel'&&!C.planPicked) C.plan='signature';
@@ -422,17 +447,13 @@
       if(long&&C.cd==='page'){ C.cd='fin'; $('cCount').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.cd)); }
       $('cCount').querySelector('[data-id="page"]').hidden=long;
     }
-    $('cFmt').querySelectorAll('button').forEach(b=>{ const v=b.firstChild, key=b.dataset.id+C.k; if(v.dataset.k===key) return; v.dataset.k=key;
-      // grand tableau : la vraie page, de haut en bas, qui défile derrière un téléphone (on voit que c'est un seul tableau)
-      // les deux formats montrés pareil : la vraie démo qui défile DANS un téléphone (rien ne dépasse de l'écran).
-      // La différence se voit au rythme : le scène par scène s'arrête sur chaque moment, le grand tableau descend d'un trait.
-      v.innerHTML=REEL.includes(C.k)?`<i class="tbp"><i class="tb ${b.dataset.id}" style="background-image:url('/img/reel/${b.dataset.id==='long'?'tableau':'scenes'}-${C.k}.webp')"></i></i>`:b.dataset.id==='long'?`<i class="roll" style="background-image:url('/img/long/${C.k}/thumb.webp')"></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${C.k}-${n}.webp?v=9')"></i>`).join(''); });
+    // (les cartes d'ambiance sont bâties par buildAmb())
     $('cStoryT').textContent=C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       // « Texte seul » : écran simple (scène par scène), ou la scène peinte du thème dans le cadre (grand tableau)
       const sim=l.querySelector('[data-lieu="simple"] em'); if(sim) sim.textContent=C.fmt==='long'?'Scène du thème':'Texte seul';
       l.querySelectorAll('[data-lieu]').forEach(b=>{ const id=b.dataset.lieu; b.setAttribute('aria-pressed',id==='simple'?e.bg!=='scene':e.bg==='scene'&&id===e.lieu);
-        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=9')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=9')`:`url('/img/lieux/${C.k}-fond.webp')`):`url('/img/lieux/${C.k}-${id==='photo'?'mairie':id}.webp')`; }); });
+        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=9')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=9')`:`url('/img/lieux/${C.k}-fond.webp')`):`url('/img/lieux/${C.k}-${id==='photo'?(THEMES[C.k].lieux||['mairie'])[0]:id}.webp')`; }); });
     $('cAddEv').hidden=C.ev.length>=6||C.occ!=='mariage';
     $('cpTint').style.background=p.c;
     const n1=nm1(), n2=nm2(), solo=isSolo(), oneShot=C.occ!=='mariage';
@@ -444,7 +465,7 @@
     $('fldSexe').hidden=C.occ!=='sbou3'; $('cNamesL').textContent=OCC[C.occ].label;
     [$('cN1'),$('cN2')].forEach((inp,i)=>{ inp.setAttribute('aria-label',OCC[C.occ].l[i]); inp.placeholder=OCC[C.occ].ph[i]; });
     $('cNamesF').classList.toggle('sbou3',C.occ==='sbou3');
-    $('cStory').querySelectorAll('[data-lieu]').forEach(b=>{ const L0=LIEUX.find(x=>x.id===b.dataset.lieu); if(!L0) return; b.hidden=!!(L0.occ&&L0.occ!==C.occ)||(L0.fam!==undefined&&L0.fam!==(THEMES[C.k].family||'')); });
+    $('cStory').querySelectorAll('[data-lieu]').forEach(b=>{ const L0=LIEUX.find(x=>x.id===b.dataset.lieu); if(!L0) return; b.hidden=!!(L0.occ&&L0.occ!==C.occ)||(L0.fam!==undefined&&L0.fam!==(THEMES[C.k].family||''))||(!L0.sig&&L0.id!=='s2'&&!okLieu(C.k,L0.id)); });
     $('cExtras').querySelector('[data-id="story"]').hidden=C.occ==='sbou3'||C.fmt==='long';
     if($('fOcc')) $('fOcc').value=OCCS.find(o=>o.id===C.occ).name;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
@@ -478,7 +499,7 @@
     const scene=(idx,withCd)=>{ let [e,main,x,bt,mode]=t.scenes[idx]; if(oneShot&&idx===3){ e='Réponse souhaitée'; main='Serez-vous des nôtres ?'; } const pg=page(idx+1,mode);
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?btn(c,bt,/R[ée]pondre|RSVP/i.test(bt)?'mail':'pin'):''}`); };
     // événements : scène = le lieu choisi, écran simple = le fond du tableau (la bande continue les fond l'un dans l'autre)
-    const evPage=i=>{ const e=C.ev[i], photo=e.bg==='scene'&&e.lieu==='photo', pg=page(e.bg==='scene'&&!photo?(e.lieu==='s2'?2:e.lieu):'fond','');
+    const evPage=i=>{ const e=C.ev[i], photo=e.bg==='scene'&&e.lieu==='photo', pg=page(e.bg==='scene'&&!photo?(e.lieu==='s2'?2:e.lieu):'fond',e.bg==='scene'&&(t.darkLieux||[]).includes(e.lieu)?'dark':'');
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e.name||'Événement '+(i+1))}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(e.place||'')}</div><div class="tx" style="color:${c.tx}">${esc(hm(e.time))}</div>${btn(c,'Itinéraire','pin')}${photo?`<div class="pv-photo" style="color:${c.tx};border-color:${c.tx}">Ici, votre lieu<br>peint d’après votre photo</div>`:''}`).replace('<section ',`<section data-ev="${i}" `); };
     // écrans en option (contenu d'exemple), sur le décor de la scène voisine, sans voile (comme le moteur)
     const xp=(id,img,mode,inner)=>{ if(!C.x.has(id)) return; const pg=page(img,mode);
@@ -519,18 +540,18 @@
     sc.hidden=C.fmt==='long';
     // le grand tableau reste préparé en arrière-plan (caché en scène par scène) : changer de format est immédiat
     $('cpPhone').classList.toggle('lg-off',C.fmt!=='long');
-    lgRender(lgInvite(t,p,f,n1,n2,ds),C.fmt==='long'?120:900);
+    if(C.fmt==='long') lgRender(lgInvite(t,p,f,n1,n2,ds),120);
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
-    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=whoTxt(); $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.id==='gifts'?giftName():x.name).join(', ')+(edText()?' — '+edText():'');
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=whoTxt(); $('fStyle').value=t.name+(t.amb?' · '+t.amb:''); $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.id==='gifts'?giftName():x.name).join(', ')+(edText()?' — '+edText():'');
     const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
     if($('fFormat')) $('fFormat').value=FMTS.find(f=>f.id===C.fmt).name;
     $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place} (${evTxt(e).toLowerCase()})`).join(' ; ');
     const needTxt=needs.length?(C.plan==='essentiel'?` Essentiel ne comprend pas ${needs.join(', ')} : vous pourrez les retirer, ou passer en Signature.`:` Avec ${needs.join(', ')}, c'est la formule Signature.`):(C.plan==='essentiel'?' Tout est compris dans Essentiel.':'');
     $('cRecap').textContent=needTxt.trim()||(C.plan==='signature'?'Votre lieu peint d’après photo, un lien par famille, français et anglais.':'');
     // récapitulatif, ligne par ligne
-    const sum=[...(OCC_ON.length>1?[['Occasion',OCCS.find(o=>o.id===C.occ).name+(C.occ==='sbou3'?(C.sexe==='fils'?' · un garçon':' · une fille'):'')]]:[]),['Thème',t.name],['Format',FMTS.find(f=>f.id===C.fmt).name],['Vous',`${whoTxt()} · ${ds}`],[C.fmt==='long'?'Tableau':'Écrans',`${C.fmt==='long'?'Illustration':'Accueil'} → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',xOn().map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'&&C.fmt!=='long'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
+    const sum=[...(OCC_ON.length>1?[['Occasion',OCCS.find(o=>o.id===C.occ).name+(C.occ==='sbou3'?(C.sexe==='fils'?' · un garçon':' · une fille'):'')]]:[]),['Thème',t.name+(t.amb?' · '+t.amb:'')],['Vous',`${whoTxt()} · ${ds}`],[C.fmt==='long'?'Tableau':'Écrans',`${C.fmt==='long'?'Illustration':'Accueil'} → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',xOn().map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'&&C.fmt!=='long'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
     $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
-    { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b> · ${esc(FMTS.find(f=>f.id===C.fmt).name)}<br>${esc(whoTxt())} · ${esc(ds)}<br>${C.ev.map(e=>esc(evTxt(e))).join(' → ')}${xOn().length?` · +${xOn().length}`:''}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
+    { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b>${t.amb?' · '+esc(t.amb):''}<br>${esc(whoTxt())} · ${esc(ds)}<br>${C.ev.map(e=>esc(evTxt(e))).join(' → ')}${xOn().length?` · +${xOn().length}`:''}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
   /* aperçu du grand tableau : une fiche de faire-part (comme business/invites/*.json) faite des choix du configurateur,
