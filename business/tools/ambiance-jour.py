@@ -31,7 +31,21 @@ def out(im, name, small):
     im.resize((540, 954), Image.LANCZOS).save(os.path.join(IMG, small, f'{K}-{name}.webp'), 'WEBP', quality=82, method=6)
 
 
-S = {'1': fit('hero.webp', top=True), '2': fit('ev1.webp'), '3': fit('ev2.webp'), '4': fit('ev3.webp')}
+def accueil():
+    # « l'image est trop basse, on voit pas le couple » : du ciel jusqu'au couple, la composition est plus haute qu'un
+    # écran 9:16. On la prend entière (0 à 1890 px), réduite d'environ 16 % pour tenir en hauteur ; les deux bandes qui
+    # manquent sur les côtés reprennent les bords de la peinture en reflet, et un téléphone 9:19,5 les coupe de toute façon.
+    from PIL import ImageFilter
+    im = Image.open(os.path.join(SRC, 'hero.webp')).convert('RGB'); W = im.width
+    reg = im.crop((0, 0, W, 1890)); th = round(W / R); sw = round(W * th / reg.height)
+    mid = reg.resize((sw, th), Image.LANCZOS); out = Image.new('RGB', (W, th)); m = (W - sw) // 2
+    from PIL import ImageOps
+    r = W - sw - m  # bords : le reflet de la peinture (feuillages, falaise), pas une bande floue
+    out.paste(ImageOps.mirror(mid.crop((0, 0, m, th))), (0, 0)); out.paste(ImageOps.mirror(mid.crop((sw - r, 0, sw, th))), (m + sw, 0))
+    out.paste(mid, (m, 0)); return out
+
+
+S = {'1': accueil(), '2': fit('ev1.webp'), '3': fit('ev2.webp'), '4': fit('ev3.webp')}
 for n, im in S.items(): out(im, n, 'themes')
 for lieu, n in (('jardin', '1'), ('eglise', '2'), ('salle', '3')): out(S[n], lieu, 'lieux')
 out(fit('tex1.webp', top=True), 'fond', 'lieux')
