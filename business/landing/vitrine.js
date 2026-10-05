@@ -223,7 +223,9 @@
   opt($('cStyles'),CK,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=7')"></span>${esc(t.name)}${t.variant?`<small>${esc(t.variant)}</small>`:''}`; });
   // les deux formats, annoncés dès le début : scène par scène (un événement par écran) ou grand tableau (un seul tableau qu'on descend)
   const FMTS=[{id:'scenes',name:'Scène par scène',sub:'Un événement par écran, vos lieux en plein écran'},{id:'long',name:'Grand tableau',sub:'Un seul tableau qu’on descend, vos lieux dans des cadres peints'}];
-  opt($('cFmt'),FMTS,'fmt','',(b,o)=>{ b.className='op-card fmt'; b.innerHTML=`<i style="background-image:url('${o.id==='long'?'/img/long/nuits/thumb.webp':'/img/themes/nuits-2.webp?v=7'}')"></i><b>${o.name}</b><small>${o.sub}</small>`; });
+  // le format se choisit à l'étape des écrans : c'est là qu'on décide quoi mettre. Visuels entiers, jamais rognés :
+  // trois écrans 9:16 pour le scène par scène, un rouleau qui file vers le bas pour le grand tableau
+  opt($('cFmt'),FMTS,'fmt','',(b,o)=>{ b.className='fmtc'; b.innerHTML=`<span class="fv"></span><b>${o.name}</b><small>${o.sub}</small>`; });
   const PLANSUB={essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
   $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
@@ -324,7 +326,9 @@
       $('cCount').querySelector('[data-id="page"]').hidden=long;
       $('fldReveal').hidden=long;
       document.querySelectorAll('#cStory [data-bg="scene"]').forEach(b=>b.innerHTML=long?'Un lieu<small>Dans le cadre</small>':'Scène<small>Votre lieu dessiné</small>'); }
-    $('cFmt').querySelectorAll('button').forEach(b=>{ b.firstChild.style.backgroundImage=`url('${b.dataset.id==='long'?`/img/long/${C.k}/thumb.webp`:`/img/themes/${C.k}-2.webp?v=7`}')`; });
+    $('cFmt').querySelectorAll('button').forEach(b=>{ const v=b.firstChild, key=b.dataset.id+C.k; if(v.dataset.k===key) return; v.dataset.k=key;
+      v.innerHTML=b.dataset.id==='long'?`<i class="roll" style="background-image:url('/img/long/${C.k}/thumb.webp')"></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${C.k}-${n}.webp?v=7')"></i>`).join(''); });
+    $('cStoryT').textContent=C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
       l.querySelector('.lieux').hidden=e.bg!=='scene';

@@ -799,3 +799,19 @@
   .cp-phone .cd.big{gap:10px}
   .cp-phone .cd.big div{min-width:0}
   .cp-phone .cd.big b{font-size:32px}
+  /* choix du format (étape 3) : deux cartes avec un visuel entier, la sélection est une coche (règle 28) */
+  .opts.fmtv{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .fmtc{position:relative;display:grid;align-content:start;gap:4px;padding:0 0 14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);text-align:left;cursor:pointer;font:inherit;min-width:0;transition:opacity .2s,border-color .2s}
+  .fmtc .fv{display:flex;justify-content:center;align-items:flex-start;gap:8px;height:190px;padding:18px 12px 0;margin-bottom:10px;background:var(--bg-2);overflow:hidden}
+  .fmtc .fv i{display:block;height:calc(100% - 18px);aspect-ratio:9/16;flex:none;background:center/cover no-repeat;border-radius:6px;box-shadow:0 8px 16px -8px rgba(0,0,0,.4)}
+  .fmtc .fv i:nth-child(2){transform:translateY(10px)}
+  .fmtc .fv{position:relative}
+  /* le rouleau est plus haut que la carte : on en voit le haut, il file vers le bas et s'efface dans le fond de la carte */
+  .fmtc .fv i.roll{position:absolute;top:18px;left:50%;transform:translateX(-50%);height:270px;width:auto;aspect-ratio:10/16;background-position:center top;border-radius:6px 6px 0 0}
+  .fmtc .fv:has(.roll)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(transparent,var(--bg-2));pointer-events:none}
+  .fmtc b{padding:0 14px;font:500 16px/1.25 "Inter Tight",Inter,sans-serif}
+  .fmtc small{padding:0 14px;font-size:12.5px;line-height:1.4;color:var(--muted)}
+  .fmtc[aria-pressed="true"]::after{content:'✓';position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font:600 13px/24px Inter,sans-serif;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+  .opts.fmtv:has([aria-pressed="true"]) .fmtc[aria-pressed="false"]{opacity:.72}
+  @media (max-width:560px){ .fmtc .fv{height:150px;gap:6px;padding:14px 8px 0} .fmtc .fv i:nth-child(3){display:none} .fmtc .fv i.roll{top:14px;height:210px} .fmtc b{font-size:15px} }
+  @media (max-width:560px){ .story>li.fixed{flex-direction:column;gap:3px} .story .ev-h{flex-wrap:wrap} }

@@ -276,6 +276,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 37. **Le grand compte à rebours tient dans l'écran** : `clamp(28px, 10.5vw, 46px)` (invite.css), 32 px dans le téléphone de
     l'aperçu. À 46 px fixes, « 250 04 42 20 » débordait des deux côtés d'un écran de 300 px.
 
+38. **Le format se choisit à l'étape des écrans** (étape 3, « Comment raconter votre journée ? »), pas à l'étape 1 :
+    c'est là qu'on décide quoi mettre. Deux cartes avec un **visuel entier, jamais rogné** (« c'est moche parce que c'est
+    coupé ») : trois écrans 9:16 du thème pour le scène par scène, le haut du rouleau qui s'efface vers le bas pour le grand
+    tableau ; sélection par la coche (règle 28). Dessous, « Vos écrans, dans l'ordre » ou « Le tableau, de haut en bas ».
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
