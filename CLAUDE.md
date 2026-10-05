@@ -62,9 +62,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     sujet est posé **entier**, toute la largeur, au bas de l'écran (`.bg .sub`, `object-fit: contain`, jamais de zoom), il
     monte avec ses pages et passe devant le précédent (pas de masque de fondu sur ces cadres : le fondu de 45 % en fond uni
     délavait le sujet du bas de la page précédente). Légère profondeur au défilement (5 %, plafonnée à 6 % d'un écran).
-    En partant, le bas du sujet (le sol) traçait une ligne droite sur le fond (« des lignes nettes, c'est moche ») : le
-    cadre d'un calque déborde d'un quart d'écran sur la suite et ce débord est fondu (`CALF` dans `layoutStrip()`, même
-    chose dans `cpLayout()`), le sol s'efface en remontant. Le dernier cadre ne déborde pas.
+    En partant, le bas du sujet (le sol) traçait une ligne droite sur le fond (« des lignes nettes, c'est moche ») : dès que
+    le cadre remonte, son bas se fond d'autant plus qu'il est monté (`calFade()` dans invite.js, `cpFade()` dans vitrine.js,
+    au plus 35 % d'un écran) ; rien tant que la page est posée. **Jamais de débord du cadre sur la page suivante** : un
+    débord fixe d'un quart d'écran laissait le manoir en haut de la dernière page, sous la tente (« deux écrans en un »).
+    Une page posée ne montre que son propre sujet.
     Derrière les calques, le décor est le **ciel nu** (`<thème>-ciel.webp`, `tools/ciel.py` : le haut calme du fond étiré
     sur toute la hauteur), pas `<thème>-fond.webp` : son jardin du bas (fleurs, sable, lanternes) restait fixe sous chaque
     scène et son bord de sable faisait une ligne droite. `-fond` reste l'image des écrans simples.

@@ -346,17 +346,21 @@
     bgs.style.height=sc.scrollHeight+'px';
     cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!L) return; const B=L.firstElementChild, top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight;
       const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px'; B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
-      // calque : le cadre déborde d'un quart d'écran sur la suite et ce débord est fondu (comme layoutStrip() du moteur) :
-      // le sol du sujet s'efface en remontant au lieu de tracer une ligne droite
-      if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage='';
-        const ext=ri<cpRuns.length-1?Math.round(h*.25):0, m=ext?`linear-gradient(to bottom,#000 calc(100% - ${ext}px),transparent)`:'';
-        L.style.height=(bot-t+ext)+'px'; L.style.webkitMaskImage=L.style.maskImage=m; return; }
+      // calque : le sol qui part en ligne droite est fondu au défilement (cpFade(), comme calFade() du moteur)
+      if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage=''; return; }
       const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
       // taille de l'écran, pas du cadre agrandi (sinon zoom ~1,8×) : même calcul que fitBg() dans invite.js
       const bw=Math.ceil(Math.max(sc.clientWidth,h*.566)), y=Math.round((ri>0?ov:0)+(h-bw/.566)/2);
       B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`; B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px'); });
+    cpFade();
   }
   addEventListener('resize',cpLayout); addEventListener('load',cpLayout);
+  // en partant, le bas du sujet détouré se fond d'autant plus qu'il est monté ; rien tant que la page est posée, et aucun
+  // débord sur la page suivante (un débord fixe montrait deux écrans en un sur la dernière page)
+  function cpFade(){ const sc=$('cpScroll'), bgs=$('cpBgs'); if(!sc||!bgs) return; const h=sc.clientHeight, st=sc.scrollTop;
+    [...bgs.querySelectorAll('.cp-bg.cal')].forEach(L=>{ const up=st+h-(L.offsetTop+L.offsetHeight), f=up>0?Math.round(Math.min(up*1.2,h*.35)):0;
+      const m=f?`linear-gradient(to bottom,#000 calc(100% - ${f}px),transparent)`:''; if(L._f!==f){ L._f=f; L.style.webkitMaskImage=L.style.maskImage=m; } }); }
+  { const sc=$('cpScroll'); if(sc){ let tk=false; sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; cpFade(); }); } },{passive:true}); } }
   // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
   function paint(){
     buildPal();
