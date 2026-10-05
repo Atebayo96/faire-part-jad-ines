@@ -284,7 +284,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     thème, puis « Quelle ambiance ? » (à la place de l'ancien choix de format, `#cFmt`, `buildAmb()`), chaque carte avec sa
     démo qui défile dans un téléphone (`REEL`, captures `img/reel/scenes-<thème>.webp` sans la roue). Masqué s'il n'y a
     qu'une ambiance (Old money). **« Plein jour » n'a aucune image générée** : ce sont les peintures de jour du grand
-    tableau (`tools/ambiance-jour.py` : découpe 9:16, `descendre.py` pour le dîner et la Vespa, lieux Église = chapelle,
+    tableau (`tools/ambiance-jour.py` : découpe 9:16, `descendre.py` pour la Vespa ; pour le dîner, les chevrons et
+    feuillages flous au-dessus de la poutre sont retirés et remplacés par le ciel net du haut, fondu sur 3,5 % : les étirer
+    faisait des traînées, « celle-là est mal faite » ; lieux Église = chapelle,
     Jardin = pergola, Salle = dîner, fond = papier aux citrons) ; toutes passent `check_images.py`. Une ambiance déclare
     ses lieux (`lieux`, les autres sont masqués et un événement passe sur le premier qui existe) et ses lieux sombres
     (`darkLieux` : le dîner de nuit est en texte blanc, `isDark()` dans invite.js). Démo : Elena & Matteo.

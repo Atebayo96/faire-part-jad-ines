@@ -84,7 +84,7 @@
   const base=up?30:/Limelight|Cinzel/.test(fam1)?38:52;
   const nmCss=(k,col)=>`font-family:${fam1};font-style:${ital?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:clamp(${Math.round(base*k*.72)}px,${(base*k/16.5).toFixed(2)}vh,${Math.round(base*k*1.1)}px);color:${col}`;
   // ?v= : à augmenter quand on remplace des décors, pour que les navigateurs ne gardent pas l'ancienne image
-  const IMGV=10, img=n=>`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  const IMGV=11, img=n=>`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
   // calques : pour les scènes qui en ont (build-site.py liste img/calques/<thème>-<n>.webp), le décor est le fond calme du
   // thème et le sujet détouré est posé ENTIER en bas de l'écran (plus de rognage selon le téléphone), avec un peu de profondeur
   const CAL=new Set(I.calques||[]), hasCal=n=>CAL.has(String(n)), fond=`/img/hd/${I.theme}-ciel.webp?v=${IMGV}`, cal=n=>`/img/calques/${I.theme}-${n}.webp?v=${IMGV}`;

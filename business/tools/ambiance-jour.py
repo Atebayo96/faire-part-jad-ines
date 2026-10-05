@@ -38,7 +38,21 @@ out(fit('tex1.webp', top=True), 'fond', 'lieux')
 # le dîner et la Vespa montaient dans la zone du texte : on étire leur ciel uni (descendre.py, rien de repeint), puis le
 # lieu « Salle » reprend le dîner corrigé
 import subprocess, sys
-subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'descendre.py'), f'{K}-3', f'{K}-4'], check=True)
+subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'descendre.py'), f'{K}-4'], check=True)
+# le dîner : au-dessus de la poutre, la peinture a des chevrons et des feuillages flous ; les étirer faisait des traînées
+# (« celle-là est mal faite »). On les retire : le ciel net du haut est étiré jusqu'à la poutre, fondu sur quelques
+# pixels dans la peinture d'origine, et la pergola descend sous le texte (~45 % de la hauteur).
+def diner():
+    im = S['3']; W, H = im.size
+    ciel, coupe, fondu, d = round(.225 * H), round(.31 * H), round(.035 * H), round(.14 * H)
+    haut = im.crop((0, 0, W, ciel)).resize((W, coupe + d), Image.LANCZOS)
+    bas = im.crop((0, coupe - fondu, W, H - d + 0))
+    out = Image.new('RGB', (W, H)); out.paste(haut, (0, 0))
+    m = Image.linear_gradient('L').resize((W, fondu))  # 0 en haut -> 255 en bas : la peinture apparaît peu à peu
+    zone = Image.composite(bas.crop((0, 0, W, fondu)), haut.crop((0, coupe + d - fondu, W, coupe + d)), m)
+    out.paste(zone, (0, coupe + d - fondu)); out.paste(bas.crop((0, fondu, W, bas.height)), (0, coupe + d))
+    return out
+out(diner(), '3', 'themes')
 shutil.copy(os.path.join(IMG, 'hd', f'{K}-3.webp'), os.path.join(IMG, 'hd', f'{K}-salle.webp'))
 Image.open(os.path.join(IMG, 'hd', f'{K}-3.webp')).resize((540, 954), Image.LANCZOS).save(os.path.join(IMG, 'lieux', f'{K}-salle.webp'), 'WEBP', quality=82, method=6)
 for x in ('portes', 'rideau'): shutil.copy(os.path.join(IMG, 'open', f'dolcevita-{x}.webp'), os.path.join(IMG, 'open', f'{K}-{x}.webp'))
