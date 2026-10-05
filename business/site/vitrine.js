@@ -225,7 +225,7 @@
   const OV={env:'<i class="sc"></i><i class="eb"><i class="ein"><i class="ebd"></i><i class="ef"><img src="/img/open/env-flap.webp" alt=""><i class="es"></i></i></i></i>',cur:'<i class="sc"></i><i class="cu"></i>',
     voile:'<i class="sc"></i><i class="vl"></i><i class="vr"></i>',door:'<i class="sc"></i><i class="dl"></i><i class="dr"></i><i class="fl"></i>',
     non:'<i class="sc"></i><em class="dt">28 · 08</em>',scratch:'<i class="sc"></i><em class="dt">28 · 08</em><i class="fo"></i><i class="coin"></i>',
-    wheel:'<i class="sc"></i><i class="wh"></i><i class="pin"></i>',slot:'<i class="sc"></i><i class="sl">'+[0,1,2].map(i=>`<i><i>${['13 07 21 19 04','05 11 02 09 12','29 31 26 30 28'][i].split(' ').map(x=>`<b>${x}</b>`).join('')}<b>${['28','08','27'][i]}</b></i></i>`).join('')+'</i>'};
+    wheel:'<i class="sc"></i><i class="wh"></i><i class="pin"></i>',slot:'<i class="sc"></i><i class="sl">'+[0,1,2].map(i=>`<i><i>${['? 07 21 19 04','? 11 02 09 12','? 31 26 30 28'][i].split(' ').map(x=>`<b>${x}</b>`).join('')}<b>${['28','08','27'][i]}</b></i></i>`).join('')+'</i>'};
   const ovCard=(b,o)=>{ b.className='op-card anim'; b.innerHTML=`<span class="ov ov-${o.id}" aria-hidden="true"><span class="ph">${OV[o.id]}</span></span><b>${o.name}</b><small>${o.sub}</small>`; };
   opt($('cOpen'),OPENS,'op','',ovCard);
   opt($('cReveal'),REVEALS,'rvl','',ovCard);
@@ -421,7 +421,6 @@
       // compte à rebours : pas de page dédiée dans le tableau (il est en haut ou à la fin) ; pas de révélation de la date
       if(long&&C.cd==='page'){ C.cd='fin'; $('cCount').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.cd)); }
       $('cCount').querySelector('[data-id="page"]').hidden=long;
-      $('fldReveal').hidden=long;
     }
     $('cFmt').querySelectorAll('button').forEach(b=>{ const v=b.firstChild, key=b.dataset.id+C.k; if(v.dataset.k===key) return; v.dataset.k=key;
       // grand tableau : la vraie page, de haut en bas, qui défile derrière un téléphone (on voit que c'est un seul tableau)
@@ -450,7 +449,7 @@
     if($('fOcc')) $('fOcc').value=OCCS.find(o=>o.id===C.occ).name;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
-    [$('cOpen'),$('cReveal')].forEach(x=>{ x.style.setProperty('--sc',`url('/img/themes/${C.k}-1.webp?v=9')`); x.style.setProperty('--op',`url('/img/open/${C.k}-portes.webp')`); x.style.setProperty('--ri',`url('/img/open/${C.k}-rideau.webp')`); x.style.setProperty('--seal',`url('/img/seals/${SEAL[0]}.webp')`); x.style.setProperty('--pc',p.c); });
+    [$('cOpen'),$('cReveal')].forEach(x=>{ x.style.setProperty('--sc',C.fmt==='long'?`url('/img/long/${C.k}/thumb.webp')`:`url('/img/themes/${C.k}-1.webp?v=9')`); x.classList.toggle('lg',C.fmt==='long'); x.style.setProperty('--op',`url('/img/open/${C.k}-portes.webp')`); x.style.setProperty('--ri',`url('/img/open/${C.k}-rideau.webp')`); x.style.setProperty('--seal',`url('/img/seals/${SEAL[0]}.webp')`); x.style.setProperty('--pc',p.c); });
     $('opSealTxt').innerHTML=iniH; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
     $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir';
     { const o=$('cpOp'); o.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); o.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`); o.style.setProperty('--pal',p.c); o.style.setProperty('--man',DOORMEN.includes(C.k)?`url('/img/open/${C.k}-portier.webp')`:'none');
@@ -522,7 +521,7 @@
     $('cpPhone').classList.toggle('lg-off',C.fmt!=='long');
     lgRender(lgInvite(t,p,f,n1,n2,ds),C.fmt==='long'?120:900);
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
-    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=C.fmt==='long'?'Aucune':REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=whoTxt(); $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.id==='gifts'?giftName():x.name).join(', ')+(edText()?' — '+edText():'');
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=whoTxt(); $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.id==='gifts'?giftName():x.name).join(', ')+(edText()?' — '+edText():'');
     const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
     if($('fFormat')) $('fFormat').value=FMTS.find(f=>f.id===C.fmt).name;
     $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place} (${evTxt(e).toLowerCase()})`).join(' ; ');
@@ -540,7 +539,7 @@
   const lgMeta={};
   function lgInvite(t,p,f,n1,n2,ds){
     const day=$('cDate').value||'2027-06-12', dl=new Date(weddingDate().getTime()-30*864e5).toISOString().slice(0,10);
-    return {slug:'apercu',demo:true,layout:'long',theme:C.k,couple:isSolo()?[n1]:[n1,n2],date:day+'T15:00',tz:'Europe/Paris',opening:'cur',music:'none',
+    return {slug:'apercu',demo:true,layout:'long',theme:C.k,reveal:C.rvl==='non'?null:C.rvl,couple:isSolo()?[n1]:[n1,n2],date:day+'T15:00',tz:'Europe/Paris',opening:'cur',music:'none',
       palette:p.c,font:f.id==='theme'?undefined:f.id,countdown:C.cd==='page'?'fin':C.cd,calques:[],anim:[],trans:[],families:{},album:C.x.has('album'),
       intro:{eyebrow:t.scenes[0][0],text:introTxt(),dateText:ds},
       parents:C.x.has('parents')?{eyebrow:famEy(),names:[C.data.parents.n1,C.data.parents.n2].filter(Boolean),text:C.data.parents.text}:null,

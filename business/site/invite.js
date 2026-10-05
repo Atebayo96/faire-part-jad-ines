@@ -268,8 +268,9 @@
         ${fam&&fam.label?`<div class="greet">${esc(fam.label)}</div>`:''}
         ${eyHtml('ey',I.intro&&I.intro.eyebrow||T.scenes[0][0],'')}
         <div class="lg-names" style="${nm(1.05,X.hero.ink)}">${names}</div>
-        <div class="dl"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>
-        <div class="lg-hint">${S.scroll} ↓</div>
+        ${RVL?`<div data-rvl style="width:100%;color:${X.hero.ink}"></div>`:''}
+        ${!RVL||RVL==='wheel'?`<div class="dl${RVL?' rvl-later':''}"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>`:''}
+        <div class="lg-hint${RVL?' rvl-later':''}">${S.scroll} ↓</div>
       </div></div>`;
     // la bibliothèque de lieux dans le grand tableau : un lieu choisi (lieu) remplit le cadre peint de l'événement
     const evs=events.map((e,i)=>{ const d=zoned(e.start,e.tz), inner=e.lieu?`/img/hd/${I.theme}-${e.lieu}.webp?v=${IMGV}`:X.base+'/'+(X.ev[(I.events||[]).indexOf(e)]||X.ev[i%X.ev.length]);
@@ -337,8 +338,9 @@
   const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], bgs=$('#bgs'), fxc=$('#fx');
 
   /* ---------- date à découvrir ---------- */
-  const rvlHost=secs[0]&&secs[0].querySelector('[data-rvl]');
-  if(rvlHost) SceauReveal.mount(rvlHost,{kind:RVL,date:main,tz:TZ,lang:L,pal,light:pages[0].lt,scope:secs[0],onDone:()=>requestAnimationFrame(layoutStrip)});
+  // grand tableau : la date se découvre sur l'illustration d'ouverture (encre foncée = fond clair)
+  const rvlHost=LG?sc.querySelector('.lg-hero-txt [data-rvl]'):secs[0]&&secs[0].querySelector('[data-rvl]');
+  if(rvlHost) SceauReveal.mount(rvlHost,{kind:RVL,date:main,tz:TZ,lang:L,pal,light:LG?(h=>{ const n=parseInt((h||'#000').slice(1,7),16); return ((n>>16&255)*.299+(n>>8&255)*.587+(n&255)*.114)<128; })(LG.hero.ink):pages[0].lt,scope:LG?rvlHost.parentNode:secs[0],onDone:()=>requestAnimationFrame(layoutStrip)});
 
   /* ---------- apparition + parallaxe ---------- */
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;

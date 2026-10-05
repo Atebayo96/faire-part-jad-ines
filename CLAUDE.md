@@ -279,8 +279,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 
 33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la
     révélation de la date. Arriver sur l'onglet rejoue l'ouverture dans l'aperçu.
-    **Chaque carte montre son effet** dans un petit téléphone aux images du thème : **au repos, une pose figée** qui dit
-    l'effet (enveloppe scellée, rideau à moitié levé, voile et portes entrouverts, ticket à moitié gratté) ; l'animation
+    **Chaque carte montre son effet** dans un petit téléphone aux images du thème : **au repos, ce que l'invité voit en
+    premier, fermé et réaliste** (enveloppe scellée, rideau baissé, voile et portes fermés, ticket intact, roue au départ,
+    rouleaux sur « ? ») ; les images suivent le format (scène 1 ou illustration du grand tableau) ; l'animation
     (5 s) ne joue qu'**au survol** (« pour pas que ça prenne trop de dégâts »). L'enveloppe reprend les vraies images de
     l'ouverture (`env-body`, `env-flap`, sceau sur la pointe du rabat), pas un dessin en CSS. Détail (`OV` dans vitrine.js,
     `.op-card.anim` et `ov*` dans vitrine.css) : enveloppe (sceau, rabat, descente), rideau qui se lève, voile qui s'ouvre
@@ -290,7 +291,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     le mot des familles, les événements dans leurs cadres (la scène peinte du thème, un lieu de la bibliothèque ou votre
     photo), puis les parties facultatives (histoire, bande de photos, dress code ; bon à savoir, liste), la réponse et le
     compte à rebours. Les écrans propres au scène par scène (programme, FAQ, table…) n'y sont pas proposés, ni la page
-    dédiée au compte à rebours, ni la révélation de la date. L'aperçu du grand tableau est **le vrai moteur** (invite.js)
+    dédiée au compte à rebours. **La révélation de la date existe aussi en grand tableau** (5 octobre 2026) : elle se
+    joue sur l'illustration d'ouverture, sous les prénoms (`.lg-hero-txt [data-rvl]` dans invite.js). L'aperçu du grand tableau est **le vrai moteur** (invite.js)
     dans un `iframe` `srcdoc`, nourri d'une fiche faite des choix (`lgInvite()` dans vitrine.js) : l'utilisateur avait vu
     que l'étape ne changeait pas quand il choisissait le grand tableau, « c'est plus du tout la même chose ».
 
