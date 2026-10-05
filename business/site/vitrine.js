@@ -90,7 +90,7 @@
      (« grand tableau » contre « scène par scène ») : c'est le même produit, plus ou moins dessiné selon les écrans. */
   // les styles « long » n'existent qu'en grand tableau (pas de décors de scènes) : hors des listes scène après scène
   // tous les thèmes ont leurs décors de scènes ; ceux marqués plan:'signature' se composent à partir de Signature
-  // les thèmes du lancement (launch:true), chacun dans les deux formats : les 5 premiers et les 3 variantes de Mille et une nuits
+  // les thèmes du lancement (launch:true dans themes.js), chacun dans les deux formats ; seuls les compose:true se composent
   const KEYS=Object.keys(THEMES).filter(k=>THEMES[k].launch), DEMOS0=window.SCEAU_DEMOS||[];
   const LONGS=[
     {slug:'nour-ilyes',k:'nuits',couple:'Nour & Ilyes',ey:'Bismillah',date:'Du 8 au 10 juillet 2027 · Marrakech',ink:'#f6eedb',shadow:'0 2px 14px rgba(0,0,0,.55)',desc:'Henné, cérémonie et fête dans le désert',alt:'un riad de nuit, le couple de dos sur un balcon'},
@@ -157,17 +157,18 @@
     const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style;
     m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=9" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=9" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
       <div class="fmts">${ds?`<a href="/d/${esc(ds.slug)}/" target="_blank" rel="noopener"><b>Scène par scène</b><span>${esc(ds.couple)}</span></a>`:''}${dl?`<a href="/d/${esc(dl.slug)}/" target="_blank" rel="noopener"><b>Grand tableau</b><span>${esc(dl.couple)}</span></a>`:''}</div>
-      <div class="acts"><a class="go" href="/creer/?theme=${esc(k)}">Composer →</a></div></div>`;
+      <div class="acts">${t.compose?`<a class="go" href="/creer/?theme=${esc(k)}">Composer →</a>`:`<a class="go" href="/contact/?theme=${esc(k)}">Avec nous →</a>`}</div></div>`;
     models.appendChild(m); };
-  KEYS.forEach(card);
+  [...KEYS].sort((a,b)=>!!THEMES[b].compose-!!THEMES[a].compose).forEach(card); // ce qui se compose en ligne d'abord
   // faire-part d'un seul événement (« one shot ») : le henné, le sbouâ ; chacun avec sa démo et son lien vers le configurateur
   const one=document.getElementById('oneShots');
   if(one) one.innerHTML=[['henne','Henné','L’invitation à la soirée henné, seule ou en plus du mariage.'],['sbou3','Sbouâ','La naissance de votre enfant, fêtée au septième jour.']].map(([id,nm,tx])=>{ const d=DEMOS.find(x=>x.kind===id); if(!d) return ''; const t=THEMES[d.theme];
     return `<div class="model one"><a class="pic" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><img src="/img/themes/${esc(d.theme)}-${id==='henne'?2:1}.webp?v=9" alt="" loading="lazy"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}`)}">${esc(d.couple)}</span></a>
       <div class="meta"><div><h3>${nm}</h3><p class="style">${esc(t.name)} · un seul événement</p><p>${tx}</p></div></div>
       <div class="fmts"><a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><b>Voir l’exemple</b><span>${esc(d.couple)}</span></a></div>
-      <div class="acts"><a class="go" href="/creer/?occasion=${id}&theme=${esc(d.theme)}">Composer →</a></div></div>`; }).join('');
+      <div class="acts">${t.compose?`<a class="go" href="/creer/?occasion=${id}&theme=${esc(d.theme)}">Composer →</a>`:`<a class="go" href="/contact/?occasion=${id}&theme=${esc(d.theme)}">Avec nous →</a>`}</div></div>`; }).join('');
   const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
+  filters.hidden=STYLES.length<3; // un seul style au lancement : rien à filtrer
   STYLES.forEach((st,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=st; b.setAttribute('aria-pressed',i===0);
     b.onclick=()=>{ filters.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c===b)); models.querySelectorAll('.model').forEach(m=>{ m.hidden=!(st==='Tous'||m.dataset.style===st); }); };
     filters.appendChild(b); });
@@ -190,13 +191,14 @@
   const isSolo=()=>C.occ==='sbou3'||!nm2();
   const whoTxt=()=>C.occ==='sbou3'?`${nm1()} · parents ${nm2()}`:isSolo()?nm1():`${nm1()} & ${nm2()}`;
   const introTxt=()=>C.occ==='henne'?(isSolo()?'A la joie de vous convier à sa soirée henné':'Ont la joie de vous convier à leur soirée henné'):C.occ==='sbou3'?`${nm2()} vous convient au sbouâ de leur ${C.sexe==='fils'?'fils':'fille'}`:'Ont la joie de vous convier à leur mariage';
-  /* au lancement, le configurateur se concentre sur Mille et une nuits et ses variantes (family:'nuits' dans themes.js),
-     pour la communauté arabe et musulmane ; les autres thèmes restent dans la galerie et le code */
-  const CK=Object.keys(THEMES).filter(k=>THEMES[k].family==='nuits'&&!THEMES[k].pending);
-  const C={occ:OCC[urlOcc]?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:'nuits',fmt:urlFmt==='long'?'long':'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
+  /* le configurateur ne propose que les thèmes compose:true (themes.js) : aujourd'hui Dolce Vita seul.
+     Le henné et le sbouâ ne sont proposés que si un thème de la famille Mille et une nuits s'y compose. */
+  const CK=Object.keys(THEMES).filter(k=>THEMES[k].compose&&!THEMES[k].pending);
+  const OCC_ON=CK.some(k=>THEMES[k].family==='nuits')?OCCS:OCCS.filter(o=>o.id==='mariage');
+  const C={occ:OCC_ON.some(o=>o.id===urlOcc)?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:CK[0],fmt:urlFmt==='long'?'long':'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
     ev:null}; C.ev=OCC[C.occ].ev();
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
-  const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'mosquee',name:'Mosquée'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
+  const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église',fam:''},{id:'mosquee',name:'Mosquée',fam:'nuits'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
   /* upsell sans frustration : les options de Signature (lieu peint d'après photo, 3e événement et plus, lien par famille,
      anglais) sont proposées au même endroit que les autres, avec l'étiquette « Signature ». On peut les choisir en Essentiel :
      la formule se met d'elle-même sur Signature et le récapitulatif explique pourquoi ; si l'on revient à Essentiel, il dit
@@ -265,13 +267,14 @@
       box.insertBefore(l,more); return l; };
     C.ev.forEach(addEv);
     resetEv=()=>{ box.querySelectorAll('li.ev').forEach(l=>l.remove()); C.ev.forEach(addEv); };
-    $('cAddEv').onclick=()=>{ if(C.ev.length>=6) return; const e={name:['','','La soirée','Le brunch','Le henné','La bénédiction'][C.ev.length]||'',time:'21:00',place:'',bg:'simple',lieu:'salle'}; C.ev.push(e); addEv(e,C.ev.length-1); paint(); showEv(C.ev.length-1); };
+    $('cAddEv').onclick=()=>{ if(C.ev.length>=6) return; const e={name:(THEMES[C.k].family==='nuits'?['','','La soirée','Le brunch','Le henné','La bénédiction']:['','','La soirée','Le brunch','Le cocktail','La bénédiction'])[C.ev.length]||'',time:'21:00',place:'',bg:'simple',lieu:'salle'}; C.ev.push(e); addEv(e,C.ev.length-1); paint(); showEv(C.ev.length-1); };
     part('Deuxième partie','facultatif',[['story','Notre histoire'],['album','Bande de photos'],['dress','Dress code']]);
     part('Troisième partie','facultatif',[['stay','Bon à savoir'],['gifts','Liste de mariage']]);
     li('fixed rsvp','<b>Réponse</b><span>« Serez-vous des nôtres ? »</span>');
     box.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{ const id=b.dataset.x; C.x.has(id)?C.x.delete(id):C.x.add(id); paint(); }); }
   // choix de l'occasion : prénoms, événements et textes par défaut de l'occasion (les prénoms tapés à la main restent)
-  opt($('cOcc'),OCCS,'occ','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
+  if(OCC_ON.length<2) $('cOcc').closest('.fld').hidden=true; // une seule occasion : rien à choisir
+  opt($('cOcc'),OCC_ON,'occ','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   $('cOcc').addEventListener('click',e=>{ if(!e.target.closest('button')) return;
     const all=Object.values(OCC).flatMap(o=>o.n);
     [$('cN1'),$('cN2')].forEach((inp,i)=>{ if(!inp.value.trim()||all.includes(inp.value.trim())) inp.value=OCC[C.occ].n[i]; });
@@ -284,10 +287,12 @@
   const DEF={
     parents:{mariage:'ont la joie de vous convier au mariage de leurs enfants',henne:'vous attendent pour la soirée henné de leur fille',sbou3:'ont la joie de vous présenter leur petit-enfant'},
     gifts:{mariage:'Votre présence suffit. Pour ceux qui le souhaitent, une cagnotte pour notre voyage.',henne:'Votre présence suffit. Pour ceux qui le souhaitent, une petite cagnotte pour la mariée.',sbou3:'Votre présence suffit. Pour ceux qui le souhaitent, une liste de naissance.'}};
+  // exemples pré-remplis dans l'esprit du thème du lancement (Mille et une nuits ou Dolce Vita)
+  const NUITS=THEMES[C.k].family==='nuits';
   C.data={
-    parents:{n1:'Famille Alaoui',n2:'Famille Haddad',text:DEF.parents[C.occ]},
-    story:[{when:'2018',title:'La rencontre',text:'Un mariage de cousins, deux places voisines.'},{when:'2022',title:'Paris',text:'Un premier appartement, le thé du dimanche.'},{when:'2026',title:'La demande',text:'Sur une terrasse, au coucher du soleil.'}],
-    dress:{title:'Tenue de fête',text:'Caftans, takchitas et djellabas bienvenus.',colors:['#0f5e4c','#d4af37','#f2e6d0','#7a1f3d']},
+    parents:{n1:NUITS?'Famille Alaoui':'Famille Martin',n2:NUITS?'Famille Haddad':'Famille Rossi',text:DEF.parents[C.occ]},
+    story:[{when:'2018',title:'La rencontre',text:'Un mariage de cousins, deux places voisines.'},{when:'2022',title:'Paris',text:NUITS?'Un premier appartement, le thé du dimanche.':'Un premier appartement, les dimanches au marché.'},{when:'2026',title:'La demande',text:'Sur une terrasse, au coucher du soleil.'}],
+    dress:NUITS?{title:'Tenue de fête',text:'Caftans, takchitas et djellabas bienvenus.',colors:['#0f5e4c','#d4af37','#f2e6d0','#7a1f3d']}:{title:'Chic d’été',text:'Lin, couleurs claires et chaussures qui aiment les pavés.',colors:['#1f5f8b','#f3d36b','#f4ede0','#b5562f']},
     stay:[{icon:'hotel',title:'Dormir',text:'Chambres réservées à 5 min.'},{icon:'car',title:'Navettes',text:'Depuis la gare à 14h15.'}],
     gifts:{text:DEF.gifts[C.occ],url:''}};
   // l'occasion change : les phrases encore « par défaut » suivent ; ce que l'utilisateur a écrit reste
@@ -410,7 +415,7 @@
     $('fldSexe').hidden=C.occ!=='sbou3'; $('cNamesL').textContent=OCC[C.occ].label;
     [$('cN1'),$('cN2')].forEach((inp,i)=>{ inp.setAttribute('aria-label',OCC[C.occ].l[i]); inp.placeholder=OCC[C.occ].ph[i]; });
     $('cNamesF').classList.toggle('sbou3',C.occ==='sbou3');
-    $('cStory').querySelectorAll('[data-lieu]').forEach(b=>{ const L0=LIEUX.find(x=>x.id===b.dataset.lieu); b.hidden=!!(L0.occ&&L0.occ!==C.occ); });
+    $('cStory').querySelectorAll('[data-lieu]').forEach(b=>{ const L0=LIEUX.find(x=>x.id===b.dataset.lieu); b.hidden=!!(L0.occ&&L0.occ!==C.occ)||(L0.fam!==undefined&&L0.fam!==(THEMES[C.k].family||'')); });
     $('cExtras').querySelector('[data-id="story"]').hidden=C.occ==='sbou3'||C.fmt==='long';
     if($('fOcc')) $('fOcc').value=OCCS.find(o=>o.id===C.occ).name;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
@@ -486,7 +491,7 @@
     const needTxt=needs.length?(C.plan==='essentiel'?` Essentiel ne comprend pas ${needs.join(', ')} : vous pourrez les retirer, ou passer en Signature.`:` Avec ${needs.join(', ')}, c'est la formule Signature.`):(C.plan==='essentiel'?' Tout est compris dans Essentiel.':'');
     $('cRecap').textContent=needTxt.trim()||(C.plan==='signature'?'Votre lieu peint d’après photo, un lien par famille, français et anglais.':'');
     // récapitulatif, ligne par ligne
-    const sum=[['Occasion',OCCS.find(o=>o.id===C.occ).name+(C.occ==='sbou3'?(C.sexe==='fils'?' · un garçon':' · une fille'):'')],['Thème',t.name],['Format',FMTS.find(f=>f.id===C.fmt).name],['Vous',`${whoTxt()} · ${ds}`],[C.fmt==='long'?'Tableau':'Écrans',`${C.fmt==='long'?'Illustration':'Accueil'} → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',xOn().map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'&&C.fmt!=='long'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
+    const sum=[...(OCC_ON.length>1?[['Occasion',OCCS.find(o=>o.id===C.occ).name+(C.occ==='sbou3'?(C.sexe==='fils'?' · un garçon':' · une fille'):'')]]:[]),['Thème',t.name],['Format',FMTS.find(f=>f.id===C.fmt).name],['Vous',`${whoTxt()} · ${ds}`],[C.fmt==='long'?'Tableau':'Écrans',`${C.fmt==='long'?'Illustration':'Accueil'} → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',xOn().map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'&&C.fmt!=='long'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
     $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
     { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b> · ${esc(FMTS.find(f=>f.id===C.fmt).name)}<br>${esc(whoTxt())} · ${esc(ds)}<br>${C.ev.map(e=>esc(evTxt(e))).join(' → ')}${xOn().length?` · +${xOn().length}`:''}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
   }

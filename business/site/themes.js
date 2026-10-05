@@ -33,14 +33,15 @@ window.SCEAU_THEMES={
   gravure:{name:"Gravure",style:"Gravure",short:"Encre ancienne, papier vieilli",desc:"Gravure à l'encre sur papier ancien, comme un livre d'autrefois.",couple:"Claire & Thomas",light:true,
     font:'"IM Fell English",Georgia,serif',italic:true,color:"#2a2620",ey:"#6b6152",tx:"#4a443a",size:.74,stack:true,
     scenes:[["Ils se marient","NAMES","Samedi 2 octobre 2027"],["La messe","Église Saint-Martin","15h00","Itinéraire"],["Le dîner","Au château","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
-  dolcevita:{name:"Dolce Vita",launch:true,style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
+  dolcevita:{name:"Dolce Vita",launch:true,compose:true,style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
     font:'"Italiana",serif',color:"#fff",size:.85,
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
 };
 
-/* lancement : 5 thèmes (launch:true), chacun dans les deux formats, « scène par scène » (décors img/hd/<thème>-n) et
-   « grand tableau » (img/long/<thème>/). Les autres thèmes restent dans le code, leurs démos restent en ligne, mais ils ne
-   sont ni dans la galerie ni dans le configurateur tant qu'ils n'existent pas dans les deux formats. */
+/* lancement : les thèmes launch:true, chacun dans les deux formats, « scène par scène » (décors img/hd/<thème>-n) et
+   « grand tableau » (img/long/<thème>/), sont dans la galerie et l'accueil. Les autres restent dans le code et leurs démos
+   en ligne. Le configurateur, lui, ne propose que les thèmes compose:true : depuis le 5 octobre 2026, Dolce Vita seul
+   (« pour l'instant on se focus sur ça ») ; les autres cartes de la galerie mènent au contact (« Avec nous »). */
 Object.assign(window.SCEAU_THEMES,{
   chinois:{name:"Double bonheur",style:"Chinois",short:"Lanternes rouges, pavillon, pruniers",desc:"Pavillon aux lanternes rouges, pont sur l'étang aux lotus, pruniers en fleurs. Pour un mariage chinois ou le Nouvel an.",couple:"Lin & Wei",long:true,
     font:'"Cinzel",serif',color:"#fff",upper:true,size:.8,gf:"Cinzel",music:"nocturne",particles:"none",
@@ -65,10 +66,11 @@ Object.assign(window.SCEAU_THEMES,{
     scenes:[["Nous nous marions", "NAMES", "Samedi 21 août 2027"], ["La cérémonie", "Sous le dais de kente", "15h00", "Itinéraire"], ["La fête", "Sous le baobab", "Dès 20h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 juillet", "Répondre"]]}
 });
 
-/* Mille et une nuits et ses variantes (family:"nuits") : au lancement, le configurateur ne propose que cette famille,
-   pour la communauté arabe et musulmane. Même peinture que le riad de nuit, d'autres lieux et d'autres lumières. */
+/* Mille et une nuits et ses variantes (family:"nuits") : dans la galerie, plus dans le configurateur depuis le
+   5 octobre 2026 (Dolce Vita seul). Dans cette famille, le lieu « Église » devient « Mosquée » et le chapeau est la basmala. Même peinture que le riad de nuit, d'autres lieux et d'autres lumières. */
 /* pals : les couleurs du thème, proposées en premier et choisies par défaut (boutons, sceau, date à gratter, roue, jackpot) */
 window.SCEAU_THEMES.nuits.pals=[{name:"Or du riad",c:"#c9a35a",seal:"or"},{name:"Bleu de nuit",c:"#2e4a7d",seal:"nuit"},{name:"Grenat",c:"#7a2e3b",seal:"bordeaux"}];
+window.SCEAU_THEMES.dolcevita.pals=[{name:"Bleu Riviera",c:"#1f5f8b",seal:"nuit"},{name:"Citron",c:"#c9a227",seal:"or"},{name:"Terracotta",c:"#b5562f",seal:"terracotta"}];
 window.SCEAU_THEMES.nuits.family="nuits"; window.SCEAU_THEMES.nuits.variant="Riad de nuit";
 Object.assign(window.SCEAU_THEMES,{
   alhambra:{pals:[{name:"Terracotta",c:"#a8532c",seal:"terracotta"},{name:"Vert myrte",c:"#4f6b3a",seal:"emeraude"},{name:"Or ancien",c:"#b08a4a",seal:"or"}],name:"Andalou",family:"nuits",variant:"Palais de l'Alhambra",launch:true,style:"Peinture",short:"Palais andalou, arcades, bassin",desc:"Un palais andalou baigné de lumière : arcades ciselées, bassin et orangers. La douceur d'un mariage de jour.",couple:"Leïla & Mehdi",light:true,
