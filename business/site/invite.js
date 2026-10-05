@@ -237,7 +237,12 @@
   function longHtml(){
     const X=LG, sec=X.sec, R0=I.rsvp||{};
     const nm=(k,col)=>esc(nmCss(k,col));
-    const blk=(i,inner,cls='')=>`<section class="lg-s${cls?' '+cls:''}" style="--ink:${sec[i].ink};--ac:${sec[i].accent};background-image:url('${X.base}/${sec[i].tex}')">${inner}</section>`;
+    // couleur qui se lit sur l'accent (blanc sur un accent sombre, encre sur un accent clair) : médaillons et bouton plein
+    const clair=hex=>{ const n=parseInt(hex.slice(1),16); return (.299*(n>>16&255)+.587*(n>>8&255)+.114*(n&255))/255>.62; };
+    const onAc=hex=>clair(hex)?'#1b1408':'#fff';
+    // verre des boutons : sombre sous une encre claire (section de nuit), blanc sous une encre foncée (papier)
+    const glass=ink=>clair(ink)?'rgba(18,15,12,.5)':'rgba(255,255,255,.55)';
+    const blk=(i,inner,cls='')=>`<section class="lg-s${cls?' '+cls:''}" style="--ink:${sec[i].ink};--ac:${sec[i].accent};--on:${onAc(sec[i].accent)};--gl:${glass(sec[i].ink)};background-image:url('${X.base}/${sec[i].tex}')">${inner}</section>`;
     const band=(i)=>`<div class="lg-band" aria-hidden="true"><img src="${X.base}/${X.bands[i]}" alt="" data-sp="-.10"></div>`;
     const ttl=(t,i)=>`<h2 class="rv lg-h" style="${nm(.62,sec[i].accent)}">${esc(t)}</h2>`;
     // 1. l'illustration d'ouverture et l'invitation
@@ -259,7 +264,7 @@
         <div class="when">${esc(when)}</div>${e.place?`<div class="tx">${esc(e.place)}</div>`:''}${e.note?`<div class="tx small">${esc(e.note)}</div>`:''}
         <div class="acts">${e.address?`<a class="b" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${S.route}</a>`:''}<button type="button" class="b" data-cal="${esc(e.id)}">${ic.cal}${S.cal}</button></div>
       </article>`; }).join('');
-    const s1=`<div class="lg-a" style="background-image:url('${X.base}/${sec[0].tex}');--ink:${sec[0].ink};--ac:${sec[0].accent}">${hero}
+    const s1=`<div class="lg-a" style="background-image:url('${X.base}/${sec[0].tex}');--ink:${sec[0].ink};--ac:${sec[0].accent};--on:${onAc(sec[0].accent)};--gl:${glass(sec[0].ink)}">${hero}
       <div class="lg-in">
         ${P0?`<div class="rv ey">${esc(P0.eyebrow||S.parents)}</div><div class="rv lg-fams">${(P0.names||[]).map(x=>`<span>${esc(x)}</span>`).join('<i>&amp;</i>')}</div><p class="rv tx">${esc(P0.text||'')}</p>`:''}
         <div class="rv lg-names2" style="${nm(.8,sec[0].accent)}">${names}</div>
@@ -294,7 +299,7 @@
   pages.forEach((p,i)=>{ const r=runs[runs.length-1]; if(r&&r.n===p.n) r.b=i; else runs.push({n:p.n,lt:p.lt,a:i,b:i}); runOf[i]=runs.length-1; });
   document.title=I.title||`${n1} & ${n2}`;
   const mu=I.music||T.music;
-  const app=document.createElement('div'); app.id='app';
+  const app=document.createElement('div'); app.id='app'; app.style.setProperty('--pal',pal);
   app.innerHTML=`
     <div class="sc${LG?' sc-long':''}${!LG&&CAL.size?' cal':''}" id="sc"${!LG&&CAL.size?` style="background-image:url('${fond}')"`:''}><div class="bgs" id="bgs">${LG?'':runs.map(r=>hasCal(r.n)?`<div class="bgl${r.lt?' light':''} cal"><div class="bg"><img class="sub" src="${cal(r.n)}" alt="" decoding="async"></div></div>`:`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
     ${LG&&I.demo?`<a class="lg-want" href="/formules/">${S.want}</a>`:''}

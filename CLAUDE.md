@@ -19,7 +19,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
    (tout ce qui est dans `.pg` glisse avec elle et se coupe à son bord). La lisibilité vient de l'image (règles 6 et 7)
    et des ombres portées des textes ; si ça ne suffit pas, on refait l'image.
 3. **Rien sous 11 px.** Échelle unique (variables `--fs-*` dans invite.css, reprises dans l'aperçu de la vitrine) :
-   chapeaux 13 px, texte courant 18 px et plus, horaires 17 px et plus, boutons 12,5 px, mentions 11,5 px.
+   chapeaux 13 px, texte courant 18 px et plus, horaires 17 px et plus, boutons 17 px (garamond), mentions 11,5 px.
    L'aperçu de la vitrine et le configurateur doivent afficher **les mêmes tailles** que le vrai faire-part.
 4. **Aérer.** Trois respirations : 10 px (entre deux lignes liées), 18 px (entre deux éléments), 28 px (avant un bouton,
    un compte à rebours, une carte). Interligne 1,45 pour le texte courant. On ne tasse jamais le bloc de texte pour
@@ -27,6 +27,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 5. **Ne pas superposer un texte à un motif.** Un chapeau, une date ou un titre ne passe jamais sur un ornement,
    un lustre, des lanternes ou des fleurs. Si c'est le cas, on déplace le texte ou on refait l'image, on ne réduit
    pas le texte.
+
+5b. **Les boutons sont des pastilles, pas des encadrés en capitales.** L'utilisateur a jugé l'ancien bouton (filet fin,
+    capitales espacées, icône au trait) « trop cliché ». Le bouton (`.b` dans invite.css, `.bt` dans l'aperçu de la vitrine,
+    `.rvl-btn` pour la révélation) est une pastille arrondie de 46 px de haut en verre dépoli, l'icône dans un médaillon
+    à la couleur du couple (`--pal`, ou `--ac` dans le grand tableau), le mot en Cormorant Garamond 17 px. Les deux actions
+    d'un événement ont la même largeur et restent côte à côte dès 360 px ; enfoncement au toucher, contour de focus.
+    Verre sombre à 50 % sur les scènes (à 30 %, un couchant clair tombait à 3,5:1), verre blanc sur les thèmes papier ;
+    dans le grand tableau, le verre se choisit par section d'après l'encre (`--gl`, invite.js). Contraste du mot mesuré
+    sur le fond réel du bouton, pire pixel compris, 4,5:1 minimum.
 
 ## Images : chaque image réserve la place du texte avant d'être belle
 

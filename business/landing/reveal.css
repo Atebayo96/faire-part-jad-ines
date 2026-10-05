@@ -68,9 +68,11 @@
 .rvl-lever::after{content:"";position:absolute;left:0;top:0;width:100%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--pl),var(--p) 55%,var(--pd));box-shadow:0 3px 6px rgba(0,0,0,.4)}
 .rvl-lever.pull{animation:rvlPull .75s cubic-bezier(.4,0,.3,1)}
 @keyframes rvlPull{40%{transform:scaleY(-.75)}100%{transform:none}}
-.rvl-btn{margin-top:14px;display:inline-flex;align-items:center;border:1px solid currentColor;padding:9px 18px;border-radius:2px;background:rgba(0,0,0,.18);color:inherit;
-  font:500 var(--fs-btn,12.5px)/1 Inter,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
-.rvl.light .rvl-btn{background:rgba(255,255,255,.45)}
+.rvl-btn{margin-top:14px;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:5px 26px;border:1px solid rgba(255,255,255,.3);border-radius:999px;color:inherit;
+  font:500 var(--fs-btn,17px)/1.1 "Cormorant Garamond",Georgia,serif;letter-spacing:.01em;cursor:pointer;background:rgba(18,15,12,.5);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);
+  box-shadow:0 1px 2px rgba(0,0,0,.12),0 8px 22px -8px rgba(0,0,0,.45);text-shadow:0 1px 6px rgba(0,0,0,.35);-webkit-tap-highlight-color:transparent;transition:transform .18s cubic-bezier(.3,.7,.3,1),opacity .4s}
+.rvl-btn:active{transform:scale(.96)}
+.rvl.light .rvl-btn{background:rgba(255,255,255,.72);border-color:rgba(127,127,127,.3);text-shadow:none;box-shadow:0 1px 2px rgba(60,40,10,.08),0 10px 24px -10px rgba(60,40,10,.3)}
 .rvl-btn:disabled{opacity:0;pointer-events:none;transition:opacity .4s}
 
 /* confettis */

@@ -271,13 +271,15 @@
   .pv-sc{position:relative;height:100%;background:center/cover no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0;color:#fff}
   /* comme dans le moteur : pas de halo sombre derrière le texte (il traçait une ligne entre deux pages au glissement) */
   .pv-sc.light .ey,.pv-sc.light .nm,.pv-sc.light .tx,.pv-sc.light .bt,.pv-sc.light .pv-hint{text-shadow:none}
-  .pv-sc.light .bt{background:transparent;backdrop-filter:none}
   .pv-sc>*{position:relative}
   .pv-sc .ey{font:500 13px/1.3 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.5)}
   .pv-sc .nm{font:400 clamp(38px,5.4vh,54px)/1.08 "Great Vibes",cursive;margin:16px 0 12px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
   .pv-sc .tx{font:italic 400 clamp(17px,2.4vh,21px)/1.45 "Cormorant Garamond",Georgia,serif;text-shadow:0 1px 10px rgba(0,0,0,.55);max-width:17em}
   .pv-sc .tx+.tx{margin-top:8px}
-  .pv-sc .bt{margin-top:24px;display:inline-block;border:1px solid rgba(255,255,255,.8);padding:11px 16px;font:500 12.5px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,0,0,.15);backdrop-filter:blur(2px)}
+  /* même bouton que le faire-part (invite.css .b) : pastille en verre, médaillon à la couleur du couple, garamond 17 px */
+  .pv-sc .bt{margin-top:24px;display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:5px 20px 5px 6px;border:1px solid rgba(255,255,255,.3);border-radius:999px;font:500 17px/1.1 "Cormorant Garamond",Georgia,serif;letter-spacing:.01em;white-space:nowrap;background:rgba(18,15,12,.5);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);box-shadow:0 1px 2px rgba(0,0,0,.12),0 8px 22px -8px rgba(0,0,0,.45);text-shadow:0 1px 6px rgba(0,0,0,.35)}
+  .pv-sc .bt svg{width:32px;height:32px;flex:none;padding:8px;border-radius:50%;color:#fff;background:var(--pal,#b8975a);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 2px 6px rgba(0,0,0,.18)}
+  .pv-sc.light .bt{background:rgba(255,255,255,.72);border-color:rgba(127,127,127,.3);border-color:color-mix(in srgb,var(--pal,#b8975a) 35%,transparent);box-shadow:0 1px 2px rgba(60,40,10,.08),0 10px 24px -10px rgba(60,40,10,.3)}
   .pv-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font:500 11.5px Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6)}
   @media (max-width:760px){ .pv{flex-direction:column;gap:12px} .pv-side{text-align:center;max-width:none} .pv-side p{display:none} .pv-side h3{font-size:24px;margin:0 0 8px} .pv-tabs{justify-content:center} .pv-phone{height:min(72vh,680px)} }
   /* filtres de style */
