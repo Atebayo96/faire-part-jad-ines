@@ -560,7 +560,7 @@
     #cpMiniSteps{margin-top:4px;border-top:1px solid var(--line)}
     .cp-mini-side .lk{background:none;border:0;padding:0;font:500 12.5px Inter,sans-serif;color:var(--ink);text-decoration:underline;cursor:pointer;justify-self:start}
     /* les étapes dans le bandeau : 2 x 2, compactes */
-    #cpMiniSteps .wz-nav{position:static;grid-template-columns:repeat(4,1fr);gap:0 6px;padding:0;margin:0;border:0;background:none}
+    #cpMiniSteps .wz-nav{position:static;grid-template-columns:repeat(5,1fr);gap:0 6px;padding:0;margin:0;border:0;background:none}
     #cpMiniSteps .wz-nav button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     #cpMiniSteps .wz-nav button{padding:6px 0 0;gap:4px;display:flex;align-items:baseline;font-size:11.5px;border-top-width:2px}
     #cpMiniSteps .wz-nav button b{font-size:15px}
@@ -659,7 +659,7 @@
   .pv-photo{position:relative;margin-top:28px;padding:10px 14px;border:1px dashed currentColor;font:italic 400 14px/1.4 "Cormorant Garamond",Georgia,serif;opacity:.9}
   @media (max-width:560px){ .lieux{grid-template-columns:repeat(3,1fr)} }
   /* configurateur en étapes */
-  .wz-nav{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .wz-nav{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
   .wz-nav button{width:100%;background:none;border:0;border-top:2px solid var(--line);padding:12px 0 0;text-align:left;cursor:pointer;display:grid;gap:4px;color:var(--muted);font:500 13px Inter,sans-serif}
   .wz-nav button b{font:500 11px/1 Inter,sans-serif;letter-spacing:.08em}
   .wz-nav button[aria-current="true"]{border-top-color:var(--ink);color:var(--ink)}
@@ -692,8 +692,8 @@
   .wz-nav button b{font:italic 400 24px/1 "Cormorant Garamond",Georgia,serif;letter-spacing:0;color:var(--ink)}
   .wz-nav button[aria-current="true"] span{font-weight:500}
   /* thèmes en vignettes dans le configurateur */
-  .opts.themes{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-  @media (max-width:560px){ .opts.themes{grid-template-columns:repeat(3,1fr)} }
+  .opts.themes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px} /* la famille Mille et une nuits : quatre variantes */
+  @media (max-width:560px){ .opts.themes{grid-template-columns:repeat(2,1fr)} }
   .th{border:0;padding:0;background:none;cursor:pointer;display:grid;gap:6px;font:500 12px Inter,sans-serif;color:var(--ink);min-width:0;text-align:left}
   .th span{display:block;aspect-ratio:3/4;background:#eee center 30%/cover no-repeat;outline:1px solid var(--line)}
   .fld .hint{margin:0;font-size:13px;color:var(--muted)}
@@ -783,3 +783,10 @@
   /* vignettes de thème (3:4 dans une image 9:16) : on cadre sur le sujet, en bas, pas sur le ciel vide */
   .th span{background-position:center 88%}
   .model .pic img{object-position:center 80%}
+
+  /* grand tableau : l'étape 3 montre les parties du tableau (lg-only), l'aperçu est le vrai moteur dans un cadre */
+  .story>li.lg-only{display:none}
+  .story.long>li.lg-only{display:grid}
+  .story>li.part .opts{display:flex;flex-wrap:wrap;gap:6px}
+  .cp-phone iframe.cp-lg{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1;background:#111;transition:opacity .25s}
+  .pv-scroll[hidden]{display:none}

@@ -65,6 +65,21 @@ Object.assign(window.SCEAU_THEMES,{
     scenes:[["Nous nous marions", "NAMES", "Samedi 21 août 2027"], ["La cérémonie", "Sous le dais de kente", "15h00", "Itinéraire"], ["La fête", "Sous le baobab", "Dès 20h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 juillet", "Répondre"]]}
 });
 
+/* Mille et une nuits et ses variantes (family:"nuits") : au lancement, le configurateur ne propose que cette famille,
+   pour la communauté arabe et musulmane. Même peinture que le riad de nuit, d'autres lieux et d'autres lumières. */
+window.SCEAU_THEMES.nuits.family="nuits"; window.SCEAU_THEMES.nuits.variant="Riad de nuit";
+Object.assign(window.SCEAU_THEMES,{
+  alhambra:{name:"Alhambra",family:"nuits",variant:"Palais andalou",launch:true,style:"Peinture",short:"Palais andalou, arcades, bassin",desc:"Un palais andalou baigné de lumière : arcades ciselées, bassin et orangers. La douceur d'un mariage de jour.",couple:"Leïla & Mehdi",light:true,
+    font:'"Amiri",serif',color:"#5b2a1c",ey:"#7a4a26",tx:"#5a3a28",size:.8,gf:"Amiri",music:"scheherazade",particles:"none",mono:["#5b2a1c","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],
+    scenes:[["Bismillah","NAMES","Samedi 4 septembre 2027"],["La cérémonie","Au palais","15h00 · Cour des orangers","Itinéraire"],["Le dîner","Sous les arcades","Dès 19h30","Itinéraire"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er août","Répondre"]]},
+  desert:{name:"Nuit du désert",family:"nuits",variant:"Dunes et tente caïdale",launch:true,style:"Peinture",short:"Dunes, tente caïdale, lanternes",desc:"Les dunes sous les étoiles, une tente caïdale et des lanternes posées sur le sable.",couple:"Amira & Youssef",
+    font:'"Cinzel",serif',color:"#f6e7c8",upper:true,size:.74,gf:"Cinzel",music:"scheherazade",particles:"none",
+    scenes:[["Bismillah","NAMES","Samedi 18 septembre 2027"],["Le henné","Vendredi soir","20h00 · Sous la tente","Itinéraire"],["La cérémonie","Dans les dunes","Samedi 17h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 20h","Répondre"]]},
+  emeraude:{name:"Émeraude & or",family:"nuits",variant:"Cour de palais",launch:true,style:"Peinture",short:"Velours émeraude, or, lanternes ciselées",desc:"Une cour de palais sous la nuit, velours émeraude et or, lanternes ciselées et plateaux de cuivre. Le faste d'une grande réception.",couple:"Myriam & Bilal",
+    font:'"Playfair Display",Georgia,serif',italic:true,color:"#f6e3ae",size:.86,gf:"Playfair+Display:ital@0;1",music:"scheherazade",particles:"none",
+    scenes:[["Bismillah","NAMES","Samedi 9 octobre 2027"],["Le nikah","En famille","15h00 · Chez les parents de la mariée","Itinéraire"],["La réception","Au palais","Dès 19h30","Itinéraire"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]}
+});
+
 /* complements utilises par le moteur de faire-part (invite.js) et le build */
 (function(T){
   const X={

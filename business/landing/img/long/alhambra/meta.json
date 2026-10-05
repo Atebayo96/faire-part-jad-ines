@@ -1,0 +1,49 @@
+{
+ "base": "/img/long/alhambra",
+ "sec": [
+  {
+   "tex": "tex1.webp",
+   "ink": "#3e2518",
+   "accent": "#8a4a22"
+  },
+  {
+   "tex": "tex2.webp",
+   "ink": "#2b3424",
+   "accent": "#3f5a34"
+  },
+  {
+   "tex": "tex3.webp",
+   "ink": "#3e2518",
+   "accent": "#9a4f2a"
+  }
+ ],
+ "bands": [
+  "band1.webp",
+  "band2.webp"
+ ],
+ "ev": [
+  "ev1.webp",
+  "ev2.webp",
+  "ev3.webp"
+ ],
+ "photos": [
+  "ph1.webp",
+  "ph2.webp",
+  "ph3.webp",
+  "ph4.webp"
+ ],
+ "hero": {
+  "src": "hero.webp",
+  "w": 900,
+  "h": 1591,
+  "ink": "#4a2416",
+  "shadow": "0 1px 10px rgba(255,250,240,.85)",
+  "top": "12%"
+ },
+ "frame": {
+  "src": "frame.webp",
+  "mask": "frame-mask.png",
+  "w": 720,
+  "h": 912
+ }
+}

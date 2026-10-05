@@ -10,14 +10,20 @@ D={'chinois':"a pair of red lacquered Chinese doors with gold studs and round br
    'asianchic':"a pair of black lacquer doors with gold-leaf geometric inlays and jade handles, white orchid motif",
    'y2k':"a pair of glossy bubblegum-pink doors with chrome trim, butterfly handles, holographic sheen",
    'oldmoney':"a pair of dark green painted panelled doors with brass lion knockers, boxwood topiary carved in relief",
-   'afro':"a pair of carved wooden doors with kente and wax patterns painted in warm orange and indigo, cowrie-shell handles"}
+   'afro':"a pair of carved wooden doors with kente and wax patterns painted in warm orange and indigo, cowrie-shell handles",
+   'alhambra':"a pair of tall Andalusian cedar doors with carved geometric star patterns, set in an ivory stucco horseshoe arch, bronze handles",
+   'desert':"a pair of caidal tent flaps in heavy ochre and indigo embroidered cloth with geometric Berber motifs and gold tassels, closed in the middle",
+   'emeraude':"a pair of monumental palace doors in deep emerald lacquer with chiselled gold geometric star inlays and heavy gold ring knockers"}
 R={'chinois':"a heavy red silk curtain with gold embroidery and tassels, double-happiness motif at the top",
    'japonais':"a pale pink noren-like curtain of soft linen with a cherry-branch print, in the manner of a woodblock print",
    'gzhel':"a white curtain painted with cobalt blue Gzhel roses, blue tassels",
    'asianchic':"a black silk curtain with fine gold-leaf threads, white orchids embroidered along the edges",
    'y2k':"a shiny bubblegum-pink satin curtain with chrome rings and butterfly embroidery",
    'oldmoney':"a deep green velvet curtain with brass rings and an understated gold braid",
-   'afro':"a kente-patterned curtain in orange, gold and indigo with cowrie fringes"}
+   'afro':"a kente-patterned curtain in orange, gold and indigo with cowrie fringes",
+   'alhambra':"an ivory silk curtain with fine gold arabesque embroidery and a border of small orange blossoms",
+   'desert':"a heavy indigo curtain of woven Berber cloth with ochre geometric motifs and long gold tassels",
+   'emeraude':"a deep emerald velvet curtain with gold embroidered arabesques and heavy gold tassels"}
 def one(k,kind):
     out=os.path.join(IMG,'open',f'{k}-{kind}.webp'); png=os.path.join(TMP,f'{k}-{kind}.png')
     ref=os.path.join(IMG,'long',k,'hero.webp') if os.path.exists(os.path.join(IMG,'long',k,'hero.webp')) else os.path.join(IMG,'hd',f'{k}-1.webp')

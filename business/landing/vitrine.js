@@ -89,7 +89,7 @@
      (« grand tableau » contre « scène par scène ») : c'est le même produit, plus ou moins dessiné selon les écrans. */
   // les styles « long » n'existent qu'en grand tableau (pas de décors de scènes) : hors des listes scène après scène
   // tous les thèmes ont leurs décors de scènes ; ceux marqués plan:'signature' se composent à partir de Signature
-  // les 5 thèmes du lancement (launch:true), chacun dans les deux formats
+  // les thèmes du lancement (launch:true), chacun dans les deux formats : les 5 premiers et les 3 variantes de Mille et une nuits
   const KEYS=Object.keys(THEMES).filter(k=>THEMES[k].launch), DEMOS0=window.SCEAU_DEMOS||[];
   const LONGS=[
     {slug:'nour-ilyes',k:'nuits',couple:'Nour & Ilyes',ey:'Bismillah',date:'Du 8 au 10 juillet 2027 · Marrakech',ink:'#f6eedb',shadow:'0 2px 14px rgba(0,0,0,.55)',desc:'Henné, cérémonie et fête dans le désert',alt:'un riad de nuit, le couple de dos sur un balcon'},
@@ -171,10 +171,13 @@
   const FONTS=[{id:'theme',name:'Du thème'},{id:'script',name:'Calligraphie',css:'"Great Vibes",cursive'},{id:'classique',name:'Classique',css:'"Playfair Display",Georgia,serif',italic:true},{id:'moderne',name:'Moderne',css:'"Jost",sans-serif',upper:true},{id:'deco',name:'Art déco',css:'"Limelight",serif'}];
   const urlPlan=new URLSearchParams(location.search).get('plan'), urlTheme=new URLSearchParams(location.search).get('theme');
   const urlFmt=new URLSearchParams(location.search).get('format');
-  const C={k:KEYS.includes(urlTheme)?urlTheme:'nuits',fmt:urlFmt==='long'?'long':'scenes',pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
+  /* au lancement, le configurateur se concentre sur Mille et une nuits et ses variantes (family:'nuits' dans themes.js),
+     pour la communauté arabe et musulmane ; les autres thèmes restent dans la galerie et le code */
+  const CK=Object.keys(THEMES).filter(k=>THEMES[k].family==='nuits');
+  const C={k:CK.includes(urlTheme)?urlTheme:'nuits',fmt:urlFmt==='long'?'long':'scenes',pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
     ev:[{name:'La cérémonie',time:'15:00',place:'Mairie du 11e',bg:'scene',lieu:'mairie'},{name:'La fête',time:'19:30',place:'Domaine des Roses',bg:'scene',lieu:'salle'}]};
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
-  const LIEUX=[{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
+  const LIEUX=[{id:'mairie',name:'Mairie'},{id:'mosquee',name:'Mosquée'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
   /* upsell sans frustration : les options de Signature (lieu peint d'après photo, 3e événement et plus, lien par famille,
      anglais) sont proposées au même endroit que les autres, avec l'étiquette « Signature ». On peut les choisir en Essentiel :
      la formule se met d'elle-même sur Signature et le récapitulatif explique pourquoi ; si l'on revient à Essentiel, il dit
@@ -182,6 +185,10 @@
   const sigNeeds=()=>{ const n=[]; if(C.ev.some(e=>e.bg==='scene'&&e.lieu==='photo')) n.push('votre lieu peint d’après photo');
     if(C.ev.length>2) n.push(`${C.ev.length} événements (2 en Essentiel)`); if(C.x.has('famille')) n.push('un lien par famille'); if(C.x.has('en')) n.push('la version anglaise'); return n; };
   const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Hébergement'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'},{id:'famille',name:'Un lien par famille',sig:true},{id:'en',name:'Version anglaise',sig:true}];
+  const LG_EXTRAS=['famille','en'];
+  // options retenues pour le format choisi (une option propre à l'autre format reste en mémoire, sans compter)
+  const LG_PARTS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'album',name:'Bande de photos'},{id:'dress',name:'Dress code'},{id:'stay',name:'Bon à savoir'},{id:'gifts',name:'Liste de mariage'}];
+  const xOn=()=>(C.fmt==='long'?[...LG_PARTS,...EXTRAS.filter(x=>LG_EXTRAS.includes(x.id))]:EXTRAS).filter(x=>C.x.has(x.id));
   const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
   const REVEALS=[{id:'non',name:'Aucune',sub:'La date s\'affiche'},{id:'scratch',name:'À gratter',sub:'Comme un ticket'},{id:'wheel',name:'La roue',sub:'Elle s\'arrête sur la date'},{id:'slot',name:'Jackpot',sub:'Jour, mois, année'}];
   const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'voile',name:'Voile',sub:'Il s\'ouvre par le milieu'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
@@ -194,10 +201,10 @@
   opt($('cOpen'),OPENS,'op','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   opt($('cReveal'),REVEALS,'rvl','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
-  opt($('cStyles'),KEYS,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=7')"></span>${esc(t.name)}`; });
+  opt($('cStyles'),CK,'k','',(b,k)=>{ const t=THEMES[k]; b.className='th'; b.innerHTML=`<span style="background-image:url('/img/themes/${k}-1.webp?v=7')"></span>${esc(t.name)}${t.variant?`<small>${esc(t.variant)}</small>`:''}`; });
   // les deux formats, annoncés dès le début : scène par scène (un événement par écran) ou grand tableau (un seul tableau qu'on descend)
   const FMTS=[{id:'scenes',name:'Scène par scène',sub:'Un événement par écran, vos lieux en plein écran'},{id:'long',name:'Grand tableau',sub:'Un seul tableau qu’on descend, vos lieux dans des cadres peints'}];
-  opt($('cFmt'),FMTS,'fmt','',(b,o)=>{ b.className='op-card fmt'; b.innerHTML=`<i style="background-image:url('${o.id==='long'?'/img/reel/long-nuits.webp':'/img/themes/nuits-2.webp?v=7'}')"></i><b>${o.name}</b><small>${o.sub}</small>`; });
+  opt($('cFmt'),FMTS,'fmt','',(b,o)=>{ b.className='op-card fmt'; b.innerHTML=`<i style="background-image:url('${o.id==='long'?'/img/long/nuits/thumb.webp':'/img/themes/nuits-2.webp?v=7'}')"></i><b>${o.name}</b><small>${o.sub}</small>`; });
   const PLANSUB={essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
   $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
@@ -210,7 +217,11 @@
     $('cExtras').appendChild(b); });
   // les écrans du faire-part, dans l'ordre (construits une fois : les champs gardent le focus)
   { const box=$('cStory'), li=(cls,h)=>{ const l=document.createElement('li'); l.className=cls; l.innerHTML=h; box.appendChild(l); return l; };
-    li('fixed','<b>Accueil</b><span>Vos prénoms, la date, le sceau</span>');
+    li('fixed home','<b>Accueil</b><span>Vos prénoms, la date, le sceau</span>');
+    /* grand tableau : ce n'est pas une suite d'écrans mais un seul tableau peint en trois parties ; l'étape montre ces
+       parties dans l'ordre, avec ce qu'on peut y mettre (lg-only), et les événements dans leurs cadres peints */
+    const part=(title,sub,ids)=>li('lg-only part',`<div class="ev-h"><b>${title}</b><small>${sub}</small></div><div class="opts">${ids.map(([id,n])=>`<button type="button" class="chip x" data-x="${id}">${n}</button>`).join('')}</div>`);
+    part('Sous l’illustration','l’invitation, puis vos événements',[['parents','Le mot des familles']]);
     const more=li('more','<button type="button" class="chip x sig" id="cAddEv">+ Ajouter un événement<i>Signature · jusqu’à 6</i></button>');
     const addEv=(e,i)=>{
       const l=li('ev',`<div class="ev-h"><b>Événement ${i+1}</b><small>${i<2?'inclus':'<i class="sig-tag">Signature</i>'}${i>=2?' · <a href="#" data-rm>Retirer</a>':''}</small></div>
@@ -225,7 +236,10 @@
       box.insertBefore(l,more); return l; };
     C.ev.forEach(addEv);
     $('cAddEv').onclick=()=>{ if(C.ev.length>=6) return; const e={name:['','','La soirée','Le brunch','Le henné','La bénédiction'][C.ev.length]||'',time:'21:00',place:'',bg:'simple',lieu:'salle'}; C.ev.push(e); addEv(e,C.ev.length-1); paint(); showEv(C.ev.length-1); };
-    li('fixed','<b>Réponse</b><span>« Serez-vous des nôtres ? »</span>'); }
+    part('Deuxième partie','facultatif',[['story','Notre histoire'],['album','Bande de photos'],['dress','Dress code']]);
+    part('Troisième partie','facultatif',[['stay','Bon à savoir'],['gifts','Liste de mariage']]);
+    li('fixed rsvp','<b>Réponse</b><span>« Serez-vous des nôtres ? »</span>');
+    box.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{ const id=b.dataset.x; C.x.has(id)?C.x.delete(id):C.x.add(id); paint(); }); }
   // l'aperçu descend jusqu'à l'écran modifié
   function showEv(i){ const el=$('cpScroll').querySelector(`[data-ev="${i}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); }
   const hm=v=>{ const m=/^(\d{1,2}):(\d{2})/.exec(v||''); return m?`${+m[1]}h${m[2]}`:''; };
@@ -264,11 +278,24 @@
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
       ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k+'&format='+C.fmt+'&names='+encodeURIComponent(($('cN1').value||'Emma').trim()+' & '+($('cN2').value||'Louis').trim())+'&date='+encodeURIComponent($('cDate').value||''); a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
     { const long=C.fmt==='long';
-      $('wz2Title').textContent=long?'Vos événements':'Vos écrans';
-      $('wz2Sub').textContent=long?'Dans le grand tableau, chaque événement a son cadre peint : choisissez le lieu qui s’y affiche (notre bibliothèque, ou votre photo), ou laissez le cadre sans lieu.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';
-      document.querySelectorAll('#cStory [data-bg="simple"]').forEach(b=>b.innerHTML=long?'Sans lieu<small>Le cadre peint du thème</small>':'Écran simple<small>Texte sur le fond</small>');
+      $('wz2Title').textContent=long?'Votre tableau':'Vos écrans';
+      $('wz2Sub').textContent=long?'Un seul tableau peint qu’on descend, en trois parties. Chaque événement a son cadre : la scène peinte du thème, un lieu de notre bibliothèque, ou votre lieu d’après photo.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';
+      document.querySelectorAll('#cStory [data-bg="simple"]').forEach(b=>b.innerHTML=long?'La scène du thème<small>Peinte dans le cadre</small>':'Écran simple<small>Texte sur le fond</small>');
+      $('wzNav3').textContent=long?'Tableau':'Écrans';
+      $('cStory').classList.toggle('long',long);
+      $('cStory').querySelector('.home').innerHTML=long?'<b>L’illustration d’ouverture</b><span>Vos prénoms et la date, en haut du tableau</span>':'<b>Accueil</b><span>Vos prénoms, la date, le sceau</span>';
+      $('cStory').querySelector('.rsvp').innerHTML=long?'<b>Réponse</b><span>« Serez-vous des nôtres ? » et le compte à rebours</span>':'<b>Réponse</b><span>« Serez-vous des nôtres ? »</span>';
+      $('cStory').querySelectorAll('li.ev .ev-h b').forEach((b,i)=>{ b.textContent=long?`Événement ${i+1} · son cadre`:`Événement ${i+1}`; });
+      $('cStory').querySelectorAll('[data-x]').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.x)));
+      // les options qui sont des écrans de la suite scène par scène n'existent pas dans le tableau (elles y sont des parties, ci-dessus)
+      $('cExtras').querySelectorAll('button').forEach(b=>{ b.hidden=long&&!LG_EXTRAS.includes(b.dataset.id); });
+      $('cExtrasT').firstChild.textContent=long?'Options ':'Écrans en plus ';
+      // compte à rebours : pas de page dédiée dans le tableau (il est en haut ou à la fin) ; pas de révélation de la date
+      if(long&&C.cd==='page'){ C.cd='fin'; $('cCount').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.cd)); }
+      $('cCount').querySelector('[data-id="page"]').hidden=long;
+      $('fldReveal').hidden=long;
       document.querySelectorAll('#cStory [data-bg="scene"]').forEach(b=>b.innerHTML=long?'Un lieu<small>Dans le cadre</small>':'Scène<small>Votre lieu dessiné</small>'); }
-    $('cFmt').querySelectorAll('button').forEach(b=>{ b.firstChild.style.backgroundImage=`url('${b.dataset.id==='long'?`/img/reel/long-${C.k}.webp`:`/img/themes/${C.k}-2.webp?v=7`}')`; });
+    $('cFmt').querySelectorAll('button').forEach(b=>{ b.firstChild.style.backgroundImage=`url('${b.dataset.id==='long'?`/img/long/${C.k}/thumb.webp`:`/img/themes/${C.k}-2.webp?v=7`}')`; });
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       l.querySelectorAll('[data-bg]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.bg===e.bg));
       l.querySelector('.lieux').hidden=e.bg!=='scene';
@@ -336,21 +363,55 @@
     // calques : le fond du thème est peint une fois derrière tout (comme .sc.cal dans invite.css)
     const anyCal=cpRuns.some(r=>r.sub); sc.classList.toggle('cal',anyCal); sc.style.backgroundImage=anyCal?`url('/img/lieux/${C.k}-fond.webp')`:'';
     cpLayout();
-    // grand tableau : l'aperçu montre le rouleau peint du thème (on le descend dans le téléphone), avec les prénoms et la date
-    if(C.fmt==='long'){ const l=LONGS.find(x=>x.k===C.k); if(l){ sc.innerHTML=`<div class="roll-prev"><img src="/img/reel/long-${C.k}.webp" alt=""><div class="roll-txt" style="color:${l.ink};text-shadow:${l.shadow}">${eyHtml('ey',l.ey,'')}<div class="nm" style="${esc(nameStyle({font:t.font,color:l.ink,size:t.size,italic:t.italic,upper:t.upper},1))}">${names}</div><div class="tx">${esc(ds)}</div></div></div>`; cpRuns=[]; } }
+    // grand tableau : l'aperçu est le vrai faire-part (invite.js) construit avec vos choix, dans le téléphone
+    sc.hidden=C.fmt==='long';
+    if(C.fmt==='long') lgRender(lgInvite(t,p,f,n1,n2,ds)); else lgClear();
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
-    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ');
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=C.fmt==='long'?'Aucune':REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=n1+' & '+n2; $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.name).join(', ');
     const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
     if($('fFormat')) $('fFormat').value=FMTS.find(f=>f.id===C.fmt).name;
     $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place} (${evTxt(e).toLowerCase()})`).join(' ; ');
     const needTxt=needs.length?(C.plan==='essentiel'?` Essentiel ne comprend pas ${needs.join(', ')} : vous pourrez les retirer, ou passer en Signature.`:` Avec ${needs.join(', ')}, c'est la formule Signature.`):(C.plan==='essentiel'?' Tout est compris dans Essentiel.':'');
     $('cRecap').textContent=needTxt.trim()||(C.plan==='signature'?'Votre lieu peint d’après photo, un lien par famille, français et anglais.':'');
     // récapitulatif, ligne par ligne
-    const sum=[['Thème',t.name],['Format',FMTS.find(f=>f.id===C.fmt).name],['Vous',`${n1} & ${n2} · ${ds}`],['Écrans',`Accueil → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',EXTRAS.filter(x=>C.x.has(x.id)).map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
+    const sum=[['Thème',t.name],['Format',FMTS.find(f=>f.id===C.fmt).name],['Vous',`${n1} & ${n2} · ${ds}`],[C.fmt==='long'?'Tableau':'Écrans',`${C.fmt==='long'?'Illustration':'Accueil'} → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',xOn().map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'&&C.fmt!=='long'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
     $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
-    { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b> · ${esc(FMTS.find(f=>f.id===C.fmt).name)}<br>${esc(n1)} &amp; ${esc(n2)} · ${esc(ds)}<br>${C.ev.map(e=>esc(evTxt(e))).join(' → ')}${C.x.size?` · +${C.x.size}`:''}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
+    { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b> · ${esc(FMTS.find(f=>f.id===C.fmt).name)}<br>${esc(n1)} &amp; ${esc(n2)} · ${esc(ds)}<br>${C.ev.map(e=>esc(evTxt(e))).join(' → ')}${xOn().length?` · +${xOn().length}`:''}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
+  /* aperçu du grand tableau : une fiche de faire-part (comme business/invites/*.json) faite des choix du configurateur,
+     rendue par le moteur lui-même dans un cadre (srcdoc) : ce qu'on voit est exactement le faire-part. Deux cadres :
+     le nouveau se prépare caché et remplace l'ancien à la même hauteur de défilement (pas de clignotement). */
+  const lgMeta={};
+  function lgInvite(t,p,f,n1,n2,ds){
+    const day=$('cDate').value||'2027-06-12', dl=new Date(weddingDate().getTime()-30*864e5).toISOString().slice(0,10);
+    return {slug:'apercu',demo:true,layout:'long',theme:C.k,couple:[n1,n2],date:day+'T15:00',tz:'Europe/Paris',opening:'cur',music:'none',
+      palette:p.c,font:f.id==='theme'?undefined:f.id,countdown:C.cd==='page'?'fin':C.cd,calques:[],anim:[],trans:[],families:{},album:C.x.has('album'),
+      intro:{eyebrow:t.scenes[0][0],text:'Ont la joie de vous convier à leur mariage',dateText:ds},
+      parents:C.x.has('parents')?{eyebrow:'Avec leurs familles',names:['Famille Alaoui','Famille Haddad'],text:'ont la joie de vous convier au mariage de leurs enfants'}:null,
+      events:C.ev.map((e,i)=>({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||e.name||'',start:day+'T'+(e.time||'15:00'),address:e.place||'',lieu:e.bg==='scene'&&e.lieu!=='photo'?e.lieu:undefined,note:e.bg==='scene'&&e.lieu==='photo'?'Ici, votre lieu peint d’après votre photo':undefined})),
+      story:C.x.has('story')?{title:'Notre histoire',items:[{when:'2018',title:'La rencontre',text:'Un mariage de cousins, deux places voisines.'},{when:'2022',title:'Paris',text:'Un premier appartement, le thé du dimanche.'},{when:'2026',title:'La demande',text:'Sur une terrasse, au coucher du soleil.'}]}:null,
+      dress:C.x.has('dress')?{eyebrow:'Dress code',title:'Tenue de fête',text:'Caftans, takchitas et djellabas bienvenus.',colors:['#0f5e4c','#d4af37','#f2e6d0',p.c]}:null,
+      infos:C.x.has('stay')?[{icon:'hotel',title:'Dormir',text:'Chambres réservées à 5 min.'},{icon:'car',title:'Navettes',text:'Depuis la gare à 14h15.'}]:[],
+      gifts:C.x.has('gifts')?{eyebrow:'Liste de mariage',text:'Votre présence suffit. Pour ceux qui le souhaitent, une cagnotte pour notre voyage.',url:'#',label:'Participer'}:null,
+      rsvp:{eyebrow:'Réponse souhaitée',title:'Serez-vous des nôtres ?',deadline:dl}};
+  }
+  let lgKey='', lgT=null;
+  function lgClear(){ lgKey=''; clearTimeout(lgT); $('cpPhone').querySelectorAll('iframe.cp-lg').forEach(x=>x.remove()); }
+  function lgRender(inv){
+    const key=JSON.stringify(inv); if(key===lgKey) return; lgKey=key; clearTimeout(lgT);
+    lgT=setTimeout(async()=>{
+      const meta=await (lgMeta[inv.theme]||(lgMeta[inv.theme]=fetch(`/img/long/${inv.theme}/meta.json`).then(r=>r.ok?r.json():null).catch(()=>null)));
+      if(key!==lgKey||!meta) return;
+      inv.long=Object.assign({},meta,{photos:inv.album?meta.photos:[]});
+      const ph=$('cpPhone'), olds=[...ph.querySelectorAll('iframe.cp-lg')], old=olds[olds.length-1];
+      let y=0; try{ y=old.contentDocument.getElementById('sc').scrollTop; }catch(e){}
+      const fr=document.createElement('iframe'); fr.className='cp-lg'; fr.title='Aperçu de votre faire-part'; fr.setAttribute('aria-label','Aperçu de votre faire-part'); fr.style.opacity=0;
+      fr.srcdoc=`<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><base href="${location.origin}/"><link rel="stylesheet" href="/polices/polices.css"><link rel="stylesheet" href="/invite.css"><link rel="stylesheet" href="/reveal.css"><style>#op,#flash,.lg-want,.demo-tag,.snd{display:none!important}</style></head><body><script>window.INVITE=${JSON.stringify(inv).replace(/</g,'\\u003c')};<\/script><script src="/themes.js"><\/script><script src="/reveal.js"><\/script><script src="/invite.js"><\/script><script>document.getElementById('op').click();<\/script></body></html>`;
+      fr.onload=()=>setTimeout(()=>{ if(key!==lgKey){ fr.remove(); return; } try{ fr.contentDocument.getElementById('sc').scrollTop=y; }catch(e){} fr.style.opacity=1; olds.forEach(x=>x.remove()); },450);
+      ph.insertBefore(fr,$('cpTint'));
+    },250);
+  }
   // téléphone : l'aperçu réduit collé en haut s'agrandit en plein écran, et se referme
   { const pv=document.querySelector('.comp-prev'), big=$('cpBig'), cl=$('cpClose'), nav=$('wzNav'), side=$('cpMiniSteps'), home=nav.parentNode, mq=matchMedia('(max-width:720px)');
     const place=()=>{ if(mq.matches){ if(nav.parentNode!==side) side.appendChild(nav); } else if(nav.parentNode!==home) home.insertBefore(nav,home.firstChild); };
@@ -366,8 +427,9 @@
       steps.forEach(w=>{ w.hidden=+w.dataset.step!==cur; });
       tabs.forEach(b=>{ const k=+b.dataset.go; b.setAttribute('aria-current',k===cur); b.classList.toggle('done',k<cur); });
       prev.hidden=cur===1; next.hidden=cur===steps.length;
-      next.textContent=['','Mes écrans →','Les détails →','Ma formule →'][cur]||'Suivant →';
-      const sc=$('cpScroll'); if(cur===2) showEv(0); else if(cur===4||cur===1) sc.scrollTo({top:0,behavior:'smooth'});
+      next.textContent=['','L’ouverture →',C.fmt==='long'?'Mon tableau →':'Mes écrans →','Les détails →','Ma formule →'][cur]||'Suivant →';
+      const sc=$('cpScroll'); if(cur===3) showEv(0); else if(cur!==4) sc.scrollTo({top:0,behavior:'smooth'});
+      if(cur===2) replayOp(500); // l'onglet de l'ouverture la rejoue
       const top=document.getElementById('composer').getBoundingClientRect().top+scrollY-70; if(scrollY>top+40) scrollTo({top,behavior:'smooth'}); };
     tabs.forEach(b=>b.onclick=()=>go(+b.dataset.go)); prev.onclick=()=>go(cur-1); next.onclick=()=>go(cur+1);
     go(1); }

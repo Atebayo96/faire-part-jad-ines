@@ -42,6 +42,16 @@ THEMES = {
   'afro': dict(thumb=.08, hero=dict(ink='#fbeedb', shadow='0 2px 14px rgba(0,0,0,.6)', top='12%'), frame='magenta',
                 sec=[dict(ink='#fbeedb', accent='#f2b440'), dict(ink='#2b1a10', accent='#9a3a18'), dict(ink='#f6ecd6', accent='#f2c14e')],
                 bands=[('band1', 'blue', 1.0), ('band2', 'magenta', 1.0)], ev=['afro-2', 'afro-3', 'afro-4'], photos=[1, 2, 3, 4]),
+  # variantes de Mille et une nuits (family:'nuits') : scènes des événements = leurs décors 2 à 4 (rangés dans la banque)
+  'alhambra': dict(hero_hd=True, bands_from='nuits', thumb=.08, hero=dict(ink='#4a2416', shadow='0 1px 10px rgba(255,250,240,.85)', top='12%'), frame='magenta',
+                sec=[dict(ink='#3e2518', accent='#8a4a22'), dict(ink='#2b3424', accent='#3f5a34'), dict(ink='#3e2518', accent='#9a4f2a')],
+                bands=[('band1', 'blue', 1.0), ('band2', 'blue', 1.0)], ev=['alhambra-2', 'alhambra-3', 'alhambra-4'], photos=[1, 2, 3, 4]),
+  'desert': dict(hero_hd=True, bands_from='nuits', thumb=.08, hero=dict(ink='#f6e7c8', shadow='0 2px 14px rgba(0,0,0,.6)', top='12%'), frame='magenta',
+                sec=[dict(ink='#f6e7c8', accent='#e7c27a'), dict(ink='#3a2616', accent='#7a4a1e'), dict(ink='#f4e6cc', accent='#e2b66a')],
+                bands=[('band1', 'blue', 1.0), ('band2', 'blue', 1.0)], ev=['desert-2', 'desert-3', 'desert-4'], photos=[1, 2, 3, 4]),
+  'emeraude': dict(hero_hd=True, bands_from='nuits', thumb=.08, hero=dict(ink='#f6e3ae', shadow='0 2px 14px rgba(0,0,0,.65)', top='12%'), frame='magenta',
+                sec=[dict(ink='#f6ecd2', accent='#e6c77a'), dict(ink='#1f2a20', accent='#1f5a44'), dict(ink='#f3e9d0', accent='#e2c27a')],
+                bands=[('band1', 'blue', 1.0), ('band2', 'blue', 1.0)], ev=['emeraude-2', 'emeraude-3', 'emeraude-4'], photos=[1, 2, 3, 4]),
 }
 
 def key_alpha(a, key, lo=70, hi=150):
@@ -65,7 +75,10 @@ for t, c in THEMES.items():
     d = os.path.join(OUT, t); os.makedirs(d, exist_ok=True)
     meta = dict(base=f'/img/long/{t}', sec=[], bands=[], ev=[], photos=[])
     # illustration d'ouverture
-    h = Image.open(f'{RAW}/{t}-hero.png').convert('RGB')
+    # provisoire (quota Gemini atteint le 5 octobre 2026) : sans illustration verticale peinte, l'ouverture est la scène 1
+    # du thème (img/hd/<thème>-1, zone de texte déjà contrôlée) ; à remplacer par long-gen.py dès que possible
+    hraw = f'{RAW}/{t}-hero.png'
+    h = Image.open(hraw if os.path.exists(hraw) or not c.get('hero_hd') else os.path.join(B, 'landing', 'img', 'hd', f'{t}-1.webp')).convert('RGB')
     ha = np.asarray(h); bottom = ha[-int(ha.shape[0] * .025):].reshape(-1, 3).mean(0)
     h = h.resize((900, round(h.height * 900 / h.width)), Image.LANCZOS); h.save(f'{d}/hero.webp', 'WEBP', quality=80, method=6)
     meta['hero'] = dict(src='hero.webp', w=h.width, h=h.height, **c['hero'])
@@ -80,6 +93,9 @@ for t, c in THEMES.items():
         meta['sec'].append(dict(tex=f'tex{i}.webp', **c['sec'][i - 1]))
     # guirlandes détourées
     for name, k, keep in c['bands']:
+        if not os.path.exists(f'{RAW}/{t}-{name}.png') and c.get('bands_from'):  # provisoire : guirlandes d'un thème voisin
+            Image.open(os.path.join(OUT, c['bands_from'], f'{name}.webp')).save(f'{d}/{name}.webp', 'WEBP', quality=82, method=6)
+            meta['bands'].append(f'{name}.webp'); continue
         a = np.asarray(Image.open(f'{RAW}/{t}-{name}.png').convert('RGB')); a = a[:int(a.shape[0] * keep)]
         al = key_alpha(a, KEYS[k]); rgb = unspill(a, al, KEYS[k])
         # on ne garde que la guirlande : les petits morceaux isolés (taches, objets parasites) sont effacés

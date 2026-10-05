@@ -158,7 +158,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     des fois tu dessines plus, des fois tu mets des trucs blancs et tu mets du texte ». Chaque écran est soit une
     **scène** (un lieu dessiné), soit un **écran simple** (le texte sur le fond du tableau). La vitrine montre un seul
     téléphone et parle d'un seul produit.
-21. **Le moins de choix possible.** Configurateur Essentiel en 3 étapes : 1) prénoms, date, thème (ouverture, couleurs,
+21. **Le moins de choix possible.** Configurateur Essentiel (aujourd'hui en 5 étapes, règle 33) : 1) prénoms, date, thème (ouverture, couleurs,
     police, révélation et compte à rebours rangés dans « Plus de réglages », fermé) ; 2) pour chaque événement :
     écran simple ou scène, et si scène, le lieu (mairie, église, salle, jardin, plage) parmi les vignettes du thème ;
     3) récapitulatif et commande. Bibliothèque : `img/hd/<thème>-<lieu>.webp` et `<thème>-fond.webp`
@@ -237,6 +237,26 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Toute vignette plus courte que 9:16 (tuiles de thème 3:4, cartes 4:5) se cadre sur le **bas** de l'image
     (`center 80–88 %`), là où est le sujet : centrée, elle coupait le torii et le manoir. `html,body{overflow-x:clip}` :
     sur Safari iOS, un débordement invisible suffisait à « pousser » la page vers la gauche.
+
+32. **Au lancement, on se concentre sur Mille et une nuits et la communauté arabe et musulmane.** Le configurateur ne
+    propose que la famille `family:"nuits"` (themes.js) : le riad de nuit (`nuits`) et ses variantes **Alhambra** (palais
+    andalou de jour, thème clair, police Amiri), **Nuit du désert** (dunes, tente caïdale) et **Émeraude & or** (cour de
+    palais émeraude). Chaque variante a ses 4 scènes (`tools/variantes-nuits.py`, références : nuits-1 et le tableau de
+    Nour & Ilyes), ses lieux, ses portes et rideau, son grand tableau, et une démo dans chaque format. Dans cette famille,
+    le lieu « Église » est remplacé par **« Mosquée »** (`mosquee` dans lieux.py). Les autres thèmes restent dans la
+    galerie et le code. Provisoire : le quota Gemini a été atteint le 5 octobre 2026 avant l'illustration verticale et
+    les guirlandes des variantes ; leur grand tableau s'ouvre sur leur scène 1 et reprend les guirlandes du riad
+    (`hero_hd`, `bands_from` dans long-assets.py). Dès que le quota revient : `long-gen.py /tmp/longraw alhambra desert
+    emeraude` puis `long-assets.py`, et les calques (`calques.py`).
+33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la
+    révélation de la date. Arriver sur l'onglet rejoue l'ouverture dans l'aperçu.
+34. **En grand tableau, l'étape 3 décrit le tableau, pas des écrans** (« Votre tableau ») : l'illustration d'ouverture,
+    le mot des familles, les événements dans leurs cadres (la scène peinte du thème, un lieu de la bibliothèque ou votre
+    photo), puis les parties facultatives (histoire, bande de photos, dress code ; bon à savoir, liste), la réponse et le
+    compte à rebours. Les écrans propres au scène par scène (programme, FAQ, table…) n'y sont pas proposés, ni la page
+    dédiée au compte à rebours, ni la révélation de la date. L'aperçu du grand tableau est **le vrai moteur** (invite.js)
+    dans un `iframe` `srcdoc`, nourri d'une fiche faite des choix (`lgInvite()` dans vitrine.js) : l'utilisateur avait vu
+    que l'étape ne changeait pas quand il choisissait le grand tableau, « c'est plus du tout la même chose ».
 
 ## Méthode
 

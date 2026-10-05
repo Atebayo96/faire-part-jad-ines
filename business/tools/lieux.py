@@ -22,6 +22,7 @@ os.makedirs(TMP, exist_ok=True); os.makedirs(os.path.join(IMG, 'lieux'), exist_o
 LIEUX = {
     'mairie': "a town hall (French 'mairie'): a dignified civic building facade with a clock, tall windows, a flag and wide front steps, seen from the square",
     'eglise': "a church: a stone chapel or church facade with its bell tower and an open wooden door, seen from the forecourt",
+    'mosquee': "a mosque: a graceful mosque with its square minaret and a carved horseshoe-arched doorway, seen from its courtyard with a fountain and orange trees",
     'salle': "a reception venue for the wedding party: an elegant manor or banquet hall, every window glowing warm, string lights at the entrance",
     'jardin': "an outdoor garden ceremony: a flowered arch at the end of an aisle between rows of empty chairs, trees and greenery around",
     'plage': "a seaside ceremony: a light draped arch on the sand facing the sea, a path of petals, gentle waves",

@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Créer notre faire-part — Save The Oui</title>
-<meta name="description" content="Composez votre faire-part en trois étapes : votre thème, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
+<meta name="description" content="Composez votre faire-part en quelques étapes : votre thème, l'ouverture, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Créer notre faire-part — Save The Oui">
-<meta property="og:description" content="Composez votre faire-part en trois étapes : votre thème, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
+<meta property="og:description" content="Composez votre faire-part en quelques étapes : votre thème, l'ouverture, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
 <meta property="og:image" content="https://savetheoui.fr/og-sceau.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -34,44 +34,48 @@
   <div class="wrap">
     <div class="head">
       <h1 class="h2">Composez votre faire-part.</h1>
-      <p>Quatre étapes courtes, l'aperçu à côté.</p>
+      <p>Cinq étapes courtes, l'aperçu à côté.</p>
     </div>
     <div class="comp">
       <form class="comp-form" id="compForm" autocomplete="off">
         <ol class="wz-nav" id="wzNav" aria-label="Étapes">
           <li><button type="button" data-go="1"><b>1</b><span>Thème</span></button></li>
-          <li><button type="button" data-go="2"><b>2</b><span>Écrans</span></button></li>
-          <li><button type="button" data-go="3"><b>3</b><span>Détails</span></button></li>
-          <li><button type="button" data-go="4"><b>4</b><span>Récapitulatif</span></button></li>
+          <li><button type="button" data-go="2"><b>2</b><span>Ouverture</span></button></li>
+          <li><button type="button" data-go="3"><b>3</b><span id="wzNav3">Écrans</span></button></li>
+          <li><button type="button" data-go="4"><b>4</b><span>Détails</span></button></li>
+          <li><button type="button" data-go="5"><b>5</b><span>Récapitulatif</span></button></li>
         </ol>
 
         <div class="wz" data-step="1">
-          <div class="step"><h3>Votre thème</h3><p>Vos prénoms, la date, et le style de votre faire-part. L'aperçu se met à jour en direct.</p></div>
+          <div class="step"><h3>Votre thème</h3><p>Vos prénoms, la date, et l'univers de votre faire-part. L'aperçu se met à jour en direct.</p></div>
           <label class="fld"><span>Vos prénoms</span>
             <div class="names"><input type="text" id="cN1" value="Emma" maxlength="20" aria-label="Premier prénom"><b>&amp;</b><input type="text" id="cN2" value="Louis" maxlength="20" aria-label="Second prénom"></div>
           </label>
           <label class="fld"><span>Date du mariage</span><input type="date" id="cDate" value="2027-06-12"></label>
-          <div class="fld"><span>Thème</span><div class="opts themes" id="cStyles"></div></div>
+          <div class="fld"><span>Thème · Mille et une nuits</span><div class="opts themes" id="cStyles"></div></div>
           <div class="fld"><span>Format</span><div class="opts fmts" id="cFmt"></div><p class="hint">Même thème, même prix : deux façons de raconter la journée. <a href="/modeles/">Voir les deux en exemple</a>.</p></div>
-<div class="fld"><span>Ouverture</span><div class="opts" id="cOpen"></div></div>
-
         </div>
 
         <div class="wz" data-step="2" hidden>
+          <div class="step"><h3>L'ouverture</h3><p>Le premier geste de vos invités : ils touchent l'écran et le faire-part s'ouvre. Choisissez, l'aperçu la rejoue.</p></div>
+          <div class="fld"><span>Ouverture</span><div class="opts" id="cOpen"></div></div>
+          <div class="fld" id="fldReveal"><span>Révélation de la date</span><div class="opts" id="cReveal"></div></div>
+        </div>
+
+        <div class="wz" data-step="3" hidden>
           <div class="step"><h3 id="wz2Title">Vos écrans</h3><p id="wz2Sub">Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.</p></div>
           <ol class="story" id="cStory"></ol>
         </div>
 
-        <div class="wz" data-step="3" hidden>
+        <div class="wz" data-step="4" hidden>
           <div class="step"><h3>Les détails</h3><p>Tout est déjà réglé pour votre thème. Ajoutez des écrans ou changez ce que vous voulez, puis passez à la suite.</p></div>
-          <div class="fld"><span>Écrans en plus <small style="font-weight:400;text-transform:none;letter-spacing:0">(facultatif)</small></span><div class="opts" id="cExtras"></div></div>
+          <div class="fld"><span id="cExtrasT">Écrans en plus <small style="font-weight:400;text-transform:none;letter-spacing:0">(facultatif)</small></span><div class="opts" id="cExtras"></div></div>
           <div class="fld"><span>Couleurs</span><div class="opts" id="cPal"></div><div class="sw-name" id="cPalName"></div></div>
           <div class="fld"><span>Police</span><div class="opts" id="cFonts"></div></div>
-          <div class="fld"><span>Révélation de la date</span><div class="opts" id="cReveal"></div></div>
           <div class="fld"><span>Compte à rebours</span><div class="opts" id="cCount"></div></div>
         </div>
 
-        <div class="wz" data-step="4" hidden>
+        <div class="wz" data-step="5" hidden>
           <div class="step"><h3>Votre faire-part</h3><p>Vérifiez, choisissez la formule, et c'est parti.</p></div>
           <dl class="sum" id="cSum"></dl>
           <div class="fld"><span>Formule</span><div class="opts" id="cPlan"></div><p class="hint" id="cRecap"></p></div>

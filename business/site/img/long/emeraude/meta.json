@@ -1,0 +1,49 @@
+{
+ "base": "/img/long/emeraude",
+ "sec": [
+  {
+   "tex": "tex1.webp",
+   "ink": "#f6ecd2",
+   "accent": "#e6c77a"
+  },
+  {
+   "tex": "tex2.webp",
+   "ink": "#1f2a20",
+   "accent": "#1f5a44"
+  },
+  {
+   "tex": "tex3.webp",
+   "ink": "#f3e9d0",
+   "accent": "#e2c27a"
+  }
+ ],
+ "bands": [
+  "band1.webp",
+  "band2.webp"
+ ],
+ "ev": [
+  "ev1.webp",
+  "ev2.webp",
+  "ev3.webp"
+ ],
+ "photos": [
+  "ph1.webp",
+  "ph2.webp",
+  "ph3.webp",
+  "ph4.webp"
+ ],
+ "hero": {
+  "src": "hero.webp",
+  "w": 900,
+  "h": 1591,
+  "ink": "#f6e3ae",
+  "shadow": "0 2px 14px rgba(0,0,0,.65)",
+  "top": "12%"
+ },
+ "frame": {
+  "src": "frame.webp",
+  "mask": "frame-mask.png",
+  "w": 720,
+  "h": 982
+ }
+}

@@ -21,6 +21,45 @@ export default {
   "families": {},
   "familyLabels": {}
  },
+ "amira-youssef": {
+  "demo": true,
+  "couple": "Amira & Youssef",
+  "date": "2027-09-18T15:00:00+00:00",
+  "events": [
+   "henne",
+   "ceremonie",
+   "fete"
+  ],
+  "eventList": [
+   {
+    "id": "henne",
+    "label": "Le henné"
+   },
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "fete",
+    "label": "La fête"
+   }
+  ],
+  "families": {
+   "famille-amrani": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "fete"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-amrani": "Chère famille Amrani",
+   "amis": "Chers amis"
+  }
+ },
  "ananya-rohan": {
   "demo": true,
   "couple": "Ananya & Rohan",
@@ -331,6 +370,45 @@ export default {
    "amis": "Chers amis"
   }
  },
+ "hiba-anas": {
+  "demo": true,
+  "couple": "Hiba & Anas",
+  "date": "2027-08-28T14:00:00+00:00",
+  "events": [
+   "henne",
+   "ceremonie",
+   "fete"
+  ],
+  "eventList": [
+   {
+    "id": "henne",
+    "label": "Le henné"
+   },
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "fete",
+    "label": "La fête"
+   }
+  ],
+  "families": {
+   "famille-tazi": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "fete"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-tazi": "Chère famille Tazi",
+   "amis": "Chers amis"
+  }
+ },
  "jade-enzo": {
   "demo": true,
   "couple": "Jade & Enzo",
@@ -361,6 +439,45 @@ export default {
   },
   "familyLabels": {
    "amis": "Les potes"
+  }
+ },
+ "leila-mehdi": {
+  "demo": true,
+  "couple": "Leïla & Mehdi",
+  "date": "2027-09-04T13:00:00+00:00",
+  "events": [
+   "nikah",
+   "ceremonie",
+   "diner"
+  ],
+  "eventList": [
+   {
+    "id": "nikah",
+    "label": "Le nikah"
+   },
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "diner",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {
+   "famille-bennani": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "diner"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-bennani": "Chère famille Bennani",
+   "amis": "Chers amis"
   }
  },
  "lena-adam": {
@@ -497,6 +614,45 @@ export default {
   "families": {},
   "familyLabels": {}
  },
+ "myriam-bilal": {
+  "demo": true,
+  "couple": "Myriam & Bilal",
+  "date": "2027-10-09T13:00:00+00:00",
+  "events": [
+   "mairie",
+   "nikah",
+   "reception"
+  ],
+  "eventList": [
+   {
+    "id": "mairie",
+    "label": "La mairie"
+   },
+   {
+    "id": "nikah",
+    "label": "Le nikah"
+   },
+   {
+    "id": "reception",
+    "label": "La réception"
+   }
+  ],
+  "families": {
+   "famille-idrissi": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "nikah",
+     "reception"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-idrissi": "Chère famille Idrissi",
+   "amis": "Chers amis"
+  }
+ },
  "nour-ilyes": {
   "demo": true,
   "couple": "Nour & Ilyes",
@@ -574,6 +730,45 @@ export default {
    "collegues": "Chers collègues"
   }
  },
+ "rania-ilias": {
+  "demo": true,
+  "couple": "Rania & Ilias",
+  "date": "2027-10-16T16:00:00+00:00",
+  "events": [
+   "henne",
+   "ceremonie",
+   "fete"
+  ],
+  "eventList": [
+   {
+    "id": "henne",
+    "label": "Le henné"
+   },
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "fete",
+    "label": "La fête"
+   }
+  ],
+  "families": {
+   "famille-bensaïd": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "fete"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-bensaïd": "Chère famille Bensaïd",
+   "amis": "Chers amis"
+  }
+ },
  "salma-rayan": {
   "demo": true,
   "couple": "Salma & Rayan",
@@ -633,6 +828,45 @@ export default {
   ],
   "families": {},
   "familyLabels": {}
+ },
+ "sofia-hamza": {
+  "demo": true,
+  "couple": "Sofia & Hamza",
+  "date": "2027-07-24T15:00:00+00:00",
+  "events": [
+   "henne",
+   "ceremonie",
+   "fete"
+  ],
+  "eventList": [
+   {
+    "id": "henne",
+    "label": "Le henné"
+   },
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "fete",
+    "label": "La fête"
+   }
+  ],
+  "families": {
+   "famille-chraïbi": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "fete"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-chraïbi": "Chère famille Chraïbi",
+   "amis": "Chers amis"
+  }
  },
  "sofia-nuno": {
   "demo": true,

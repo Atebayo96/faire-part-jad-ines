@@ -852,5 +852,236 @@
   "size": "2K",
   "ref": "@afro/hero",
   "prompt": "A vertical illustration in exactly the same painting style and palette as the reference, vibrant contemporary African painting style with bold wax print and kente patterns: warm ochre, terracotta, emerald green, gold and indigo: a joyful dance under string lights with drummers, everyone seen from behind. The union is shown through hands, backs and symbols. No faces visible, nothing floating in the sky, no text, no letters, no watermark."
+ },
+ "alhambra/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent, same painterly style and palette as the reference. The top fifth is a calm plain pale cream sky, almost white, where a dark title will be written. Below it, the carved ivory towers and cypress trees of an Andalusian palace in soft morning light. In the middle, a long arcade of slender marble columns and lace-like carved stucco arches, the bride and groom seen from behind walking hand in hand under the arches, her long ivory veil, his cream djellaba. Lower, a long reflecting pool lined with myrtle hedges and orange trees in terracotta pots, rose petals on the water. The last tenth of the image is a warm ivory marble floor that fills the full width with an even pale tone. Nothing floating in the air: no flying lanterns, no balloons, no birds, no kites; every lamp hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams.",
+  "ref": "business/landing/img/hd/alhambra-1.webp"
+ },
+ "alhambra/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like warm ivory stucco with a very faint tone-on-tone carved arabesque pattern, overall colour pale ivory #f3e9d6. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "alhambra/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like handmade paper with a very faint tone-on-tone zellige star pattern, overall colour soft myrtle green #dfe6d4. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "alhambra/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like warm terracotta plaster with a very faint tone-on-tone geometric pattern, overall colour pale terracotta #f0d9c4. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "alhambra/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of orange blossoms, small oranges, myrtle leaves and white jasmine, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "business/landing/img/hd/alhambra-1.webp"
+ },
+ "alhambra/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of pale pink damask roses, myrtle leaves and white jasmine, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "business/landing/img/hd/alhambra-1.webp"
+ },
+ "alhambra/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "An ornate Andalusian arch frame: a carved ivory stucco lace arch on two slender marble columns, a thin border of green and ochre zellige and small orange-blossom sprigs at its base, front view, symmetrical, filling most of the image. The opening inside the arch and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, painterly gouache style. No text.",
+  "ref": null
+ },
+ "alhambra/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind walking hand in hand under the carved arches of an Andalusian palace, morning light on the marble. No faces visible. No text.",
+  "ref": null
+ },
+ "alhambra/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the bride's hands with fine henna holding a sprig of orange blossom, the groom's hand on hers. No faces visible. No text.",
+  "ref": null
+ },
+ "alhambra/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind beside a long reflecting pool lined with myrtle hedges, her veil catching the light. No faces visible. No text.",
+  "ref": null
+ },
+ "alhambra/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of two gold rings on a carved stucco window sill with rose petals, soft blurred palace background. No faces visible. No text.",
+  "ref": null
+ },
+ "desert/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent, same painterly style and palette as the reference. The top fifth is a calm plain deep indigo night sky, smooth and dark, where a light title will be written. Below it, a thin crescent moon and a few faint stars above the crests of golden dunes. In the middle, on a dune crest, the bride and groom seen from behind, side by side, her long veil lifted by the wind, his cream djellaba, looking at a caidal tent glowing from inside below. Lower, the caidal tent with its embroidered entrance, lanterns standing on the sand in a curving path, rugs and cushions. Lower still, a campfire and resting camels. The last tenth of the image is smooth golden sand that fills the full width with an even warm tone. Nothing floating in the air: no flying lanterns, no balloons, no birds, no kites; every lamp hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams.",
+  "ref": "business/landing/img/hd/desert-1.webp"
+ },
+ "desert/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like a velvety desert night with a very faint tone-on-tone geometric pattern, overall colour deep indigo #1b1f3a. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "desert/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like warm handmade paper the colour of sand with a very faint tone-on-tone arabesque pattern, overall colour warm sand #ead6b2. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "desert/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like woven caidal tent cloth with a very faint tone-on-tone geometric pattern, overall colour deep ochre brown #3a2616. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "desert/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of palm fronds, dried pampas, white flowers and small brass lanterns resting on it, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "business/landing/img/hd/desert-1.webp"
+ },
+ "desert/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of desert roses, palm leaves and white jasmine, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "business/landing/img/hd/desert-1.webp"
+ },
+ "desert/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "An ornate caidal tent entrance frame: a horseshoe arch of embroidered tent cloth in ochre, indigo and gold with tassels and small brass lanterns at its base, front view, symmetrical, filling most of the image. The opening inside the arch and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, painterly gouache style. No text.",
+  "ref": null
+ },
+ "desert/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind walking on a dune crest at sunset, her veil lifted by the wind. No faces visible. No text.",
+  "ref": null
+ },
+ "desert/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the bride's hands with fresh henna holding a glass of mint tea inside a caidal tent, lantern light. No faces visible. No text.",
+  "ref": null
+ },
+ "desert/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind sitting on rugs in front of a glowing caidal tent at dusk. No faces visible. No text.",
+  "ref": null
+ },
+ "desert/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the groom's hand holding the bride's hand with henna over golden sand, soft blurred lanterns. No faces visible. No text.",
+  "ref": null
+ },
+ "emeraude/hero": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "2K",
+  "prompt": "A single tall vertical painting meant to be scrolled from top to bottom like a slow descent, same painterly style and palette as the reference. The top fifth is a calm plain deep emerald green wall, dark and smooth, where a light title will be written. Below it, a monumental carved gold horseshoe doorway with a brass chandelier hanging from it. In the middle, the bride in a gold-embroidered emerald caftan and the groom in a cream djellaba seen from behind, side by side, at the top of a marble staircase. Lower, a palace salon in emerald velvet and gold: low embroidered sofas, brass lanterns standing on the floor, silver trays with tea glasses and dates. Lower still, a round reception table with gold cutlery and white roses. The last tenth of the image is a dark emerald and gold carpet that fills the full width with an even deep green tone. Nothing floating in the air: no flying lanterns, no balloons, no birds, no kites; every lamp hangs from or stands on something. No faces visible: people only seen from behind. No text, no letters, no logos, no watermark. One single continuous image without seams.",
+  "ref": "business/landing/img/hd/emeraude-1.webp"
+ },
+ "emeraude/tex1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like deep emerald velvet with a very faint tone-on-tone damask pattern, overall colour deep emerald #123a2e. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "emeraude/tex2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like warm cream silk paper with a very faint tone-on-tone gold arabesque pattern, overall colour warm cream #efe3c8. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "emeraude/tex3": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "1:4",
+  "size": "1K",
+  "prompt": "A plain painted paper background texture, flat and even from top to bottom, subtle hand-painted grain, like dark green velvet with a very faint tone-on-tone geometric pattern, overall colour dark bottle green #0f2a22. No objects, no frame, no text, no light spots, no vignette.",
+  "ref": null
+ },
+ "emeraude/band1": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of white roses, gold leaves and emerald green foliage, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "business/landing/img/hd/emeraude-1.webp"
+ },
+ "emeraude/band2": {
+  "model": "gemini-3.1-flash-image",
+  "ratio": "4:1",
+  "size": "2K",
+  "prompt": "A thick lush horizontal garland of deep green velvet drapery with gold tassels and small white roses, spanning the entire width from the left edge to the right edge, painterly gouache style, isolated on a perfectly flat pure blue background (#0000FF) that fills everything around it, no shadow on the background, front view, crisp edges.",
+  "ref": "business/landing/img/hd/emeraude-1.webp"
+ },
+ "emeraude/frame": {
+  "model": "gemini-3-pro-image",
+  "ratio": "3:4",
+  "size": "2K",
+  "prompt": "An ornate palace arch frame: a carved gold horseshoe arch with an inner border of emerald green and gold zellige and small white roses at its base, front view, symmetrical, filling most of the image. The opening inside the arch and everything outside the frame are perfectly flat pure magenta (#FF00FF), no shadow, crisp edges, painterly gouache style. No text.",
+  "ref": null
+ },
+ "emeraude/ph1": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride in an emerald gold-embroidered caftan and the groom seen from behind entering a palace salon with gold arches. No faces visible. No text.",
+  "ref": null
+ },
+ "emeraude/ph2": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of the bride's hands with fine henna and gold bracelets on emerald velvet. No faces visible. No text.",
+  "ref": null
+ },
+ "emeraude/ph3": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: the bride and groom seen from behind at the top of a marble staircase under a brass chandelier. No faces visible. No text.",
+  "ref": null
+ },
+ "emeraude/ph4": {
+  "model": "gemini-3-pro-image",
+  "ratio": "4:5",
+  "size": "1K",
+  "prompt": "Editorial wedding photography, natural light, shallow depth of field, fine film grain, photorealistic: close-up of two gold rings on an emerald velvet cushion with white roses. No faces visible. No text.",
+  "ref": null
  }
 }
