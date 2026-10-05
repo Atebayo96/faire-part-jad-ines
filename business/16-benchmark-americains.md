@@ -51,7 +51,12 @@ En revanche, leur **standard côté couple est très au-dessus du nôtre**, et i
 Classé par effet pour nos personas (la grand-mère au soleil, le couple qui ne veut pas relancer) et par coût pour nous.
 Rien ici ne touche à la direction artistique : ce sont des briques de **parcours**, à poser dans le moteur et le tableau de bord.
 
-### Tout de suite (petit, dans le moteur actuel)
+### Tout de suite (petit, dans le moteur actuel) : **fait le 5 octobre 2026** (règle 43 de CLAUDE.md)
+
+A1 existait déjà (`.op-to`, `.greet`). A2 à A7 sont dans le moteur, l'API (`api/rsvp.js`, `api/seen.js`), le tableau de bord et le
+configurateur ; les démos Chiara & Lucas, Giulia & Hugo et Nour & Ilyes ont des menus, une question et un WhatsApp d'exemple,
+et `/tableau/?demo=chiara-lucas` montre les trois états par famille. Vérifié en captures à 390 px (feuille de réponse, tableau
+de bord) et sur le configurateur.
 
 | # | Pris chez | Ce qu'on fait | Pourquoi |
 |---|---|---|---|

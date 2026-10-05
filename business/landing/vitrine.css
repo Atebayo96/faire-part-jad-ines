@@ -326,6 +326,9 @@
   .story>li{border:1px solid var(--line);padding:14px;display:grid;gap:12px;min-width:0}
   .story>li.fixed{display:flex;justify-content:space-between;gap:12px;align-items:baseline;color:var(--muted);font-size:14px}
   .story>li.fixed b{color:var(--ink);font-weight:500}
+  /* la réponse se règle (menus, question, WhatsApp) : l'en-tête garde la ligne des écrans fixes, les champs dessous */
+  .story>li.fixed.rsvp{display:grid;gap:12px}
+  .story>li.fixed.rsvp .rsvp-h{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
   .story .ev-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
   .story .ev-h b{font:500 15px "Inter Tight",Inter,sans-serif}
   .story .ev-h small{font-size:12px;color:var(--muted)}

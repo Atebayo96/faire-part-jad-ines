@@ -20,6 +20,8 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -61,6 +63,8 @@ export default {
    "famille-amrani": "Chère famille Amrani",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -101,6 +105,8 @@ export default {
    "famille-sharma": "Chère famille Sharma",
    "collegues": "Chers collègues"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -142,6 +148,8 @@ export default {
    "famille-petrov": "Chère famille Petrov",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -168,8 +176,31 @@ export default {
     "label": "Le dîner"
    }
   ],
-  "families": {},
-  "familyLabels": {},
+  "families": {
+   "famille-rossi": {
+    "events": null
+   },
+   "famille-martin": {
+    "events": null
+   },
+   "amis": {
+    "events": [
+     "ceremonie",
+     "diner"
+    ]
+   }
+  },
+  "familyLabels": {
+   "famille-rossi": "Chère famille Rossi",
+   "famille-martin": "Chère famille Martin",
+   "amis": "Chers amis"
+  },
+  "rsvpMenu": [
+   "Poisson du jour",
+   "Osso buco",
+   "Végétarien"
+  ],
+  "rsvpQuestion": "Une chanson qui vous fera danser ?",
   "gifts": [],
   "giftLabels": {}
  },
@@ -193,6 +224,8 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -216,6 +249,8 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -251,6 +286,8 @@ export default {
    "famille-martin": "Chère famille Martin",
    "famille-bernard": "Chers Paul et Anne"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -274,6 +311,8 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -309,6 +348,8 @@ export default {
    "famille-martin": "Chère famille Martin",
    "famille-bernard": "Chers Paul et Anne"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -350,6 +391,8 @@ export default {
    "famille-mensah": "Chère famille Mensah",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -373,6 +416,12 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [
+   "Poisson",
+   "Viande",
+   "Végétarien"
+  ],
+  "rsvpQuestion": "Une chanson qui vous fera danser ?",
   "gifts": [],
   "giftLabels": {}
  },
@@ -414,6 +463,8 @@ export default {
    "famille-moreau": "Chère famille Moreau",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -438,6 +489,8 @@ export default {
   "familyLabels": {
    "amis": "Chères amies"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -479,6 +532,8 @@ export default {
    "famille-tazi": "Chère famille Tazi",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -513,6 +568,8 @@ export default {
   "familyLabels": {
    "amis": "Les potes"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -554,6 +611,8 @@ export default {
    "famille-bennani": "Chère famille Bennani",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -577,6 +636,8 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -618,6 +679,8 @@ export default {
    "famille-chen": "Chère famille Chen",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -652,6 +715,8 @@ export default {
   "familyLabels": {
    "famille-nguyen": "Chère famille Nguyen"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -675,6 +740,8 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -698,6 +765,8 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -739,6 +808,8 @@ export default {
    "famille-idrissi": "Chère famille Idrissi",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -780,6 +851,12 @@ export default {
    "famille-haddad": "Chère famille Haddad",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [
+   "Tajine d’agneau",
+   "Poisson",
+   "Végétarien"
+  ],
+  "rsvpQuestion": "Un souhait pour les mariés ?",
   "gifts": [],
   "giftLabels": {}
  },
@@ -820,6 +897,8 @@ export default {
    "famille-sharma": "Chère famille Sharma",
    "collegues": "Chers collègues"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -861,6 +940,8 @@ export default {
    "famille-bensaïd": "Chère famille Bensaïd",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -902,6 +983,8 @@ export default {
    "famille-alaoui": "Chère famille Alaoui",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -925,6 +1008,8 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -949,6 +1034,8 @@ export default {
   "familyLabels": {
    "famille-alaoui": "Chère famille Alaoui"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -990,6 +1077,8 @@ export default {
    "famille-chraïbi": "Chère famille Chraïbi",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -1013,6 +1102,8 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -1054,6 +1145,8 @@ export default {
    "famille-whitmore": "Chère famille Whitmore",
    "amis": "Chers amis"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },
@@ -1089,6 +1182,8 @@ export default {
    "famille-martin": "Chère famille Martin",
    "famille-bernard": "Chers Paul et Anne"
   },
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  }

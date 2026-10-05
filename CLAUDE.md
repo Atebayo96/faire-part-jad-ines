@@ -370,6 +370,24 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     toute grosse évolution. Une scène dont le sujet monte au-dessus de 50 % se corrige en attendant Gemini avec
     `tools/descendre.py` (étire la bande de ciel uni au-dessus du sujet, jamais le sujet ni la lune : `--bande 0.05`).
 
+43. **La réponse et le tableau de bord suivent le standard américain** (`business/16-benchmark-americains.md`, 5 octobre 2026 :
+    Paperless Post, Greenvelope, Joy, Zola, Partiful). Ce que le couple attend et que tout le marché fait : l'**enveloppe et
+    l'accueil sont adressés** au foyer (`families[f].label`, `.op-to`, `.greet`) ; la réponse nomme **chaque personne** (la
+    première ligne est celui qui répond, les autres n'apparaissent que s'il vient) et chacune **choisit son menu** parmi
+    ceux de la fiche (`rsvp.menu`, liste de 8 au plus, vérifiée par `api/rsvp.js`), le nombre de personnes en découle ;
+    une **question libre** (`rsvp.question` → `answer`) ; un **secours WhatsApp** (`rsvp.whatsapp`, lien `wa.me` avec le
+    nom déjà écrit) pour qui ne veut pas remplir un formulaire ; « **Me rappeler de répondre** » pose un rappel `.ics` dans
+    le calendrier de l'invité (dans 3 jours, ou une semaine avant la date limite), sans numéro collecté ni SMS payant.
+    L'ouverture d'un lien par famille est notée (`api/seen.js` : première, dernière, nombre ; rien d'autre, rien en démo),
+    le tableau de bord distingue **pas ouvert / ouvert sans réponse / répondu** et ne propose « **Relancer sur
+    WhatsApp** » (`wa.me/?text=` avec le lien de la famille, le contact se choisit dans WhatsApp) qu'aux deux premiers.
+    Les mariés **ajoutent ou corrigent une réponse à la main** (POST `api/rsvp` avec la clé du tableau de bord, `manual`,
+    `rid` seul suffit ; la clé de l'invité reste valable) et exportent tout en CSV (personnes et menus compris). Le
+    configurateur règle menus, question et WhatsApp sous « Réponse » (`C.data.rsvp`, `ED.rsvp`), dans les deux formats.
+    Le bouton Calendrier met le lieu, la note et le lien dans l'événement (`icsUrl()`), pour l'itinéraire le jour J.
+    On ne prend pas : la liste des invités visible, les commentaires, la vérification du téléphone ou du mail pour
+    répondre, le prix par invité (voir la fiche 16, § 5).
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
