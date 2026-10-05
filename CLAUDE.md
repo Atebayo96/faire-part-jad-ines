@@ -293,9 +293,17 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     (`darkLieux` : le dîner de nuit est en texte blanc, `isDark()` dans invite.js). Démo : Elena & Matteo.
     Accueil (« Deux ambiances pour Dolce Vita »), carrousel et galerie (liens par ambiance) ne montrent plus de grand
     tableau ; les démos en grand tableau restent en ligne, le moteur et l'aperçu `lgInvite` restent dans le code.
-    **Posée, une page ne montre que sa propre scène** aussi pour les peintures entières (sans calques) : la scène suivante,
-    qui commence 45 % d'écran plus haut, est invisible tant que la page est posée et apparaît en défilant (opacité selon
-    le défilement, invite.js et `cpFade()`) ; son ciel clair délavait le bas de l'écran.
+    **Peintures entières (sans calques) : fondu enchaîné plein écran.** Posée, une page ne montre que sa scène ; en
+    défilant, la scène suivante (collante, à la taille de l'écran, son cadre commence un écran plus haut que sa page)
+    apparaît en fondu sur tout l'écran, sur 80 % d'un écran de défilement, et la précédente reste en place dessous (son
+    cadre dure un écran de plus). Plus de bande de ciel qui monte avec un bord, ni de trou sombre : « au moment où tu
+    défiles, tu vois que c'est pas vraiment continu ». `layoutStrip()` et le fondu dans invite.js, `cpLayout()`/`cpFade()`
+    dans vitrine.js ; les calques gardent leur rendu (sujet qui monte).
+    **Lieux de « Plein jour »** : Église (la chapelle) et Jardin (la pergola) seulement ; le dîner comme « Salle » ne
+    voulait rien dire. `lieuAlt` remplace un lieu absent (mairie → église, salle et plage → jardin). **À peindre dès que
+    Gemini revient** : Mairie, Salle, Plage en plein jour, dans le style des peintures du tableau.
+    **Old money** : ses scènes sont des vignettes sur papier ; sur un téléphone allongé, le sujet (toute la largeur) laisse
+    beaucoup de papier au-dessus. L'utilisateur le trouve « trop petit, pas dans le full frame » : question ouverte.
 
 33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la
     révélation de la date. Arriver sur l'onglet rejoue l'ouverture dans l'aperçu.
@@ -307,6 +315,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `.op-card.anim` et `ov*` dans vitrine.css) : enveloppe (sceau, rabat, descente), rideau qui se lève, voile qui s'ouvre
     par le milieu, portes sur gonds avec la lumière, date qui apparaît, ticket gratté par une pièce, roue qui tourne,
     jackpot 28 · 08 · 27. « Les gens voient direct l'impact, sans attendre le téléphone à droite. » Sélection par la coche.
+    **Ticket, roue et jackpot sont le vrai composant** (`SceauReveal.mount`, aux couleurs choisies, réduit dans le petit
+    téléphone, `mountMini()`), pas un dessin à part : « ceux-là c'est pas les mêmes que ceux-là, c'est dommage ». Au
+    survol, la roue tourne, le ticket se gratte, les rouleaux défilent (CSS sur `.rvm`).
 34. **En grand tableau, l'étape 3 décrit le tableau, pas des écrans** (« Votre tableau ») : l'illustration d'ouverture,
     le mot des familles, les événements dans leurs cadres (la scène peinte du thème, un lieu de la bibliothèque ou votre
     photo), puis les parties facultatives (histoire, bande de photos, dress code ; bon à savoir, liste), la réponse et le

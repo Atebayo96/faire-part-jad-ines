@@ -227,8 +227,14 @@
      téléphone), pour ne pas faire tourner huit animations en permanence ; les images suivent le thème (variables --sc, --op, --seal, --pc posées par paint) */
   const OV={env:'<i class="sc"></i><i class="eb"><i class="ein"><i class="ebd"></i><i class="ef"><img src="/img/open/env-flap.webp" alt=""><i class="es"></i></i></i></i>',cur:'<i class="sc"></i><i class="cu"></i>',
     voile:'<i class="sc"></i><i class="vl"></i><i class="vr"></i>',door:'<i class="sc"></i><i class="dl"></i><i class="dr"></i><i class="fl"></i>',
-    non:'<i class="sc"></i><em class="dt">28 · 08</em>',scratch:'<i class="sc"></i><em class="dt">28 · 08</em><i class="fo"></i><i class="coin"></i>',
-    wheel:'<i class="sc"></i><i class="wh"></i><i class="pin"></i>',slot:'<i class="sc"></i><i class="sl">'+[0,1,2].map(i=>`<i><i>${['? 07 21 19 04','? 11 02 09 12','? 31 26 30 28'][i].split(' ').map(x=>`<b>${x}</b>`).join('')}<b>${['28','08','27'][i]}</b></i></i>`).join('')+'</i>'};
+    non:'<i class="sc"></i><em class="dt">28 · 08</em>',scratch:'<i class="sc"></i><span class="rvm"></span>',wheel:'<i class="sc"></i><span class="rvm"></span>',slot:'<i class="sc"></i><span class="rvm"></span>'};
+  /* ticket, roue et jackpot : le vrai jeu (reveal.js), aux couleurs choisies, réduit dans le petit téléphone ; « ceux-là
+     c'est pas les mêmes, c'est dommage » : un dessin à part ne ressemblait pas au vrai. Au survol, la roue tourne, le
+     ticket se gratte, les rouleaux défilent (vitrine.css) ; rien n'est cliquable dans la carte. */
+  let rvmKey='';
+  function mountMini(t,p){ const key=C.k+p.c+$('cDate').value; if(key===rvmKey||!window.SceauReveal) return; rvmKey=key;
+    $('cReveal').querySelectorAll('.rvm').forEach(el=>{ const kind=el.closest('[data-id]').dataset.id;
+      SceauReveal.mount(el,{kind,date:weddingDate(),tz:'Europe/Paris',lang:'fr',pal:p.c,light:!!t.light&&t.scenes[0][4]!=='dark',scope:el}); }); }
   const ovCard=(b,o)=>{ b.className='op-card anim'; b.innerHTML=`<span class="ov ov-${o.id}" aria-hidden="true"><span class="ph">${OV[o.id]}</span></span><b>${o.name}</b><small>${o.sub}</small>`; };
   opt($('cOpen'),OPENS,'op','',ovCard);
   opt($('cReveal'),REVEALS,'rvl','',ovCard);
@@ -238,7 +244,7 @@
   const grp=k=>THEMES[k].group||k, GRPS=[...new Set(CK.map(grp))];
   const okLieu=(k,id)=>!THEMES[k].lieux||THEMES[k].lieux.includes(id);
   // une ambiance qui n'a pas tous les lieux : un lieu absent passe sur le premier qui existe
-  const fixLieux=()=>C.ev.forEach(e=>{ if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=THEMES[C.k].lieux[0]; });
+  const fixLieux=()=>C.ev.forEach(e=>{ if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=(THEMES[C.k].lieuAlt||{})[e.lieu]||THEMES[C.k].lieux[0]; });
   fixLieux();
   GRPS.forEach(g=>{ const k0=CK.find(k=>grp(k)===g), t=THEMES[k0], b=document.createElement('button'); b.type='button'; b.className='th'; b.dataset.id=g;
     b.innerHTML=`<span style="background-image:url('/img/themes/${k0}-1.webp?v=10')"></span>${esc(t.name)}`;
@@ -404,12 +410,15 @@
     const sc=$('cpScroll'), h=sc.clientHeight, bgs=$('cpBgs'); if(!h||!bgs) return; const ov=Math.round(h*.45), secs=[...sc.querySelectorAll('.pv-sc')], layers=[...bgs.children];
     bgs.style.height=sc.scrollHeight+'px';
     cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!L) return; const B=L.firstElementChild, top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight;
-      const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px'; B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
+      // peintures entières : fondu enchaîné plein écran, comme layoutStrip() dans invite.js ; calques : le sujet monte
+      const cal=L.classList.contains('cal'), dz=ri>0&&!cal;
+      const nx=cpRuns[ri+1]&&!(layers[ri+1]&&layers[ri+1].classList.contains('cal'))&&!cal?h:0; // la scène reste sous la suivante pendant le fondu
+      const t=ri>0?(dz?top-h:top-ov):top; L.style.top=t+'px'; L.style.height=(bot-t+nx)+'px'; B.style.height=(ri>0&&!dz?h+ov:h)+'px'; B.style.top=(ri>0&&!dz?-ov:0)+'px';
       // calque : le sol qui part en ligne droite est fondu au défilement (cpFade(), comme calFade() du moteur)
-      if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage=''; return; }
-      const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
+      if(cal){ B.style.webkitMaskImage=B.style.maskImage=''; return; }
+      B.style.webkitMaskImage=B.style.maskImage='';
       // taille de l'écran, pas du cadre agrandi (sinon zoom ~1,8×) : même calcul que fitBg() dans invite.js
-      const bw=Math.ceil(Math.max(sc.clientWidth,h*.566)), y=Math.round((ri>0?ov:0)+(h-bw/.566)/2);
+      const bw=Math.ceil(Math.max(sc.clientWidth,h*.566)), y=Math.round((h-bw/.566)/2);
       B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`; B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px'); });
     cpFade();
   }
@@ -422,7 +431,7 @@
     // peintures entières : posée, une page ne montre que sa scène ; la suivante n'apparaît qu'en défilant (comme invite.js)
     const secs=[...$('cpScroll').querySelectorAll('.pv-sc')], layers=[...bgs.children];
     cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!ri||!L||L.classList.contains('cal')||!secs[r.a]) return; const B=L.firstElementChild;
-      const q=Math.max(0,Math.min(1,(st-(secs[r.a].offsetTop-h))/(h*.45))), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; } }); }
+      const q=Math.max(0,Math.min(1,(st-(secs[r.a].offsetTop-h))/(h*.8))), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; } }); }
   { const sc=$('cpScroll'); if(sc){ let tk=false; sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; cpFade(); }); } },{passive:true}); } }
   // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
   function paint(){
@@ -478,6 +487,7 @@
     if($('fOcc')) $('fOcc').value=OCCS.find(o=>o.id===C.occ).name;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
+    mountMini(t,p);
     [$('cOpen'),$('cReveal')].forEach(x=>{ x.style.setProperty('--sc',C.fmt==='long'?`url('/img/long/${C.k}/thumb.webp')`:`url('/img/themes/${C.k}-1.webp?v=10')`); x.classList.toggle('lg',C.fmt==='long'); x.style.setProperty('--op',`url('/img/open/${C.k}-portes.webp')`); x.style.setProperty('--ri',`url('/img/open/${C.k}-rideau.webp')`); x.style.setProperty('--seal',`url('/img/seals/${SEAL[0]}.webp')`); x.style.setProperty('--pc',p.c); });
     $('opSealTxt').innerHTML=iniH; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
     $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir';

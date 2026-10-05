@@ -378,14 +378,20 @@
     bgs.style.height=sc.scrollHeight+'px';
     runs.forEach((r,ri)=>{
       const top=secs[r.a].offsetTop, bot=secs[r.b].offsetTop+secs[r.b].offsetHeight, L=layers[ri], B=L.firstElementChild;
-      const t=ri>0?top-ov:top; L.style.top=t+'px'; L.style.height=(bot-t)+'px';
-      B.style.height=(ri>0?h+ov:h)+'px'; B.style.top=(ri>0?-ov:0)+'px';
+      /* peintures entières : fondu enchaîné plein écran. Le cadre de la scène suivante commence un écran plus haut que
+         sa page ; son image, collante et à la taille de l'écran, couvre déjà tout l'écran mais invisible, et apparaît
+         en fondu pendant qu'on défile (opacité, plus bas). Plus de bande de ciel qui monte avec un bord : « au moment où
+         tu défiles, tu vois que c'est pas vraiment continu ». Les calques gardent leur rendu (sujet qui monte). */
+      const cal=L.classList.contains('cal'), dz=ri>0&&!cal;
+      // la scène reste en place sous la suivante pendant le fondu : son cadre dure un écran de plus
+      const nx=runs[ri+1]&&!(layers[ri+1]&&layers[ri+1].classList.contains('cal'))&&!cal?h:0;
+      const t=ri>0?(dz?top-h:top-ov):top; L.style.top=t+'px'; L.style.height=(bot-t+nx)+'px';
+      B.style.height=(ri>0&&!dz?h+ov:h)+'px'; B.style.top=(ri>0&&!dz?-ov:0)+'px';
       // calque : pas de fond ni de fondu dans le cadre (le fond du thème est derrière tout, sur .sc) ; le sujet détouré
       // monte avec les pages et passe devant le sujet précédent, qui reste en place jusqu'à être poussé
       // (le sol qui part en ligne droite est fondu au défilement, calFade() ci-dessous)
       if(L.classList.contains('cal')){ B.style.webkitMaskImage=B.style.maskImage=''; return; }
-      fitBg(B,sc.clientWidth,h,ri>0?ov:0);
-      const m=ri>0?`linear-gradient(to bottom,transparent 0,#000 ${ov}px)`:''; B.style.webkitMaskImage=m; B.style.maskImage=m;
+      fitBg(B,sc.clientWidth,h,0); B.style.webkitMaskImage=B.style.maskImage='';
     });
   }
   // les textes défilent avec la page, sans fondu ni décalage : rien ne signale un « changement de page »
@@ -415,12 +421,11 @@
       subs.forEach(({L,S})=>{ const t=L.offsetTop, b=t+L.offsetHeight; if(b<st-h||t>st+2*h) return;
         const off=Math.max(-h*.06,Math.min(h*.06,(st-t)*.05)); S.style.transform=`translate3d(0,${off.toFixed(1)}px,0)`; }); };
     if(subs.length){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(par); } },{passive:true}); par(); } }
-  /* peintures entières (sans calques) : la scène suivante commence 45 % d'écran plus haut que sa page et s'y fond. Posée,
-     une page ne montre que sa propre scène (le ciel clair de la suivante délavait le bas de l'écran, ambiance « Plein
-     jour ») : la suivante n'apparaît qu'une fois qu'on défile, et elle est entière quand on a parcouru ce fondu. */
+  /* peintures entières (sans calques) : fondu enchaîné. Posée, une page ne montre que sa propre scène ; en défilant vers
+     la suivante, celle-ci apparaît en fondu sur tout l'écran (sur 80 % d'un écran de défilement). */
   { const fr=runs.map((r,ri)=>({ri,a:r.a,B:layers[ri]&&layers[ri].firstElementChild})).filter(x=>x.ri>0&&x.B&&!layers[x.ri].classList.contains('cal')); let tk=false;
     const fade=()=>{ tk=false; const h=sc.clientHeight, st=sc.scrollTop, ov=h*OVK;
-      fr.forEach(({a,B})=>{ const q=Math.max(0,Math.min(1,(st-(secs[a].offsetTop-h))/ov)), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; } }); };
+      fr.forEach(({a,B})=>{ const q=Math.max(0,Math.min(1,(st-(secs[a].offsetTop-h))/(h*.8))), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; } }); };
     if(fr.length&&!LG){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(fade); } },{passive:true}); fade(); addEventListener('resize',fade); } }
   // précharge les images des pages suivantes
   if(!LG) [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=hasCal(n)?cal(n):img(n); });
