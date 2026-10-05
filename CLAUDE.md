@@ -295,6 +295,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     grands-parents » et « leur petit-enfant » pour un sbouâ, pas de « Notre histoire » ni de « Les célébrations » pour un
     événement seul ; le cadre d'un sbouâ en écran simple montre le fond du thème, pas le couple.
 
+42. **Recette rejouable** (`business/tools/recette/`, compte rendu `business/15-recette-mille-et-une-nuits.md`) : vitrine,
+    configurateur dans toutes les combinaisons, toutes les démos jusqu'au « Merci », accueil du moteur. À rejouer après
+    toute grosse évolution. Une scène dont le sujet monte au-dessus de 50 % se corrige en attendant Gemini avec
+    `tools/descendre.py` (étire la bande de ciel uni au-dessus du sujet, jamais le sujet ni la lune : `--bande 0.05`).
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
