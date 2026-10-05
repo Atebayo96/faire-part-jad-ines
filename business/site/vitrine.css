@@ -79,7 +79,7 @@
   .roll-txt{position:absolute;left:0;right:0;top:11%;text-align:center;padding:0 8%}
   .roll-txt .ey{font:500 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.92}
   /* « Bismillah » s'écrit en arabe, en calligraphie (ligature basmala « ﷽ » d'Amiri), comme dans le faire-part (invite.css, .ey.ar) */
-  .ey.ar{font:400 clamp(22px,6.6vw,29px)/1.5 "Amiri","Scheherazade New",serif!important;letter-spacing:0!important;text-transform:none!important;direction:rtl;white-space:nowrap}
+  .ey.ar{font:400 clamp(17px,5.2vw,24px)/1.5 "Amiri","Scheherazade New",serif!important;letter-spacing:0!important;text-transform:none!important;direction:rtl;white-space:nowrap}
   .roll-txt .ey.ar{font-size:calc(var(--car-w) * .066)!important}
   .roll-txt .nm{margin:10px 0 6px;line-height:1.05}
   .roll-txt .tx{font:italic 400 clamp(13px,1.8vh,16px)/1.35 "Cormorant Garamond",Georgia,serif}
@@ -815,3 +815,24 @@
   .opts.fmtv:has([aria-pressed="true"]) .fmtc[aria-pressed="false"]{opacity:.72}
   @media (max-width:560px){ .fmtc .fv{height:150px;gap:6px;padding:14px 8px 0} .fmtc .fv i:nth-child(3){display:none} .fmtc .fv i.roll{top:14px;height:210px} .fmtc b{font-size:15px} }
   @media (max-width:560px){ .story>li.fixed{flex-direction:column;gap:3px} .story .ev-h{flex-wrap:wrap} }
+  .opts .sw.th-end{margin-right:14px} /* les couleurs du thème, puis les couleurs communes */
+  /* le téléphone de l'aperçu fait 284 px : la basmala y garde la même place que sur un vrai téléphone (5,2 % de la largeur), entière */
+  .cp-phone .ey.ar{font-size:16px!important}
+  /* réglages d'une partie ou d'un écran en plus, sous son choix */
+  .eds:empty,#cExtrasEd:empty{display:none}
+  .eds,#cExtrasEd{display:grid;gap:10px}
+  #cExtrasEd{margin-top:12px}
+  .ed{display:grid;gap:10px;padding:14px;background:var(--bg-2);border-left:2px solid var(--ink)}
+  .ed-t{font:500 13px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .ed-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}
+  .ed-row.s{grid-template-columns:90px 1fr 1.6fr auto}
+  .ed-f{display:grid;gap:4px;min-width:0}
+  .ed-f>span{font-size:12px;color:var(--muted)}
+  .ed input[type=text],.ed input[type=url],.ed textarea,.ed select{width:100%;min-width:0;font:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:0}
+  .ed textarea{resize:vertical;line-height:1.4}
+  .ed-cols{display:flex;gap:8px}
+  .ed-cols input{width:40px;height:40px;padding:0;border:1px solid var(--line);background:none;cursor:pointer}
+  .ed-x{width:36px;height:38px;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-size:18px;color:var(--muted)}
+  .ed-add{justify-self:start;border:1px dashed var(--line);background:none;padding:8px 12px;font:500 13px Inter,sans-serif;cursor:pointer;color:var(--ink)}
+  .ed-n{margin:0;font-size:13px;color:var(--muted)}
+  @media (max-width:560px){ .ed-row,.ed-row.s{grid-template-columns:1fr} .ed-x{justify-self:end} }

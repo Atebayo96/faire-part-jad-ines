@@ -281,6 +281,20 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     coupé ») : trois écrans 9:16 du thème pour le scène par scène, le haut du rouleau qui s'efface vers le bas pour le grand
     tableau ; sélection par la coche (règle 28). Dessous, « Vos écrans, dans l'ordre » ou « Le tableau, de haut en bas ».
 
+39. **Les couleurs suivent le thème.** Chaque thème de la famille porte ses couleurs (`pals` dans themes.js : 3 teintes et
+    la cire de sceau qui va avec), proposées en premier et choisies par défaut, puis les dix couleurs communes. Elles colorent
+    le sceau, la date à gratter, la roue, le jackpot et le médaillon des boutons : tout restait doré (« couleur standard »).
+40. **Boutons à leur taille.** Un bouton seul garde sa largeur naturelle (`.acts .b:only-child`) ; deux boutons sont côte à
+    côte et de même largeur, plafonnés à 200 px, et passent l'un sous l'autre sans s'étirer sur un écran étroit.
+    La basmala tient dans l'écran : `clamp(17px, 5.2vw, 24px)`, 16 px dans le téléphone de l'aperçu (elle était coupée).
+41. **Chaque partie se règle quand on la coche** (grand tableau : sous la partie ; scène par scène : sous « Écrans en
+    plus ») : familles et leur phrase, moments de l'histoire, dress code et ses couleurs, infos du bon à savoir avec leur
+    icône, phrase et lien de la liste (`C.data`, `ED` dans vitrine.js). L'aperçu montre ce qui est écrit, la demande
+    l'emporte (`fScreens`). Une partie vide ou non cochée n'apparaît pas (le titre « Notre histoire » s'affichait seul).
+    Les mots suivent l'occasion : liste de mariage / cagnotte (henné) / liste de naissance (sbouâ), « Avec ses
+    grands-parents » et « leur petit-enfant » pour un sbouâ, pas de « Notre histoire » ni de « Les célébrations » pour un
+    événement seul ; le cadre d'un sbouâ en écran simple montre le fond du thème, pas le couple.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

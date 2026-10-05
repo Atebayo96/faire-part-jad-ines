@@ -193,7 +193,7 @@
   /* au lancement, le configurateur se concentre sur Mille et une nuits et ses variantes (family:'nuits' dans themes.js),
      pour la communauté arabe et musulmane ; les autres thèmes restent dans la galerie et le code */
   const CK=Object.keys(THEMES).filter(k=>THEMES[k].family==='nuits'&&!THEMES[k].pending);
-  const C={occ:OCC[urlOcc]?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:'nuits',fmt:urlFmt==='long'?'long':'scenes',pal:'or',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
+  const C={occ:OCC[urlOcc]?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:'nuits',fmt:urlFmt==='long'?'long':'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
     ev:null}; C.ev=OCC[C.occ].ev();
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
   const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'mosquee',name:'Mosquée'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
@@ -203,7 +203,7 @@
      simplement ce qui n'y est pas compris. Jamais de case grisée ni de refus. */
   const sigNeeds=()=>{ const n=[]; if(C.ev.some(e=>e.bg==='scene'&&e.lieu==='photo')) n.push('votre lieu peint d’après photo');
     if(C.ev.length>2) n.push(`${C.ev.length} événements (2 en Essentiel)`); if(C.x.has('famille')) n.push('un lien par famille'); if(C.x.has('en')) n.push('la version anglaise'); return n; };
-  const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Hébergement'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'},{id:'famille',name:'Un lien par famille',sig:true},{id:'en',name:'Version anglaise',sig:true}];
+  const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Bon à savoir'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'},{id:'famille',name:'Un lien par famille',sig:true},{id:'en',name:'Version anglaise',sig:true}];
   const LG_EXTRAS=['famille','en'];
   // options retenues pour le format choisi (une option propre à l'autre format reste en mémoire, sans compter)
   const LG_PARTS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'album',name:'Bande de photos'},{id:'dress',name:'Dress code'},{id:'stay',name:'Bon à savoir'},{id:'gifts',name:'Liste de mariage'}];
@@ -229,7 +229,14 @@
   const PLANSUB={essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
   $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
-  opt($('cPal'),PALS,'pal','',(b,p)=>{ b.className='sw'; b.style.background=p.c; b.setAttribute('aria-label',p.name); });
+  /* couleurs : celles du thème d'abord (pals dans themes.js, choisies par défaut), puis les dix couleurs communes.
+     Elles colorent les boutons de l'aperçu, le sceau, la date à gratter, la roue et le jackpot. */
+  const palsOf=k=>[...(THEMES[k].pals||[]).map((x,i)=>Object.assign({id:'t'+i,theme:true},x)),...PALS];
+  let palK='';
+  function buildPal(){ if(palK===C.k) return; palK=C.k; const box=$('cPal'); box.innerHTML='';
+    palsOf(C.k).forEach((x,i,a)=>{ const b=document.createElement('button'); b.type='button'; b.dataset.id=x.id; b.className='sw'+(x.theme&&!(a[i+1]||{}).theme?' th-end':'');
+      b.style.background=x.c; b.setAttribute('aria-label',x.name+(x.theme?' (couleur du thème)':'')); b.onclick=()=>{ C.pal=x.id; C.palPicked=true; paint(); }; box.appendChild(b); });
+    if(!palsOf(C.k).some(x=>x.id===C.pal)) C.pal=palsOf(C.k)[0].id; }
   opt($('cFonts'),FONTS,'font','',(b,f)=>{ b.className='fo'; b.innerHTML=`<b>Aa</b><small>${f.name}</small>`; });
   opt($('cCount'),COUNTS,'cd','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
   // écrans en option : plusieurs à la fois ; l'aperçu fait défiler jusqu'à l'écran ajouté
@@ -242,7 +249,7 @@
     li('fixed home','<b>Accueil</b><span>Vos prénoms, la date, le sceau</span>');
     /* grand tableau : ce n'est pas une suite d'écrans mais un seul tableau peint en trois parties ; l'étape montre ces
        parties dans l'ordre, avec ce qu'on peut y mettre (lg-only), et les événements dans leurs cadres peints */
-    const part=(title,sub,ids)=>li('lg-only part',`<div class="ev-h"><b>${title}</b><small>${sub}</small></div><div class="opts">${ids.map(([id,n])=>`<button type="button" class="chip x" data-x="${id}">${n}</button>`).join('')}</div>`);
+    const part=(title,sub,ids)=>li('lg-only part',`<div class="ev-h"><b>${title}</b><small>${sub}</small></div><div class="opts">${ids.map(([id,n])=>`<button type="button" class="chip x" data-x="${id}">${n}</button>`).join('')}</div><div class="eds"></div>`);
     part('Sous l’illustration','l’invitation, puis vos événements',[['parents','Le mot des familles']]);
     const more=li('more','<button type="button" class="chip x sig" id="cAddEv">+ Ajouter un événement<i>Signature · jusqu’à 6</i></button>');
     const addEv=(e,i)=>{
@@ -268,9 +275,58 @@
   $('cOcc').addEventListener('click',e=>{ if(!e.target.closest('button')) return;
     const all=Object.values(OCC).flatMap(o=>o.n);
     [$('cN1'),$('cN2')].forEach((inp,i)=>{ if(!inp.value.trim()||all.includes(inp.value.trim())) inp.value=OCC[C.occ].n[i]; });
-    C.ev=OCC[C.occ].ev(); resetEv(); paint(); });
+    C.ev=OCC[C.occ].ev(); resetEv(); occDefaults(); paint(); });
   if(C.occ!=='mariage'){ $('cN1').value=OCC[C.occ].n[0]; $('cN2').value=OCC[C.occ].n[1]; }
   opt($('cSexe'),[{id:'fille',name:'Une fille'},{id:'fils',name:'Un garçon'}],'sexe','',(b,o)=>{ b.className='chip'; b.textContent=o.name; });
+  /* contenu des parties (grand tableau) et des écrans en plus (scène par scène) : chacun se règle dès qu'on le coche,
+     au même endroit ; l'aperçu le montre tel quel et la demande l'emporte. La liste suit l'occasion (mariage, henné, sbouâ). */
+  const giftName=()=>({henne:'Cagnotte',sbou3:'Liste de naissance'})[C.occ]||'Liste de mariage';
+  const DEF={
+    parents:{mariage:'ont la joie de vous convier au mariage de leurs enfants',henne:'vous attendent pour la soirée henné de leur fille',sbou3:'ont la joie de vous présenter leur petit-enfant'},
+    gifts:{mariage:'Votre présence suffit. Pour ceux qui le souhaitent, une cagnotte pour notre voyage.',henne:'Votre présence suffit. Pour ceux qui le souhaitent, une petite cagnotte pour la mariée.',sbou3:'Votre présence suffit. Pour ceux qui le souhaitent, une liste de naissance.'}};
+  C.data={
+    parents:{n1:'Famille Alaoui',n2:'Famille Haddad',text:DEF.parents[C.occ]},
+    story:[{when:'2018',title:'La rencontre',text:'Un mariage de cousins, deux places voisines.'},{when:'2022',title:'Paris',text:'Un premier appartement, le thé du dimanche.'},{when:'2026',title:'La demande',text:'Sur une terrasse, au coucher du soleil.'}],
+    dress:{title:'Tenue de fête',text:'Caftans, takchitas et djellabas bienvenus.',colors:['#0f5e4c','#d4af37','#f2e6d0','#7a1f3d']},
+    stay:[{icon:'hotel',title:'Dormir',text:'Chambres réservées à 5 min.'},{icon:'car',title:'Navettes',text:'Depuis la gare à 14h15.'}],
+    gifts:{text:DEF.gifts[C.occ],url:''}};
+  // l'occasion change : les phrases encore « par défaut » suivent ; ce que l'utilisateur a écrit reste
+  const occDefaults=()=>{ [['parents','text'],['gifts','text']].forEach(([k,f])=>{ if(Object.values(DEF[k]).includes(C.data[k][f])) C.data[k][f]=DEF[k][C.occ]; }); };
+  const famEy=()=>({henne:'Avec ses parents',sbou3:'Avec ses grands-parents'})[C.occ]||'Avec leurs familles';
+  const ICONS=[['hotel','Dormir'],['car','Venir'],['kids','Enfants'],['dress','Tenue'],['gift','Cadeau'],['info','Autre']];
+  const fldE=(lab,h)=>`<label class="ed-f"><span>${lab}</span>${h}</label>`;
+  const inpE=(pa,ph,max)=>`<input type="text" data-p="${pa}" maxlength="${max||80}" placeholder="${esc(ph||'')}">`;
+  const areaE=pa=>`<textarea data-p="${pa}" rows="2" maxlength="240"></textarea>`;
+  const ED={
+    parents:()=>`<div class="ed-row">${fldE('Première famille',inpE('parents.n1','Famille Alaoui',40))}${fldE('Seconde famille (facultatif)',inpE('parents.n2','Famille Haddad',40))}</div>${fldE('Leur phrase',areaE('parents.text'))}`,
+    story:()=>C.data.story.map((x,i)=>`<div class="ed-row s">${fldE('Année',inpE(`story.${i}.when`,'2018',12))}${fldE('Moment',inpE(`story.${i}.title`,'La rencontre',40))}${fldE('En une phrase',inpE(`story.${i}.text`,'',120))}${C.data.story.length>1?`<button type="button" class="ed-x" data-rm="story.${i}" aria-label="Retirer ce moment">×</button>`:''}</div>`).join('')+(C.data.story.length<5?'<button type="button" class="ed-add" data-add="story">+ Un moment</button>':''),
+    album:()=>`<p class="ed-n">Vous nous envoyez 4 à 8 photos après la commande. L'aperçu montre des photos d'exemple.</p>`,
+    dress:()=>`${fldE('Titre',inpE('dress.title','Tenue de fête',40))}${fldE('Consigne',areaE('dress.text'))}<div class="ed-f"><span>Couleurs suggérées</span><div class="ed-cols">${C.data.dress.colors.map((c,i)=>`<input type="color" data-p="dress.colors.${i}" aria-label="Couleur ${i+1}">`).join('')}</div></div>`,
+    stay:()=>C.data.stay.map((x,i)=>`<div class="ed-row s">${fldE('Icône',`<select data-p="stay.${i}.icon">${ICONS.map(([k,n])=>`<option value="${k}">${n}</option>`).join('')}</select>`)}${fldE('Titre',inpE(`stay.${i}.title`,'Dormir',30))}${fldE('Texte',inpE(`stay.${i}.text`,'',140))}${C.data.stay.length>1?`<button type="button" class="ed-x" data-rm="stay.${i}" aria-label="Retirer cette info">×</button>`:''}</div>`).join('')+(C.data.stay.length<4?'<button type="button" class="ed-add" data-add="stay">+ Une info</button>':''),
+    gifts:()=>`${fldE('Votre phrase',areaE('gifts.text'))}${fldE('Lien de la cagnotte ou de la liste (facultatif)','<input type="url" data-p="gifts.url" maxlength="200" placeholder="https://…">')}`};
+  const getP=pa=>pa.split('.').reduce((o,k)=>o==null?o:o[k],C.data);
+  const setP=(pa,v)=>{ const ks=pa.split('.'), last=ks.pop(); ks.reduce((o,k)=>o[k],C.data)[last]=v; };
+  const edTitle=id=>id==='gifts'?giftName():((LG_PARTS.find(x=>x.id===id)||EXTRAS.find(x=>x.id===id)||{}).name||'');
+  // un cadre ne se reconstruit que si ses parties changent (les champs gardent le focus pendant la frappe)
+  function edBox(host,ids){ if(!host) return; const key=ids.join(',')+'|'+C.occ+'|'+C.data.story.length+'|'+C.data.stay.length; if(host.dataset.key===key) return; host.dataset.key=key;
+    host.innerHTML=ids.map(id=>`<div class="ed" data-ed="${id}"><b class="ed-t">${esc(edTitle(id))}</b>${ED[id]()}</div>`).join('');
+    host.querySelectorAll('[data-p]').forEach(el=>{ const v=getP(el.dataset.p); el.value=v==null?'':v; el.addEventListener('input',()=>{ setP(el.dataset.p,el.value); paint(); }); });
+    host.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ const k=b.dataset.add; C.data[k].push(k==='story'?{when:'',title:'',text:''}:{icon:'info',title:'',text:''}); paint(); });
+    host.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ const [k,i]=b.dataset.rm.split('.'); C.data[k].splice(+i,1); paint(); }); }
+  function paintEd(long){
+    $('cStory').querySelectorAll('li.part').forEach(l=>edBox(l.querySelector('.eds'),long?[...l.querySelectorAll('[data-x]')].map(b=>b.dataset.x).filter(id=>C.x.has(id)&&ED[id]&&!(id==='story'&&C.occ==='sbou3')):[]));
+    edBox($('cExtrasEd'),long?[]:EXTRAS.map(x=>x.id).filter(id=>C.x.has(id)&&ED[id]&&!(id==='story'&&C.occ==='sbou3')));
+    // la liste prend le nom de l'occasion ; « Notre histoire » n'a pas de sens pour un sbouâ
+    document.querySelectorAll('#cStory [data-x="gifts"],#cExtras [data-id="gifts"]').forEach(b=>b.textContent=giftName());
+    const st=$('cStory').querySelector('[data-x="story"]'); if(st) st.hidden=C.occ==='sbou3';
+  }
+  const edText=()=>{ const d=C.data, on=id=>C.x.has(id), o=[];
+    if(on('parents')) o.push(`familles : ${[d.parents.n1,d.parents.n2].filter(Boolean).join(' & ')} « ${d.parents.text} »`);
+    if(on('story')&&C.occ!=='sbou3') o.push('histoire : '+d.story.map(x=>[x.when,x.title,x.text].filter(Boolean).join(' ')).join(' / '));
+    if(on('dress')) o.push(`dress code : ${d.dress.title}, ${d.dress.text} (${d.dress.colors.join(' ')})`);
+    if(on('stay')) o.push('bon à savoir : '+d.stay.map(x=>`${x.title} ${x.text}`).join(' / '));
+    if(on('gifts')) o.push(`${giftName().toLowerCase()} : ${d.gifts.text}${d.gifts.url?' '+d.gifts.url:''}`);
+    return o.join(' ; '); };
   // l'aperçu descend jusqu'à l'écran modifié
   function showEv(i){ const el=$('cpScroll').querySelector(`[data-ev="${i}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); }
   const hm=v=>{ const m=/^(\d{1,2}):(\d{2})/.exec(v||''); return m?`${+m[1]}h${m[2]}`:''; };
@@ -299,7 +355,8 @@
   addEventListener('resize',cpLayout); addEventListener('load',cpLayout);
   // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
   function paint(){
-    const t=THEMES[C.k], p=PALS.find(x=>x.id===C.pal), f=FONTS.find(x=>x.id===C.font);
+    buildPal();
+    const t=THEMES[C.k], p=palsOf(C.k).find(x=>x.id===C.pal)||palsOf(C.k)[0], f=FONTS.find(x=>x.id===C.font);
     $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
     [['cStyles','k'],['cFmt','fmt'],['cOpen','op'],['cPal','pal'],['cCount','cd'],['cReveal','rvl']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
     $('cFonts').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.id===C.font); const ff=FONTS.find(x=>x.id===b.dataset.id); b.querySelector('b').style.fontFamily=ff.css||t.font; b.querySelector('b').style.fontStyle=(ff.id==='theme'?t.italic:ff.italic)?'italic':'normal'; });
@@ -318,6 +375,7 @@
       $('cStory').querySelector('.rsvp').innerHTML=long?'<b>Réponse</b><span>« Serez-vous des nôtres ? » et le compte à rebours</span>':'<b>Réponse</b><span>« Serez-vous des nôtres ? »</span>';
       $('cStory').querySelectorAll('li.ev .ev-h b').forEach((b,i)=>{ b.textContent=long?`Événement ${i+1} · son cadre`:`Événement ${i+1}`; });
       $('cStory').querySelectorAll('[data-x]').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.x)));
+      paintEd(long);
       // les options qui sont des écrans de la suite scène par scène n'existent pas dans le tableau (elles y sont des parties, ci-dessus)
       $('cExtras').querySelectorAll('button').forEach(b=>{ b.hidden=long&&!LG_EXTRAS.includes(b.dataset.id); });
       $('cExtrasT').firstChild.textContent=long?'Options ':'Écrans en plus ';
@@ -347,7 +405,7 @@
     $('cStory').querySelectorAll('[data-lieu]').forEach(b=>{ const L0=LIEUX.find(x=>x.id===b.dataset.lieu); b.hidden=!!(L0.occ&&L0.occ!==C.occ); });
     $('cExtras').querySelector('[data-id="story"]').hidden=C.occ==='sbou3'||C.fmt==='long';
     if($('fOcc')) $('fOcc').value=OCCS.find(o=>o.id===C.occ).name;
-    const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
+    const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
     $('opSealTxt').innerHTML=iniH; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
     $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir';
@@ -384,18 +442,18 @@
       pages.push(pg.html(c=>inner(c,pg.lt)).replace('<section ',`<section data-x="${id}" `)); };
     const card=(c,lt,rows,one)=>`<div class="pv-card${one?' one':''}" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${rows.map(r=>`<div>${r[0]?`<b>${r[0]}</b>`:''}<span>${r[1]}</span></div>`).join('')}</div>`;
     const hd=(c,ey,title)=>`<div class="ey" style="color:${c.ey};position:relative">${ey}</div>`+(title?`<div class="nm" style="${esc(nmCss(base*.62,c.nm))};position:relative">${title}</div>`:'');
-    xp('parents',1,'',c=>hd(c,'Avec leurs familles','')+`<div class="pv-fam" style="color:${c.tx}">Famille Martin &amp; Famille Bernard</div><div class="tx" style="color:${c.tx};position:relative">ont la joie de vous convier au mariage de leurs enfants</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
-    xp('story',1,'',(c,lt)=>hd(c,'Notre histoire','Il était une fois')+card(c,lt,[['2018','La rencontre, un jeudi soir'],['2022','Le premier appartement'],['2026','La demande, sous les tilleuls']]));
+    xp('parents',1,'',c=>hd(c,famEy(),'')+`<div class="pv-fam" style="color:${c.tx}">${[C.data.parents.n1,C.data.parents.n2].filter(Boolean).map(esc).join(' &amp; ')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.parents.text)}</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
+    xp('story',1,'',(c,lt)=>hd(c,'Notre histoire','Il était une fois')+card(c,lt,C.data.story.map(x=>[esc(x.when),esc([x.title,x.text].filter(Boolean).join(', '))])));
     pages.push(evPage(0));
     // page dediee au compte a rebours
     if(C.cd==='page'){ const pg=page('fond',''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
     C.ev.forEach((_,i)=>{ if(i) pages.push(evPage(i)); });
     xp('program','fond','',(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,[['15h00','La cérémonie'],['17h00','Vin d’honneur'],['19h30','Le dîner'],['23h00','On danse']]));
     const m4=t.scenes[3][4];
-    xp('dress',4,m4,c=>hd(c,'Dress code','Élégance d’été')+`<div class="pv-sws">${['#f3e3c3',p.c,'#7fb4d6','#e58f7a'].map(x=>`<i style="background:${x}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">Lin, soie, couleurs douces.</div>`);
-    xp('stay',4,m4,(c,lt)=>hd(c,'Hébergement et accès','')+card(c,lt,[['Hôtel','Chambres réservées à 5 min'],['Navette','Depuis la gare à 14h15']]));
+    xp('dress',4,m4,c=>hd(c,'Dress code',esc(C.data.dress.title))+`<div class="pv-sws">${C.data.dress.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.dress.text)}</div>`);
+    xp('stay',4,m4,(c,lt)=>hd(c,'Bon à savoir','')+card(c,lt,C.data.stay.map(x=>[esc(x.title),esc(x.text)])));
     xp('faq',4,m4,(c,lt)=>hd(c,'Vos questions','')+card(c,lt,[['','<b>Les enfants sont-ils invités ?</b><br>Oui, un espace jeux les attend.'],['','<b>Où se garer ?</b><br>Parking sur place.']],true));
-    xp('gifts',4,m4,c=>hd(c,'Liste de mariage','Votre présence suffit')+`<div class="tx" style="color:${c.tx};position:relative">Pour ceux qui le souhaitent, une cagnotte pour notre voyage.</div>${btn(c,'Participer','gift')}`);
+    xp('gifts',4,m4,c=>hd(c,esc(giftName()),'')+`<div class="tx" style="color:${c.tx};position:relative">${esc(C.data.gifts.text)}</div>${btn(c,'Participer','gift')}`);
     xp('photos',4,m4,c=>hd(c,'Vos photos','')+`<div class="tx" style="color:${c.tx};position:relative">Partagez vos plus belles photos de la soirée dans notre album commun.</div>${btn(c,'Partager mes photos','cam')}`);
     xp('table',4,m4,c=>hd(c,'Le jour J','Votre table')+`<div class="tx" style="color:${c.tx};position:relative;font-size:26px;margin-top:6px">La table des Roses</div><div class="tx" style="color:${c.tx};position:relative;font-size:13px">Chaque famille voit sa table sur son lien personnel.</div>`);
     pages.push(scene(3,C.cd==='fin'));
@@ -410,7 +468,7 @@
     sc.hidden=C.fmt==='long';
     if(C.fmt==='long') lgRender(lgInvite(t,p,f,n1,n2,ds)); else lgClear();
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
-    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=C.fmt==='long'?'Aucune':REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=whoTxt(); $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.name).join(', ');
+    $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=C.fmt==='long'?'Aucune':REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=whoTxt(); $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.id==='gifts'?giftName():x.name).join(', ')+(edText()?' — '+edText():'');
     const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
     if($('fFormat')) $('fFormat').value=FMTS.find(f=>f.id===C.fmt).name;
     $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place} (${evTxt(e).toLowerCase()})`).join(' ; ');
@@ -431,12 +489,13 @@
     return {slug:'apercu',demo:true,layout:'long',theme:C.k,couple:isSolo()?[n1]:[n1,n2],date:day+'T15:00',tz:'Europe/Paris',opening:'cur',music:'none',
       palette:p.c,font:f.id==='theme'?undefined:f.id,countdown:C.cd==='page'?'fin':C.cd,calques:[],anim:[],trans:[],families:{},album:C.x.has('album'),
       intro:{eyebrow:t.scenes[0][0],text:introTxt(),dateText:ds},
-      parents:C.x.has('parents')?{eyebrow:'Avec leurs familles',names:['Famille Alaoui','Famille Haddad'],text:'ont la joie de vous convier au mariage de leurs enfants'}:null,
-      events:C.ev.map((e,i)=>({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||e.name||'',start:day+'T'+(e.time||'15:00'),address:e.place||'',lieu:e.bg==='scene'&&!['photo','s2'].includes(e.lieu)?e.lieu:undefined,note:e.bg==='scene'&&e.lieu==='photo'?'Ici, votre lieu peint d’après votre photo':undefined})),
-      story:C.x.has('story')?{title:'Notre histoire',items:[{when:'2018',title:'La rencontre',text:'Un mariage de cousins, deux places voisines.'},{when:'2022',title:'Paris',text:'Un premier appartement, le thé du dimanche.'},{when:'2026',title:'La demande',text:'Sur une terrasse, au coucher du soleil.'}]}:null,
-      dress:C.x.has('dress')?{eyebrow:'Dress code',title:'Tenue de fête',text:'Caftans, takchitas et djellabas bienvenus.',colors:['#0f5e4c','#d4af37','#f2e6d0',p.c]}:null,
-      infos:C.x.has('stay')?[{icon:'hotel',title:'Dormir',text:'Chambres réservées à 5 min.'},{icon:'car',title:'Navettes',text:'Depuis la gare à 14h15.'}]:[],
-      gifts:C.x.has('gifts')?{eyebrow:'Liste de mariage',text:'Votre présence suffit. Pour ceux qui le souhaitent, une cagnotte pour notre voyage.',url:'#',label:'Participer'}:null,
+      parents:C.x.has('parents')?{eyebrow:famEy(),names:[C.data.parents.n1,C.data.parents.n2].filter(Boolean),text:C.data.parents.text}:null,
+      eventsTitle:C.occ==='mariage'?undefined:'',
+      events:C.ev.map((e,i)=>({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||e.name||'',start:day+'T'+(e.time||'15:00'),address:e.place||'',lieu:e.bg==='scene'&&!['photo','s2'].includes(e.lieu)?e.lieu:(e.bg!=='scene'&&C.occ==='sbou3'?'fond':undefined),note:e.bg==='scene'&&e.lieu==='photo'?'Ici, votre lieu peint d’après votre photo':undefined})),
+      story:C.x.has('story')&&C.occ!=='sbou3'?{title:'Notre histoire',items:C.data.story.filter(x=>x.when||x.title)}:null,
+      dress:C.x.has('dress')?{eyebrow:'Dress code',title:C.data.dress.title,text:C.data.dress.text,colors:C.data.dress.colors}:null,
+      infos:C.x.has('stay')?C.data.stay.filter(x=>x.title||x.text):[],
+      gifts:C.x.has('gifts')?{eyebrow:giftName(),text:C.data.gifts.text,url:C.data.gifts.url||'#',label:'Participer'}:null,
       rsvp:{eyebrow:'Réponse souhaitée',title:'Serez-vous des nôtres ?',deadline:dl}};
   }
   let lgKey='', lgT=null;

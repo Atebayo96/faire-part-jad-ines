@@ -275,11 +275,12 @@
         <div class="rv lg-names2" style="${nm(.8,sec[0].accent)}">${names}</div>
         <p class="rv tx">${esc(I.intro&&I.intro.text||S.joy)}</p>
         ${I.countdown==='debut'?`<div class="rv">${cdHtml(false,sec[0].ink)}</div>`:''}
-        ${ttl(S.celebr,0)}${evs}
+        ${I.eventsTitle===''?'':ttl(I.eventsTitle||S.celebr,0)}${evs}
       </div></div>`;
     // 2. notre histoire, photos, dress code
     const ST0=I.story, DR0=I.dress, phs=X.photos||[];
-    const s2=blk(1,`<div class="lg-in">${ttl(ST0&&ST0.title||S.story,1)}
+    // la deuxième partie n'existe que si elle a quelque chose : le titre « Notre histoire » ne s'affiche qu'avec une histoire
+    const s2=!(ST0||phs.length||DR0)?'':blk(1,`<div class="lg-in">${ST0?ttl(ST0.title||S.story,1):''}
         ${ST0&&ST0.items?`<div class="rv st lg-st">${ST0.items.map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')}</div>`:''}
       </div>
       ${phs.length?`<div class="rv lg-ph" aria-hidden="true"><div class="lg-ph-in">${[...phs,...phs].map((u,k)=>`<img src="${X.base}/${u}" alt="" loading="lazy" style="--r:${[-3,2,-1.5,3][k%4]}deg">`).join('')}</div></div>`:''}
@@ -296,7 +297,7 @@
         ${I.countdown!=='non'?`<div class="rv ey lg-gap">${S.cdEnd}</div><div class="rv">${cdHtml(true,sec[2].ink)}</div>`:''}
         <a class="lg-made" href="/" target="_blank" rel="noopener">${S.made} <b>Save the Oui</b></a>
       </div>`,'lg-end');
-    return `<div class="lg">${s1}${band(0)}${s2}${band(1)}${s3}</div>`;
+    return `<div class="lg">${s1}${band(0)}${s2?s2+band(1):''}${s3}</div>`;
   }
 
   /* ---------- montage ---------- */
