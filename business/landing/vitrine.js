@@ -219,9 +219,10 @@
   const $=id=>document.getElementById(id);
   function shade(hex,f){ const n=parseInt(hex.slice(1),16); const ch=s=>Math.max(0,Math.min(255,Math.round(((n>>s)&255)*f))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; }
   function opt(box,items,key,label,draw){ items.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.dataset.id=it.id||it; draw(b,it); b.onclick=()=>{ C[key]=b.dataset.id; if(key==='k') C.font='theme'; paint(); }; box.appendChild(b); }); }
-  /* chaque ouverture et chaque révélation se montre sur sa carte, en boucle (« les gens voient direct l'impact, sans
-     attendre le téléphone à droite ») ; les images suivent le thème (variables --sc, --op, --seal, --pc posées par paint) */
-  const OV={env:'<i class="sc"></i><i class="eb"><i class="ef"></i><i class="es"></i></i>',cur:'<i class="sc"></i><i class="cu"></i>',
+  /* chaque ouverture et chaque révélation se montre sur sa carte (« les gens voient direct l'impact, sans attendre le
+     téléphone à droite ») : au repos, une image figée qui dit l'effet ; l'animation ne se joue qu'au survol (au toucher sur
+     téléphone), pour ne pas faire tourner huit animations en permanence ; les images suivent le thème (variables --sc, --op, --seal, --pc posées par paint) */
+  const OV={env:'<i class="sc"></i><i class="eb"><i class="ein"><i class="ebd"></i><i class="ef"><img src="/img/open/env-flap.webp" alt=""><i class="es"></i></i></i></i>',cur:'<i class="sc"></i><i class="cu"></i>',
     voile:'<i class="sc"></i><i class="vl"></i><i class="vr"></i>',door:'<i class="sc"></i><i class="dl"></i><i class="dr"></i><i class="fl"></i>',
     non:'<i class="sc"></i><em class="dt">28 · 08</em>',scratch:'<i class="sc"></i><em class="dt">28 · 08</em><i class="fo"></i><i class="coin"></i>',
     wheel:'<i class="sc"></i><i class="wh"></i><i class="pin"></i>',slot:'<i class="sc"></i><i class="sl">'+[0,1,2].map(i=>`<i><i>${['13 07 21 19 04','05 11 02 09 12','29 31 26 30 28'][i].split(' ').map(x=>`<b>${x}</b>`).join('')}<b>${['28','08','27'][i]}</b></i></i>`).join('')+'</i>'};
@@ -495,7 +496,9 @@
     cpLayout();
     // grand tableau : l'aperçu est le vrai faire-part (invite.js) construit avec vos choix, dans le téléphone
     sc.hidden=C.fmt==='long';
-    if(C.fmt==='long') lgRender(lgInvite(t,p,f,n1,n2,ds)); else lgClear();
+    // le grand tableau reste préparé en arrière-plan (caché en scène par scène) : changer de format est immédiat
+    $('cpPhone').classList.toggle('lg-off',C.fmt!=='long');
+    lgRender(lgInvite(t,p,f,n1,n2,ds),C.fmt==='long'?120:900);
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
     $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=C.fmt==='long'?'Aucune':REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=whoTxt(); $('fStyle').value=t.name; $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.id==='gifts'?giftName():x.name).join(', ')+(edText()?' — '+edText():'');
     const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
@@ -528,8 +531,7 @@
       rsvp:{eyebrow:'Réponse souhaitée',title:'Serez-vous des nôtres ?',deadline:dl}};
   }
   let lgKey='', lgT=null;
-  function lgClear(){ lgKey=''; clearTimeout(lgT); $('cpPhone').querySelectorAll('iframe.cp-lg').forEach(x=>x.remove()); }
-  function lgRender(inv){
+  function lgRender(inv,wait){
     const key=JSON.stringify(inv); if(key===lgKey) return; lgKey=key; clearTimeout(lgT);
     lgT=setTimeout(async()=>{
       const meta=await (lgMeta[inv.theme]||(lgMeta[inv.theme]=fetch(`/img/long/${inv.theme}/meta.json`).then(r=>r.ok?r.json():null).catch(()=>null)));
@@ -539,9 +541,9 @@
       let y=0; try{ y=old.contentDocument.getElementById('sc').scrollTop; }catch(e){}
       const fr=document.createElement('iframe'); fr.className='cp-lg'; fr.title='Aperçu de votre faire-part'; fr.setAttribute('aria-label','Aperçu de votre faire-part'); fr.style.opacity=0;
       fr.srcdoc=`<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><base href="${location.origin}/"><link rel="stylesheet" href="/polices/polices.css"><link rel="stylesheet" href="/invite.css"><link rel="stylesheet" href="/reveal.css"><style>#op,#flash,.lg-want,.demo-tag,.snd{display:none!important}</style></head><body><script>window.INVITE=${JSON.stringify(inv).replace(/</g,'\\u003c')};<\/script><script src="/themes.js"><\/script><script src="/reveal.js"><\/script><script src="/invite.js"><\/script><script>document.getElementById('op').click();<\/script></body></html>`;
-      fr.onload=()=>setTimeout(()=>{ if(key!==lgKey){ fr.remove(); return; } try{ fr.contentDocument.getElementById('sc').scrollTop=y; }catch(e){} fr.style.opacity=1; olds.forEach(x=>x.remove()); },450);
+      fr.onload=()=>setTimeout(()=>{ if(key!==lgKey){ fr.remove(); return; } try{ fr.contentDocument.getElementById('sc').scrollTop=y; }catch(e){} fr.style.opacity=1; olds.forEach(x=>x.remove()); },200);
       ph.insertBefore(fr,$('cpTint'));
-    },250);
+    },wait);
   }
   // téléphone : l'aperçu réduit collé en haut s'agrandit en plein écran, et se referme
   { const pv=document.querySelector('.comp-prev'), big=$('cpBig'), cl=$('cpClose'), nav=$('wzNav'), side=$('cpMiniSteps'), home=nav.parentNode, mq=matchMedia('(max-width:720px)');

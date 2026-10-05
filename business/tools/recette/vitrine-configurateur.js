@@ -39,7 +39,7 @@ async function audit(p){ return p.evaluate(()=>{
     await p.click('#wzNav [data-go="4"]'); await p.waitForTimeout(250);
     if(fmt==='scenes'){ for(const x of await p.$$('#cExtras button:not([hidden])')){ await x.click(); await p.waitForTimeout(60); } want=await p.$$eval('#cExtras button:not([hidden])',x=>x.filter(b=>['parents','story','dress','stay','gifts'].includes(b.dataset.id)).length); eds=await p.$$eval('#cExtrasEd .ed',x=>x.length); }
     await p.click('#wzNav [data-go="5"]'); await p.waitForTimeout(fmt==='long'?2500:600);
-    const r=await p.evaluate(()=>({ow:document.documentElement.scrollWidth-innerWidth,sum:document.getElementById('cSum').innerText,href:document.getElementById('cGo').href,iframe:!!document.querySelector('iframe.cp-lg'),scroll:document.getElementById('cpScroll').hidden,gifts:(document.querySelector('#cExtras [data-id="gifts"]')||{}).textContent}));
+    const r=await p.evaluate(()=>({ow:document.documentElement.scrollWidth-innerWidth,sum:document.getElementById('cSum').innerText,href:document.getElementById('cGo').href,iframe:!!document.querySelector('#cpPhone:not(.lg-off) iframe.cp-lg'),scroll:document.getElementById('cpScroll').hidden,gifts:(document.querySelector('#cExtras [data-id="gifts"]')||{}).textContent}));
     const giftOk={mariage:'Liste de mariage',henne:'Cagnotte',sbou3:'Liste de naissance'}[occ]===r.gifts;
     const okFmt=fmt==='long'?(r.iframe&&r.scroll):(!r.iframe&&!r.scroll);
     const okHref=r.href.includes('occasion='+occ)&&r.href.includes('theme='+k)&&r.href.includes('format='+fmt);

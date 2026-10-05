@@ -279,7 +279,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 
 33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la
     révélation de la date. Arriver sur l'onglet rejoue l'ouverture dans l'aperçu.
-    **Chaque carte montre son effet**, en boucle de 5 s, dans un petit téléphone aux images du thème (`OV` dans vitrine.js,
+    **Chaque carte montre son effet** dans un petit téléphone aux images du thème : **au repos, une pose figée** qui dit
+    l'effet (enveloppe scellée, rideau à moitié levé, voile et portes entrouverts, ticket à moitié gratté) ; l'animation
+    (5 s) ne joue qu'**au survol** (« pour pas que ça prenne trop de dégâts »). L'enveloppe reprend les vraies images de
+    l'ouverture (`env-body`, `env-flap`, sceau sur la pointe du rabat), pas un dessin en CSS. Détail (`OV` dans vitrine.js,
     `.op-card.anim` et `ov*` dans vitrine.css) : enveloppe (sceau, rabat, descente), rideau qui se lève, voile qui s'ouvre
     par le milieu, portes sur gonds avec la lumière, date qui apparaît, ticket gratté par une pièce, roue qui tourne,
     jackpot 28 · 08 · 27. « Les gens voient direct l'impact, sans attendre le téléphone à droite. » Sélection par la coche.
