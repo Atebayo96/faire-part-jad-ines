@@ -84,11 +84,13 @@ for t, c in THEMES.items():
     h = Image.open(hraw if os.path.exists(hraw) or not c.get('hero_hd') else os.path.join(B, 'landing', 'img', 'hd', f'{t}-1.webp')).convert('RGB')
     ha = np.asarray(h); bottom = ha[-int(ha.shape[0] * .025):].reshape(-1, 3).mean(0)
     h = h.resize((900, round(h.height * 900 / h.width)), Image.LANCZOS); h.save(f'{d}/hero.webp', 'WEBP', quality=80, method=6)
-    meta['hero'] = dict(src='hero.webp', w=h.width, h=h.height, **c['hero'])
+    meta['hero'] = dict(src='hero.webp', w=h.width, h=h.height, **c['hero'], **({'fade': '58%'} if c.get('hero_hd') and not os.path.exists(hraw) else {}))
     # fonds : le premier prend exactement la couleur du bas de l'illustration ; raccord invisible en hauteur (miroir)
     for i in (1, 2, 3):
         tx = np.asarray(Image.open(f'{RAW}/{t}-tex{i}.png').convert('RGB')).astype(float)
-        if i == 1: tx = tx - tx.reshape(-1, 3).mean(0) + bottom
+        # provisoire (hero_hd) : la scène 1 n'est pas peinte pour se prolonger ; on garde la vraie couleur du fond du thème
+        # et l'image s'y fond sur une longue hauteur (hero.fade), au lieu de teinter le fond de la couleur du sol de la scène
+        if i == 1 and not c.get('hero_hd'): tx = tx - tx.reshape(-1, 3).mean(0) + bottom
         tx = np.clip(tx, 0, 255).astype(np.uint8)
         tile = np.vstack([tx, tx[::-1]])
         im = Image.fromarray(tile).resize((780, round(tile.shape[0] * 780 / tile.shape[1])), Image.LANCZOS)

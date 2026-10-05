@@ -795,3 +795,7 @@
   .names.sbou3>b{display:none}
   .head.one-h{margin-top:72px}
   .fld[hidden]{display:none}
+  /* le téléphone de l'aperçu fait 284 px de large : le grand compte à rebours y tient, comme sur un vrai téléphone (invite.css) */
+  .cp-phone .cd.big{gap:10px}
+  .cp-phone .cd.big div{min-width:0}
+  .cp-phone .cd.big b{font-size:32px}

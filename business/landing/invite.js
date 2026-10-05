@@ -252,7 +252,7 @@
     const ttl=(t,i)=>`<h2 class="rv lg-h" style="${nm(.62,sec[i].accent)}">${esc(t)}</h2>`;
     // 1. l'illustration d'ouverture et l'invitation
     const P0=I.parents||null, names=namesH('<i>&amp;</i>');
-    const hero=`<div class="lg-hero"><img class="lg-hero-img" src="${X.base}/${X.hero.src}" alt="" style="aspect-ratio:${X.hero.w}/${X.hero.h}">
+    const hero=`<div class="lg-hero"><img class="lg-hero-img" src="${X.base}/${X.hero.src}" alt="" style="aspect-ratio:${X.hero.w}/${X.hero.h}${X.hero.fade?';--fade:'+X.hero.fade:''}">
       <div class="lg-hero-txt" data-sp=".35" style="color:${X.hero.ink};--sh:${X.hero.shadow||'none'};--top:${X.hero.top||'14%'}">
         ${fam&&fam.label?`<div class="greet">${esc(fam.label)}</div>`:''}
         ${eyHtml('ey',I.intro&&I.intro.eyebrow||T.scenes[0][0],'')}

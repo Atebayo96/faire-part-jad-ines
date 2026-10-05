@@ -38,7 +38,8 @@
   "h": 1591,
   "ink": "#4a2416",
   "shadow": "0 1px 10px rgba(255,250,240,.85)",
-  "top": "12%"
+  "top": "12%",
+  "fade": "58%"
  },
  "frame": {
   "src": "frame.webp",

@@ -246,7 +246,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     le lieu « Église » est remplacé par **« Mosquée »** (`mosquee` dans lieux.py). Les autres thèmes restent dans la
     galerie et le code. Provisoire : le quota Gemini a été atteint le 5 octobre 2026 avant l'illustration verticale et
     les guirlandes des variantes ; leur grand tableau s'ouvre sur leur scène 1 et reprend les guirlandes du riad
-    (`hero_hd`, `bands_from` dans long-assets.py). Dès que le quota revient : `long-gen.py /tmp/longraw alhambra desert
+    (`hero_hd`, `bands_from` dans long-assets.py) ; la scène se fond sur 40 % de sa hauteur (`hero.fade`) dans le vrai fond du thème, sans teinter ce fond de la couleur du sol (Émeraude finissait sur un taupe « coupé, moche »). Dès que le quota revient : `long-gen.py /tmp/longraw alhambra desert
     emeraude` puis `long-assets.py`, et les calques (`calques.py`).
 33. **L'ouverture a son propre onglet** (étape 2 sur 5 : thème, ouverture, écrans, détails, récapitulatif), avec la
     révélation de la date. Arriver sur l'onglet rejoue l'ouverture dans l'aperçu.
@@ -272,6 +272,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     portes, grand tableau) mais `pending:true` tant que ses images n'existent pas :
     `bash business/tools/theme-nuits.sh maghreb`, regarder les images, retirer `pending`, mettre `launch:true`, ajouter
     ses deux démos.
+
+37. **Le grand compte à rebours tient dans l'écran** : `clamp(28px, 10.5vw, 46px)` (invite.css), 32 px dans le téléphone de
+    l'aperçu. À 46 px fixes, « 250 04 42 20 » débordait des deux côtés d'un écran de 300 px.
 
 ## Méthode
 
