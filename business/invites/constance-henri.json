@@ -1,84 +1,85 @@
 {
-  "slug": "constance-henri",
-  "demo": true,
-  "theme": "oldmoney",
-  "couple": [
-    "Constance",
-    "Henri"
-  ],
-  "date": "2027-06-12T15:00",
-  "opening": "env",
-  "palette": "#b8975a",
-  "countdown": "fin",
-  "reveal": "scratch",
-  "music": "valse",
-  "intro": {
-    "eyebrow": "Ils se marient"
+ "slug": "constance-henri",
+ "demo": true,
+ "theme": "oldmoney",
+ "couple": [
+  "Constance",
+  "Henri"
+ ],
+ "date": "2027-06-12T15:00",
+ "opening": "env",
+ "palette": "#b8975a",
+ "countdown": "fin",
+ "reveal": "scratch",
+ "music": "valse",
+ "intro": {
+  "eyebrow": "Ils se marient"
+ },
+ "events": [
+  {
+   "id": "ceremonie",
+   "eyebrow": "La cérémonie",
+   "title": "À la chapelle",
+   "start": "2027-06-12T15:00",
+   "end": "2027-06-12T16:00",
+   "place": "Chapelle du domaine",
+   "address": "Château de Canisy, 50750 Canisy",
+   "lieu": "eglise"
   },
-  "events": [
-    {
-      "id": "ceremonie",
-      "eyebrow": "La cérémonie",
-      "title": "À la chapelle",
-      "start": "2027-06-12T15:00",
-      "end": "2027-06-12T16:00",
-      "place": "Chapelle du domaine",
-      "address": "Château de Canisy, 50750 Canisy",
-      "lieu": "eglise"
-    },
-    {
-      "id": "diner",
-      "eyebrow": "Le dîner",
-      "title": "Au manoir",
-      "start": "2027-06-12T19:30",
-      "end": "2027-06-13T02:00",
-      "place": "Le grand salon",
-      "address": "Château de Canisy, 50750 Canisy",
-      "lieu": "salle"
-    }
-  ],
-  "infos": [
-    {
-      "icon": "dress",
-      "title": "Tenue",
-      "text": "Tenue de soirée. Les couleurs pastel sont les bienvenues."
-    },
-    {
-      "icon": "car",
-      "title": "Venir",
-      "text": "Parking sur place. Navette depuis la gare de Melun à 14h15."
-    },
-    {
-      "icon": "hotel",
-      "title": "Dormir",
-      "text": "Chambres réservées à l'Hôtel de la Forêt, à 5 minutes."
-    }
-  ],
-  "rsvp": {
-    "deadline": "2027-05-01",
-    "eyebrow": "Réponse souhaitée",
-    "title": "Serez-vous des nôtres ?",
-    "yesText": "Nous avons hâte de vous voir au château.",
-    "noText": "Vous nous manquerez. Merci d'avoir répondu."
-  },
-  "families": {
-    "famille-martin": {
-      "label": "Chère famille Martin",
-      "seats": 4,
-      "table": "La table des Roses"
-    },
-    "famille-bernard": {
-      "label": "Chers Paul et Anne",
-      "seats": 2,
-      "events": [
-        "ceremonie"
-      ]
-    }
-  },
-  "gifts": {
-    "title": "Votre présence est notre plus beau cadeau",
-    "text": "Une urne sera à votre disposition. Pour ceux qui préfèrent, une liste en ligne.",
-    "url": "demo",
-    "label": "Voir la liste"
+  {
+   "id": "diner",
+   "eyebrow": "Le dîner",
+   "title": "Au manoir",
+   "start": "2027-06-12T19:30",
+   "end": "2027-06-13T02:00",
+   "place": "Le grand salon",
+   "address": "Château de Canisy, 50750 Canisy",
+   "lieu": "salle"
   }
+ ],
+ "infos": [
+  {
+   "icon": "dress",
+   "title": "Tenue",
+   "text": "Tenue de soirée. Les couleurs pastel sont les bienvenues."
+  },
+  {
+   "icon": "car",
+   "title": "Venir",
+   "text": "Parking sur place. Navette depuis la gare de Melun à 14h15."
+  },
+  {
+   "icon": "hotel",
+   "title": "Dormir",
+   "text": "Chambres réservées à l'Hôtel de la Forêt, à 5 minutes."
+  }
+ ],
+ "rsvp": {
+  "deadline": "2027-05-01",
+  "eyebrow": "Réponse souhaitée",
+  "title": "Serez-vous des nôtres ?",
+  "yesText": "Nous avons hâte de vous voir au château.",
+  "noText": "Vous nous manquerez. Merci d'avoir répondu."
+ },
+ "families": {
+  "famille-martin": {
+   "label": "Chère famille Martin",
+   "seats": 4,
+   "table": "La table des Roses"
+  },
+  "famille-bernard": {
+   "label": "Chers Paul et Anne",
+   "seats": 2,
+   "events": [
+    "ceremonie"
+   ]
+  }
+ },
+ "gifts": {
+  "title": "Votre présence est notre plus beau cadeau",
+  "text": "Une urne sera à votre disposition. Pour ceux qui préfèrent, une liste en ligne.",
+  "url": "demo",
+  "label": "Voir la liste"
+ },
+ "chain": true
 }

@@ -1,0 +1,42 @@
+{
+ "src": "/img/chaine/dolcevita/strip.webp",
+ "w": 1080,
+ "h": 14080,
+ "ink": {
+  "nm": "#193f64",
+  "ey": "#2f5d86",
+  "tx": "#2c3e55"
+ },
+ "anchors": [
+  {
+   "y": 0,
+   "role": "home",
+   "dark": false,
+   "contrast": 7.49
+  },
+  {
+   "y": 3320,
+   "role": "event",
+   "dark": false,
+   "contrast": 7.56
+  },
+  {
+   "y": 6120,
+   "role": "event",
+   "dark": true,
+   "contrast": 6.24
+  },
+  {
+   "y": 9280,
+   "role": "info",
+   "dark": true,
+   "contrast": 11.01
+  },
+  {
+   "y": 11743,
+   "role": "rsvp",
+   "dark": true,
+   "contrast": 6.25
+  }
+ ]
+}

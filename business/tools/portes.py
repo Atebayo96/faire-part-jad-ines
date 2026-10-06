@@ -14,7 +14,8 @@ D={'chinois':"a pair of red lacquered Chinese doors with gold studs and round br
    'maghreb':"a pair of studded cobalt blue medina doors with black iron nails and a brass hand-of-Fatima knocker, in a whitewashed horseshoe arch",
    'alhambra':"a pair of tall Andalusian cedar doors with carved geometric star patterns, set in an ivory stucco horseshoe arch, bronze handles",
    'desert':"a pair of caidal tent flaps in heavy ochre and indigo embroidered cloth with geometric Berber motifs and gold tassels, closed in the middle",
-   'emeraude':"a pair of monumental palace doors in deep emerald lacquer with chiselled gold geometric star inlays and heavy gold ring knockers"}
+   'emeraude':"a pair of monumental palace doors in deep emerald lacquer with chiselled gold geometric star inlays and heavy gold ring knockers",
+   'doucefrance':"a pair of weathered pale blue wooden doors of a Provençal bastide with wrought-iron hinges, set in honey-coloured stone, lavender and climbing white roses around"}
 R={'chinois':"a heavy red silk curtain with gold embroidery and tassels, double-happiness motif at the top",
    'japonais':"a pale pink noren-like curtain of soft linen with a cherry-branch print, in the manner of a woodblock print",
    'gzhel':"a white curtain painted with cobalt blue Gzhel roses, blue tassels",
@@ -25,10 +26,11 @@ R={'chinois':"a heavy red silk curtain with gold embroidery and tassels, double-
    'maghreb':"a white cotton curtain with cobalt blue Berber geometric embroidery and blue tassels",
    'alhambra':"an ivory silk curtain with fine gold arabesque embroidery and a border of small orange blossoms",
    'desert':"a heavy indigo curtain of woven Berber cloth with ochre geometric motifs and long gold tassels",
-   'emeraude':"a deep emerald velvet curtain with gold embroidered arabesques and heavy gold tassels"}
+   'emeraude':"a deep emerald velvet curtain with gold embroidered arabesques and heavy gold tassels",
+   'doucefrance':"a natural linen curtain printed with small lavender sprigs and olive branches, a soft lavender-coloured braid"}
 def one(k,kind):
     out=os.path.join(IMG,'open',f'{k}-{kind}.webp'); png=os.path.join(TMP,f'{k}-{kind}.png')
-    ref=os.path.join(IMG,'long',k,'hero.webp') if os.path.exists(os.path.join(IMG,'long',k,'hero.webp')) else os.path.join(IMG,'hd',f'{k}-1.webp')
+    ref=next(p for p in [os.path.join(IMG,'long',k,'hero.webp'),os.path.join(IMG,'chaine',k,'st-1.webp'),os.path.join(IMG,'hd',f'{k}-1.webp')] if os.path.exists(p))
     desc=D[k] if kind=='portes' else R[k]
     p=(f"Same painterly style and palette as the reference image. Frontal, flat, full-frame view of {desc}, filling the whole image edge to edge, "
        +("the two leaves meeting exactly on the vertical centre line, " if kind=='portes' else "hanging straight with vertical folds, top valance and bottom fringe, ")

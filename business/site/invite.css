@@ -467,3 +467,7 @@ a{color:inherit}
 .gq-l{display:grid;gap:6px}
 .gq-l input{width:100%;min-width:0;height:36px;border:1px solid rgba(127,127,127,.4);border-radius:6px;padding:0 8px;font:13px Inter,sans-serif;color:#2a2620;background:rgba(255,255,255,.92)}
 .gq-l button{justify-self:start;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;font:500 13px Inter,sans-serif;cursor:pointer}
+
+/* chaîne continue : une seule peinture, collante à l'écran, que le défilement fait descendre (chainLayout() dans invite.js) */
+.chv{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
+.chs{position:absolute;left:0;top:0;width:100%;height:auto;display:block;will-change:transform}

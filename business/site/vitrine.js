@@ -34,7 +34,7 @@
     const ref='sc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
     const v=id=>($o(id)||{}).value||'';
     const body={type:'commande',ref,plan:ordPlan,email,name:$o('oName').value,date:$o('oDate').value,consent:true,cgv:true,waiver:true,
-      style:v('fStyle'),format:v('fFormat'),palette:v('fPal'),font:v('fFont'),opening:v('fOpen'),countdown:v('fCount'),screens:v('fScreens'),events:v('fEvents'),names:$o('oName').value,weddingDate:$o('oDate').value};
+      style:v('fStyle'),format:v('fFormat'),palette:v('fPal'),font:v('fFont'),opening:v('fOpen'),countdown:v('fCount'),screens:v('fScreens'),events:v('fEvents'),names:$o('oName').value,weddingDate:$o('oDate').value,photos:window.SCEAU_PHOTOS||[]};
     // on garde la trace de la commande et des cases cochées (preuve de la renonciation), sans bloquer le paiement
     try{ await Promise.race([fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),new Promise(r=>setTimeout(r,2500))]); }catch(x){}
     const u=new URL(ordLink); u.searchParams.set('prefilled_email',email); u.searchParams.set('client_reference_id',ref);
@@ -114,7 +114,7 @@
     if(!d) return;
     CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name+(t.amb?' · '+t.amb:''),desc:t.amb?t.ambSub:(t.style!==t.name?t.style+' · ':'')+t.short,href:'/d/'+d.slug+'/',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=11`})); }));
   // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
-  CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
+  if(KEYS.includes('nuits')) CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
     couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`/img/reel/yk-${i}.webp`,
     scenes:[["Ils se marient","NAMES","Samedi 12 juin 2027"],["Cérémonie civile","Hôtel de Ville de Nanterre","À 14h00","Itinéraire","dark"],["Réception","Le Palacio","Dès 19h · cocktail, dîner et soirée","Itinéraire","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre","dark"]]});
   function roll(c,eager){
@@ -241,6 +241,8 @@
   $('cReveal').addEventListener('click',e=>{ if(e.target.closest('button')) $('cpScroll').scrollTo({top:0,behavior:'smooth'}); });
   /* un thème = une tuile ; s'il a plusieurs ambiances (group dans themes.js : Dolce Vita « Crépuscule » / « Plein jour »),
      elles se choisissent juste dessous, chacune avec sa démo qui défile dans un téléphone */
+  // modèle en chaîne : seulement si sa peinture existe (window.SCEAU_CHAINS, écrit par build-site.py)
+  const isChain=k=>!!THEMES[k].chain&&(window.SCEAU_CHAINS||[]).includes(k);
   const grp=k=>THEMES[k].group||k, GRPS=[...new Set(CK.map(grp))];
   const okLieu=(k,id)=>!THEMES[k].lieux||THEMES[k].lieux.includes(id);
   // une ambiance qui n'a pas tous les lieux : un lieu absent passe sur le premier qui existe
@@ -290,13 +292,27 @@
     const part=(title,sub,ids)=>li('lg-only part',`<div class="ev-h"><b>${title}</b><small>${sub}</small></div><div class="opts">${ids.map(([id,n])=>`<button type="button" class="chip x" data-x="${id}">${n}</button>`).join('')}</div><div class="eds"></div>`);
     part('Sous l’illustration','l’invitation, puis vos événements',[['parents','Le mot des familles']]);
     const more=li('more','<button type="button" class="chip x sig" id="cAddEv">+ Ajouter un événement<i>Signature · jusqu’à 6</i></button>');
+    const sendPhoto=f=>new Promise((ok,ko)=>{ const im=new Image(); im.onload=async()=>{ try{ const k=Math.min(1,1600/Math.max(im.width,im.height)), cv=document.createElement('canvas');
+        cv.width=Math.round(im.width*k); cv.height=Math.round(im.height*k); cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
+        const r=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:cv.toDataURL('image/jpeg',.82)})});
+        if(!r.ok) throw new Error(r.status); ok((await r.json()).id); }catch(err){ ko(err); } }; im.onerror=ko; im.src=URL.createObjectURL(f); });
     const addEv=(e,i)=>{
       const l=li('ev',`<div class="ev-h"><b>Événement ${i+1}</b><small>${i<2?'inclus':'<i class="sig-tag">Signature</i>'}${i>=2?' · <a href="#" data-rm>Retirer</a>':''}</small></div>
         <div class="ev-b"><button type="button" class="ev-pic" data-pick aria-expanded="false"><span></span><em>Changer le décor</em></button>
-        <div class="ev-f"><label class="ed-f"><span>Le moment</span><input type="text" data-k="name" maxlength="40" placeholder="La cérémonie"></label><label class="ed-f"><span>À quelle heure</span><input type="time" data-k="time"></label><label class="ed-f ev-pl"><span>Où (le nom du lieu)</span><input type="text" data-k="place" maxlength="60" placeholder="Église Saint-Paul"></label><p class="ev-dn"></p></div></div>
+        <label class="ev-ph"><input type="file" accept="image/*" multiple data-ph hidden><span class="ev-ph-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg></span><em>Ajouter des photos du lieu</em></label>
+        <div class="ev-f"><label class="ed-f"><span>Le moment</span><input type="text" data-k="name" maxlength="40" placeholder="La cérémonie"></label><label class="ed-f"><span>À quelle heure</span><input type="time" data-k="time"></label><label class="ed-f ev-pl"><span>Où (le nom du lieu)</span><input type="text" data-k="place" maxlength="60" placeholder="Église Saint-Paul"></label><label class="ed-f ev-ab"><span>Parlez-nous de ce lieu</span><textarea data-k="about" rows="2" maxlength="400" placeholder="Une petite chapelle en pierre au milieu des vignes, une allée de platanes, une grande terrasse…"></textarea></label><div class="ev-th"></div><p class="ev-dn"></p></div></div>
         <div class="lieux" role="group" aria-label="Le décor de cet écran"><button type="button" data-lieu="simple"><span></span><em>Texte seul</em></button>${LIEUX.map(x=>`<button type="button" data-lieu="${x.id}"${x.sig?' class="sig"':''}><span>${x.sig?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>':''}</span>${x.sig?'Votre lieu<i>Signature</i>':x.name}</button>`).join('')}</div>`);
       l.dataset.i=i;
-      l.querySelectorAll('input').forEach(inp=>{ inp.value=e[inp.dataset.k]; inp.addEventListener('input',()=>{ e[inp.dataset.k]=inp.value; paint(); }); });
+      l.querySelectorAll('input[data-k],textarea[data-k]').forEach(inp=>{ inp.value=e[inp.dataset.k]||''; inp.addEventListener('input',()=>{ e[inp.dataset.k]=inp.value; paint(); }); });
+      // photos du lieu : réduites dans le navigateur (1600 px, JPEG), envoyées tout de suite (api/upload.js), 4 par lieu
+      e.photos=e.photos||[]; const thumbs=()=>{ l.querySelector('.ev-th').innerHTML=e.photos.map((x,j)=>`<span style="background-image:url('${x.url}')"><button type="button" data-rmph="${j}" aria-label="Retirer cette photo">×</button>${x.id?'':'<i title="Envoi en cours ou à refaire">…</i>'}</span>`).join('');
+        const pin=l.querySelector('.ev-ph-in'); pin.style.backgroundImage=e.photos[0]?`url('${e.photos[0].url}')`:''; pin.classList.toggle('has',!!e.photos[0]); };
+      l.querySelector('[data-ph]').addEventListener('change',async ev=>{ for(const f of [...ev.target.files].slice(0,4-e.photos.length)){
+          const x={url:URL.createObjectURL(f),id:''}; e.photos.push(x); thumbs();
+          try{ x.id=await sendPhoto(f); }catch(err){ x.err=1; } thumbs(); paint(); }
+        ev.target.value=''; });
+      l.querySelector('.ev-th').addEventListener('click',ev=>{ const b=ev.target.closest('[data-rmph]'); if(!b) return; e.photos.splice(+b.dataset.rmph,1); thumbs(); paint(); });
+      thumbs();
       l.querySelectorAll('[data-bg]').forEach(b=>b.onclick=()=>{ e.bg=b.dataset.bg; paint(); showEv(i); });
       l.querySelectorAll('[data-lieu]').forEach(b=>b.onclick=()=>{ if(b.dataset.lieu==='simple') e.bg='simple'; else { e.lieu=b.dataset.lieu; e.bg='scene'; } l.classList.remove('open'); l.querySelector('[data-pick]').setAttribute('aria-expanded','false'); paint(); showEv(i); });
       // le choix du décor ne s'ouvre qu'à la demande : au repos, une seule grande vignette (« trop condensé »)
@@ -399,7 +415,8 @@
   // l'aperçu va à l'écran de l'événement et s'y pose exactement : un défilement doux interrompu par un nouveau rendu
   // s'arrêtait quelques pixels avant, et le « Faites défiler » de l'accueil restait en haut de l'écran
   let evT=null;
-  function showEv(i){ const sc=$('cpScroll'), el=sc.querySelector(`[data-ev="${i}"]`); if(!el) return; sc.scrollTo({top:el.offsetTop,behavior:'smooth'});
+  function showEv(i){ if(isChain(C.k)){ setTimeout(()=>{ try{ const fr=[...$('cpPhone').querySelectorAll('iframe.cp-lg')].pop(), d=fr.contentDocument, el=d.querySelector(`[data-ev="${i}"]`); if(el) d.getElementById('sc').scrollTo({top:el.offsetTop,behavior:'smooth'}); }catch(e){} },700); return; }
+    const sc=$('cpScroll'), el=sc.querySelector(`[data-ev="${i}"]`); if(!el) return; sc.scrollTo({top:el.offsetTop,behavior:'smooth'});
     clearTimeout(evT); evT=setTimeout(()=>{ const e2=sc.querySelector(`[data-ev="${i}"]`); if(e2&&Math.abs(sc.scrollTop-e2.offsetTop)>1) sc.scrollTo({top:e2.offsetTop,behavior:'smooth'}); },700); }
   const hm=v=>{ const m=/^(\d{1,2}):(\d{2})/.exec(v||''); return m?`${+m[1]}h${m[2]}`:''; };
   const cdHtml=(big,col,extra)=>`<div class="cd${big?' big':''}" style="color:${col};${extra||''}"><div><b data-u="d">0</b><span>jours</span></div><div><b data-u="h">0</b><span>heures</span></div><div><b data-u="m">0</b><span>min</span></div><div><b data-u="s">0</b><span>sec</span></div></div>`;
@@ -481,11 +498,12 @@
       $('cCount').querySelector('[data-id="page"]').hidden=long;
     }
     // (les cartes d'ambiance sont bâties par buildAmb())
+    $('cStory').classList.toggle('ch',!!isChain(C.k));
     $('cStoryT').textContent=C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       // du jour au soir : les vignettes suivent l'heure de l'événement (lieu peint en plein jour avant 18 h, s'il existe)
       const Jt=THEMES[C.k].jour&&THEMES[THEMES[C.k].jour], day=Jt&&parseInt(e.time||'15',10)<18, kOf=id=>day&&(id==='fond'||(Jt.lieux||[]).includes(id))?THEMES[C.k].jour:C.k;
-      const dn=l.querySelector('.ev-dn'); if(dn) dn.textContent=Jt?(day?'☀ Avant 18 h : votre écran est en plein jour.':'☾ Après 18 h : votre écran passe au crépuscule.'):'';
+      const dn=l.querySelector('.ev-dn'); if(dn&&isChain(C.k)) dn.textContent='Nous peignons votre lieu d’après votre description et vos photos, dans la lumière de son heure, comme la suite de votre faire-part.'; else if(dn) dn.textContent=Jt?(day?'☀ Avant 18 h : votre écran est en plein jour.':'☾ Après 18 h : votre écran passe au crépuscule.'):'';
       // « Texte seul » : écran simple (scène par scène), ou la scène peinte du thème dans le cadre (grand tableau)
       const sim=l.querySelector('[data-lieu="simple"] em'); if(sim) sim.textContent=C.fmt==='long'?'Scène du thème':'Texte seul';
       l.querySelectorAll('[data-lieu]').forEach(b=>{ const id=b.dataset.lieu; b.setAttribute('aria-pressed',id==='simple'?e.bg!=='scene':e.bg==='scene'&&id===e.lieu);
@@ -583,15 +601,16 @@
     const anyCal=cpRuns.some(r=>r.sub); sc.classList.toggle('cal',anyCal); sc.style.backgroundImage=anyCal?`url('/img/lieux/${C.k}-ciel.webp')`:''; // le ciel nu (tools/ciel.py), pas le fond et son jardin
     cpLayout();
     // grand tableau : l'aperçu est le vrai faire-part (invite.js) construit avec vos choix, dans le téléphone
-    sc.hidden=C.fmt==='long';
-    // le grand tableau reste préparé en arrière-plan (caché en scène par scène) : changer de format est immédiat
-    $('cpPhone').classList.toggle('lg-off',C.fmt!=='long');
-    if(C.fmt==='long') lgRender(lgInvite(t,p,f,n1,n2,ds),120);
+    // modèles en chaîne : l'aperçu est le vrai faire-part (invite.js) peint d'un seul tenant, avec vos textes
+    const viaEngine=C.fmt==='long'||isChain(C.k);
+    sc.hidden=viaEngine; $('cpPhone').classList.toggle('lg-off',!viaEngine);
+    if(isChain(C.k)) lgRender(chainInvite(t,p,f,n1,n2,ds),150); else if(C.fmt==='long') lgRender(lgInvite(t,p,f,n1,n2,ds),120);
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
     $('fOpen').value=OPENS.find(o=>o.id===C.op).name; $('fCount').value=COUNTS.find(o=>o.id===C.cd).name; $('fReveal').value=REVEALS.find(o=>o.id===C.rvl).name; if($('fNames')) $('fNames').value=whoTxt(); $('fStyle').value=t.name+(t.amb?' · '+t.amb:''); $('fPal').value=p.name; $('fFont').value=f.name; $('fScreens').value=xOn().map(x=>x.id==='gifts'?giftName():x.name).join(', ')+(edText()?' — '+edText():'');
-    const evTxt=e=>e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
+    const evTxt=e=>isChain(C.k)?((e.photos||[]).length?'peint d’après vos photos':'peint d’après votre description'):e.bg==='scene'?LIEUX.find(x=>x.id===e.lieu).name:'écran simple';
     if($('fFormat')) $('fFormat').value=FMTS.find(f=>f.id===C.fmt).name;
-    $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place} (${evTxt(e).toLowerCase()})`).join(' ; ');
+    $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place}`+(t.chain?(e.about?` : « ${e.about} »`:'')+((e.photos||[]).length?` (${e.photos.length} photo${e.photos.length>1?'s':''} : ${(e.photos||[]).map(x=>x.id||'non envoyée').join(', ')})`:''):` (${evTxt(e).toLowerCase()})`)).join(' ; ');
+    window.SCEAU_PHOTOS=C.ev.flatMap(e=>(e.photos||[]).map(x=>x.id).filter(Boolean));
     const needTxt=needs.length?(C.plan==='essentiel'?` Essentiel ne comprend pas ${needs.join(', ')} : vous pourrez les retirer, ou passer en Signature.`:` Avec ${needs.join(', ')}, c'est la formule Signature.`):(C.plan==='essentiel'?' Tout est compris dans Essentiel.':'');
     $('cRecap').textContent=needTxt.trim()||(C.plan==='signature'?'Votre lieu peint d’après photo, un lien par famille, français et anglais.':'');
     // récapitulatif, ligne par ligne
@@ -604,6 +623,13 @@
      rendue par le moteur lui-même dans un cadre (srcdoc) : ce qu'on voit est exactement le faire-part. Deux cadres :
      le nouveau se prépare caché et remplace l'ancien à la même hauteur de défilement (pas de clignotement). */
   const lgMeta={};
+  // fiche d'aperçu d'un modèle en chaîne : toutes les pages du scène par scène, sur la peinture de la démo du modèle
+  function chainInvite(t,p,f,n1,n2,ds){ const inv=lgInvite(t,p,f,n1,n2,ds); delete inv.layout; inv.chainOf=C.k; inv.opening='env';
+    inv.countdown=C.cd; inv.events.forEach(e=>{ delete e.lieu; delete e.note; });
+    if(C.x.has('program')) inv.program={eyebrow:'Le programme',title:'Le grand jour',items:C.data.program.filter(x=>x.time||x.title).map(x=>({time:hm(x.time),title:x.title}))};
+    if(C.x.has('faq')) inv.faq={eyebrow:'Vos questions',items:C.data.faq.filter(x=>x.q).map(x=>({q:x.q,a:x.a}))};
+    if(C.x.has('photos')) inv.photos={eyebrow:'Vos photos',text:'Partagez vos plus belles photos de la soirée dans notre album commun.',url:'demo'};
+    return inv; }
   function lgInvite(t,p,f,n1,n2,ds){
     const day=$('cDate').value||'2027-06-12', dl=new Date(weddingDate().getTime()-30*864e5).toISOString().slice(0,10);
     return {slug:'apercu',demo:true,layout:'long',theme:C.k,reveal:C.rvl==='non'?null:C.rvl,couple:isSolo()?[n1]:[n1,n2],date:day+'T15:00',tz:'Europe/Paris',opening:'cur',music:'none',
@@ -626,9 +652,10 @@
   function lgRender(inv,wait){
     const key=JSON.stringify(inv); if(key===lgKey) return; lgKey=key; clearTimeout(lgT);
     lgT=setTimeout(async()=>{
-      const meta=await (lgMeta[inv.theme]||(lgMeta[inv.theme]=fetch(`/img/long/${inv.theme}/meta.json`).then(r=>r.ok?r.json():null).catch(()=>null)));
+      const mk=(inv.chainOf?'chaine/':'long/')+inv.theme;
+      const meta=await (lgMeta[mk]||(lgMeta[mk]=fetch(`/img/${mk}/meta.json`).then(r=>r.ok?r.json():null).catch(()=>null)));
       if(key!==lgKey||!meta) return;
-      inv.long=Object.assign({},meta,{photos:inv.album?meta.photos:[]});
+      if(inv.chainOf) inv.chain=meta; else inv.long=Object.assign({},meta,{photos:inv.album?meta.photos:[]});
       const ph=$('cpPhone'), olds=[...ph.querySelectorAll('iframe.cp-lg')], old=olds[olds.length-1];
       let y=0; try{ y=old.contentDocument.getElementById('sc').scrollTop; }catch(e){}
       const fr=document.createElement('iframe'); fr.className='cp-lg'; fr.title='Aperçu de votre faire-part'; fr.setAttribute('aria-label','Aperçu de votre faire-part'); fr.style.opacity=0;

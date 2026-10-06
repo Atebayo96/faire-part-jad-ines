@@ -760,6 +760,7 @@
   .fmt2 a:last-child img{object-position:top}
   .fmt2 b{display:block;font:500 22px/1.2 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em;margin-bottom:8px}
   .fmt2 p{margin:0 0 10px;color:var(--muted);font-size:15px} .fmt2 em{font-style:normal;font-size:14px}
+  .fmt3 a{grid-template-columns:96px 1fr;gap:16px} .fmt3 img{width:96px}
 
   @media (min-width:721px){ .cp-mini-side,.cp-close{display:none} }
   /* la barre des étapes reste visible tout le temps : collée sous le menu (et sous l'aperçu réduit sur téléphone) */
@@ -961,3 +962,25 @@
 .story li.ev.open .lieux{display:flex;padding-top:4px;border-top:1px solid var(--line);margin-top:2px;padding-top:14px}
 .story li.ev.open .ev-pic em{text-decoration:none;opacity:.6}
 @media (max-width:560px){ .ev-b{grid-template-columns:92px 1fr;gap:14px} .story li.ev .ev-f{grid-template-columns:1fr} }
+
+/* modèles en chaîne : plus de bibliothèque de décors, chaque lieu est peint d'après la description et les photos */
+.ev-ph{display:none}
+.story.ch li.ev .ev-pic,.story.ch li.ev .lieux,.story.ch li.ev.open .lieux{display:none}
+.story.ch .ev-ph{display:grid;gap:8px;cursor:pointer;text-align:center;font:500 13px/1.25 Inter,sans-serif;color:var(--ink)}
+.ev-ph-in{display:grid;place-items:center;aspect-ratio:9/16;border-radius:12px;border:1.5px dashed var(--line);background:var(--bg-2) center/cover no-repeat;color:var(--muted)}
+.ev-ph-in svg{width:30px;height:30px}
+.ev-ph-in.has{border-style:solid}
+.ev-ph-in.has svg{display:none}
+.ev-ph em{font-style:normal;text-decoration:underline;text-underline-offset:3px}
+.ev-ph:focus-within .ev-ph-in{outline:2px solid var(--ink);outline-offset:3px}
+.ev-ab,.ev-th{grid-column:1/-1}
+.ev-ab textarea{width:100%;min-height:64px;font:inherit;font-size:15px;padding:10px 12px;border:1px solid var(--line);resize:vertical}
+.ev-th{display:flex;gap:8px;flex-wrap:wrap}
+.ev-th:empty{display:none}
+.ev-th span{position:relative;width:64px;height:64px;border-radius:8px;background:center/cover no-repeat;box-shadow:0 0 0 1px var(--line)}
+.ev-th button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;border:0;background:var(--ink);color:#fff;font:600 13px/22px Inter,sans-serif;cursor:pointer;padding:0}
+.ev-th i{position:absolute;left:4px;bottom:2px;color:#fff;font-style:normal;text-shadow:0 1px 3px #000}
+
+/* accueil : les trois modèles côte à côte (une colonne sur téléphone) */
+.fmt2.fmt3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:860px){ .fmt2.fmt3{grid-template-columns:1fr} }

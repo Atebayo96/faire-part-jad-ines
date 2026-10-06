@@ -9,7 +9,7 @@ window.SCEAU_THEMES={
   aquarelle:{name:"Aquarelle",style:"Aquarelle",short:"Pivoines, eucalyptus, papier blanc",desc:"Fleurs à l'aquarelle sur papier blanc, sauge et rose poudré.",couple:"Alice & Théo",light:true,
     font:'"Parisienne",cursive',color:"#3e5a4a",ey:"#7a8f80",tx:"#55695d",
     scenes:[["Nous nous marions","NAMES","Samedi 22 mai 2027"],["La cérémonie","Sous l'arche fleurie","15h30 · Domaine des Roses","Itinéraire"],["Le dîner","Au jardin","Dès 19h, sous la tonnelle"],["RSVP","Serez-vous des nôtres ?","Avant le 15 avril","Répondre"]]},
-  bollywood:{name:"Bollywood",launch:true,style:"Peinture",short:"Palais, soucis, mille lumières",desc:"Palais rose, soucis et mille lumières, sur plusieurs jours.",couple:"Priya & Arjun",
+  bollywood:{name:"Bollywood",style:"Peinture",short:"Palais, soucis, mille lumières",desc:"Palais rose, soucis et mille lumières, sur plusieurs jours.",couple:"Priya & Arjun",
     font:'"Cinzel Decorative",serif',color:"#fff4d6",size:.72,
     scenes:[["Shubh Vivah","NAMES","Du 9 au 11 juillet 2027"],["Mehndi","Vendredi après-midi","14h00 · Cour du palais","Itinéraire"],["Cérémonie","Sous le mandap","Samedi 17h00","Itinéraire"],["Sangeet & réception","Serez-vous des nôtres ?","Samedi, dès 20h","Répondre"]]},
   minimal:{name:"Trait",style:"Minimal",short:"Une ligne, du papier, rien de plus",desc:"Dessin d'un seul trait sur papier crème. Sobre et moderne.",couple:"Sarah & Yanis",light:true,
@@ -27,7 +27,7 @@ window.SCEAU_THEMES={
   ceramique:{name:"Azulejos",style:"Céramique",short:"Carreaux bleus, citrons, océan",desc:"Carreaux bleus et blancs, citronniers et lumière du sud.",couple:"Sofia & Nuno",light:true,
     font:'"DM Serif Display",Georgia,serif',color:"#1f4fa3",ey:"#3d6bb8",tx:"#2c3a55",size:.86,
     scenes:[["Vamos casar","NAMES","Samedi 25 juin 2027"],["La cérémonie","À la chapelle blanche","16h00 · Lisbonne","Itinéraire"],["Le dîner","Face à l'océan","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre"]]},
-  nuits:{name:"Mille et une nuits",launch:true,style:"Peinture",short:"Riad, zellige, lanternes",desc:"Riad, zellige et lanternes. Henné, cérémonie et nuit étoilée.",couple:"Yasmine & Karim",
+  nuits:{name:"Mille et une nuits",style:"Peinture",short:"Riad, zellige, lanternes",desc:"Riad, zellige et lanternes. Henné, cérémonie et nuit étoilée.",couple:"Yasmine & Karim",
     font:'"Aref Ruqaa",serif',color:"#fff3d6",size:.8,
     scenes:[["Bismillah","NAMES","Samedi 12 juin 2027"],["Le henné","Vendredi soir","19h00 · Chez la famille Alaoui","Itinéraire"],["La cérémonie","Au riad","Samedi 14h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 19h","Répondre"]]},
   gravure:{name:"Gravure",style:"Gravure",short:"Encre ancienne, papier vieilli",desc:"Gravure à l'encre sur papier ancien, comme un livre d'autrefois.",couple:"Claire & Thomas",light:true,
@@ -46,7 +46,7 @@ Object.assign(window.SCEAU_THEMES,{
   chinois:{name:"Double bonheur",style:"Chinois",short:"Lanternes rouges, pavillon, pruniers",desc:"Pavillon aux lanternes rouges, pont sur l'étang aux lotus, pruniers en fleurs. Pour un mariage chinois ou le Nouvel an.",couple:"Lin & Wei",long:true,
     font:'"Cinzel",serif',color:"#fff",upper:true,size:.8,gf:"Cinzel",music:"nocturne",particles:"none",
     scenes:[["Nous nous marions", "NAMES", "Samedi 13 février 2027"], ["La cérémonie du thé", "Au pavillon", "11h00 · Pavillon des lotus", "Itinéraire"], ["Le banquet", "Sous les lanternes rouges", "Dès 19h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 janvier", "Répondre"]]},
-  japonais:{name:"Sakura",launch:true,style:"Japonais",short:"Cerisiers, torii, ombrelle rouge",desc:"Cerisiers en fleurs, torii vermillon et mont Fuji, dans la douceur d'une estampe.",couple:"Hana & Kenji",long:true,light:true,
+  japonais:{name:"Sakura",style:"Japonais",short:"Cerisiers, torii, ombrelle rouge",desc:"Cerisiers en fleurs, torii vermillon et mont Fuji, dans la douceur d'une estampe.",couple:"Hana & Kenji",long:true,light:true,
     font:'"Zen Old Mincho",serif',color:"#2b2830",size:.82,gf:"Zen+Old+Mincho",music:"nocturne",particles:"none",
     scenes:[["Nous nous marions", "NAMES", "Samedi 3 avril 2027"], ["La cérémonie", "Au sanctuaire", "14h00 · Sous les cerisiers", "Itinéraire"], ["La réception", "Au ryokan", "Dès 18h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er mars", "Répondre"]]},
   gzhel:{name:"Gzhel",style:"Russe",short:"Porcelaine bleu cobalt, troïka, bouleaux",desc:"Tout en bleu cobalt sur porcelaine blanche : église à bulbes, troïka et roses de Gzhel.",couple:"Anastasia & Nikolaï",long:true,light:true,
@@ -73,7 +73,7 @@ window.SCEAU_THEMES.nuits.pals=[{name:"Or du riad",c:"#c9a35a",seal:"or"},{name:
 window.SCEAU_THEMES.dolcevita.pals=[{name:"Bleu Riviera",c:"#1f5f8b",seal:"nuit"},{name:"Citron",c:"#c9a227",seal:"or"},{name:"Terracotta",c:"#b5562f",seal:"terracotta"}];
 window.SCEAU_THEMES.nuits.family="nuits"; window.SCEAU_THEMES.nuits.variant="Riad de nuit";
 Object.assign(window.SCEAU_THEMES,{
-  alhambra:{pals:[{name:"Terracotta",c:"#a8532c",seal:"terracotta"},{name:"Vert myrte",c:"#4f6b3a",seal:"emeraude"},{name:"Or ancien",c:"#b08a4a",seal:"or"}],name:"Andalou",family:"nuits",variant:"Palais de l'Alhambra",launch:true,style:"Peinture",short:"Palais andalou, arcades, bassin",desc:"Un palais andalou baigné de lumière : arcades ciselées, bassin et orangers. La douceur d'un mariage de jour.",couple:"Leïla & Mehdi",light:true,
+  alhambra:{pals:[{name:"Terracotta",c:"#a8532c",seal:"terracotta"},{name:"Vert myrte",c:"#4f6b3a",seal:"emeraude"},{name:"Or ancien",c:"#b08a4a",seal:"or"}],name:"Andalou",family:"nuits",variant:"Palais de l'Alhambra",style:"Peinture",short:"Palais andalou, arcades, bassin",desc:"Un palais andalou baigné de lumière : arcades ciselées, bassin et orangers. La douceur d'un mariage de jour.",couple:"Leïla & Mehdi",light:true,
     font:'"Amiri",serif',color:"#5b2a1c",ey:"#7a4a26",tx:"#5a3a28",size:.8,gf:"Amiri",music:"scheherazade",particles:"none",mono:["#5b2a1c","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],
     scenes:[["Bismillah","NAMES","Samedi 4 septembre 2027"],["La cérémonie","Au palais","15h00 · Cour des orangers","Itinéraire"],["Le dîner","Sous les arcades","Dès 19h30","Itinéraire"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er août","Répondre"]]},
   /* en attente d'images (quota Gemini) : pending:true le garde hors du configurateur et de la galerie.
@@ -115,6 +115,15 @@ Object.assign(window.SCEAU_THEMES,{
      un événement avant 18 h prend le lieu peint en plein jour s'il existe, après 18 h celui du crépuscule (invite.js, vitrine.js).
      « L'idée c'est que ça doit être évolutif : si le mariage commence la journée et le soir c'est la salle, le faire-part doit vivre. » */
   T.dolcevita.jour='dolcevitajour';
+  /* les 3 modèles du lancement (6 octobre 2026) : une seule peinture continue par faire-part (chain:true ; la peinture de
+     la démo est img/chaine/<thème>/, celle d'une cliente est peinte après sa commande d'après ses lieux et ses photos) */
+  T.dolcevita.chain=true; T.oldmoney.chain=true;
+  T.doucefrance={name:"Douce France",launch:true,compose:true,chain:true,style:"Peinture",short:"Bastide, lavande, platanes",
+    desc:"Une bastide en pierre dorée, des champs de lavande et un dîner sous les platanes : la Provence, simplement.",couple:"Camille & Antoine",light:true,
+    font:'"Cormorant Garamond",Georgia,serif',italic:true,color:"#2f3a5a",ey:"#4a5578",tx:"#34405e",size:.95,gf:"Cormorant+Garamond:ital,wght@0,500;1,400",music:"valse",particles:"none",
+    mono:["#2f3a5a","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],
+    pals:[{name:"Lavande",c:"#6f63a3",seal:"lavande"},{name:"Olivier",c:"#6b7a45",seal:"sauge"},{name:"Pierre dorée",c:"#b08648",seal:"or"}],
+    scenes:[["Ils se marient","NAMES","Samedi 3 juillet 2027"],["La cérémonie","À l'église du village","16h00 · Lourmarin","Itinéraire"],["Le dîner","Sous les platanes","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juin","Répondre","dark"]]};
   T.dolcevitajour=Object.assign({},T.dolcevita,{jour:undefined,compose:false,launch:false,light:true,
     color:"#193f64",ey:"#2f5d86",tx:"#2c3e55",mono:["#193f64","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],lieux:['eglise','jardin'],lieuAlt:{mairie:'eglise',salle:'jardin',plage:'jardin'},
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]});

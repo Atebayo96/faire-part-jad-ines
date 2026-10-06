@@ -48,9 +48,12 @@ def ok(png, t):
 
 
 def gemini(out, prompt, refs):
-    for _ in range(3):
+    # Gemini répond parfois 503 (« high demand ») : on attend de plus en plus longtemps avant de réessayer
+    import time
+    for t in range(6):
         r = subprocess.run([sys.executable, os.path.join(HERE, 'gemini.py'), out, prompt, *refs], capture_output=True, text=True)
         if r.returncode == 0 and os.path.exists(out): return True
+        time.sleep(min(90, 15 * (t + 1)))
     return False
 
 

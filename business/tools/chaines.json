@@ -1,0 +1,125 @@
+{
+ "dolcevita": {
+  "start": "landing/img/hd/dolcevitajour-1.webp",
+  "style": "a painterly gouache illustration of the Amalfi coast (Positano, Ravello): lemon trees, bougainvillea, white stone balustrades, pastel cliffside villages, turquoise sea, soft brushwork",
+  "stations": [
+   {
+    "role": "home",
+    "dark": false,
+    "light": "bright summer morning, pale blue sky",
+    "subject": "a pergola of lemons and pink bougainvillea on a white stone terrace above the turquoise sea, the bride in a white dress with a long veil and the groom in a cream suit seen from behind holding hands at the balustrade, the pastel village of Positano on the cliff",
+    "calm": 58,
+    "lift": 640
+   },
+   {
+    "role": "event",
+    "dark": false,
+    "light": "warm late-afternoon golden light, pale gold sky",
+    "subject": "a small white chapel on the cliff with an arch of bougainvillea and lemon trees around its door, the bride and groom seen from behind walking toward it on a stone path, the sea below"
+   },
+   {
+    "role": "event",
+    "dark": true,
+    "light": "sunset turning to dusk, deep blue sky with a few warm pink clouds, the first stars",
+    "subject": "a terrace dinner under a pergola of lemons with warm string lights just lit, a long table with white linen and candles, the illuminated village and the sea at dusk behind"
+   },
+   {
+    "role": "info",
+    "dark": true,
+    "light": "blue hour night, deep indigo sky, calm",
+    "subject": "the calm night sea with the lights of a distant village reflected on the water, a few boats, very quiet and simple"
+   },
+   {
+    "role": "rsvp",
+    "dark": true,
+    "light": "night with a full moon, deep blue night sky",
+    "subject": "a moonlit balcony with a white stone balustrade, potted lemon trees and lanterns, a cream Vespa parked, the moon reflected on the sea"
+   }
+  ],
+  "ink": "#193f64",
+  "ey": "#2f5d86",
+  "tx": "#2c3e55"
+ },
+ "oldmoney": {
+  "start": "landing/img/hd/oldmoney-1.webp",
+  "ink": "#1f2b44",
+  "ey": "#3d4a63",
+  "tx": "#2a3550",
+  "style": "a refined painterly gouache illustration of the English countryside in a quiet 'old money' style: a Georgian manor of honey-coloured stone covered in ivy, clipped boxwood and yew hedges, gravel drives, rose gardens, a vintage dark green car, soft muted greens, creams and stone tones, full-bleed painting edge to edge (not a vignette, no paper margin)",
+  "stations": [
+   {
+    "role": "home",
+    "dark": false,
+    "calm": 58,
+    "lift": 640,
+    "light": "soft bright morning, pale cream and light blue sky",
+    "subject": "the Georgian manor covered in ivy at the end of a gravel drive between clipped boxwood, a vintage dark green car parked in front, the bride and groom seen from behind walking toward the manor"
+   },
+   {
+    "role": "event",
+    "dark": false,
+    "light": "warm afternoon light, pale golden sky",
+    "subject": "a small old stone chapel with a slate roof and a bell cote in the manor park, roses climbing the porch, ancient oak trees, guests' empty wooden chairs on the lawn"
+   },
+   {
+    "role": "event",
+    "dark": true,
+    "light": "dusk turning to night, deep blue sky with the last warm glow on the horizon",
+    "subject": "a white marquee tent on the lawn glowing warmly from inside, long tables with candles, strings of lights in the old trees, the manor lit in the background"
+   },
+   {
+    "role": "info",
+    "dark": true,
+    "light": "night, deep navy sky, calm",
+    "subject": "a still ornamental lake in the park at night reflecting the lit windows of the distant manor, a stone balustrade and topiary in silhouette, very calm"
+   },
+   {
+    "role": "rsvp",
+    "dark": true,
+    "light": "night with a pale moon, deep navy sky",
+    "subject": "the manor's stone terrace at night with lanterns on the steps, the vintage green car parked below with its lights on, rose bushes"
+   }
+  ]
+ },
+ "doucefrance": {
+  "start": "landing/img/hd/dolcevitajour-2.webp",
+  "ink": "#2f3a5a",
+  "ey": "#4a5578",
+  "tx": "#34405e",
+  "style": "a painterly gouache illustration of Provence, in the south of France: a honey-stone bastide with pale blue shutters, lavender fields, plane trees, olive trees and cypresses, a village square with a stone fountain, warm Mediterranean light, soft brushwork, full-bleed painting edge to edge",
+  "stations": [
+   {
+    "role": "home",
+    "dark": false,
+    "calm": 58,
+    "lift": 640,
+    "light": "bright summer morning, pale blue sky",
+    "subject": "a honey-stone bastide with pale blue shutters surrounded by rows of lavender in bloom, olive trees and a cypress, the bride and groom seen from behind walking hand in hand along the lavender rows"
+   },
+   {
+    "role": "event",
+    "dark": false,
+    "light": "warm afternoon light, pale golden sky",
+    "subject": "a small Provençal village church with a stone bell tower on a square shaded by plane trees, a stone fountain, white flowers on the church door, the couple seen from behind going up the steps"
+   },
+   {
+    "role": "event",
+    "dark": true,
+    "light": "dusk turning to night, deep blue sky with the last warm glow",
+    "subject": "a long dinner table under the plane trees in the garden of the bastide, white linen, candles and glasses, strings of warm lights hanging in the branches, lavender in the foreground"
+   },
+   {
+    "role": "info",
+    "dark": true,
+    "light": "night, deep indigo sky with stars, calm",
+    "subject": "lavender fields under the starry night, a lone olive tree, the distant lights of a hilltop village, very calm and simple"
+   },
+   {
+    "role": "rsvp",
+    "dark": true,
+    "light": "night with a full moon, deep indigo sky",
+    "subject": "the terrace of the bastide at night with lanterns, a wooden table with two glasses of wine, pots of lavender, the moon above the hills"
+   }
+  ]
+ }
+}

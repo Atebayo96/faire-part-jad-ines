@@ -119,19 +119,29 @@
     mute:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 17.5V5l11-2v8M3 3l18 18"/><circle cx="6.5" cy="17.5" r="2.5"/></svg>'
   };
 
+  /* ---------- chaîne continue (6 octobre 2026) ----------
+     Le faire-part est UNE peinture verticale (img/chaine/<thème>/strip.webp, tools/chaine.py) : chaque moment est la suite
+     du précédent, la lumière tourne du jour à la nuit. Ancres : où se pose l'écran de l'accueil, de chaque événement, des
+     infos et de la réponse, avec la couleur de texte qui s'y lit (dark = texte blanc). « Quand je swipe l'image d'après,
+     que ce soit comme une seule chaîne. » */
+  const CH=I.chain&&I.chain.anchors?I.chain:null;
+  const chA=r=>CH?CH.anchors.filter(a=>a.role===r):[];
+  let ROLE='home', EVI=0;
+  const chDark=()=>{ if(!CH) return null; const ev=chA('event'), pick={home:chA('home')[0],pre:chA('home')[0],event:ev[Math.min(EVI,ev.length-1)],post:chA('info')[0]||chA('rsvp')[0],rsvp:chA('rsvp')[0]}[ROLE]; return pick?!!pick.dark:null; };
   /* ---------- pages ---------- */
   const pages=[];
   let rvI=0;
   function page(n,inner,opts={}){
     rvI=0;
-    const Tn=isJ(n)?J:T, dark=opts.dark!=null?opts.dark:isDark(n), lt=Tn.light&&!dark;
-    const c={nm:lt?Tn.color:'#fff',ey:lt?(Tn.ey||Tn.color):'#fff',tx:lt?(Tn.tx||Tn.color):'#fff'};
+    const Tn=isJ(n)?J:T, cd=chDark(), dark=cd!=null?cd:opts.dark!=null?opts.dark:isDark(n), lt=CH?!dark:Tn.light&&!dark;
+    const ink=CH&&CH.ink||{};
+    const c=CH?{nm:lt?(ink.nm||'#193f64'):'#fff',ey:lt?(ink.ey||ink.nm||'#193f64'):'#fff',tx:lt?(ink.tx||ink.nm||'#193f64'):'#fff'}:{nm:lt?Tn.color:'#fff',ey:lt?(Tn.ey||Tn.color):'#fff',tx:lt?(Tn.tx||Tn.color):'#fff'};
     const body=inner(c,lt);
     // le décor n'est pas dans la page : un calque fixe par scène (plusieurs pages d'affilée peuvent partager la même scène,
     // le décor reste alors en place : aucune coupure). Pas de voile sombre sous le texte : il « apparaissait » au swipe
     // sans que l'image change, l'utilisateur l'a fait retirer (voir CLAUDE.md).
-    pages.push({n,lt,
-      html:`<section class="pg${lt?' light':''}${opts.cls?' '+opts.cls:''}" data-img="${img(n)}" style="${esc(opts.style||'')}">${body}</section>`});
+    pages.push({n,lt,role:ROLE,evi:EVI,
+      html:`<section class="pg${lt?' light':''}${opts.cls?' '+opts.cls:''}"${ROLE==='event'?` data-ev="${EVI}"`:''} data-img="${img(n)}" style="${esc(opts.style||'')}">${body}</section>`});
   }
   const cdHtml=(big,col)=>`<div class="cd${big?' big':''}" style="color:${col}">${['d','h','m','s'].map((u,i)=>`<div><b data-u="${u}">0</b><span>${[S.days,S.hours,S.min,S.sec][i]}</span></div>`).join('')}</div>`;
   const oval=!!T.top1, compact=!!T.compact;
@@ -180,6 +190,7 @@
   const cardBg=lt=>lt?'rgba(255,255,255,.55)':'rgba(0,0,0,.28)';
   const lastScene=events.length?evImg(events[events.length-1],events.length-1):2;
 
+  ROLE='pre';
   // 2. le mot des familles (scène 1 : le décor de l'accueil reste en place)
   const P=I.parents;
   if(P) page(K1,(c)=>
@@ -201,7 +212,7 @@
 
   // 5. événements
   events.forEach((e,i)=>{
-    const d=zoned(e.start,e.tz);
+    const d=zoned(e.start,e.tz); ROLE='event'; EVI=i;
     page(evImg(e,i),(c)=>{
       const when=(multiDay||e.showDate?fmtDayShort(d,e.tz)+' · ':'')+fmtTime(d,e.tz);
       return head(c,e.eyebrow||'',e.title)+rv('when',c.tx,esc(when))+
@@ -212,6 +223,7 @@
     });
   });
 
+  ROLE='post';
   // 6. le programme du jour (sur le décor du dernier événement)
   const PR=I.program;
   if(PR) page(lastScene,(c,lt)=>
@@ -253,6 +265,7 @@
     head(c,S.dayJ,S.table,.7)+rv('tbl',c.tx,esc(fam.table))+rv('tx',c.tx,esc(I.tableText||S.tableTx)),{});
 
   // 8. réponse
+  ROLE='rsvp';
   const R=I.rsvp||{};
   const deadline=R.deadline?zoned(R.deadline+'T23:59',TZ):null;
   page(K4,(c)=>
@@ -336,7 +349,7 @@
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app'; app.style.setProperty('--pal',pal);
   app.innerHTML=`
-    <div class="sc${LG?' sc-long':''}${!LG&&CAL.size?' cal':''}" id="sc"${!LG&&CAL.size?` style="background-image:url('${fond}')"`:''}><div class="bgs" id="bgs">${LG?'':runs.map(r=>hasCal(r.n)?`<div class="bgl${r.lt?' light':''} cal"><div class="bg"><img class="sub" src="${cal(r.n)}" alt="" decoding="async"></div></div>`:`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
+    <div class="sc${LG?' sc-long':''}${!LG&&CAL.size?' cal':''}" id="sc"${!LG&&CAL.size?` style="background-image:url('${fond}')"`:''}><div class="bgs" id="bgs">${CH?`<div class="chv"><img class="chs" src="${esc(CH.src)}?v=${IMGV}" alt="" decoding="async"></div>`:LG?'':runs.map(r=>hasCal(r.n)?`<div class="bgl${r.lt?' light':''} cal"><div class="bg"><img class="sub" src="${cal(r.n)}" alt="" decoding="async"></div></div>`:`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
     ${LG&&I.demo?`<a class="lg-want" href="/formules/">${S.want}</a>`:''}
     ${I.demo?`<a class="demo-tag" href="/modeles/">${S.demo} · Save the Oui</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
@@ -352,7 +365,8 @@
     <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
   const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${LG?LG.base+'/'+LG.hero.src:img(1)}')`;
   document.body.append(bd,app);
-  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], bgs=$('#bgs'), fxc=$('#fx');
+  const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], bgs=$('#bgs'), fxc=$('#fx'), chImg=$('#bgs .chs');
+  if(CH){ let tk=false; sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; chScroll(); }); } },{passive:true}); chImg.addEventListener('load',layoutStrip); }
 
   /* ---------- date à découvrir ---------- */
   // grand tableau : la date se découvre sur l'illustration d'ouverture (encre foncée = fond clair)
@@ -363,7 +377,7 @@
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let opened=false;
   const io=new IntersectionObserver(es=>es.forEach(en=>{
-    if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); layers[runOf[i]].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
+    if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); if(layers[runOf[i]]) layers[runOf[i]].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
   }),{root:sc,threshold:[.45,.8]});
   secs.forEach(s=>io.observe(s));
   /* ---------- fond continu ----------
@@ -394,8 +408,33 @@
     B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`;
     B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px');
   }
+  /* chaîne : la peinture descend avec les pages ; quand le haut d'une page est en haut de l'écran, l'écran montre son
+     ancre. Entre deux pages, la peinture avance en proportion (elle peut aller un peu moins vite que le texte) : aucune
+     coupure, c'est la même image qui continue. Ancres des pages : accueil, événements (dans l'ordre), infos réparties
+     entre l'ancre « infos » et la réponse, pages d'avant les événements entre l'accueil et le premier événement. */
+  let chP=[], chY=[];
+  function chainLayout(){ if(!CH) return; const w=sc.clientWidth, h=sc.clientHeight, k=w/CH.w, maxY=Math.max(0,CH.h*k-h);
+    const home=chA('home')[0], ev=chA('event'), info=chA('info')[0], rsvp=chA('rsvp')[0];
+    const yOf=a=>a?a.y*k:0, groups={};
+    pages.forEach((p,i)=>{ (groups[p.role]=groups[p.role]||[]).push(i); });
+    chP=secs.map(x=>x.offsetTop); chY=pages.map(()=>0);
+    const spread=(ids,y0,y1)=>(ids||[]).forEach((i,j,a)=>{ chY[i]=y0+(y1-y0)*(a.length>1?j/(a.length-1):0); });
+    (groups.home||[]).forEach(i=>chY[i]=yOf(home));
+    const evY=i=>ev.length?yOf(ev[Math.min(i,ev.length-1)])+(i>=ev.length?(i-ev.length+1)*h*.35:0):yOf(home);
+    (groups.event||[]).forEach(i=>chY[i]=evY(pages[i].evi));
+    const firstEv=(groups.event||[]).length?chY[groups.event[0]]:yOf(info||rsvp);
+    spread(groups.pre,yOf(home)+(firstEv-yOf(home))*.35,yOf(home)+(firstEv-yOf(home))*.7);
+    const lastEv=(groups.event||[]).length?chY[groups.event[groups.event.length-1]]:yOf(home);
+    // les pages d'infos restent sur le ciel calme de l'ancre « infos » (la peinture y avance à peine), puis la réponse
+    spread(groups.post,Math.max(yOf(info),lastEv+h*.2),Math.max(yOf(info),lastEv+h*.2)+h*.12);
+    (groups.rsvp||[]).forEach(i=>chY[i]=yOf(rsvp));
+    for(let i=1;i<chY.length;i++) chY[i]=Math.max(chY[i],chY[i-1]);
+    chY=chY.map(y=>Math.min(maxY,y)); chScroll(); }
+  function chScroll(){ if(!CH||!chP.length) return; const st=sc.scrollTop; let i=0; while(i<chP.length-1&&chP[i+1]<=st) i++;
+    const t=i<chP.length-1?Math.min(1,(st-chP[i])/Math.max(1,chP[i+1]-chP[i])):0, y=chY[i]+(i<chP.length-1?(chY[i+1]-chY[i])*t:0);
+    chImg.style.transform=`translate3d(0,${(-y).toFixed(1)}px,0)`; }
   function layoutStrip(){
-    const h=sc.clientHeight; fxc.style.height=h+'px'; if(LG) return;
+    const h=sc.clientHeight; fxc.style.height=h+'px'; if(CH){ bgs.style.height=sc.scrollHeight+'px'; chainLayout(); return; } if(LG) return;
     const ov=Math.round(h*OVK);
     bgs.style.height=sc.scrollHeight+'px';
     runs.forEach((r,ri)=>{

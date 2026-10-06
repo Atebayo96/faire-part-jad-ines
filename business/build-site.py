@@ -22,7 +22,7 @@ OGF = {
     'conte': ('Great_Vibes', 1.15, False), 'artdeco': ('Limelight', .8, False), 'aquarelle': ('Parisienne', 1.05, False),
     'bollywood': ('Cinzel_Decorative', .72, False), 'minimal': ('Jost_wght_300', .62, True), 'boheme': ('Cormorant_Garamond_ital_wght_1_400', .95, False),
     'americaine': ('Playfair_Display_ital_1', .85, False), 'pop': ('Shrikhand', .8, False), 'ceramique': ('DM_Serif_Display', .85, False),
-    'nuits': ('Aref_Ruqaa', .85, False), 'gravure': ('IM_Fell_English_ital_1', .8, False), 'dolcevita': ('Italiana', .9, False), 'dolcevitajour': ('Italiana', .9, False),
+    'nuits': ('Aref_Ruqaa', .85, False), 'gravure': ('IM_Fell_English_ital_1', .8, False), 'dolcevita': ('Italiana', .9, False), 'dolcevitajour': ('Italiana', .9, False), 'doucefrance': ('Cormorant_Garamond_ital_wght_1_400', 1.0, False),
 }
 
 
@@ -289,6 +289,10 @@ def main():
         # calques : sujets détourés posés sur le fond du thème (business/tools/calques.py)
         inv['calques'] = calques.get(inv['theme'], [])
         # mise en page continue : description des images du thème (business/tools/long-assets.py)
+        # chaîne continue : une seule peinture qu'on descend (business/tools/chaine.py)
+        if inv.get('chain'):
+            cm = os.path.join(B, 'landing', 'img', 'chaine', inv['theme'], 'meta.json')
+            inv['chain'] = json.load(open(cm)) if os.path.exists(cm) else None
         if inv.get('layout') == 'long':
             inv['long'] = json.load(open(os.path.join(B, 'landing', 'img', 'long', inv['theme'], 'meta.json')))
         # transitions filmées disponibles pour ce thème (img/trans/<theme>-<a>-<b>/)
@@ -302,7 +306,9 @@ def main():
                            preload=inv['long']['base'] + '/' + inv['long']['hero']['src'] if inv.get('long') else f"/img/hd/{inv['theme']}-1.webp")
         open(os.path.join(out, 'index.html'), 'w', encoding='utf-8').write(page)
         # aperçu WhatsApp : le haut de la scène d'accueil, ou, pour les styles qui n'existent qu'en grand tableau, le ciel de l'illustration
-        if t.get('long'):
+        if inv.get('chain') and os.path.exists(os.path.join(SITE, 'img', 'chaine', inv['theme'], 'st-1.webp')):
+            og_image(os.path.join(SITE, 'img', 'chaine', inv['theme'], 'st-1.webp'), os.path.join(out, 'og.jpg'), couple, dt, inv['theme'], t)
+        elif t.get('long'):
             og_image(os.path.join(SITE, 'img', 'long', inv['theme'], 'hero.webp'), os.path.join(out, 'og.jpg'), couple, dt, inv['theme'], t, x={'crop': .01})
         else:
             og_image(os.path.join(SITE, 'img', 'hd', f"{inv['theme']}-1.webp"), os.path.join(out, 'og.jpg'), couple, dt, inv['theme'], t)
@@ -335,11 +341,13 @@ def main():
             demos.append({'slug': inv['slug'], 'theme': inv['theme'], 'couple': ' & '.join(inv['couple']), 'opening': inv.get('opening', 'env'), 'layout': inv.get('layout', 'pages'), 'reveal': inv.get('reveal'), 'kind': inv.get('kind'),
                           'events': len(inv['events']), 'families': bool(inv.get('families')), 'lang': inv.get('lang', 'fr'),
                           'music': inv.get('music') or T[inv['theme']].get('music'), 'thumb': f"/img/themes/{inv['theme']}-2.webp"})
+    # modèles dont la peinture en chaîne existe (img/chaine/<thème>/meta.json, tools/chaine.py)
+    chains = sorted(d for d in os.listdir(os.path.join(SITE, 'img', 'chaine')) if os.path.exists(os.path.join(SITE, 'img', 'chaine', d, 'meta.json')))
     for u in PAGES:
         p = os.path.join(SITE, u.strip('/'), 'index.html')
         l = open(p, encoding='utf-8').read()
         assert '[]/*DEMOS*/' in l and '{}/*CALQUES*/' in l, p
-        open(p, 'w', encoding='utf-8').write(l.replace('[]/*DEMOS*/', json.dumps(demos, ensure_ascii=False)).replace('{}/*CALQUES*/', json.dumps(calques)))
+        open(p, 'w', encoding='utf-8').write(l.replace('[]/*DEMOS*/', json.dumps(demos, ensure_ascii=False)).replace('{}/*CALQUES*/', json.dumps(calques) + ';window.SCEAU_CHAINS=' + json.dumps(chains)))
     site_og(T)
     print('site ->', SITE, '|', len(invites), 'faire-part')
 
