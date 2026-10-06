@@ -404,6 +404,21 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Le téléphone de l'accueil passe d'une scène à l'autre en fondu, texte révélé ensuite (`.film`) : la bande qui glissait
     montrait un trait à chaque raccord.
 
+32h. **Scènes de fête et gros plans symboliques** (6 octobre 2026 : « il manque des scènes de fête où il y a du monde, ou des
+    focus, comme les mains qui s'enlacent » ; « ça doit rester symbolique : les gens de dos, ou des symboles, une main, des
+    verres qui trinquent »). Pour Dolce Vita, Douce France et Old money, 5 images chacun (`tools/scenes-fete.py`, 15
+    générations accordées, ~2,25 €) : `fete` (soirée dansante), `cocktail`, `sortie` (sortie de cérémonie sous les pétales)
+    sont trois décors de plus pour un événement (`T.extra`, « Soirée », « Cocktail », « Sortie de cérémonie » dans `LIEUX`
+    de vitrine.js, `x:1` = seulement pour les thèmes qui les ont) ; `mains` sert au mot des familles et `verres` à la
+    réponse (`pageImg.parents`, `pageImg.rsvp`). Invités toujours de dos ou en silhouettes, pas de visage.
+    **Une seule génération par image, sans prolongement** (« je veux que l'image soit au bon format direct ») : Gemini ne
+    peint pas plus haut que 9:16, donc ces images sont **composées pour le plein écran** (rien d'important dans les 10 %
+    de chaque bord) et posées en `cover`, calées en bas (`T.cover`, `COV` dans `fitBg()`, même calcul dans `cpLayout()`) :
+    pas de bande de ciel unie en haut. C'est la méthode à suivre pour toute nouvelle scène.
+    Dolce Vita les a en version du soir seulement (texte blanc) : la phrase « Avant 18 h : plein jour » ne s'affiche que
+    pour un décor qui existe dans les deux versions. Douce France et Old money : `fete` et `verres` en texte blanc
+    (`darkLieux`), les autres en texte foncé. **À revoir** : `oldmoney-sortie` (les arbres montent dans la zone du texte,
+    `check_images.py` échoue) et `doucefrance-mains` (un buste flou étrange dans le fond) ; l'utilisateur fera le tri.
 32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
     « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money
     (`compose:true`). Un thème peut avoir plusieurs **ambiances** (`group` / `amb` / `ambSub` dans themes.js) : Dolce Vita

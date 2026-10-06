@@ -203,7 +203,7 @@
   const C={occ:OCC_ON.some(o=>o.id===urlOcc)?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:CK[0],fmt:'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
     ev:null}; C.ev=OCC[C.occ].ev();
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
-  const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église',fam:''},{id:'mosquee',name:'Mosquée',fam:'nuits'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'photo',name:'Votre lieu',sig:true}];
+  const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église',fam:''},{id:'mosquee',name:'Mosquée',fam:'nuits'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'fete',name:'Soirée',x:1},{id:'cocktail',name:'Cocktail',x:1},{id:'sortie',name:'Sortie de cérémonie',x:1},{id:'photo',name:'Votre lieu',sig:true}];
   /* upsell sans frustration : les options de Signature (lieu peint d'après photo, 3e événement et plus, lien par famille,
      anglais) sont proposées au même endroit que les autres, avec l'étiquette « Signature ». On peut les choisir en Essentiel :
      la formule se met d'elle-même sur Signature et le récapitulatif explique pourquoi ; si l'on revient à Essentiel, il dit
@@ -246,7 +246,7 @@
   // modèle en chaîne : seulement si sa peinture existe (window.SCEAU_CHAINS, écrit par build-site.py)
   const isChain=k=>!!THEMES[k].chain&&(window.SCEAU_CHAINS||[]).includes(k);
   const grp=k=>THEMES[k].group||k, GRPS=[...new Set(CK.map(grp))];
-  const okLieu=(k,id)=>!THEMES[k].lieux||THEMES[k].lieux.includes(id);
+  const okLieu=(k,id)=>{ const L0=LIEUX.find(x=>x.id===id); if(L0&&L0.x) return (THEMES[k].extra||[]).includes(id); return !THEMES[k].lieux||THEMES[k].lieux.includes(id); };
   // une ambiance qui n'a pas tous les lieux : un lieu absent passe sur le premier qui existe
   const fixLieux=()=>C.ev.forEach(e=>{ if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=(THEMES[C.k].lieuAlt||{})[e.lieu]||THEMES[C.k].lieux[0]; });
   fixLieux();
@@ -456,7 +456,7 @@
       B.style.webkitMaskImage=B.style.maskImage='';
       // taille de l'écran, pas du cadre agrandi (sinon zoom ~1,8×) : même calcul que fitBg() dans invite.js
       // toute la largeur, posée en bas, le haut rempli par le ciel étiré : comme fitBg() (rien de coupé sur les côtés)
-      skyOf(B); const bw=Math.ceil(sc.clientWidth), y=Math.round(h-bw/(RT[urlOf(B)]||.566));
+      skyOf(B); const ar=RT[urlOf(B)]||.566, cov=new RegExp(`-(${(THEMES[C.k].cover||['$^']).join('|')})\\.webp`).test(urlOf(B)||''), bw=cov?Math.ceil(Math.max(sc.clientWidth,h*ar)):Math.ceil(sc.clientWidth), y=Math.round(h-bw/ar);
       B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`; B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px'); });
     cpFade();
   }
@@ -518,7 +518,7 @@
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       // du jour au soir : les vignettes suivent l'heure de l'événement (lieu peint en plein jour avant 18 h, s'il existe)
       const Jt=THEMES[C.k].jour&&THEMES[THEMES[C.k].jour], day=Jt&&parseInt(e.time||'15',10)<18, kOf=id=>day&&(id==='fond'||(Jt.lieux||[]).includes(id))?THEMES[C.k].jour:C.k;
-      const dn=l.querySelector('.ev-dn'); if(dn&&isChain(C.k)) dn.textContent='Nous peignons votre lieu d’après votre description et vos photos, dans la lumière de son heure, comme la suite de votre faire-part.'; else if(dn) dn.textContent=Jt?(day?'☀ Avant 18 h : votre écran est en plein jour.':'☾ Après 18 h : votre écran passe au crépuscule.'):'';
+      const dn=l.querySelector('.ev-dn'); if(dn&&isChain(C.k)) dn.textContent='Nous peignons votre lieu d’après votre description et vos photos, dans la lumière de son heure, comme la suite de votre faire-part.'; else if(dn){ const id=e.bg==='scene'?e.lieu:'fond', both=id==='fond'||(Jt&&(Jt.lieux||[]).includes(id)); dn.textContent=Jt&&both?(day?'☀ Avant 18 h : votre écran est en plein jour.':'☾ Après 18 h : votre écran passe au crépuscule.'):''; }
       // « Texte seul » : écran simple (scène par scène), ou la scène peinte du thème dans le cadre (grand tableau)
       const sim=l.querySelector('[data-lieu="simple"] em'); if(sim) sim.textContent=C.fmt==='long'?'Scène du thème':'Texte seul';
       l.querySelectorAll('[data-lieu]').forEach(b=>{ const id=b.dataset.lieu; b.setAttribute('aria-pressed',id==='simple'?e.bg!=='scene':e.bg==='scene'&&id===e.lieu);
@@ -577,7 +577,7 @@
     { const pg=page(K1,'',null,t.top1?'padding-top:'+t.top1:'');
       const oval=!!t.top1;
       pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc(`background-image:url('/img/seals/${SEAL[0]}.webp')`)}"><b style="${esc(`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`)}">${iniH}</b></div>`}${eyHtml('ey',t.scenes[0][0],`color:${c.ey}`)}<div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">${esc(introTxt())}</div>`}${rv?`<div class="cp-rvl" style="width:100%;color:${c.tx}"></div>`:''}${!rv||rv==='wheel'?`<div class="cp-dl${rv?' rvl-later':''}" style="color:${pg.lt?(lumOf(p.c)<.3?p.c:c.ey):'#fff'}"><i></i><span>${esc(ds)}</span><i></i></div>`:''}${C.cd==='debut'?`<div class="${rv?'rvl-later':''}">${cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':'')}</div>`:''}<div class="pv-hint${rv?' rvl-later':''}" style="color:${c.ey}">Faites défiler ↓</div>`)); }
-    const scene=(idx,withCd)=>{ let [e,main,x,bt,mode]=t.scenes[idx]; if(oneShot&&idx===3){ e='Réponse souhaitée'; main='Serez-vous des nôtres ?'; } const pg=page(idx===3?K4:idx+1,idx===3&&isJ(K4)?(J.scenes[3]||[])[4]:mode);
+    const scene=(idx,withCd)=>{ let [e,main,x,bt,mode]=t.scenes[idx]; if(oneShot&&idx===3){ e='Réponse souhaitée'; main='Serez-vous des nôtres ?'; } const rk=idx===3&&PI.rsvp&&!usedPI.has(PI.rsvp)?PI.rsvp:null; const pg=rk?page(rk,(t.darkLieux||[]).includes(rk)?'dark':''):page(idx===3?K4:idx+1,idx===3&&isJ(K4)?(J.scenes[3]||[])[4]:mode);
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?btn(c,bt,/R[ée]pondre|RSVP/i.test(bt)?'mail':'pin'):''}`); };
     // événements : scène = le lieu choisi, écran simple = le fond du tableau (la bande continue les fond l'un dans l'autre)
     const evPage=i=>{ const e=C.ev[i], photo=e.bg==='scene'&&e.lieu==='photo', pg=page(dayKey(e.bg==='scene'&&!photo?(e.lieu==='s2'?2:e.lieu):'fond',hr(e)<18),e.bg==='scene'&&(t.darkLieux||[]).includes(e.lieu)?'dark':'');
@@ -587,7 +587,7 @@
       pages.push(pg.html(c=>inner(c,pg.lt)).replace('<section ',`<section data-x="${id}" `)); };
     const card=(c,lt,rows,one)=>`<div class="pv-card${one?' one':''}" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${rows.map(r=>`<div>${r[0]?`<b>${r[0]}</b>`:''}<span>${r[1]}</span></div>`).join('')}</div>`;
     const hd=(c,ey,title)=>`<div class="ey" style="color:${c.ey};position:relative">${ey}</div>`+(title?`<div class="nm" style="${esc(nmCss(base*.62,c.nm))};position:relative">${title}</div>`:'');
-    xp('parents',K1,'',c=>hd(c,famEy(),'')+`<div class="pv-fam" style="color:${c.tx}">${[C.data.parents.n1,C.data.parents.n2].filter(Boolean).map(esc).join(' &amp; ')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.parents.text)}</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
+    xp('parents',...pk('parents',K1,''),c=>hd(c,famEy(),'')+`<div class="pv-fam" style="color:${c.tx}">${[C.data.parents.n1,C.data.parents.n2].filter(Boolean).map(esc).join(' &amp; ')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.parents.text)}</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
     xp('story',K1,'',(c,lt)=>hd(c,'Notre histoire','Il était une fois')+card(c,lt,C.data.story.map(x=>[esc(x.when),esc([x.title,x.text].filter(Boolean).join(', '))])));
     pages.push(evPage(0));
     // page dediee au compte a rebours

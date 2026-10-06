@@ -140,6 +140,13 @@ Object.assign(window.SCEAU_THEMES,{
 /* « Bismillah » s'écrit en arabe, en calligraphie : la ligature basmala (U+FDFD « ﷽ ») de la police Amiri hébergée dans
    polices/, exactement comme sur le faire-part d'Inès & Jad (pas la phrase lettre à lettre). Dans le faire-part comme dans la vitrine.
    Retourne le texte à afficher et s'il est en arabe (classe .ar, dir="rtl"). */
+// scènes de fête et gros plans symboliques (tools/scenes-fete.py, 6 octobre 2026) : trois décors de plus pour un
+// événement (extra : Soirée, Cocktail, Sortie de cérémonie), les mains pour le mot des familles, les verres pour la
+// réponse. Peintes en 9:16 pour être affichées en plein écran (cover : rien d'important dans les bords, ~9 % perdus).
+['dolcevita','doucefrance','oldmoney'].forEach(k=>{ const t=window.SCEAU_THEMES[k];
+  t.extra=['fete','cocktail','sortie']; t.cover=['fete','cocktail','sortie','mains','verres'];
+  t.pageImg=Object.assign({},t.pageImg,{parents:'mains',rsvp:'verres'}); });
+['doucefrance','oldmoney'].forEach(k=>{ const t=window.SCEAU_THEMES[k]; t.darkLieux=(t.darkLieux||[]).concat(['fete','verres']); });
 // porte dans un mur (règle 15) : contour de la porte dans img/open/<thème>-portes.webp, en fractions de l'image
 // [x0, y0, x1, y1, arc] (arc = hauteur du cintre, 0 pour une porte droite). Sans contour, la porte remplit l'image et
 // les deux moitiés de l'image s'ouvrent. Avec, le mur reste en place et seuls les battants s'ouvrent.

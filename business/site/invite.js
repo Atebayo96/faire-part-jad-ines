@@ -197,7 +197,7 @@
   ROLE='pre';
   // 2. le mot des familles (scène 1 : le décor de l'accueil reste en place)
   const P=I.parents;
-  if(P) page(K1,(c)=>
+  if(P) page(pk('parents',K1),(c)=>
     head(c,P.eyebrow||S.parents,'')+
     (P.names&&P.names.length?rv('fams',c.tx,P.names.map(x=>`<span>${esc(x)}</span>`).join('<i>&amp;</i>')):'')+
     rv('tx',c.tx,esc(P.text||''))+
@@ -273,7 +273,7 @@
   ROLE='rsvp';
   const R=I.rsvp||{};
   const deadline=R.deadline?zoned(R.deadline+'T23:59',TZ):null;
-  page(K4,(c)=>
+  page(pk('rsvp',K4),(c)=>
     `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(R.eyebrow||T.scenes[3][0])}</div>`+
     `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(.74,c.nm))}">${esc(R.title||T.scenes[3][1])}</div>`+
     (deadline?`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${S.before} ${esc(er(deadline.toLocaleDateString(LOC,{day:'numeric',month:'long',timeZone:TZ})))}</div>`:'')+
@@ -413,8 +413,10 @@
     const im=new Image(); im.onload=()=>{ const r=im.width/im.height; if(Math.abs(r-IR)>.01&&RT[u]!==r){ RT[u]=r; layoutStrip(); } try{ const cv=document.createElement('canvas'); cv.width=16; cv.height=4; const x=cv.getContext('2d'); x.drawImage(im,0,0,im.width,im.height*.01,0,0,16,4);
       const d=x.getImageData(0,0,16,4).data; let r=0,g=0,b=0; for(let k=0;k<d.length;k+=4){ r+=d[k]; g+=d[k+1]; b+=d[k+2]; } const n=d.length/4;
       SKY[u]=`rgb(${Math.round(r/n)},${Math.round(g/n)},${Math.round(b/n)})`; B.style.setProperty('--sky',SKY[u]); }catch(e){} }; im.src=u; }
+  // décors peints pour le plein écran (T.cover) : posés en cover, calés en bas, les bords se perdent sans rien couper d'important
+  const COV=new RegExp(`-(${(T.cover||['$^']).join('|')})\\.webp`);
   function fitBg(B,w,h,ov){ skyOf(B);
-    const bw=Math.ceil(w), ih=bw/(RT[urlOf(B)]||IR), y=Math.round(ov+(h-ih));
+    const r=RT[urlOf(B)]||IR, bw=COV.test(urlOf(B)||'')?Math.ceil(Math.max(w,h*r)):Math.ceil(w), ih=bw/r, y=Math.round(ov+(h-ih));
     B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`;
     B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px');
   }
