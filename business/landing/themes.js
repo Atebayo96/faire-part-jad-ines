@@ -117,7 +117,8 @@ Object.assign(window.SCEAU_THEMES,{
   T.dolcevita.jour='dolcevitajour';
   /* les 3 modèles du lancement (6 octobre 2026) : une seule peinture continue par faire-part (chain:true ; la peinture de
      la démo est img/chaine/<thème>/, celle d'une cliente est peinte après sa commande d'après ses lieux et ses photos) */
-  T.dolcevita.chain=true;
+  // 6 octobre 2026 : chaîne mise de côté (« met les scènes normales pour voir ») ; remettre chain=true pour la rétablir
+  T.dolcevita.chain=false;
   // Old money : ses 5 peintures plein cadre (6 octobre 2026), scènes séparées reliées par le fondu ; pas de chaîne (budget)
   T.oldmoney.nocal=true; T.oldmoney.scenes[2][4]='dark'; T.oldmoney.scenes[3][4]='dark';
   T.doucefrance={name:"Douce France",pending:true,chain:true,style:"Peinture",short:"Bastide, lavande, platanes",

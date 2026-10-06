@@ -141,8 +141,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 18. **Remplacé le 6 octobre 2026 : un swipe = une scène.** L'utilisateur : « à chaque swipe le texte s'affiche, il ne monte
     pas, et quand je swipe ça passe direct à la scène d'après ». Un geste (doigt > 36 px, molette, flèche) amène pile à la
     page suivante (`goPage()` dans invite.js, même chose dans l'aperçu du configurateur) ; une page plus haute que l'écran
-    se parcourt d'un écran à la fois. Pendant le mouvement, le texte de la page qui part s'efface et celui de la page qui
-    arrive apparaît (opacité selon la distance, puis révélation ligne à ligne `.rv`, rejouée à chaque arrivée). Pas de
+    se parcourt d'un écran à la fois. **Le texte ne glisse jamais** (« pourquoi le texte défile ? il doit apparaître à chaque
+    scène avec son animation ») : dès que la page bouge, il s'éteint (0,16 s) ; seule la scène change pendant le swipe ; une
+    fois la page posée, son texte se révèle ligne à ligne (`.rv`, classe `on` posée à l'arrivée ; `.pv-sc.off` dans l'aperçu). Pas de
     `scroll-snap` CSS : à la molette d'un ordinateur, la page revenait en arrière. Le grand tableau garde le défilement libre.
     Ancienne règle (pour mémoire) : **Tout défile en continu, on ne sent jamais de page.** Même les faire-part en scènes (anciennement « page par
     page ») défilent librement : aucun calage en plein écran (pas de `scroll-snap`, pas de « calage doux » après le
@@ -330,7 +331,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     posée sur son ancre (`img/chaine/<thème>/meta.json` : y, rôle, texte clair/foncé, contraste mesuré ≥ 4,5). Le
     configurateur montre alors le vrai moteur (`chainInvite()`) et remplace la bibliothèque de lieux par « Parlez-nous de
     ce lieu » + photos (`api/upload.js`, Vercel Blob privé, ids envoyés avec la commande) : le lieu de la cliente est peint
-    après la commande. **Seul Dolce Vita existe en chaîne** (démo Giulia & Hugo). **L'utilisateur a arrêté les générations :
+    après la commande. **Seul Dolce Vita existe en chaîne**, mise de côté le 6 octobre 2026 (« pour Dolce Vita, mets les scènes normales, pour voir » :
+    `T.dolcevita.chain=false`, plus de `"chain": true` dans giulia-hugo.json ; la peinture reste dans `img/chaine/dolcevita/`). **L'utilisateur a arrêté les générations :
     « faut pas ruiner tous les budgets Gemini, au pire c'est plusieurs scènes et on trouvera comment les lier, on perd trop
     d'argent ».** La mise au point de la chaîne Dolce Vita a coûté ~60 générations. Règle : **aucune génération sans
     accord explicite et chiffré** (nombre d'images, coût), jamais de méthode « à l'essai » sur Gemini ; on tente d'abord

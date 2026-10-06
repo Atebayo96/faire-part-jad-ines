@@ -473,7 +473,9 @@
     sc.addEventListener('touchstart',e=>{ y0=e.touches[0].clientY; },{passive:true});
     sc.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
     sc.addEventListener('touchend',e=>{ if(y0==null) return; const dy=y0-e.changedTouches[0].clientY; y0=null; if(Math.abs(dy)>30) go(dy>0?1:-1); },{passive:true}); } }
-  { const sc=$('cpScroll'); if(sc){ let tk=false; sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; cpFade(); }); } },{passive:true}); } }
+  { const sc=$('cpScroll'); if(sc){ let tk=false; const pvVis=()=>{ const st=sc.scrollTop, h=sc.clientHeight||1; sc.querySelectorAll('.pv-sc').forEach(x=>{ const off=Math.abs(x.offsetTop-st)/h>.004; if(x._off!==off){ x._off=off; x.classList.toggle('off',off); } }); };
+    // un swipe : le texte s'éteint et réapparaît, animé, sur la page d'arrivée (il ne glisse jamais, comme invite.js)
+    sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; cpFade(); pvVis(); }); } },{passive:true}); } }
   // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
   function paint(){
     buildPal();

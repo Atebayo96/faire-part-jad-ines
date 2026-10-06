@@ -379,7 +379,7 @@
   const io=new IntersectionObserver(es=>es.forEach(en=>{
     // la page qui sort de l'écran perd son « on » : à son retour, son texte se révèle de nouveau
     if(!en.isIntersecting||en.intersectionRatio<.08){ en.target.classList.remove('on'); return; }
-    if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); if(layers[runOf[i]]) layers[runOf[i]].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
+    if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ if(LG) en.target.classList.add('on'); if(layers[runOf[i]]) layers[runOf[i]].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
   }),{root:sc,threshold:[0,.05,.45,.8]});
   secs.forEach(s=>io.observe(s));
   /* ---------- fond continu ----------
@@ -486,10 +486,11 @@
     if(k){ e.preventDefault(); goPage(k); }
   });
   addEventListener('resize',layoutStrip);
-  // pendant le swipe, le texte de la page qui part s'efface et celui de la page qui arrive apparaît (il ne « monte » pas)
+  // pendant le swipe, le texte disparaît ; il apparaît sur la page d'arrivée, avec son animation (il ne « monte » jamais)
   { let tk=false; const vis=()=>{ tk=false; const h=sc.clientHeight, st=sc.scrollTop;
       secs.forEach(x=>{ const d=Math.abs(x.offsetTop-st)/h, tall=x.offsetHeight>h*1.05&&st>=x.offsetTop&&st<=x.offsetTop+x.offsetHeight-h;
-        const o=tall?1:Math.max(0,Math.min(1,1-d*2.6)); if(x._o!==o){ x._o=o; x.style.opacity=o>=.999?'':o.toFixed(3); } }); };
+        // le texte ne glisse jamais : il est caché dès que la page bouge, et se révèle (.rv) une fois la page posée
+        const o=(tall||d<.004)?1:0; if(x._o!==o){ x._o=o; x.style.opacity=o?'':'0'; if(o&&opened) x.classList.add('on'); else if(!o) x.classList.remove('on'); } }); };
     if(!LG){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(vis); } },{passive:true}); addEventListener('resize',vis); } }
   // profondeur des calques : le sujet détouré glisse un peu moins vite que les pages (jamais plus de 6 % d'un écran)
   { const subs=layers.map((L,ri)=>({L,S:L.querySelector('.sub'),ri})).filter(x=>x.S); let tk=false;
