@@ -148,6 +148,8 @@ Object.assign(window.SCEAU_THEMES,{
   // le premier écran est un gros plan qui dit tout de suite « mariage » (les mains et les alliances, comme l'aquarelle
   // d'Alice & Théo) ; le mot des familles garde ce décor (« la première image, pour les 3, un truc très bien en zoom »)
   t.home='mains'; t.pageImg=Object.assign({},t.pageImg,{rsvp:'verres'}); });
+// Dolce Vita : un mariage qui commence avant 18 h s'ouvre sur les mains peintes en plein jour (dolcevitajour-mains)
+window.SCEAU_THEMES.dolcevitajour.home='mains'; window.SCEAU_THEMES.dolcevitajour.cover=['mains'];
 ['doucefrance','oldmoney'].forEach(k=>{ const t=window.SCEAU_THEMES[k]; t.darkLieux=(t.darkLieux||[]).concat(['fete','verres']); });
 // porte dans un mur (règle 15) : contour de la porte dans img/open/<thème>-portes.webp, en fractions de l'image
 // [x0, y0, x1, y1, arc] (arc = hauteur du cintre, 0 pour une porte droite). Sans contour, la porte remplit l'image et

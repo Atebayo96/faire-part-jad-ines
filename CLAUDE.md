@@ -436,7 +436,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     un truc très bien en zoom pour direct comprendre que c'est un mariage, comme on avait fait les mains ») : `T.home='mains'`
     pour Dolce Vita, Douce France et Old money (`K1` dans invite.js et vitrine.js) ; le mot des familles garde ce décor, la
     réponse a les verres. L'accueil de Douce France « n'était pas vraiment le thème ». Les cartes de la galerie gardent la
-    scène 1. Dolce Vita n'a que des mains du soir : un mariage de jour s'ouvre aussi sur elles. La roue de la date
+    scène 1. Dolce Vita a aussi ses mains **en plein jour** (`dolcevitajour-mains`, 1 génération, ciel éclairci de 14 % :
+    contraste 4,05 → 4,69) : un mariage qui commence avant 18 h s'ouvre sur elles (`J.home`, reconnu par `dayKey()`). La roue de la date
     descend jusqu'au haut du bouquet sur un téléphone 390 × 844 (Giulia & Hugo) : à surveiller.
     **Porte de Douce France repeinte en porte pleine** (« on a dit des portes normales, là t'as généré des portes avec des
     murs ») : `portes.py doucefrance --portes`, 1 génération ; la consigne dit maintenant « les deux portes seules remplissent

@@ -556,7 +556,7 @@
     /* du jour au soir, comme le moteur (invite.js) : un événement avant 18 h prend le lieu peint en plein jour s'il existe
        (t.jour), après 18 h celui du soir ; l'accueil suit le premier événement, les dernières pages le dernier */
     const J=t.jour&&THEMES[t.jour], isJ=k=>String(k).startsWith('j:'), jk=k=>String(k).slice(2), hr=e=>parseInt(e&&e.time||'15',10);
-    const dayKey=(k,day)=>day&&J&&(typeof k==='number'||k==='fond'||(J.lieux||[]).includes(k)||Object.values(J.pageImg||{}).includes(k))?'j:'+k:k;
+    const dayKey=(k,day)=>day&&J&&(typeof k==='number'||k==='fond'||(J.lieux||[]).includes(k)||k===J.home||Object.values(J.pageImg||{}).includes(k))?'j:'+k:k;
     const K1=dayKey(t.home||1,hr(C.ev[0])<18), K4=dayKey(4,hr(C.ev[C.ev.length-1])<18);
     // une scène propre à chaque écran d'après les événements (t.pageImg), chacune une seule fois, comme le moteur (pk dans invite.js)
     const PI=t.pageImg||{}, usedPI=new Set(), lastDay=hr(C.ev[C.ev.length-1])<18;

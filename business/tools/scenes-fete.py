@@ -59,6 +59,12 @@ JOBS = {
         "white linen tablecloth beside a lemon and a sprig of bougainvillea, a candle glowing, in the lower part of the image"),
     'dolcevita-verres': (DN, FOCUS_N, HANDS + " Two hands raising two glasses of spritz that touch in a toast, in the lower "
         "part of the image, the blurred lights of the coastal village and the sea at night behind"),
+    # version de jour du premier écran de Dolce Vita (« faut refaire l'image le jour, c'est mieux ») : un mariage qui
+    # commence avant 18 h s'ouvre sur elle (J.home, dayKey dans invite.js et vitrine.js)
+    'dolcevitajour-mains': (('dolcevitajour', 1, 2, 3), FOCUS_D, HANDS + " A close-up still life in full daylight: the "
+        "joined hands of the bride and groom with their wedding rings (her lace cuff, his cream linen cuff), resting on a "
+        "white linen tablecloth beside a lemon and a sprig of bougainvillea, in the lower part of the image; behind, softly "
+        "blurred, the turquoise sea, the coast and a pale sky with light clouds"),
     # Douce France : jour en texte foncé, soir en texte blanc (la fête et les verres sont dans darkLieux)
     'doucefrance-fete': (FN, NIGHT_TREES, PEOPLE + " " + REAL + " The evening party on the gravel square of the village, "
         "under two or three big plane trees painted whole: strings of warm bulbs and a few paper lanterns between them, "
