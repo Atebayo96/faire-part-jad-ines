@@ -150,6 +150,7 @@
   main.innerHTML=`
     <h1>${esc(inv.couple)}${data.demo?'<span class="tag">Exemple</span>':''}</h1>
     <p class="sub">${data.demo?'Voici le tableau de bord que reçoivent les mariés. Les réponses ci-dessous sont fictives.':'Les réponses de vos invités, en temps réel.'}</p>
+    ${inv.online?`<div class="share"><p class="lnk">Le lien de votre faire-part : ${esc(base)} <button class="btn sm" data-copy="${esc(base)}">Copier</button> <a class="btn sm" href="${esc(base)}" target="_blank" rel="noopener">Voir</a> <a class="btn sm" href="/creer/?edit=${encodeURIComponent(inv.slug)}#k=${encodeURIComponent(key)}">Modifier mon faire-part</a></p></div>`:''}
     <div class="stats" id="stats"></div>
     <h2>Par événement</h2>
     <div class="evs" id="perEv"></div>

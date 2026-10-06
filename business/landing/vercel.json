@@ -2,6 +2,10 @@
   "regions": ["cdg1"],
   "cleanUrls": true,
   "crons": [{ "path": "/api/purge", "schedule": "0 4 * * *" }],
+  "rewrites": [
+    { "source": "/d/:slug", "destination": "/api/page?s=:slug" },
+    { "source": "/d/:slug/", "destination": "/api/page?s=:slug" }
+  ],
   "headers": [
     { "source": "/d/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },
     { "source": "/tableau/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },

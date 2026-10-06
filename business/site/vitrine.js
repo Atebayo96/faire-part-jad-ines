@@ -4,20 +4,28 @@
   const PLANS={essentiel:{name:'Essentiel',price:'99 €'},signature:{name:'Signature',price:'229 €'},couture:{name:'Couture',price:'dès 590 €'}};
   // bouton de formule : sur /creer/, la commande Stripe s'ouvre (formule payable en ligne) ; ailleurs, le lien mène à /creer/?plan=…
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',e=>{ const sel=document.getElementById('planSel'); if(sel) sel.value=a.dataset.plan;
-    const pay=(window.SCEAU_PAY||{})[a.dataset.plan]; if(pay&&openOrder){ e.preventDefault(); openOrder(a.dataset.plan,pay); } }));
+    // Essentiel en libre-service (api/commande.js) : le faire-part composé est publié dès le paiement ; sinon, lien de paiement Stripe
+    if(window.SCEAU_EDIT) return;
+    const self=a.dataset.plan==='essentiel'&&window.SCEAU_AUTO&&window.SCEAU_COMPOSE;
+    const pay=(window.SCEAU_PAY||{})[a.dataset.plan]; if((self||pay)&&openOrder){ e.preventDefault(); openOrder(a.dataset.plan,self?null:pay); } }));
 
   let openOrder=null;
   if(document.getElementById('order')){
   /* commande : récapitulatif, conditions de vente et renonciation au délai de rétractation, puis paiement Stripe */
   let ordPlan=null, ordLink=null;
   const ord=document.getElementById('order'), $o=id=>document.getElementById(id);
+  // le paiement en ligne de l'Essentiel est-il branché (clé Stripe et stockage) ? Sinon, la commande suit l'ancien chemin
+  fetch('/api/commande').then(r=>r.ok?r.json():{}).then(j=>{ window.SCEAU_AUTO=!!j.auto; }).catch(()=>{});
   function choicesText(){ const v=id=>($o(id)||{}).value||''; return [v('fOcc')&&v('fOcc')!=='Mariage'&&'occasion '+v('fOcc').toLowerCase(), v('fStyle')&&'thème '+v('fStyle'), v('fFormat')&&'format '+v('fFormat').toLowerCase(), v('fOpen')&&'ouverture '+v('fOpen').toLowerCase(), v('fPal')&&'couleurs '+v('fPal').toLowerCase(), v('fEvents')&&'écrans : '+v('fEvents'), v('fScreens')&&'écrans en plus : '+v('fScreens').toLowerCase()].filter(Boolean).join(' · '); }
   openOrder=function(plan,link){
-    ordPlan=plan; ordLink=link; const P=PLANS[plan];
+    ordPlan=plan; ordLink=link; const P=PLANS[plan], self=!link;
     $o('ordT').textContent=`${P.name} · ${P.price}`;
-    const ch=choicesText(); $o('ordSub').textContent=ch?'Vos choix dans l’essai : '+ch+'. Tout reste modifiable ensuite.':'Vous choisirez le thème, les couleurs et les écrans avec nous juste après.';
+    const ch=choicesText(); $o('ordSub').textContent=self?'Votre faire-part, tel que vous le voyez dans l’aperçu, est en ligne dès votre paiement, avec votre tableau de bord. Vous pourrez modifier textes, lieux et horaires quand vous voulez.':ch?'Vos choix dans l’essai : '+ch+'. Tout reste modifiable ensuite.':'Vous choisirez le thème, les couleurs et les écrans avec nous juste après.';
+    // libre-service : prénoms et date viennent du configurateur
+    $o('oName').hidden=$o('oDate').hidden=self;
+    $o('oWaiverT').textContent=self?'Je demande que mon faire-part soit publié dès mon paiement, et je reconnais perdre mon droit de rétractation dès sa publication (article L221-28 du Code de la consommation).':'Je demande que la création de mon faire-part commence dès mon paiement, et je reconnais perdre mon droit de rétractation dès ce commencement (article L221-28 du Code de la consommation).';
     $o('oPay').textContent=`Payer ${P.price} avec Stripe`;
-    const promo=(window.SCEAU_PAY||{}).promo; $o('ordNote').textContent=(promo?`Offre de lancement : saisissez le code ${promo} sur la page de paiement. `:'')+'Paiement sécurisé par Stripe. Vous recevez votre reçu par e-mail, puis nous vous écrivons pour recueillir vos lieux, horaires et textes.';
+    const promo=(window.SCEAU_PAY||{}).promo; $o('ordNote').textContent=(promo?`Offre de lancement : saisissez le code ${promo} sur la page de paiement. `:'')+(self?'Paiement sécurisé par Stripe. Juste après, vous voyez le lien de votre faire-part et votre tableau de bord ; vous les recevez aussi par e-mail.':'Paiement sécurisé par Stripe. Vous recevez votre reçu par e-mail, puis nous vous écrivons pour recueillir vos lieux, horaires et textes.');
     if(!$o('oName').value&&$o('fNames')&&$o('fNames').value) $o('oName').value=$o('fNames').value;
     ord.hidden=false; document.body.style.overflow='hidden'; setTimeout(()=>$o('oEmail').focus(),50);
   };
@@ -31,6 +39,13 @@
     if(!$o('oCgv').checked) return show('Merci d’accepter les conditions de vente.');
     if(!$o('oWaiver').checked) return show('Cochez la case pour que nous puissions commencer la création dès votre paiement.');
     err.hidden=true; const btn=$o('oPay'); btn.disabled=true; btn.textContent='Ouverture du paiement…';
+    if(!ordLink){ // Essentiel en libre-service : la fiche du faire-part part avec la commande, Stripe Checkout s'ouvre
+      try{ const r=await fetch('/api/commande',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,cgv:true,waiver:true,consent:true,fiche:window.SCEAU_COMPOSE.fiche(),config:window.SCEAU_COMPOSE.config()})});
+        const j=await r.json().catch(()=>({})); if(!r.ok||!j.url) throw new Error(j.error||r.status);
+        location.href=j.url; }
+      catch(x){ btn.disabled=false; btn.textContent=`Payer ${PLANS[ordPlan].price} avec Stripe`;
+        show(String(x.message)==='plan'?'L’Essentiel comprend 2 événements : retirez-en un, ou passez en Signature.':'Le paiement n’a pas pu s’ouvrir. Réessayez dans un instant, ou écrivez-nous.'); }
+      return; }
     const ref='sc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
     const v=id=>($o(id)||{}).value||'';
     const body={type:'commande',ref,plan:ordPlan,email,name:$o('oName').value,date:$o('oDate').value,consent:true,cgv:true,waiver:true,
@@ -494,7 +509,11 @@
     const needs=sigNeeds(); if(needs.length&&C.plan==='essentiel'&&!C.planPicked) C.plan='signature';
     $('cPlan').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan));
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
-      ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k+'&format='+C.fmt+'&occasion='+C.occ+'&names='+encodeURIComponent(whoTxt())+'&date='+encodeURIComponent($('cDate').value||''); a.textContent=C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
+      ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k+'&format='+C.fmt+'&occasion='+C.occ+'&names='+encodeURIComponent(whoTxt())+'&date='+encodeURIComponent($('cDate').value||''); a.textContent=window.SCEAU_EDIT?'Enregistrer les modifications':C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
+    // « Ensuite » : l'Essentiel est en libre-service (en ligne dès le paiement) ; Signature et Couture passent par nous
+    { const nx=$('cNext'), li=a=>a.map((x,i)=>`<li><b>${i+1}</b><span>${x}</span></li>`).join(''); if(nx) nx.innerHTML=C.plan==='essentiel'
+      ?li(['Vous payez, paiement sécurisé par Stripe.','Votre faire-part, tel que dans l’aperçu, est en ligne tout de suite : vous recevez son lien et votre tableau de bord.','Un horaire ou un texte change ? Vous le modifiez vous-même, le lien de vos invités reste le même.'])
+      :li(['Vous commandez, paiement sécurisé par Stripe.','On vous écrit sous 24 h pour vos textes, adresses, horaires et photos. La musique se choisit à ce moment-là.',C.plan==='couture'?'On fixe le calendrier ensemble.':'Vous validez l’aperçu : votre lien est prêt en 3 à 5 jours.']); }
     { const long=C.fmt==='long';
       $('wz2Title').textContent=long?'Votre tableau':'Vos écrans';
       $('wz2Sub').textContent=long?'Un seul tableau peint qu’on descend, en trois parties. Chaque événement a son cadre : la scène peinte du thème, un lieu de notre bibliothèque, ou votre lieu d’après photo.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';
@@ -661,6 +680,28 @@
       gifts:C.x.has('gifts')?Object.assign({eyebrow:giftName(),text:C.data.gifts.text,mode:C.data.gifts.mode},C.data.gifts.mode==='liste'?{items:C.data.gifts.items.filter(x=>x.name).map((x,i)=>({id:'g'+i,name:x.name,price:x.price}))}:{url:C.data.gifts.url||(C.data.gifts.mode==='cagnotte'?'https://savetheoui.fr':'#')}):null,
       rsvp:{eyebrow:'Réponse souhaitée',title:'Serez-vous des nôtres ?',deadline:dl,menu:menuList(),question:C.data.rsvp.question||'',whatsapp:C.data.rsvp.whatsapp||''}};
   }
+  /* la fiche du vrai faire-part (invite.js, schéma de business/invites/*.json), faite des choix du configurateur : c'est elle
+     qui est publiée dès le paiement de l'Essentiel (api/commande.js), et réenregistrée quand les mariés la modifient
+     (api/fiche.js). L'aperçu du scène par scène est dessiné à part (page()) : le faire-part publié est le moteur. */
+  function realInvite(){
+    const t=THEMES[C.k], p=palsOf(C.k).find(x=>x.id===C.pal)||palsOf(C.k)[0], f=FONTS.find(x=>x.id===C.font);
+    const d=weddingDate(), ds0=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const inv=lgInvite(t,p,f,nm1(),nm2(),ds0.charAt(0).toUpperCase()+ds0.slice(1)), day=$('cDate').value||'2027-06-12';
+    ['slug','demo','layout','music','calques','anim','trans','families','album'].forEach(k=>delete inv[k]);
+    Object.assign(inv,{opening:C.op,countdown:C.cd,kind:C.occ==='mariage'?undefined:C.occ,
+      events:C.ev.map((e,i)=>Object.assign({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||'',start:day+'T'+(e.time||'15:00'),address:e.place||''},
+        e.bg!=='scene'?{bg:'simple'}:e.lieu==='s2'?{scene:2}:{lieu:e.lieu})),
+      infos:inv.infos.map(x=>({icon:x.icon,title:x.title,text:x.text}))});
+    // la date du faire-part : l'heure du premier événement
+    inv.date=inv.events.map(e=>e.start).sort()[0];
+    if(C.x.has('program')) inv.program={title:'Le grand jour',items:C.data.program.filter(x=>x.time||x.title).map(x=>({time:hm(x.time),title:x.title}))};
+    if(C.x.has('faq')) inv.faq={items:C.data.faq.filter(x=>x.q).map(x=>({q:x.q,a:x.a}))};
+    if(inv.gifts&&inv.gifts.mode!=='liste') inv.gifts.url=C.data.gifts.url||undefined;
+    return JSON.parse(JSON.stringify(inv)); }
+  // les choix du configurateur, pour le rouvrir tel quel (modification par les mariés)
+  const snapshot=()=>({occ:C.occ,sexe:C.sexe,k:C.k,fmt:C.fmt,pal:C.pal,font:C.font,op:C.op,cd:C.cd,rvl:C.rvl,x:[...C.x],
+    n1:$('cN1').value,n2:$('cN2').value,date:$('cDate').value,ev:C.ev.map(({photos,...e})=>e),data:C.data});
+  window.SCEAU_COMPOSE={fiche:realInvite,config:snapshot};
   let lgKey='', lgT=null;
   // QR de la cagnotte dans l'aperçu (qrcode.js, chargé une fois, à la première cagnotte)
   let qrLib=null;
@@ -725,4 +766,28 @@
   if('IntersectionObserver' in window){ const io=new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting){ setTimeout(playOp,900); io.disconnect(); } }); },{threshold:.6}); io.observe(op); }
   $('compForm').addEventListener('submit',e=>e.preventDefault());
   paint();
+  /* modification par les mariés d'un faire-part commandé en ligne : /creer/?edit=<slug>#k=<clé du tableau de bord>.
+     Le configurateur se rouvre sur leurs choix ; le bouton final enregistre (api/fiche.js), le lien des invités ne change pas. */
+  { const slug=new URLSearchParams(location.search).get('edit'), key=new URLSearchParams(location.hash.slice(1)).get('k');
+    if(slug&&key){ window.SCEAU_EDIT=true;
+      fetch('/api/fiche?s='+encodeURIComponent(slug),{headers:{Authorization:'Bearer '+key}}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{
+        const g=j.config||{}; if(!THEMES[g.k]) throw 0;
+        Object.assign(C,{occ:g.occ||'mariage',sexe:g.sexe||'fille',k:g.k,fmt:'scenes',pal:g.pal,font:g.font||'theme',op:g.op||'env',cd:g.cd||'fin',rvl:g.rvl||'non',x:new Set(g.x||[]),plan:j.plan||'essentiel',planPicked:true});
+        if(g.ev&&g.ev.length) C.ev=g.ev; if(g.data) Object.assign(C.data,g.data);
+        $('cN1').value=g.n1||''; $('cN2').value=g.n2||''; if(g.date){ $('cDate').value=g.date; }
+        // les cadres de réglage se reconstruisent avec les textes des mariés (sinon ils gardent ceux de l'exemple)
+        document.querySelectorAll('#cStory .eds,#cExtrasEd').forEach(h=>delete h.dataset.key);
+        ambG=''; palK=''; resetEv(); paint();
+        const bar=document.createElement('p'); bar.className='edit-bar'; bar.innerHTML=`Vous modifiez votre faire-part en ligne. Le lien de vos invités reste le même : <a href="/d/${esc(slug)}/" target="_blank" rel="noopener">voir le faire-part</a>.`;
+        $('composer').prepend(bar);
+        $('cPlan').closest('.fld').hidden=true; document.querySelectorAll('.next').forEach(x=>x.closest('.fld').hidden=true);
+        const save=async ev=>{ ev.preventDefault(); ev.stopPropagation(); const a=ev.currentTarget; if(a.dataset.busy) return; a.dataset.busy=1; a.textContent='Enregistrement…';
+          let msg='Enregistré. Vos invités voient déjà la nouvelle version.';
+          try{ const r=await fetch('/api/fiche',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify({s:slug,fiche:realInvite(),config:snapshot()})});
+            const k=await r.json().catch(()=>({})); if(!r.ok) msg=k.error==='plan'?'L’Essentiel comprend 2 événements : retirez-en un pour enregistrer, ou écrivez-nous pour passer en Signature.':'L’enregistrement n’a pas fonctionné. Réessayez dans un instant.'; }
+          catch(x){ msg='L’enregistrement n’a pas fonctionné. Réessayez dans un instant.'; }
+          delete a.dataset.busy; paint();
+          let m=$('editMsg'); if(!m){ m=document.createElement('p'); m.id='editMsg'; m.setAttribute('role','status'); $('cGo').parentNode.appendChild(m); } m.textContent=msg; };
+        ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(a) a.addEventListener('click',save,true); });
+      }).catch(()=>{ const bar=document.createElement('p'); bar.className='edit-bar err'; bar.textContent='Ce lien de modification ne fonctionne pas. Ouvrez-le depuis votre tableau de bord, ou écrivez-nous.'; $('composer').prepend(bar); }); } }
   }

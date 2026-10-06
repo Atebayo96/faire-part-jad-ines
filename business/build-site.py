@@ -332,6 +332,26 @@ def main():
         '// Généré par business/build-site.py à partir de business/invites/*.json. Ne pas modifier à la main.\nexport default ' +
         json.dumps(invites, ensure_ascii=False, indent=1) + ';\n')
     build_yk()
+    # faire-part commandés en ligne (Essentiel en libre-service, api/commande.js) : ils ne sont pas dans invites/*.json,
+    # l'API les sert depuis le stockage (api/page.js) et a besoin, par thème, de ce que le build ajoute aux fiches
+    # (calques, scènes animées, transitions) et des décors qui existent (img/hd/<thème>-<clé>.webp)
+    hd = sorted(f[:-5] for f in os.listdir(os.path.join(SITE, 'img', 'hd')) if f.endswith('.webp'))
+    meta = {}
+    os.makedirs(os.path.join(SITE, 'img', 'og'), exist_ok=True)
+    for k, t in T.items():
+        if not os.path.exists(os.path.join(SITE, 'img', 'hd', f'{k}-1.webp')):
+            continue
+        meta[k] = {'compose': bool(t.get('compose')) and not t.get('pending'), 'light': bool(t.get('light')),
+                   'keys': [f[len(k) + 1:] for f in hd if f.startswith(k + '-') and '-' not in f[len(k) + 1:]],
+                   'calques': calques.get(k, []),
+                   'anim': [n for n in range(1, 5) if os.path.isdir(os.path.join(SITE, 'img', 'frames', f'{k}-{n}'))],
+                   'trans': sorted(d[len(k) + 1:] for d in os.listdir(os.path.join(SITE, 'img', 'trans')) if d.startswith(k + '-')) if os.path.isdir(os.path.join(SITE, 'img', 'trans')) else []}
+        # aperçu WhatsApp d'un faire-part commandé en ligne : la scène d'accueil du thème, sans prénoms (ils sont dans le titre)
+        if meta[k]['compose']:
+            og_image(os.path.join(SITE, 'img', 'hd', f'{k}-1.webp'), os.path.join(SITE, 'img', 'og', f'{k}.jpg'), 'Vous êtes invités', 'Ouvrez le faire-part', k, t)
+    open(os.path.join(SITE, 'api', '_meta.js'), 'w', encoding='utf-8').write(
+        '// Généré par business/build-site.py : ce que les faire-part commandés en ligne reprennent de chaque thème. Ne pas modifier à la main.\nexport default ' +
+        json.dumps({'site': SITE_URL, 'themes': meta}, ensure_ascii=False) + ';\n')
     # liste des démos pour la vitrine
     demos = [{'slug': 'yasmine-karim', 'theme': 'nuits', 'couple': 'Yasmine & Karim', 'special': 'Lieux réels peints et animés', 'events': 2,
               'music': 'scheherazade', 'thumb': '/d/yasmine-karim/thumb.webp'}]

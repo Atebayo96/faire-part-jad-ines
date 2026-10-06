@@ -1040,3 +1040,9 @@
 /* accueil : les trois modèles côte à côte (une colonne sur téléphone) */
 .fmt2.fmt3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:860px){ .fmt2.fmt3{grid-template-columns:1fr} }
+
+/* modification d'un faire-part commandé en ligne (/creer/?edit=…) : un bandeau au-dessus du configurateur */
+.edit-bar{margin:0 0 18px;padding:14px 18px;border-radius:14px;background:#f3efe6;color:#2a2620;font-size:15px;line-height:1.45}
+.edit-bar a{color:inherit;font-weight:600}
+.edit-bar.err{background:#fbe9e7;color:#7a1f12}
+#editMsg{color:#111;font-size:15px}

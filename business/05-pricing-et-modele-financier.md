@@ -4,6 +4,12 @@
 > 1. **The Digital Yes** (plus de 3 000 couples, 4,9/5 sur Trustpilot, 31 modèles) vend exactement ce type de produit à **175 € / 575 € / 975 €**. Le marché accepte donc des prix bien plus hauts que nos 89 / 189 €. Nos prix remontent : **99 / 229 / 590 €**.
 > 2. On n'a plus à chercher la direction artistique pour chaque client. Les **modèles de base sont produits à l'avance**, donc le temps par commande baisse fortement (voir le §3).
 
+> **Révision du 6/10/2026 : l'Essentiel passe en libre-service.** Le couple compose son faire-part dans le configurateur,
+> paie (Stripe Checkout), et le faire-part est **publié automatiquement** dès le paiement, avec le tableau de bord et un lien
+> pour le modifier lui-même (`api/commande.js`, `api/stripe.js`, `api/fiche.js`). Aucun temps humain par commande : c'est ce
+> qui rend 99 € rentable. Le prix ne bouge pas : c'est le prix d'appel, sous Weddinvita (149 €) et The Digital Yes (175 €).
+> Signature et Couture restent faits par nous.
+
 ## 1. Principes de prix
 
 1. **Prix fixe par mariage, invités illimités.** C'est l'argument n°1 face au papier, et c'est la norme du marché.
@@ -18,7 +24,7 @@
 | Entrée de gamme | 149 € | **99 €** (libre-service, immédiat) | 175 € |
 | Milieu de gamme | — | **229 €** | 575 € |
 | Haut de gamme | sur devis | **dès 590 €** | 975 € |
-| Délai | 48 h | **immédiat à 5 jours** | 1 à 2 semaines (express +85 €) |
+| Délai | 48 h | **immédiat (Essentiel) à 5 jours** | 1 à 2 semaines (express +85 €) |
 | Lieu recréé | non | **oui, bibliothèque + sur-mesure** | oui (modèle « La Finca ») |
 | Scènes animées au doigt | non | **oui** | partiellement |
 
@@ -37,7 +43,7 @@
 | Musique | Bibliothèque ou **la vôtre** | Idem | Idem |
 | Save-the-date | +29 € | ✔ inclus | ✔ |
 | Vidéo 9:16 | — | ✔ | ✔ |
-| Livraison | Immédiate (libre-service) | 3 à 5 jours ouvrés | 2 à 3 semaines |
+| Livraison | **Dès le paiement (libre-service, publication automatique)** | 3 à 5 jours ouvrés | 2 à 3 semaines |
 | En ligne | 12 mois | 18 mois | 36 mois |
 
 ### Options
@@ -67,11 +73,11 @@ Avec des **modèles produits à l'avance**, une commande ne demande plus de cher
 | Poste | Essentiel | Signature | Couture |
 |---|---|---|---|
 | Frais Stripe (~1,5 % + 0,25 €) | 1,7 € | 3,7 € | 10 € |
-| Génération IA | 0 € | ~4 € (1 lieu) | ~25 € (4 à 6 lieux) |
+| Génération IA | 0 € | ~10 à 15 € (1 lieu, avec les essais ratés) | ~25 € (4 à 6 lieux) |
 | Hébergement, e-mails | ~0,5 € | ~0,5 € | ~0,5 € |
 | **Marge brute hors temps** | **~97 €** | **~221 €** | **~615 €** |
-| Temps de travail *(H)* | ~5 min (SAV) | **~40 min** | ~4 h |
-| **Marge par heure** | — | **~335 €/h** | ~155 €/h |
+| Temps de travail *(H)* | **0** (libre-service ; SAV seulement) | **~1 h 30 à 2 h** (peindre un lieu inconnu d'après photo, retouches) | ~4 h |
+| **Marge par heure** | — | **~110 à 145 €/h** | ~155 €/h |
 
 Répartition des ventes supposée : 50 % Essentiel · 38 % Signature · 12 % Couture (~650 € en moyenne), et ~22 € d'options en moyenne.
 → **Panier moyen ≈ 236 €**, coûts variables ≈ 8,50 € par commande, **temps moyen ≈ 47 min par commande**.

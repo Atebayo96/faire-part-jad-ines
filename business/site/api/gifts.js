@@ -3,11 +3,11 @@
 // GET  /api/gifts?invite=slug (Authorization: Bearer <clé>) : qui offre quoi, pour le tableau de bord des mariés.
 // POST /api/gifts {invite, item, name}               : réserve un cadeau ; 409 s'il est déjà pris.
 import { save, readAll, readOne, ready, dashKey, same, bearer, isAdmin, clean } from './_store.js';
-import INVITES from './_invites.js';
+import { getInvite } from './_fiche.js';
 
 export default async function handler(req, res) {
   const slug = String((req.method === 'POST' ? (req.body || {}).invite : req.query.invite) || '');
-  const inv = INVITES[slug];
+  const inv = await getInvite(slug);
   if (!inv || !(inv.gifts || []).length) return res.status(404).json({ error: 'invite' });
   if (req.method === 'POST') {
     const b = req.body || {};

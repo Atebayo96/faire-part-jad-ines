@@ -83,7 +83,7 @@
           <dl class="sum" id="cSum"></dl>
           <div class="fld"><span>Formule</span><div class="opts" id="cPlan"></div><p class="hint" id="cRecap"></p></div>
           <div class="fld"><span>Ensuite</span>
-            <ol class="next"><li><b>1</b><span>Vous commandez, paiement sécurisé par Stripe.</span></li><li><b>2</b><span>On vous écrit sous 24 h pour vos textes, adresses, horaires et photos. La musique se choisit à ce moment-là.</span></li><li><b>3</b><span>Vous validez l'aperçu : votre lien est prêt sous 48 h (Essentiel) ou 3 à 5 jours (Signature).</span></li></ol>
+            <ol class="next" id="cNext"><li><b>1</b><span>Vous commandez, paiement sécurisé par Stripe.</span></li><li><b>2</b><span>On vous écrit sous 24 h pour vos textes, adresses, horaires et photos. La musique se choisit à ce moment-là.</span></li><li><b>3</b><span>Vous validez l'aperçu : votre lien est prêt sous 48 h (Essentiel) ou 3 à 5 jours (Signature).</span></li></ol>
           </div>
           <div class="recap"><a class="btn solid" href="/contact/?plan=essentiel" id="cGo" data-plan="essentiel">Commander · Essentiel 99 €</a></div>
           <input type="hidden" name="occasion" id="fOcc"><input type="hidden" name="style" id="fStyle"><input type="hidden" name="format" id="fFormat"><input type="hidden" name="palette" id="fPal"><input type="hidden" name="font" id="fFont"><input type="hidden" name="opening" id="fOpen"><input type="hidden" name="countdown" id="fCount"><input type="hidden" name="reveal" id="fReveal"><input type="hidden" name="events" id="fEvents"><input type="hidden" name="screens" id="fScreens"><input type="hidden" id="fNames"><input type="hidden" id="fDate">
@@ -125,7 +125,7 @@
       <input type="email" id="oEmail" placeholder="E-mail (pour le reçu et la suite)" autocomplete="email" aria-label="E-mail">
       <input type="text" id="oDate" placeholder="Date du mariage" onfocus="this.type='date'" aria-label="Date du mariage">
       <label class="chk"><input type="checkbox" id="oCgv"><span>J'ai lu et j'accepte les <a href="/cgv/" target="_blank" rel="noopener">conditions de vente</a>.</span></label>
-      <label class="chk"><input type="checkbox" id="oWaiver"><span>Je demande que la création de mon faire-part commence dès mon paiement, et je reconnais perdre mon droit de rétractation dès ce commencement (article L221-28 du Code de la consommation).</span></label>
+      <label class="chk"><input type="checkbox" id="oWaiver"><span id="oWaiverT">Je demande que la création de mon faire-part commence dès mon paiement, et je reconnais perdre mon droit de rétractation dès ce commencement (article L221-28 du Code de la consommation).</span></label>
       <p class="err" id="oErr" hidden></p>
       <button class="btn solid" type="submit" id="oPay"></button>
       <p class="order-note" id="ordNote">Paiement sécurisé par Stripe. Vous recevez votre reçu par e-mail, puis nous vous écrivons pour recueillir vos lieux, horaires et textes.</p>

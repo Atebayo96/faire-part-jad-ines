@@ -8,10 +8,21 @@ header a{font:600 14px/1 -apple-system,"Helvetica Neue",sans-serif;letter-spacin
 main{max-width:640px;margin:0 auto;padding:48px 16px 70px}
 h1{font:500 clamp(32px,7vw,48px)/1.1 -apple-system,"Helvetica Neue",sans-serif;letter-spacing:-.03em;margin:0 0 14px}
 ol{padding-left:20px} li{margin:10px 0;color:#333} p{color:#333} a{color:#111}
-.btn{display:inline-flex;align-items:center;height:48px;padding:0 22px;background:#0d0d0d;color:#fff;text-decoration:none;margin-top:18px}
+.btn{display:inline-flex;align-items:center;height:48px;padding:0 22px;background:#0d0d0d;color:#fff;text-decoration:none;margin-top:18px;border-radius:999px}
+/* Essentiel en libre-service : les liens du faire-part publié, dès le retour de Stripe */
+.box{border:1px solid #e6e6e6;border-radius:16px;padding:18px 18px 20px;margin:18px 0}
+.box h2{font:600 17px/1.3 -apple-system,"Helvetica Neue",sans-serif;margin:0 0 6px}
+.box p{margin:0 0 12px;font-size:15px}
+.url{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.url input{flex:1 1 220px;min-width:0;height:44px;padding:0 12px;border:1px solid #cfcfcf;border-radius:10px;font:15px/1 Inter,-apple-system,Arial,sans-serif;color:#111;background:#fafafa}
+.url .btn{margin:0;height:44px;border-radius:999px;border:0;font:500 15px/1 Inter,-apple-system,Arial,sans-serif;cursor:pointer}
+.url .btn.lt{background:#fff;color:#111;border:1px solid #111}
+.wait{color:#555}
 </style></head><body>
 <header><div><a href="/" class="logo"><span>Save the</span><b>Oui</b></a></div></header>
 <main>
+<div id="auto" hidden></div>
+<div id="manual">
 <h1>Merci, c'est parti.</h1>
 <p>Votre paiement est bien reçu. Stripe vous envoie votre reçu par e-mail.</p>
 <ol>
@@ -21,4 +32,28 @@ ol{padding-left:20px} li{margin:10px 0;color:#333} p{color:#333} a{color:#111}
 </ol>
 <p>Une question ? Répondez simplement à notre e-mail.</p>
 <a class="btn" href="/">Retour au site</a>
-</main></body></html>
+</div>
+</main>
+<script>
+/* retour de Stripe pour un Essentiel en libre-service (/merci/?ref=…&k=…) : la commande se publie (api/commande.js) et les
+   liens s'affichent ici. Le webhook Stripe publie aussi de son côté : si la page est fermée, le faire-part est en ligne quand même. */
+(function(){
+  const q=new URLSearchParams(location.search), ref=q.get('ref'), k=q.get('k'); if(!ref||!k) return;
+  const box=document.getElementById('auto'), esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  document.getElementById('manual').hidden=true; box.hidden=false;
+  box.innerHTML='<h1>Merci !</h1><p class="wait">Votre paiement est bien reçu. Nous mettons votre faire-part en ligne…</p>';
+  const row=(id,title,text,url,open)=>`<div class="box"><h2>${title}</h2><p>${text}</p><div class="url"><input id="${id}" readonly value="${esc(url)}" aria-label="${esc(title)}"><button type="button" class="btn lt" data-copy="${id}">Copier</button><a class="btn" href="${esc(url)}" target="_blank" rel="noopener">${open}</a></div></div>`;
+  let n=0;
+  (async function poll(){
+    let j=null; try{ const r=await fetch('/api/commande?ref='+encodeURIComponent(ref)+'&k='+encodeURIComponent(k)+(q.get('fake')?'&fake=1':'')); j=await r.json(); }catch(e){}
+    if(!j||j.status!=='paid'){ if(++n<30) return setTimeout(poll,2000);
+      box.innerHTML='<h1>Merci !</h1><p>Votre paiement est bien reçu. La mise en ligne prend un peu plus de temps que prévu : vous recevrez vos liens par e-mail, et nous vérifions de notre côté. Une question ? <a href="/contact/">Écrivez-nous</a>.</p>'; return; }
+    box.innerHTML=`<h1>C'est en ligne !</h1><p>Le faire-part de ${esc(j.couple)} est prêt à partir. ${j.mailed?`Vous recevez aussi ces liens par e-mail (${esc(j.email)}).`:'Gardez ces liens : ajoutez cette page à vos favoris.'}</p>`+
+      row('lk','Le lien à envoyer à vos invités','Sur WhatsApp, par SMS ou par e-mail. Il s’ouvre sur tous les téléphones.',j.link,'Voir')+
+      row('db','Votre tableau de bord','Les réponses de vos invités, en temps réel. Gardez ce lien pour vous.',j.dashboard,'Ouvrir')+
+      row('ed','Modifier votre faire-part','Un horaire ou un texte change ? Le lien de vos invités reste le même.',j.edit,'Modifier')+
+      `<a class="btn" href="https://wa.me/?text=${encodeURIComponent('Notre faire-part : '+j.link)}" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>`;
+    box.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{ const i=document.getElementById(b.dataset.copy); i.select(); (navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(()=>document.execCommand('copy')); b.textContent='Copié'; setTimeout(()=>b.textContent='Copier',1600); });
+  })();
+})();
+</script></body></html>

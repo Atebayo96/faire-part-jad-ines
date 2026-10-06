@@ -2,12 +2,12 @@
 // ouverture et leur nombre, rien d'autre (pas d'adresse IP, pas d'appareil) : le tableau de bord des mariés distingue
 // « pas ouvert », « ouvert sans réponse » et « répondu », pour ne relancer que ceux qu'il faut.
 import { save, readOne, ready, clean } from './_store.js';
-import INVITES from './_invites.js';
+import { getInvite } from './_fiche.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
   const b = req.body || {};
-  const inv = INVITES[b.invite];
+  const inv = await getInvite(b.invite);
   if (!inv) return res.status(404).json({ error: 'invite' });
   const f = clean(b.f, 60);
   if (!f || !inv.families[f] || inv.demo) return res.status(200).json({ ok: true });

@@ -4,14 +4,14 @@
 // GET /api/rsvp?invite=slug&r=<rid>.<rkey> : la réponse de cet invité, pour la pré-remplir sur un autre téléphone.
 // GET /api/rsvp?invite=slug (en-tête Authorization: Bearer <clé>) : réponses et ouvertures des liens par famille, pour le tableau de bord.
 import { save, readAll, readOne, ready, dashKey, same, bearer, isAdmin, clean, id, newKey, keyHash } from './_store.js';
-import INVITES from './_invites.js';
+import { getInvite } from './_fiche.js';
 
 const owner = (req, slug) => isAdmin(req) || same(bearer(req), dashKey(slug));
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const b = req.body || {};
-    const inv = INVITES[b.invite];
+    const inv = await getInvite(b.invite);
     if (!inv) return res.status(404).json({ error: 'invite' });
     if (b.website) return res.status(200).json({ ok: true });
     if (inv.demo) return res.status(200).json({ ok: true, demo: true });
@@ -42,7 +42,7 @@ export default async function handler(req, res) {
   }
   if (req.method === 'GET') {
     const slug = String(req.query.invite || '');
-    const inv = INVITES[slug];
+    const inv = await getInvite(slug);
     if (!inv) return res.status(404).json({ error: 'invite' });
     if (req.query.r) {
       const [rid, rkey] = String(req.query.r).split('.');
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     const last = new Map(); for (const r of rows) last.set(r.name.toLowerCase().replace(/\s+/g, ' '), r);
     // ouvertures des liens par famille (api/seen.js) : { famille: { first, last, n } }
     const seen = {}; for (const s of await readAll(`seen/${slug}/`)) { const f = s.pathname.slice(`seen/${slug}/`.length, -5); seen[f] = { first: s.first, last: s.last, n: s.n }; }
-    return res.status(200).json({ invite: { slug, couple: inv.couple, events: inv.eventList, families: inv.familyLabels, menu: inv.rsvpMenu || [], question: inv.rsvpQuestion || '' },
+    return res.status(200).json({ invite: { slug, couple: inv.couple, online: !!inv.online, events: inv.eventList, families: inv.familyLabels, menu: inv.rsvpMenu || [], question: inv.rsvpQuestion || '' },
       responses: [...last.values()].map(({ k, pathname, ...r }) => Object.assign({ rid: pathname.slice(`rsvp/${slug}/`.length, -5) }, r)), seen });
   }
   res.status(405).json({ error: 'method' });

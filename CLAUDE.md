@@ -584,6 +584,19 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     étiquette « Signature » sur ce qui n'est pas dans Essentiel. « Dans toutes les formules » ne liste que ce qui est
     vraiment dans Essentiel (pas le lien par famille, ni l'anglais en plus, ni le save-the-date).
 
+45. **L'Essentiel est en libre-service** (6 octobre 2026 : « on corrige l'Essentiel, ce sera du libre-service », 99 €
+    gardé comme prix d'appel). Le couple compose dans le configurateur, paie, et le faire-part est **publié tout seul** :
+    `realInvite()` (vitrine.js) fait la fiche du vrai moteur à partir des choix, `api/commande.js` la nettoie (`_fiche.js` :
+    seuls les champs connus, 2 événements, lieux existants du thème, liens en https) et ouvre Stripe Checkout ; au retour
+    (page Merci) ou par le webhook (`api/stripe.js`), `_publish.js` la range dans `fiches/<slug>.json`, `/d/<slug>/` la sert
+    (`api/page.js`, réécriture dans vercel.json quand aucun fichier du build ne correspond), et les mariés reçoivent le lien,
+    le tableau de bord et « Modifier mon faire-part » (`/creer/?edit=<slug>#k=<clé>`, `api/fiche.js`). Les réponses,
+    cadeaux et ouvertures passent par `getInvite()` (dépôt ou stockage). À brancher sur Vercel : `STRIPE_SECRET_KEY`,
+    `STRIPE_WEBHOOK_SECRET` (événement `checkout.session.completed` vers `/api/stripe`), et pour l'e-mail `RESEND_API_KEY`
+    (+ `SCEAU_MAIL_FROM`). Sans clé Stripe, l'Essentiel reprend l'ancien chemin. Test local : `SCEAU_LOCAL=1
+    SCEAU_STRIPE_FAKE=1` (paiement simulé). Signature et Couture restent faits par nous (liens de paiement, `paiement.js`).
+    Tout ce qui promet un délai dit « en ligne dès le paiement » pour l'Essentiel (formules, accueil, questions, CGV, « Ensuite »).
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
