@@ -36,6 +36,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Verre sombre à 50 % sur les scènes (à 30 %, un couchant clair tombait à 3,5:1), verre blanc sur les thèmes papier ;
     dans le grand tableau, le verre se choisit par section d'après l'encre (`--gl`, invite.js). Contraste du mot mesuré
     sur le fond réel du bouton, pire pixel compris, 4,5:1 minimum.
+    Même chose sur la vitrine : le lien « Voir l'exemple » des cartes de `/modeles/` (`.model .fmts a`) était un encadré
+    gris en demi-largeur où le texte passait sur trois lignes (« pas ouf ») ; c'est une pastille blanche pleine largeur,
+    médaillon noir ▶, le mot puis les prénoms, sans coupure à 390 px.
 
 ## Images : chaque image réserve la place du texte avant d'être belle
 
