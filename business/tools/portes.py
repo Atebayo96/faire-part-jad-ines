@@ -15,7 +15,7 @@ D={'chinois':"a pair of red lacquered Chinese doors with gold studs and round br
    'alhambra':"a pair of tall Andalusian cedar doors with carved geometric star patterns, set in an ivory stucco horseshoe arch, bronze handles",
    'desert':"a pair of caidal tent flaps in heavy ochre and indigo embroidered cloth with geometric Berber motifs and gold tassels, closed in the middle",
    'emeraude':"a pair of monumental palace doors in deep emerald lacquer with chiselled gold geometric star inlays and heavy gold ring knockers",
-   'doucefrance':"a pair of weathered pale blue wooden doors of a Provençal bastide with wrought-iron hinges, set in honey-coloured stone, lavender and climbing white roses around"}
+   'doucefrance':"a pair of tall weathered pale blue wooden double doors of a Provençal bastide with wrought-iron hinges and a round iron knocker, seen very close so that the two doors alone fill the whole frame: no stone wall, no roses, no lavender, no frame around them"}  # 6 oct. 2026 : la première version montrait le mur, les roses et la lavande autour (« on a dit des portes normales »)
 R={'chinois':"a heavy red silk curtain with gold embroidery and tassels, double-happiness motif at the top",
    'japonais':"a pale pink noren-like curtain of soft linen with a cherry-branch print, in the manner of a woodblock print",
    'gzhel':"a white curtain painted with cobalt blue Gzhel roses, blue tassels",
@@ -42,6 +42,8 @@ def one(k,kind):
     im=Image.open(png).convert('RGB'); w,h=im.size; tw=round(h*900/1591)
     if tw<w: im=im.crop(((w-tw)//2,0,(w-tw)//2+tw,h))
     im.resize((900,1591),Image.LANCZOS).save(out,'WEBP',quality=82,method=6); return f'{k}-{kind} : ok'
+KINDS=('portes','rideau')
+if '--portes' in sys.argv: sys.argv.remove('--portes'); KINDS=('portes',)
 themes=sys.argv[1:] or list(D)
 with cf.ThreadPoolExecutor(4) as ex:
-    for res in ex.map(lambda j: one(*j), [(k,kind) for k in themes for kind in ('portes','rideau')]): print(res,flush=True)
+    for res in ex.map(lambda j: one(*j), [(k,kind) for k in themes for kind in KINDS]): print(res,flush=True)

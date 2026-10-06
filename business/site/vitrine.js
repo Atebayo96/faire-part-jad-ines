@@ -557,7 +557,7 @@
        (t.jour), après 18 h celui du soir ; l'accueil suit le premier événement, les dernières pages le dernier */
     const J=t.jour&&THEMES[t.jour], isJ=k=>String(k).startsWith('j:'), jk=k=>String(k).slice(2), hr=e=>parseInt(e&&e.time||'15',10);
     const dayKey=(k,day)=>day&&J&&(typeof k==='number'||k==='fond'||(J.lieux||[]).includes(k)||Object.values(J.pageImg||{}).includes(k))?'j:'+k:k;
-    const K1=dayKey(1,hr(C.ev[0])<18), K4=dayKey(4,hr(C.ev[C.ev.length-1])<18);
+    const K1=dayKey(t.home||1,hr(C.ev[0])<18), K4=dayKey(4,hr(C.ev[C.ev.length-1])<18);
     // une scène propre à chaque écran d'après les événements (t.pageImg), chacune une seule fois, comme le moteur (pk dans invite.js)
     const PI=t.pageImg||{}, usedPI=new Set(), lastDay=hr(C.ev[C.ev.length-1])<18;
     const pk=(name,fb,fbMode)=>{ const k=PI[name]; if(!k||usedPI.has(k)||!C.x.has(name)) return [fb,fbMode]; usedPI.add(k); const kd=dayKey(k,lastDay); return [kd,!isJ(kd)&&(t.darkLieux||[]).includes(k)?'dark':'']; };

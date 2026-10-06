@@ -96,7 +96,7 @@
   const isJ=n=>String(n).startsWith('j:'), jk=n=>String(n).slice(2);
   const hourOf=e=>{ const m=/T(\d{1,2})/.exec(e&&e.start||''); return m?+m[1]:12; };
   const dayKey=(k,day)=>day&&J&&(/^\d+$/.test(String(k))||k==='fond'||(J.lieux||[]).includes(k)||Object.values(J.pageImg||{}).includes(k))?'j:'+k:k;
-  const IMGV=20, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  const IMGV=21, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
   // calques : pour les scènes qui en ont (build-site.py liste img/calques/<thème>-<n>.webp), le décor est le fond calme du
   // thème et le sujet détouré est posé ENTIER en bas de l'écran (plus de rognage selon le téléphone), avec un peu de profondeur
   const CAL=new Set(I.calques||[]), hasCal=n=>CAL.has(String(n)), fond=`/img/hd/${I.theme}-ciel.webp?v=${IMGV}`, cal=n=>`/img/calques/${I.theme}-${n}.webp?v=${IMGV}`;
@@ -152,7 +152,7 @@
   // jour ou soir pour l'accueil (premier événement) et les dernières pages (dernier événement)
   // la date dans la couleur du couple, sauf si elle est trop claire pour un fond clair (de l'or sur un ciel pâle) : l'encre du thème
   const palLum=(h=>{ const n=parseInt((h||'#000').slice(1,7),16), f=v=>{ v/=255; return v<=.03928?v/12.92:((v+.055)/1.055)**2.4; }; return .2126*f(n>>16&255)+.7152*f(n>>8&255)+.0722*f(n&255); })(pal);
-  const K1=dayKey(1,events.length&&hourOf(events[0])<SOIR), K4=dayKey(4,events.length&&hourOf(events[events.length-1])<SOIR);
+  const K1=dayKey(T.home||1,events.length&&hourOf(events[0])<SOIR), K4=dayKey(4,events.length&&hourOf(events[events.length-1])<SOIR);
   // 1. accueil
   page(K1,(c,lt)=>{
     const names=T.stack&&!solo?`${esc(n1)}<br>&amp; ${esc(n2)}`:namesH();

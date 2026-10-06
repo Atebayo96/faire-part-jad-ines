@@ -432,6 +432,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     (terrasse de la bastide, plus de lavande), `-eglise` et `-salle` (invités) ; ciel de la fête et des verres assombri de 8 %
     dans la peinture (contraste 4,41 / 4,48 → 5,02 / 5,11). **Reste à revoir avec le même regard** : les scènes 1 et 3 de
     Douce France et ses écrans `prog`, `dress`, `info` (lavande jusqu'aux tables), sa mairie, et les lieux vides des autres thèmes.
+    **Le premier écran est un gros plan symbolique** (6 octobre 2026 : « la première image, pour les 3, ça doit vraiment être
+    un truc très bien en zoom pour direct comprendre que c'est un mariage, comme on avait fait les mains ») : `T.home='mains'`
+    pour Dolce Vita, Douce France et Old money (`K1` dans invite.js et vitrine.js) ; le mot des familles garde ce décor, la
+    réponse a les verres. L'accueil de Douce France « n'était pas vraiment le thème ». Les cartes de la galerie gardent la
+    scène 1. Dolce Vita n'a que des mains du soir : un mariage de jour s'ouvre aussi sur elles. La roue de la date
+    descend jusqu'au haut du bouquet sur un téléphone 390 × 844 (Giulia & Hugo) : à surveiller.
+    **Porte de Douce France repeinte en porte pleine** (« on a dit des portes normales, là t'as généré des portes avec des
+    murs ») : `portes.py doucefrance --portes`, 1 génération ; la consigne dit maintenant « les deux portes seules remplissent
+    le cadre, pas de mur, pas de roses, pas de lavande ».
 32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
     « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money
     (`compose:true`). Un thème peut avoir plusieurs **ambiances** (`group` / `amb` / `ambSub` dans themes.js) : Dolce Vita
