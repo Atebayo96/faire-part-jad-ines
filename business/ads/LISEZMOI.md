@@ -7,7 +7,7 @@ Il faut le site servi en local : `python3 -m http.server 8765 -d business/site`.
 |---|---|---|
 | `ouverture/` | `save-the-oui-15s.mp4` (9:16) | La vraie ouverture d'enveloppe du site, puis les moments de Dolce Vita, la réponse et le tableau de bord, puis le logo. |
 | `carrousel/` | `save-the-oui-carrousel-9x16.mp4`, `-4x5.mp4` | Tous nos univers sur un arc 3D qui défile par swipes (scène 1 de chaque thème, prénoms et date dans la police du thème). La version principale. |
-| `carrousel/` | `save-the-oui-carrousel-ouvertures-9x16.mp4`, `-4x5.mp4` | Variante : chaque carte s'ouvre en arrivant au centre (enveloppe, portes, rideau, images de `img/open`). Pas obligatoire, à tester. |
+| `carrousel/` | `save-the-oui-carrousel-ouvertures-9x16.mp4`, `-4x5.mp4` | Variante : chaque carte s'ouvre en arrivant au centre (enveloppe, portes, rideau, images de `img/open`). Gardée pour plus tard : les portes ont plu (6 octobre 2026). |
 
 Rendus :
 - ouverture : `node business/ads/ouverture/real.js 156` (filme le vrai moteur), puis `node business/ads/ouverture/render.js full business/landing/music/valse.mp3 1.3`

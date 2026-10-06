@@ -625,6 +625,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     filme **le vrai moteur** (`ads/ouverture/real.js`, horloge et animations pilotées). Jamais d'image prolongée ou détourée
     dans une pub (`dolcevita-eglise` refusée) : les peintures d'origine (`<thème>-1..4`, `mains`, `fete`, `verres`).
     Le carrousel 3D incurvé de tous les univers (`ads/carrousel/`) a plu : c'est le modèle des présentations de nos créations.
+    Version principale : les faire-part qui défilent, sans ouverture. La variante où chaque carte s'ouvre au centre
+    (`OUVERTURES=1`) est gardée pour plus tard : les portes ont plu, l'enveloppe moins.
 
 ## Méthode
 
