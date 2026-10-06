@@ -57,8 +57,12 @@ JOBS = {
         "with rosé, baskets of lavender and fougasse, guests standing and chatting seen from behind, the lavender fields beyond"),
     'doucefrance-sortie': (F, DAY, PEOPLE + " Leaving the village church: the bride and groom seen from behind walking out "
         "of the stone church under the bell tower, guests on each side throwing lavender in the air"),
-    'doucefrance-mains': (F, FOCUS_D, HANDS + " The joined hands of the bride and groom with their wedding rings, resting on "
-        "a bouquet of lavender and olive branches on raw linen, in the lower part of the image"),
+    # première version : un buste flou et coupé au-dessus des mains (« pourquoi t'as coupé ? autant en faire une plus
+    # symbolique ») ; seulement les mains, vues de près, sur une table de pierre
+    'doucefrance-mains': (F, FOCUS_D, HANDS + " A close-up still life: only the two joined hands of the bride and groom with "
+        "their wedding rings (her lace cuff, his linen cuff, nothing above the wrists), resting on a bouquet of lavender and "
+        "olive branches laid on raw linen on an old stone table, in the lower part of the image. No torso, no dress, no "
+        "body, no person in the background: behind the table only the softly blurred lavender fields and the pale sky"),
     'doucefrance-verres': (FN, FOCUS_N, HANDS + " Two hands raising two glasses of rosé that touch in a toast, in the lower "
         "part of the image, a blurred lavender field and the warm lights of the bastide at dusk behind"),
     # Old money : jour en texte foncé, soir en texte blanc

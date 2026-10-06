@@ -418,7 +418,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Dolce Vita les a en version du soir seulement (texte blanc) : la phrase « Avant 18 h : plein jour » ne s'affiche que
     pour un décor qui existe dans les deux versions. Douce France et Old money : `fete` et `verres` en texte blanc
     (`darkLieux`), les autres en texte foncé. **À revoir** : `oldmoney-sortie` (les arbres montent dans la zone du texte,
-    `check_images.py` échoue) et `doucefrance-mains` (un buste flou étrange dans le fond) ; l'utilisateur fera le tri.
+    `check_images.py` échoue) ; l'utilisateur fera le tri. `doucefrance-mains` repeinte (1 génération) : la première montrait
+    un buste coupé et flou au-dessus des mains (« pourquoi t'as coupé ? autant en faire une plus symbolique ») ; désormais
+    seulement les mains et les alliances sur la lavande, fond d'oliviers flou éclairci de 18 % dans la peinture (contraste
+    3,99 → 4,89, sans génération).
 32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
     « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money
     (`compose:true`). Un thème peut avoir plusieurs **ambiances** (`group` / `amb` / `ambSub` dans themes.js) : Dolce Vita
