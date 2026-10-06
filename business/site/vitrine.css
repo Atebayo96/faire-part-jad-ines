@@ -307,6 +307,9 @@
   /* même bouton que le faire-part (invite.css .b) : pastille en verre, médaillon à la couleur du couple, garamond 17 px */
   .pv-sc .bt{margin-top:24px;display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:5px 20px 5px 6px;border:1px solid rgba(255,255,255,.3);border-radius:999px;font:500 17px/1.1 "Cormorant Garamond",Georgia,serif;letter-spacing:.01em;white-space:nowrap;background:rgba(18,15,12,.5);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);box-shadow:0 1px 2px rgba(0,0,0,.12),0 8px 22px -8px rgba(0,0,0,.45);text-shadow:0 1px 6px rgba(0,0,0,.35)}
   .pv-sc .bt svg{width:32px;height:32px;flex:none;padding:8px;border-radius:50%;color:#fff;background:var(--pal,#b8975a);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 2px 6px rgba(0,0,0,.18)}
+  /* les deux actions d'un événement, comme dans le faire-part (.acts) : côte à côte, même largeur, 200 px au plus */
+  .pv-acts{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%;max-width:340px}
+  .pv-acts .bt{margin-top:0;flex:1 1 0;min-width:max-content;max-width:200px;justify-content:center}
   .pv-sc.light .bt{background:rgba(255,255,255,.72);border-color:rgba(127,127,127,.3);border-color:color-mix(in srgb,var(--pal,#b8975a) 35%,transparent);box-shadow:0 1px 2px rgba(60,40,10,.08),0 10px 24px -10px rgba(60,40,10,.3)}
   .pv-hint{position:absolute;bottom:18px;left:0;right:0;text-align:center;font:500 11.5px Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6)}
   @media (max-width:760px){ .pv{flex-direction:column;gap:12px} .pv-side{text-align:center;max-width:none} .pv-side p{display:none} .pv-side h3{font-size:24px;margin:0 0 8px} .pv-tabs{justify-content:center} .pv-phone{height:min(72vh,680px)} }

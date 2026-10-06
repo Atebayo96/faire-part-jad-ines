@@ -490,6 +490,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     le sceau, la date à gratter, la roue, le jackpot et le médaillon des boutons : tout restait doré (« couleur standard »).
 40. **Boutons à leur taille.** Un bouton seul garde sa largeur naturelle (`.acts .b:only-child`) ; deux boutons sont côte à
     côte et de même largeur, plafonnés à 200 px, et passent l'un sous l'autre sans s'étirer sur un écran étroit.
+    L'aperçu du configurateur montre **les deux actions d'un événement**, Itinéraire et Calendrier (`.pv-acts`, mêmes
+    règles que `.acts`) : il n'affichait qu'Itinéraire alors que le faire-part a toujours les deux (« comme ça on le perd pas »).
     La basmala tient dans l'écran : `clamp(17px, 5.2vw, 24px)`, 16 px dans le téléphone de l'aperçu (elle était coupée).
 41. **Chaque partie se règle quand on la coche** (grand tableau : sous la partie ; scène par scène : sous « Écrans en
     plus ») : familles et leur phrase, moments de l'histoire, dress code et ses couleurs, infos du bon à savoir avec leur
