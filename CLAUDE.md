@@ -303,6 +303,20 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     (`vignette-papier.py`). Les captures qui sautent d'une page à l'autre peuvent montrer une page vide (Chromium ne
     repeint pas le cadre collant) : vérifier en défilant à la molette.
 
+32e. **Chaque scène est une peinture plein écran au format d'un téléphone** (6 octobre 2026, décision de l'utilisateur
+    pour tous les thèmes : « l'image générée doit être de la taille de l'écran et permettre la continuité » ; « qu'elle prenne
+    tout l'espace, suffisante pour le texte, et qu'elle ne se finisse pas avant les bords »). Format **9:21 (1080 × 2520)**,
+    d'un seul tenant, d'un bord à l'autre : en haut un ciel, un mur ou un papier calme peint dans l'image, assez grand pour
+    tout le texte ; en bas le sujet, qui touche les bords et le bas. Affichage `cover` calé en bas (un téléphone moins haut
+    ne perd qu'un peu de ciel). **Interdit** : remplir le haut d'une couleur ou d'une bande étirée, prolonger les bords en
+    reflet, fondre les bords d'un sujet détouré sur du papier (ce sont les rustines du 5–6 octobre : `skyOf()`, `--sky`,
+    `::before`, reflets d'`ambiance-jour.py`, masque latéral de `.sub`, à retirer dès que les images existent).
+    Gemini ne génère pas plus haut que 9:16 : on peint en 9:16 puis on **prolonge la peinture vers le haut** (deuxième
+    passage « extend this painting upward, same style, calm sky »), contrôlé par `check_images.py` et regardé en grand.
+    À faire quand le plafond Gemini est relevé (budget estimé 40 à 45 $) : prolonger les images de Dolce Vita (soir et
+    jour), peindre ses lieux de jour et de fin d'après-midi, **repeindre Old money en peintures plein cadre** (ses scènes
+    sont des vignettes sur papier), puis le nouveau thème directement dans ce format.
+
 32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
     « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money
     (`compose:true`). Un thème peut avoir plusieurs **ambiances** (`group` / `amb` / `ambSub` dans themes.js) : Dolce Vita
