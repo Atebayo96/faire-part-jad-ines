@@ -14,7 +14,10 @@
   .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
   header{border-bottom:1px solid var(--line)}
   header .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
-  .logo{font:600 14px/1 "Inter Tight",sans-serif;letter-spacing:.32em;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;min-height:40px}
+  /* même logo que la vitrine (vitrine.css) : « SAVE THE » en capitales espacées + « Oui » en Great Vibes */
+  .logo{display:inline-flex;align-items:baseline;gap:7px;text-decoration:none;color:var(--ink);white-space:nowrap;min-height:40px;padding-top:12px}
+  .logo span{font:500 12px/1 "Inter Tight",Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase}
+  .logo b{font:400 27px/1 "Great Vibes",cursive;letter-spacing:0;position:relative;top:1px}
   h1{font:500 clamp(30px,5vw,46px)/1.05 "Inter Tight",sans-serif;letter-spacing:-.03em;margin:34px 0 6px}
   .sub{color:var(--muted);margin:0 0 26px}
   .tag{display:inline-block;font:600 11px/1 Inter;letter-spacing:.16em;text-transform:uppercase;background:#f3e9d3;color:#7a5a14;padding:7px 10px;border-radius:20px;margin-left:8px;vertical-align:middle}
@@ -65,6 +68,10 @@
     .fam td{padding:3px 0;border:0}
   }
   .msg{padding:40px 0;color:var(--muted)}
+  .msg b{display:block;color:var(--ink);font:500 22px/1.25 "Inter Tight",sans-serif;letter-spacing:-.02em;margin-bottom:8px}
+  .msg .btn{margin-top:16px}
+  .empty{border:1px solid var(--line);border-radius:6px;padding:16px;background:var(--bg-2);margin:0 0 26px}
+  .empty b{display:block;font:500 16px "Inter Tight",sans-serif;margin-bottom:4px}
   footer{margin:60px 0 30px;color:var(--muted);font-size:13px}
   /* ajouter ou corriger une réponse à la main : l'oncle qui a répondu par téléphone, la famille qui a répondu sur WhatsApp */
   .man{border:1px solid var(--line);border-radius:6px;padding:16px;margin-top:12px;background:var(--bg-2)}
@@ -93,22 +100,30 @@
   const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const h=new URLSearchParams(location.hash.slice(1)), q=new URLSearchParams(location.search);
   const demo=q.get('demo'), slug=demo||h.get('i'), key=h.get('k');
-  let data;
+  // un message par cause : « vérifiez votre connexion » s'affichait aussi pour un faire-part introuvable ou une panne du serveur
+  const say=(t,p,retry)=>{ main.innerHTML=`<div class="msg"><b>${t}</b>${p}${retry?'<br><button class="btn" onclick="location.reload()">Réessayer</button>':''}</div>`; };
+  let data, st=0;
   try{
-    if(demo){ const r=await fetch('/tableau/demo/'+encodeURIComponent(demo)+'.json'); if(!r.ok) throw 0; data=await r.json(); }
+    if(demo){ const r=await fetch('/tableau/demo/'+encodeURIComponent(demo)+'.json'); st=r.status; if(!r.ok) throw 0; data=await r.json(); }
     else{
-      if(!slug||!key){ main.innerHTML='<p class="msg">Ce lien est incomplet. Utilisez le lien personnel reçu avec votre faire-part.</p>'; return; }
-      const r=await fetch('/api/rsvp?invite='+encodeURIComponent(slug),{headers:{Authorization:'Bearer '+key}});
-      if(r.status===401){ main.innerHTML='<p class="msg">Ce lien n’est pas valide.</p>'; return; }
-      if(r.status===503){ main.innerHTML='<p class="msg">Le stockage des réponses n’est pas encore activé. Revenez dans quelques minutes.</p>'; return; }
+      if(!slug||!key){ say('Ce lien est incomplet','Utilisez le lien personnel reçu avec votre faire-part.'); return; }
+      const r=await fetch('/api/rsvp?invite='+encodeURIComponent(slug),{headers:{Authorization:'Bearer '+key}}); st=r.status;
+      if(r.status===401){ say('Ce lien n’est pas valide','Utilisez le lien personnel reçu avec votre faire-part, sans le modifier.'); return; }
+      if(r.status===404){ say('Faire-part introuvable','Nous ne trouvons pas de faire-part à cette adresse. Utilisez le lien reçu après votre commande, ou écrivez-nous.'); return; }
+      if(r.status===503){ say('Pas encore prêt','Le stockage des réponses n’est pas encore activé. Revenez dans quelques minutes.',1); return; }
       if(!r.ok) throw 0; data=await r.json();
       // liste de mariage chez nous : qui offre quoi (api/gifts.js) ; rien si le faire-part n'a pas de liste
       try{ const g=await fetch('/api/gifts?invite='+encodeURIComponent(slug),{headers:{Authorization:'Bearer '+key}}); if(g.ok) data.gifts=(await g.json()).gifts; }catch(e){}
     }
-  }catch(e){ main.innerHTML='<p class="msg">Impossible de charger les réponses. Vérifiez votre connexion.</p>'; return; }
+  }catch(e){
+    if(demo&&st===404) say('Exemple introuvable','Cet exemple de tableau de bord n’existe pas.');
+    else if(st) say('Un souci de notre côté','Les réponses n’ont pas pu être chargées. Réessayez dans un instant ; si cela continue, écrivez-nous.',1);
+    else say('Pas de connexion','Les réponses n’ont pas pu être chargées. Vérifiez votre connexion internet.',1);
+    return;
+  }
 
-  const inv=data.invite, evs=inv.events, fams=inv.families||{}, seen=data.seen||{}, menus=inv.menu||[], question=inv.question||'';
-  let R=data.responses;
+  const inv=data.invite, evs=inv.events||[], fams=inv.families||{}, seen=data.seen||{}, menus=inv.menu||[], question=inv.question||'';
+  let R=data.responses||[];
   document.title='Réponses · '+inv.couple;
   document.getElementById('who').textContent=inv.couple;
   const attending=r=>Object.values(r.events).some(Boolean);
@@ -151,6 +166,7 @@
     <h1>${esc(inv.couple)}${data.demo?'<span class="tag">Exemple</span>':''}</h1>
     <p class="sub">${data.demo?'Voici le tableau de bord que reçoivent les mariés. Les réponses ci-dessous sont fictives.':'Les réponses de vos invités, en temps réel.'}</p>
     ${inv.online?`<div class="share"><p class="lnk">Le lien de votre faire-part : ${esc(base)} <button class="btn sm" data-copy="${esc(base)}">Copier</button> <a class="btn sm" href="${esc(base)}" target="_blank" rel="noopener">Voir</a> <a class="btn sm" href="/creer/?edit=${encodeURIComponent(inv.slug)}#k=${encodeURIComponent(key)}">Modifier mon faire-part</a></p></div>`:''}
+    ${R.length?'':`<div class="empty"><b>Pas encore de réponse</b>C’est normal au début : envoyez votre lien à vos invités, leurs réponses arriveront ici dès qu’ils toucheront « Répondre ».</div>`}
     <div class="stats" id="stats"></div>
     <h2>Par événement</h2>
     <div class="evs" id="perEv"></div>
