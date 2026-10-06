@@ -569,7 +569,7 @@
   /* voile : un grand rideau OPAQUE (le tissu du thème, coupé en deux pans) qui s'ouvre par le milieu, les pans se tassent
      chacun vers son bord, en plis (mêmes règles que invite.css) */
   .op-voile{overflow:hidden}
-  .op-sheer{position:absolute;top:0;bottom:0;width:55%;background:var(--cur,url("/img/open/rideau.webp")) no-repeat;background-size:185% 100%;
+  .op-sheer{position:absolute;top:0;bottom:0;width:60%;background:var(--cur,url("/img/open/rideau.webp")) no-repeat;background-size:166.7% 100%;
     will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
   .op-sheer.l{left:0;background-position:0 0;transform-origin:0 50%;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H91C96 8 87 17 92 27S97 44 89 55S98 72 91 83S99 94 100 100H0Z'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H91C96 8 87 17 92 27S97 44 89 55S98 72 91 83S99 94 100 100H0Z'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat}
   .op-sheer.r{right:0;background-position:100% 0;transform-origin:100% 50%;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M100 0H9C4 9 13 19 8 30S3 46 11 57S2 71 9 82S1 94 0 100H100Z'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M100 0H9C4 9 13 19 8 30S3 46 11 57S2 71 9 82S1 94 0 100H100Z'/%3E%3C/svg%3E") 0 0/100% 100% no-repeat}

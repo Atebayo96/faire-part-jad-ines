@@ -127,8 +127,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     s'écartent sans ondulation `skewY`, le monogramme s'efface sans bouger.
     **Un tissu n'a pas de bord droit** (« l'image coupe net, c'est une ligne droite alors qu'un voile c'est du tissu ») :
     le bas du rideau est festonné (masque SVG sur `.op-cur::before`, rideau 7 % plus long que l'écran pour que les festons
-    soient cachés à l'arrêt, ombre en `drop-shadow` qui suit le feston) ; chaque pan du voile dépasse le milieu (55 %) et
-    son bord intérieur ondule (masques SVG de `.op-sheer.l/.r`). Sans nouvelle image.
+    soient cachés à l'arrêt, ombre en `drop-shadow` qui suit le feston) ; chaque pan du voile dépasse le milieu et
+    son bord intérieur ondule (masques SVG de `.op-sheer.l/.r`). Sans nouvelle image. Les pans font **60 %** de large : à 55 %,
+    les creux des deux ondulations ne se recouvraient pas et on entrevoyait la page au repos (« le voile laisse entrevoir
+    l'intérieur », Old money).
     **Les portes s'ouvrent vers l'intérieur** (6 octobre 2026, « une porte s'ouvre vers l'intérieur ») : les battants
     s'éloignent dans la salle (`opDoorL` en `rotateY` positif, `opDoorR` négatif), même chose dans les cartes `ovDoor*`.
     Ils vont **jusqu'au bout** (« continue l'animation logique jusqu'à disparaître ») : un seul mouvement de 2,3 s jusqu'à
