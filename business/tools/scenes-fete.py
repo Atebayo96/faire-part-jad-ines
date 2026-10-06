@@ -65,6 +65,19 @@ JOBS = {
         "joined hands of the bride and groom with their wedding rings (her lace cuff, his cream linen cuff), resting on a "
         "white linen tablecloth beside a lemon and a sprig of bougainvillea, in the lower part of the image; behind, softly "
         "blurred, the turquoise sea, the coast and a pale sky with light clouds"),
+    # « Texte seul » (écran simple d'un événement, img/hd/<thème>-fond.webp) : l'ancien fond de jour était le papier du grand
+    # tableau découpé, celui du soir un ciel noir sur une bande de jardin coupée net (« le texte seul c'est moche »,
+    # 6 octobre 2026, 2 générations accordées). Ici, presque tout l'écran est ciel : c'est un écran de texte.
+    'dolcevita-fond': (DN, NIGHT, "The 'text only' screen of the invitation: almost the whole image is a calm painted dusk sky "
+        "over the sea, deep blue to indigo, a few faint stars. Only the lower 30% shows, painted whole and touching the bottom: "
+        "the edge of a terrace with a white stone balustrade, two lemon trees in terracotta pots and a little bougainvillea, "
+        "and across the dark bay the tiny warm lights of a coastal village. No people. Every tree and pot complete, no straight "
+        "horizontal edge, the sky continues down behind everything to the horizon"),
+    'dolcevitajour-fond': (('dolcevitajour', 1, 2, 3), DAY, "The 'text only' screen of the invitation: almost the whole image "
+        "is a calm painted pale summer sky with a few light, delicate clouds over the turquoise sea. Only the lower 30% shows, "
+        "painted whole and touching the bottom: the edge of a sunny terrace with a white stone balustrade, two lemon trees in "
+        "terracotta pots and a little bougainvillea, and far away the coast with a small white village. No people. Every tree "
+        "and pot complete, no straight horizontal edge, the sky continues down behind everything to the horizon"),
     # Douce France : jour en texte foncé, soir en texte blanc (la fête et les verres sont dans darkLieux)
     'doucefrance-fete': (FN, NIGHT_TREES, PEOPLE + " " + REAL + " The evening party on the gravel square of the village, "
         "under two or three big plane trees painted whole: strings of warm bulbs and a few paper lanterns between them, "

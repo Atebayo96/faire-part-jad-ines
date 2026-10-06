@@ -1058,3 +1058,19 @@
 #cAddEv i:empty{display:none}
 .ed-lead{margin:0 0 4px;font-size:15px;line-height:1.45;color:var(--ink)}
 .ed-t:empty{display:none}
+/* « Ajouter un écran » : un seul groupe de choix */
+.story>li.more.add .opts{display:flex;flex-wrap:wrap;gap:8px}
+#cAddEv{font-weight:600}
+/* le bouton « Répondre » : le formulaire que voient les invités, en petit, qui suit les réglages */
+.rv-mock{display:grid;gap:8px;padding:16px;border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 24px -18px rgba(0,0,0,.35)}
+.rv-mock .rm-t{font:500 20px/1.2 "Cormorant Garamond",Georgia,serif;text-align:center;margin-bottom:2px;color:var(--ink)}
+.rv-mock .rm-in,.rv-mock .rm-sel{display:block;padding:10px 12px;border:1px solid #d6d2ca;border-radius:10px;font-size:14px;color:#5f5a52;background:#fbfaf7}
+.rv-mock .rm-sel{display:flex;justify-content:space-between;gap:8px;color:#2a2620}
+.rv-mock .rm-sel em{font-style:normal}
+.rv-mock .rm-ev{display:flex;align-items:center;gap:6px;font-size:14px;color:#2a2620}
+.rv-mock .rm-ev span{flex:1}
+.rv-mock .rm-ev i{font-style:normal;font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid #d6d2ca}
+.rv-mock .rm-pp{display:grid;gap:6px}
+.rv-mock .rm-b{display:block;text-align:center;padding:12px;border-radius:999px;background:#111;color:#fff;font-size:15px;margin-top:2px}
+.rv-mock .rm-wa{text-align:center;font-size:13px;color:#2a6b45}
+.ed-sub{margin:6px 0 0;font:600 12px/1 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}

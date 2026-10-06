@@ -603,11 +603,18 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **Une seule liste d'écrans** (6 octobre 2026 : « ajouter un événement et écrans en plus, c'est la même chose non ? ») :
     à l'étape « Écrans », « Vos écrans, dans l'ordre » montre tout à sa place (accueil, mot des familles, histoire, les
     moments, programme, infos…, la réponse), chaque écran avec son réglage et son « Retirer » (`li.xs`), et **un seul
-    « Ajouter un écran »** en bas : « Un moment de la journée » (heure, lieu, décor ; le 3e en Signature) ou « Un écran
-    d'infos » (sans heure ni lieu). Un écran déjà ajouté n'est plus proposé. Le lien par famille et l'anglais ne sont pas des
+    « + Ajouter un écran »** en bas, une seule rangée de choix (« ça rejoint la même chose ») : « Un moment de la journée »
+    (heure, lieu, décor ; le 3e en Signature) en premier, puis les écrans d'infos ; chacun se range à sa place. Un écran
+    déjà ajouté n'est plus proposé. Le lien par famille et l'anglais ne sont pas des
     écrans : ils sont dans « Détails », « Options » (`OPTS`). La table par famille est marquée Signature (elle en dépend).
-    La réponse s'appelle « La réponse de vos invités » et dit d'abord ce que fait l'invité, puis ce qu'on peut lui demander
-    (« Ce que vous demandez à vos invités » ne se comprenait pas). L'album photos a son champ de lien (`C.data.photos.url`).
+    La réponse s'appelle **« Le bouton « Répondre » »** et montre **le formulaire que voit l'invité** en touchant le bouton
+    (`rsvpMock()` : ses moments en Oui/Non, qui vient et les menus, la question, WhatsApp), mis à jour à chaque réglage,
+    puis « Réglez-le » ; régler la réponse fait descendre l'aperçu sur le dernier écran. « Ce que vous demandez à vos
+    invités » ne se comprenait pas, « on ne comprend pas que c'est lié au bouton Répondre ».
+    **« Texte seul » de Dolce Vita repeint** (6 octobre 2026, 2 générations accordées, `scenes-fete.py` `dolcevita-fond`,
+    `dolcevitajour-fond`) : l'ancien fond de jour était le papier du grand tableau découpé (« c'est moche, tu l'as découpé ? »),
+    celui du soir un ciel noir sur une bande de jardin coupée net. Désormais un grand ciel calme sur la mer et une terrasse
+    aux citronniers entière en bas, en `cover` (`T.cover` + `fond`). Images en `?v=17` (vitrine) et `IMGV=23`. L'album photos a son champ de lien (`C.data.photos.url`).
 
 ## Méthode
 
