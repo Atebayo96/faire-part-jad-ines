@@ -135,7 +135,7 @@ Object.assign(window.SCEAU_THEMES,{
   T.dolcevitajour.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info'};
   // Douce France (tools/douce-france.py, 6 octobre 2026) : 4 scènes, 6 lieux, 4 écrans, porte et rideau ; le soir en texte blanc
   T.doucefrance.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info',gifts:'liste'}; T.doucefrance.darkLieux=['salle','prog','dress','info','liste'];
-  T.oldmoney.pageImg={infos:'info',stay:'info',gifts:'liste'}; T.oldmoney.darkLieux=(T.oldmoney.darkLieux||[]).concat(['info','liste']);
+  T.oldmoney.pageImg={infos:'info',stay:'info',gifts:'liste'}; T.oldmoney.darkLieux=(T.oldmoney.darkLieux||[]).concat(['info','liste','salle']);
 })(window.SCEAU_THEMES);
 /* « Bismillah » s'écrit en arabe, en calligraphie : la ligature basmala (U+FDFD « ﷽ ») de la police Amiri hébergée dans
    polices/, exactement comme sur le faire-part d'Inès & Jad (pas la phrase lettre à lettre). Dans le faire-part comme dans la vitrine.

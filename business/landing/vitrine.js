@@ -517,7 +517,7 @@
       // « Texte seul » : écran simple (scène par scène), ou la scène peinte du thème dans le cadre (grand tableau)
       const sim=l.querySelector('[data-lieu="simple"] em'); if(sim) sim.textContent=C.fmt==='long'?'Scène du thème':'Texte seul';
       l.querySelectorAll('[data-lieu]').forEach(b=>{ const id=b.dataset.lieu; b.setAttribute('aria-pressed',id==='simple'?e.bg!=='scene':e.bg==='scene'&&id===e.lieu);
-        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=12')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=12')`:`url('/img/lieux/${kOf('fond')}-fond.webp')`):`url('/img/lieux/${kOf(id==='photo'?'eglise':id)}-${id==='photo'?(THEMES[C.k].lieux||['eglise'])[0]:id}.webp')`; });
+        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=12')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=12')`:`url('/img/lieux/${kOf('fond')}-fond.webp?v=13')`):`url('/img/lieux/${kOf(id==='photo'?'eglise':id)}-${id==='photo'?(THEMES[C.k].lieux||['eglise'])[0]:id}.webp?v=13')`; });
       // la grande vignette reprend le décor choisi, avec son nom
       const sel=l.querySelector('[data-lieu][aria-pressed="true"]'), pic=l.querySelector('[data-pick] span');
       if(sel&&pic){ pic.style.backgroundImage=sel.firstChild.style.backgroundImage; pic.dataset.n=(sel.querySelector('em')||{}).textContent||sel.textContent.replace('Signature','').trim(); } });
@@ -562,7 +562,7 @@
       // un numéro = scène du thème ; un nom = lieu de la bibliothèque, ou « fond » pour un écran simple
       // calque : le sujet détouré est posé entier au bas de l'écran sur le fond du thème (même rendu que le moteur)
       const hasCal=((window.SCEAU_CALQUES||{})[kk]||[]).includes(String(img));
-      const src=hasCal?`/img/lieux/${kk}-ciel.webp`:typeof img==='number'?`/img/themes/${kk}-${img}.webp?v=12`:`/img/lieux/${kk}-${img}.webp`;
+      const src=hasCal?`/img/lieux/${kk}-ciel.webp`:typeof img==='number'?`/img/themes/${kk}-${img}.webp?v=12`:`/img/lieux/${kk}-${img}.webp?v=13`;
       const sub=hasCal?`/img/calques/${kk}-${img}.webp?v=12`:'';
       return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" data-sub="${esc(sub)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     // boutons de l'aperçu : même pastille que le faire-part (invite.css .b), icône dans un médaillon à la couleur choisie
