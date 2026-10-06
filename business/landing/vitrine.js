@@ -232,8 +232,8 @@
      la formule se met d'elle-même sur Signature et le récapitulatif explique pourquoi ; si l'on revient à Essentiel, il dit
      simplement ce qui n'y est pas compris. Jamais de case grisée ni de refus. */
   const sigNeeds=()=>{ const n=[]; if(C.ev.some(e=>e.bg==='scene'&&e.lieu==='photo')) n.push('votre lieu peint d’après photo');
-    if(C.ev.length>2) n.push(`${C.ev.length} événements (2 en Essentiel)`); if(C.x.has('famille')) n.push('un lien par famille'); if(C.x.has('en')) n.push('la version anglaise'); return n; };
-  const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Bon à savoir'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)'},{id:'famille',name:'Un lien par famille',sig:true},{id:'en',name:'Version anglaise',sig:true}];
+    if(C.ev.length>2) n.push(`${C.ev.length} événements (2 en Essentiel)`); if(C.x.has('famille')) n.push('un lien par famille'); if(C.x.has('table')) n.push('la table de chaque famille'); if(C.x.has('en')) n.push('la version anglaise'); return n; };
+  const EXTRAS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'program',name:'Le programme'},{id:'dress',name:'Dress code'},{id:'stay',name:'Bon à savoir'},{id:'faq',name:'Vos questions'},{id:'gifts',name:'Liste de mariage'},{id:'photos',name:'Partage des photos'},{id:'table',name:'Votre table (par famille)',sig:true},{id:'famille',name:'Un lien par famille',sig:true},{id:'en',name:'Version anglaise',sig:true}];
   const LG_EXTRAS=['famille','en'];
   // options retenues pour le format choisi (une option propre à l'autre format reste en mémoire, sans compter)
   const LG_PARTS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'album',name:'Bande de photos'},{id:'dress',name:'Dress code'},{id:'stay',name:'Bon à savoir'},{id:'gifts',name:'Liste de mariage'}];
@@ -304,10 +304,14 @@
     if(!palsOf(C.k).some(x=>x.id===C.pal)) C.pal=palsOf(C.k)[0].id; }
   opt($('cFonts'),FONTS,'font','',(b,f)=>{ b.className='fo'; b.innerHTML=`<b>Aa</b><small>${f.name}</small>`; });
   opt($('cCount'),COUNTS,'cd','',(b,o)=>{ b.className='op-card'; b.innerHTML=`<b>${o.name}</b><small>${o.sub}</small>`; });
-  // écrans en option : plusieurs à la fois ; l'aperçu fait défiler jusqu'à l'écran ajouté
+  /* écrans en option : plusieurs à la fois ; l'aperçu fait défiler jusqu'à l'écran ajouté. Un écran d'infos et un événement,
+     c'est pareil pour les mariés (« ajouter un événement et écrans en plus, c'est la même chose non ? ») : tout se range dans
+     la même liste, à sa place, et s'ajoute au même endroit, en bas. Le lien par famille et l'anglais ne sont pas des écrans :
+     ils restent dans « Détails » (OPTS). */
+  const OPTS=['famille','en'], PRE=['parents','story'];
   EXTRAS.forEach(x=>{ const b=document.createElement('button'); b.type='button'; b.className='chip x'+(x.sig?' sig':''); b.dataset.id=x.id; b.innerHTML=esc(x.name)+(x.sig?'<i>Signature</i>':'');
     b.onclick=()=>{ const on=!C.x.has(x.id); on?C.x.add(x.id):C.x.delete(x.id); paint(); if(on){ const el=$('cpScroll').querySelector(`[data-x="${x.id}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); } };
-    $('cExtras').appendChild(b); });
+    (OPTS.includes(x.id)?$('cOpts'):$('cExtras')).appendChild(b); });
   let resetEv=()=>{};
   // les écrans du faire-part, dans l'ordre (construits une fois : les champs gardent le focus)
   { const box=$('cStory'), li=(cls,h)=>{ const l=document.createElement('li'); l.className=cls; l.innerHTML=h; box.appendChild(l); return l; };
@@ -316,7 +320,17 @@
        parties dans l'ordre, avec ce qu'on peut y mettre (lg-only), et les événements dans leurs cadres peints */
     const part=(title,sub,ids)=>li('lg-only part',`<div class="ev-h"><b>${title}</b><small>${sub}</small></div><div class="opts">${ids.map(([id,n])=>`<button type="button" class="chip x" data-x="${id}">${n}</button>`).join('')}</div><div class="eds"></div>`);
     part('Sous l’illustration','l’invitation, puis vos événements',[['parents','Le mot des familles']]);
-    const more=li('more','<button type="button" class="chip x sig" id="cAddEv">+ Ajouter un événement<i>Signature · jusqu’à 6</i></button>');
+    // écrans d'infos avant les événements (le mot des familles, l'histoire)
+    const xsLi=x=>{ const l=li('xs',`<div class="ev-h"><b>${esc(x.name)}</b><small><a href="#" data-rmx>Retirer</a></small></div><div class="eds"></div>`); l.dataset.xs=x.id;
+      l.querySelector('[data-rmx]').onclick=ev=>{ ev.preventDefault(); C.x.delete(x.id); paint(); }; return l; };
+    EXTRAS.filter(x=>PRE.includes(x.id)).forEach(xsLi);
+    // les événements se rangent avant ce repère, les écrans d'infos après
+    const evEnd=li('ev-end',''); evEnd.hidden=true;
+    EXTRAS.filter(x=>!PRE.includes(x.id)&&!OPTS.includes(x.id)).forEach(xsLi);
+    const more=li('more add',`<div class="ev-h"><b>Ajouter un écran</b><small>dans l’ordre où vos invités le verront</small></div>
+      <div class="add-g"><span>Un moment de la journée</span><small>avec son heure, son lieu et son décor : vin d’honneur, soirée, brunch…</small><div class="opts"><button type="button" class="chip x" id="cAddEv">+ Un moment<i></i></button></div></div>
+      <div class="add-g"><span>Un écran d’infos</span><small>sans heure ni lieu : le programme, le dress code, la liste…</small><div class="opts" id="cExtrasIn"></div></div>`);
+    more.querySelector('#cExtrasIn').replaceWith($('cExtras'));
     const sendPhoto=f=>new Promise((ok,ko)=>{ const im=new Image(); im.onload=async()=>{ try{ const k=Math.min(1,1600/Math.max(im.width,im.height)), cv=document.createElement('canvas');
         cv.width=Math.round(im.width*k); cv.height=Math.round(im.height*k); cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
         const r=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:cv.toDataURL('image/jpeg',.82)})});
@@ -343,13 +357,13 @@
       // le choix du décor ne s'ouvre qu'à la demande : au repos, une seule grande vignette (« trop condensé »)
       l.querySelector('[data-pick]').onclick=()=>{ const o=l.classList.toggle('open'); l.querySelector('[data-pick]').setAttribute('aria-expanded',o); showEv(i); };
       const rm=l.querySelector('[data-rm]'); if(rm) rm.onclick=ev=>{ ev.preventDefault(); C.ev.splice(i,1); l.remove(); [...box.querySelectorAll('li.ev')].forEach((x,k)=>{ x.dataset.i=k; }); paint(); };
-      box.insertBefore(l,more); return l; };
+      box.insertBefore(l,evEnd); return l; };
     C.ev.forEach(addEv);
     resetEv=()=>{ box.querySelectorAll('li.ev').forEach(l=>l.remove()); C.ev.forEach(addEv); };
     $('cAddEv').onclick=()=>{ if(C.ev.length>=6) return; const e={name:(THEMES[C.k].family==='nuits'?['','','La soirée','Le brunch','Le henné','La bénédiction']:['','','La soirée','Le brunch','Le cocktail','La bénédiction'])[C.ev.length]||'',time:'21:00',place:'',bg:'simple',lieu:'salle'}; C.ev.push(e); addEv(e,C.ev.length-1); paint(); showEv(C.ev.length-1); };
     part('Deuxième partie','facultatif',[['story','Notre histoire'],['album','Bande de photos'],['dress','Dress code']]);
     part('Troisième partie','facultatif',[['stay','Bon à savoir'],['gifts','Liste de mariage']]);
-    li('fixed rsvp','<div class="rsvp-h"><b>Réponse</b><span>« Serez-vous des nôtres ? »</span></div><div class="eds"></div>');
+    li('fixed rsvp','<div class="rsvp-h"><b>La réponse de vos invités</b><span>le dernier écran</span></div><div class="eds"></div>');
     box.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{ const id=b.dataset.x; C.x.has(id)?C.x.delete(id):C.x.add(id); paint(); }); }
   // choix de l'occasion : prénoms, événements et textes par défaut de l'occasion (les prénoms tapés à la main restent)
   if(OCC_ON.length<2) $('cOcc').closest('.fld').hidden=true; // une seule occasion : rien à choisir
@@ -379,6 +393,7 @@
     gifts:{text:DEF.gifts[C.occ],url:'',mode:'liste',items:NUITS?[{name:'Un service à thé',price:'120'},{name:'Un plateau en cuivre',price:'80'},{name:'Notre voyage de noces',price:''}]:[{name:'Le dîner à Ravello',price:'150'},{name:'Une nuit face à la mer',price:'200'},{name:'Le service à café',price:'80'}]},
     /* la réponse : les menus au choix (chaque personne nommée choisit le sien), une question libre, et le WhatsApp des mariés
        pour ceux qui préfèrent répondre de vive voix (voir business/16-benchmark-americains.md, A2 et A5) */
+    photos:{url:''},
     rsvp:{menu:NUITS?'Viande, Poisson, Végétarien':'Poisson, Viande, Végétarien',question:'Une chanson qui vous fera danser ?',whatsapp:''}};
   const menuList=()=>String(C.data.rsvp.menu||'').split(/[,;\/]/).map(x=>x.trim()).filter(Boolean).slice(0,8);
   // l'occasion change : les phrases encore « par défaut » suivent ; ce que l'utilisateur a écrit reste
@@ -389,7 +404,9 @@
   const inpE=(pa,ph,max)=>`<input type="text" data-p="${pa}" maxlength="${max||80}" placeholder="${esc(ph||'')}">`;
   const areaE=pa=>`<textarea data-p="${pa}" rows="2" maxlength="240"></textarea>`;
   const ED={
-    rsvp:()=>`${fldE('Menus au choix (séparés par des virgules, ou rien)',inpE('rsvp.menu','Poisson, Viande, Végétarien',120))}${fldE('Une question à vos invités (facultatif)',inpE('rsvp.question','Une chanson qui vous fera danser ?',80))}${fldE('Votre WhatsApp, pour ceux qui préfèrent répondre de vive voix (facultatif)',`<input type="tel" data-p="rsvp.whatsapp" maxlength="20" placeholder="+33 6 12 34 56 78" autocomplete="tel">`)}<p class="ed-n">Chaque invité nomme les personnes qui l’accompagnent et choisit son menu. Vous voyez qui a ouvert son lien, qui a répondu, et vous relancez sur WhatsApp en un toucher depuis votre tableau de bord.</p>`,
+    rsvp:()=>`<p class="ed-lead">Sur ce dernier écran, chaque invité dit s’il vient, à quels moments, et avec qui. Les réponses arrivent dans votre tableau de bord.</p>${fldE('Les menus à choisir (séparés par des virgules ; laissez vide s’il n’y a pas de choix)',inpE('rsvp.menu','Poisson, Viande, Végétarien',120))}${fldE('Une question à leur poser (facultatif)',inpE('rsvp.question','Une chanson qui vous fera danser ?',80))}${fldE('Votre WhatsApp, pour ceux qui préfèrent vous répondre directement (facultatif)',`<input type="tel" data-p="rsvp.whatsapp" maxlength="20" placeholder="+33 6 12 34 56 78" autocomplete="tel">`)}`,
+    photos:()=>`${fldE('Le lien de votre album partagé (Google Photos, iCloud…)','<input type="url" data-p="photos.url" maxlength="200" placeholder="https://…">')}<p class="ed-n">Vos invités y déposent leurs photos de la journée. Vous pourrez ajouter le lien plus tard.</p>`,
+    table:()=>`<p class="ed-n">Avec un lien par famille, chaque famille voit sa table sur son faire-part. Vous nous donnez le plan de table après la commande.</p>`,
     parents:()=>`<div class="ed-row">${fldE('Première famille',inpE('parents.n1','Famille Alaoui',40))}${fldE('Seconde famille (facultatif)',inpE('parents.n2','Famille Haddad',40))}</div>${fldE('Leur phrase',areaE('parents.text'))}`,
     story:()=>C.data.story.map((x,i)=>`<div class="ed-row s">${fldE('Année',inpE(`story.${i}.when`,'2018',12))}${fldE('Moment',inpE(`story.${i}.title`,'La rencontre',40))}${fldE('En une phrase',inpE(`story.${i}.text`,'',120))}${C.data.story.length>1?`<button type="button" class="ed-x" data-rm="story.${i}" aria-label="Retirer ce moment">×</button>`:''}</div>`).join('')+(C.data.story.length<5?'<button type="button" class="ed-add" data-add="story">+ Un moment</button>':''),
     album:()=>`<p class="ed-n">Vous nous envoyez 4 à 8 photos après la commande. L'aperçu montre des photos d'exemple.</p>`,
@@ -407,7 +424,7 @@
   if(C.occ==='mariage') C.data.gifts.text=GIFT_TX.liste;
   const getP=pa=>pa.split('.').reduce((o,k)=>o==null?o:o[k],C.data);
   const setP=(pa,v)=>{ const ks=pa.split('.'), last=ks.pop(); ks.reduce((o,k)=>o[k],C.data)[last]=v; };
-  const edTitle=id=>id==='gifts'?giftName():id==='rsvp'?'Ce que vous demandez à vos invités':((LG_PARTS.find(x=>x.id===id)||EXTRAS.find(x=>x.id===id)||{}).name||'');
+  const edTitle=id=>id==='gifts'?giftName():id==='rsvp'?'':((LG_PARTS.find(x=>x.id===id)||EXTRAS.find(x=>x.id===id)||{}).name||'');
   // un cadre ne se reconstruit que si ses parties changent (les champs gardent le focus pendant la frappe)
   function edBox(host,ids){ if(!host) return; const key=ids.join(',')+'|'+C.occ+'|'+C.data.story.length+'|'+C.data.stay.length+'|'+C.data.program.length+'|'+C.data.faq.length+'|'+C.data.gifts.mode+'|'+C.data.gifts.items.length; if(host.dataset.key===key) return; host.dataset.key=key;
     host.innerHTML=ids.map(id=>`<div class="ed" data-ed="${id}"><b class="ed-t">${esc(edTitle(id))}</b>${ED[id]()}</div>`).join('');
@@ -419,11 +436,12 @@
       if(C.occ==='mariage'&&(g.text===was||Object.values(DEF.gifts).includes(g.text))) g.text=GIFT_TX[g.mode]; paint(); }); }
   function paintEd(long){
     $('cStory').querySelectorAll('li.part').forEach(l=>edBox(l.querySelector('.eds'),long?[...l.querySelectorAll('[data-x]')].map(b=>b.dataset.x).filter(id=>C.x.has(id)&&ED[id]&&!(id==='story'&&C.occ==='sbou3')):[]));
-    edBox($('cExtrasEd'),long?[]:EXTRAS.map(x=>x.id).filter(id=>C.x.has(id)&&ED[id]&&!(id==='story'&&C.occ==='sbou3')));
+    $('cStory').querySelectorAll('li.xs').forEach(l=>{ const id=l.dataset.xs, on=!long&&C.x.has(id)&&!(id==='story'&&C.occ==='sbou3');
+      if(l.hidden===on) l.hidden=!on; if(on) edBox(l.querySelector('.eds'),ED[id]?[id]:[]); else delete l.querySelector('.eds').dataset.key; });
     // la réponse se règle toujours (menus, question, WhatsApp), dans les deux formats
     edBox($('cStory').querySelector('.rsvp .eds'),['rsvp']);
     // la liste prend le nom de l'occasion ; « Notre histoire » n'a pas de sens pour un sbouâ
-    document.querySelectorAll('#cStory [data-x="gifts"],#cExtras [data-id="gifts"]').forEach(b=>b.textContent=giftName());
+    document.querySelectorAll('#cStory [data-x="gifts"],#cExtras [data-id="gifts"],#cStory [data-xs="gifts"] .ev-h b').forEach(b=>b.textContent=giftName());
     const st=$('cStory').querySelector('[data-x="story"]'); if(st) st.hidden=C.occ==='sbou3';
   }
   const edText=()=>{ const d=C.data, on=id=>C.x.has(id), o=[];
@@ -508,7 +526,7 @@
   function paint(){
     buildPal();
     const t=THEMES[C.k], p=palsOf(C.k).find(x=>x.id===C.pal)||palsOf(C.k)[0], f=FONTS.find(x=>x.id===C.font);
-    $('cExtras').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
+    $('cOpts').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
     buildAmb();
     $('cStyles').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===grp(C.k)));
     [['cFmt','k'],['cOpen','op'],['cPal','pal'],['cCount','cd'],['cReveal','rvl']].forEach(([id,key])=>$(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C[key])));
@@ -525,17 +543,17 @@
       :li(['Vous commandez, paiement sécurisé par Stripe.','On vous écrit sous 24 h pour vos textes, adresses, horaires et photos. La musique se choisit à ce moment-là.',C.plan==='couture'?'On fixe le calendrier ensemble.':C.plan==='essentiel'?'Vous validez l’aperçu : votre lien est prêt sous 48 h.':'Vous validez l’aperçu : votre lien est prêt en 3 à 5 jours.']); }
     { const long=C.fmt==='long';
       $('wz2Title').textContent=long?'Votre tableau':'Vos écrans';
-      $('wz2Sub').textContent=long?'Un seul tableau peint qu’on descend, en trois parties. Chaque événement a son cadre : la scène peinte du thème, un lieu de notre bibliothèque, ou votre lieu d’après photo.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';
+      $('wz2Sub').textContent=long?'Un seul tableau peint qu’on descend, en trois parties. Chaque événement a son cadre : la scène peinte du thème, un lieu de notre bibliothèque, ou votre lieu d’après photo.':'Dans l’ordre où vos invités les verront. Chaque moment a son décor ; ajoutez un moment ou un écran d’infos en bas de la liste.';
       $('wzNav3').textContent=long?'Tableau':'Écrans';
       $('cStory').classList.toggle('long',long);
       $('cStory').querySelector('.home').innerHTML=long?'<b>L’illustration d’ouverture</b><span>Vos prénoms et la date, en haut du tableau</span>':'<b>Accueil</b><span>Vos prénoms, la date, le sceau</span>';
-      $('cStory').querySelector('.rsvp .rsvp-h').innerHTML=long?'<b>Réponse</b><span>« Serez-vous des nôtres ? » et le compte à rebours</span>':'<b>Réponse</b><span>« Serez-vous des nôtres ? »</span>';
+      $('cStory').querySelector('.rsvp .rsvp-h').innerHTML=long?'<b>Réponse</b><span>« Serez-vous des nôtres ? » et le compte à rebours</span>':'<b>La réponse de vos invités</b><span>le dernier écran</span>';
       $('cStory').querySelectorAll('li.ev .ev-h b').forEach((b,i)=>{ b.textContent=long?`Événement ${i+1} · son cadre`:`Événement ${i+1}`; });
       $('cStory').querySelectorAll('[data-x]').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.x)));
       paintEd(long);
       // les options qui sont des écrans de la suite scène par scène n'existent pas dans le tableau (elles y sont des parties, ci-dessus)
-      $('cExtras').querySelectorAll('button').forEach(b=>{ b.hidden=long&&!LG_EXTRAS.includes(b.dataset.id); });
-      $('cExtrasT').firstChild.textContent=long?'Options ':'Écrans en plus ';
+      // un écran déjà ajouté n'est plus proposé : il est dans la liste, avec son « Retirer »
+      $('cExtras').querySelectorAll('button').forEach(b=>{ const id=b.dataset.id; b.hidden=long||C.x.has(id)||(id==='story'&&C.occ==='sbou3'); });
       // compte à rebours : pas de page dédiée dans le tableau (il est en haut ou à la fin) ; pas de révélation de la date
       if(long&&C.cd==='page'){ C.cd='fin'; $('cCount').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.cd)); }
       $('cCount').querySelector('[data-id="page"]').hidden=long;
@@ -554,7 +572,9 @@
       // la grande vignette reprend le décor choisi, avec son nom
       const sel=l.querySelector('[data-lieu][aria-pressed="true"]'), pic=l.querySelector('[data-pick] span');
       if(sel&&pic){ pic.style.backgroundImage=sel.firstChild.style.backgroundImage; pic.dataset.n=(sel.querySelector('em')||{}).textContent||sel.textContent.replace('Signature','').trim(); } });
-    $('cAddEv').hidden=C.ev.length>=6||C.occ!=='mariage';
+    $('cAddEv').hidden=C.ev.length>=6||C.occ!=='mariage'; $('cAddEv').closest('.add-g').hidden=$('cAddEv').hidden;
+    // les 2 premiers moments sont dans l'Essentiel, le 3e passe en Signature
+    $('cAddEv').classList.toggle('sig',C.ev.length>=2); $('cAddEv').querySelector('i').textContent=C.ev.length>=2?'Signature':'';
     $('cpTint').style.background=p.c;
     const n1=nm1(), n2=nm2(), solo=isSolo(), oneShot=C.occ!=='mariage';
     const ini=(n1[0]||'').toUpperCase()+(solo?'':(n2[0]||'').toUpperCase());
@@ -566,7 +586,6 @@
     [$('cN1'),$('cN2')].forEach((inp,i)=>{ inp.setAttribute('aria-label',OCC[C.occ].l[i]); inp.placeholder=OCC[C.occ].ph[i]; });
     $('cNamesF').classList.toggle('sbou3',C.occ==='sbou3');
     $('cStory').querySelectorAll('[data-lieu]').forEach(b=>{ const L0=LIEUX.find(x=>x.id===b.dataset.lieu); if(!L0) return; b.hidden=!!(L0.occ&&L0.occ!==C.occ)||(L0.fam!==undefined&&L0.fam!==(THEMES[C.k].family||''))||(!L0.sig&&L0.id!=='s2'&&!okLieu(C.k,L0.id)); });
-    $('cExtras').querySelector('[data-id="story"]').hidden=C.occ==='sbou3'||C.fmt==='long';
     if($('fOcc')) $('fOcc').value=OCCS.find(o=>o.id===C.occ).name;
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
@@ -706,6 +725,7 @@
     if(C.x.has('program')) inv.program={title:'Le grand jour',items:C.data.program.filter(x=>x.time||x.title).map(x=>({time:hm(x.time),title:x.title}))};
     if(C.x.has('faq')) inv.faq={items:C.data.faq.filter(x=>x.q).map(x=>({q:x.q,a:x.a}))};
     if(inv.gifts&&inv.gifts.mode!=='liste') inv.gifts.url=C.data.gifts.url||undefined;
+    if(C.x.has('photos')&&/^https?:\/\//.test(C.data.photos.url||'')) inv.photos={text:'Partagez vos plus belles photos de la journée dans notre album commun.',url:C.data.photos.url};
     return JSON.parse(JSON.stringify(inv)); }
   // les choix du configurateur, pour le rouvrir tel quel (modification par les mariés)
   const snapshot=()=>({occ:C.occ,sexe:C.sexe,k:C.k,fmt:C.fmt,pal:C.pal,font:C.font,op:C.op,cd:C.cd,rvl:C.rvl,x:[...C.x],
@@ -785,7 +805,7 @@
         if(g.ev&&g.ev.length) C.ev=g.ev; if(g.data) Object.assign(C.data,g.data);
         $('cN1').value=g.n1||''; $('cN2').value=g.n2||''; if(g.date){ $('cDate').value=g.date; }
         // les cadres de réglage se reconstruisent avec les textes des mariés (sinon ils gardent ceux de l'exemple)
-        document.querySelectorAll('#cStory .eds,#cExtrasEd').forEach(h=>delete h.dataset.key);
+        document.querySelectorAll('#cStory .eds').forEach(h=>delete h.dataset.key);
         ambG=''; palK=''; resetEv(); paint();
         const bar=document.createElement('p'); bar.className='edit-bar'; bar.innerHTML=`Vous modifiez votre faire-part en ligne. Le lien de vos invités reste le même : <a href="/d/${esc(slug)}/" target="_blank" rel="noopener">voir le faire-part</a>.`;
         $('composer').prepend(bar);

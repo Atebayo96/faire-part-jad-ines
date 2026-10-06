@@ -1046,3 +1046,15 @@
 .edit-bar a{color:inherit;font-weight:600}
 .edit-bar.err{background:#fbe9e7;color:#7a1f12}
 #editMsg{color:#111;font-size:15px}
+/* une seule liste d'écrans : les écrans d'infos à leur place, un seul « Ajouter un écran » en bas */
+.story>li.xs[hidden],.story>li.ev-end{display:none}
+.story>li.xs{display:grid;gap:12px}
+.story>li.xs .ed-t{display:none}
+.story>li.more.add{padding:16px;border:1px dashed var(--line);display:grid;gap:16px}
+.story .add-g{display:grid;gap:4px}
+.story .add-g>span{font:500 14px Inter,sans-serif;color:var(--ink)}
+.story .add-g>small{font-size:13px;color:var(--muted);margin-bottom:6px}
+.story .add-g[hidden]{display:none}
+#cAddEv i:empty{display:none}
+.ed-lead{margin:0 0 4px;font-size:15px;line-height:1.45;color:var(--ink)}
+.ed-t:empty{display:none}

@@ -600,8 +600,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Tout ce qui promet un délai dit « en ligne dès le paiement » pour l'Essentiel (formules, accueil, questions, CGV, « Ensuite »).
     Tant que le paiement n'est pas branché (ni `STRIPE_SECRET_KEY`, ni lien de paiement), le bouton « Commander » mène au
     contact : une phrase le dit sous le bouton (`payNote()`), et « Ensuite » garde l'ancien déroulé (« prêt sous 48 h »).
-    **Les écrans en plus se choisissent à l'étape « Écrans »** (6 octobre 2026 : « c'est là qu'elle est paramétrable, pas
-    dans Détails ») ; l'étape « Détails » ne garde que couleurs, police et compte à rebours.
+    **Une seule liste d'écrans** (6 octobre 2026 : « ajouter un événement et écrans en plus, c'est la même chose non ? ») :
+    à l'étape « Écrans », « Vos écrans, dans l'ordre » montre tout à sa place (accueil, mot des familles, histoire, les
+    moments, programme, infos…, la réponse), chaque écran avec son réglage et son « Retirer » (`li.xs`), et **un seul
+    « Ajouter un écran »** en bas : « Un moment de la journée » (heure, lieu, décor ; le 3e en Signature) ou « Un écran
+    d'infos » (sans heure ni lieu). Un écran déjà ajouté n'est plus proposé. Le lien par famille et l'anglais ne sont pas des
+    écrans : ils sont dans « Détails », « Options » (`OPTS`). La table par famille est marquée Signature (elle en dépend).
+    La réponse s'appelle « La réponse de vos invités » et dit d'abord ce que fait l'invité, puis ce qu'on peut lui demander
+    (« Ce que vous demandez à vos invités » ne se comprenait pas). L'album photos a son champ de lien (`C.data.photos.url`).
 
 ## Méthode
 

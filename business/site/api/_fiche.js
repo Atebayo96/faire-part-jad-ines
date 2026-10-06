@@ -57,6 +57,7 @@ export function sanitize(raw, plan = 'essentiel') {
     infos: arr(r.infos, 8).map(x => ({ icon: pick(x && x.icon, ICONS, 'info'), title: txt(x && x.title, 60) || '', text: txt(x && x.text, 300) || '' })).filter(x => x.title || x.text),
     program: PR ? { eyebrow: txt(PR.eyebrow, 40), title: txt(PR.title, 60), items: arr(PR.items, 12).map(x => ({ time: txt(x && x.time, 10), title: txt(x && x.title, 60), text: txt(x && x.text, 160) })).filter(x => x.time || x.title) } : undefined,
     faq: FQ ? { eyebrow: txt(FQ.eyebrow, 40), items: arr(FQ.items, 10).map(x => ({ q: txt(x && x.q, 120), a: txt(x && x.a, 400) })).filter(x => x.q) } : undefined,
+    photos: r.photos && url(r.photos.url) ? { text: txt(r.photos.text, 200), url: url(r.photos.url) } : undefined,
     gifts: GF ? { eyebrow: txt(GF.eyebrow, 40), text: txt(GF.text, 300), mode: gmode,
       items: gmode === 'liste' ? arr(GF.items, 30).map((x, i) => ({ id: 'g' + i, name: txt(x && x.name, 80), price: txt(x && x.price, 10) })).filter(x => x.name) : undefined,
       url: gmode === 'liste' ? undefined : url(GF.url) } : undefined,
