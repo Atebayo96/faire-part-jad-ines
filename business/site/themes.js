@@ -158,17 +158,6 @@ window.sceauDoorFit=function(root,box,wall,l,r){
   leaf(l,x0,'left'); leaf(r,x0+w,'right');
   root.style.setProperty('--dox',f((x0+x1)/2)); root.style.setProperty('--doy',f((y0+y1)/2)); root.style.setProperty('--dos',(1.2/(x1-x0)).toFixed(3));
 };
-// le sceau de l'enveloppe devient celui de l'accueil : il glisse de l'un à l'autre au lieu de disparaître puis de
-// réapparaître (« il y a encore le sceau qui réapparaît, pourquoi ? »)
-window.sceauSealFly=function(from,to){
-  if(!from||!to||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const a=from.getBoundingClientRect(), b=to.getBoundingClientRect(); if(!a.width||!b.width) return;
-  const dx=a.left+a.width/2-(b.left+b.width/2), dy=a.top+a.height/2-(b.top+b.height/2);
-  from.style.visibility='hidden'; to.classList.add('s-fly');
-  to.style.transform=`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) scale(${(a.width/b.width).toFixed(3)})`;
-  void to.offsetWidth; to.classList.add('s-go'); to.style.transform='';
-  setTimeout(()=>to.classList.remove('s-fly','s-go'),1000);
-};
 window.SCEAU_BASMALA='﷽';
 window.SCEAU_BASMALA_LABEL='Bismillah ar-Rahman ar-Rahim';
 window.sceauEy=function(t){ t=t==null?'':String(t); return /^\s*(bismillah|bismillah\s+ar-?rahman\s+ar-?rahim|basmala)\s*$/i.test(t)?{ar:true,text:window.SCEAU_BASMALA}:{ar:false,text:t}; };

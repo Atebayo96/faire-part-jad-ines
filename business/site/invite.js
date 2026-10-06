@@ -564,7 +564,7 @@
     if(q.cls) flash.classList.add(q.cls);
     if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash); else if(q.flash===0) flash.classList.add('bloom');
     setTimeout(()=>{ if(q.morph){ app.classList.add('morph'); setTimeout(()=>app.classList.remove('morph'),1800); } app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); if(LG) longStart(); },q.on);
-    setTimeout(()=>{ if(q.morph&&window.sceauSealFly) sceauSealFly(op.querySelector('.op-seal'),secs[0]&&secs[0].querySelector('.seal')); op.classList.add('gone'); },q.gone);
+    setTimeout(()=>op.classList.add('gone'),q.gone);
     setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1800,q.gone+1400));
   }
   op.addEventListener('click',open);

@@ -482,8 +482,6 @@
   .op.opening .op-env-in{animation:envZoom 1.6s cubic-bezier(.45,0,.75,1) forwards}
   @keyframes envZoom{from{transform:scale(1.32)}to{transform:scale(1.5)}}
   .op[data-type="env"].gone{transition:opacity .35s ease-out,visibility .35s}
-  .cp-seal.s-fly{opacity:1!important;filter:drop-shadow(0 8px 12px rgba(0,0,0,.38))!important;transition:none!important;z-index:5}
-  .cp-seal.s-fly.s-go{transition:transform .8s cubic-bezier(.45,0,.2,1)!important}
   @keyframes pageMorph{from{transform:scale(1.06)}to{transform:none}}
   .pv-scroll.morph{animation:pageMorph 1.7s cubic-bezier(.2,.55,.3,1) both}
 

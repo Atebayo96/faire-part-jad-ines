@@ -706,13 +706,13 @@
   // enveloppe : pas de lumiere, zoom doux continu puis morph vers la page ; rideau, portes et voile : la lumiere part au toucher (flash:0) et monte avec le mouvement,
   // la page se voit a travers (memes valeurs que invite.js)
   const cpFlash=$('cpFlash'), SEQ={env:{flash:null,gone:1000,morph:1},cur:{flash:null,gone:760,cls:'soft'},door:{flash:500,gone:2300,cls:'door'},voile:{flash:null,gone:1500,cls:'door'}}; let opT2=[];
-  function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); { const s0=op.querySelector('.op-seal'); if(s0) s0.style.visibility=''; } cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
+  function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
     op.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); { const D=op.querySelector('.op-doors'); if(D&&window.sceauDoorFit) sceauDoorFit(D,THEMES[C.k].door,D.querySelector('.op-wall'),D.querySelector('.op-leaf.l'),D.querySelector('.op-leaf.r')); } op.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`);
     const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth; }
   function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
     if(q.flash===0) cpFlash.classList.add('bloom');
     const ps=$('cpScroll'); ps.classList.remove('morph');
-    opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ ps.scrollTop=0; if(q.morph){ ps.classList.add('morph'); opT2.push(setTimeout(()=>ps.classList.remove('morph'),1800)); } },q.morph?Math.max(0,q.gone-200):q.gone), setTimeout(()=>{ if(q.morph&&window.sceauSealFly) sceauSealFly(op.querySelector('.op-seal'),$('cpScroll').querySelector('.cp-seal')); op.classList.add('gone'); },q.gone)]; }
+    opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ ps.scrollTop=0; if(q.morph){ ps.classList.add('morph'); opT2.push(setTimeout(()=>ps.classList.remove('morph'),1800)); } },q.morph?Math.max(0,q.gone-200):q.gone), setTimeout(()=>op.classList.add('gone'),q.gone)]; }
   function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
   op.addEventListener('click',playOp);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playOp(); } });

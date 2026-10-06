@@ -136,10 +136,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     l'embrasure seulement ; ils s'ouvrent derrière le mur, puis la caméra traverse la porte (`opThrough`, centrée sur la
     porte, jusqu'à ce qu'elle remplisse l'écran). Même chose dans l'aperçu et dans les cartes de l'étape Ouverture (`.ow`).
     Sans contour (porte qui remplit l'image), les deux moitiés de l'image s'ouvrent comme avant.
-    **Un seul sceau** (« il y a encore le sceau qui réapparaît, pourquoi ? ») : le sceau de l'enveloppe disparaissait avec
-    elle, puis celui de l'accueil apparaissait en fondu en haut de la page. Désormais il **glisse** de l'enveloppe à sa
-    place sur l'accueil (`sceauSealFly()` dans themes.js, 0,8 s, classes `s-fly` / `s-go` : jamais `go`, déjà pris par
-    le bouton d'envoi de la réponse, qui l'étirait en un rectangle sombre).
+    **Pas d'animation du sceau** (6 octobre 2026) : un essai où le sceau de l'enveloppe glissait jusqu'à l'accueil a été
+    refusé (« c'est pas ouf, on le redécouvre après, ça me va ») : le sceau de l'accueil apparaît avec le texte.
     Toute nouvelle ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à
     aucun moment l'écran ne doit être vide ou tout blanc.
     - **Voile** = un grand rideau **opaque** (le tissu du thème, `img/open/<thème>-rideau.webp`, coupé en deux
