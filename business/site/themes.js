@@ -2,7 +2,7 @@
 window.SCEAU_THEMES={
   conte:{name:"Conte de fées",style:"Peinture",short:"Château, carrosse, crépuscule",desc:"Un château, un carrosse et un ciel de crépuscule. Pour les mariages romantiques.",couple:"Emma & Louis",
     font:'"Great Vibes",cursive',color:"#fff",
-    scenes:[["Ils se marient","NAMES","Samedi 5 juin 2027"],["La cérémonie","Sous l'arche de roses","15h00 · Jardins du château","Itinéraire"],["La fête","Dîner au château","Dès 19h, bal jusqu'au bout de la nuit"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre"]]},
+    scenes:[["Nous vous invitons","NAMES","Samedi 5 juin 2027"],["La cérémonie","Sous l'arche de roses","15h00 · Jardins du château","Itinéraire"],["La fête","Dîner au château","Dès 19h, bal jusqu'au bout de la nuit"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre"]]},
   artdeco:{name:"Art déco",style:"Art déco",short:"Noir, or, années folles",desc:"Noir et or, géométrie des années 1920, champagne et jazz.",couple:"Margaux & Victor",
     font:'"Limelight",serif',color:"#d9b96a",ey:"#d9b96a",tx:"#efe3c2",size:.8,
     scenes:[["Save the date","NAMES","Samedi 16 octobre 2027"],["La cérémonie","Au grand salon","16h00 · Hôtel particulier, Paris 8e","Itinéraire"],["La soirée","Champagne & jazz","Dès 20h · Tenue de soirée"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
@@ -32,7 +32,7 @@ window.SCEAU_THEMES={
     scenes:[["Bismillah","NAMES","Samedi 12 juin 2027"],["Le henné","Vendredi soir","19h00 · Chez la famille Alaoui","Itinéraire"],["La cérémonie","Au riad","Samedi 14h00","Itinéraire"],["La fête","Serez-vous des nôtres ?","Samedi, dès 19h","Répondre"]]},
   gravure:{name:"Gravure",style:"Gravure",short:"Encre ancienne, papier vieilli",desc:"Gravure à l'encre sur papier ancien, comme un livre d'autrefois.",couple:"Claire & Thomas",light:true,
     font:'"IM Fell English",Georgia,serif',italic:true,color:"#2a2620",ey:"#6b6152",tx:"#4a443a",size:.74,stack:true,
-    scenes:[["Ils se marient","NAMES","Samedi 2 octobre 2027"],["La messe","Église Saint-Martin","15h00","Itinéraire"],["Le dîner","Au château","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
+    scenes:[["Nous vous invitons","NAMES","Samedi 2 octobre 2027"],["La messe","Église Saint-Martin","15h00","Itinéraire"],["Le dîner","Au château","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er septembre","Répondre"]]},
   dolcevita:{name:"Dolce Vita",launch:true,compose:true,nocal:true,style:"Peinture",short:"Riviera, citronniers, Vespa",desc:"Côte amalfitaine, citronniers et dîner face à la mer.",couple:"Giulia & Hugo",
     font:'"Italiana",serif',color:"#fff",size:.85,
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]}
@@ -60,7 +60,7 @@ Object.assign(window.SCEAU_THEMES,{
     scenes:[["On se marie !", "NAMES", "Samedi 26 juin 2027"], ["La cérémonie", "Mairie de Marseille", "15h00", "Itinéraire"], ["La soirée", "Rooftop & dance floor", "Dès 20h", "Itinéraire"], ["Tu viens ?", "Serez-vous des nôtres ?", "Avant le 1er juin", "Répondre"]]},
   oldmoney:{name:"Old money",launch:true,compose:true,style:"Old money",short:"Manoir, voiture ancienne, buis taillés",desc:"Un manoir anglais, une voiture ancienne et des buis taillés : l'élégance discrète.",couple:"Victoire & Charles",long:true,light:true,
     font:'"Playfair Display",Georgia,serif',italic:true,color:"#1f2b44",size:.86,gf:"Playfair+Display:ital@0;1",music:"valse",particles:"none",
-    scenes:[["Ils se marient", "NAMES", "Samedi 12 juin 2027"], ["La cérémonie", "À la chapelle", "15h00 · Dans le parc", "Itinéraire"], ["Le dîner", "Sous la tente", "Dès 19h30", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er mai", "Répondre"]]},
+    scenes:[["Nous vous invitons", "NAMES", "Samedi 12 juin 2027"], ["La cérémonie", "À la chapelle", "15h00 · Dans le parc", "Itinéraire"], ["Le dîner", "Sous la tente", "Dès 19h30", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 1er mai", "Répondre"]]},
   afro:{name:"Kente",style:"Afro",short:"Kente, wax, baobab au crépuscule",desc:"Kente et wax, baobab au crépuscule, calebasses et cauris : la fête aux couleurs de l'Afrique.",couple:"Fatou & Kwame",long:true,
     font:'"Abril Fatface",serif',color:"#fff",size:.82,gf:"Abril+Fatface",music:"marine",particles:"none",
     scenes:[["Nous nous marions", "NAMES", "Samedi 21 août 2027"], ["La cérémonie", "Sous le dais de kente", "15h00", "Itinéraire"], ["La fête", "Sous le baobab", "Dès 20h", "Itinéraire"], ["Réponse souhaitée", "Serez-vous des nôtres ?", "Avant le 15 juillet", "Répondre"]]}
@@ -126,7 +126,7 @@ Object.assign(window.SCEAU_THEMES,{
     font:'"Cormorant Garamond",Georgia,serif',italic:true,color:"#2f3a5a",ey:"#4a5578",tx:"#34405e",size:.95,gf:"Cormorant+Garamond:ital,wght@0,500;1,400",music:"valse",particles:"none",
     mono:["#2f3a5a","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],
     pals:[{name:"Lavande",c:"#6f63a3",seal:"bleu"},{name:"Olivier",c:"#6b7a45",seal:"sauge"},{name:"Pierre dorée",c:"#b08648",seal:"or"}],
-    scenes:[["Ils se marient","NAMES","Samedi 3 juillet 2027"],["La cérémonie","À l'église du village","16h00 · Lourmarin","Itinéraire"],["Le dîner","Sous les platanes","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juin","Répondre","dark"]]};
+    scenes:[["Nous vous invitons","NAMES","Samedi 3 juillet 2027"],["La cérémonie","À l'église du village","16h00 · Lourmarin","Itinéraire"],["Le dîner","Sous les platanes","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juin","Répondre","dark"]]};
   T.dolcevitajour=Object.assign({},T.dolcevita,{jour:undefined,compose:false,launch:false,light:true,
     color:"#193f64",ey:"#2f5d86",tx:"#2c3e55",mono:["#193f64","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],lieux:['eglise','jardin'],lieuAlt:{mairie:'eglise',salle:'jardin',plage:'jardin'},
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]});

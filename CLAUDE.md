@@ -219,8 +219,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     un thème présent dans les deux versions n'apparaît qu'une fois. Le configurateur montre les mêmes vignettes.
 27. **Chaque chose à sa page** : les questions sur `/questions/`, le formulaire de contact sur `/contact/` (plus dans le
     configurateur), le tableau de bord en lien depuis « Les réponses arrivent » (accueil) et « Dans toutes les formules ».
-    Les formules se comparent **en images** (bande de 4 vignettes par formule, badge appareil photo = peint d'après votre
-    photo), pas seulement en texte. La fin du configurateur est un récapitulatif ligne par ligne, la formule, « Ensuite »
+    Plus de bande de vignettes dans les cartes des formules (retirée le 6 octobre 2026, règle 44). La fin du configurateur est un récapitulatif ligne par ligne, la formule, « Ensuite »
     en 3 temps, puis le bouton « Commander · formule prix ».
 
 28. **Dans une grille de vignettes, la sélection est une coche** (pastille noire ✓ en haut à droite, les autres vignettes
@@ -501,6 +500,16 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Le bouton Calendrier met le lieu, la note et le lien dans l'événement (`icsUrl()`), pour l'itinéraire le jour J.
     On ne prend pas : la liste des invités visible, les commentaires, la vérification du téléphone ou du mail pour
     répondre, le prix par invité (voir la fiche 16, § 5).
+
+44. **La page Formules dit ce qu'on achète et ce qu'on ne fait pas soi-même** (6 octobre 2026 : « les images c'est pas
+    vraiment logique » ; « proposer ce qu'ils ne peuvent pas faire eux-mêmes sur Canva »). En haut, « ce que vous recevez »
+    en 3 temps (le lien, le faire-part animé, le tableau de bord). **Pas de vignettes dans les cartes des formules** :
+    l'utilisateur les a fait retirer (« ça sert à rien de mettre les photos ici ») après des incohérences (mairie de nuit
+    alors qu'une mairie, c'est le jour ; église rognée). Les formules se distinguent par leurs mots et leurs listes.
+    Juste après les prix, la section
+    « Ce que vous ne pouvez pas faire sur Canva » (`#pourquoi`, `.vs`) : fait soi-même contre Save The Oui, ligne par ligne,
+    étiquette « Signature » sur ce qui n'est pas dans Essentiel. « Dans toutes les formules » ne liste que ce qui est
+    vraiment dans Essentiel (pas le lien par famille, ni l'anglais en plus, ni le save-the-date).
 
 ## Méthode
 
