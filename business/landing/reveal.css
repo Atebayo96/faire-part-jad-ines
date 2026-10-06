@@ -43,13 +43,14 @@
   background:radial-gradient(circle at 38% 32%,#fffdf7,#f1e6cc 70%,#dccb9f);color:var(--pd);font:700 max(11px,2.6cqw)/1 Inter,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;
   box-shadow:0 4px 12px rgba(0,0,0,.35),inset 0 -2px 4px rgba(0,0,0,.12);animation:rvlPulse 2s ease-in-out infinite;cursor:pointer}
 .rvl-hub:disabled{animation:none;cursor:default}
-.rvl-hub:focus-visible,.rvl-btn:focus-visible,.rvl-lever:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.rvl-hub:focus-visible,.rvl-btn:focus-visible,.rvl-slot:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 @keyframes rvlPulse{0%,100%{box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 0 rgba(255,246,218,.6)}50%{box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 9px rgba(255,246,218,0)}}
 .rvl-wheel.won .rvl-win path{animation:rvlWin .5s ease-in-out 3 alternate}
 @keyframes rvlWin{to{filter:brightness(1.35)}}
 
 /* jackpot */
-.rvl-slot{display:flex;align-items:flex-end;gap:min(2cqw,8px)}
+.rvl-slot{display:flex;align-items:flex-end;gap:min(2cqw,8px);cursor:pointer;border-radius:12px;-webkit-tap-highlight-color:transparent}
+.rvl-slot[aria-disabled]{cursor:default}
 .rvl-box{position:relative;padding:min(3cqw,11px);border-radius:14px;background:linear-gradient(160deg,var(--pl),var(--p) 45%,var(--pd));
   box-shadow:0 12px 24px -6px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -2px 0 rgba(0,0,0,.2);
   outline:2px dotted rgba(255,246,218,.9);outline-offset:-5px;animation:rvlLights 1s steps(1) infinite}

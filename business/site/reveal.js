@@ -114,22 +114,23 @@
   function slot(root,o,P,S,done){
     const H=14, reel=(cls,vals,fin)=>`<div class="rvl-reel ${cls}"><div class="rvl-strip">${['?',...Array.from({length:H},()=>pick(vals)),fin].map(v=>`<div>${esc(v)}</div>`).join('')}</div></div>`;
     const yrs=[P.year-2,P.year-1,P.year+1,P.year+2,P.year+3];
-    root.querySelector('.rvl-game').innerHTML=`<div class="rvl-slot"><div class="rvl-box"><div class="rvl-reels">`+
+    // pas de bouton « Lancer » sous la machine (« ce bouton sert à rien ») : on touche la machine ou son levier
+    root.querySelector('.rvl-game').innerHTML=`<div class="rvl-slot" role="button" tabindex="0" aria-label="${esc(S.pull)}"><div class="rvl-box"><div class="rvl-reels">`+
       reel('d',Array.from({length:31},(_,i)=>P.dd(i+1)),P.dd(P.day))+reel('m',P.long,P.long[P.month])+reel('y',yrs,P.year)+
-      `</div></div><button type="button" class="rvl-lever" aria-label="${esc(S.pull)}"></button></div>`+
-      `<button type="button" class="rvl-btn">${esc(S.pull)}</button>`;
+      `</div></div><div class="rvl-lever" aria-hidden="true"></div></div>`;
+    const m=root.querySelector('.rvl-slot');
     let spun=false;
     const go=()=>{
       if(spun) return; spun=true; root.classList.add('touched');
-      root.querySelector('.rvl-lever').classList.add('pull'); root.querySelector('.rvl-btn').disabled=true;
+      root.querySelector('.rvl-lever').classList.add('pull'); m.removeAttribute('tabindex'); m.setAttribute('aria-disabled','true');
       const strips=[...root.querySelectorAll('.rvl-strip')];
       strips.forEach((s,i)=>{ const dur=reduce?.4:1.7+i*.65;
         s.style.transition=`transform ${dur}s cubic-bezier(.2,.62,.28,1.06) ${reduce?0:.18}s`;
         requestAnimationFrame(()=>{ s.style.transform=`translateY(${(-(H+1)/(H+2)*100).toFixed(4)}%)`; }); });
       setTimeout(()=>{ root.querySelector('.rvl-box').classList.add('won'); done(); },reduce?500:(1.7+2*.65+.18)*1000+120);
     };
-    root.querySelector('.rvl-lever').addEventListener('click',go);
-    root.querySelector('.rvl-btn').addEventListener('click',go);
+    m.addEventListener('click',go);
+    m.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
   }
 
   function mount(el,o){

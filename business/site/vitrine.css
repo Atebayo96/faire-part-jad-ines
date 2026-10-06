@@ -453,6 +453,14 @@
   .op.opening .op-flap{animation:flapPartial 2.1s cubic-bezier(.32,0,.34,1) forwards}
   .op.opening .op-fshadow{opacity:0;transition:opacity .5s ease}
   @keyframes flapPartial{0%{transform:rotateX(0deg)}100%{transform:rotateX(40deg)}}
+  /* enveloppe : dès le toucher, un zoom très doux et continu vers elle ; elle s'efface en fondu pendant qu'il continue,
+     et le faire-part, déjà monté dessous, finit le geste en se posant à sa taille (morph) : jamais d'écran de lumière
+     entre les deux (« faut que ça soit direct, un morph avec le faire-part ») */
+  .op.opening .op-env-in{animation:envZoom 2.2s cubic-bezier(.45,0,.75,1) forwards}
+  @keyframes envZoom{from{transform:scale(1.32)}to{transform:scale(1.72)}}
+  .op[data-type="env"].gone{transition:opacity .9s cubic-bezier(.4,0,.2,1),visibility .9s}
+  @keyframes pageMorph{from{transform:scale(1.06)}to{transform:none}}
+  .pv-scroll.morph{animation:pageMorph 1.7s cubic-bezier(.2,.55,.3,1) both}
 
   /* lumière commune aux trois ouvertures */
   .cp-flash{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;
@@ -468,16 +476,13 @@
   .op[data-type="voile"].gone{transition:opacity .8s cubic-bezier(.4,0,.6,1),visibility .8s}
   @keyframes flashBloom{0%{opacity:0}44%{opacity:1}54%{opacity:1}100%{opacity:0}}
 
-  /* rideau : il se tasse un instant, puis monte d'un seul geste (lent, accélère, ralentit), en se plissant légèrement */
+  /* rideau : il monte d'un seul geste (lent, accélère, ralentit), sans tassement, sans lumière : plus simple */
   .op-cur{background:var(--cur,url("/img/open/rideau.webp")) center/cover no-repeat;transform-origin:50% 0;will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
   .op-cur-edge{position:absolute;left:0;right:0;bottom:-40px;height:40px;background:linear-gradient(rgba(0,0,0,.4),transparent)}
   .op-mono{position:absolute;left:0;right:0;top:38%;text-align:center;font:400 54px/1 "Great Vibes",cursive;color:#e9c879;text-shadow:0 2px 0 #7a5a14,0 6px 16px rgba(0,0,0,.5);transition:opacity .45s ease,transform .6s ease}
-  .op.opening .op-cur{animation:opCurtain 1.75s both}
-  .op.opening .op-mono{opacity:0;transform:translateY(-6px) scale(.97)}
-  @keyframes opCurtain{
-    0%{transform:translate3d(0,0,0) scaleY(1);animation-timing-function:cubic-bezier(.33,0,.5,1)}
-    5%{transform:translate3d(0,.5%,0) scaleY(1.003);animation-timing-function:cubic-bezier(.45,.05,.25,1)}
-    100%{transform:translate3d(0,-106%,0) scaleY(.9)}}
+  .op.opening .op-cur{animation:opCurtain 1.6s cubic-bezier(.55,0,.25,1) both}
+  .op.opening .op-mono{opacity:0}
+  @keyframes opCurtain{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-106%,0)}}
 
   /* grandes portes : les battants partent LENTEMENT (petit déclic, puis un seul mouvement qui s'étire sur 2,6 s),
      la salle est d'abord une lumière chaude derrière eux, puis cette lumière s'efface pendant l'ouverture et laisse
@@ -510,16 +515,16 @@
   .op.opening .op-man{animation:manPush 2.9s cubic-bezier(.45,0,.25,1) both}
   @keyframes opDoorL{
   0%{transform:rotateY(0);animation-timing-function:cubic-bezier(.6,0,.8,.4)}
-  7%{transform:rotateY(-1.5deg);animation-timing-function:cubic-bezier(.35,0,.55,1)}
-  64%{transform:rotateY(-84deg);animation-timing-function:cubic-bezier(.2,0,.4,1)}
-  86%{transform:rotateY(-103deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}
-  100%{transform:rotateY(-100deg)}}
-  @keyframes opDoorR{
-  0%{transform:rotateY(0);animation-timing-function:cubic-bezier(.6,0,.8,.4)}
   7%{transform:rotateY(1.5deg);animation-timing-function:cubic-bezier(.35,0,.55,1)}
   64%{transform:rotateY(84deg);animation-timing-function:cubic-bezier(.2,0,.4,1)}
   86%{transform:rotateY(103deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}
   100%{transform:rotateY(100deg)}}
+  @keyframes opDoorR{
+  0%{transform:rotateY(0);animation-timing-function:cubic-bezier(.6,0,.8,.4)}
+  7%{transform:rotateY(-1.5deg);animation-timing-function:cubic-bezier(.35,0,.55,1)}
+  64%{transform:rotateY(-84deg);animation-timing-function:cubic-bezier(.2,0,.4,1)}
+  86%{transform:rotateY(-103deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}
+  100%{transform:rotateY(-100deg)}}
   @keyframes opRoom{from{opacity:1}to{opacity:0}}
   @keyframes opShade{from{opacity:0}to{opacity:1}}
   @keyframes opGlow{0%{opacity:0;transform:scale(.6)}45%{opacity:.9;transform:scale(1.1)}100%{opacity:0;transform:scale(1.4)}}
@@ -538,18 +543,16 @@
   .op-sheer.l::after{right:0;background:linear-gradient(270deg,rgba(0,0,0,.45),transparent)}
   .op-sheer.r::after{left:0;background:linear-gradient(90deg,rgba(0,0,0,.45),transparent)}
   .op-voile .op-mono{top:40%}
-  .op.opening .op-sheer.l{animation:opSheerL 2.4s cubic-bezier(.62,0,.22,1) both,opWaveL 2.4s ease-in-out both}
-  .op.opening .op-sheer.r{animation:opSheerR 2.4s cubic-bezier(.62,0,.22,1) both,opWaveR 2.4s ease-in-out both}
+  .op.opening .op-sheer.l{animation:opSheerL 2.4s cubic-bezier(.62,0,.22,1) both}
+  .op.opening .op-sheer.r{animation:opSheerR 2.4s cubic-bezier(.62,0,.22,1) both}
   .op.opening .op-sheer::after{animation:opShade 1.6s ease-in .3s both}
-  .op.opening .op-voile .op-mono{opacity:0;transform:translateY(-6px) scale(.97)}
+  .op.opening .op-voile .op-mono{opacity:0}
   /* un seul geste : le pan part lentement, accélère, puis ralentit jusqu'à se poser (une seule courbe, aucun arrêt
-     intermédiaire) ; l'ondulation du tissu est une animation à part (skewY), superposée au mouvement */
+     intermédiaire). Plus d'ondulation (skewY) ni de lumière : « c'est pas ouf, faut que ça soit plus simple » */
   @keyframes opSheerL{from{scale:1 1;translate:0 0}to{scale:.13 1;translate:-3% 0}}
   @keyframes opSheerR{from{scale:1 1;translate:0 0}to{scale:.13 1;translate:3% 0}}
-  @keyframes opWaveL{0%{transform:skewY(0)}40%{transform:skewY(-1.3deg)}75%{transform:skewY(.4deg)}100%{transform:skewY(0)}}
-  @keyframes opWaveR{0%{transform:skewY(0)}40%{transform:skewY(1.3deg)}75%{transform:skewY(-.4deg)}100%{transform:skewY(0)}}
   .replay{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font:inherit;font-size:13px;cursor:pointer}
-  @media (prefers-reduced-motion:reduce){ .op-flap,.op-env,.op-cur,.op-leaf{transition-duration:.01s!important;transition-delay:0s!important} .op-man{animation:none} .op.opening .op-leaf,.op.opening .op-doors,.op.opening .op-room,.op.opening .op-sheer,.op.opening .op-man,.op.opening .op-doors-in,.op.opening .op-glow,.op.opening .op-leaf::after,.op.opening .op-flap{animation-duration:.01s!important} }
+  @media (prefers-reduced-motion:reduce){ .op-flap,.op-env,.op-cur,.op-leaf{transition-duration:.01s!important;transition-delay:0s!important} .op-man{animation:none} .op.opening .op-leaf,.op.opening .op-doors,.op.opening .op-room,.op.opening .op-sheer,.op.opening .op-man,.op.opening .op-doors-in,.op.opening .op-glow,.op.opening .op-leaf::after,.op.opening .op-flap,.op.opening .op-env-in{animation-duration:.01s!important} .pv-scroll.morph{animation:none} }
 
   /* ----- mobile ----- */
   @media (max-width:720px){
@@ -915,8 +918,8 @@
 .op-card.anim .ov-door .dl{left:0;background-position:left center;transform-origin:left;transform:none;animation-name:ovDoorL}
 .op-card.anim .ov-door .dr{right:0;background-position:right center;transform-origin:right;transform:none;animation-name:ovDoorR}
 .op-card.anim .ov-door .fl{inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,244,214,.95),rgba(255,236,190,0) 70%);opacity:0;animation-name:ovFlash}
-@keyframes ovDoorL{0%,14%{transform:rotateY(0)}58%,92%{transform:rotateY(-100deg)}100%{transform:rotateY(0)}}
-@keyframes ovDoorR{0%,14%{transform:rotateY(0)}58%,92%{transform:rotateY(100deg)}100%{transform:rotateY(0)}}
+@keyframes ovDoorL{0%,14%{transform:rotateY(0)}58%,92%{transform:rotateY(100deg)}100%{transform:rotateY(0)}}
+@keyframes ovDoorR{0%,14%{transform:rotateY(0)}58%,92%{transform:rotateY(-100deg)}100%{transform:rotateY(0)}}
 @keyframes ovFlash{0%,22%{opacity:0}38%{opacity:.85}56%,100%{opacity:0}}
 /* révélation de la date */
 .op-card.anim .ph .dt{left:0;right:0;top:30%;text-align:center;font:italic 500 11px/1.2 "Cormorant Garamond",Georgia,serif;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}

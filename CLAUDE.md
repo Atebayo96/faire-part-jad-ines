@@ -113,6 +113,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     écran blanc. La page est montée tout de suite (`on` ≈ 150–320 ms) et se voit à travers l'entrebâillement ; les
     battants, le rideau ou les pans s'effacent pendant qu'ils finissent de s'ouvrir. L'utilisateur a aussi refusé
     la version où l'on restait une seconde sur un écran de lumière avant de voir la page (démo Nour & Ilyes).
+    **Enveloppe (6 octobre 2026)** : plus aucune lumière. Dès le toucher, un zoom très doux et continu vers l'enveloppe
+    (`envZoom`, 1,32 → 1,72 sur 2,2 s, courbe qui accélère à peine) ; à 1,1 s elle s'efface en fondu (0,9 s) pendant que
+    le zoom continue, et la page, montée dessous à 0,9 s, se pose de 1,06 à 1 (`pageMorph`, classe `morph` sur `#app`,
+    `.pv-scroll.morph` dans l'aperçu) : un morph direct, jamais l'écran crème du pic de lumière (« faut que ça soit direct »).
+    **Rideau et voile, plus simples** (6 octobre 2026, « une animation bizarre qui se lance, c'est pas ouf ») : plus de
+    lumière (`flash: null`), le rideau monte d'un seul `translate` (plus de tassement ni d'écrasement), les pans du voile
+    s'écartent sans ondulation `skewY`, le monogramme s'efface sans bouger.
+    **Les portes s'ouvrent vers l'intérieur** (6 octobre 2026, « une porte s'ouvre vers l'intérieur ») : les battants
+    s'éloignent dans la salle (`opDoorL` en `rotateY` positif, `opDoorR` négatif), même chose dans les cartes `ovDoor*`.
     Toute nouvelle ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à
     aucun moment l'écran ne doit être vide ou tout blanc.
     - **Voile** = un grand rideau **opaque** (le tissu du thème, `img/open/<thème>-rideau.webp`, coupé en deux
@@ -409,6 +418,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **Ticket, roue et jackpot sont le vrai composant** (`SceauReveal.mount`, aux couleurs choisies, réduit dans le petit
     téléphone, `mountMini()`), pas un dessin à part : « ceux-là c'est pas les mêmes que ceux-là, c'est dommage ». Au
     survol, la roue tourne, le ticket se gratte, les rouleaux défilent (CSS sur `.rvm`).
+    **Jackpot sans bouton « Lancer »** (« ce bouton sert à rien ») : on touche la machine ou son levier (`.rvl-slot`
+    en `role=button`, reveal.js) ; la pastille grise restait sous les rouleaux une fois tirée.
 34. **En grand tableau, l'étape 3 décrit le tableau, pas des écrans** (« Votre tableau ») : l'illustration d'ouverture,
     le mot des familles, les événements dans leurs cadres (la scène peinte du thème, un lieu de la bibliothèque ou votre
     photo), puis les parties facultatives (histoire, bande de photos, dress code ; bon à savoir, liste), la réponse et le

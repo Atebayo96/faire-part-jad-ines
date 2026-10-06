@@ -547,19 +547,20 @@
   const op=$('#op');
   // une seule arche continue, comme le faire-part d'Inès & Jad : l'ouverture commence, la lumière monte,
   // le passage vers la première page se fait sous le pic blanc, puis la lumière se retire et dévoile la page déjà nette
-  // enveloppe : la lumière monte à 1 s et la page apparaît sous le pic, comme le faire-part d'Inès & Jad.
+  // enveloppe : pas de lumière ; zoom doux et continu dès le toucher, l'enveloppe s'efface et le faire-part, monté
+  // dessous, finit le geste en se posant (morph, `morph` sur #app).
   // rideau, portes et voile : la lumière part AU TOUCHER (flash:0), en même temps que le mouvement, et monte
   // doucement avec lui (jamais de plein écran blanc) ; la page est déjà vivante derrière (on la voit à travers
   // l'entrebâillement, ou dès que les pans s'écartent), et le rideau / les battants s'effacent en fondu alors
   // qu'ils finissent de s'ouvrir : tout s'enchaîne, aucun temps mort sur de la lumière (voir CLAUDE.md, règle 15).
-  const SEQ={env:{flash:1000,on:1530,gone:1560},cur:{flash:0,on:320,gone:760,cls:'soft'},door:{flash:500,on:200,gone:1400,cls:'door'},voile:{flash:400,on:150,gone:1500,cls:'door'}};
+  const SEQ={env:{flash:null,on:900,gone:1100,morph:1},cur:{flash:null,on:320,gone:760,cls:'soft'},door:{flash:500,on:200,gone:1400,cls:'door'},voile:{flash:null,on:150,gone:1500,cls:'door'}};
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
     if(q.cls) flash.classList.add(q.cls);
-    if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash); else flash.classList.add('bloom');
-    setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); if(LG) longStart(); },q.on);
+    if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash); else if(q.flash===0) flash.classList.add('bloom');
+    setTimeout(()=>{ if(q.morph){ app.classList.add('morph'); setTimeout(()=>app.classList.remove('morph'),1800); } app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); if(LG) longStart(); },q.on);
     setTimeout(()=>op.classList.add('gone'),q.gone);
     setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1800,q.gone+1400));
   }
