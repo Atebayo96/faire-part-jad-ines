@@ -1,0 +1,91 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<!-- Pub « carrousel » : tous nos univers sur un arc 3D qui défile par swipes. Servie par render.js sur le site
+     (http://localhost:8765, polices et images du site), filmée image par image (render(t) est déterministe). -->
+<link rel="stylesheet" href="/polices/polices.css">
+<style>
+:root{--ink:#16140f;--mute:#6b665d;--bg:#f6f4f0}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:var(--H,1920px);overflow:hidden;background:var(--bg)}
+#st{position:absolute;inset:0;overflow:hidden;background:radial-gradient(90% 60% at 50% 62%,#fff 0%,var(--bg) 70%)}
+.abs{position:absolute}
+#logo{left:0;right:0;top:var(--logoY);text-align:center;color:var(--ink);white-space:nowrap}
+#logo span{font:500 26px/1 "Inter Tight",Inter,sans-serif;letter-spacing:.3em;text-transform:uppercase}
+#logo b{font:400 88px/1 "Great Vibes",cursive;font-weight:400;margin-left:8px;position:relative;top:9px}
+#title{left:0;right:0;top:var(--titleY);text-align:center;color:var(--ink);font:500 88px/1.04 "Cormorant Garamond",serif;letter-spacing:-.01em}
+#title i{font-style:italic;font-weight:400}
+#sub{left:110px;right:110px;top:var(--subY);text-align:center;color:var(--mute);font:500 34px/1.4 Inter,sans-serif}
+#btn{left:50%;top:var(--btnY);height:96px;padding:0 64px;border-radius:48px;background:#0d0d0d;color:#fff;display:flex;align-items:center;
+  font:600 32px/1 Inter,sans-serif;white-space:nowrap}
+#car{left:0;right:0;top:var(--carY);height:900px;perspective:2000px;perspective-origin:50% 45%}
+.cd{position:absolute;left:50%;top:0;width:410px;height:729px;margin-left:-205px;border-radius:34px;overflow:hidden;background:#ddd;
+  box-shadow:0 46px 70px -28px rgba(30,24,12,.45),0 8px 18px rgba(30,24,12,.12);backface-visibility:hidden}
+.cd img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
+.cd .tx{position:absolute;left:0;right:0;top:9.5%;text-align:center;padding:0 30px}
+.cd .ey{font:600 14px/1 Inter,sans-serif;letter-spacing:.26em;text-transform:uppercase;opacity:.92}
+.cd .ey.bas{font:400 27px/1 Amiri,serif;letter-spacing:0;text-transform:none}
+.cd .nm{margin-top:18px;line-height:1.08}
+.cd .dt{margin-top:16px;font:500 21px/1.2 "Cormorant Garamond",serif}
+.cd .lt{text-shadow:0 2px 12px rgba(0,0,0,.45)}
+#lab{left:0;right:0;top:var(--labY);text-align:center;color:var(--ink)}
+#lab .n{font:500 50px/1 "Cormorant Garamond",serif}
+#lab .s{margin-top:14px;font:500 26px/1 Inter,sans-serif;color:var(--mute)}
+#end{left:0;right:0;top:var(--labY);text-align:center;color:var(--ink);font:500 44px/1 "Cormorant Garamond",serif}
+#end small{display:block;margin-top:16px;font:500 28px/1 Inter,sans-serif;letter-spacing:.16em;color:var(--mute)}
+</style></head><body>
+<div id="st">
+  <div id="logo" class="abs"><span>Save the</span><b>Oui</b></div>
+  <div id="title" class="abs">Des faire-part<br><i>qui s’ouvrent.</i></div>
+  <div id="sub" class="abs">Choisissez un univers, composez-le en 10 minutes, envoyez le lien à vos invités.</div>
+  <div id="btn" class="abs">Créer votre faire-part</div>
+  <div id="car" class="abs"></div>
+  <div id="lab" class="abs"><div class="n"></div><div class="s"></div></div>
+  <div id="end" class="abs">En ligne dès le paiement · dès 99 €<small>SAVETHEOUI.FR</small></div>
+</div>
+<script>
+const TH=window.TH;               // themes.json, injecté par render.js
+const H=window.H||1920;          // 1920 (9:16) ou 1350 (4:5)
+const L=H>=1900?{logoY:150,titleY:290,subY:500,btnY:650,carY:860,labY:1680}:{logoY:70,titleY:170,subY:-999,btnY:-999,carY:440,labY:1215};
+const r=document.documentElement.style; r.setProperty('--H',H+'px'); for(const k in L) r.setProperty('--'+k,L[k]+'px');
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), lin=(t,a,b)=>cl((t-a)/(b-a));
+const eo=x=>1-Math.pow(1-x,3), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c=1.4;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const N=TH.length, car=$('car');
+const cards=TH.map(t=>{const d=document.createElement('div');d.className='cd';
+  const light=/^#f|^#e|^#d/i.test(t.color);
+  const ey=t.eyebrow==='Bismillah'?'<div class="ey bas">﷽</div>':`<div class="ey">${t.eyebrow}</div>`;
+  const fs=Math.round(56*t.size);
+  d.innerHTML=`<img src="/img/hd/${t.k}-1.webp"><div class="tx ${light?'lt':''}" style="color:${t.color}">${ey}
+    <div class="nm" style="font-family:${t.font.replace(/"/g,"'")};font-size:${fs}px;${t.upper?'text-transform:uppercase;letter-spacing:.06em;':''}">${t.couple.replace('&','<br>&amp; ')}</div>
+    <div class="dt">${t.date}</div></div>`;
+  car.appendChild(d);return d});
+// position du carrousel : swipes (0,55 s de glissement, puis un temps d'arrêt), début et fin plus lents
+const T0=1.35, STEP=.92, MOVE=.55, NSTEPS=12;
+function pos(t){ if(t<T0) return 0; const k=Math.floor((t-T0)/STEP), f=lin((t-T0)-k*STEP,0,MOVE);
+  return k>=NSTEPS?NSTEPS+.35*eio(lin(t,T0+NSTEPS*STEP,15)):k+eio(f); }
+const SP=440;
+function S(el,o,tr){el.style.opacity=o;if(tr!==undefined)el.style.transform=tr;el.style.visibility=o<=.001?'hidden':'visible'}
+let lastLab=-1;
+function render(t){
+  const p=pos(t);
+  cards.forEach((c,i)=>{let d=((i-p)%N+N)%N; if(d>N/2)d-=N;
+    const ad=Math.abs(d); if(ad>3.2){c.style.visibility='hidden';return}
+    const intro=eo(lin(t,.25+.08*(d+3),.95+.08*(d+3)));
+    const x=d*SP, ry=-d*15, z=ad*70-ad*ad*6, lift=(1-cl(ad))*-14;
+    S(c,intro,`translate3d(${x}px,${(1-intro)*420+lift}px,${z}px) rotateY(${ry}deg)`);
+    c.style.zIndex=100-Math.round(ad*10);
+  });
+  const ttl=eo(lin(t,0,.6)); S($('logo'),ttl,`translateY(${(1-ttl)*20}px)`);
+  const tt=eo(lin(t,.1,.7)); S($('title'),tt,`translateY(${(1-tt)*30}px)`);
+  const su=eo(lin(t,.3,.9)); S($('sub'),su,`translateY(${(1-su)*30}px)`);
+  const pulse=t>12.9?1+.04*Math.sin(Math.PI*lin(t,12.9,13.5)):1;
+  const bt=back(lin(t,.5,1.1)); S($('btn'),lin(t,.5,.7),`translateX(-50%) scale(${(.85+.15*bt)*pulse})`);
+  // nom de l'univers au centre ; laissé à la fin pour le prix et l'adresse
+  const ci=((Math.round(p)%N)+N)%N, fr=Math.abs(p-Math.round(p));
+  if(ci!==lastLab){lastLab=ci;$('lab').children[0].textContent=TH[ci].name;$('lab').children[1].textContent=TH[ci].short;}
+  const lo=Math.min(eo(lin(t,.9,1.3)),1-lin(fr,.12,.32),1-lin(t,12.4,12.7));
+  S($('lab'),lo,`translateY(${(1-lo)*10}px)`);
+  const en=eo(lin(t,12.75,13.3)); S($('end'),en,`translateY(${(1-en)*24}px)`);
+}
+window.render=render;
+</script></body></html>

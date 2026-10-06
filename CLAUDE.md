@@ -616,6 +616,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     celui du soir un ciel noir sur une bande de jardin coupée net. Désormais un grand ciel calme sur la mer et une terrasse
     aux citronniers entière en bas, en `cover` (`T.cover` + `fond`). Images en `?v=17` (vitrine) et `IMGV=23`. L'album photos a son champ de lien (`C.data.photos.url`).
 
+46. **Publicités vidéo dans `business/ads/`** (6 octobre 2026) : une page animée par pub, filmée image par image (`LISEZMOI.md`).
+    Une ouverture reconstituée en CSS a été refusée (« catastrophique, c'est pas du tout ce qu'on a dans notre site ») : on
+    filme **le vrai moteur** (`ads/ouverture/real.js`, horloge et animations pilotées). Jamais d'image prolongée ou détourée
+    dans une pub (`dolcevita-eglise` refusée) : les peintures d'origine (`<thème>-1..4`, `mains`, `fete`, `verres`).
+    Le carrousel 3D incurvé de tous les univers (`ads/carrousel/`) a plu : c'est le modèle des présentations de nos créations.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
