@@ -65,11 +65,13 @@
   .car-item{position:absolute;inset:0;display:block;border-radius:32px;overflow:hidden;border:7px solid #111;background:#111;box-shadow:0 30px 50px -30px rgba(0,0,0,.5);
     color:#fff;text-decoration:none;opacity:0;pointer-events:none;transition:opacity .7s ease;-webkit-tap-highlight-color:transparent}
   .car-item.on{opacity:1;pointer-events:auto}
-  .film{position:absolute;left:0;top:0;width:100%;height:400%;display:flex;flex-direction:column;will-change:transform;transition:transform .85s cubic-bezier(.3,0,.2,1)}
-  .car-item[data-f="1"] .film{transform:translateY(-25%)}
-  .car-item[data-f="2"] .film{transform:translateY(-50%)}
-  .car-item[data-f="3"] .film{transform:translateY(-75%)}
-  .film .pv-sc{height:25%;flex:none}
+  /* accueil : les scènes ne glissent plus en bande (on voyait un trait à chaque raccord) ; la suivante apparaît en fondu
+     par-dessus la précédente, puis son texte se révèle ligne à ligne, comme le faire-part (un swipe = une scène) */
+  .film{position:absolute;inset:0}
+  .film .pv-sc{position:absolute;inset:0;height:100%;opacity:0;z-index:1;transition:opacity 0s 1.1s}
+  .car-item[data-f="0"] .film .pv-sc:nth-child(1),.car-item[data-f="1"] .film .pv-sc:nth-child(2),.car-item[data-f="2"] .film .pv-sc:nth-child(3),.car-item[data-f="3"] .film .pv-sc:nth-child(4){opacity:1;z-index:2;transition:opacity 1.1s cubic-bezier(.4,0,.2,1)}
+  .film .pv-sc>:not(.bg){opacity:0;transform:translateY(14px);transition:opacity .2s,transform 0s .2s}
+  .car-item[data-f="0"] .film .pv-sc:nth-child(1)>:not(.bg),.car-item[data-f="1"] .film .pv-sc:nth-child(2)>:not(.bg),.car-item[data-f="2"] .film .pv-sc:nth-child(3)>:not(.bg),.car-item[data-f="3"] .film .pv-sc:nth-child(4)>:not(.bg){opacity:1;transform:none;transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1);transition-delay:calc(var(--n,0) * 90ms + 750ms)}
   .film .pv-sc>.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   /* faire-part en continu : un seul long tableau, que le telephone descend lentement tout seul */
   .roll{position:absolute;inset:0;overflow:hidden}
