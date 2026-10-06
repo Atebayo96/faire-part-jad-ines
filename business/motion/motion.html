@@ -55,12 +55,12 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--cream)}
 #url{left:0;right:0;top:1500px;text-align:center;font:500 34px/1 IN;letter-spacing:.14em;color:#5d5444}
 </style></head><body>
 <div id="st">
-  <div id="c1" class="abs cap" style="top:190px">Votre faire-part de mariage…</div>
-  <div id="c1b" class="abs cap" style="top:1560px"><i>…mais qui s’ouvre.</i></div>
+  <div id="c1" class="abs cap" style="top:150px">Votre faire-part de mariage…</div>
+  <div id="c1b" class="abs cap" style="top:229px"><i>…mais qui s’ouvre.</i></div>
   <div id="env" class="abs">
     <img id="body" src="file:///home/user/faire-part-jad-ines/business/landing/img/open/env-body.webp">
     <img id="flap" src="file:///home/user/faire-part-jad-ines/business/landing/img/open/env-flap.webp">
-    <div id="seal" class="abs"><img src="file:///home/user/faire-part-jad-ines/business/landing/img/seals/or.webp"><div class="ini">G&amp;H</div></div>
+    <div id="seal" class="abs"><img src="file:///home/user/faire-part-jad-ines/business/landing/img/seals/or.webp"></div>
   </div>
 
   <div id="c2" class="abs cap" style="top:150px">Un lien à envoyer.<br><i>Un faire-part qui vit.</i></div>
@@ -69,15 +69,15 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--cream)}
 
   <div id="ph" class="abs"><div id="scr">
     <img class="bgi" id="i1" src="file:///home/user/faire-part-jad-ines/business/landing/img/hd/dolcevita-mains.webp">
-    <img class="bgi" id="i2" src="file:///home/user/faire-part-jad-ines/business/landing/img/hd/dolcevita-eglise.webp">
+    <img class="bgi" id="i2" src="file:///home/user/faire-part-jad-ines/business/landing/img/hd/dolcevita-2.webp">
     <img class="bgi" id="i3" src="file:///home/user/faire-part-jad-ines/business/landing/img/hd/dolcevita-fete.webp">
     <img class="bgi" id="i4" src="file:///home/user/faire-part-jad-ines/business/landing/img/hd/dolcevita-verres.webp">
-    <div class="ptx" id="t1"><div class="k">Nous nous marions</div><div class="nm">Giulia &amp; Hugo</div><div class="dt">Samedi 22 mai 2027</div></div>
-    <div class="ptx" id="t2"><div class="k">Cérémonie</div><div class="ti">Samedi 22 mai</div><div class="hr">15h00</div>
+    <img id="real" class="bgi" src="real/pre.jpg" style="object-fit:fill"><div class="ptx" id="t1" style="display:none"><div class="k">Nous nous marions</div><div class="nm">Giulia &amp; Hugo</div><div class="dt">Samedi 22 mai 2027</div></div>
+    <div class="ptx" id="t2"><div class="k">Cérémonie</div><div class="ti">Samedi 28 août</div><div class="hr">18h30</div>
       <div class="acts"><div class="pill"><b>➚</b>Itinéraire</div><div class="pill"><b>＋</b>Calendrier</div></div></div>
-    <div class="ptx" id="t3"><div class="k">La soirée</div><div class="ti">Samedi 22 mai</div><div class="hr">20h00</div>
+    <div class="ptx" id="t3"><div class="k">La soirée</div><div class="ti">Samedi 28 août</div><div class="hr">20h30</div>
       <div class="acts"><div class="pill"><b>➚</b>Itinéraire</div><div class="pill"><b>＋</b>Calendrier</div></div></div>
-    <div class="ptx" id="t4"><div class="k">Avant le 1er mars</div><div class="ti">Serez-vous<br>des nôtres ?</div>
+    <div class="ptx" id="t4"><div class="k">Avant le 1er juillet</div><div class="ti">Serez-vous<br>des nôtres ?</div>
       <div class="acts"><div class="pill" id="rep"><b>✓</b>Répondre</div></div></div>
     <div id="tap" class="abs"></div>
     <div id="dash" class="abs"><h4>Vos réponses</h4>
@@ -105,29 +105,36 @@ function inout(t,a,b,d=.45){return Math.min(eo(lin(t,a,a+d)),1-eio(lin(t,b-d,b))
 // révélation ligne à ligne d'un bloc de texte dans le téléphone
 function lines(el,t,a,b){[...el.children].forEach((c,i)=>{const s=a+i*.14;const o=Math.min(eo(lin(t,s,s+.5)),1-lin(t,b-.25,b));
   c.style.opacity=o;c.style.transform=`translateY(${(1-eo(lin(t,s,s+.5)))*26}px)`});el.style.visibility=(t>a-.01&&t<b)?'visible':'hidden'}
-function render(t){
+let curSrc='';
+async function render(t){
   // 1. enveloppe (0 – 2,7 s)
-  S($('c1'),inout(t,.15,2.5),`translateY(${(1-eo(lin(t,.15,.7)))*30}px)`);
-  S($('c1b'),inout(t,1.05,2.5),`translateY(${(1-eo(lin(t,1.05,1.6)))*30}px)`);
+  S($('c1'),inout(t,.2,2.75),`translateY(${(1-eo(lin(t,.2,.7)))*30}px)`);
+  S($('c1b'),inout(t,.75,2.75),`translateY(${(1-eo(lin(t,.75,1.25)))*30}px)`);
+  S($('env'),0);
   const zin=eio(lin(t,0,2.6)), env=$('env');
-  S(env,1-lin(t,2.2,2.45),`scale(${.78+.06*zin+.5*ei(lin(t,1.9,2.62))})`);
+  S(env,0,`scale(${.78+.06*zin+.5*ei(lin(t,1.9,2.62))})`);
   $('flap').style.transform=`rotateX(${-178*eio(lin(t,1.25,2.05))}deg)`;
   $('flap').style.zIndex=t>1.65?0:2;
   const sealOut=eio(lin(t,.95,1.3));
   S($('seal'),1-sealOut,`translateY(${-20*sealOut}px) scale(${1+.08*Math.sin(Math.min(t,.95)*5)*(t<.95?1:0)+.25*sealOut})`);
   $('seal').style.top=(677-105)+'px';
   // 2. téléphone (2,4 – 12 s)
-  const pin=eo(lin(t,2.3,2.95)), pout=eio(lin(t,11.55,12.15));
+  const pin=eo(lin(t,0,.55)), pout=eio(lin(t,11.55,12.15));
   S($('ph'),Math.min(pin,1-pout),`translateY(${(1-pin)*120+pout*-60}px) scale(${(.94+.06*pin)*(1-.08*pout)})`);
   // décors en fondu enchaîné, légère poussée (Ken Burns)
-  const cf=[[2.3,5.1],[4.8,7.25],[6.95,8.95],[8.65,12.3]];
+  const cf=[[-1,-.5],[4.8,7.25],[6.95,8.95],[8.65,12.3]];
   ['i1','i2','i3','i4'].forEach((id,i)=>{const[a,b]=cf[i];const o=i==0?1-lin(t,b-.3,b):Math.min(lin(t,a,a+.3),1-lin(t,b-.3,b));
     S($(id),o,`scale(${1.08-.08*lin(t,a,b)})`)});
-  lines($('t1'),t,2.85,5.0); lines($('t2'),t,5.15,7.15); lines($('t3'),t,7.25,8.9); lines($('t4'),t,9.0,12.3);
+  lines($('t2'),t,5.15,7.15); lines($('t3'),t,7.25,8.9); lines($('t4'),t,9.0,12.3);
   // toucher sur Répondre (9,9 s) et tableau de bord
-  const tp=lin(t,9.85,10.25); const tap=$('tap');
+  // vraie ouverture du site (frames capturées par real.js), toucher du sceau à 1,0 s
+  const TAP0=1.0, fi=Math.min(155,Math.round((t-TAP0)*30)), src=t<TAP0?'real/pre.jpg':`real/r${String(fi).padStart(3,'0')}.jpg`;
+  const rl=$('real'); if(src!==curSrc){curSrc=src;rl.src=src;await rl.decode().catch(()=>{});}
+  S(rl,1-lin(t,4.85,5.15));
+  const tp0=lin(t,TAP0-.25,TAP0+.15);
+  const tp=t<5?tp0:lin(t,9.85,10.25); const tap=$('tap');
   const r=$('rep').getBoundingClientRect(), s=$('scr').getBoundingClientRect();
-  tap.style.left=(r.left-s.left+r.width/2-60)+'px'; tap.style.top=(r.top-s.top+r.height/2-60)+'px';
+  if(t<5){tap.style.left=(304-60)+'px';tap.style.top=(773-60)+'px';}else{tap.style.left=(r.left-s.left+r.width/2-60)+'px'; tap.style.top=(r.top-s.top+r.height/2-60)+'px';}
   S(tap,tp>0&&tp<1?.9*(1-tp):0,`scale(${.4+1.1*tp})`);
   $('rep').style.transform=`scale(${1-.06*Math.sin(Math.PI*lin(t,9.85,10.1))})`;
   const dk=back(lin(t,10.15,10.75));
@@ -136,7 +143,7 @@ function render(t){
   $('n1').textContent=Math.round(87*cnt);$('n2').textContent=Math.round(6*cnt);$('n3').textContent=Math.round(12*cnt);
   $('bar').style.width=(87/105*100*cnt)+'%';
   // légendes
-  S($('c2'),inout(t,2.75,5.05),`translateY(${(1-eo(lin(t,2.75,3.25)))*30}px)`);
+  S($('c2'),inout(t,2.9,5.05),`translateY(${(1-eo(lin(t,2.9,3.4)))*30}px)`);
   S($('c3'),inout(t,5.15,8.95),`translateY(${(1-eo(lin(t,5.15,5.65)))*30}px)`);
   S($('c4'),inout(t,9.05,11.95),`translateY(${(1-eo(lin(t,9.05,9.55)))*30}px)`);
   // 3. signature (12 – 15 s)
