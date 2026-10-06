@@ -140,6 +140,35 @@ Object.assign(window.SCEAU_THEMES,{
 /* « Bismillah » s'écrit en arabe, en calligraphie : la ligature basmala (U+FDFD « ﷽ ») de la police Amiri hébergée dans
    polices/, exactement comme sur le faire-part d'Inès & Jad (pas la phrase lettre à lettre). Dans le faire-part comme dans la vitrine.
    Retourne le texte à afficher et s'il est en arabe (classe .ar, dir="rtl"). */
+// porte dans un mur (règle 15) : contour de la porte dans img/open/<thème>-portes.webp, en fractions de l'image
+// [x0, y0, x1, y1, arc] (arc = hauteur du cintre, 0 pour une porte droite). Sans contour, la porte remplit l'image et
+// les deux moitiés de l'image s'ouvrent. Avec, le mur reste en place et seuls les battants s'ouvrent.
+window.SCEAU_THEMES.doucefrance.door=[.233,.245,.778,.845,0];
+window.SCEAU_THEMES.alhambra.door=[.089,.10,.922,1,.25];
+// pose le mur (troué à la forme de la porte) et les deux battants sur ce contour ; wall, l, r : éléments du mur et des
+// battants (l'image est étirée sur tout l'écran, 100 % × 100 %, comme les battants pleins)
+window.sceauDoorFit=function(root,box,wall,l,r){
+  [wall,l,r].forEach(e=>e&&e.removeAttribute('style')); root.classList.toggle('boxed',!!box); if(!box) return;
+  const [x0,y0,x1,y1,a]=box, w=(x1-x0)/2, h=y1-y0, f=v=>(v*100).toFixed(3)+'%', P=v=>Math.round(v*1000);
+  const ys=y0+a, hole=a?`M${P(x0)} ${P(y1)}V${P(ys)}A${P(x1-x0)/2} ${P(a)} 0 0 1 ${P(x1)} ${P(ys)}V${P(y1)}Z`:`M${P(x0)} ${P(y1)}V${P(y0)}H${P(x1)}V${P(y1)}Z`;
+  const m=`url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000' preserveAspectRatio='none'><path fill-rule='evenodd' d='M0 0H1000V1000H0Z${hole}'/></svg>`)}") 0 0/100% 100% no-repeat`;
+  wall.style.cssText=`-webkit-mask:${m};mask:${m}`;
+  const leaf=(e,x,side)=>{ e.style.cssText=`left:${f(x)};right:auto;top:${f(y0)};bottom:auto;width:${f(w)};height:${f(h)};background-size:${f(1/w)} ${f(1/h)};`+
+    `background-position:${f(x/(1-w))} ${h<1?f(y0/(1-h)):'0%'};overflow:hidden;`+(a?`border-top-${side}-radius:100% ${f(a/h)}`:''); };
+  leaf(l,x0,'left'); leaf(r,x0+w,'right');
+  root.style.setProperty('--dox',f((x0+x1)/2)); root.style.setProperty('--doy',f((y0+y1)/2)); root.style.setProperty('--dos',(1.2/(x1-x0)).toFixed(3));
+};
+// le sceau de l'enveloppe devient celui de l'accueil : il glisse de l'un à l'autre au lieu de disparaître puis de
+// réapparaître (« il y a encore le sceau qui réapparaît, pourquoi ? »)
+window.sceauSealFly=function(from,to){
+  if(!from||!to||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const a=from.getBoundingClientRect(), b=to.getBoundingClientRect(); if(!a.width||!b.width) return;
+  const dx=a.left+a.width/2-(b.left+b.width/2), dy=a.top+a.height/2-(b.top+b.height/2);
+  from.style.visibility='hidden'; to.classList.add('s-fly');
+  to.style.transform=`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) scale(${(a.width/b.width).toFixed(3)})`;
+  void to.offsetWidth; to.classList.add('s-go'); to.style.transform='';
+  setTimeout(()=>to.classList.remove('s-fly','s-go'),1000);
+};
 window.SCEAU_BASMALA='﷽';
 window.SCEAU_BASMALA_LABEL='Bismillah ar-Rahman ar-Rahim';
 window.sceauEy=function(t){ t=t==null?'':String(t); return /^\s*(bismillah|bismillah\s+ar-?rahman\s+ar-?rahim|basmala)\s*$/i.test(t)?{ar:true,text:window.SCEAU_BASMALA}:{ar:false,text:t}; };

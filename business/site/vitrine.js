@@ -228,7 +228,7 @@
      téléphone à droite ») : au repos, une image figée qui dit l'effet ; l'animation ne se joue qu'au survol (au toucher sur
      téléphone), pour ne pas faire tourner huit animations en permanence ; les images suivent le thème (variables --sc, --op, --seal, --pc posées par paint) */
   const OV={env:'<i class="sc"></i><i class="eb"><i class="ein"><i class="ebd"></i><i class="ef"><img src="/img/open/env-flap.webp" alt=""><i class="es"></i></i></i></i>',cur:'<i class="sc"></i><i class="cu"></i>',
-    voile:'<i class="sc"></i><i class="vl"></i><i class="vr"></i>',door:'<i class="sc"></i><i class="dl"></i><i class="dr"></i><i class="fl"></i>',
+    voile:'<i class="sc"></i><i class="vl"></i><i class="vr"></i>',door:'<i class="sc"></i><i class="dl"></i><i class="dr"></i><i class="ow"></i><i class="fl"></i>',
     non:'<i class="sc"></i><em class="dt">28 · 08</em>',scratch:'<i class="sc"></i><span class="rvm"></span>',wheel:'<i class="sc"></i><span class="rvm"></span>',slot:'<i class="sc"></i><span class="rvm"></span>'};
   /* ticket, roue et jackpot : le vrai jeu (reveal.js), aux couleurs choisies, réduit dans le petit téléphone ; « ceux-là
      c'est pas les mêmes, c'est dommage » : un dessin à part ne ressemblait pas au vrai. Au survol, la roue tourne, le
@@ -541,7 +541,7 @@
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
     mountMini(t,p);
-    [$('cOpen'),$('cReveal')].forEach(x=>{ x.style.setProperty('--sc',C.fmt==='long'?`url('/img/long/${C.k}/thumb.webp')`:`url('/img/themes/${C.k}-1.webp?v=14')`); x.classList.toggle('lg',C.fmt==='long'); x.style.setProperty('--op',`url('/img/open/${C.k}-portes.webp')`); x.style.setProperty('--ri',`url('/img/open/${C.k}-rideau.webp')`); x.style.setProperty('--seal',`url('/img/seals/${SEAL[0]}.webp')`); x.style.setProperty('--pc',p.c); });
+    [$('cOpen'),$('cReveal')].forEach(x=>{ x.style.setProperty('--sc',C.fmt==='long'?`url('/img/long/${C.k}/thumb.webp')`:`url('/img/themes/${C.k}-1.webp?v=14')`); x.classList.toggle('lg',C.fmt==='long'); x.style.setProperty('--op',`url('/img/open/${C.k}-portes.webp')`); x.querySelectorAll('.ov-door').forEach(D=>window.sceauDoorFit&&sceauDoorFit(D,THEMES[C.k].door,D.querySelector('.ow'),D.querySelector('.dl'),D.querySelector('.dr'))); x.style.setProperty('--ri',`url('/img/open/${C.k}-rideau.webp')`); x.style.setProperty('--seal',`url('/img/seals/${SEAL[0]}.webp')`); x.style.setProperty('--pc',p.c); });
     $('opSealTxt').innerHTML=iniH; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
     $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir';
     { const o=$('cpOp'); o.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); o.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`); o.style.setProperty('--pal',p.c); o.style.setProperty('--man',DOORMEN.includes(C.k)?`url('/img/open/${C.k}-portier.webp')`:'none');
@@ -706,13 +706,13 @@
   // enveloppe : pas de lumiere, zoom doux continu puis morph vers la page ; rideau, portes et voile : la lumiere part au toucher (flash:0) et monte avec le mouvement,
   // la page se voit a travers (memes valeurs que invite.js)
   const cpFlash=$('cpFlash'), SEQ={env:{flash:null,gone:1000,morph:1},cur:{flash:null,gone:760,cls:'soft'},door:{flash:500,gone:2300,cls:'door'},voile:{flash:null,gone:1500,cls:'door'}}; let opT2=[];
-  function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
-    op.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); op.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`);
+  function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); { const s0=op.querySelector('.op-seal'); if(s0) s0.style.visibility=''; } cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
+    op.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); { const D=op.querySelector('.op-doors'); if(D&&window.sceauDoorFit) sceauDoorFit(D,THEMES[C.k].door,D.querySelector('.op-wall'),D.querySelector('.op-leaf.l'),D.querySelector('.op-leaf.r')); } op.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`);
     const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth; }
   function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
     if(q.flash===0) cpFlash.classList.add('bloom');
     const ps=$('cpScroll'); ps.classList.remove('morph');
-    opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ ps.scrollTop=0; if(q.morph){ ps.classList.add('morph'); opT2.push(setTimeout(()=>ps.classList.remove('morph'),1800)); } },q.morph?Math.max(0,q.gone-200):q.gone), setTimeout(()=>op.classList.add('gone'),q.gone)]; }
+    opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ ps.scrollTop=0; if(q.morph){ ps.classList.add('morph'); opT2.push(setTimeout(()=>ps.classList.remove('morph'),1800)); } },q.morph?Math.max(0,q.gone-200):q.gone), setTimeout(()=>{ if(q.morph&&window.sceauSealFly) sceauSealFly(op.querySelector('.op-seal'),$('cpScroll').querySelector('.cp-seal')); op.classList.add('gone'); },q.gone)]; }
   function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
   op.addEventListener('click',playOp);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playOp(); } });

@@ -129,6 +129,17 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Ils vont **jusqu'au bout** (« continue l'animation logique jusqu'à disparaître ») : un seul mouvement de 2,3 s jusqu'à
     96°, sans dépassement ni retour ; passé 90° on ne voit plus que leur dos (`backface-visibility: hidden`), ils
     disparaissent d'eux-mêmes, et `.op` n'est retiré (`gone`) qu'à 2,3 s.
+    **Une porte au milieu d'un mur ne fait pas s'ouvrir le mur** (« la porte est que dans le milieu, tu ouvres le mur ») :
+    un thème dont l'image de portes montre un mur autour déclare le contour de la porte (`T.door = [x0, y0, x1, y1, arc]`
+    en fractions de l'image, `arc` = hauteur du cintre ; aujourd'hui Douce France et Andalou). `sceauDoorFit()`
+    (themes.js) pose alors le mur fixe, troué à la forme de la porte (`.op-wall`, masque SVG), et les deux battants dans
+    l'embrasure seulement ; ils s'ouvrent derrière le mur, puis la caméra traverse la porte (`opThrough`, centrée sur la
+    porte, jusqu'à ce qu'elle remplisse l'écran). Même chose dans l'aperçu et dans les cartes de l'étape Ouverture (`.ow`).
+    Sans contour (porte qui remplit l'image), les deux moitiés de l'image s'ouvrent comme avant.
+    **Un seul sceau** (« il y a encore le sceau qui réapparaît, pourquoi ? ») : le sceau de l'enveloppe disparaissait avec
+    elle, puis celui de l'accueil apparaissait en fondu en haut de la page. Désormais il **glisse** de l'enveloppe à sa
+    place sur l'accueil (`sceauSealFly()` dans themes.js, 0,8 s, classes `s-fly` / `s-go` : jamais `go`, déjà pris par
+    le bouton d'envoi de la réponse, qui l'étirait en un rectangle sombre).
     Toute nouvelle ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à
     aucun moment l'écran ne doit être vide ou tout blanc.
     - **Voile** = un grand rideau **opaque** (le tissu du thème, `img/open/<thème>-rideau.webp`, coupé en deux

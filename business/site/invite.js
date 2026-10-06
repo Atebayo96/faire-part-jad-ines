@@ -360,7 +360,7 @@
     <div class="op" id="op" data-type="${esc(I.opening||'env')}" role="button" tabindex="0" aria-label="${S.tap}" style="--door:url('/img/open/${I.theme}-portes.webp');--cur:url('/img/open/${I.theme}-rideau.webp');--pal:${pal}${I.doormen?`;--man:url('/img/open/${I.theme}-portier.webp')`:''}">
       <div class="op-env"><div class="op-vig"></div><div class="op-env-in"><div class="op-body"></div><div class="op-fshadow"></div><div class="op-flap"><img src="/img/open/env-flap.webp" alt=""><div class="op-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${iniH()}</b></div></div></div></div>
       <div class="op-cur"><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${monoT}</div><div class="op-cur-edge"></div></div>
-      <div class="op-doors"><div class="op-room"></div><div class="op-glow"></div><div class="op-doors-in"><div class="op-leaf l">${I.doormen?'<div class="op-man"></div>':''}</div><div class="op-leaf r">${I.doormen?'<div class="op-man"></div>':''}</div></div></div>
+      <div class="op-doors"><div class="op-room"></div><div class="op-glow"></div><div class="op-wall"></div><div class="op-doors-in"><div class="op-leaf l">${I.doormen?'<div class="op-man"></div>':''}</div><div class="op-leaf r">${I.doormen?'<div class="op-man"></div>':''}</div></div></div>
       <div class="op-voile"><div class="op-sheer l"></div><div class="op-sheer r"></div><div class="op-mono" style="${T.mono?`color:${T.mono[0]};text-shadow:${T.mono[1]}`:''}">${monoT}</div></div>
       ${fam&&fam.label?`<div class="op-to">${esc(fam.label)}</div>`:''}
       <div class="op-tap">${(I.opening||'env')==='env'?S.tapSeal:S.tap}</div>
@@ -369,6 +369,7 @@
     <div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-in" role="dialog" aria-modal="true"><button type="button" class="x" aria-label="Fermer">×</button><div id="sheetBody"></div></div></div>`;
   const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${LG?LG.base+'/'+LG.hero.src:img(1)}')`;
   document.body.append(bd,app);
+  { const D=$('#op .op-doors'); if(D&&window.sceauDoorFit) sceauDoorFit(D,T.door,D.querySelector('.op-wall'),D.querySelector('.op-leaf.l'),D.querySelector('.op-leaf.r')); }
   const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], bgs=$('#bgs'), fxc=$('#fx'), chImg=$('#bgs .chs');
   if(CH){ let tk=false; sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; chScroll(); }); } },{passive:true}); chImg.addEventListener('load',layoutStrip); }
 
@@ -563,7 +564,7 @@
     if(q.cls) flash.classList.add(q.cls);
     if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash); else if(q.flash===0) flash.classList.add('bloom');
     setTimeout(()=>{ if(q.morph){ app.classList.add('morph'); setTimeout(()=>app.classList.remove('morph'),1800); } app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); if(LG) longStart(); },q.on);
-    setTimeout(()=>op.classList.add('gone'),q.gone);
+    setTimeout(()=>{ if(q.morph&&window.sceauSealFly) sceauSealFly(op.querySelector('.op-seal'),secs[0]&&secs[0].querySelector('.seal')); op.classList.add('gone'); },q.gone);
     setTimeout(()=>{ op.remove(); flash.remove(); },Math.max((q.flash||0)+1800,q.gone+1400));
   }
   op.addEventListener('click',open);

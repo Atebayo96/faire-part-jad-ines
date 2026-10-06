@@ -214,6 +214,8 @@ a{color:inherit}
 .op.opening .op-env-in{animation:envZoom 1.6s cubic-bezier(.45,0,.75,1) forwards}
 @keyframes envZoom{from{transform:scale(1.32)}to{transform:scale(1.5)}}
 .op[data-type="env"].gone{transition:opacity .35s ease-out,visibility .35s}
+.seal.s-fly{opacity:1!important;filter:drop-shadow(0 8px 12px rgba(0,0,0,.38))!important;transition:none!important;z-index:5}
+.seal.s-fly.s-go{transition:transform .8s cubic-bezier(.45,0,.2,1)!important}
 @keyframes pageMorph{from{transform:scale(1.06)}to{transform:none}}
 #app.morph #sc{animation:pageMorph 1.7s cubic-bezier(.2,.55,.3,1) both}
 
@@ -247,6 +249,13 @@ a{color:inherit}
    la lumière blanche, qui vient tard et douce : aucun temps mort sur un écran de lumière. */
 .op-doors{overflow:hidden;will-change:transform}
 .op-room{position:absolute;inset:0;z-index:0;background:radial-gradient(75% 60% at 50% 50%,#fffefa 0%,#fff6e2 40%,#f6e4bd 75%,#e9cf98 100%)}
+.op-wall{position:absolute;inset:0;z-index:3;display:none;background:var(--door,url("/img/open/portes.webp")) 0 0/100% 100% no-repeat;pointer-events:none}
+/* porte dans un mur (T.door, sceauDoorFit() dans themes.js) : le mur reste, les battants s'ouvrent dans l'embrasure et
+   passent derrière lui, puis la caméra traverse la porte (elle grandit jusqu'à remplir l'écran) et le mur s'efface */
+.op-doors.boxed .op-wall{display:block}
+.op.opening .op-doors.boxed{transform-origin:var(--dox) var(--doy);animation:opThrough 2.5s cubic-bezier(.5,0,.6,1) .1s both}
+.op-doors.boxed .op-doors-in{perspective-origin:var(--dox) var(--doy)}
+@keyframes opThrough{0%{transform:scale(1)}55%{transform:scale(1.08)}100%{transform:scale(var(--dos,2))}}
 .op-doors-in{position:absolute;inset:0;z-index:2;perspective:620px;perspective-origin:50% 50%;transform-style:preserve-3d}
 .op-leaf{position:absolute;top:0;bottom:0;width:50%;background:var(--door,url("/img/open/portes.webp")) no-repeat;background-size:200% 100%;backface-visibility:hidden;will-change:transform;transform:rotateY(0) translateZ(0)}
 .op-leaf.l{left:0;background-position:0 0;transform-origin:0 50%}
