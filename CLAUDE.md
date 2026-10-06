@@ -340,6 +340,17 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     (`tools/peintures-oldmoney/`) sont ses scènes 1 à 4 (`nocal`), reliées par le fondu. Douce France est défini
     (`pending:true`, démo dans `tools/demos-en-attente/`) mais rien n'est peint.
 
+32g. **Une image ne se répète pas d'un écran à l'autre** (6 octobre 2026 : « on a plusieurs images qui se répètent, faut en
+    générer de nouvelles dans le thème »). Les écrans d'après les événements ont leur scène (`T.pageImg` dans themes.js :
+    programme, dress code, hébergement / infos -> `img/hd/<thème>-prog|dress|info.webp`, `tools/pages-extra.py`, une seule
+    génération par image, sans retouche automatique) ; chaque image ne sert qu'une fois (`pk()` dans invite.js et vitrine.js),
+    sinon l'écran garde le décor de la réponse. Dolce Vita en a pour le soir et le jour (8 images accordées, ~1,20 €).
+    `dolcevita-prog` est sortie avec un texte peint dans le ciel, effacé sans génération (ciel recalculé). **Reste** :
+    la liste de mariage d'Old money partage encore la scène de la réponse ; `oldmoney-liste` a été jetée (un ciel de nuit
+    au-dessus d'une orangerie intérieure, le défaut déjà refusé) : la repeindre demande un nouvel accord.
+    Le téléphone de l'accueil passe d'une scène à l'autre en fondu, texte révélé ensuite (`.film`) : la bande qui glissait
+    montrait un trait à chaque raccord.
+
 32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
     « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money
     (`compose:true`). Un thème peut avoir plusieurs **ambiances** (`group` / `amb` / `ambSub` dans themes.js) : Dolce Vita

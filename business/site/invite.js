@@ -95,8 +95,8 @@
   const J=T.jour&&window.SCEAU_THEMES[T.jour]||null, SOIR=18;
   const isJ=n=>String(n).startsWith('j:'), jk=n=>String(n).slice(2);
   const hourOf=e=>{ const m=/T(\d{1,2})/.exec(e&&e.start||''); return m?+m[1]:12; };
-  const dayKey=(k,day)=>day&&J&&(/^\d+$/.test(String(k))||k==='fond'||(J.lieux||[]).includes(k))?'j:'+k:k;
-  const IMGV=13, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  const dayKey=(k,day)=>day&&J&&(/^\d+$/.test(String(k))||k==='fond'||(J.lieux||[]).includes(k)||Object.values(J.pageImg||{}).includes(k))?'j:'+k:k;
+  const IMGV=14, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
   // calques : pour les scènes qui en ont (build-site.py liste img/calques/<thème>-<n>.webp), le décor est le fond calme du
   // thème et le sujet détouré est posé ENTIER en bas de l'écran (plus de rognage selon le téléphone), avec un peu de profondeur
   const CAL=new Set(I.calques||[]), hasCal=n=>CAL.has(String(n)), fond=`/img/hd/${I.theme}-ciel.webp?v=${IMGV}`, cal=n=>`/img/calques/${I.theme}-${n}.webp?v=${IMGV}`;
@@ -189,6 +189,10 @@
   }
   const cardBg=lt=>lt?'rgba(255,255,255,.55)':'rgba(0,0,0,.28)';
   const lastScene=events.length?evImg(events[events.length-1],events.length-1):2;
+  /* une scène propre à chaque écran d'après les événements (T.pageImg : programme, dress code, hébergement, infos), pour
+     qu'une même image ne revienne pas sur trois pages ; chaque image ne sert qu'une fois, sinon l'écran garde son décor */
+  const PI=T.pageImg||{}, usedPI=new Set(), lastDay=events.length&&hourOf(events[events.length-1])<SOIR;
+  const pk=(name,fb)=>{ const k=PI[name]; if(!k||usedPI.has(k)) return fb; usedPI.add(k); return dayKey(k,lastDay); };
 
   ROLE='pre';
   // 2. le mot des familles (scène 1 : le décor de l'accueil reste en place)
@@ -226,23 +230,23 @@
   ROLE='post';
   // 6. le programme du jour (sur le décor du dernier événement)
   const PR=I.program;
-  if(PR) page(lastScene,(c,lt)=>
+  if(PR) page(pk('program',lastScene),(c,lt)=>
     head(c,PR.eyebrow||S.program,PR.title||'',.6)+
     rv('card tl',c.tx,(PR.items||[]).map(x=>`<div class="it"><b>${esc(x.time)}</b><div><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   // 7. infos pratiques, dress code, hébergement, questions, liste, photos, table : sur le décor de la réponse
-  if(I.infos&&I.infos.length) page(K4,(c,lt)=>
+  if(I.infos&&I.infos.length) page(pk('infos',K4),(c,lt)=>
     head(c,I.infosTitle||S.infos,'')+
     rv('card',c.tx,I.infos.map(x=>`<div class="it">${ic[x.icon]||ic.info}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const DR=I.dress;
-  if(DR) page(K4,(c)=>
+  if(DR) page(pk('dress',K4),(c)=>
     head(c,DR.eyebrow||S.dress,DR.title||'',.7)+
     (DR.colors&&DR.colors.length?rv('sw',null,DR.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')):'')+
     rv('tx',c.tx,esc(DR.text||'')),{});
 
   const SY=I.stay;
-  if(SY) page(K4,(c,lt)=>
+  if(SY) page(pk('stay',K4),(c,lt)=>
     head(c,SY.eyebrow||S.stay,SY.title||'',.6)+
     rv('card',c.tx,(SY.items||[]).map(x=>`<div class="it">${ic[x.icon]||ic.hotel}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 

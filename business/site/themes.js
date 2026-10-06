@@ -130,6 +130,10 @@ Object.assign(window.SCEAU_THEMES,{
   T.dolcevitajour=Object.assign({},T.dolcevita,{jour:undefined,compose:false,launch:false,light:true,
     color:"#193f64",ey:"#2f5d86",tx:"#2c3e55",mono:["#193f64","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],lieux:['eglise','jardin'],lieuAlt:{mairie:'eglise',salle:'jardin',plage:'jardin'},
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]});
+  // une scène par écran d'après les événements (tools/pages-extra.py, 6 octobre 2026) : plus la même image sur trois pages
+  T.dolcevita.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info'};
+  T.dolcevitajour.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info'};
+  T.oldmoney.pageImg={infos:'info',stay:'info'}; T.oldmoney.darkLieux=(T.oldmoney.darkLieux||[]).concat(['info']);
 })(window.SCEAU_THEMES);
 /* « Bismillah » s'écrit en arabe, en calligraphie : la ligature basmala (U+FDFD « ﷽ ») de la police Amiri hébergée dans
    polices/, exactement comme sur le faire-part d'Inès & Jad (pas la phrase lettre à lettre). Dans le faire-part comme dans la vitrine.

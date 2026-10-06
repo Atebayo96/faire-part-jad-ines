@@ -551,8 +551,11 @@
     /* du jour au soir, comme le moteur (invite.js) : un événement avant 18 h prend le lieu peint en plein jour s'il existe
        (t.jour), après 18 h celui du soir ; l'accueil suit le premier événement, les dernières pages le dernier */
     const J=t.jour&&THEMES[t.jour], isJ=k=>String(k).startsWith('j:'), jk=k=>String(k).slice(2), hr=e=>parseInt(e&&e.time||'15',10);
-    const dayKey=(k,day)=>day&&J&&(typeof k==='number'||k==='fond'||(J.lieux||[]).includes(k))?'j:'+k:k;
+    const dayKey=(k,day)=>day&&J&&(typeof k==='number'||k==='fond'||(J.lieux||[]).includes(k)||Object.values(J.pageImg||{}).includes(k))?'j:'+k:k;
     const K1=dayKey(1,hr(C.ev[0])<18), K4=dayKey(4,hr(C.ev[C.ev.length-1])<18);
+    // une scène propre à chaque écran d'après les événements (t.pageImg), chacune une seule fois, comme le moteur (pk dans invite.js)
+    const PI=t.pageImg||{}, usedPI=new Set(), lastDay=hr(C.ev[C.ev.length-1])<18;
+    const pk=(name,fb,fbMode)=>{ const k=PI[name]; if(!k||usedPI.has(k)||!C.x.has(name)) return [fb,fbMode]; usedPI.add(k); const kd=dayKey(k,lastDay); return [kd,!isJ(kd)&&(t.darkLieux||[]).includes(k)?'dark':'']; };
     const page=(img0,mode,inner,extra)=>{ const jj=isJ(img0), tt=jj?J:t, kk=jj?t.jour:C.k, img=jj?(/^\d+$/.test(jk(img0))?+jk(img0):jk(img0)):img0;
       const dk=mode==='dark'||(jj&&(typeof img==='number'?(tt.scenes[img-1]||[])[4]==='dark':(tt.darkLieux||[]).includes(img))), lt=tt.light&&!dk;
       const c={nm:lt?tt.color:'#fff',ey:lt?(tt.ey||tt.color):'#fff',tx:lt?(tt.tx||tt.color):'#fff'};
@@ -586,10 +589,10 @@
     // page dediee au compte a rebours
     if(C.cd==='page'){ const pg=page(dayKey('fond',hr(C.ev[0])<18),''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
     C.ev.forEach((_,i)=>{ if(i) pages.push(evPage(i)); });
-    xp('program',dayKey('fond',hr(C.ev[C.ev.length-1])<18),'',(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,C.data.program.filter(x=>x.time||x.title).map(x=>[esc(hm(x.time)),esc(x.title)])));
+    xp('program',...pk('program',dayKey('fond',hr(C.ev[C.ev.length-1])<18),''),(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,C.data.program.filter(x=>x.time||x.title).map(x=>[esc(hm(x.time)),esc(x.title)])));
     const m4=t.scenes[3][4];
-    xp('dress',K4,isJ(K4)?'':m4,c=>hd(c,'Dress code',esc(C.data.dress.title))+`<div class="pv-sws">${C.data.dress.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.dress.text)}</div>`);
-    xp('stay',K4,isJ(K4)?'':m4,(c,lt)=>hd(c,'Bon à savoir','')+card(c,lt,C.data.stay.map(x=>[esc(x.title),esc(x.text)])));
+    xp('dress',...pk('dress',K4,isJ(K4)?'':m4),c=>hd(c,'Dress code',esc(C.data.dress.title))+`<div class="pv-sws">${C.data.dress.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.dress.text)}</div>`);
+    xp('stay',...pk('stay',K4,isJ(K4)?'':m4),(c,lt)=>hd(c,'Bon à savoir','')+card(c,lt,C.data.stay.map(x=>[esc(x.title),esc(x.text)])));
     xp('faq',K4,isJ(K4)?'':m4,(c,lt)=>hd(c,'Vos questions','')+card(c,lt,C.data.faq.filter(x=>x.q).map(x=>['',`<b>${esc(x.q)}</b><br>${esc(x.a)}`]),true));
     xp('gifts',K4,isJ(K4)?'':m4,(c,lt)=>{ const g=C.data.gifts;
       const body=g.mode==='liste'?`<div class="pv-card pv-gl" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${g.items.filter(x=>x.name).map(x=>`<div><span>${esc(x.name)}${x.price?`<small>${esc(x.price)} €</small>`:''}</span><i>Je l’offre</i></div>`).join('')}</div>`
