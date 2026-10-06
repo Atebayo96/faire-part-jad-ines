@@ -161,7 +161,7 @@
   const card=(k)=>{ const t=THEMES[k], ds=DEMOS.find(x=>x.theme===k&&x.layout!=='long'&&!x.kind), dl=DEMOS.find(x=>x.theme===k&&x.layout==='long'&&!x.kind);
     const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style;
     m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=12" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=12" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
-      <div class="fmts">${VARS(k).map(v=>{ const d=DEMOS.find(x=>x.theme===v&&x.layout!=='long'&&!x.kind); return d?`<a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><b>${esc(THEMES[v].amb||'Voir l’exemple')}</b><span>${esc(d.couple)}</span></a>`:''; }).join('')}</div>
+      <div class="fmts">${VARS(k).map(v=>{ const d=DEMOS.find(x=>x.theme===v&&x.layout!=='long'&&!x.kind); return d?`<a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z"/></svg></i><span><b>${esc(THEMES[v].amb||'Voir l’exemple')}</b><small>${esc(d.couple)}</small></span></a>`:''; }).join('')}</div>
       <div class="acts">${t.compose?`<a class="go" href="/creer/?theme=${esc(k)}">Composer →</a>`:`<a class="go" href="/contact/?theme=${esc(k)}">Avec nous →</a>`}</div></div>`;
     models.appendChild(m); };
   [...KEYS].sort((a,b)=>!!THEMES[b].compose-!!THEMES[a].compose).forEach(card); // ce qui se compose en ligne d'abord
@@ -170,7 +170,7 @@
   if(one) one.innerHTML=[['henne','Henné','L’invitation à la soirée henné, seule ou en plus du mariage.'],['sbou3','Sbouâ','La naissance de votre enfant, fêtée au septième jour.']].map(([id,nm,tx])=>{ const d=DEMOS.find(x=>x.kind===id); if(!d) return ''; const t=THEMES[d.theme];
     return `<div class="model one"><a class="pic" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><img src="/img/themes/${esc(d.theme)}-${id==='henne'?2:1}.webp?v=12" alt="" loading="lazy"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}`)}">${esc(d.couple)}</span></a>
       <div class="meta"><div><h3>${nm}</h3><p class="style">${esc(t.name)} · un seul événement</p><p>${tx}</p></div></div>
-      <div class="fmts"><a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><b>Voir l’exemple</b><span>${esc(d.couple)}</span></a></div>
+      <div class="fmts"><a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z"/></svg></i><span><b>Voir l’exemple</b><small>${esc(d.couple)}</small></span></a></div>
       <div class="acts">${t.compose?`<a class="go" href="/creer/?occasion=${id}&theme=${esc(d.theme)}">Composer →</a>`:`<a class="go" href="/contact/?occasion=${id}&theme=${esc(d.theme)}">Avec nous →</a>`}</div></div>`; }).join('');
   const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
   filters.hidden=STYLES.length<3; // un seul style au lancement : rien à filtrer
