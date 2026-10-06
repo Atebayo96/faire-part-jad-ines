@@ -114,14 +114,21 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     battants, le rideau ou les pans s'effacent pendant qu'ils finissent de s'ouvrir. L'utilisateur a aussi refusé
     la version où l'on restait une seconde sur un écran de lumière avant de voir la page (démo Nour & Ilyes).
     **Enveloppe (6 octobre 2026)** : plus aucune lumière. Dès le toucher, un zoom très doux et continu vers l'enveloppe
-    (`envZoom`, 1,32 → 1,72 sur 2,2 s, courbe qui accélère à peine) ; à 1,1 s elle s'efface en fondu (0,9 s) pendant que
-    le zoom continue, et la page, montée dessous à 0,9 s, se pose de 1,06 à 1 (`pageMorph`, classe `morph` sur `#app`,
+    (`envZoom`, 1,32 → 1,5 sur 1,6 s : à 1,72 « c'est un peu trop gros ») ; à 1 s elle est **coupée** en 0,35 s (une
+    surimpression longue de 0,9 s gênait), et la page, montée dessous à 0,7 s, se pose de 1,06 à 1 (`pageMorph`, classe `morph` sur `#app`,
     `.pv-scroll.morph` dans l'aperçu) : un morph direct, jamais l'écran crème du pic de lumière (« faut que ça soit direct »).
     **Rideau et voile, plus simples** (6 octobre 2026, « une animation bizarre qui se lance, c'est pas ouf ») : plus de
     lumière (`flash: null`), le rideau monte d'un seul `translate` (plus de tassement ni d'écrasement), les pans du voile
     s'écartent sans ondulation `skewY`, le monogramme s'efface sans bouger.
+    **Un tissu n'a pas de bord droit** (« l'image coupe net, c'est une ligne droite alors qu'un voile c'est du tissu ») :
+    le bas du rideau est festonné (masque SVG sur `.op-cur::before`, rideau 7 % plus long que l'écran pour que les festons
+    soient cachés à l'arrêt, ombre en `drop-shadow` qui suit le feston) ; chaque pan du voile dépasse le milieu (55 %) et
+    son bord intérieur ondule (masques SVG de `.op-sheer.l/.r`). Sans nouvelle image.
     **Les portes s'ouvrent vers l'intérieur** (6 octobre 2026, « une porte s'ouvre vers l'intérieur ») : les battants
     s'éloignent dans la salle (`opDoorL` en `rotateY` positif, `opDoorR` négatif), même chose dans les cartes `ovDoor*`.
+    Ils vont **jusqu'au bout** (« continue l'animation logique jusqu'à disparaître ») : un seul mouvement de 2,3 s jusqu'à
+    96°, sans dépassement ni retour ; passé 90° on ne voit plus que leur dos (`backface-visibility: hidden`), ils
+    disparaissent d'eux-mêmes, et `.op` n'est retiré (`gone`) qu'à 2,3 s.
     Toute nouvelle ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à
     aucun moment l'écran ne doit être vide ou tout blanc.
     - **Voile** = un grand rideau **opaque** (le tissu du thème, `img/open/<thème>-rideau.webp`, coupé en deux

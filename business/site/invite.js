@@ -553,7 +553,7 @@
   // doucement avec lui (jamais de plein écran blanc) ; la page est déjà vivante derrière (on la voit à travers
   // l'entrebâillement, ou dès que les pans s'écartent), et le rideau / les battants s'effacent en fondu alors
   // qu'ils finissent de s'ouvrir : tout s'enchaîne, aucun temps mort sur de la lumière (voir CLAUDE.md, règle 15).
-  const SEQ={env:{flash:null,on:900,gone:1100,morph:1},cur:{flash:null,on:320,gone:760,cls:'soft'},door:{flash:500,on:200,gone:1400,cls:'door'},voile:{flash:null,on:150,gone:1500,cls:'door'}};
+  const SEQ={env:{flash:null,on:700,gone:1000,morph:1},cur:{flash:null,on:320,gone:760,cls:'soft'},door:{flash:500,on:200,gone:2300,cls:'door'},voile:{flash:null,on:150,gone:1500,cls:'door'}};
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
