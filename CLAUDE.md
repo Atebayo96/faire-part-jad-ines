@@ -234,7 +234,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     retirer, ou passer en Signature »). Le `.ok` de la vitrine est le message « Merci » caché : ne pas réutiliser ce nom.
 
 24. **La marque s'appelle « Save The Oui »** (depuis le 3 octobre 2026 ; « Sceau » était le nom de travail). Logo :
-    « SAVE THE » en capitales espacées + « Oui » en Great Vibes (`.logo`), favicon = sceau de cire avec un O. Tout ce qui
+    « SAVE THE » en capitales espacées + « Oui » en Great Vibes (`.logo`), favicon = sceau de cire avec un O. **Même logo sur toutes les pages, tableau de bord compris** (`tableau/index.html` avait
+    son propre `.logo` en capitales espacées : « Save theOui », « moche »). Tout ce qui
     est visible dit Save The Oui ; les identifiants du code (`SCEAU_THEMES`, `sceau-rsvp-…`, `og-sceau.jpg`) ne changent pas.
 25. **Le configurateur avance par étapes** (thème, écrans, détails, formule : `.wz`, `#wzNav`), une seule à l'écran, l'aperçu
     à côté (collant sur grand écran, au-dessus sur téléphone). L'utilisateur trouvait la page unique « trop complexe ».
@@ -573,6 +574,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `rid` seul suffit ; la clé de l'invité reste valable) et exportent tout en CSV (personnes et menus compris). Le
     configurateur règle menus, question et WhatsApp sous « Réponse » (`C.data.rsvp`, `ED.rsvp`), dans les deux formats.
     Le bouton Calendrier met le lieu, la note et le lien dans l'événement (`icsUrl()`), pour l'itinéraire le jour J.
+    **Un message par cause** (6 octobre 2026) : sans réponse, le tableau dit « Pas encore de réponse » (c'est normal au
+    début) ; « Vérifiez votre connexion » n'apparaît que sans réseau ; faire-part introuvable (404), lien invalide (401),
+    panne (5xx, avec « Réessayer ») ont chacun leur phrase. Avant, toute erreur disait « vérifiez votre connexion ».
     On ne prend pas : la liste des invités visible, les commentaires, la vérification du téléphone ou du mail pour
     répondre, le prix par invité (voir la fiche 16, § 5).
 
