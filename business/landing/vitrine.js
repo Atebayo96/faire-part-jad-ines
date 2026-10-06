@@ -15,7 +15,15 @@
   let ordPlan=null, ordLink=null;
   const ord=document.getElementById('order'), $o=id=>document.getElementById(id);
   // le paiement en ligne de l'Essentiel est-il branché (clé Stripe et stockage) ? Sinon, la commande suit l'ancien chemin
-  fetch('/api/commande').then(r=>r.ok?r.json():{}).then(j=>{ window.SCEAU_AUTO=!!j.auto; }).catch(()=>{});
+  fetch('/api/commande').then(r=>r.ok?r.json():{}).then(j=>{ window.SCEAU_AUTO=!!j.auto; if(window.SCEAU_REPAINT) window.SCEAU_REPAINT(); else payNote(); }).catch(payNote);
+  /* tant que le paiement en ligne n'est pas branché (ni clé Stripe, ni lien de paiement), le bouton « Commander » mène au
+     formulaire de contact : on le dit sous le bouton, au lieu de laisser croire qu'il ouvre le paiement */
+  function payNote(){ const go=document.getElementById('cGo'); if(!go||window.SCEAU_EDIT) return; let n=document.getElementById('cPayNote');
+    const plan=go.dataset.plan, open=(plan==='essentiel'&&window.SCEAU_AUTO)||!!(window.SCEAU_PAY||{})[plan]||plan==='couture';
+    if(!n){ n=document.createElement('p'); n.id='cPayNote'; go.parentNode.appendChild(n); }
+    n.textContent=open?'':'Le paiement en ligne ouvre très bientôt. En attendant, ce bouton vous mène à notre formulaire avec votre composition : on vous répond sous 24 h.';
+    n.hidden=open; }
+  window.SCEAU_PAYNOTE=payNote;
   function choicesText(){ const v=id=>($o(id)||{}).value||''; return [v('fOcc')&&v('fOcc')!=='Mariage'&&'occasion '+v('fOcc').toLowerCase(), v('fStyle')&&'thème '+v('fStyle'), v('fFormat')&&'format '+v('fFormat').toLowerCase(), v('fOpen')&&'ouverture '+v('fOpen').toLowerCase(), v('fPal')&&'couleurs '+v('fPal').toLowerCase(), v('fEvents')&&'écrans : '+v('fEvents'), v('fScreens')&&'écrans en plus : '+v('fScreens').toLowerCase()].filter(Boolean).join(' · '); }
   openOrder=function(plan,link){
     ordPlan=plan; ordLink=link; const P=PLANS[plan], self=!link;
@@ -510,10 +518,11 @@
     $('cPlan').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan));
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
       ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k+'&format='+C.fmt+'&occasion='+C.occ+'&names='+encodeURIComponent(whoTxt())+'&date='+encodeURIComponent($('cDate').value||''); a.textContent=window.SCEAU_EDIT?'Enregistrer les modifications':C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
+    if(window.SCEAU_PAYNOTE) window.SCEAU_PAYNOTE();
     // « Ensuite » : l'Essentiel est en libre-service (en ligne dès le paiement) ; Signature et Couture passent par nous
-    { const nx=$('cNext'), li=a=>a.map((x,i)=>`<li><b>${i+1}</b><span>${x}</span></li>`).join(''); if(nx) nx.innerHTML=C.plan==='essentiel'
+    { const nx=$('cNext'), li=a=>a.map((x,i)=>`<li><b>${i+1}</b><span>${x}</span></li>`).join(''); if(nx) nx.innerHTML=C.plan==='essentiel'&&window.SCEAU_AUTO
       ?li(['Vous payez, paiement sécurisé par Stripe.','Votre faire-part, tel que dans l’aperçu, est en ligne tout de suite : vous recevez son lien et votre tableau de bord.','Un horaire ou un texte change ? Vous le modifiez vous-même, le lien de vos invités reste le même.'])
-      :li(['Vous commandez, paiement sécurisé par Stripe.','On vous écrit sous 24 h pour vos textes, adresses, horaires et photos. La musique se choisit à ce moment-là.',C.plan==='couture'?'On fixe le calendrier ensemble.':'Vous validez l’aperçu : votre lien est prêt en 3 à 5 jours.']); }
+      :li(['Vous commandez, paiement sécurisé par Stripe.','On vous écrit sous 24 h pour vos textes, adresses, horaires et photos. La musique se choisit à ce moment-là.',C.plan==='couture'?'On fixe le calendrier ensemble.':C.plan==='essentiel'?'Vous validez l’aperçu : votre lien est prêt sous 48 h.':'Vous validez l’aperçu : votre lien est prêt en 3 à 5 jours.']); }
     { const long=C.fmt==='long';
       $('wz2Title').textContent=long?'Votre tableau':'Vos écrans';
       $('wz2Sub').textContent=long?'Un seul tableau peint qu’on descend, en trois parties. Chaque événement a son cadre : la scène peinte du thème, un lieu de notre bibliothèque, ou votre lieu d’après photo.':'Pour chaque événement : un écran simple (votre texte sur le fond du tableau), ou une scène de votre lieu, dessinée dans le thème.';
@@ -701,7 +710,7 @@
   // les choix du configurateur, pour le rouvrir tel quel (modification par les mariés)
   const snapshot=()=>({occ:C.occ,sexe:C.sexe,k:C.k,fmt:C.fmt,pal:C.pal,font:C.font,op:C.op,cd:C.cd,rvl:C.rvl,x:[...C.x],
     n1:$('cN1').value,n2:$('cN2').value,date:$('cDate').value,ev:C.ev.map(({photos,...e})=>e),data:C.data});
-  window.SCEAU_COMPOSE={fiche:realInvite,config:snapshot};
+  window.SCEAU_COMPOSE={fiche:realInvite,config:snapshot}; window.SCEAU_REPAINT=()=>paint();
   let lgKey='', lgT=null;
   // QR de la cagnotte dans l'aperçu (qrcode.js, chargé une fois, à la première cagnotte)
   let qrLib=null;

@@ -598,6 +598,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     (+ `SCEAU_MAIL_FROM`). Sans clé Stripe, l'Essentiel reprend l'ancien chemin. Test local : `SCEAU_LOCAL=1
     SCEAU_STRIPE_FAKE=1` (paiement simulé). Signature et Couture restent faits par nous (liens de paiement, `paiement.js`).
     Tout ce qui promet un délai dit « en ligne dès le paiement » pour l'Essentiel (formules, accueil, questions, CGV, « Ensuite »).
+    Tant que le paiement n'est pas branché (ni `STRIPE_SECRET_KEY`, ni lien de paiement), le bouton « Commander » mène au
+    contact : une phrase le dit sous le bouton (`payNote()`), et « Ensuite » garde l'ancien déroulé (« prêt sous 48 h »).
+    **Les écrans en plus se choisissent à l'étape « Écrans »** (6 octobre 2026 : « c'est là qu'elle est paramétrable, pas
+    dans Détails ») ; l'étape « Détails » ne garde que couleurs, police et compte à rebours.
 
 ## Méthode
 
