@@ -346,8 +346,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     génération par image, sans retouche automatique) ; chaque image ne sert qu'une fois (`pk()` dans invite.js et vitrine.js),
     sinon l'écran garde le décor de la réponse. Dolce Vita en a pour le soir et le jour (8 images accordées, ~1,20 €).
     `dolcevita-prog` est sortie avec un texte peint dans le ciel, effacé sans génération (ciel recalculé). **Reste** :
-    la liste de mariage d'Old money partage encore la scène de la réponse ; `oldmoney-liste` a été jetée (un ciel de nuit
-    au-dessus d'une orangerie intérieure, le défaut déjà refusé) : la repeindre demande un nouvel accord.
+    `oldmoney-liste` (repeinte dehors, sur la terrasse du manoir : la première avait un ciel de nuit au-dessus d'une
+    orangerie intérieure). **Jamais de décor coupé** (« pourquoi on coupe ici ? faut vraiment la full image ») : demander
+    « une zone claire et unie » faisait estomper en blanc le haut des falaises et des maisons, et la première apéritif du
+    soir s'arrêtait net sur une poutre de pergola. Consigne actuelle (`DAY`, `dolcevita-prog`) : un vrai ciel peint qui
+    descend derrière toute la scène, silhouettes entières, ni fondu blanc, ni bande unie, ni poutre en travers du haut.
+    Gemini écrit parfois un texte dans le ciel (« aperitivo… ») : effacé par retouche locale (OpenCV, sans génération).
     Le téléphone de l'accueil passe d'une scène à l'autre en fondu, texte révélé ensuite (`.film`) : la bande qui glissait
     montrait un trait à chaque raccord.
 

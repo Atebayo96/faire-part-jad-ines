@@ -10,12 +10,21 @@ import lieux as L, check_images as C
 
 NIGHT = ("The text written on it is WHITE, so the area from 10% to 55% of the height must be DARK and CALM: a deep dusk or "
          "night sky (deep blue to indigo), smooth, with no bright clouds, no sunset glow, no lanterns or branches in that area.")
-DAY = ("The text written on it is DARK, so the area from 10% to 55% of the height must be LIGHT and PLAIN: a very pale, "
-       "soft sky, almost uniform, with no cloud detail, no branches, no ornament in that area.")
+# « une zone claire et unie » faisait estomper le haut des falaises et des maisons en blanc (« pourquoi on coupe ici ? ») :
+# on demande un vrai ciel peint, comme sur la chapelle de jour, et un décor entier qui monte dans ce ciel
+DAY = ("The text written on it is DARK, so the area from 10% to 55% of the height is a REAL PAINTED SKY like in the "
+       "references: soft pale blue with a few light, delicate clouds, light enough for dark text. Cliffs, houses, trees and "
+       "flowers keep their complete silhouettes and rise naturally into that sky. Absolutely NO white fade, NO mist band, "
+       "NO vignette: nothing in the painting dissolves or fades into white or into a blank area.")
 JOBS = {
-    'dolcevita-prog': (('dolcevita', 1, 3, 4), NIGHT, "the aperitivo on a terrace above the sea at dusk: a small marble bar "
-        "with spritz glasses, a bowl of lemons, an ice bucket, potted lemon trees and bougainvillea, string lights over the bar, "
-        "the lights of the coastal village below"),
+    # première version : une pergola coupée net sur un aplat de ciel (« pas besoin de couper, faut vraiment la full image ») ;
+    # terrasse ouverte, sans poutre au-dessus, et un vrai ciel du soir qui descend derrière tout
+    'dolcevita-prog': (('dolcevita', 1, 3, 4), NIGHT + " The sky is a real painted evening sky with a smooth gradient down to "
+        "the horizon, continuous behind the whole scene; trees, flowers and the coast keep their complete silhouettes against "
+        "it. No straight horizontal edge, no beam or roof across the top of the scene, no flat band.",
+        "the aperitivo on an OPEN terrace above the sea at dusk, with no pergola and no roof: a small marble bar with spritz "
+        "glasses, a bowl of lemons, an ice bucket, potted lemon trees and bougainvillea on each side, a few lanterns on the "
+        "balustrade, the lights of the coastal village and the sea below"),
     'dolcevita-dress': (('dolcevita', 1, 3, 4), NIGHT, "the dress code: on a wrought-iron balcony rail covered in bougainvillea, "
         "a flowing pale silk evening dress and a cream linen jacket hang on wooden hangers, a straw hat and a fan on a little "
         "table beside them, the sea and the village lights below at dusk"),
@@ -32,15 +41,17 @@ JOBS = {
     'oldmoney-info': (('oldmoney', 2, 3, 4), NIGHT, "practical information, arriving at the manor: a vintage dark green car "
         "parked on the gravel forecourt, an old leather suitcase and a hat box beside it, a lit lantern on the stone steps, "
         "clipped box hedges, the manor door glowing warm, at dusk"),
-    'oldmoney-liste': (('oldmoney', 2, 3, 4), NIGHT, "the wedding gift list: in the manor's orangery at dusk, a round table "
-        "with a white tablecloth holding a stack of gift boxes wrapped in cream paper and silk ribbon, a silver tray, a vase of "
-        "white roses, candles, tall glass windows onto the garden"),
+    # première version jetée : un ciel de nuit au-dessus d'une orangerie intérieure ; la scène est donc dehors
+    'oldmoney-liste': (('oldmoney', 2, 3, 4), NIGHT, "the wedding gift list, OUTDOORS on the stone terrace of the manor at "
+        "dusk: a round table with a white tablecloth holding a stack of gift boxes wrapped in cream paper and silk ribbon, a "
+        "silver tray, a vase of white roses and lit candles, clipped box hedges and the softly lit manor windows behind, the "
+        "open evening sky above (a real outdoor sky, no ceiling, no interior)"),
 }
 
 
 def make(key):
     (th, *refs), zone, subject = JOBS[key]
-    t = L.T[th]; ink = (255, 255, 255) if zone is NIGHT else C.hex_rgb(t['color'])
+    t = L.T[th]; ink = (255, 255, 255) if zone.startswith(NIGHT) else C.hex_rgb(t['color'])
     png = os.path.join(L.TMP, key + '.png')
     prompt = ("The three reference images are scenes from the same illustrated wedding invitation theme. "
               f"Paint a NEW scene of the same series showing {subject}. "

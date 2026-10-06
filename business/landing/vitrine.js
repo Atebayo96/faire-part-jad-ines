@@ -594,7 +594,7 @@
     xp('dress',...pk('dress',K4,isJ(K4)?'':m4),c=>hd(c,'Dress code',esc(C.data.dress.title))+`<div class="pv-sws">${C.data.dress.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.dress.text)}</div>`);
     xp('stay',...pk('stay',K4,isJ(K4)?'':m4),(c,lt)=>hd(c,'Bon à savoir','')+card(c,lt,C.data.stay.map(x=>[esc(x.title),esc(x.text)])));
     xp('faq',K4,isJ(K4)?'':m4,(c,lt)=>hd(c,'Vos questions','')+card(c,lt,C.data.faq.filter(x=>x.q).map(x=>['',`<b>${esc(x.q)}</b><br>${esc(x.a)}`]),true));
-    xp('gifts',K4,isJ(K4)?'':m4,(c,lt)=>{ const g=C.data.gifts;
+    xp('gifts',...pk('gifts',K4,isJ(K4)?'':m4),(c,lt)=>{ const g=C.data.gifts;
       const body=g.mode==='liste'?`<div class="pv-card pv-gl" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${g.items.filter(x=>x.name).map(x=>`<div><span>${esc(x.name)}${x.price?`<small>${esc(x.price)} €</small>`:''}</span><i>Je l’offre</i></div>`).join('')}</div>`
         :g.mode==='cagnotte'?`<div class="pv-gq" style="color:${c.tx}"><i class="pv-qr" data-qr="${esc(g.url||'https://savetheoui.fr')}"></i><span>Scannez ou copiez le lien<em>Copier le lien</em></span></div>${btn(c,'Participer','gift')}`
         :btn(c,'Voir la liste','gift');

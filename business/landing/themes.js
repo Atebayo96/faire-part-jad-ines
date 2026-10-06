@@ -133,7 +133,7 @@ Object.assign(window.SCEAU_THEMES,{
   // une scène par écran d'après les événements (tools/pages-extra.py, 6 octobre 2026) : plus la même image sur trois pages
   T.dolcevita.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info'};
   T.dolcevitajour.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info'};
-  T.oldmoney.pageImg={infos:'info',stay:'info'}; T.oldmoney.darkLieux=(T.oldmoney.darkLieux||[]).concat(['info']);
+  T.oldmoney.pageImg={infos:'info',stay:'info',gifts:'liste'}; T.oldmoney.darkLieux=(T.oldmoney.darkLieux||[]).concat(['info','liste']);
 })(window.SCEAU_THEMES);
 /* « Bismillah » s'écrit en arabe, en calligraphie : la ligature basmala (U+FDFD « ﷽ ») de la police Amiri hébergée dans
    polices/, exactement comme sur le faire-part d'Inès & Jad (pas la phrase lettre à lettre). Dans le faire-part comme dans la vitrine.
