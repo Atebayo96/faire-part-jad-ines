@@ -705,7 +705,7 @@
   // meme sequence que le faire-part d'Ines & Jad : ouverture, la lumiere monte, la page apparait dessous
   // enveloppe : pas de lumiere, zoom doux continu puis morph vers la page ; rideau, portes et voile : la lumiere part au toucher (flash:0) et monte avec le mouvement,
   // la page se voit a travers (memes valeurs que invite.js)
-  const cpFlash=$('cpFlash'), SEQ={env:{flash:null,gone:1000,morph:1},cur:{flash:null,gone:760,cls:'soft'},door:{flash:500,gone:2300,cls:'door'},voile:{flash:null,gone:1500,cls:'door'}}; let opT2=[];
+  const cpFlash=$('cpFlash'), SEQ={env:{flash:null,gone:1000,morph:1},cur:{flash:null,gone:760,cls:'soft'},door:{flash:null,gone:2300,cls:'door'},voile:{flash:null,gone:1500,cls:'door'}}; let opT2=[];
   function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
     op.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); { const D=op.querySelector('.op-doors'); if(D&&window.sceauDoorFit) sceauDoorFit(D,THEMES[C.k].door,D.querySelector('.op-wall'),D.querySelector('.op-leaf.l'),D.querySelector('.op-leaf.r')); } op.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`);
     const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth; }

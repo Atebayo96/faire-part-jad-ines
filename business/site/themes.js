@@ -143,8 +143,8 @@ Object.assign(window.SCEAU_THEMES,{
 // porte dans un mur (règle 15) : contour de la porte dans img/open/<thème>-portes.webp, en fractions de l'image
 // [x0, y0, x1, y1, arc] (arc = hauteur du cintre, 0 pour une porte droite). Sans contour, la porte remplit l'image et
 // les deux moitiés de l'image s'ouvrent. Avec, le mur reste en place et seuls les battants s'ouvrent.
-window.SCEAU_THEMES.doucefrance.door=[.233,.245,.778,.845,0];
-window.SCEAU_THEMES.alhambra.door=[.089,.10,.922,1,.25];
+// (6 octobre 2026 : pour l'instant toutes les portes s'ouvrent en entier, « fais une full porte comme les autres » ;
+// contours mesurés si on y revient : doucefrance [.233,.245,.778,.845,0], alhambra [.089,.10,.922,1,.25])
 // pose le mur (troué à la forme de la porte) et les deux battants sur ce contour ; wall, l, r : éléments du mur et des
 // battants (l'image est étirée sur tout l'écran, 100 % × 100 %, comme les battants pleins)
 window.sceauDoorFit=function(root,box,wall,l,r){

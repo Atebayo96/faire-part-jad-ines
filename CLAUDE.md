@@ -136,6 +136,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     l'embrasure seulement ; ils s'ouvrent derrière le mur, puis la caméra traverse la porte (`opThrough`, centrée sur la
     porte, jusqu'à ce qu'elle remplisse l'écran). Même chose dans l'aperçu et dans les cartes de l'étape Ouverture (`.ow`).
     Sans contour (porte qui remplit l'image), les deux moitiés de l'image s'ouvrent comme avant.
+    **Mis de côté le même jour** (« fais une full porte comme les autres pour l'instant ») : aucun thème ne déclare de
+    contour (valeurs mesurées notées dans themes.js), toutes les portes s'ouvrent en entier ; le code reste.
+    **Plus aucune lumière aux portes** (« le flash sert à rien ») : ni flash (`flash: null`), ni salle éclairée
+    (`.op-room` masquée), ni lueur (`opGlow` coupée), ni éclat dans les cartes (`.ov-door .fl`). Par l'entrebâillement,
+    on voit directement la page. Les lignes ci-dessous sur la lumière des portes sont remplacées.
     **Pas d'animation du sceau** (6 octobre 2026) : un essai où le sceau de l'enveloppe glissait jusqu'à l'accueil a été
     refusé (« c'est pas ouf, on le redécouvre après, ça me va ») : le sceau de l'accueil apparaît avec le texte.
     Toute nouvelle ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à

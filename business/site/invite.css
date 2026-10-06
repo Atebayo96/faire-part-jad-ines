@@ -246,7 +246,7 @@ a{color:inherit}
    voir la page à travers l'entrebâillement ; la caméra avance doucement. Le mouvement commence bien avant
    la lumière blanche, qui vient tard et douce : aucun temps mort sur un écran de lumière. */
 .op-doors{overflow:hidden;will-change:transform}
-.op-room{position:absolute;inset:0;z-index:0;background:radial-gradient(75% 60% at 50% 50%,#fffefa 0%,#fff6e2 40%,#f6e4bd 75%,#e9cf98 100%)}
+.op-room{position:absolute;inset:0;z-index:0;display:none;background:radial-gradient(75% 60% at 50% 50%,#fffefa 0%,#fff6e2 40%,#f6e4bd 75%,#e9cf98 100%)}
 .op-wall{position:absolute;inset:0;z-index:3;display:none;background:var(--door,url("/img/open/portes.webp")) 0 0/100% 100% no-repeat;pointer-events:none}
 /* porte dans un mur (T.door, sceauDoorFit() dans themes.js) : le mur reste, les battants s'ouvrent dans l'embrasure et
    passent derrière lui, puis la caméra traverse la porte (elle grandit jusqu'à remplir l'écran) et le mur s'efface */
@@ -272,11 +272,11 @@ a{color:inherit}
 .op-leaf.r .op-man{left:2%;transform:scaleX(-1)}
 @keyframes manIdle{0%,100%{translate:0 0}50%{translate:0 -.6%}}
 .op.opening .op-doors{animation:opPush 3.1s cubic-bezier(.45,0,.25,1) .1s both}
-.op.opening .op-room{animation:opRoom .9s cubic-bezier(.4,0,.3,1) .6s both}
+.op.opening .op-room{animation:none}
 .op.opening .op-leaf.l{animation:opDoorL 2.3s both}
 .op.opening .op-leaf.r{animation:opDoorR 2.3s both}
 .op.opening .op-leaf::after{animation:opShade 2.2s ease-in .35s both}
-.op.opening .op-glow{animation:opGlow 1.1s cubic-bezier(.3,0,.4,1) .5s both}
+.op.opening .op-glow{animation:none}
 .op.opening .op-man{animation:manPush 2.9s cubic-bezier(.45,0,.25,1) both}
 /* les battants s'ouvrent vers l'intérieur, comme une vraie porte (ils s'éloignent dans la salle) */
 @keyframes opDoorL{
