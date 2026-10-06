@@ -138,7 +138,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 17. **La basmala est une calligraphie, pas une phrase.** « Bismillah » s'affiche avec la ligature `U+FDFD` (« ﷽ »)
     de la police Amiri, comme sur le faire-part d'Inès & Jad (`window.SCEAU_BASMALA` dans `themes.js`), jamais
     lettre à lettre ni en capitales espacées.
-18. **Tout défile en continu, on ne sent jamais de page.** Même les faire-part en scènes (anciennement « page par
+18. **Remplacé le 6 octobre 2026 : un swipe = une scène.** L'utilisateur : « à chaque swipe le texte s'affiche, il ne monte
+    pas, et quand je swipe ça passe direct à la scène d'après ». Un geste (doigt > 36 px, molette, flèche) amène pile à la
+    page suivante (`goPage()` dans invite.js, même chose dans l'aperçu du configurateur) ; une page plus haute que l'écran
+    se parcourt d'un écran à la fois. Pendant le mouvement, le texte de la page qui part s'efface et celui de la page qui
+    arrive apparaît (opacité selon la distance, puis révélation ligne à ligne `.rv`, rejouée à chaque arrivée). Pas de
+    `scroll-snap` CSS : à la molette d'un ordinateur, la page revenait en arrière. Le grand tableau garde le défilement libre.
+    Ancienne règle (pour mémoire) : **Tout défile en continu, on ne sent jamais de page.** Même les faire-part en scènes (anciennement « page par
     page ») défilent librement : aucun calage en plein écran (pas de `scroll-snap`, pas de « calage doux » après le
     geste), molette et clavier natifs, textes sans fondu ni décalage pendant le défilement. Historique : l'utilisateur
     a d'abord refusé le « swipe brusque », puis le décor fixe (« un changement de page, c'est moche »), puis a tranché :

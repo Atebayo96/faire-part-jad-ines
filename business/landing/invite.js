@@ -377,8 +377,10 @@
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let opened=false;
   const io=new IntersectionObserver(es=>es.forEach(en=>{
+    // la page qui sort de l'écran perd son « on » : à son retour, son texte se révèle de nouveau
+    if(!en.isIntersecting||en.intersectionRatio<.08){ en.target.classList.remove('on'); return; }
     if(en.isIntersecting&&en.intersectionRatio>.45){ const i=secs.indexOf(en.target); if(opened){ en.target.classList.add('on'); if(layers[runOf[i]]) layers[runOf[i]].classList.add('on'); } bd.style.backgroundImage=`url('${en.target.dataset.img}')`; }
-  }),{root:sc,threshold:[.45,.8]});
+  }),{root:sc,threshold:[0,.05,.45,.8]});
   secs.forEach(s=>io.observe(s));
   /* ---------- fond continu ----------
      Le décor n'est pas fixe derrière des pages qui glissent (l'utilisateur voyait « un changement de page, c'est
@@ -463,13 +465,32 @@
      sans calage en plein écran. L'utilisateur ne veut plus sentir de pages : « l'idée c'est que ce soit en continu,
      mais tu ne te rends pas compte que tu changes de page ». Seul le décor change, fondu sur une longue bande.
      Avant l'ouverture, on ne défile pas. */
-  sc.addEventListener('touchmove',e=>{ if(!opened) e.preventDefault(); },{passive:false});
+  /* un geste = une page : le doigt, la molette ou le clavier amènent directement à la scène suivante (ou précédente).
+     Une page plus haute que l'écran (programme, infos) se parcourt d'un écran à la fois avant de passer à la suivante. */
+  let pgBusy=0;
+  function goPage(dir){ if(LG) return; const now=Date.now(); if(now<pgBusy) return; const h=sc.clientHeight, st=sc.scrollTop;
+    const tops=secs.map(x=>x.offsetTop), cur=tops.reduce((a,t,i)=>t<=st+4?i:a,0), pg=secs[cur], end=pg.offsetTop+pg.offsetHeight-h;
+    let to;
+    if(dir>0) to=st<end-4?Math.min(end,st+h):(tops[cur+1]!=null?tops[cur+1]:st);
+    else to=st>pg.offsetTop+4?Math.max(pg.offsetTop,st-h):(cur>0?Math.max(tops[cur-1],tops[cur-1]+secs[cur-1].offsetHeight-h):0);
+    if(Math.abs(to-st)<2) return; pgBusy=now+(reduce?150:650); sc.scrollTo({top:to,behavior:reduce?'auto':'smooth'}); }
+  let ty0=null, wAcc=0, wT=0;
+  sc.addEventListener('touchstart',e=>{ ty0=e.touches[0].clientY; },{passive:true});
+  sc.addEventListener('touchmove',e=>{ if(!opened||!LG) e.preventDefault(); },{passive:false});
+  sc.addEventListener('touchend',e=>{ if(!opened||LG||ty0==null) return; const dy=ty0-e.changedTouches[0].clientY; ty0=null; if(Math.abs(dy)>36) goPage(dy>0?1:-1); },{passive:true});
+  sc.addEventListener('wheel',e=>{ if(LG) return; e.preventDefault(); if(!opened) return; const now=Date.now(); if(now-wT>260) wAcc=0; wT=now; wAcc+=e.deltaY;
+    if(Math.abs(wAcc)>=40){ goPage(wAcc>0?1:-1); wAcc=0; } },{passive:false});
   addEventListener('keydown',e=>{
     if(!opened||LG||sheet.classList.contains('on')||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')) return;
-    const k={ArrowDown:.35,ArrowUp:-.35,PageDown:.85,PageUp:-.85,' ':.85}[e.key];
-    if(k){ e.preventDefault(); sc.scrollBy({top:sc.clientHeight*k,behavior:reduce?'auto':'smooth'}); }
+    const k={ArrowDown:1,ArrowUp:-1,PageDown:1,PageUp:-1,' ':1}[e.key];   // une page à la fois
+    if(k){ e.preventDefault(); goPage(k); }
   });
   addEventListener('resize',layoutStrip);
+  // pendant le swipe, le texte de la page qui part s'efface et celui de la page qui arrive apparaît (il ne « monte » pas)
+  { let tk=false; const vis=()=>{ tk=false; const h=sc.clientHeight, st=sc.scrollTop;
+      secs.forEach(x=>{ const d=Math.abs(x.offsetTop-st)/h, tall=x.offsetHeight>h*1.05&&st>=x.offsetTop&&st<=x.offsetTop+x.offsetHeight-h;
+        const o=tall?1:Math.max(0,Math.min(1,1-d*2.6)); if(x._o!==o){ x._o=o; x.style.opacity=o>=.999?'':o.toFixed(3); } }); };
+    if(!LG){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(vis); } },{passive:true}); addEventListener('resize',vis); } }
   // profondeur des calques : le sujet détouré glisse un peu moins vite que les pages (jamais plus de 6 % d'un écran)
   { const subs=layers.map((L,ri)=>({L,S:L.querySelector('.sub'),ri})).filter(x=>x.S); let tk=false;
     /* en partant, le bas du sujet (le sol) traçait une ligne droite sur le ciel (« des lignes nettes, c'est moche ») :

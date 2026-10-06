@@ -465,6 +465,14 @@
     const secs=[...$('cpScroll').querySelectorAll('.pv-sc')], layers=[...bgs.children];
     cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!ri||!L||L.classList.contains('cal')||!secs[r.a]) return; const B=L.firstElementChild;
       const q=Math.max(0,Math.min(1,(st-(secs[r.a].offsetTop-h))/h)), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; L.style.visibility=o==='0.000'?'hidden':''; } }); }
+  // aperçu : un geste = une page, comme le faire-part (goPage() dans invite.js)
+  { const sc=$('cpScroll'); if(sc){ let acc=0, t0=0, busy=0, y0=null;
+    const go=d=>{ const now=Date.now(); if(now<busy) return; const h=sc.clientHeight, tops=[...sc.querySelectorAll('.pv-sc')].map(x=>x.offsetTop), st=sc.scrollTop;
+      const cur=tops.reduce((a,t,i)=>t<=st+4?i:a,0), to=tops[Math.max(0,Math.min(tops.length-1,cur+d))]; if(to==null||Math.abs(to-st)<2) return; busy=now+600; sc.scrollTo({top:to,behavior:'smooth'}); };
+    sc.addEventListener('wheel',e=>{ e.preventDefault(); const now=Date.now(); if(now-t0>260) acc=0; t0=now; acc+=e.deltaY; if(Math.abs(acc)>=40){ go(acc>0?1:-1); acc=0; } },{passive:false});
+    sc.addEventListener('touchstart',e=>{ y0=e.touches[0].clientY; },{passive:true});
+    sc.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+    sc.addEventListener('touchend',e=>{ if(y0==null) return; const dy=y0-e.changedTouches[0].clientY; y0=null; if(Math.abs(dy)>30) go(dy>0?1:-1); },{passive:true}); } }
   { const sc=$('cpScroll'); if(sc){ let tk=false; sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; cpFade(); }); } },{passive:true}); } }
   // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
   function paint(){

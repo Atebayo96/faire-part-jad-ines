@@ -471,3 +471,9 @@ a{color:inherit}
 /* chaîne continue : une seule peinture, collante à l'écran, que le défilement fait descendre (chainLayout() dans invite.js) */
 .chv{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
 .chs{position:absolute;left:0;top:0;width:100%;height:auto;display:block;will-change:transform}
+
+/* Un swipe = une scène (6 octobre 2026, décision de l'utilisateur, remplace le défilement libre de la règle 18) :
+   « à chaque swipe, ça passe direct à la scène d'après, le texte s'affiche, il ne monte pas ». Le défilement se cale sur
+   chaque page, une à la fois (paging() dans invite.js : un geste = une page, au doigt, à la molette et au clavier) ; pendant le geste, le texte de la page qui part s'efface et celui qui arrive apparaît
+   (opacité de la page selon sa distance à l'écran, invite.js ; puis ses lignes se révèlent une à une, .rv). */
+.sc-long{scroll-snap-type:none}
