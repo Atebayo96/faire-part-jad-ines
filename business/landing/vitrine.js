@@ -422,6 +422,8 @@
     clearTimeout(evT); evT=setTimeout(()=>{ const e2=sc.querySelector(`[data-ev="${i}"]`); if(e2&&Math.abs(sc.scrollTop-e2.offsetTop)>1) sc.scrollTo({top:e2.offsetTop,behavior:'smooth'}); },700); }
   const hm=v=>{ const m=/^(\d{1,2}):(\d{2})/.exec(v||''); return m?`${+m[1]}h${m[2]}`:''; };
   const cdHtml=(big,col,extra)=>`<div class="cd${big?' big':''}" style="color:${col};${extra||''}"><div><b data-u="d">0</b><span>jours</span></div><div><b data-u="h">0</b><span>heures</span></div><div><b data-u="m">0</b><span>min</span></div><div><b data-u="s">0</b><span>sec</span></div></div>`;
+  // le jour d'un événement, écrit au-dessus de l'heure (comme .when.when-ev dans le faire-part)
+  const evDay=()=>{ const t=weddingDate().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}); return t.charAt(0).toUpperCase()+t.slice(1); };
   function weddingDate(){ const v=$('cDate').value; const d=v?new Date(v+'T15:00:00'):null; return d&&!isNaN(d)?d:new Date('2027-06-12T15:00:00'); }
   function tick(){
     const ms=Math.max(0,weddingDate()-Date.now()), v={d:Math.floor(ms/864e5),h:Math.floor(ms/36e5)%24,m:Math.floor(ms/6e4)%60,s:Math.floor(ms/1e3)%60};
@@ -579,7 +581,7 @@
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?btn(c,bt,/R[ée]pondre|RSVP/i.test(bt)?'mail':'pin'):''}`); };
     // événements : scène = le lieu choisi, écran simple = le fond du tableau (la bande continue les fond l'un dans l'autre)
     const evPage=i=>{ const e=C.ev[i], photo=e.bg==='scene'&&e.lieu==='photo', pg=page(dayKey(e.bg==='scene'&&!photo?(e.lieu==='s2'?2:e.lieu):'fond',hr(e)<18),e.bg==='scene'&&(t.darkLieux||[]).includes(e.lieu)?'dark':'');
-      return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e.name||'Événement '+(i+1))}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(e.place||'')}</div><div class="tx" style="color:${c.tx}">${esc(hm(e.time))}</div><div class="pv-acts">${btn(c,'Itinéraire','pin')}${btn(c,'Calendrier','cal')}</div>${photo?`<div class="pv-photo" style="color:${c.tx};border-color:${c.tx}">Ici, votre lieu<br>peint d’après votre photo</div>`:''}`).replace('<section ',`<section data-ev="${i}" `); };
+      return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e.name||'Événement '+(i+1))}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(e.place||'')}</div><div class="pv-when" style="color:${c.tx}"><span>${esc(evDay())}</span><b>${esc(hm(e.time))}</b></div><div class="pv-acts">${btn(c,'Itinéraire','pin')}${btn(c,'Calendrier','cal')}</div>${photo?`<div class="pv-photo" style="color:${c.tx};border-color:${c.tx}">Ici, votre lieu<br>peint d’après votre photo</div>`:''}`).replace('<section ',`<section data-ev="${i}" `); };
     // écrans en option (contenu d'exemple), sur le décor de la scène voisine, sans voile (comme le moteur)
     const xp=(id,img,mode,inner)=>{ if(!C.x.has(id)) return; const pg=page(img,mode);
       pages.push(pg.html(c=>inner(c,pg.lt)).replace('<section ',`<section data-x="${id}" `)); };

@@ -20,6 +20,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
    et des ombres portées des textes ; si ça ne suffit pas, on refait l'image.
 3. **Rien sous 11 px.** Échelle unique (variables `--fs-*` dans invite.css, reprises dans l'aperçu de la vitrine) :
    chapeaux 13 px, texte courant 18 px et plus, horaires 17 px et plus, boutons 17 px (garamond), mentions 11,5 px.
+   **Le jour et l'heure se voient en premier** (6 octobre 2026 : « les horaires et les dates ne sont pas assez mis en
+   avant ») : sur l'écran d'un événement, le jour est toujours écrit (« Samedi 22 mai », 22 px) et l'heure dessous en grand
+   chiffre (`--fs-hour`, 32 à 40 px, Cormorant 600, chiffres alignés `lining-nums` : sinon « 15hoo ») ; `.when.when-ev`
+   dans invite.css, `.pv-when` dans l'aperçu. La date de l'accueil (`.dl`, `--fs-date`) passe à 22 px en 600 (20 px dans
+   l'aperçu, `.cp-dl`, qui était à 14 px). Jamais la classe `ev` seule : elle encadre les événements de la feuille de réponse.
    L'aperçu de la vitrine et le configurateur doivent afficher **les mêmes tailles** que le vrai faire-part.
 4. **Aérer.** Trois respirations : 10 px (entre deux lignes liées), 18 px (entre deux éléments), 28 px (avant un bouton,
    un compte à rebours, une carte). Interligne 1,45 pour le texte courant. On ne tasse jamais le bloc de texte pour

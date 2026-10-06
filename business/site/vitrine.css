@@ -308,6 +308,11 @@
   .pv-sc .bt{margin-top:24px;display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:5px 20px 5px 6px;border:1px solid rgba(255,255,255,.3);border-radius:999px;font:500 17px/1.1 "Cormorant Garamond",Georgia,serif;letter-spacing:.01em;white-space:nowrap;background:rgba(18,15,12,.5);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);box-shadow:0 1px 2px rgba(0,0,0,.12),0 8px 22px -8px rgba(0,0,0,.45);text-shadow:0 1px 6px rgba(0,0,0,.35)}
   .pv-sc .bt svg{width:32px;height:32px;flex:none;padding:8px;border-radius:50%;color:#fff;background:var(--pal,#b8975a);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 2px 6px rgba(0,0,0,.18)}
   /* les deux actions d'un événement, comme dans le faire-part (.acts) : côte à côte, même largeur, 200 px au plus */
+  /* le jour puis l'heure en grand, comme .when.when-ev dans invite.css */
+  .pv-when{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:14px;text-shadow:0 1px 10px rgba(0,0,0,.55)}
+  .pv-when span{font:500 20px/1.25 "Cormorant Garamond",Georgia,serif}
+  .pv-when b{font:600 34px/1.05 "Cormorant Garamond",Georgia,serif;letter-spacing:.02em;font-variant-numeric:lining-nums}
+  .pv-sc.light .pv-when{text-shadow:none}
   .pv-acts{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%;max-width:340px}
   .pv-acts .bt{margin-top:0;flex:1 1 0;min-width:max-content;max-width:200px;justify-content:center}
   .pv-sc.light .bt{background:rgba(255,255,255,.72);border-color:rgba(127,127,127,.3);border-color:color-mix(in srgb,var(--pal,#b8975a) 35%,transparent);box-shadow:0 1px 2px rgba(60,40,10,.08),0 10px 24px -10px rgba(60,40,10,.3)}
@@ -421,8 +426,8 @@
   .pv-sws{position:relative;display:flex;gap:10px;margin:16px 0 14px}
   .pv-sws i{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.75)}
   .pv-fam{position:relative;font:500 17px/1.35 "Cormorant Garamond",Georgia,serif;margin:14px 0 10px}
-  .cp-dl{display:flex;align-items:center;gap:10px;margin-top:14px;font:500 14px/1.2 "Cormorant Garamond",Georgia,serif;white-space:nowrap}
-  .cp-dl i{display:block;width:26px;height:1px;background:currentColor;opacity:.75}
+  .cp-dl{display:flex;align-items:center;gap:10px;margin-top:14px;font:600 20px/1.2 "Cormorant Garamond",Georgia,serif;white-space:nowrap}
+  .cp-dl i{display:block;width:20px;height:1px;background:currentColor;opacity:.75}
   .cp-phone .pv-hint{z-index:1}
   .cp-scrim{position:absolute;inset:0 0 45% 0;background:linear-gradient(rgba(0,0,0,.35),transparent)}
   .cp-body{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;text-align:center;padding:12% 8% 0}

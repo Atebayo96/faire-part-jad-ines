@@ -218,8 +218,9 @@
   events.forEach((e,i)=>{
     const d=zoned(e.start,e.tz); ROLE='event'; EVI=i;
     page(evImg(e,i),(c)=>{
-      const when=(multiDay||e.showDate?fmtDayShort(d,e.tz)+' · ':'')+fmtTime(d,e.tz);
-      return head(c,e.eyebrow||'',e.title)+rv('when',c.tx,esc(when))+
+      // le jour est toujours écrit (on ne le perd pas), l'heure en grand dessous
+      const when=`<span class="wd">${esc(fmtDayShort(d,e.tz))}</span><span class="hr">${esc(fmtTime(d,e.tz))}</span>`;
+      return head(c,e.eyebrow||'',e.title)+rv('when when-ev',c.tx,when)+
         (e.place?rv('tx',c.tx,esc(e.place)):'')+
         (e.note?rv('tx',c.tx,esc(e.note),'font-size:15px;opacity:.9'):'')+
         rv('acts',c.tx,(e.address?`<a class="b" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${S.route}</a>`:'')+
