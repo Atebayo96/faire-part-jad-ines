@@ -292,12 +292,15 @@
     const more=li('more','<button type="button" class="chip x sig" id="cAddEv">+ Ajouter un événement<i>Signature · jusqu’à 6</i></button>');
     const addEv=(e,i)=>{
       const l=li('ev',`<div class="ev-h"><b>Événement ${i+1}</b><small>${i<2?'inclus':'<i class="sig-tag">Signature</i>'}${i>=2?' · <a href="#" data-rm>Retirer</a>':''}</small></div>
-        <div class="ev-f"><input type="text" data-k="name" maxlength="40" aria-label="Nom de l'événement ${i+1}" placeholder="La cérémonie"><input type="time" data-k="time" aria-label="Heure"><input type="text" data-k="place" maxlength="60" aria-label="Lieu" placeholder="Lieu (ex. Mairie du 11e)"></div>
+        <div class="ev-b"><button type="button" class="ev-pic" data-pick aria-expanded="false"><span></span><em>Changer le décor</em></button>
+        <div class="ev-f"><label class="ed-f"><span>Le moment</span><input type="text" data-k="name" maxlength="40" placeholder="La cérémonie"></label><label class="ed-f"><span>À quelle heure</span><input type="time" data-k="time"></label><label class="ed-f ev-pl"><span>Où (le nom du lieu)</span><input type="text" data-k="place" maxlength="60" placeholder="Église Saint-Paul"></label><p class="ev-dn"></p></div></div>
         <div class="lieux" role="group" aria-label="Le décor de cet écran"><button type="button" data-lieu="simple"><span></span><em>Texte seul</em></button>${LIEUX.map(x=>`<button type="button" data-lieu="${x.id}"${x.sig?' class="sig"':''}><span>${x.sig?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>':''}</span>${x.sig?'Votre lieu<i>Signature</i>':x.name}</button>`).join('')}</div>`);
       l.dataset.i=i;
       l.querySelectorAll('input').forEach(inp=>{ inp.value=e[inp.dataset.k]; inp.addEventListener('input',()=>{ e[inp.dataset.k]=inp.value; paint(); }); });
       l.querySelectorAll('[data-bg]').forEach(b=>b.onclick=()=>{ e.bg=b.dataset.bg; paint(); showEv(i); });
-      l.querySelectorAll('[data-lieu]').forEach(b=>b.onclick=()=>{ if(b.dataset.lieu==='simple') e.bg='simple'; else { e.lieu=b.dataset.lieu; e.bg='scene'; } paint(); showEv(i); });
+      l.querySelectorAll('[data-lieu]').forEach(b=>b.onclick=()=>{ if(b.dataset.lieu==='simple') e.bg='simple'; else { e.lieu=b.dataset.lieu; e.bg='scene'; } l.classList.remove('open'); l.querySelector('[data-pick]').setAttribute('aria-expanded','false'); paint(); showEv(i); });
+      // le choix du décor ne s'ouvre qu'à la demande : au repos, une seule grande vignette (« trop condensé »)
+      l.querySelector('[data-pick]').onclick=()=>{ const o=l.classList.toggle('open'); l.querySelector('[data-pick]').setAttribute('aria-expanded',o); showEv(i); };
       const rm=l.querySelector('[data-rm]'); if(rm) rm.onclick=ev=>{ ev.preventDefault(); C.ev.splice(i,1); l.remove(); [...box.querySelectorAll('li.ev')].forEach((x,k)=>{ x.dataset.i=k; }); paint(); };
       box.insertBefore(l,more); return l; };
     C.ev.forEach(addEv);
@@ -444,7 +447,7 @@
     // peintures entières : posée, une page ne montre que sa scène ; la suivante n'apparaît qu'en défilant (comme invite.js)
     const secs=[...$('cpScroll').querySelectorAll('.pv-sc')], layers=[...bgs.children];
     cpRuns.forEach((r,ri)=>{ const L=layers[ri]; if(!ri||!L||L.classList.contains('cal')||!secs[r.a]) return; const B=L.firstElementChild;
-      const q=Math.max(0,Math.min(1,(st-(secs[r.a].offsetTop-h))/(h*.8))), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; L.style.visibility=o==='0.000'?'hidden':''; } }); }
+      const q=Math.max(0,Math.min(1,(st-(secs[r.a].offsetTop-h))/h)), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; L.style.visibility=o==='0.000'?'hidden':''; } }); }
   { const sc=$('cpScroll'); if(sc){ let tk=false; sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; cpFade(); }); } },{passive:true}); } }
   // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
   function paint(){
@@ -482,11 +485,14 @@
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       // du jour au soir : les vignettes suivent l'heure de l'événement (lieu peint en plein jour avant 18 h, s'il existe)
       const Jt=THEMES[C.k].jour&&THEMES[THEMES[C.k].jour], day=Jt&&parseInt(e.time||'15',10)<18, kOf=id=>day&&(id==='fond'||(Jt.lieux||[]).includes(id))?THEMES[C.k].jour:C.k;
-      const tag=l.querySelector('.ev-h small'); if(tag&&Jt){ let d=tag.querySelector('.dn'); if(!d){ d=document.createElement('span'); d.className='dn'; tag.prepend(d); } d.textContent=day?'de jour · ':'le soir · '; }
+      const dn=l.querySelector('.ev-dn'); if(dn) dn.textContent=Jt?(day?'☀ Avant 18 h : votre écran est en plein jour.':'☾ Après 18 h : votre écran passe au crépuscule.'):'';
       // « Texte seul » : écran simple (scène par scène), ou la scène peinte du thème dans le cadre (grand tableau)
       const sim=l.querySelector('[data-lieu="simple"] em'); if(sim) sim.textContent=C.fmt==='long'?'Scène du thème':'Texte seul';
       l.querySelectorAll('[data-lieu]').forEach(b=>{ const id=b.dataset.lieu; b.setAttribute('aria-pressed',id==='simple'?e.bg!=='scene':e.bg==='scene'&&id===e.lieu);
-        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=11')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=11')`:`url('/img/lieux/${kOf('fond')}-fond.webp')`):`url('/img/lieux/${kOf(id==='photo'?'eglise':id)}-${id==='photo'?(THEMES[C.k].lieux||['eglise'])[0]:id}.webp')`; }); });
+        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=11')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=11')`:`url('/img/lieux/${kOf('fond')}-fond.webp')`):`url('/img/lieux/${kOf(id==='photo'?'eglise':id)}-${id==='photo'?(THEMES[C.k].lieux||['eglise'])[0]:id}.webp')`; });
+      // la grande vignette reprend le décor choisi, avec son nom
+      const sel=l.querySelector('[data-lieu][aria-pressed="true"]'), pic=l.querySelector('[data-pick] span');
+      if(sel&&pic){ pic.style.backgroundImage=sel.firstChild.style.backgroundImage; pic.dataset.n=(sel.querySelector('em')||{}).textContent||sel.textContent.replace('Signature','').trim(); } });
     $('cAddEv').hidden=C.ev.length>=6||C.occ!=='mariage';
     $('cpTint').style.background=p.c;
     const n1=nm1(), n2=nm2(), solo=isSolo(), oneShot=C.occ!=='mariage';

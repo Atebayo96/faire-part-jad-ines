@@ -290,6 +290,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     traînées floues (« en haut c'est flou »). L'exemple par défaut du configurateur : cérémonie à l'église (la mairie de
     jour n'existe pas encore). Accueil : « Un faire-part qui vit, du jour au soir. »
     Ce qui suit (ambiances, « Plein jour » choisi à part) est remplacé par cette règle.
+    **Réglage d'un événement, aéré** (« trop condensé ») : une grande vignette du décor choisi (avec son nom) et « Changer le
+    décor » à gauche, les champs avec leurs libellés à droite (« Le moment », « À quelle heure », « Où »), une phrase qui dit
+    « Avant 18 h : votre écran est en plein jour » ou « Après 18 h : … crépuscule ». La rangée des décors ne s'ouvre qu'à la
+    demande et se referme au choix. Le fondu entre deux scènes dure un écran entier de défilement (le passage du jour à la
+    nuit était « très rapide ») ; **à peindre quand Gemini revient** : des scènes de fin d'après-midi (lumière dorée) pour
+    passer du jour au soir en douceur, et les lieux de jour manquants (mairie, salle, plage).
     **Calques : les bords gauche et droit du sujet se fondent dans le papier** (`.bg .sub`, `.cp-bg i .sub` : masque de 5 à
     22 % de chaque côté) : le sujet détouré s'arrêtait sur deux lignes droites (Old money, « regarde les bords, c'est moche »).
     Un cadre invisible pendant le fondu est masqué entier (`visibility:hidden`) : son ciel `::before` recouvrait le sujet

@@ -447,7 +447,7 @@
      la suivante, celle-ci apparaît en fondu sur tout l'écran (sur 80 % d'un écran de défilement). */
   { const fr=runs.map((r,ri)=>({ri,a:r.a,B:layers[ri]&&layers[ri].firstElementChild})).filter(x=>x.ri>0&&x.B&&!layers[x.ri].classList.contains('cal')); let tk=false;
     const fade=()=>{ tk=false; const h=sc.clientHeight, st=sc.scrollTop, ov=h*OVK;
-      fr.forEach(({a,B})=>{ const q=Math.max(0,Math.min(1,(st-(secs[a].offsetTop-h))/(h*.8))), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; B.parentNode.style.visibility=o==='0.000'?'hidden':''; } }); }; // invisible : le cadre entier est masqué (son ciel ::before recouvrait le sujet de la page d'avant)
+      fr.forEach(({a,B})=>{ const q=Math.max(0,Math.min(1,(st-(secs[a].offsetTop-h))/h)), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; B.parentNode.style.visibility=o==='0.000'?'hidden':''; } }); }; // invisible : le cadre entier est masqué (son ciel ::before recouvrait le sujet de la page d'avant)
     if(fr.length&&!LG){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(fade); } },{passive:true}); fade(); addEventListener('resize',fade); } }
   // précharge les images des pages suivantes
   if(!LG) [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=hasCal(n)?cal(n):img(n); });

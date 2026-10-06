@@ -944,3 +944,20 @@
 /* lignes répétées (programme, questions, cadeaux) : les intitulés ne s'affichent qu'au-dessus de la première ligne */
 .ed-row.p~.ed-row.p .ed-f>span,.ed-row.q~.ed-row.q .ed-f>span,.ed-row.g~.ed-row.g .ed-f>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .lg .op-card.anim .ph .dt{color:#1f3550;text-shadow:0 1px 3px rgba(255,255,255,.85)}
+
+/* Un événement : une grande vignette du décor choisi à gauche, les champs avec leurs libellés à droite ; les autres décors
+   ne s'ouvrent qu'avec « Changer le décor » (7 vignettes jour et nuit mélangées sous chaque champ : « trop condensé ») */
+.story>li.ev{gap:16px;padding:18px}
+.ev-b{display:grid;grid-template-columns:112px 1fr;gap:18px;align-items:start}
+.ev-pic{display:grid;gap:8px;padding:0;border:0;background:none;cursor:pointer;font:inherit;color:var(--ink);text-align:center}
+.ev-pic span{position:relative;display:block;aspect-ratio:9/16;border-radius:12px;background:#eee center/cover no-repeat;box-shadow:0 0 0 1px var(--line),0 8px 18px -10px rgba(0,0,0,.45)}
+.ev-pic span::after{content:attr(data-n);position:absolute;left:6px;right:6px;bottom:6px;padding:4px 6px;border-radius:999px;background:rgba(255,255,255,.92);font:500 12px/1.2 Inter,sans-serif;color:var(--ink)}
+.ev-pic em{font:500 13px/1.2 Inter,sans-serif;font-style:normal;text-decoration:underline;text-underline-offset:3px}
+.ev-pic:focus-visible span{outline:2px solid var(--ink);outline-offset:3px}
+.story li.ev .ev-f{grid-template-columns:1fr 120px;gap:14px 10px;align-content:start}
+.story li.ev .ev-f .ev-pl{grid-column:1/-1}
+.ev-dn{grid-column:1/-1;margin:0;font-size:13px;color:var(--muted)}
+.story li.ev .lieux{display:none}
+.story li.ev.open .lieux{display:flex;padding-top:4px;border-top:1px solid var(--line);margin-top:2px;padding-top:14px}
+.story li.ev.open .ev-pic em{text-decoration:none;opacity:.6}
+@media (max-width:560px){ .ev-b{grid-template-columns:92px 1fr;gap:14px} .story li.ev .ev-f{grid-template-columns:1fr} }
