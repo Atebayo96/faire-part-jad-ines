@@ -337,8 +337,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     d'argent ».** La mise au point de la chaîne Dolce Vita a coûté ~60 générations. Règle : **aucune génération sans
     accord explicite et chiffré** (nombre d'images, coût), jamais de méthode « à l'essai » sur Gemini ; on tente d'abord
     sans générer (assemblage, fondu, `descendre.py`). Old money : ses 5 peintures plein cadre déjà payées
-    (`tools/peintures-oldmoney/`) sont ses scènes 1 à 4 (`nocal`), reliées par le fondu. Douce France est défini
-    (`pending:true`, démo dans `tools/demos-en-attente/`) mais rien n'est peint.
+    (`tools/peintures-oldmoney/`) sont ses scènes 1 à 4 (`nocal`), reliées par le fondu. **Douce France est peint** (6 octobre 2026,
+    « vas-y ») : `tools/douce-france.py` (scène 1 d'abord, qui fixe le style, puis le reste d'après elle ; une passe par image),
+    4 scènes, 6 lieux, 4 écrans (`prog`, `dress`, `info`, `liste`), porte et rideau (`portes.py`) : 18 générations (~2,70 €).
+    Ciel du soir trop clair en bas pour le texte blanc : foncé dans la peinture elle-même (dégradé de 0,74 à 1 entre 50 et
+    60 % de la hauteur), sans génération. Thème `launch` + `compose`, sceau de cire bleue (pas de cire lavande), démo
+    Camille & Antoine (`invites/camille-antoine.json`).
 
 32g. **Une image ne se répète pas d'un écran à l'autre** (6 octobre 2026 : « on a plusieurs images qui se répètent, faut en
     générer de nouvelles dans le thème »). Les écrans d'après les événements ont leur scène (`T.pageImg` dans themes.js :

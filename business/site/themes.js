@@ -121,11 +121,11 @@ Object.assign(window.SCEAU_THEMES,{
   T.dolcevita.chain=false;
   // Old money : ses 5 peintures plein cadre (6 octobre 2026), scènes séparées reliées par le fondu ; pas de chaîne (budget)
   T.oldmoney.nocal=true; T.oldmoney.scenes[2][4]='dark'; T.oldmoney.scenes[3][4]='dark';
-  T.doucefrance={name:"Douce France",pending:true,chain:true,style:"Peinture",short:"Bastide, lavande, platanes",
+  T.doucefrance={name:"Douce France",launch:true,compose:true,nocal:true,style:"Peinture",short:"Bastide, lavande, platanes",
     desc:"Une bastide en pierre dorée, des champs de lavande et un dîner sous les platanes : la Provence, simplement.",couple:"Camille & Antoine",light:true,
     font:'"Cormorant Garamond",Georgia,serif',italic:true,color:"#2f3a5a",ey:"#4a5578",tx:"#34405e",size:.95,gf:"Cormorant+Garamond:ital,wght@0,500;1,400",music:"valse",particles:"none",
     mono:["#2f3a5a","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],
-    pals:[{name:"Lavande",c:"#6f63a3",seal:"lavande"},{name:"Olivier",c:"#6b7a45",seal:"sauge"},{name:"Pierre dorée",c:"#b08648",seal:"or"}],
+    pals:[{name:"Lavande",c:"#6f63a3",seal:"bleu"},{name:"Olivier",c:"#6b7a45",seal:"sauge"},{name:"Pierre dorée",c:"#b08648",seal:"or"}],
     scenes:[["Ils se marient","NAMES","Samedi 3 juillet 2027"],["La cérémonie","À l'église du village","16h00 · Lourmarin","Itinéraire"],["Le dîner","Sous les platanes","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juin","Répondre","dark"]]};
   T.dolcevitajour=Object.assign({},T.dolcevita,{jour:undefined,compose:false,launch:false,light:true,
     color:"#193f64",ey:"#2f5d86",tx:"#2c3e55",mono:["#193f64","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],lieux:['eglise','jardin'],lieuAlt:{mairie:'eglise',salle:'jardin',plage:'jardin'},
@@ -133,6 +133,8 @@ Object.assign(window.SCEAU_THEMES,{
   // une scène par écran d'après les événements (tools/pages-extra.py, 6 octobre 2026) : plus la même image sur trois pages
   T.dolcevita.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info'};
   T.dolcevitajour.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info'};
+  // Douce France (tools/douce-france.py, 6 octobre 2026) : 4 scènes, 6 lieux, 4 écrans, porte et rideau ; le soir en texte blanc
+  T.doucefrance.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info',gifts:'liste'}; T.doucefrance.darkLieux=['salle','prog','dress','info','liste'];
   T.oldmoney.pageImg={infos:'info',stay:'info',gifts:'liste'}; T.oldmoney.darkLieux=(T.oldmoney.darkLieux||[]).concat(['info','liste']);
 })(window.SCEAU_THEMES);
 /* « Bismillah » s'écrit en arabe, en calligraphie : la ligature basmala (U+FDFD « ﷽ ») de la police Amiri hébergée dans

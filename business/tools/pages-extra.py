@@ -36,8 +36,10 @@ JOBS = {
     'dolcevitajour-dress': (('dolcevitajour', 1, 2, 3), DAY, "the dress code: on a wrought-iron balcony rail covered in "
         "bougainvillea, a flowing pale silk dress and a cream linen jacket hang on wooden hangers, a straw hat and a fan on a "
         "little table beside them, the turquoise sea below in full daylight"),
-    'dolcevitajour-info': (('dolcevitajour', 1, 2, 3), DAY, "where to stay: a small pastel hotel villa with green shutters and "
-        "open windows, a stone staircase lined with lemon trees going down to the harbour where boats are moored, full daylight"),
+    'dolcevitajour-info': (('dolcevitajour', 1, 2, 3), DAY, "where to stay, seen from a little further away so that every "
+        "building is shown WHOLE with its roof and chimney against the sky: a row of small pastel hotel villas with green "
+        "shutters on the right, a stone staircase lined with lemon trees going down to the harbour where boats are moored, "
+        "the coast beyond, full daylight"),
     'oldmoney-info': (('oldmoney', 2, 3, 4), NIGHT, "practical information, arriving at the manor: a vintage dark green car "
         "parked on the gravel forecourt, an old leather suitcase and a hat box beside it, a lit lantern on the stone steps, "
         "clipped box hedges, the manor door glowing warm, at dusk"),

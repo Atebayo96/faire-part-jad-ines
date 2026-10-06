@@ -153,6 +153,35 @@ export default {
   "gifts": [],
   "giftLabels": {}
  },
+ "camille-antoine": {
+  "demo": true,
+  "couple": "Camille & Antoine",
+  "date": "2027-07-03T14:00:00+00:00",
+  "events": [
+   "ceremonie",
+   "diner"
+  ],
+  "eventList": [
+   {
+    "id": "ceremonie",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "diner",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [
+   "Poisson",
+   "Viande",
+   "Végétarien"
+  ],
+  "rsvpQuestion": "Une chanson qui vous fera danser ?",
+  "gifts": [],
+  "giftLabels": {}
+ },
  "chiara-lucas": {
   "demo": true,
   "couple": "Chiara & Lucas",
