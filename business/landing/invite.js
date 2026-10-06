@@ -88,12 +88,20 @@
   const base=up?30:/Limelight|Cinzel/.test(fam1)?38:52;
   const nmCss=(k,col)=>`font-family:${fam1};font-style:${ital?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:clamp(${Math.round(base*k*.72)}px,${(base*k/16.5).toFixed(2)}vh,${Math.round(base*k*1.1)}px);color:${col}`;
   // ?v= : à augmenter quand on remplace des décors, pour que les navigateurs ne gardent pas l'ancienne image
-  const IMGV=11, img=n=>`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  /* du jour au soir : un thème peut avoir sa version de jour (T.jour, ex. Dolce Vita -> dolcevitajour). Un événement qui
+     commence avant 18 h prend le lieu peint en plein jour (s'il existe), après 18 h celui du crépuscule ; l'accueil suit
+     le premier événement, les dernières pages (programme, infos, réponse) le dernier. « Le faire-part doit vivre : si le
+     mariage commence la journée et que le soir c'est la salle ». Clé de décor : 'j:<scène ou lieu>' pour le jour. */
+  const J=T.jour&&window.SCEAU_THEMES[T.jour]||null, SOIR=18;
+  const isJ=n=>String(n).startsWith('j:'), jk=n=>String(n).slice(2);
+  const hourOf=e=>{ const m=/T(\d{1,2})/.exec(e&&e.start||''); return m?+m[1]:12; };
+  const dayKey=(k,day)=>day&&J&&(/^\d+$/.test(String(k))||k==='fond'||(J.lieux||[]).includes(k))?'j:'+k:k;
+  const IMGV=11, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
   // calques : pour les scènes qui en ont (build-site.py liste img/calques/<thème>-<n>.webp), le décor est le fond calme du
   // thème et le sujet détouré est posé ENTIER en bas de l'écran (plus de rognage selon le téléphone), avec un peu de profondeur
   const CAL=new Set(I.calques||[]), hasCal=n=>CAL.has(String(n)), fond=`/img/hd/${I.theme}-ciel.webp?v=${IMGV}`, cal=n=>`/img/calques/${I.theme}-${n}.webp?v=${IMGV}`;
   // texte blanc : une scène marquée 'dark', ou un lieu sombre de la bibliothèque (darkLieux : le dîner de nuit de « Plein jour »)
-  const isDark=n=>/^\d+$/.test(String(n))?(T.scenes[n-1]||[])[4]==='dark':(T.darkLieux||[]).includes(n);
+  const isDark=n=>{ const t=isJ(n)?J:T, k=isJ(n)?jk(n):n; return /^\d+$/.test(String(k))?(t.scenes[k-1]||[])[4]==='dark':(t.darkLieux||[]).includes(k); };
 
   /* ---------- icônes ---------- */
   const ic={
@@ -116,8 +124,8 @@
   let rvI=0;
   function page(n,inner,opts={}){
     rvI=0;
-    const dark=opts.dark!=null?opts.dark:isDark(n), lt=T.light&&!dark;
-    const c={nm:lt?T.color:'#fff',ey:lt?(T.ey||T.color):'#fff',tx:lt?(T.tx||T.color):'#fff'};
+    const Tn=isJ(n)?J:T, dark=opts.dark!=null?opts.dark:isDark(n), lt=Tn.light&&!dark;
+    const c={nm:lt?Tn.color:'#fff',ey:lt?(Tn.ey||Tn.color):'#fff',tx:lt?(Tn.tx||Tn.color):'#fff'};
     const body=inner(c,lt);
     // le décor n'est pas dans la page : un calque fixe par scène (plusieurs pages d'affilée peuvent partager la même scène,
     // le décor reste alors en place : aucune coupure). Pas de voile sombre sous le texte : il « apparaissait » au swipe
@@ -131,8 +139,12 @@
   // chapeau de l'accueil : « Bismillah » s'écrit en arabe, en calligraphie (ligature basmala, voir themes.js), de droite à gauche
   const eyHtml=(cls,t,st)=>{ const e=window.sceauEy(t); return `<div class="${cls}${e.ar?' ar':''}"${e.ar?` lang="ar" dir="rtl" aria-label="${esc(window.SCEAU_BASMALA_LABEL)}"`:''} style="${st}">${esc(e.text)}</div>`; };
 
+  // jour ou soir pour l'accueil (premier événement) et les dernières pages (dernier événement)
+  // la date dans la couleur du couple, sauf si elle est trop claire pour un fond clair (de l'or sur un ciel pâle) : l'encre du thème
+  const palLum=(h=>{ const n=parseInt((h||'#000').slice(1,7),16), f=v=>{ v/=255; return v<=.03928?v/12.92:((v+.055)/1.055)**2.4; }; return .2126*f(n>>16&255)+.7152*f(n>>8&255)+.0722*f(n&255); })(pal);
+  const K1=dayKey(1,events.length&&hourOf(events[0])<SOIR), K4=dayKey(4,events.length&&hourOf(events[events.length-1])<SOIR);
   // 1. accueil
-  page(1,(c)=>{
+  page(K1,(c,lt)=>{
     const names=T.stack&&!solo?`${esc(n1)}<br>&amp; ${esc(n2)}`:namesH();
     return (fam&&fam.label?`<div class="rv greet" style="--i:${rvI++};color:${c.tx}">${esc(fam.label)}</div>`:'')+
       (oval||compact?'':`<div class="rv seal" style="--i:${rvI++};background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sealL};--m:${sealM};--d:${sealD}">${iniH()}</b></div>`)+
@@ -141,14 +153,14 @@
       (oval||compact?'':`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${esc(I.intro&&I.intro.text||S.joy)}</div>`)+
       // date à découvrir (grattage, roue, jackpot) : le compte à rebours et l'invitation à défiler n'apparaissent qu'une fois la date trouvée
       (RVL?`<div class="rv" data-rvl style="--i:${rvI++};width:100%;color:${c.tx}"></div>`:'')+
-      (!RVL||RVL==='wheel'?`<div class="rv dl${RVL?' rvl-later':''}" style="--i:${rvI++};color:${T.light?pal:'#fff'}"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>`:'')+
+      (!RVL||RVL==='wheel'?`<div class="rv dl${RVL?' rvl-later':''}" style="--i:${rvI++};color:${lt?(palLum<.3?pal:c.ey):'#fff'}"><i></i><span>${esc(I.intro&&I.intro.dateText||fmtDay(main))}</span><i></i></div>`:'')+
       (I.countdown==='debut'?`<div class="rv${RVL?' rvl-later':''}" style="--i:${rvI++}">${cdHtml(false,c.tx)}</div>`:'')+
       `<div class="hint${RVL?' rvl-later':''}" style="color:${c.ey}">${S.scroll} ↓</div>`;
   },{style:oval?'padding-top:'+T.top1:''});
 
   // décor d'un événement : un lieu de la bibliothèque du thème (lieu: 'mairie' | 'eglise' | 'salle' | 'jardin' | 'plage'),
   // bg: 'simple' = écran simple, le texte sur le fond du tableau (img/hd/<thème>-fond.webp), ou une scène du thème (scene: 2)
-  const evImg=(e,i)=>e.bg==='simple'?'fond':(e.lieu||e.scene||[2,3][i%2]);
+  const evImg=(e,i)=>dayKey(e.bg==='simple'?'fond':(e.lieu||e.scene||[2,3][i%2]),hourOf(e)<SOIR);
   const rv=(cls,col,inner,st='')=>`<div class="rv ${cls}" style="--i:${rvI++};${col?'color:'+col+';':''}${st}">${inner}</div>`;
   const head=(c,ey,title,k=.74)=>rv('ey',c.ey,esc(ey))+(title?rv('nm',null,esc(title),esc(nmCss(k,c.nm))):'');
   // dans les démos, les liens externes (liste, album, hôtel) ouvrent une explication au lieu d'un faux site
@@ -170,7 +182,7 @@
 
   // 2. le mot des familles (scène 1 : le décor de l'accueil reste en place)
   const P=I.parents;
-  if(P) page(1,(c)=>
+  if(P) page(K1,(c)=>
     head(c,P.eyebrow||S.parents,'')+
     (P.names&&P.names.length?rv('fams',c.tx,P.names.map(x=>`<span>${esc(x)}</span>`).join('<i>&amp;</i>')):'')+
     rv('tx',c.tx,esc(P.text||''))+
@@ -178,13 +190,13 @@
 
   // 3. notre histoire
   const ST=I.story;
-  if(ST) page(1,(c,lt)=>
+  if(ST) page(K1,(c,lt)=>
     head(c,ST.eyebrow||S.story,ST.title||'',.6)+
     (ST.photos&&ST.photos.length?rv('ph',null,ST.photos.slice(0,3).map((u,k)=>`<img src="${esc(u)}" alt="" loading="lazy" style="--r:${[-4,3,-2][k]}deg">`).join('')):'')+
     rv('st',c.tx,(ST.items||[]).map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')),{cls:'tall'});
 
   // 4. compte à rebours sur une page
-  if(I.countdown==='page') page(1,(c)=>
+  if(I.countdown==='page') page(K1,(c)=>
     head(c,S.soon,S.left,.8)+rv('',null,cdHtml(true,c.tx))+rv('dl',c.tx,`<i></i><span>${esc(fmtDay(main))}</span><i></i>`),{});
 
   // 5. événements
@@ -207,43 +219,43 @@
     rv('card tl',c.tx,(PR.items||[]).map(x=>`<div class="it"><b>${esc(x.time)}</b><div><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   // 7. infos pratiques, dress code, hébergement, questions, liste, photos, table : sur le décor de la réponse
-  if(I.infos&&I.infos.length) page(4,(c,lt)=>
+  if(I.infos&&I.infos.length) page(K4,(c,lt)=>
     head(c,I.infosTitle||S.infos,'')+
     rv('card',c.tx,I.infos.map(x=>`<div class="it">${ic[x.icon]||ic.info}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const DR=I.dress;
-  if(DR) page(4,(c)=>
+  if(DR) page(K4,(c)=>
     head(c,DR.eyebrow||S.dress,DR.title||'',.7)+
     (DR.colors&&DR.colors.length?rv('sw',null,DR.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')):'')+
     rv('tx',c.tx,esc(DR.text||'')),{});
 
   const SY=I.stay;
-  if(SY) page(4,(c,lt)=>
+  if(SY) page(K4,(c,lt)=>
     head(c,SY.eyebrow||S.stay,SY.title||'',.6)+
     rv('card',c.tx,(SY.items||[]).map(x=>`<div class="it">${ic[x.icon]||ic.hotel}<div><h4>${esc(x.title)}</h4><p>${esc(x.text)}</p>${x.url?`<a class="lk" ${lnk(x.url)}>${esc(x.link||S.site)} →</a>`:''}</div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const FQ=I.faq;
-  if(FQ) page(4,(c,lt)=>
+  if(FQ) page(K4,(c,lt)=>
     head(c,FQ.eyebrow||S.faq,FQ.title||'',.6)+
     rv('card qa',c.tx,(FQ.items||[]).map(x=>`<div class="it"><div><h4>${esc(x.q)}</h4><p>${esc(x.a)}</p></div></div>`).join(''),'background:'+cardBg(lt)),{cls:'tall'});
 
   const GF=I.gifts;
-  if(GF) page(4,(c,lt)=>
+  if(GF) page(K4,(c,lt)=>
     head(c,GF.eyebrow||S.gifts,GF.title||'',.7)+rv('tx',c.tx,esc(GF.text||''))+giftBody(GF,c.tx,lt),{cls:GF.mode==='liste'&&(GF.items||[]).length>3?'tall':''});
 
   const PH=I.photos;
-  if(PH) page(4,(c)=>
+  if(PH) page(K4,(c)=>
     head(c,PH.eyebrow||S.photos,PH.title||'',.7)+rv('tx',c.tx,esc(PH.text||''))+
     (PH.url?rv('acts',c.tx,`<a class="b" ${lnk(PH.url)}>${ic.cam}${esc(PH.label||S.photosBtn)}</a>`):''),{});
 
   // la table n'apparaît que sur le lien personnel d'une famille qui a une table
-  if(fam&&fam.table) page(4,(c)=>
+  if(fam&&fam.table) page(K4,(c)=>
     head(c,S.dayJ,S.table,.7)+rv('tbl',c.tx,esc(fam.table))+rv('tx',c.tx,esc(I.tableText||S.tableTx)),{});
 
   // 8. réponse
   const R=I.rsvp||{};
   const deadline=R.deadline?zoned(R.deadline+'T23:59',TZ):null;
-  page(4,(c)=>
+  page(K4,(c)=>
     `<div class="rv ey" style="--i:${rvI++};color:${c.ey}">${esc(R.eyebrow||T.scenes[3][0])}</div>`+
     `<div class="rv nm" style="--i:${rvI++};${esc(nmCss(.74,c.nm))}">${esc(R.title||T.scenes[3][1])}</div>`+
     (deadline?`<div class="rv tx" style="--i:${rvI++};color:${c.tx}">${S.before} ${esc(er(deadline.toLocaleDateString(LOC,{day:'numeric',month:'long',timeZone:TZ})))}</div>`:'')+
@@ -370,7 +382,14 @@
   /* la peinture prend toute la largeur de l'écran et se pose en bas : rien n'est coupé sur les côtés (« dans église t'as
      encore le truc coupé ») ; sur un téléphone plus allongé que 9:16, le haut libre est rempli par le ciel de l'image
      étiré (::before, --strip). Avant, elle était agrandie à la hauteur de l'écran et perdait ses bords. */
-  function fitBg(B,w,h,ov){
+  // couleur du haut de l'image (moyenne de ses premières lignes) : remplit le haut libre de l'écran sans motif ni trait
+  const SKY={};
+  function skyOf(B){ const u=(B.style.backgroundImage.match(/url\(["']?([^"')]+)/)||[])[1]; if(!u) return;
+    if(SKY[u]){ B.style.setProperty('--sky',SKY[u]); return; }
+    const im=new Image(); im.onload=()=>{ try{ const cv=document.createElement('canvas'); cv.width=16; cv.height=4; const x=cv.getContext('2d'); x.drawImage(im,0,0,im.width,im.height*.01,0,0,16,4);
+      const d=x.getImageData(0,0,16,4).data; let r=0,g=0,b=0; for(let k=0;k<d.length;k+=4){ r+=d[k]; g+=d[k+1]; b+=d[k+2]; } const n=d.length/4;
+      SKY[u]=`rgb(${Math.round(r/n)},${Math.round(g/n)},${Math.round(b/n)})`; B.style.setProperty('--sky',SKY[u]); }catch(e){} }; im.src=u; }
+  function fitBg(B,w,h,ov){ skyOf(B);
     const bw=Math.ceil(w), ih=bw/IR, y=Math.round(ov+(h-ih));
     B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`;
     B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px');

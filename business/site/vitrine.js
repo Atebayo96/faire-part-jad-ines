@@ -187,7 +187,7 @@
      ou le sbouâ (la naissance, 7e jour). Un seul prénom possible : celui de l'enfant, ou de la mariée pour son henné. */
   const OCCS=[{id:'mariage',name:'Mariage',sub:'Tous vos événements, du henné à la fête'},{id:'henne',name:'Henné',sub:'Une invitation pour la soirée henné'},{id:'sbou3',name:'Sbouâ',sub:'La naissance de votre enfant'}];
   const OCC={
-    mariage:{n:['Emma','Louis'],l:['Premier prénom','Second prénom'],ph:['',''],label:'Vos prénoms',ev:()=>[{name:'La cérémonie',time:'15:00',place:'Mairie du 11e',bg:'scene',lieu:'mairie'},{name:'La fête',time:'19:30',place:'Domaine des Roses',bg:'scene',lieu:'salle'}]},
+    mariage:{n:['Emma','Louis'],l:['Premier prénom','Second prénom'],ph:['',''],label:'Vos prénoms',ev:()=>[{name:'La cérémonie',time:'15:00',place:'Église Saint-Paul',bg:'scene',lieu:'eglise'},{name:'La fête',time:'19:30',place:'Domaine des Roses',bg:'scene',lieu:'salle'}]},
     henne:{n:['Yasmine',''],l:['Prénom de la mariée','Prénom du marié (facultatif)'],ph:['Yasmine','Le marié (facultatif)'],label:'Le henné de',ev:()=>[{name:'Le henné',time:'19:30',place:'Chez la famille Alaoui',bg:'scene',lieu:'s2'}]},
     sbou3:{n:['Lina','Yasmine & Karim'],l:['Prénom de l’enfant','Les parents'],ph:['Prénom de l’enfant','Les parents (ex. Yasmine & Karim)'],label:'Le sbouâ de',ev:()=>[{name:'Le sbouâ',time:'15:00',place:'À la maison',bg:'simple',lieu:'salle'}]}};
   const nm1=()=>($('cN1').value.trim()||OCC[C.occ].n[0]), nm2=()=>(C.occ==='henne'?$('cN2').value.trim():($('cN2').value.trim()||OCC[C.occ].n[1]));
@@ -410,6 +410,14 @@
      les pages, deux scènes voisines se chevauchent et se fondent par un masque en dégradé (30 % d'un écran) ;
      les textes glissent avec la page et ne s'estompent que près du bord. Rien ne saute, on ne « change pas de page ». */
   let cpRuns=[];
+  // couleur du haut de l'image : remplit le haut libre de l'écran (comme skyOf() dans invite.js)
+  const SKY={};
+  function skyOf(B){ const u=(B.style.backgroundImage.match(/url\(["']?([^"')]+)/)||[])[1]; if(!u) return;
+    if(SKY[u]){ B.style.setProperty('--sky',SKY[u]); return; }
+    const im=new Image(); im.onload=()=>{ try{ const cv=document.createElement('canvas'); cv.width=16; cv.height=4; const x=cv.getContext('2d'); x.drawImage(im,0,0,im.width,im.height*.01,0,0,16,4);
+      const d=x.getImageData(0,0,16,4).data; let r=0,g=0,b=0; for(let k=0;k<d.length;k+=4){ r+=d[k]; g+=d[k+1]; b+=d[k+2]; } const n=d.length/4;
+      SKY[u]=`rgb(${Math.round(r/n)},${Math.round(g/n)},${Math.round(b/n)})`; B.style.setProperty('--sky',SKY[u]); }catch(e){} }; im.src=u; }
+  const lumOf=h=>{ const n=parseInt((h||'#000').slice(1,7),16), f=v=>{ v/=255; return v<=.03928?v/12.92:((v+.055)/1.055)**2.4; }; return .2126*f(n>>16&255)+.7152*f(n>>8&255)+.0722*f(n&255); };
   function cpLayout(){
     const sc=$('cpScroll'), h=sc.clientHeight, bgs=$('cpBgs'); if(!h||!bgs) return; const ov=Math.round(h*.45), secs=[...sc.querySelectorAll('.pv-sc')], layers=[...bgs.children];
     bgs.style.height=sc.scrollHeight+'px';
@@ -424,7 +432,7 @@
       // taille de l'écran, pas du cadre agrandi (sinon zoom ~1,8×) : même calcul que fitBg() dans invite.js
       // toute la largeur, posée en bas, le haut rempli par le ciel étiré : comme fitBg() (rien de coupé sur les côtés)
       const bw=Math.ceil(sc.clientWidth), y=Math.round(h-bw/.566);
-      B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`; B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px'); });
+      skyOf(B); B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`; B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px'); });
     cpFade();
   }
   addEventListener('resize',cpLayout); addEventListener('load',cpLayout);
@@ -472,10 +480,13 @@
     // (les cartes d'ambiance sont bâties par buildAmb())
     $('cStoryT').textContent=C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
+      // du jour au soir : les vignettes suivent l'heure de l'événement (lieu peint en plein jour avant 18 h, s'il existe)
+      const Jt=THEMES[C.k].jour&&THEMES[THEMES[C.k].jour], day=Jt&&parseInt(e.time||'15',10)<18, kOf=id=>day&&(id==='fond'||(Jt.lieux||[]).includes(id))?THEMES[C.k].jour:C.k;
+      const tag=l.querySelector('.ev-h small'); if(tag&&Jt){ let d=tag.querySelector('.dn'); if(!d){ d=document.createElement('span'); d.className='dn'; tag.prepend(d); } d.textContent=day?'de jour · ':'le soir · '; }
       // « Texte seul » : écran simple (scène par scène), ou la scène peinte du thème dans le cadre (grand tableau)
       const sim=l.querySelector('[data-lieu="simple"] em'); if(sim) sim.textContent=C.fmt==='long'?'Scène du thème':'Texte seul';
       l.querySelectorAll('[data-lieu]').forEach(b=>{ const id=b.dataset.lieu; b.setAttribute('aria-pressed',id==='simple'?e.bg!=='scene':e.bg==='scene'&&id===e.lieu);
-        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=10')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=10')`:`url('/img/lieux/${C.k}-fond.webp')`):`url('/img/lieux/${C.k}-${id==='photo'?(THEMES[C.k].lieux||['mairie'])[0]:id}.webp')`; }); });
+        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=10')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=10')`:`url('/img/lieux/${kOf('fond')}-fond.webp')`):`url('/img/lieux/${kOf(id==='photo'?'eglise':id)}-${id==='photo'?(THEMES[C.k].lieux||['eglise'])[0]:id}.webp')`; }); });
     $('cAddEv').hidden=C.ev.length>=6||C.occ!=='mariage';
     $('cpTint').style.background=p.c;
     const n1=nm1(), n2=nm2(), solo=isSolo(), oneShot=C.occ!=='mariage';
@@ -503,50 +514,56 @@
     const nmCss=(sz,col)=>`font-family:${fam};font-style:${it?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};font-size:${sz}px;color:${col}`;
     const d=weddingDate(), ds0=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}), ds=ds0.charAt(0).toUpperCase()+ds0.slice(1);
     const names=solo?esc(n1):t.stack?`${esc(n1)}<br>&amp; ${esc(n2)}`:`${esc(n1)} &amp; ${esc(n2)}`;
-    const page=(img,mode,inner,extra)=>{ const dk=mode==='dark', lt=t.light&&!dk;
-      const c={nm:lt?t.color:'#fff',ey:lt?(t.ey||t.color):'#fff',tx:lt?(t.tx||t.color):'#fff'};
+    /* du jour au soir, comme le moteur (invite.js) : un événement avant 18 h prend le lieu peint en plein jour s'il existe
+       (t.jour), après 18 h celui du soir ; l'accueil suit le premier événement, les dernières pages le dernier */
+    const J=t.jour&&THEMES[t.jour], isJ=k=>String(k).startsWith('j:'), jk=k=>String(k).slice(2), hr=e=>parseInt(e&&e.time||'15',10);
+    const dayKey=(k,day)=>day&&J&&(typeof k==='number'||k==='fond'||(J.lieux||[]).includes(k))?'j:'+k:k;
+    const K1=dayKey(1,hr(C.ev[0])<18), K4=dayKey(4,hr(C.ev[C.ev.length-1])<18);
+    const page=(img0,mode,inner,extra)=>{ const jj=isJ(img0), tt=jj?J:t, kk=jj?t.jour:C.k, img=jj?(/^\d+$/.test(jk(img0))?+jk(img0):jk(img0)):img0;
+      const dk=mode==='dark'||(jj&&(typeof img==='number'?(tt.scenes[img-1]||[])[4]==='dark':(tt.darkLieux||[]).includes(img))), lt=tt.light&&!dk;
+      const c={nm:lt?tt.color:'#fff',ey:lt?(tt.ey||tt.color):'#fff',tx:lt?(tt.tx||tt.color):'#fff'};
       // un numéro = scène du thème ; un nom = lieu de la bibliothèque, ou « fond » pour un écran simple
       // calque : le sujet détouré est posé entier au bas de l'écran sur le fond du thème (même rendu que le moteur)
-      const hasCal=((window.SCEAU_CALQUES||{})[C.k]||[]).includes(String(img));
-      const src=hasCal?`/img/lieux/${C.k}-ciel.webp`:typeof img==='number'?`/img/themes/${C.k}-${img}.webp?v=10`:`/img/lieux/${C.k}-${img}.webp`;
-      const sub=hasCal?`/img/calques/${C.k}-${img}.webp?v=10`:'';
+      const hasCal=((window.SCEAU_CALQUES||{})[kk]||[]).includes(String(img));
+      const src=hasCal?`/img/lieux/${kk}-ciel.webp`:typeof img==='number'?`/img/themes/${kk}-${img}.webp?v=10`:`/img/lieux/${kk}-${img}.webp`;
+      const sub=hasCal?`/img/calques/${kk}-${img}.webp?v=10`:'';
       return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" data-sub="${esc(sub)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     // boutons de l'aperçu : même pastille que le faire-part (invite.css .b), icône dans un médaillon à la couleur choisie
     const BT_IC={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>',gift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M3 9h18M12 9v11M12 9c-2-4-6-4-6-1.5S10 9 12 9zm0 0c2-4 6-4 6-1.5S14 9 12 9z"/></svg>',cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'};
     const btn=(c,label,icon)=>`<span class="bt" style="color:${c.tx};--pal:${p.c}">${BT_IC[icon]}${esc(label)}</span>`;
     const pages=[], rv=C.rvl!=='non'?C.rvl:null;
     // 1. prenoms + date (+ compte a rebours au debut)
-    { const pg=page(1,'',null,t.top1?'padding-top:'+t.top1:'');
+    { const pg=page(K1,'',null,t.top1?'padding-top:'+t.top1:'');
       const oval=!!t.top1;
-      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc(`background-image:url('/img/seals/${SEAL[0]}.webp')`)}"><b style="${esc(`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`)}">${iniH}</b></div>`}${eyHtml('ey',t.scenes[0][0],`color:${c.ey}`)}<div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">${esc(introTxt())}</div>`}${rv?`<div class="cp-rvl" style="width:100%;color:${c.tx}"></div>`:''}${!rv||rv==='wheel'?`<div class="cp-dl${rv?' rvl-later':''}" style="color:${pg.lt?p.c:'#fff'}"><i></i><span>${esc(ds)}</span><i></i></div>`:''}${C.cd==='debut'?`<div class="${rv?'rvl-later':''}">${cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':'')}</div>`:''}<div class="pv-hint${rv?' rvl-later':''}" style="color:${c.ey}">Faites défiler ↓</div>`)); }
-    const scene=(idx,withCd)=>{ let [e,main,x,bt,mode]=t.scenes[idx]; if(oneShot&&idx===3){ e='Réponse souhaitée'; main='Serez-vous des nôtres ?'; } const pg=page(idx+1,mode);
+      pages.push(pg.html(c=>`${oval?'':`<div class="cp-seal" style="${esc(`background-image:url('/img/seals/${SEAL[0]}.webp')`)}"><b style="${esc(`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`)}">${iniH}</b></div>`}${eyHtml('ey',t.scenes[0][0],`color:${c.ey}`)}<div class="nm" style="${esc(nmCss(t.stack?base*.82:base,c.nm))}">${names}</div>${oval?'':`<div class="tx" style="color:${c.tx}">${esc(introTxt())}</div>`}${rv?`<div class="cp-rvl" style="width:100%;color:${c.tx}"></div>`:''}${!rv||rv==='wheel'?`<div class="cp-dl${rv?' rvl-later':''}" style="color:${pg.lt?(lumOf(p.c)<.3?p.c:c.ey):'#fff'}"><i></i><span>${esc(ds)}</span><i></i></div>`:''}${C.cd==='debut'?`<div class="${rv?'rvl-later':''}">${cdHtml(false,c.tx,oval?'transform:scale(.8);margin-top:6px':'')}</div>`:''}<div class="pv-hint${rv?' rvl-later':''}" style="color:${c.ey}">Faites défiler ↓</div>`)); }
+    const scene=(idx,withCd)=>{ let [e,main,x,bt,mode]=t.scenes[idx]; if(oneShot&&idx===3){ e='Réponse souhaitée'; main='Serez-vous des nôtres ?'; } const pg=page(idx===3?K4:idx+1,idx===3&&isJ(K4)?(J.scenes[3]||[])[4]:mode);
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e)}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(main)}</div><div class="tx" style="color:${c.tx}">${esc(x)}</div>${withCd?cdHtml(false,c.tx):''}${bt?btn(c,bt,/R[ée]pondre|RSVP/i.test(bt)?'mail':'pin'):''}`); };
     // événements : scène = le lieu choisi, écran simple = le fond du tableau (la bande continue les fond l'un dans l'autre)
-    const evPage=i=>{ const e=C.ev[i], photo=e.bg==='scene'&&e.lieu==='photo', pg=page(e.bg==='scene'&&!photo?(e.lieu==='s2'?2:e.lieu):'fond',e.bg==='scene'&&(t.darkLieux||[]).includes(e.lieu)?'dark':'');
+    const evPage=i=>{ const e=C.ev[i], photo=e.bg==='scene'&&e.lieu==='photo', pg=page(dayKey(e.bg==='scene'&&!photo?(e.lieu==='s2'?2:e.lieu):'fond',hr(e)<18),e.bg==='scene'&&(t.darkLieux||[]).includes(e.lieu)?'dark':'');
       return pg.html(c=>`<div class="ey" style="color:${c.ey}">${esc(e.name||'Événement '+(i+1))}</div><div class="nm" style="${esc(nmCss(base*.72,c.nm))}">${esc(e.place||'')}</div><div class="tx" style="color:${c.tx}">${esc(hm(e.time))}</div>${btn(c,'Itinéraire','pin')}${photo?`<div class="pv-photo" style="color:${c.tx};border-color:${c.tx}">Ici, votre lieu<br>peint d’après votre photo</div>`:''}`).replace('<section ',`<section data-ev="${i}" `); };
     // écrans en option (contenu d'exemple), sur le décor de la scène voisine, sans voile (comme le moteur)
     const xp=(id,img,mode,inner)=>{ if(!C.x.has(id)) return; const pg=page(img,mode);
       pages.push(pg.html(c=>inner(c,pg.lt)).replace('<section ',`<section data-x="${id}" `)); };
     const card=(c,lt,rows,one)=>`<div class="pv-card${one?' one':''}" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${rows.map(r=>`<div>${r[0]?`<b>${r[0]}</b>`:''}<span>${r[1]}</span></div>`).join('')}</div>`;
     const hd=(c,ey,title)=>`<div class="ey" style="color:${c.ey};position:relative">${ey}</div>`+(title?`<div class="nm" style="${esc(nmCss(base*.62,c.nm))};position:relative">${title}</div>`:'');
-    xp('parents',1,'',c=>hd(c,famEy(),'')+`<div class="pv-fam" style="color:${c.tx}">${[C.data.parents.n1,C.data.parents.n2].filter(Boolean).map(esc).join(' &amp; ')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.parents.text)}</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
-    xp('story',1,'',(c,lt)=>hd(c,'Notre histoire','Il était une fois')+card(c,lt,C.data.story.map(x=>[esc(x.when),esc([x.title,x.text].filter(Boolean).join(', '))])));
+    xp('parents',K1,'',c=>hd(c,famEy(),'')+`<div class="pv-fam" style="color:${c.tx}">${[C.data.parents.n1,C.data.parents.n2].filter(Boolean).map(esc).join(' &amp; ')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.parents.text)}</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
+    xp('story',K1,'',(c,lt)=>hd(c,'Notre histoire','Il était une fois')+card(c,lt,C.data.story.map(x=>[esc(x.when),esc([x.title,x.text].filter(Boolean).join(', '))])));
     pages.push(evPage(0));
     // page dediee au compte a rebours
-    if(C.cd==='page'){ const pg=page('fond',''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
+    if(C.cd==='page'){ const pg=page(dayKey('fond',hr(C.ev[0])<18),''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
     C.ev.forEach((_,i)=>{ if(i) pages.push(evPage(i)); });
-    xp('program','fond','',(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,C.data.program.filter(x=>x.time||x.title).map(x=>[esc(hm(x.time)),esc(x.title)])));
+    xp('program',dayKey('fond',hr(C.ev[C.ev.length-1])<18),'',(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,C.data.program.filter(x=>x.time||x.title).map(x=>[esc(hm(x.time)),esc(x.title)])));
     const m4=t.scenes[3][4];
-    xp('dress',4,m4,c=>hd(c,'Dress code',esc(C.data.dress.title))+`<div class="pv-sws">${C.data.dress.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.dress.text)}</div>`);
-    xp('stay',4,m4,(c,lt)=>hd(c,'Bon à savoir','')+card(c,lt,C.data.stay.map(x=>[esc(x.title),esc(x.text)])));
-    xp('faq',4,m4,(c,lt)=>hd(c,'Vos questions','')+card(c,lt,C.data.faq.filter(x=>x.q).map(x=>['',`<b>${esc(x.q)}</b><br>${esc(x.a)}`]),true));
-    xp('gifts',4,m4,(c,lt)=>{ const g=C.data.gifts;
+    xp('dress',K4,isJ(K4)?'':m4,c=>hd(c,'Dress code',esc(C.data.dress.title))+`<div class="pv-sws">${C.data.dress.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.dress.text)}</div>`);
+    xp('stay',K4,isJ(K4)?'':m4,(c,lt)=>hd(c,'Bon à savoir','')+card(c,lt,C.data.stay.map(x=>[esc(x.title),esc(x.text)])));
+    xp('faq',K4,isJ(K4)?'':m4,(c,lt)=>hd(c,'Vos questions','')+card(c,lt,C.data.faq.filter(x=>x.q).map(x=>['',`<b>${esc(x.q)}</b><br>${esc(x.a)}`]),true));
+    xp('gifts',K4,isJ(K4)?'':m4,(c,lt)=>{ const g=C.data.gifts;
       const body=g.mode==='liste'?`<div class="pv-card pv-gl" style="color:${c.tx};background:${lt?'rgba(255,255,255,.5)':'rgba(0,0,0,.28)'}">${g.items.filter(x=>x.name).map(x=>`<div><span>${esc(x.name)}${x.price?`<small>${esc(x.price)} €</small>`:''}</span><i>Je l’offre</i></div>`).join('')}</div>`
         :g.mode==='cagnotte'?`<div class="pv-gq" style="color:${c.tx}"><i class="pv-qr" data-qr="${esc(g.url||'https://savetheoui.fr')}"></i><span>Scannez ou copiez le lien<em>Copier le lien</em></span></div>${btn(c,'Participer','gift')}`
         :btn(c,'Voir la liste','gift');
       return hd(c,esc(giftName()),'')+`<div class="tx" style="color:${c.tx};position:relative">${esc(g.text)}</div>`+body; });
-    xp('photos',4,m4,c=>hd(c,'Vos photos','')+`<div class="tx" style="color:${c.tx};position:relative">Partagez vos plus belles photos de la soirée dans notre album commun.</div>${btn(c,'Partager mes photos','cam')}`);
-    xp('table',4,m4,c=>hd(c,'Le jour J','Votre table')+`<div class="tx" style="color:${c.tx};position:relative;font-size:26px;margin-top:6px">La table des Roses</div><div class="tx" style="color:${c.tx};position:relative;font-size:13px">Chaque famille voit sa table sur son lien personnel.</div>`);
+    xp('photos',K4,isJ(K4)?'':m4,c=>hd(c,'Vos photos','')+`<div class="tx" style="color:${c.tx};position:relative">Partagez vos plus belles photos de la soirée dans notre album commun.</div>${btn(c,'Partager mes photos','cam')}`);
+    xp('table',K4,isJ(K4)?'':m4,c=>hd(c,'Le jour J','Votre table')+`<div class="tx" style="color:${c.tx};position:relative;font-size:26px;margin-top:6px">La table des Roses</div><div class="tx" style="color:${c.tx};position:relative;font-size:13px">Chaque famille voit sa table sur son lien personnel.</div>`);
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML='<div class="cp-bgs" id="cpBgs" aria-hidden="true"></div>'+pages.join(''); sc.scrollTop=st; tick();
     drawQr(sc);

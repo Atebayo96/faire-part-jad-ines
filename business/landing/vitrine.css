@@ -370,7 +370,7 @@
   .cp-bg.cal i{background:none}
   .cp-bg.cal i::before{display:none}
   .cp-bg i .sub{position:absolute;left:0;bottom:0;width:100%;height:auto;max-height:100%;object-fit:contain;object-position:center bottom;pointer-events:none;display:block}
-  .cp-bg i::before{content:'';position:absolute;left:0;right:0;top:0;height:calc(var(--strip,0px) + 2px);background:var(--img) center top/var(--bs,cover) no-repeat;transform:scaleY(-1)} /* +2 px : recouvre l arrondi, sinon un trait fin entre le ciel étiré et l image */
+  .cp-bg i::before{content:'';position:absolute;left:0;right:0;top:0;height:calc(var(--strip,0px) + 48px);background:var(--sky,#111);-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 48px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 48px),transparent)} /* le haut libre : la couleur du ciel de l'image, lue dans l'image (skyOf()) ; étirer sa première bande faisait des traînées floues (« en haut c'est flou ») */
   .cp-phone .pv-scroll{position:absolute;inset:0;z-index:1}
   .cp-phone .pv-sc{padding-top:14%;background:none;will-change:opacity,transform;z-index:1;border-top:0} /* sans la bordure des sections de la vitrine : elle traçait une ligne entre deux écrans */
   .cp-phone .pv-sc .nm{margin:14px 0 10px}

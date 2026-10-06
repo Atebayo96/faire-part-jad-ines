@@ -111,8 +111,11 @@ Object.assign(window.SCEAU_THEMES,{
      avoir deux visuels. Dolce Vita « Crépuscule » (ses scènes du soir) et « Plein jour » (dolcevitajour : les peintures de
      jour de son grand tableau, tools/ambiance-jour.py). group : le thème affiché ; amb : le nom de l'ambiance ;
      lieux : les lieux qui existent dans cette ambiance (sinon tous) ; lieuAlt : le lieu qui remplace un lieu absent. Le dîner est sous un ciel bleu nuit : texte blanc. */
-  T.dolcevita.group='dolcevita'; T.dolcevita.amb='Crépuscule'; T.dolcevita.ambSub='Les lumières du soir sur la côte';
-  T.dolcevitajour=Object.assign({},T.dolcevita,{amb:'Plein jour',ambSub:'Ciel bleu et mer turquoise',launch:false,light:true,
+  /* du jour au soir (6 octobre 2026) : plus de choix d'ambiance. Dolce Vita porte sa version de jour (jour:'dolcevitajour') ;
+     un événement avant 18 h prend le lieu peint en plein jour s'il existe, après 18 h celui du crépuscule (invite.js, vitrine.js).
+     « L'idée c'est que ça doit être évolutif : si le mariage commence la journée et le soir c'est la salle, le faire-part doit vivre. » */
+  T.dolcevita.jour='dolcevitajour';
+  T.dolcevitajour=Object.assign({},T.dolcevita,{jour:undefined,compose:false,launch:false,light:true,
     color:"#193f64",ey:"#2f5d86",tx:"#2c3e55",mono:["#193f64","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],lieux:['eglise','jardin'],lieuAlt:{mairie:'eglise',salle:'jardin',plage:'jardin'},
     scenes:[["Ci sposiamo","NAMES","Samedi 28 août 2027"],["La cérémonie","À la petite chapelle","17h00 · Ravello","Itinéraire"],["Le dîner","Face à la mer","Dès 19h30","","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er juillet","Répondre"]]});
 })(window.SCEAU_THEMES);

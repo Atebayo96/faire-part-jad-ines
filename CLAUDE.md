@@ -277,6 +277,20 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Les calques restent dans `img/calques/` sans être utilisés. `tools/dolcevita-jour.py` (version de jour) existe mais
     n'est pas à lancer sans demande.
 
+32d. **Du jour au soir, plus de choix d'ambiance** (6 octobre 2026 : « le plein jour et le crépuscule, ça doit être évolutif :
+    si le mariage commence la journée et le soir c'est la salle, le faire-part doit vivre »). Dolce Vita porte sa version de
+    jour (`jour:'dolcevitajour'` dans themes.js ; `dolcevitajour` n'est plus proposé seul). Un événement qui commence
+    **avant 18 h** prend le lieu peint en plein jour s'il existe (`lieux` de la version de jour : église, jardin, fond), sinon
+    celui du soir ; l'accueil, le mot des familles et l'histoire suivent le premier événement, le programme, les infos et
+    la réponse le dernier. Clé de décor `j:<scène ou lieu>` (invite.js : `dayKey()`, `img()`, `isDark()`, couleurs de
+    page prises dans le thème de l'image) ; même règle dans l'aperçu (`page()` de vitrine.js) et dans les vignettes de lieux
+    de chaque événement, qui affiche « de jour » ou « le soir ». La date de l'accueil prend l'encre du thème si la couleur du
+    couple est trop claire pour un fond clair. Le haut libre de l'écran (peinture posée en bas) est rempli par **la couleur
+    du ciel lue dans l'image** (`skyOf()`, `--sky`), fondue sur 48 px dans la peinture : étirer sa première bande faisait des
+    traînées floues (« en haut c'est flou »). L'exemple par défaut du configurateur : cérémonie à l'église (la mairie de
+    jour n'existe pas encore). Accueil : « Un faire-part qui vit, du jour au soir. »
+    Ce qui suit (ambiances, « Plein jour » choisi à part) est remplacé par cette règle.
+
 32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
     « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money
     (`compose:true`). Un thème peut avoir plusieurs **ambiances** (`group` / `amb` / `ambSub` dans themes.js) : Dolce Vita
