@@ -1,0 +1,194 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<!-- Pubs « parcours » : le vrai site filmé (caps/, captures.js) dans un téléphone, trois montages (window.V) :
+     etapes (3 étapes, 1 lien), direct (vous réglez, vous voyez), oui (ce soir vous composez, demain les oui arrivent).
+     render(t) est déterministe ; render.js filme image par image. -->
+<link rel="stylesheet" href="/polices/polices.css">
+<style>
+:root{--ink:#16140f;--mute:#6b665d;--bg:#f6f2ea;--gold:#8a6a2c}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+#st{position:absolute;inset:0;overflow:hidden;background:radial-gradient(100% 70% at 50% 55%,#fffdf8 0%,var(--bg) 75%)}
+.abs{position:absolute}
+.cap{left:60px;right:60px;text-align:center;color:var(--ink);font:500 76px/1.08 "Cormorant Garamond",serif}
+.cap i{font-style:italic;font-weight:400;color:var(--gold)}
+.cap small{display:block;font:600 26px/1 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);margin-bottom:22px}
+.num{display:inline-flex;width:84px;height:84px;border-radius:50%;background:var(--ink);color:#fff;align-items:center;justify-content:center;
+  font:500 50px/1 "Cormorant Garamond",serif;vertical-align:middle;margin-right:22px;position:relative;top:-6px}
+#ph{left:50%;border-radius:76px;background:#0d0d0f;padding:20px;box-shadow:0 60px 110px -30px rgba(40,25,5,.42),0 0 0 2px #2b2b30 inset}
+#scr{position:relative;width:100%;height:100%;border-radius:58px;overflow:hidden;background:#fff}
+#scr img.s{position:absolute;inset:0;width:100%;height:100%}
+#tap{width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;background:rgba(20,20,20,.28);border:3px solid rgba(255,255,255,.9);z-index:20}
+#loupe{width:292px;height:621px;border-radius:40px;overflow:hidden;background:#fff;border:6px solid #fff;box-shadow:0 30px 70px -20px rgba(30,20,5,.45)}
+#loupe img{position:absolute;left:0;top:0;transform-origin:0 0}
+#loupe span{position:absolute;left:0;right:0;bottom:0;padding:10px;background:rgba(255,255,255,.92);font:600 18px/1 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;text-align:center;color:var(--mute)}
+/* messagerie (générique) */
+#chat{position:absolute;inset:0;background:#ece5d8;font-family:Inter,sans-serif;z-index:5}
+#chat .hd{height:150px;background:#fbf8f2;display:flex;align-items:flex-end;gap:18px;padding:0 26px 22px;border-bottom:1px solid #e2dacb}
+#chat .av{width:62px;height:62px;border-radius:50%;background:#b9a27a;color:#fff;display:flex;align-items:center;justify-content:center;font:600 28px/1 Inter}
+#chat .hd b{display:block;font:600 27px/1.2 Inter;color:#1d1a16}#chat .hd small{font:500 20px/1.3 Inter;color:#7a7365}
+.bub{position:absolute;max-width:76%;padding:16px 20px;border-radius:24px;font:500 24px/1.35 Inter;color:#1d1a16;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.bub.in{left:22px;background:#fff;border-top-left-radius:6px}
+.bub.out{right:22px;background:#e3f1d9;border-top-right-radius:6px}
+.bub .who{display:block;font:600 19px/1 Inter;color:#9a6a2c;margin-bottom:8px}
+.card{border-radius:16px;overflow:hidden;background:#fff;margin:-4px -8px 12px;width:420px}
+.card img{display:block;width:100%;height:250px;object-fit:cover;object-position:50% 70%}
+.card div{padding:14px 16px}.card b{display:block;font:600 23px/1.25 Inter}.card small{display:block;margin-top:6px;font:500 19px/1 Inter;color:#7a7365}
+.bub .tm{display:block;text-align:right;font:500 17px/1 Inter;color:#8a8475;margin-top:6px}
+/* notifications */
+.nt{position:absolute;left:18px;right:18px;top:24px;z-index:12;border-radius:30px;background:rgba(250,248,244,.94);box-shadow:0 18px 40px -10px rgba(0,0,0,.35);
+  padding:22px 24px;display:flex;gap:18px;align-items:center;font-family:Inter,sans-serif}
+.nt .ic{flex:none;width:64px;height:64px;border-radius:16px;background:#16140f url(/img/seals/or.webp) center/82% no-repeat}
+.nt b{display:block;font:600 22px/1.2 Inter;color:#1d1a16}.nt span{display:block;font:500 22px/1.3 Inter;color:#3d3a33;margin-top:4px}
+.nt em{font-style:normal;color:#8a8475;font-size:18px;float:right}
+/* panneau de réglages (direct) */
+#pan{left:90px;right:90px;top:1612px;height:250px;border-radius:40px;background:#fff;box-shadow:0 30px 60px -24px rgba(30,20,5,.35);padding:30px 36px}
+#pan .lb{font:600 22px/1 Inter;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+#pan .row{position:relative;display:flex;gap:18px;margin-top:26px;justify-content:center}
+.chip{height:96px;padding:0 30px;border-radius:48px;border:2px solid #e3dccd;display:flex;align-items:center;font:500 34px/1 "Cormorant Garamond",serif;color:var(--ink);background:#fff;white-space:nowrap}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.dot{width:96px;height:96px;border-radius:50%;border:6px solid #fff;box-shadow:0 0 0 2px #e3dccd}
+.dot.on{box-shadow:0 0 0 4px var(--ink)}
+/* fin */
+#end{inset:0;z-index:30}
+#endseal{left:50%;top:560px;width:230px;height:230px;margin-left:-115px;background:url(/img/seals/or.webp) center/contain no-repeat;display:flex;align-items:center;justify-content:center;
+  font:400 110px/1 "Great Vibes",cursive;color:#6e4f17;text-shadow:-1px -1px 0 rgba(255,236,170,.55),1px 1px 1px rgba(60,35,5,.7)}
+#logo{left:0;right:0;top:860px;text-align:center;color:var(--ink);white-space:nowrap}
+#logo span{font:500 40px/1 "Inter Tight",Inter,sans-serif;letter-spacing:.32em;text-transform:uppercase}
+#logo b{font:400 180px/1 "Great Vibes",cursive;font-weight:400;margin-left:12px;position:relative;top:15px}
+#etag{top:1110px}
+#price{left:50%;top:1330px;white-space:nowrap;background:var(--ink);color:#fbf7ef;border-radius:60px;padding:28px 60px;font:500 44px/1 "Cormorant Garamond",serif}
+#url{left:0;right:0;top:1500px;text-align:center;font:500 32px/1 Inter,sans-serif;letter-spacing:.16em;color:var(--mute)}
+</style></head><body>
+<div id="st">
+  <div id="caps"></div>
+  <div id="ph" class="abs"><div id="scr">
+    <img class="s" id="sa"><img class="s" id="sb">
+    <div id="chat">
+      <div class="hd"><div class="av">F</div><div><b>Famille Martin</b><small>Mamie, Papi, Julie, Marc et 8 autres</small></div></div>
+      <div class="bub in" id="m1" style="top:200px"><span class="who">Julie</span>Alors, ce faire-part, ça avance ?<span class="tm">09:58</span></div>
+      <div class="bub out" id="m2" style="top:360px"><div class="card"><img src="/img/hd/doucefrance-1.webp"><div><b>Camille &amp; Antoine vous invitent</b><small>savetheoui.fr/d/camille-antoine</small></div></div>On se marie le 3 juillet ! Tout est là, répondez directement dedans.<span class="tm">10:05</span></div>
+      <div class="bub in" id="m3" style="top:860px"><span class="who">Mamie</span>Oh qu’il est beau !! On sera là bien sûr<span class="tm">10:09</span></div>
+    </div>
+    <div class="nt" id="n1"><div class="ic"></div><div><b>Save The Oui <em>maintenant</em></b><span>Mamie et Papi viendront (2 personnes)</span></div></div>
+    <div class="nt" id="n2" style="top:170px"><div class="ic"></div><div><b>Save The Oui <em>maintenant</em></b><span>Julie et Marc viendront (2 personnes)</span></div></div>
+    <div id="tap" class="abs"></div>
+  </div></div>
+  <div id="loupe" class="abs"><img id="lp"><span>L’aperçu</span></div>
+  <div id="pan" class="abs"><div class="lb" id="plb"></div><div class="row" id="prow"></div></div>
+  <div id="end" class="abs">
+    <div id="endseal" class="abs">O</div>
+    <div id="logo" class="abs"><span>Save the</span><b>Oui</b></div>
+    <div id="etag" class="abs cap"></div>
+    <div id="price" class="abs">Composez le vôtre · dès 99 €</div>
+    <div id="url" class="abs">SAVETHEOUI.FR</div>
+  </div>
+</div>
+<script>
+const V=window.V||'etapes', TAPS=window.TAPS||{};
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), lin=(t,a,b)=>cl((t-a)/(b-a));
+const eo=x=>1-Math.pow(1-x,3), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c=1.5;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+function S(el,o,tr){el.style.opacity=o;if(tr!==undefined)el.style.transform=tr;el.style.visibility=o<=.001?'hidden':'visible'}
+const pad=(n,k=2)=>String(n).padStart(k,'0');
+// géométrie du téléphone : écran 390 × 844 css mis à l'échelle K
+const G={etapes:{W:600,top:500},direct:{W:520,top:430},oui:{W:600,top:500}}[V];
+const K=G.W/390, SH=Math.round(844*K);
+Object.assign($('ph').style,{top:G.top+'px',width:(G.W+40)+'px',height:(SH+40)+'px',marginLeft:-(G.W/2+20)+'px'});
+// légendes : une liste [début, fin, html, top]
+const CAPS={
+ etapes:[[.2,3.95,'<span class="num">1</span>Vos prénoms,<br><i>votre date.</i>',150],[4.05,7.55,'<span class="num">2</span>Votre <i>univers.</i>',190],
+         [7.65,9.6,'<span class="num">3</span>Vous <i>commandez.</i>',190],[9.7,12.7,'Le lien part,<br><i>ils l’ouvrent.</i>',150]],
+ direct:[[.2,12.2,'<small>Le configurateur</small>Vous réglez.<br><i>Vous voyez.</i>',110]],
+ oui:[[.2,2.45,'<small>Mardi · 21h04</small>Vous <i>composez.</i>',150],[2.55,4.45,'<small>Mardi · 21h12</small>Vous <i>commandez.</i>',150],
+      [4.55,6.45,'<small>Le lendemain</small>Votre lien <i>est prêt.</i>',150],[6.55,8.45,'<small>Mercredi · 10h05</small>Vous <i>l’envoyez.</i>',150],
+      [8.55,10.45,'<small>Mercredi · 10h11</small>Les premiers <i>oui.</i>',150],[10.55,12.55,'<small>Samedi</small>Tout est <i>au même endroit.</i>',150]]
+}[V];
+$('caps').innerHTML=CAPS.map((c,i)=>`<div class="abs cap" id="c${i}" style="top:${c[3]}px">${c[2]}</div>`).join('');
+$('etag').innerHTML={etapes:'Votre faire-part,<br><i>en trois étapes.</i>',direct:'Le faire-part animé<br><i>qui vous ressemble.</i>',oui:'Ce soir, vous le composez.<br><i>Demain, les oui arrivent.</i>'}[V];
+// deux couches d'écran pour les fondus
+const cache={};let cur={a:'',b:''};
+async function setImg(el,key,src){ if(cur[key]===src) return; cur[key]=src; el.src=src; await el.decode().catch(()=>{}); }
+async function screen(a,b,mix){ await setImg($('sa'),'a',a); if(b) await setImg($('sb'),'b',b); S($('sa'),1); S($('sb'),b?mix:0); }
+function tap(t,t0,x,y){ const p=lin(t,t0-.2,t0+.3); S($('tap'),p>0&&p<1?(p<.4?1:1-(p-.4)/.6):0,`scale(${p<.4?1-.25*p/.4:.9+.6*(p-.4)})`);
+  if(p>0&&p<1){$('tap').style.left=(x*K)+'px';$('tap').style.top=(y*K)+'px';} }
+const C='/_caps/';
+async function render(t){
+  // légendes
+  CAPS.forEach((c,i)=>{const o=Math.min(eo(lin(t,c[0],c[0]+.45)),1-eio(lin(t,c[1]-.3,c[1])));S($('c'+i),o,`translateY(${(1-eo(lin(t,c[0],c[0]+.45)))*26}px)`)});
+  // téléphone : entrée, sortie vers la fin
+  const pin=eo(lin(t,0,.55)), pout=eio(lin(t,12.55,13.1));
+  S($('ph'),Math.min(pin,1-pout),`translateY(${(1-pin)*120-pout*60}px) scale(${(.95+.05*pin)*(1-.08*pout)})`);
+  S($('tap'),0); S($('chat'),0); S($('n1'),0); S($('n2'),0); S($('loupe'),0); S($('pan'),0);
+  if(V==='etapes') await etapes(t); else if(V==='direct') await direct(t); else await oui(t);
+  // fin
+  const e=lin(t,12.85,13.4); S($('end'),e>0?1:0);
+  const sd=lin(t,12.85,13.45); S($('endseal'),eo(lin(t,12.85,13.1)),`translateY(${(1-back(sd))*-160}px) scale(${1.5-.5*back(sd)}) rotate(${(1-eo(sd))*-14}deg)`);
+  const lg=eo(lin(t,13.2,13.7)); S($('logo'),lg,`translateY(${(1-lg)*30}px)`);
+  const tg=eo(lin(t,13.5,14)); S($('etag'),tg,`translateY(${(1-tg)*30}px)`);
+  const pr=back(lin(t,13.85,14.35)); S($('price'),lin(t,13.85,14.05),`translateX(-50%) scale(${.85+.15*pr})`);
+  S($('url'),eo(lin(t,14.15,14.6)));
+}
+// messagerie : bulles qui arrivent
+function chat(t,t0,{full=false}={}){
+  S($('chat'),1); const b=[[$('m1'),t0-.5],[$('m2'),t0+.35],[$('m3'),full?t0+2.1:99]];
+  b.forEach(([el,a])=>{const p=back(lin(t,a,a+.4));S(el,lin(t,a,a+.15),`translateY(${(1-p)*40}px) scale(${.92+.08*p})`)});
+}
+function notif(el,t,a,b){const p=back(lin(t,a,a+.45)), q=eio(lin(t,b-.3,b)); S(el,Math.min(lin(t,a,a+.15),1-q),`translateY(${(1-p)*-160}px)`)}
+async function etapes(t){
+  // 1. prénoms (16 états de saisie)
+  if(t<3.95){ const i=Math.min(15,Math.max(0,Math.floor((t-.75)/.17))); await screen(C+`cfg-a${pad(i)}.jpg`);
+    S($('loupe'),Math.min(eo(lin(t,.9,1.3)),1-lin(t,3.6,3.9))); await loupe(C+`cfg-a${pad(i)}.jpg`); }
+  else if(t<7.6){ // 2. défilement puis toucher du thème
+    let src; if(t<5.6) src=C+`cfg-b${pad(Math.min(12,Math.max(1,1+Math.floor((t-4.0)/.12))))}.jpg`;
+    else src=C+`cfg-c${Math.min(5,Math.floor((t-5.7)/.22)+0)}.jpg`;
+    if(t>=5.6&&t<5.7) src=C+'cfg-b12.jpg';
+    await screen(src); tap(t,5.65,TAPS.theme[0],TAPS.theme[1]);
+    S($('loupe'),Math.min(eo(lin(t,5.6,6.0)),1-lin(t,7.2,7.5))); await loupe(src); }
+  else if(t<9.65){ await screen(C+'cfg-c5.jpg',C+'cfg-d.jpg',eio(lin(t,7.6,8.0))); tap(t,8.7,TAPS.cmd[0],TAPS.cmd[1]); }
+  else { // 4. le lien part, puis l'invité ouvre
+    if(t<10.95){ await screen(C+'cfg-d.jpg'); chat(t,9.75); const p=lin(t,9.6,9.85); S($('chat'),p);
+      tap(t,10.75,348/K,500/K); }
+    else { const fi=Math.floor((t-11.25)*30); const src=t<11.25?C+'ca-env-pre.jpg':(fi>59?C+'ca-env-fin.jpg':C+`ca-env-${pad(fi,3)}.jpg`);
+      await screen(src); if(t<11.2){chat(t,9.75);S($('chat'),1-lin(t,10.95,11.2));}
+      tap(t,11.25,195,496); }
+  }
+}
+async function loupe(src){ const im=$('lp'); if(im.dataset.s!==src){im.dataset.s=src;im.src=src;await im.decode().catch(()=>{});}
+  // l'aperçu du configurateur (33..217 × 135..535 dans la capture) agrandi dans la bulle
+  const z=280/184; im.style.transform=`scale(${z}) translate(-33px,-135px)`; im.style.width='780px';
+  $('loupe').style.left=(1080-292-30)+'px'; $('loupe').style.top=(G.top+150)+'px'; }
+async function direct(t){
+  // panneau
+  const P=t<5.05?{lb:'Le thème',it:['Douce France','Dolce Vita','Old money'],ch:[[0,0],[1.45,1],[2.85,2],[4.25,0]]}
+        :t<8.35?{lb:'La couleur',dots:['#6f63a3','#6b7a45','#b08648'],ch:[[0,0],[5.85,1],[7.15,2]]}
+        :{lb:'L’ouverture',it:['Enveloppe','Portes','Rideau'],ch:[[0,0],[9.0,1]]};
+  const sec=t<5.05?0:t<8.35?1:2, s0=[.3,5.05,8.35][sec];
+  S($('pan'),Math.min(eo(lin(t,.3,.8)),1-lin(t,12.2,12.5)),`translateY(${(1-eo(lin(t,s0,s0+.4)))*30}px)`);
+  if($('pan').dataset.k!==P.lb){$('pan').dataset.k=P.lb;$('plb').textContent=P.lb;
+    $('prow').innerHTML=P.it?P.it.map(x=>`<div class="chip">${x}</div>`).join(''):P.dots.map(c=>`<div class="dot" style="background:${c}"></div>`).join('');}
+  let on=0; P.ch.forEach(([a,i])=>{if(t>=a)on=i}); [...$('prow').children].forEach((c,i)=>c.classList.toggle('on',i===on));
+  // doigt sur le panneau
+  const cur=P.ch.filter(([a])=>a>0).find(([a])=>t>a-.25&&t<a+.35);
+  if(cur){const el=$('prow').children[cur[1]], r=el.getBoundingClientRect(), s=$('scr').getBoundingClientRect(); const p=lin(t,cur[0]-.2,cur[0]+.3);
+    S($('tap'),p<.4?1:1-(p-.4)/.6,`scale(${p<.4?1-.25*p/.4:.9+.6*(p-.4)})`); $('tap').style.left=(r.left+r.width/2-s.left)+'px'; $('tap').style.top=(r.top+r.height/2-s.top)+'px';}
+  // écran
+  const TH=['th-doucefrance','th-dolcevita','th-oldmoney'], PA=['pal-lavande','pal-olivier','pal-or'];
+  const fade=(arr,pre)=>{let prev=arr[0],nx=arr[0],m=0; for(const[a,i] of P.ch){ if(t>=a){prev=nx;nx=arr[i];m=eio(lin(t,a,a+.35));} } return [C+prev+'-fin.jpg',C+nx+'-fin.jpg',m];};
+  if(sec===0){const[a,b,m]=fade(TH);await screen(a,b,m);}
+  else if(sec===1){const[a,b,m]=fade(PA);await screen(a,b,m);}
+  else { // portes : l'écran passe sur les portes fermées, puis on les touche
+    if(t<9.35) await screen(C+'pal-or-fin.jpg',C+'door-pre.jpg',eio(lin(t,9.0,9.3)));
+    else { const fi=Math.floor((t-9.75)*30); await screen(t<9.75?C+'door-pre.jpg':(fi>77?C+'door-fin.jpg':C+`door-${pad(fi,3)}.jpg`));
+      const p=lin(t,9.55,10.05); S($('tap'),p>0&&p<1?(p<.4?1:1-(p-.4)/.6):0,`scale(${p<.4?1-.25*p/.4:.9+.6*(p-.4)})`); $('tap').style.left=(195*K)+'px'; $('tap').style.top=(430*K)+'px'; }
+  }
+}
+async function oui(t){
+  if(t<2.5){ const i=Math.min(15,Math.max(0,Math.floor((t-.4)/.12))); await screen(C+`cfg-a${pad(i)}.jpg`); }
+  else if(t<4.5){ await screen(C+'cfg-a15.jpg',C+'cfg-d.jpg',eio(lin(t,2.5,2.85))); tap(t,3.6,TAPS.cmd[0],TAPS.cmd[1]); }
+  else if(t<6.5){ await screen(C+'cfg-d.jpg',C+'ca-env-pre.jpg',eio(lin(t,4.5,4.85))); }
+  else if(t<10.5){ await screen(C+'ca-env-pre.jpg'); chat(t,6.85,{full:true}); S($('chat'),lin(t,6.5,6.75)); notif($('n1'),t,8.75,10.5); notif($('n2'),t,9.55,10.5); }
+  else { await screen(C+'tb.jpg'); S($('chat'),0); }
+}
+window.render=render;
+</script></body></html>
