@@ -74,6 +74,8 @@
     const sz=(t.size||1)*scale;
     return `font-family:${t.font};color:${t.color};font-size:clamp(${Math.round(34*sz)}px,${(5.2*sz).toFixed(2)}vh,${Math.round(54*sz)}px);${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.14em;font-weight:300;':''}`;
   }
+  // icônes des boutons (pastille + médaillon, règle 5b) : carrousel de l'accueil et aperçu du configurateur
+  const BT_IC={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>',gift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M3 9h18M12 9v11M12 9c-2-4-6-4-6-1.5S10 9 12 9zm0 0c2-4 6-4 6-1.5S14 9 12 9z"/></svg>',cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'};
   /* les 4 scenes d'une creation, empilees dans un film (aucun defilement a l'interieur du telephone) */
   function film(t,eager){
     const ey=t.ey||t.color, tx=t.tx||t.color;
@@ -82,7 +84,7 @@
       const tt=dk?Object.assign({},t,{color:'#fff'}):t, ey2=dk?'#fff':ey, tx2=dk?'#fff':tx;
       const nmTxt=main==='NAMES'?(t.stack?t.couple.split(' & ').map(esc).join('<br>&amp; '):esc(t.couple)):esc(main);
       const big=`<div class="nm" style="${esc(nameStyle(tt,main==='NAMES'?1:.78))}">${nmTxt}</div>`;
-      return `<div class="pv-sc${t.light&&!dk?' light':''}" style="${i===0&&t.top1?'padding-top:'+t.top1:''}"><img class="bg" src="${esc(t.img(i+1))}" alt="" width="540" height="954" decoding="async"${eager&&i===0?'':' loading="lazy"'}>${eyHtml('ey',e,`color:${ey2}`)}${big}<div class="tx" style="color:${tx2}">${esc(x)}</div>${bt?`<span class="bt" style="color:${tx2};border-color:${tx2}">${esc(bt)}</span>`:''}</div>`;
+      return `<div class="pv-sc${t.light&&!dk?' light':''}" style="${i===0&&t.top1?'padding-top:'+t.top1:''}"><img class="bg" src="${esc(t.img(i+1))}" alt="" width="540" height="954" decoding="async"${eager&&i===0?'':' loading="lazy"'}>${eyHtml('ey',e,`color:${ey2}`)}${big}<div class="tx" style="color:${tx2}">${esc(x)}</div>${bt?`<span class="bt" style="color:${tx2};--pal:${(t.pals&&t.pals[0].c)||'#b8975a'}">${BT_IC[/R[ée]pondre|RSVP/i.test(bt)?'mail':'pin']}${esc(bt)}</span>`:''}</div>`;
     }).join('')+'</div>';
   }
 
@@ -101,7 +103,7 @@
     {slug:'anastasia-nikolai',k:'gzhel',couple:'Anastasia & Nikolaï',ey:'Nous nous marions',date:'Samedi 16 janvier 2027 · Paris',ink:'#1d3f9a',shadow:'0 1px 10px rgba(255,255,255,.9)',desc:'Cathédrale, pain et sel, dîner',alt:'une troïka dans la neige, peinte en bleu cobalt'},
     {slug:'linh-thomas',k:'asianchic',couple:'Linh & Thomas',ey:'Save the date',date:'Samedi 18 septembre 2027 · Paris',ink:'#f2e7cf',shadow:'0 2px 14px rgba(0,0,0,.7)',desc:'Cérémonie au bord de l’eau, dîner black tie',alt:'un pavillon de laque noire et d’or, le couple de dos au bord d’un bassin'},
     {slug:'jade-enzo',k:'y2k',couple:'Jade & Enzo',ey:'On se marie !',date:'Samedi 26 juin 2027 · Marseille',ink:'#4a1640',shadow:'0 1px 10px rgba(255,240,248,.85)',desc:'Mairie, apéro et dance floor',alt:'une décapotable rose sur un boulevard pastel'},
-    {slug:'victoire-charles',k:'oldmoney',couple:'Victoire & Charles',ey:'Ils se marient',date:'Samedi 12 juin 2027 · Normandie',ink:'#1f2b44',shadow:'0 1px 10px rgba(255,252,244,.9)',desc:'Chapelle, pelouse et dîner sous la tente',alt:'un manoir anglais et une voiture ancienne'},
+    {slug:'victoire-charles',k:'oldmoney',couple:'Victoire & Charles',ey:'Nous vous invitons',date:'Samedi 12 juin 2027 · Normandie',ink:'#1f2b44',shadow:'0 1px 10px rgba(255,252,244,.9)',desc:'Chapelle, pelouse et dîner sous la tente',alt:'un manoir anglais et une voiture ancienne'},
     {slug:'fatou-kwame',k:'afro',couple:'Fatou & Kwame',ey:'Nous nous marions',date:'Samedi 21 août 2027 · Paris',ink:'#fbeedb',shadow:'0 2px 14px rgba(0,0,0,.6)',desc:'La dot, le oui et la fête',alt:'un pavillon drapé de kente sous un baobab'}
   ];
   // cartes de la section « Un seul grand tableau » : la même liste
@@ -116,7 +118,7 @@
   // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
   if(KEYS.includes('nuits')) CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
     couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`/img/reel/yk-${i}.webp`,
-    scenes:[["Ils se marient","NAMES","Samedi 12 juin 2027"],["Cérémonie civile","Hôtel de Ville de Nanterre","À 14h00","Itinéraire","dark"],["Réception","Le Palacio","Dès 19h · cocktail, dîner et soirée","Itinéraire","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre","dark"]]});
+    scenes:[["Nous vous invitons","NAMES","Samedi 12 juin 2027"],["Cérémonie civile","Hôtel de Ville de Nanterre","À 14h00","Itinéraire","dark"],["Réception","Le Palacio","Dès 19h · cocktail, dîner et soirée","Itinéraire","dark"],["Réponse souhaitée","Serez-vous des nôtres ?","Avant le 1er mai","Répondre","dark"]]});
   function roll(c,eager){
     const tt={font:c.font,color:c.ink,size:c.size,italic:c.italic,upper:c.upper};
     return `<div class="roll"><img src="${esc(c.img())}" alt="" width="540" height="2176" decoding="async"${eager?'':' loading="lazy"'}></div><div class="roll-txt" style="color:${c.ink};text-shadow:${c.shadow}">${eyHtml('ey',c.ey,'')}<div class="nm" style="${esc(nameStyle(tt,1))}">${esc(c.couple)}</div><div class="tx">${esc(c.date)}</div></div>`;
@@ -159,7 +161,7 @@
   const card=(k)=>{ const t=THEMES[k], ds=DEMOS.find(x=>x.theme===k&&x.layout!=='long'&&!x.kind), dl=DEMOS.find(x=>x.theme===k&&x.layout==='long'&&!x.kind);
     const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style;
     m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=12" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=12" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
-      <div class="fmts">${VARS(k).map(v=>{ const d=DEMOS.find(x=>x.theme===v&&x.layout!=='long'&&!x.kind); return d?`<a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><b>${esc(THEMES[v].amb||'Voir l’exemple')}</b><span>${esc(d.couple)}</span></a>`:''; }).join('')}</div>
+      <div class="fmts">${VARS(k).map(v=>{ const d=DEMOS.find(x=>x.theme===v&&x.layout!=='long'&&!x.kind); return d?`<a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z"/></svg></i><span><b>${esc(THEMES[v].amb||'Voir l’exemple')}</b><small>${esc(d.couple)}</small></span></a>`:''; }).join('')}</div>
       <div class="acts">${t.compose?`<a class="go" href="/creer/?theme=${esc(k)}">Composer →</a>`:`<a class="go" href="/contact/?theme=${esc(k)}">Avec nous →</a>`}</div></div>`;
     models.appendChild(m); };
   [...KEYS].sort((a,b)=>!!THEMES[b].compose-!!THEMES[a].compose).forEach(card); // ce qui se compose en ligne d'abord
@@ -168,7 +170,7 @@
   if(one) one.innerHTML=[['henne','Henné','L’invitation à la soirée henné, seule ou en plus du mariage.'],['sbou3','Sbouâ','La naissance de votre enfant, fêtée au septième jour.']].map(([id,nm,tx])=>{ const d=DEMOS.find(x=>x.kind===id); if(!d) return ''; const t=THEMES[d.theme];
     return `<div class="model one"><a class="pic" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><img src="/img/themes/${esc(d.theme)}-${id==='henne'?2:1}.webp?v=12" alt="" loading="lazy"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}`)}">${esc(d.couple)}</span></a>
       <div class="meta"><div><h3>${nm}</h3><p class="style">${esc(t.name)} · un seul événement</p><p>${tx}</p></div></div>
-      <div class="fmts"><a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><b>Voir l’exemple</b><span>${esc(d.couple)}</span></a></div>
+      <div class="fmts"><a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z"/></svg></i><span><b>Voir l’exemple</b><small>${esc(d.couple)}</small></span></a></div>
       <div class="acts">${t.compose?`<a class="go" href="/creer/?occasion=${id}&theme=${esc(d.theme)}">Composer →</a>`:`<a class="go" href="/contact/?occasion=${id}&theme=${esc(d.theme)}">Avec nous →</a>`}</div></div>`; }).join('');
   const STYLES=['Tous',...new Set(KEYS.map(k=>THEMES[k].style))];
   filters.hidden=STYLES.length<3; // un seul style au lancement : rien à filtrer
@@ -566,7 +568,6 @@
       const sub=hasCal?`/img/calques/${kk}-${img}.webp?v=12`:'';
       return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" data-sub="${esc(sub)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     // boutons de l'aperçu : même pastille que le faire-part (invite.css .b), icône dans un médaillon à la couleur choisie
-    const BT_IC={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>',gift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M3 9h18M12 9v11M12 9c-2-4-6-4-6-1.5S10 9 12 9zm0 0c2-4 6-4 6-1.5S14 9 12 9z"/></svg>',cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'};
     const btn=(c,label,icon)=>`<span class="bt" style="color:${c.tx};--pal:${p.c}">${BT_IC[icon]}${esc(label)}</span>`;
     const pages=[], rv=C.rvl!=='non'?C.rvl:null;
     // 1. prenoms + date (+ compte a rebours au debut)
