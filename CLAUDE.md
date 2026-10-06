@@ -422,6 +422,16 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     un buste coupé et flou au-dessus des mains (« pourquoi t'as coupé ? autant en faire une plus symbolique ») ; désormais
     seulement les mains et les alliances sur la lavande, fond d'oliviers flou éclairci de 18 % dans la peinture (contraste
     3,99 → 4,89, sans génération).
+    **Des mariages comme on en voit vraiment** (6 octobre 2026 : « ces champs comme ça n'existent pas, faut pas trop abuser » ;
+    « l'église, le domaine, c'est vide, il n'y a pas de monde » ; « sans être dans les clichés, regarde ce qui se fait :
+    une mairie classique, une église classique, un domaine classique »). Consigne `REAL` de scenes-fete.py : un mariage
+    français ordinaire, pas de rangées de lavande à perte de vue ni de fleurs partout, la lavande en bordure ou en pots ;
+    les lieux d'un événement ont **du monde** (invités de dos). Et pour la nuit, `NIGHT_TREES` : un vrai ciel qui descend
+    derrière des **arbres entiers** (la consigne « zone vide et sombre » faisait couper les platanes net sous un aplat :
+    c'était la consigne, pas un recadrage). Repeints ainsi (4 générations, ~0,60 €) : `doucefrance-fete`, `-verres`
+    (terrasse de la bastide, plus de lavande), `-eglise` et `-salle` (invités) ; ciel de la fête et des verres assombri de 8 %
+    dans la peinture (contraste 4,41 / 4,48 → 5,02 / 5,11). **Reste à revoir avec le même regard** : les scènes 1 et 3 de
+    Douce France et ses écrans `prog`, `dress`, `info` (lavande jusqu'aux tables), sa mairie, et les lieux vides des autres thèmes.
 32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
     « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money
     (`compose:true`). Un thème peut avoir plusieurs **ambiances** (`group` / `amb` / `ambSub` dans themes.js) : Dolce Vita

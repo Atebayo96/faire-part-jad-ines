@@ -114,7 +114,7 @@
   const VARS=k=>Object.keys(THEMES).filter(v=>v===k||THEMES[v].group===k&&v!==k);
   [...KEYS].sort((a,b)=>!!THEMES[b].compose-!!THEMES[a].compose).forEach(k0=>VARS(k0).forEach(k=>{ const t=THEMES[k], d=DEMOS0.find(x=>x.theme===k&&x.slug!=='yasmine-karim'&&!x.kind&&x.layout!=='long');
     if(!d) return;
-    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name+(t.amb?' · '+t.amb:''),desc:t.amb?t.ambSub:(t.style!==t.name?t.style+' · ':'')+t.short,href:'/d/'+d.slug+'/',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=15`})); }));
+    CREAS.push(Object.assign({},t,{kind:'pages',k,label:t.name+(t.amb?' · '+t.amb:''),desc:t.amb?t.ambSub:(t.style!==t.name?t.style+' · ':'')+t.short,href:'/d/'+d.slug+'/',tag:t.name,img:i=>`/img/themes/${k}-${i}.webp?v=16`})); }));
   // notre faire-part reel : les vrais lieux du couple, peints et animes (demo Yasmine & Karim)
   if(KEYS.includes('nuits')) CREAS.push({kind:'pages',k:'yk',label:'Yasmine & Karim',desc:'Leurs vrais lieux, peints et animés : mairie, salle, ville',href:'/d/yasmine-karim/',tag:'Lieux réels peints',
     couple:'Yasmine & Karim',font:'"Great Vibes",cursive',color:'#2c2114',ey:'#8a6a2c',tx:'#5a4632',light:true,img:i=>`/img/reel/yk-${i}.webp`,
@@ -160,7 +160,7 @@
   // une carte par thème, avec ses deux formats : « scène par scène » (démo pages) et « grand tableau » (démo long)
   const card=(k)=>{ const t=THEMES[k], ds=DEMOS.find(x=>x.theme===k&&x.layout!=='long'&&!x.kind), dl=DEMOS.find(x=>x.theme===k&&x.layout==='long'&&!x.kind);
     const m=document.createElement('div'); m.className='model'; m.dataset.theme=k; m.dataset.style=t.style;
-    m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=15" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=15" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
+    m.innerHTML=`<a class="pic" href="/d/${esc((ds||dl).slug)}/" target="_blank" rel="noopener" aria-label="Ouvrir le faire-part ${esc(t.name)}"><img src="/img/themes/${k}-1.webp?v=16" alt="" loading="lazy"><img class="pic2" src="/img/themes/${k}-2.webp?v=16" alt="" loading="lazy" aria-hidden="true"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}${t.upper?'text-transform:uppercase;letter-spacing:.1em;font-size:19px;':''}`)}">${esc(t.couple)}</span></a><div class="meta"><div><h3>${esc(t.name)}</h3><p class="style">${esc(t.style+' · '+t.short)}</p></div>
       <div class="fmts">${VARS(k).map(v=>{ const d=DEMOS.find(x=>x.theme===v&&x.layout!=='long'&&!x.kind); return d?`<a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z"/></svg></i><span><b>${esc(THEMES[v].amb||'Voir l’exemple')}</b><small>${esc(d.couple)}</small></span></a>`:''; }).join('')}</div>
       <div class="acts">${t.compose?`<a class="go" href="/creer/?theme=${esc(k)}">Composer →</a>`:`<a class="go" href="/contact/?theme=${esc(k)}">Avec nous →</a>`}</div></div>`;
     models.appendChild(m); };
@@ -168,7 +168,7 @@
   // faire-part d'un seul événement (« one shot ») : le henné, le sbouâ ; chacun avec sa démo et son lien vers le configurateur
   const one=document.getElementById('oneShots');
   if(one) one.innerHTML=[['henne','Henné','L’invitation à la soirée henné, seule ou en plus du mariage.'],['sbou3','Sbouâ','La naissance de votre enfant, fêtée au septième jour.']].map(([id,nm,tx])=>{ const d=DEMOS.find(x=>x.kind===id); if(!d) return ''; const t=THEMES[d.theme];
-    return `<div class="model one"><a class="pic" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><img src="/img/themes/${esc(d.theme)}-${id==='henne'?2:1}.webp?v=15" alt="" loading="lazy"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}`)}">${esc(d.couple)}</span></a>
+    return `<div class="model one"><a class="pic" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><img src="/img/themes/${esc(d.theme)}-${id==='henne'?2:1}.webp?v=16" alt="" loading="lazy"><span class="cn" style="${esc(`font-family:${t.font};${t.italic?'font-style:italic;':''}`)}">${esc(d.couple)}</span></a>
       <div class="meta"><div><h3>${nm}</h3><p class="style">${esc(t.name)} · un seul événement</p><p>${tx}</p></div></div>
       <div class="fmts"><a href="/d/${esc(d.slug)}/" target="_blank" rel="noopener"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z"/></svg></i><span><b>Voir l’exemple</b><small>${esc(d.couple)}</small></span></a></div>
       <div class="acts">${t.compose?`<a class="go" href="/creer/?occasion=${id}&theme=${esc(d.theme)}">Composer →</a>`:`<a class="go" href="/contact/?occasion=${id}&theme=${esc(d.theme)}">Avec nous →</a>`}</div></div>`; }).join('');
@@ -251,7 +251,7 @@
   const fixLieux=()=>C.ev.forEach(e=>{ if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=(THEMES[C.k].lieuAlt||{})[e.lieu]||THEMES[C.k].lieux[0]; });
   fixLieux();
   GRPS.forEach(g=>{ const k0=CK.find(k=>grp(k)===g), t=THEMES[k0], b=document.createElement('button'); b.type='button'; b.className='th'; b.dataset.id=g;
-    b.innerHTML=`<span style="background-image:url('/img/themes/${k0}-1.webp?v=15')"></span>${esc(t.name)}`;
+    b.innerHTML=`<span style="background-image:url('/img/themes/${k0}-1.webp?v=16')"></span>${esc(t.name)}`;
     b.onclick=()=>{ if(grp(C.k)!==g){ C.k=k0; C.font='theme'; fixLieux(); } paint(); }; $('cStyles').appendChild(b); });
   // les deux formats, annoncés dès le début : scène par scène (un événement par écran) ou grand tableau (un seul tableau qu'on descend)
   // img/reel/scenes-<thème>.webp et tableau-<thème>.webp : captures des deux démos du thème, toute la page (7 écrans de 844 px
@@ -266,7 +266,7 @@
   function buildAmb(){ const g=grp(C.k); if(ambG===g) return; ambG=g; const box=$('cFmt'), V=CK.filter(k=>grp(k)===g); box.innerHTML='';
     box.closest('.fld').hidden=V.length<2;
     V.forEach(k=>{ const t=THEMES[k], b=document.createElement('button'); b.type='button'; b.className='fmtc'; b.dataset.id=k;
-      b.innerHTML=`<span class="fv">${REEL.includes(k)?`<i class="tbp"><i class="tb scenes" style="background-image:url('/img/reel/scenes-${k}.webp')"></i></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${k}-${n}.webp?v=15')"></i>`).join('')}</span><b>${esc(t.amb||t.name)}</b><small>${esc(t.ambSub||'')}</small>`;
+      b.innerHTML=`<span class="fv">${REEL.includes(k)?`<i class="tbp"><i class="tb scenes" style="background-image:url('/img/reel/scenes-${k}.webp')"></i></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${k}-${n}.webp?v=16')"></i>`).join('')}</span><b>${esc(t.amb||t.name)}</b><small>${esc(t.ambSub||'')}</small>`;
       b.onclick=()=>{ C.k=k; fixLieux(); paint(); }; box.appendChild(b); }); }
   const PLANSUB={essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
@@ -522,7 +522,7 @@
       // « Texte seul » : écran simple (scène par scène), ou la scène peinte du thème dans le cadre (grand tableau)
       const sim=l.querySelector('[data-lieu="simple"] em'); if(sim) sim.textContent=C.fmt==='long'?'Scène du thème':'Texte seul';
       l.querySelectorAll('[data-lieu]').forEach(b=>{ const id=b.dataset.lieu; b.setAttribute('aria-pressed',id==='simple'?e.bg!=='scene':e.bg==='scene'&&id===e.lieu);
-        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=15')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=15')`:`url('/img/lieux/${kOf('fond')}-fond.webp?v=15')`):`url('/img/lieux/${kOf(id==='photo'?'eglise':id)}-${id==='photo'?(THEMES[C.k].lieux||['eglise'])[0]:id}.webp?v=15')`; });
+        b.firstChild.style.backgroundImage=id==='s2'?`url('/img/themes/${C.k}-2.webp?v=16')`:id==='simple'?(C.fmt==='long'?`url('/img/themes/${C.k}-${2+(+l.dataset.i%3)}.webp?v=16')`:`url('/img/lieux/${kOf('fond')}-fond.webp?v=16')`):`url('/img/lieux/${kOf(id==='photo'?'eglise':id)}-${id==='photo'?(THEMES[C.k].lieux||['eglise'])[0]:id}.webp?v=16')`; });
       // la grande vignette reprend le décor choisi, avec son nom
       const sel=l.querySelector('[data-lieu][aria-pressed="true"]'), pic=l.querySelector('[data-pick] span');
       if(sel&&pic){ pic.style.backgroundImage=sel.firstChild.style.backgroundImage; pic.dataset.n=(sel.querySelector('em')||{}).textContent||sel.textContent.replace('Signature','').trim(); } });
@@ -543,7 +543,7 @@
     const SEAL={or:['or','#fbe3a0','#c99a3a','#6e4a12'],sauge:['sauge','#e4ecd6','#8fa37f','#3f4d36'],terracotta:['terracotta','#f5b085','#c0643f','#4f1f0c'],nuit:['bleu','#9bb4e8','#2f4f94','#0c1a3d'],rose:['rose','#fff0f2','#d99aa6','#7a4250'],bordeaux:['terracotta','#e8a0a8','#7a2e3b','#3a1018'],lavande:['bleu','#d9d2f0','#8a7fb5','#3d3660'],emeraude:['sauge','#cfe7db','#2f6b57','#143427'],ardoise:['bleu','#c9d0d8','#4a5560','#1f262c'],champagne:['or','#f6ead2','#cdb48a','#6e5a35']}[p.seal||C.pal]||['or','#fbe3a0','#c99a3a','#6e4a12'];
     $('opSeal').style.backgroundImage=`url('/img/seals/${SEAL[0]}.webp')`;
     mountMini(t,p);
-    [$('cOpen'),$('cReveal')].forEach(x=>{ x.style.setProperty('--sc',C.fmt==='long'?`url('/img/long/${C.k}/thumb.webp')`:`url('/img/themes/${C.k}-1.webp?v=15')`); x.classList.toggle('lg',C.fmt==='long'); x.style.setProperty('--op',`url('/img/open/${C.k}-portes.webp')`); x.querySelectorAll('.ov-door').forEach(D=>window.sceauDoorFit&&sceauDoorFit(D,THEMES[C.k].door,D.querySelector('.ow'),D.querySelector('.dl'),D.querySelector('.dr'))); x.style.setProperty('--ri',`url('/img/open/${C.k}-rideau.webp')`); x.style.setProperty('--seal',`url('/img/seals/${SEAL[0]}.webp')`); x.style.setProperty('--pc',p.c); });
+    [$('cOpen'),$('cReveal')].forEach(x=>{ x.style.setProperty('--sc',C.fmt==='long'?`url('/img/long/${C.k}/thumb.webp')`:`url('/img/themes/${C.k}-1.webp?v=16')`); x.classList.toggle('lg',C.fmt==='long'); x.style.setProperty('--op',`url('/img/open/${C.k}-portes.webp')`); x.querySelectorAll('.ov-door').forEach(D=>window.sceauDoorFit&&sceauDoorFit(D,THEMES[C.k].door,D.querySelector('.ow'),D.querySelector('.dl'),D.querySelector('.dr'))); x.style.setProperty('--ri',`url('/img/open/${C.k}-rideau.webp')`); x.style.setProperty('--seal',`url('/img/seals/${SEAL[0]}.webp')`); x.style.setProperty('--pc',p.c); });
     $('opSealTxt').innerHTML=iniH; $('opSealTxt').style.cssText=`--l:${SEAL[1]};--m:${SEAL[2]};--d:${SEAL[3]}`;
     $('opTap').textContent=C.op==='env'?'Touchez le sceau pour ouvrir':'Touchez pour ouvrir';
     { const o=$('cpOp'); o.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); o.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`); o.style.setProperty('--pal',p.c); o.style.setProperty('--man',DOORMEN.includes(C.k)?`url('/img/open/${C.k}-portier.webp')`:'none');
@@ -567,8 +567,8 @@
       // un numéro = scène du thème ; un nom = lieu de la bibliothèque, ou « fond » pour un écran simple
       // calque : le sujet détouré est posé entier au bas de l'écran sur le fond du thème (même rendu que le moteur)
       const hasCal=((window.SCEAU_CALQUES||{})[kk]||[]).includes(String(img));
-      const src=hasCal?`/img/lieux/${kk}-ciel.webp`:typeof img==='number'?`/img/themes/${kk}-${img}.webp?v=15`:`/img/lieux/${kk}-${img}.webp?v=15`;
-      const sub=hasCal?`/img/calques/${kk}-${img}.webp?v=15`:'';
+      const src=hasCal?`/img/lieux/${kk}-ciel.webp`:typeof img==='number'?`/img/themes/${kk}-${img}.webp?v=16`:`/img/lieux/${kk}-${img}.webp?v=16`;
+      const sub=hasCal?`/img/calques/${kk}-${img}.webp?v=16`:'';
       return {lt,c,html:h=>`<section class="pv-sc${lt?' light':''}" data-img="${esc(src)}" data-sub="${esc(sub)}" style="${esc(extra||'')}">${h(c)}</section>`}; };
     // boutons de l'aperçu : même pastille que le faire-part (invite.css .b), icône dans un médaillon à la couleur choisie
     const btn=(c,label,icon)=>`<span class="bt" style="color:${c.tx};--pal:${p.c}">${BT_IC[icon]}${esc(label)}</span>`;

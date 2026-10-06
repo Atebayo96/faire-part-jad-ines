@@ -34,6 +34,16 @@ PEOPLE = ("The guests are shown only from behind or as small distant silhouettes
           "viewer. It stays symbolic and elegant, never a crowded stock photo.")
 HANDS = "Only hands are visible (no face, no body beyond the wrists and sleeves)."
 
+# 6 octobre 2026 : « ces champs comme ça n'existent pas, faut pas trop abuser » ; « l'église, le domaine, c'est vide, il
+# n'y a pas de monde » ; « regarde ce qui se fait dans les mariages pour que ça ait l'air normal, une église classique,
+# un domaine classique ». Et les platanes coupés net sous un aplat de ciel venaient de la consigne NIGHT (zone vide
+# imposée) : pour la nuit, un vrai ciel qui descend derrière des arbres entiers.
+REAL = ("It must look like a real, ordinary French wedding as people actually have them, not a cliché: no endless rows of "
+        "lavender, no flower overload, no fairy-tale exaggeration. Lavender, if any, only as a small border or a few pots.")
+NIGHT_TREES = ("WHITE text is written in the upper part, so the area from 10% to 50% of the height is a REAL PAINTED NIGHT SKY, "
+               "deep blue to indigo, smooth and dark, that continues down behind the trees and buildings to the horizon. "
+               "Every tree is painted WHOLE: its complete rounded crown rises into the sky, never cut by a straight line, "
+               "and stays below 50% of the height. No flat band, no straight horizontal edge anywhere.")
 D, F, O = ('dolcevita', 1, 3, 4), ('doucefrance', 1, 2, 3), ('oldmoney', 1, 2, 3)
 DN, FN, ON = ('dolcevita', 3, 4, 2), ('doucefrance', 3, 4, 1), ('oldmoney', 3, 4, 1)
 JOBS = {
@@ -50,9 +60,10 @@ JOBS = {
     'dolcevita-verres': (DN, FOCUS_N, HANDS + " Two hands raising two glasses of spritz that touch in a toast, in the lower "
         "part of the image, the blurred lights of the coastal village and the sea at night behind"),
     # Douce France : jour en texte foncé, soir en texte blanc (la fête et les verres sont dans darkLieux)
-    'doucefrance-fete': (FN, NIGHT, PEOPLE + " The village ball under the plane trees at night: strings of guinguette bulbs "
-        "and paper lanterns, couples dancing on the little square seen from behind as warm silhouettes, the lit stone bastide "
-        "behind"),
+    'doucefrance-fete': (FN, NIGHT_TREES, PEOPLE + " " + REAL + " The evening party on the gravel square of the village, "
+        "under two or three big plane trees painted whole: strings of warm bulbs and a few paper lanterns between them, "
+        "couples dancing seen from behind as warm silhouettes, round tables with white cloths on the side, the lit stone "
+        "bastide behind"),
     'doucefrance-cocktail': (F, DAY, PEOPLE + " The vin d'honneur in the afternoon: a long table under an old olive tree "
         "with rosé, baskets of lavender and fougasse, guests standing and chatting seen from behind, the lavender fields beyond"),
     'doucefrance-sortie': (F, DAY, PEOPLE + " Leaving the village church: the bride and groom seen from behind walking out "
@@ -63,8 +74,18 @@ JOBS = {
         "their wedding rings (her lace cuff, his linen cuff, nothing above the wrists), resting on a bouquet of lavender and "
         "olive branches laid on raw linen on an old stone table, in the lower part of the image. No torso, no dress, no "
         "body, no person in the background: behind the table only the softly blurred lavender fields and the pale sky"),
-    'doucefrance-verres': (FN, FOCUS_N, HANDS + " Two hands raising two glasses of rosé that touch in a toast, in the lower "
-        "part of the image, a blurred lavender field and the warm lights of the bastide at dusk behind"),
+    'doucefrance-verres': (FN, FOCUS_N, HANDS + " " + REAL + " Two hands raising two glasses of rosé that touch in a toast, in "
+        "the lower part of the image, above the stone balustrade of the bastide terrace in the evening: a blurred olive tree, "
+        "warm string lights and the lit windows of the house behind. No lavender field"),
+    # lieux repeints (règle 21 : décors d'un événement), avec du monde
+    'doucefrance-eglise': (F, DAY, PEOPLE + " " + REAL + " A classic village church in Provence on the wedding day: the "
+        "Romanesque honey-stone church with its bell gable and open wooden door, the little square in front with plane "
+        "trees, guests in suits and summer dresses seen from behind gathering on the steps and the square before the "
+        "ceremony, a few white flowers by the door"),
+    'doucefrance-salle': (FN, NIGHT_TREES, PEOPLE + " " + REAL + " A classic wedding estate in Provence in the evening: a "
+        "honey-stone bastide with its gravel courtyard, cypress trees and one old olive tree, long tables with white cloths "
+        "and candles under strings of warm lights, guests seen from behind arriving and chatting with a glass in hand, "
+        "every window glowing. At most a few pots of lavender"),
     # Old money : jour en texte foncé, soir en texte blanc
     'oldmoney-fete': (ON, NIGHT, PEOPLE + " The evening ball under the large white marquee lit from inside, crystal "
         "chandeliers, couples in evening dress dancing seen from behind, the dark manor in the night behind"),
@@ -81,7 +102,7 @@ JOBS = {
 
 def make(key):
     (th, *refs), zone, subject = JOBS[key]
-    t = L.T[th]; night = zone in (NIGHT, FOCUS_N); ink = (255, 255, 255) if night else C.hex_rgb(t['color'])
+    t = L.T[th]; night = zone in (NIGHT, FOCUS_N, NIGHT_TREES); ink = (255, 255, 255) if night or zone == NIGHT_TREES else C.hex_rgb(t['color'])
     png = os.path.join(L.TMP, key + '.png')
     if os.path.exists(png): return key + ' : déjà générée (' + png + ')'
     prompt = ("The three reference images are scenes from the same illustrated wedding invitation theme. "
