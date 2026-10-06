@@ -41,7 +41,8 @@ async function audit(p){ return p.evaluate(()=>{
     await p.click('#wzNav [data-go="5"]'); await p.waitForTimeout(fmt==='long'?2500:600);
     const r=await p.evaluate(()=>({ow:document.documentElement.scrollWidth-innerWidth,sum:document.getElementById('cSum').innerText,href:document.getElementById('cGo').href,iframe:!!document.querySelector('#cpPhone:not(.lg-off) iframe.cp-lg'),scroll:document.getElementById('cpScroll').hidden,gifts:(document.querySelector('#cExtras [data-id="gifts"]')||{}).textContent}));
     const giftOk={mariage:'Liste de mariage',henne:'Cagnotte',sbou3:'Liste de naissance'}[occ]===r.gifts;
-    const okFmt=fmt==='long'?(r.iframe&&r.scroll):(!r.iframe&&!r.scroll);
+    const chain=(await p.evaluate(()=>window.SCEAU_CHAINS||[])).includes(k); // modèle en chaîne : l'aperçu est le vrai moteur
+    const okFmt=fmt==='long'||chain?(r.iframe&&r.scroll):(!r.iframe&&!r.scroll);
     const okHref=r.href.includes('occasion='+occ)&&r.href.includes('theme='+k)&&r.href.includes('format='+fmt);
     add('Configurateur',`${occ} · ${k} · ${fmt} · ${w}px`,!errs.length&&r.ow<=0&&okFmt&&okHref&&giftOk&&eds===want,[errs.join(' | '),r.ow>0?`déborde de ${r.ow}px`:'',okFmt?'':'aperçu du mauvais format',okHref?'':'lien de commande incomplet',giftOk?'':'nom de la liste : '+r.gifts,eds===want?'':`réglages ${eds}/${want}`].filter(Boolean).join(' · '));
     await p.close(); }
