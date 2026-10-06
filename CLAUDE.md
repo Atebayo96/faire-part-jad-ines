@@ -488,6 +488,16 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     On ne prend pas : la liste des invités visible, les commentaires, la vérification du téléphone ou du mail pour
     répondre, le prix par invité (voir la fiche 16, § 5).
 
+44. **La page Formules dit ce qu'on achète et ce qu'on ne fait pas soi-même** (6 octobre 2026 : « les images c'est pas
+    vraiment logique » ; « proposer ce qu'ils ne peuvent pas faire eux-mêmes sur Canva »). En haut, « ce que vous recevez »
+    en 3 temps (le lien, le faire-part animé, le tableau de bord). Les bandes de vignettes de chaque formule ne répètent pas
+    les mêmes images sous d'autres étiquettes : Essentiel = lieux de la bibliothèque, sans badge ; Signature = un seul lieu
+    « peint d'après votre photo » (badge appareil photo) ; Couture = un autre univers (Douce France), badge sur chaque lieu.
+    Le badge appareil photo ne se pose **que** sur un lieu peint d'après la photo du client. Juste après les prix, la section
+    « Ce que vous ne pouvez pas faire sur Canva » (`#pourquoi`, `.vs`) : fait soi-même contre Save The Oui, ligne par ligne,
+    étiquette « Signature » sur ce qui n'est pas dans Essentiel. « Dans toutes les formules » ne liste que ce qui est
+    vraiment dans Essentiel (pas le lien par famille, ni l'anglais en plus, ni le save-the-date).
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois
