@@ -117,8 +117,10 @@ Object.assign(window.SCEAU_THEMES,{
   T.dolcevita.jour='dolcevitajour';
   /* les 3 modèles du lancement (6 octobre 2026) : une seule peinture continue par faire-part (chain:true ; la peinture de
      la démo est img/chaine/<thème>/, celle d'une cliente est peinte après sa commande d'après ses lieux et ses photos) */
-  T.dolcevita.chain=true; T.oldmoney.chain=true;
-  T.doucefrance={name:"Douce France",launch:true,compose:true,chain:true,style:"Peinture",short:"Bastide, lavande, platanes",
+  T.dolcevita.chain=true;
+  // Old money : ses 5 peintures plein cadre (6 octobre 2026), scènes séparées reliées par le fondu ; pas de chaîne (budget)
+  T.oldmoney.nocal=true; T.oldmoney.scenes[2][4]='dark'; T.oldmoney.scenes[3][4]='dark';
+  T.doucefrance={name:"Douce France",pending:true,chain:true,style:"Peinture",short:"Bastide, lavande, platanes",
     desc:"Une bastide en pierre dorée, des champs de lavande et un dîner sous les platanes : la Provence, simplement.",couple:"Camille & Antoine",light:true,
     font:'"Cormorant Garamond",Georgia,serif',italic:true,color:"#2f3a5a",ey:"#4a5578",tx:"#34405e",size:.95,gf:"Cormorant+Garamond:ital,wght@0,500;1,400",music:"valse",particles:"none",
     mono:["#2f3a5a","0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)"],

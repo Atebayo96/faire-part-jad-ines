@@ -317,6 +317,21 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     jour), peindre ses lieux de jour et de fin d'après-midi, **repeindre Old money en peintures plein cadre** (ses scènes
     sont des vignettes sur papier), puis le nouveau thème directement dans ce format.
 
+32f. **Faire-part en une seule peinture (chaîne) et budget Gemini** (6 octobre 2026). `tools/chaine.py` peint une démo
+    comme une seule peinture verticale : chaque moment en pleine page (ciel calme en haut, scène en grand), puis un
+    passage peint entre deux moments (brume, ciel, la lumière qui tourne) ; l'accueil est prolongé vers le haut par du
+    ciel peint. Le moteur (`CH`, `chainLayout()` dans invite.js) fait descendre la peinture avec les pages, chaque page
+    posée sur son ancre (`img/chaine/<thème>/meta.json` : y, rôle, texte clair/foncé, contraste mesuré ≥ 4,5). Le
+    configurateur montre alors le vrai moteur (`chainInvite()`) et remplace la bibliothèque de lieux par « Parlez-nous de
+    ce lieu » + photos (`api/upload.js`, Vercel Blob privé, ids envoyés avec la commande) : le lieu de la cliente est peint
+    après la commande. **Seul Dolce Vita existe en chaîne** (démo Giulia & Hugo). **L'utilisateur a arrêté les générations :
+    « faut pas ruiner tous les budgets Gemini, au pire c'est plusieurs scènes et on trouvera comment les lier, on perd trop
+    d'argent ».** La mise au point de la chaîne Dolce Vita a coûté ~60 générations. Règle : **aucune génération sans
+    accord explicite et chiffré** (nombre d'images, coût), jamais de méthode « à l'essai » sur Gemini ; on tente d'abord
+    sans générer (assemblage, fondu, `descendre.py`). Old money : ses 5 peintures plein cadre déjà payées
+    (`tools/peintures-oldmoney/`) sont ses scènes 1 à 4 (`nocal`), reliées par le fondu. Douce France est défini
+    (`pending:true`, démo dans `tools/demos-en-attente/`) mais rien n'est peint.
+
 32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
     « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money
     (`compose:true`). Un thème peut avoir plusieurs **ambiances** (`group` / `amb` / `ambSub` dans themes.js) : Dolce Vita
