@@ -290,6 +290,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     traînées floues (« en haut c'est flou »). L'exemple par défaut du configurateur : cérémonie à l'église (la mairie de
     jour n'existe pas encore). Accueil : « Un faire-part qui vit, du jour au soir. »
     Ce qui suit (ambiances, « Plein jour » choisi à part) est remplacé par cette règle.
+    **Calques : les bords gauche et droit du sujet se fondent dans le papier** (`.bg .sub`, `.cp-bg i .sub` : masque de 5 à
+    22 % de chaque côté) : le sujet détouré s'arrêtait sur deux lignes droites (Old money, « regarde les bords, c'est moche »).
+    Un cadre invisible pendant le fondu est masqué entier (`visibility:hidden`) : son ciel `::before` recouvrait le sujet
+    de la page d'avant. `oldmoney-4` (les alliances, table coupée net sous le papier) est fondue en vignette
+    (`vignette-papier.py`). Les captures qui sautent d'une page à l'autre peuvent montrer une page vide (Chromium ne
+    repeint pas le cadre collant) : vérifier en défilant à la molette.
 
 32c. **Le grand tableau est retiré de l'offre ; on reste en scène par scène, avec des ambiances** (5 octobre 2026 :
     « on reste sur du scène par scène, juste on propose 2 visuels différents »). Configurateur : Dolce Vita et Old money

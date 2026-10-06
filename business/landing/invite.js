@@ -96,7 +96,7 @@
   const isJ=n=>String(n).startsWith('j:'), jk=n=>String(n).slice(2);
   const hourOf=e=>{ const m=/T(\d{1,2})/.exec(e&&e.start||''); return m?+m[1]:12; };
   const dayKey=(k,day)=>day&&J&&(/^\d+$/.test(String(k))||k==='fond'||(J.lieux||[]).includes(k))?'j:'+k:k;
-  const IMGV=11, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  const IMGV=12, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
   // calques : pour les scènes qui en ont (build-site.py liste img/calques/<thème>-<n>.webp), le décor est le fond calme du
   // thème et le sujet détouré est posé ENTIER en bas de l'écran (plus de rognage selon le téléphone), avec un peu de profondeur
   const CAL=new Set(I.calques||[]), hasCal=n=>CAL.has(String(n)), fond=`/img/hd/${I.theme}-ciel.webp?v=${IMGV}`, cal=n=>`/img/calques/${I.theme}-${n}.webp?v=${IMGV}`;
@@ -447,7 +447,7 @@
      la suivante, celle-ci apparaît en fondu sur tout l'écran (sur 80 % d'un écran de défilement). */
   { const fr=runs.map((r,ri)=>({ri,a:r.a,B:layers[ri]&&layers[ri].firstElementChild})).filter(x=>x.ri>0&&x.B&&!layers[x.ri].classList.contains('cal')); let tk=false;
     const fade=()=>{ tk=false; const h=sc.clientHeight, st=sc.scrollTop, ov=h*OVK;
-      fr.forEach(({a,B})=>{ const q=Math.max(0,Math.min(1,(st-(secs[a].offsetTop-h))/(h*.8))), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; } }); };
+      fr.forEach(({a,B})=>{ const q=Math.max(0,Math.min(1,(st-(secs[a].offsetTop-h))/(h*.8))), o=q>=1?'':(q*q*(3-2*q)).toFixed(3); if(B._o!==o){ B._o=o; B.style.opacity=o; B.parentNode.style.visibility=o==='0.000'?'hidden':''; } }); }; // invisible : le cadre entier est masqué (son ciel ::before recouvrait le sujet de la page d'avant)
     if(fr.length&&!LG){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(fade); } },{passive:true}); fade(); addEventListener('resize',fade); } }
   // précharge les images des pages suivantes
   if(!LG) [...new Set(pages.map(p=>p.n))].forEach(n=>{ const im=new Image(); im.src=hasCal(n)?cal(n):img(n); });
