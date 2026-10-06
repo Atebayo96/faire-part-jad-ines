@@ -96,7 +96,7 @@
   const isJ=n=>String(n).startsWith('j:'), jk=n=>String(n).slice(2);
   const hourOf=e=>{ const m=/T(\d{1,2})/.exec(e&&e.start||''); return m?+m[1]:12; };
   const dayKey=(k,day)=>day&&J&&(/^\d+$/.test(String(k))||k==='fond'||(J.lieux||[]).includes(k)||Object.values(J.pageImg||{}).includes(k))?'j:'+k:k;
-  const IMGV=17, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  const IMGV=18, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
   // calques : pour les scènes qui en ont (build-site.py liste img/calques/<thème>-<n>.webp), le décor est le fond calme du
   // thème et le sujet détouré est posé ENTIER en bas de l'écran (plus de rognage selon le téléphone), avec un peu de profondeur
   const CAL=new Set(I.calques||[]), hasCal=n=>CAL.has(String(n)), fond=`/img/hd/${I.theme}-ciel.webp?v=${IMGV}`, cal=n=>`/img/calques/${I.theme}-${n}.webp?v=${IMGV}`;
@@ -403,14 +403,16 @@
      encore le truc coupé ») ; sur un téléphone plus allongé que 9:16, le haut libre est rempli par le ciel de l'image
      étiré (::before, --strip). Avant, elle était agrandie à la hauteur de l'écran et perdait ses bords. */
   // couleur du haut de l'image (moyenne de ses premières lignes) : remplit le haut libre de l'écran sans motif ni trait
-  const SKY={};
-  function skyOf(B){ const u=(B.style.backgroundImage.match(/url\(["']?([^"')]+)/)||[])[1]; if(!u) return;
+  // RT : largeur / hauteur réelle de chaque décor, lue au chargement : une peinture prolongée vers le haut (1080 × 2520,
+  // règle 32e) n'a plus le format 9:16 ; elle est posée en bas, toute la largeur, et remplit l'écran sans ciel ajouté
+  const SKY={}, RT={}, urlOf=B=>(B.style.backgroundImage.match(/url\(["']?([^"')]+)/)||[])[1];
+  function skyOf(B){ const u=urlOf(B); if(!u) return;
     if(SKY[u]){ B.style.setProperty('--sky',SKY[u]); return; }
-    const im=new Image(); im.onload=()=>{ try{ const cv=document.createElement('canvas'); cv.width=16; cv.height=4; const x=cv.getContext('2d'); x.drawImage(im,0,0,im.width,im.height*.01,0,0,16,4);
+    const im=new Image(); im.onload=()=>{ const r=im.width/im.height; if(Math.abs(r-IR)>.01&&RT[u]!==r){ RT[u]=r; layoutStrip(); } try{ const cv=document.createElement('canvas'); cv.width=16; cv.height=4; const x=cv.getContext('2d'); x.drawImage(im,0,0,im.width,im.height*.01,0,0,16,4);
       const d=x.getImageData(0,0,16,4).data; let r=0,g=0,b=0; for(let k=0;k<d.length;k+=4){ r+=d[k]; g+=d[k+1]; b+=d[k+2]; } const n=d.length/4;
       SKY[u]=`rgb(${Math.round(r/n)},${Math.round(g/n)},${Math.round(b/n)})`; B.style.setProperty('--sky',SKY[u]); }catch(e){} }; im.src=u; }
   function fitBg(B,w,h,ov){ skyOf(B);
-    const bw=Math.ceil(w), ih=bw/IR, y=Math.round(ov+(h-ih));
+    const bw=Math.ceil(w), ih=bw/(RT[urlOf(B)]||IR), y=Math.round(ov+(h-ih));
     B.style.backgroundSize=bw+'px auto'; B.style.backgroundPosition=`center ${y}px`;
     B.style.setProperty('--bs',`${bw}px ${Math.round(Math.max(1,y)/.015)}px`); B.style.setProperty('--strip',Math.max(0,y)+'px');
   }

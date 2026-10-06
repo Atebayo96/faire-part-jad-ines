@@ -338,6 +338,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `::before`, reflets d'`ambiance-jour.py`, masque latéral de `.sub`, à retirer dès que les images existent).
     Gemini ne génère pas plus haut que 9:16 : on peint en 9:16 puis on **prolonge la peinture vers le haut** (deuxième
     passage « extend this painting upward, same style, calm sky »), contrôlé par `check_images.py` et regardé en grand.
+    **Fait le 6 octobre 2026 pour les deux églises de Dolce Vita** (`dolcevitajour-eglise` = `dolcevitajour-2`, et
+    `dolcevita-eglise`, accord : 2 générations, ~0,30 €) : « l'image est découpée, il faut mettre l'original ». Méthode
+    (une génération par image) : fenêtre 9:16 = 611 px blancs en haut + le haut de la peinture, consigne « extend the
+    painting upward into the blank white area, same sky », puis on ne garde que la bande du haut, fondue sur 140 px dans
+    l'original intact (1080 × 2520, `img/lieux` et `img/themes` en 540 × 1260). Le moteur lit le format réel de chaque
+    décor (`RT` dans invite.js et vitrine.js) : une image plus haute que 9:16 est posée en bas, toute la largeur, sans ciel
+    ajouté.
     À faire quand le plafond Gemini est relevé (budget estimé 40 à 45 $) : prolonger les images de Dolce Vita (soir et
     jour), peindre ses lieux de jour et de fin d'après-midi, **repeindre Old money en peintures plein cadre** (ses scènes
     sont des vignettes sur papier), puis le nouveau thème directement dans ce format.
