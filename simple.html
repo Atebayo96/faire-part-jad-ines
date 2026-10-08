@@ -49,15 +49,14 @@
     .h{font:600 30px/1 "Playfair",serif;font-variant-numeric:lining-nums tabular-nums;color:var(--ink);min-width:3.1em}
     .w{font:600 18px/1.25 "Playfair",serif;color:var(--ink)}
     .w small{display:block;margin-top:2px;font:400 16px/1.3 "Amiri",serif;color:var(--soft)}
-    .acts{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .b{display:flex;align-items:center;justify-content:center;height:42px;border-radius:999px;border:1px solid rgba(90,63,28,.25);
-      background:var(--paper);color:var(--brown);font:500 17px/1 "Playfair",serif;text-decoration:none;cursor:pointer}
-    .b:active{transform:scale(.97)}
-    .b:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+    /* l'adresse est le lien vers Google Maps (dans la page comme dans le PDF) */
+    a.ev{text-decoration:none;color:inherit}
+    .w small u{text-decoration:underline;text-decoration-color:rgba(184,151,90,.7);text-underline-offset:3px}
+    a.ev:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
     /* écrans très bas : on resserre un peu */
-    @media (max-height:640px){ .ev{padding:10px 12px;row-gap:8px} .b{height:40px} .evs{margin-top:12px} }
-    /* PDF / impression : une page au format du téléphone ; les deux boutons sont des liens qui marchent dans le PDF */
+    @media (max-height:640px){ .ev{padding:10px 12px} .evs{margin-top:12px} }
+    /* PDF / impression : une seule page au format du téléphone */
     @page{size:390px 844px;margin:0}
     @media print{
       html,body{height:auto;overflow:visible;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -75,38 +74,17 @@
       <p class="date">Samedi 17 octobre 2026</p>
 
       <div class="evs">
-        <div class="ev">
+        <a class="ev" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=H%C3%B4tel%20de%20Ville%20de%20Nanterre%201%20place%20du%2027%20mars%202002%2092000%20Nanterre">
           <span class="h">13h30</span>
-          <span class="w">Cérémonie civile<small>Hôtel de Ville de Nanterre<br>1 place du 27 mars 2002<br>92000 Nanterre</small></span>
-          <div class="acts">
-            <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=H%C3%B4tel%20de%20Ville%20de%20Nanterre%201%20place%20du%2027%20mars%202002%2092000%20Nanterre">Itinéraire</a>
-            <a class="b" href="https://ines-et-jad.vercel.app/cal.html?e=mairie" data-cal="mairie">Calendrier</a>
-          </div>
-        </div>
-        <div class="ev">
+          <span class="w">Cérémonie civile<small><u>Hôtel de Ville de Nanterre<br>1 place du 27 mars 2002<br>92000 Nanterre</u></small></span>
+        </a>
+        <a class="ev" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=Le%20Palacio%20R%C3%A9ception%2015%20rue%20Camille%20Flammarion%2091630%20Avrainville">
           <span class="h">18h</span>
-          <span class="w">Réception<small>Le Palacio Réception<br>15 rue Camille Flammarion<br>91630 Avrainville</small></span>
-          <div class="acts">
-            <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=Le%20Palacio%20R%C3%A9ception%2015%20rue%20Camille%20Flammarion%2091630%20Avrainville">Itinéraire</a>
-            <a class="b" href="https://ines-et-jad.vercel.app/cal.html?e=palacio" data-cal="palacio">Calendrier</a>
-          </div>
-        </div>
+          <span class="w">Réception<small><u>Le Palacio Réception<br>15 rue Camille Flammarion<br>91630 Avrainville</u></small></span>
+        </a>
       </div>
     </div>
   </main>
 
-  <script>
-    const EVENTS={
-      mairie:{title:"Mariage Inès & Jad — Cérémonie civile",start:"20261017T113000Z",end:"20261017T130000Z",loc:"Hôtel de Ville de Nanterre, 1 place du 27 mars 2002, 92000 Nanterre",desc:"Cérémonie civile du mariage d'Inès et Jad.",ics:"mairie-jad-ines.ics"},
-      palacio:{title:"Mariage Inès & Jad — Réception",start:"20261017T160000Z",end:"20261018T010000Z",loc:"Le Palacio Réception, 15 rue Camille Flammarion, 91630 Avrainville",desc:"Cocktail, dîner et soirée du mariage d'Inès et Jad.",ics:"palacio-jad-ines.ics"}
-    };
-    function addCal(k){
-      const e=EVENTS[k];
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){ window.location.href=e.ics; return; }
-      window.open("https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(e.title)
-        +"&dates="+e.start+"/"+e.end+"&location="+encodeURIComponent(e.loc)+"&details="+encodeURIComponent(e.desc),"_blank","noopener");
-    }
-    document.querySelectorAll('[data-cal]').forEach(b=>b.addEventListener('click',ev=>{ ev.preventDefault(); addCal(b.dataset.cal); }));
-  </script>
 </body>
 </html>
