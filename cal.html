@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Ajouter au calendrier — Inès &amp; Jad</title>
+  <style>
+    /* Page relais du bouton « Calendrier » du PDF : ouvre l'agenda du téléphone, avec deux liens de secours. */
+    @font-face { font-family:"Playfair"; src:url("fonts/PlayfairDisplay.ttf") format("truetype"); font-display:swap; }
+    body{margin:0;min-height:100svh;display:grid;place-items:center;background:#f4ecd8;color:#2c2114;font:18px/1.45 "Playfair",Georgia,serif;text-align:center;padding:24px}
+    h1{font-size:22px;font-weight:600;margin:0 0 6px}
+    p{margin:0 0 22px;color:#5a4632}
+    a{display:flex;align-items:center;justify-content:center;height:46px;margin:10px auto 0;max-width:280px;border-radius:999px;
+      border:1px solid rgba(90,63,28,.25);background:#fffaf0;color:#5a3f1c;text-decoration:none;font-size:17px}
+  </style>
+</head>
+<body>
+  <main>
+    <h1 id="t">Ajouter au calendrier</h1>
+    <p id="w"></p>
+    <a id="apple" href="#">Calendrier de l'iPhone</a>
+    <a id="google" href="#">Google Agenda</a>
+  </main>
+  <script>
+    const EVENTS={
+      mairie:{name:"Cérémonie civile · 13h30",title:"Mariage Inès & Jad — Cérémonie civile",start:"20261017T113000Z",end:"20261017T130000Z",loc:"Hôtel de Ville de Nanterre, 1 place du 27 mars 2002, 92000 Nanterre",desc:"Cérémonie civile du mariage d'Inès et Jad.",ics:"mairie-jad-ines.ics"},
+      palacio:{name:"Réception · dès 18h",title:"Mariage Inès & Jad — Réception",start:"20261017T160000Z",end:"20261018T010000Z",loc:"Le Palacio Réception, 15 rue Camille Flammarion, 91630 Avrainville",desc:"Cocktail, dîner et soirée du mariage d'Inès et Jad.",ics:"palacio-jad-ines.ics"}
+    };
+    const e=EVENTS[new URLSearchParams(location.search).get('e')]||EVENTS.mairie;
+    const g="https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(e.title)
+      +"&dates="+e.start+"/"+e.end+"&location="+encodeURIComponent(e.loc)+"&details="+encodeURIComponent(e.desc);
+    document.getElementById('w').textContent="Samedi 17 octobre 2026 — "+e.name;
+    document.getElementById('apple').href=e.ics;
+    document.getElementById('google').href=g;
+    // ouverture directe, comme le bouton du faire-part ; les deux liens restent si rien ne s'ouvre
+    location.replace(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)?e.ics:g);
+  </script>
+</body>
+</html>

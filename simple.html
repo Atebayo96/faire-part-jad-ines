@@ -57,13 +57,11 @@
 
     /* écrans très bas : on resserre un peu */
     @media (max-height:640px){ .ev{padding:10px 12px;row-gap:8px} .b{height:40px} .evs{margin-top:12px} }
-    /* PDF / impression : une page au format du téléphone, le bouton Calendrier (qui ne marche pas dans un PDF) retiré */
+    /* PDF / impression : une page au format du téléphone ; les deux boutons sont des liens qui marchent dans le PDF */
     @page{size:390px 844px;margin:0}
     @media print{
       html,body{height:auto;overflow:visible;-webkit-print-color-adjust:exact;print-color-adjust:exact}
       main{height:844px;width:390px}
-      .acts{grid-template-columns:1fr}
-      button.b{display:none}
     }
   </style>
 </head>
@@ -82,7 +80,7 @@
           <span class="w">Cérémonie civile<small>Hôtel de Ville de Nanterre<br>1 place du 27 mars 2002<br>92000 Nanterre</small></span>
           <div class="acts">
             <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=H%C3%B4tel%20de%20Ville%20de%20Nanterre%201%20place%20du%2027%20mars%202002%2092000%20Nanterre">Itinéraire</a>
-            <button class="b" type="button" data-cal="mairie">Calendrier</button>
+            <a class="b" href="https://ines-et-jad.vercel.app/cal.html?e=mairie" data-cal="mairie">Calendrier</a>
           </div>
         </div>
         <div class="ev">
@@ -90,7 +88,7 @@
           <span class="w">Réception<small>Le Palacio Réception<br>15 rue Camille Flammarion<br>91630 Avrainville</small></span>
           <div class="acts">
             <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=Le%20Palacio%20R%C3%A9ception%2015%20rue%20Camille%20Flammarion%2091630%20Avrainville">Itinéraire</a>
-            <button class="b" type="button" data-cal="palacio">Calendrier</button>
+            <a class="b" href="https://ines-et-jad.vercel.app/cal.html?e=palacio" data-cal="palacio">Calendrier</a>
           </div>
         </div>
       </div>
@@ -108,7 +106,7 @@
       window.open("https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(e.title)
         +"&dates="+e.start+"/"+e.end+"&location="+encodeURIComponent(e.loc)+"&details="+encodeURIComponent(e.desc),"_blank","noopener");
     }
-    document.querySelectorAll('[data-cal]').forEach(b=>b.addEventListener('click',()=>addCal(b.dataset.cal)));
+    document.querySelectorAll('[data-cal]').forEach(b=>b.addEventListener('click',ev=>{ ev.preventDefault(); addCal(b.dataset.cal); }));
   </script>
 </body>
 </html>
