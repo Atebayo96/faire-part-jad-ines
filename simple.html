@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0f1a2e">
+  <meta name="theme-color" content="#f4ecd8">
   <title>Inès &amp; Jad — 17 octobre 2026</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23b8975a'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23e8cf8b' stroke-width='2'/%3E%3C/svg%3E">
   <meta property="og:title" content="Inès & Jad — 17 octobre 2026">
@@ -17,189 +17,77 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://ines-et-jad.vercel.app/assets/og_preview.jpg">
   <style>
-    /* Version simple : tout sur une seule page, sans enveloppe ni animation, défilement normal. */
+    /* Version simple : tout tient sur un seul écran, sans enveloppe, sans animation, sans défilement. */
     @font-face { font-family:"Playfair"; src:url("fonts/PlayfairDisplay.ttf") format("truetype"); font-display:swap; }
     @font-face { font-family:"Amiri"; src:url("fonts/Amiri.ttf") format("truetype"); font-display:swap; }
     @font-face { font-family:"Script"; src:url("fonts/GreatVibes.ttf") format("truetype"); font-display:swap; }
 
-    :root{ --ivory-soft:#fffaf0; --gold:#b8975a; --gold-light:#e8cf8b; --bronze:#8c6f47; --brown:#5a3f1c; --night:#0f1a2e; --phone:520px; }
+    :root{ --ink:#2c2114; --soft:#5a4632; --gold:#b8975a; --brown:#5a3f1c; --paper:#f4ecd8; --card:#fffaf0; }
     *{box-sizing:border-box}
-    html,body{margin:0;background:#0b0f17;overflow-x:clip}
-    body{font-family:"Amiri",Georgia,serif;color:#1a1511}
-    h1,h2,h3{margin:0;font-family:"Playfair",Georgia,serif;font-weight:500}
-    .amp{font-style:italic;color:var(--gold-light)}
-    main{width:min(100%,var(--phone));margin:0 auto}
+    html,body{margin:0;height:100%;background:var(--paper);overflow:hidden}
+    body{font-family:"Amiri",Georgia,serif;color:var(--ink)}
+    main{height:100svh;width:min(100%,520px);margin:0 auto;display:flex;flex-direction:column;background:var(--paper)}
 
-    /* chaque scène : son image entière derrière, le texte posé dans la zone calme */
-    .sc{position:relative;min-height:100svh;overflow:hidden;display:grid;justify-items:center;
-      padding:96px 22px calc(80px + env(safe-area-inset-bottom));background:var(--night) center/cover no-repeat;text-align:center}
-    .sc>*{position:relative;z-index:1}
-    .bld{position:absolute;inset:0;z-index:0;background:center bottom/cover no-repeat;
-      -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 80%,transparent 100%);
-      mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 80%,transparent 100%)}
+    /* image du haut : les mains et la bague, qui se réduit si l'écran est petit */
+    .pic{flex:1 1 auto;min-height:90px;background:url("hero_frames_mir/frame_001.webp") center 45%/cover no-repeat;
+      -webkit-mask-image:linear-gradient(to bottom,transparent,#000 10%,#000 78%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 10%,#000 78%,transparent)}
+    /* la basmala sur le papier, au-dessus de l'image : jamais sur les mains */
+    .basmala{flex:0 0 auto;margin:0;padding:max(10px,env(safe-area-inset-top)) 0 4px;text-align:center;
+      font-size:clamp(20px,6vw,26px);line-height:1.5;color:var(--brown)}
 
-    /* accueil */
-    .hero{background-image:url("hero_frames_mir/frame_001.webp");align-content:end;padding-bottom:calc(44px + env(safe-area-inset-bottom))}
-    .basmala{position:absolute;left:0;right:0;top:max(7.5vh,calc(env(safe-area-inset-top) + 4.5vh));margin:0;
-      font-size:clamp(22px,6.6vw,29px);line-height:1.5;color:var(--bronze);text-shadow:0 1px 1px rgba(255,253,246,.8)}
-    .names{margin:0 0 10px;font:400 clamp(40px,13vw,58px)/1.08 "Script",cursive;white-space:nowrap;color:#2c2114;
-      text-shadow:0 2px 4px rgba(255,252,245,.9),0 5px 22px rgba(255,250,240,.6)}
-    .names .amp{color:var(--gold);font-style:normal}
-    .invite{margin:0 auto 14px;max-width:24em;font:italic 400 clamp(16px,4.4vw,18px)/1.45 "Playfair",serif;color:#4a3826;
-      text-shadow:0 1px 8px rgba(255,252,245,.9);text-wrap:balance}
-    .date-wrap{display:flex;align-items:center;justify-content:center;gap:14px}
-    .date-wrap .orn{position:relative;width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
-    .date-wrap .orn:last-child{background:linear-gradient(90deg,var(--gold),transparent)}
-    .date{font:600 clamp(20px,5.6vw,24px)/1.2 "Playfair",serif;letter-spacing:.04em;color:#2c2114;
-      text-shadow:0 1px 3px rgba(255,252,245,.95),0 2px 14px rgba(255,250,240,.55)}
+    .txt{flex:0 0 auto;padding:0 16px calc(14px + env(safe-area-inset-bottom));text-align:center}
+    h1{margin:0;font:400 clamp(40px,12vw,52px)/1.05 "Script",cursive;color:var(--ink)}
+    h1 .amp{color:var(--gold)}
+    .inv{margin:4px 0 0;font:italic 400 16px/1.4 "Playfair",serif;color:var(--soft)}
+    .date{margin:4px 0 0;font:600 clamp(19px,5.4vw,22px)/1.25 "Playfair",serif;letter-spacing:.03em;color:var(--ink)}
 
-    /* résumé du jour, tout de suite sous l'accueil */
-    .day{background:#f4ecd8;color:#2c2114;padding:44px 22px 48px;min-height:0}
-    .day h2{font:400 clamp(34px,9vw,42px)/1.1 "Script",cursive;color:var(--brown);margin-bottom:24px}
-    .rows{display:grid;gap:18px;width:100%;max-width:400px}
-    .row{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;text-align:left;
-      padding:16px 18px;border-radius:14px;background:#fffaf0;box-shadow:0 1px 0 rgba(90,63,28,.12),0 8px 24px rgba(90,63,28,.08)}
-    .row .h{font:600 32px/1 "Playfair",serif;color:#2c2114;font-variant-numeric:lining-nums tabular-nums}
-    .row .w{font:600 18px/1.3 "Playfair",serif;color:#2c2114}
-    .row .w small{display:block;font:400 16px/1.4 "Amiri",serif;color:#5a4632;margin-top:2px}
-
-    /* compte à rebours */
-    .grotte{background-image:url("grotte_frames/frame_015.webp");align-content:center}
-    .grotte .info{transform:translateY(-9vh)}
-    .grotte .t{font:400 clamp(30px,8.5vw,40px)/1.1 "Script",cursive;color:var(--brown);text-shadow:0 2px 12px rgba(255,250,240,.7);margin:0 0 16px}
-    .lead{font:italic 400 15px/1 "Playfair",serif;letter-spacing:.28em;text-transform:uppercase;color:var(--brown)}
-    .cd{display:flex;justify-content:center;margin:14px auto 0}
-    .cd div{padding:0 clamp(12px,4.6vw,22px);position:relative}
-    .cd div+div::before{content:"";position:absolute;left:0;top:14%;height:46%;width:1px;background:linear-gradient(180deg,transparent,rgba(140,111,71,.55),transparent)}
-    .cd b{display:block;font:500 clamp(34px,11vw,50px)/1 "Playfair",serif;color:#3a2c1a;text-shadow:0 3px 14px rgba(255,250,240,.75)}
-    .cd span{display:block;margin-top:7px;font:italic 400 13px/1 "Playfair",serif;color:var(--brown)}
-
-    /* événements */
-    .ev{align-content:start;padding-top:calc(8vh + env(safe-area-inset-top))}
-    .mairie{background-image:url("mairie_frames/frame_015.webp")}
-    .mairie .bld{background-image:url("assets/mairie_building.png");transform:translateY(15%)}
-    .palacio{background-image:url("palacio_frames/frame_015.webp")}
-    .palacio .bld{background-image:url("assets/palacio_building.png");transform:translateY(22%)}
-    .eyebrow{display:inline-flex;align-items:center;gap:12px;margin:0 0 16px;font:600 13px/1 "Playfair",serif;text-transform:uppercase;letter-spacing:.4em;text-indent:.4em}
-    .eyebrow::before,.eyebrow::after{content:"";width:22px;height:1px;background:linear-gradient(90deg,transparent,currentColor,transparent)}
-    .ev h2{font:600 clamp(33px,9.4vw,44px)/1.03 "Playfair",serif;color:#fff}
-    .hour{margin-top:14px;font:600 clamp(32px,10vw,40px)/1 "Playfair",serif;font-variant-numeric:lining-nums}
-    .what{margin:10px auto 0;max-width:20em;font:500 18px/1.45 "Playfair",serif}
-    .acts{display:flex;justify-content:center;gap:12px;margin-top:28px;flex-wrap:wrap}
-    .b{display:inline-flex;align-items:center;justify-content:center;min-width:140px;height:46px;padding:0 20px;border-radius:999px;cursor:pointer;
-      font:500 17px/1 "Playfair",serif;text-decoration:none;border:0;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+    .evs{display:grid;gap:10px;margin:16px auto 0;max-width:420px}
+    .ev{display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:10px;align-items:center;text-align:left;
+      padding:12px 14px;border-radius:14px;background:var(--card);box-shadow:0 1px 0 rgba(90,63,28,.12),0 6px 18px rgba(90,63,28,.08)}
+    .h{font:600 30px/1 "Playfair",serif;font-variant-numeric:lining-nums tabular-nums;color:var(--ink);min-width:3.1em}
+    .w{font:600 18px/1.25 "Playfair",serif;color:var(--ink)}
+    .w small{display:block;margin-top:2px;font:400 16px/1.3 "Amiri",serif;color:var(--soft)}
+    .acts{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .b{display:flex;align-items:center;justify-content:center;height:42px;border-radius:999px;border:1px solid rgba(90,63,28,.25);
+      background:var(--paper);color:var(--brown);font:500 17px/1 "Playfair",serif;text-decoration:none;cursor:pointer}
     .b:active{transform:scale(.97)}
-    .mairie .eyebrow,.mairie .hour{color:var(--brown);text-shadow:0 1px 2px rgba(255,250,240,.85),0 2px 10px rgba(255,250,240,.55)}
-    .mairie h2{color:#2c2114;text-shadow:0 1px 3px rgba(255,252,245,.95),0 2px 14px rgba(255,250,240,.7)}
-    .mairie .b{background:rgba(255,250,240,.82);color:#3f2c12}
-    .palacio .eyebrow,.palacio .hour{color:var(--gold-light);text-shadow:0 2px 10px rgba(0,0,0,.65)}
-    .palacio h2,.palacio .what{color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.6),0 6px 26px rgba(0,0,0,.5)}
-    .palacio .b{background:rgba(11,15,23,.5);color:#fff5e8}
+    .b:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-    /* fin */
-    .final{background-image:url("paris_frames/frame_015.webp");align-content:center}
-    .final h2{font:500 clamp(29px,8.4vw,35px)/1.08 "Playfair",serif;color:#fff;text-shadow:0 6px 22px rgba(0,0,0,.7)}
-    .final h2 .hl{font:400 1.22em/1 "Script",cursive;color:var(--gold-light)}
-    .closing{position:absolute;left:0;right:0;bottom:calc(9vh + env(safe-area-inset-bottom))}
-    .closing p{margin:0;font:500 clamp(20px,5.6vw,24px)/1.4 "Playfair",serif;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.6)}
-    .closing .small{margin-top:8px;font:700 12px/1.4 Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-light)}
-
-    .sound{position:fixed;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(calc(min(50vw,260px) - 52px));z-index:5;
-      width:40px;height:40px;display:grid;place-items:center;border-radius:999px;cursor:pointer;font-size:16px;
-      color:var(--gold-light);background:rgba(15,26,46,.5);border:1px solid rgba(232,207,139,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-    .sound.off{color:rgba(255,250,240,.6)}
-    .sound.off::after{content:"";position:absolute;width:26px;height:1.5px;background:currentColor;transform:rotate(-45deg)}
-    a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px}
-    @media(min-width:760px){ main{margin:26px auto;border-radius:30px;overflow:hidden} }
+    /* écrans très bas : on resserre un peu */
+    @media (max-height:640px){ .ev{padding:10px 12px;row-gap:8px} .b{height:40px} .evs{margin-top:12px} }
   </style>
 </head>
 <body>
-  <audio id="bgm" src="assets/music.mp3" loop preload="none"></audio>
-  <button class="sound off" id="sound" type="button" aria-label="Activer la musique" aria-pressed="false">&#9835;</button>
-
   <main>
-    <section class="sc hero">
-      <p class="basmala" dir="rtl" lang="ar" aria-label="Bismillah ar-Rahman ar-Rahim">﷽</p>
-      <div>
-        <h1 class="names">Inès <span class="amp">&amp;</span> Jad</h1>
-        <p class="invite">Ont la joie de vous convier à leur mariage qui sera célébré le</p>
-        <div class="date-wrap"><span class="orn"></span><span class="date">Samedi 17 octobre 2026</span><span class="orn"></span></div>
-      </div>
-    </section>
+    <p class="basmala" dir="rtl" lang="ar" aria-label="Bismillah ar-Rahman ar-Rahim">﷽</p>
+    <div class="pic" aria-hidden="true"></div>
+    <div class="txt">
+      <h1>Inès <span class="amp">&amp;</span> Jad</h1>
+      <p class="inv">vous convient à leur mariage</p>
+      <p class="date">Samedi 17 octobre 2026</p>
 
-    <section class="sc day">
-      <h2>Le programme</h2>
-      <div class="rows">
-        <div class="row"><span class="h">13h30</span><span class="w">Cérémonie civile<small>Hôtel de Ville de Nanterre</small></span></div>
-        <div class="row"><span class="h">18h</span><span class="w">Réception<small>Le Palacio, Avrainville</small></span></div>
-      </div>
-    </section>
-
-    <section class="sc ev mairie">
-      <div class="bld" aria-hidden="true"></div>
-      <div>
-        <p class="eyebrow">Cérémonie civile</p>
-        <h2>Hôtel de Ville de Nanterre</h2>
-        <p class="hour">13h30</p>
-        <div class="acts">
-          <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=H%C3%B4tel%20de%20Ville%20de%20Nanterre%201%20place%20du%2027%20mars%202002%2092000%20Nanterre">Itinéraire</a>
-          <button class="b" type="button" data-cal="mairie">Calendrier</button>
+      <div class="evs">
+        <div class="ev">
+          <span class="h">13h30</span>
+          <span class="w">Cérémonie civile<small>Hôtel de Ville de Nanterre</small></span>
+          <div class="acts">
+            <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=H%C3%B4tel%20de%20Ville%20de%20Nanterre%201%20place%20du%2027%20mars%202002%2092000%20Nanterre">Itinéraire</a>
+            <button class="b" type="button" data-cal="mairie">Calendrier</button>
+          </div>
+        </div>
+        <div class="ev">
+          <span class="h">18h</span>
+          <span class="w">Réception<small>Le Palacio, Avrainville</small></span>
+          <div class="acts">
+            <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=Le%20Palacio%20R%C3%A9ception%2015%20rue%20Camille%20Flammarion%2091630%20Avrainville">Itinéraire</a>
+            <button class="b" type="button" data-cal="palacio">Calendrier</button>
+          </div>
         </div>
       </div>
-    </section>
-
-    <section class="sc ev palacio">
-      <div class="bld" aria-hidden="true"></div>
-      <div>
-        <p class="eyebrow">Réception</p>
-        <h2>Le Palacio</h2>
-        <p class="hour">Dès 18h</p>
-        <p class="what">Cocktail de bienvenue, suivi du dîner et de la soirée</p>
-        <div class="acts">
-          <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=Le%20Palacio%20R%C3%A9ception%2015%20rue%20Camille%20Flammarion%2091630%20Avrainville">Itinéraire</a>
-          <button class="b" type="button" data-cal="palacio">Calendrier</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="sc grotte">
-      <div class="info">
-        <p class="t">Le grand jour approche</p>
-        <div class="lead" id="lead">plus que</div>
-        <div class="cd" role="timer">
-          <div><b id="cd-d">—</b><span>jours</span></div>
-          <div><b id="cd-h">—</b><span>heures</span></div>
-          <div><b id="cd-m">—</b><span>min</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="sc final">
-      <h2>Serez-vous <span class="hl">des nôtres&nbsp;?</span></h2>
-      <div class="closing">
-        <p>Inès Hariat <span class="amp">&amp;</span> Jad Ghailan</p>
-        <div class="small">17 octobre 2026</div>
-      </div>
-    </section>
+    </div>
   </main>
 
   <script>
-    const bgm=document.getElementById('bgm'), snd=document.getElementById('sound');
-    function sync(){ const on=!bgm.paused; snd.classList.toggle('off',!on); snd.setAttribute('aria-pressed',on);
-      snd.setAttribute('aria-label',on?'Couper la musique':'Activer la musique'); }
-    snd.addEventListener('click',()=>{ if(bgm.paused){ bgm.volume=.8; bgm.play().then(sync).catch(sync); } else { bgm.pause(); sync(); } });
-    document.addEventListener('visibilitychange',()=>{ if(document.hidden&&!bgm.paused){ bgm.pause(); sync(); } });
-
-    const TARGET=new Date('2026-10-17T13:30:00+02:00').getTime(), pad=n=>String(n).padStart(2,'0');
-    function tick(){
-      const diff=TARGET-Date.now();
-      if(diff<=0){ document.getElementById('lead').textContent="C'est aujourd'hui !"; ['d','h','m'].forEach(k=>document.getElementById('cd-'+k).textContent='0'); return; }
-      document.getElementById('cd-d').textContent=Math.floor(diff/864e5);
-      document.getElementById('cd-h').textContent=pad(Math.floor(diff%864e5/36e5));
-      document.getElementById('cd-m').textContent=pad(Math.floor(diff%36e5/6e4));
-    }
-    tick(); setInterval(tick,15000);
-
     const EVENTS={
       mairie:{title:"Mariage Inès & Jad — Cérémonie civile",start:"20261017T113000Z",end:"20261017T130000Z",loc:"Hôtel de Ville de Nanterre, 1 place du 27 mars 2002, 92000 Nanterre",desc:"Cérémonie civile du mariage d'Inès et Jad.",ics:"mairie-jad-ines.ics"},
       palacio:{title:"Mariage Inès & Jad — Réception",start:"20261017T160000Z",end:"20261018T010000Z",loc:"Le Palacio Réception, 15 rue Camille Flammarion, 91630 Avrainville",desc:"Cocktail, dîner et soirée du mariage d'Inès et Jad.",ics:"palacio-jad-ines.ics"}
