@@ -429,7 +429,7 @@
         <div class="info reveal">
           <p class="eyebrow">Civil Ceremony</p>
           <h2>Nanterre City Hall</h2>
-          <p class="place">At 2:00 PM</p>
+          <p class="place">At 1:30 PM</p>
           <div class="btn-row">
             <a class="btn" target="_blank" rel="noreferrer" aria-label="Open directions to Nanterre City Hall"
               href="https://www.google.com/maps/search/?api=1&query=H%C3%B4tel%20de%20Ville%20de%20Nanterre%201%20place%20du%2027%20mars%202002%2092000%20Nanterre">Directions</a>
@@ -445,7 +445,7 @@
           <p class="eyebrow">Reception</p>
           <h2>Le Palacio</h2>
           <div class="timeline">
-            <div class="ev"><span class="t">From 7 PM</span><h3>Welcome cocktail, followed by dinner and an evening of celebration</h3></div>
+            <div class="ev"><span class="t">From 6 PM</span><h3>Welcome cocktail, followed by dinner and an evening of celebration</h3></div>
           </div>
           <div class="btn-row">
             <a class="btn" target="_blank" rel="noreferrer" aria-label="Open directions to Le Palacio"
@@ -734,7 +734,7 @@
       else if(e.key==='End'){ e.preventDefault(); goTo(acts.length-1); }
     });
 
-    const TARGET=new Date('2026-10-17T14:00:00+02:00').getTime();
+    const TARGET=new Date('2026-10-17T13:30:00+02:00').getTime();
     const pad=n=>String(n).padStart(2,'0');
     function tick(){
       const diff=TARGET-Date.now();
@@ -748,8 +748,8 @@
     tick(); setInterval(tick,1000);
 
     const EVENTS={
-      mairie:{title:"Inès & Jad's Wedding — Civil Ceremony",start:"20261017T120000Z",end:"20261017T133000Z",loc:"Hôtel de Ville de Nanterre, 1 place du 27 mars 2002, 92000 Nanterre",desc:"Civil ceremony of Inès and Jad's wedding.",ics:"mairie-jad-ines.ics"},
-      palacio:{title:"Inès & Jad's Wedding — Reception",start:"20261017T170000Z",end:"20261018T010000Z",loc:"Le Palacio Réception, 15 rue Camille Flammarion, 91630 Avrainville",desc:"Cocktail, dinner and party for Inès and Jad's wedding.",ics:"palacio-jad-ines.ics"}
+      mairie:{title:"Inès & Jad's Wedding — Civil Ceremony",start:"20261017T113000Z",end:"20261017T130000Z",loc:"Hôtel de Ville de Nanterre, 1 place du 27 mars 2002, 92000 Nanterre",desc:"Civil ceremony of Inès and Jad's wedding.",ics:"mairie-jad-ines.ics"},
+      palacio:{title:"Inès & Jad's Wedding — Reception",start:"20261017T160000Z",end:"20261018T010000Z",loc:"Le Palacio Réception, 15 rue Camille Flammarion, 91630 Avrainville",desc:"Cocktail, dinner and party for Inès and Jad's wedding.",ics:"palacio-jad-ines.ics"}
     };
     /* ajout direct au calendrier : Apple (iPhone/iPad/Mac) -> .ics hébergé ouvert dans Calendrier ;
        sinon -> Google Agenda avec l'événement pré-rempli (pas de téléchargement de fichier) */
