@@ -36,7 +36,7 @@
       font-size:clamp(20px,6vw,26px);line-height:1.5;color:var(--brown)}
 
     /* le texte remonte sous l'image ; la place en trop va en bas */
-    .txt{flex:1 0 auto;display:flex;flex-direction:column;justify-content:flex-start;padding:0 16px calc(14px + env(safe-area-inset-bottom));text-align:center}
+    .txt{flex:1 0 auto;display:flex;flex-direction:column;justify-content:center;padding:0 16px calc(28px + env(safe-area-inset-bottom));text-align:center}
     .evs{width:100%}
     h1{margin:0;font:400 clamp(40px,12vw,52px)/1.05 "Script",cursive;color:var(--ink)}
     h1 .amp{color:var(--gold)}
@@ -57,6 +57,14 @@
 
     /* écrans très bas : on resserre un peu */
     @media (max-height:640px){ .ev{padding:10px 12px;row-gap:8px} .b{height:40px} .evs{margin-top:12px} }
+    /* PDF / impression : une page au format du téléphone, le bouton Calendrier (qui ne marche pas dans un PDF) retiré */
+    @page{size:390px 844px;margin:0}
+    @media print{
+      html,body{height:auto;overflow:visible;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      main{height:844px;width:390px}
+      .acts{grid-template-columns:1fr}
+      button.b{display:none}
+    }
   </style>
 </head>
 <body>
@@ -71,7 +79,7 @@
       <div class="evs">
         <div class="ev">
           <span class="h">13h30</span>
-          <span class="w">Cérémonie civile<small>Hôtel de Ville de Nanterre</small></span>
+          <span class="w">Cérémonie civile<small>Hôtel de Ville de Nanterre<br>1 place du 27 mars 2002<br>92000 Nanterre</small></span>
           <div class="acts">
             <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=H%C3%B4tel%20de%20Ville%20de%20Nanterre%201%20place%20du%2027%20mars%202002%2092000%20Nanterre">Itinéraire</a>
             <button class="b" type="button" data-cal="mairie">Calendrier</button>
@@ -79,7 +87,7 @@
         </div>
         <div class="ev">
           <span class="h">18h</span>
-          <span class="w">Réception<small>Le Palacio, Avrainville</small></span>
+          <span class="w">Réception<small>Le Palacio Réception<br>15 rue Camille Flammarion<br>91630 Avrainville</small></span>
           <div class="acts">
             <a class="b" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=Le%20Palacio%20R%C3%A9ception%2015%20rue%20Camille%20Flammarion%2091630%20Avrainville">Itinéraire</a>
             <button class="b" type="button" data-cal="palacio">Calendrier</button>
