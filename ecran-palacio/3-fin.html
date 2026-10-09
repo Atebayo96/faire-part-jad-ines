@@ -1,15 +1,26 @@
 <!doctype html><meta charset="utf-8"><link rel="stylesheet" href="style.css">
 <div class="s">
  <div class="sky"></div>
- <div style="position:absolute;inset:0;background:linear-gradient(#060b20 0%,rgba(6,11,32,.35) 45%,rgba(30,40,80,.1) 100%)"></div>
+ <div style="position:absolute;inset:0;background:linear-gradient(#050a1c 0%,rgba(8,14,40,.55) 40%,rgba(40,30,60,.15) 75%,rgba(120,70,40,.35) 100%)"></div>
+ <div style="position:absolute;left:-10%;right:-10%;bottom:-30%;height:75%;background:radial-gradient(ellipse at 50% 100%,rgba(255,170,90,.45),rgba(255,150,80,.12) 45%,transparent 70%)"></div>
  <div id="L"></div>
  <div class="mono" style="color:#f6eedb;text-shadow:0 2px 18px rgba(0,0,0,.55)"><div class="ij">I<em style="color:#e6c785">&amp;</em>J</div>
   <div class="orn" style="margin-top:24px"><i></i><b></b><i></i></div>
   <div class="d">17 · 10 · 2026</div></div>
 </div>
 <script>
-const P=[[90,700,1.0,2],[250,860,.7,5],[330,420,.45,1],[520,780,.6,3],[640,250,.35,4],[1290,300,.4,1],[1380,820,.75,5],[1560,560,.55,2],[1700,860,.9,3],[1790,330,.4,4],[200,180,.3,3],[1100,940,.5,1],[800,960,.45,2],[1500,120,.3,5],[60,420,.35,4],[1840,600,.5,1]];
+// lanternes : de grosses proches en bas sur les côtés, de plus en plus petites et lointaines en montant ; le centre reste dégagé
+const P=[[150,820,1.15,4],[420,900,.8,1],[1640,800,1.1,1],[1430,930,.75,4],[300,620,.6,1],[1560,600,.62,4],
+[560,700,.42,1],[1330,690,.45,4],[210,430,.38,4],[1700,420,.36,1],[470,520,.3,1],[1450,500,.3,4],
+[640,420,.22,4],[1260,420,.24,1],[380,300,.2,1],[1560,280,.2,4],[120,250,.17,4],[1790,200,.17,1],
+[720,250,.15,1],[1180,240,.15,4],[530,160,.13,4],[1390,140,.13,1],[900,90,.11,1],[1020,120,.11,4],
+[260,120,.1,1],[1680,90,.1,4],[60,520,.25,1],[1860,560,.26,4],[820,620,.2,4],[1100,600,.2,1]];
 const L=document.getElementById('L');
-for(const [x,y,s,i] of P){const im=new Image();im.src='../assets/nuit_lantern_'+i+'.png';
- im.style.cssText=`position:absolute;left:${x}px;top:${y}px;height:${170*s}px;opacity:${.55+.45*s};-webkit-mask-image:radial-gradient(ellipse 50% 47% at 50% 47%,#000 70%,transparent 100%);filter:drop-shadow(0 0 ${30*s}px rgba(255,180,80,.8)) blur(${s<.5?1:0}px)`;L.appendChild(im);}
+for(const [x,y,s,i] of P){
+ const g=document.createElement('div');const h=170*s;
+ g.style.cssText=`position:absolute;left:${x-h*1.2}px;top:${y-h*.6}px;width:${h*2.6}px;height:${h*2.4}px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,190,110,${.35+.2*s}),rgba(255,160,80,.08) 60%,transparent);`;
+ L.appendChild(g);
+ const im=new Image();im.src='../assets/nuit_lantern_'+i+'.png';
+ im.style.cssText=`position:absolute;left:${x}px;top:${y}px;height:${h}px;opacity:${Math.min(1,.5+.5*s)};-webkit-mask-image:radial-gradient(ellipse 50% 47% at 50% 47%,#000 70%,transparent 100%);filter:brightness(${1.05+.15*s}) saturate(1.1) blur(${s<.2?.6:0}px) drop-shadow(0 0 ${12+20*s}px rgba(255,180,90,.9));transform:rotate(${(x%7-3)*1.5}deg)`;
+ L.appendChild(im);}
 </script>
