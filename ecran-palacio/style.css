@@ -1,0 +1,15 @@
+@font-face{font-family:"Playfair";src:url("../fonts/PlayfairDisplay.ttf")}
+@font-face{font-family:"Amiri";src:url("../fonts/Amiri.ttf")}
+@font-face{font-family:"Script";src:url("../fonts/GreatVibes.ttf")}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0b1430}
+.s{position:absolute;inset:0;overflow:hidden}
+.sky{position:absolute;inset:0;background:url("../assets/palacio_sky_starry.png") center/cover;filter:saturate(1.05)}
+.gold{color:#e6c785}
+.iv{color:#f6eedb}
+.sh{text-shadow:0 2px 18px rgba(0,0,0,.55)}
+.orn{display:flex;align-items:center;gap:22px;justify-content:center}
+.orn i{display:block;width:150px;height:1.5px;background:linear-gradient(90deg,transparent,#d9b56a)}
+.orn i:last-child{transform:scaleX(-1)}
+.orn b{width:12px;height:12px;border:1.5px solid #d9b56a;transform:rotate(45deg)}
+.lan{position:absolute;top:0;filter:drop-shadow(0 0 28px rgba(255,190,90,.55))}
