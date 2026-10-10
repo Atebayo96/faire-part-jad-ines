@@ -54,12 +54,12 @@
   /* chaque thème a sa feuille (10 octobre 2026 : « le choix du thème change juste la photo au milieu, c'est pas ouf ») :
      la forme du cadre de la peinture et l'ornement des filets suivent le thème.
      arche : arche ronde, filets simples (Dolce Vita) · ogive : arc brisé, étoile à huit branches (Mille et une nuits)
-     outrepasse : arc polylobé, losanges (Andalou) · medaillon : ovale, filets doubles (Old money)
+     outrepasse : le même arc brisé que Mille et une nuits (l'arc polylobé et le fer à cheval n'ont pas été validés), losanges (Andalou) · medaillon : ovale, filets doubles (Old money)
      bandeau : la peinture en haut de la feuille, toute la largeur, fondue dans le papier, brin de feuillage (Douce France) */
   const STYLES={dolcevita:'arche',dolcevitajour:'arche',nuits:'ogive',nuitsjour:'ogive',alhambra:'outrepasse',oldmoney:'medaillon',doucefrance:'bandeau'};
   const styleOf=k=>STYLES[k]||(TH()[k]&&TH()[k].family==='nuits'?'ogive':'arche');
   // contour du cadre (viewBox 0 0 100 120, étiré à la taille du cadre) : masque de la peinture et filet à la couleur du couple
-  const FRAMES={ogive:'M2 120V54C2 30 26 18 50 2C74 18 98 30 98 54V120Z',outrepasse:'M4 120V52A9.7 9.7 0 0 1 8.6 34A10.1 10.1 0 0 1 21.3 19.6A10.6 10.6 0 0 1 39.8 11.6A10.7 10.7 0 0 1 60.2 11.6A10.6 10.6 0 0 1 78.7 19.6A10.1 10.1 0 0 1 91.4 34A9.7 9.7 0 0 1 96 52V120Z'};
+  const FRAMES={ogive:'M2 120V54C2 30 26 18 50 2C74 18 98 30 98 54V120Z',outrepasse:'M2 120V54C2 30 26 18 50 2C74 18 98 30 98 54V120Z'};
   const frame=st=>{ const d=FRAMES[st]; if(!d) return '';
     const m=`url('data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120' preserveAspectRatio='none'><path d='${d}'/></svg>`).replace(/'/g,'%27')}')`;
     return {mask:m,svg:`<svg class="ct-fr" viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden="true"><path d="${d}"/><path class="in" d="${d}" transform="translate(50 63) scale(.9) translate(-50 -63)"/></svg>`}; };

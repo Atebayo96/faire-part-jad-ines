@@ -54,8 +54,10 @@
 /* la date se voit en premier (règle 3) : 22 px en 600, entre deux filets à la couleur du couple */
 .ct-dl{display:flex;align-items:center;gap:calc(12px*var(--k));width:100%;max-width:21em;margin-top:var(--g2)!important;
   font:600 max(18px,calc(22px*var(--k)))/1.2 "Cormorant Garamond",Georgia,serif;color:var(--tx);font-variant-numeric:lining-nums}
-.ct-dl span{white-space:nowrap}
-.ct-dl i{flex:1;min-width:10px;height:1px;background:var(--pal);opacity:.8}
+.ct-dl{justify-content:center}
+.ct-dl span{white-space:nowrap;flex:none}
+/* deux filets de même longueur, qui peuvent s'effacer : la date reste au centre même quand elle est large (Andalou) */
+.ct-dl i{flex:1 1 0;min-width:0;height:1px;background:var(--pal);opacity:.8}
 /* les moments : côte à côte comme sur un carton (deux colonnes séparées d'un filet), l'heure en grand chiffre */
 .ct-evs{display:grid;grid-template-columns:1fr;gap:var(--g2);width:100%;margin-top:var(--g3)}
 .ct-n2 .ct-evs{grid-template-columns:1fr 1fr;gap:0}
@@ -143,12 +145,11 @@
 .ct-fr path.in{stroke:var(--paper);stroke-width:1.2;opacity:.9}
 /* ogive (Mille et une nuits) : arc brisé, étoile à huit branches au bout des filets */
 .ct-s-ogive .ct-arch,.ct-s-outrepasse .ct-arch{border-radius:0;box-shadow:none;width:calc(132px*var(--k)*var(--ak,1));aspect-ratio:3/3.7;overflow:hidden;min-height:0}
-.ct-s-outrepasse .ct-arch{width:calc(150px*var(--k)*var(--ak,1));aspect-ratio:3/3.3}
 .ct-s-ogive .ct-arch,.ct-s-outrepasse .ct-arch{filter:drop-shadow(0 12px 16px rgba(40,25,10,.28))}
 .ct-s-ogive .ct-o{display:block;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat}
 .ct-s-ogive .ct-dl{gap:calc(8px*var(--k))}
-/* outrepasse (Andalou) : arc polylobé de l'Alhambra (le fer à cheval faisait un trou de serrure, pas validé), petits losanges, filets en pointillés comme un zellige */
+/* outrepasse (Andalou) : l'arc brisé de Mille et une nuits (polylobé et fer à cheval pas validés), petits losanges, filets en pointillés comme un zellige */
 .ct-s-outrepasse .ct-o{display:block;width:calc(8px*var(--k));height:calc(8px*var(--k));transform:rotate(45deg)}
 .ct-s-outrepasse .ct-dl{gap:calc(9px*var(--k))}
 .ct-s-outrepasse .ct-dl i{height:2px;opacity:1;background:radial-gradient(circle,var(--pal) 45%,transparent 55%) center/6px 2px repeat-x}
@@ -163,7 +164,8 @@
 .ct-s-medaillon .ct-evs{border-top:1px solid color-mix(in srgb,var(--pal) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--pal) 55%,transparent);padding:var(--g2) 0}
 /* bandeau (Douce France) : la peinture en haut, sur toute la largeur de la feuille, fondue dans le papier vers le bas,
    brin de feuillage au bout des filets */
-.ct-s-bandeau .ct-sheet{padding-top:0}
+/* la peinture touche le haut de la feuille : le contenu part du haut (centré, il laissait une bande de papier au-dessus) */
+.ct-s-bandeau .ct-sheet,.ct-fit.ct-s-bandeau .ct-sheet{padding-top:0;justify-content:flex-start}
 .ct-s-bandeau .ct-arch{width:calc(100% + 44px*var(--k));margin:0 calc(-22px*var(--k));aspect-ratio:auto;height:calc(210px*var(--k)*var(--ak,1));border-radius:0;box-shadow:none;
   -webkit-mask:linear-gradient(#000 55%,transparent);mask:linear-gradient(#000 55%,transparent)}
 .ct-s-bandeau .ct-arch img{object-position:center 72%}

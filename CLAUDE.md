@@ -656,9 +656,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     pose en bas de sa ligne, les heures restent sur la même ligne même si « La cérémonie » passe sur deux lignes.
     **Chaque thème a sa feuille** (« le choix du thème change juste la photo au milieu, c'est pas ouf ») : `STYLES` dans carte.js
     donne la forme du cadre de la peinture et l'ornement des filets de la date : arche ronde (Dolce Vita), arc brisé et étoile à
-    huit branches (Mille et une nuits), arc polylobé de l'Alhambra, losanges et pointillés (Andalou ; le fer à cheval, en
-    trou de serrure, n'a pas été validé), médaillon ovale et filets doubles (Old
-    money), peinture en bandeau fondue dans le papier et brin de feuillage (Douce France). **La feuille tient dans l'écran,
+    huit branches (Mille et une nuits), pour l'Andalou le même arc brisé, avec losanges et pointillés (le fer à cheval
+    puis l'arc polylobé n'ont pas été validés : « fais le cadre comme Mille et une nuits »), médaillon ovale et filets doubles (Old
+    money), peinture en bandeau fondue dans le papier et brin de feuillage (Douce France ; le bandeau touche le haut de la feuille,
+    le contenu part du haut). La date reste au centre entre deux filets de même longueur (`flex:1 1 0`), même large. **La feuille tient dans l'écran,
     signature comprise** : dans l'aperçu (carte comme page, `fit:true`, classe `ct-fit`) et en ligne, `fit()` réduit jusqu'à
     74 % si le contenu dépasse (le « Save The Oui » sortait de l'écran). **La peinture rapetisse d'abord** (`--ak`, jusqu'à 62 %, le
     sceau suit à moitié), le texte ensuite : l'arc de Mille et une nuits gardait sa hauteur (taille minimale automatique d'un
