@@ -668,6 +668,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     jardin à bande unie et une « salle » qui est un manoir français ; aucun des deux n'a `mains`, `verres`, `fete`, `cocktail`,
     `sortie`, `prog`, `dress`, `info` (règles 32g, 32h). À repeindre selon la méthode de `scenes-fete.py` (une génération par
     image, composée pour le plein écran, posée en `cover`), **seulement avec l'accord chiffré de l'utilisateur**.
+    **Fait le 10 octobre 2026** (38 images accordées, ~5,70 €, `tools/nuits-andalou.py`) : 19 images par thème, la scène 1
+    peinte d'abord et prise comme référence des autres ; pour l'Andalou, la consigne interdit de recopier les vignettes sur
+    papier crème des anciennes références. Thèmes passés en `nocal`, `home='mains'`, `cover`, `pageImg`, `extra` (themes.js),
+    `IMGV=24`, `?v=18`. Retouches sans génération (`tools/retouche-nuits-andalou.py`) : « MAIRIE » écrit par Gemini dans le
+    ciel effacé, zones de texte assombries ou adoucies dans la peinture (henné et église du riad, mains et fête de l'Andalou) ;
+    les 38 passent `check_images.py`. Anciennes images gardées dans l'historique git.
 49. **Le compte à rebours se règle dans la liste des écrans** (« si je mets page dédiée elle se met au milieu, ça doit être
     paramétrable au moment des écrans ») : une ligne « Le compte à rebours » dans « Vos écrans, dans l'ordre », qui se range à
     l'endroit choisi : sous la date (accueil), **avant vos moments** (`page`), **après vos moments** (`apres`, nouveau), avec la

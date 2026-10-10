@@ -177,7 +177,15 @@ window.sceauDoorFit=function(root,box,wall,l,r){
 window.SCEAU_THEMES.nuits.compose=true; window.SCEAU_THEMES.alhambra.compose=true;
 // leurs lieux peints (img/lieux) : tous proposés, le thème n'impose pas la mosquée ; l'Andalou n'a pas d'église (-> mairie)
 window.SCEAU_THEMES.nuits.lieux=['mairie','eglise','mosquee','salle','jardin','plage'];
-window.SCEAU_THEMES.alhambra.lieux=['mairie','mosquee','salle','jardin','plage']; window.SCEAU_THEMES.alhambra.lieuAlt={eglise:'mairie'};
+window.SCEAU_THEMES.alhambra.lieux=['mairie','eglise','mosquee','salle','jardin','plage'];
+/* repeints le 10 octobre 2026 selon les règles de Dolce Vita (tools/nuits-andalou.py, 38 images accordées) : des peintures
+   entières composées pour le plein écran (cover), sans calques ; l'accueil s'ouvre sur les mains, la réponse sur les verres
+   (thé à la menthe, citronnade à la fleur d'oranger), chaque écran d'infos a sa scène, et la fête, le cocktail, la sortie
+   sont des décors de plus. L'Andalou est de jour (texte foncé), sauf sa fête du soir. */
+['nuits','alhambra'].forEach(k=>{ const t=window.SCEAU_THEMES[k]; t.nocal=true; t.home='mains'; t.extra=['fete','cocktail','sortie'];
+  t.cover=['1','2','3','4','mains','verres','fond','mairie','eglise','mosquee','salle','jardin','plage','fete','cocktail','sortie','prog','dress','info'];
+  t.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info',rsvp:'verres'}; });
+window.SCEAU_THEMES.alhambra.darkLieux=['fete'];
 window.SCEAU_BASMALA='﷽';
 window.SCEAU_BASMALA_LABEL='Bismillah ar-Rahman ar-Rahim';
 window.sceauEy=function(t){ t=t==null?'':String(t); return /^\s*(bismillah|bismillah\s+ar-?rahman\s+ar-?rahim|basmala)\s*$/i.test(t)?{ar:true,text:window.SCEAU_BASMALA}:{ar:false,text:t}; };
