@@ -96,7 +96,7 @@
   const isJ=n=>String(n).startsWith('j:'), jk=n=>String(n).slice(2);
   const hourOf=e=>{ const m=/T(\d{1,2})/.exec(e&&e.start||''); return m?+m[1]:12; };
   const dayKey=(k,day)=>day&&J&&(/^\d+$/.test(String(k))||k==='fond'||(J.lieux||[]).includes(k)||k===J.home||Object.values(J.pageImg||{}).includes(k))?'j:'+k:k;
-  const IMGV=23, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
+  const IMGV=24, img=n=>isJ(n)?`/img/hd/${T.jour}-${jk(n)}.webp?v=${IMGV}`:`/img/hd/${I.theme}-${n}.webp?v=${IMGV}`;
   // calques : pour les scènes qui en ont (build-site.py liste img/calques/<thème>-<n>.webp), le décor est le fond calme du
   // thème et le sujet détouré est posé ENTIER en bas de l'écran (plus de rognage selon le téléphone), avec un peu de profondeur
   const CAL=new Set(I.calques||[]), hasCal=n=>CAL.has(String(n)), fond=`/img/hd/${I.theme}-ciel.webp?v=${IMGV}`, cal=n=>`/img/calques/${I.theme}-${n}.webp?v=${IMGV}`;

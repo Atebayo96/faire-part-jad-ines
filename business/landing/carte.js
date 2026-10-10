@@ -10,7 +10,7 @@
 (function(){
   const TH=()=>window.SCEAU_THEMES||{};
   const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const IMGV=23;
+  const IMGV=24;
   const INK='#2b2621';
   // les trois papiers (carte.css, .ct-p-*) : leur teinte, et la plus sombre que prend le relief (pour mesurer l'encre)
   const PAPERS={coton:{c:'#f8f2e7',low:'#ddd3c3'},aquarelle:{c:'#f9f6f0',low:'#d8d3ca'},velin:{c:'#f7f0e2',low:'#e0d6c4'}};
