@@ -176,8 +176,9 @@ window.sceauDoorFit=function(root,box,wall,l,r){
    eux reviennent l'occasion (mariage, henné, sbouâ) et la basmala (règles 17, 35). Aucune image nouvelle. */
 window.SCEAU_THEMES.nuits.compose=true; window.SCEAU_THEMES.alhambra.compose=true;
 // leurs lieux peints (img/lieux) : tous proposés, le thème n'impose pas la mosquée ; l'Andalou n'a pas d'église (-> mairie)
-window.SCEAU_THEMES.nuits.lieux=['mairie','eglise','mosquee','salle','jardin','plage'];
-window.SCEAU_THEMES.alhambra.lieux=['mairie','eglise','mosquee','salle','jardin','plage'];
+/* pas d'église dans ces deux thèmes (« y'a pas d'église, y'a mairie et salle, ou henné à la maison », 10 octobre 2026) :
+   un moment prévu à l'église passe à la mairie ; les images d'église peintes ce jour-là restent dans img/ sans être proposées */
+['nuits','alhambra'].forEach(k=>{ const t=window.SCEAU_THEMES[k]; t.lieux=['mairie','salle','mosquee','jardin','plage']; t.lieuAlt={eglise:'mairie'}; });
 /* repeints le 10 octobre 2026 selon les règles de Dolce Vita (tools/nuits-andalou.py, 38 images accordées) : des peintures
    entières composées pour le plein écran (cover), sans calques ; l'accueil s'ouvre sur les mains, la réponse sur les verres
    (thé à la menthe, citronnade à la fleur d'oranger), chaque écran d'infos a sa scène, et la fête, le cocktail, la sortie

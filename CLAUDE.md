@@ -674,6 +674,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `IMGV=24`, `?v=18`. Retouches sans génération (`tools/retouche-nuits-andalou.py`) : « MAIRIE » écrit par Gemini dans le
     ciel effacé, zones de texte assombries ou adoucies dans la peinture (henné et église du riad, mains et fête de l'Andalou) ;
     les 38 passent `check_images.py`. Anciennes images gardées dans l'historique git.
+    **Pas d'église dans ces deux thèmes** (« y'a pas d'église, y'a mairie et salle, ou henné à la maison ») : `lieux` sans
+    `eglise`, `lieuAlt {eglise:'mairie'}` ; les images d'église restent dans img/ sans être proposées. **Une image de faire-part
+    n'a pas à représenter un vrai lieu** (« ça peut être symbolique, illustratif, simple ») : jamais d'invraisemblance (des
+    tables posées au bord d'un bassin, « où tu vois un domaine qui ressemble à ça ») ; dans le doute, un gros plan symbolique
+    (une table dressée, des lanternes, un plateau de henné) plutôt qu'un lieu inventé.
 49. **Le compte à rebours se règle dans la liste des écrans** (« si je mets page dédiée elle se met au milieu, ça doit être
     paramétrable au moment des écrans ») : une ligne « Le compte à rebours » dans « Vos écrans, dans l'ordre », qui se range à
     l'endroit choisi : sous la date (accueil), **avant vos moments** (`page`), **après vos moments** (`apres`, nouveau), avec la
