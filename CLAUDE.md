@@ -651,7 +651,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     hauteur de la fenêtre) : en ligne et dans l'aperçu, la feuille a la hauteur du conteneur, le contenu est centré et grandit
     jusqu'à 118 % s'il reste de la place (`fit()`), la signature en bas. **Y aller / Agenda** : un rond avec l'icône et le mot
     en petit dessous (deux pastilles avec le mot passaient l'une sous l'autre). Pas de coupure « 13 / mai » (espace insécable)
-    ni « Saint- / Paul » (`text-wrap: balance`).
+    ni « Saint- / Paul » (`text-wrap: balance`). **Les moments côte à côte sont alignés** (« c'est pas aligné les dates ») : chaque
+    colonne a les mêmes cases dans le même ordre et partage les lignes de la grille (`subgrid`, `--slots`) ; le chapeau se
+    pose en bas de sa ligne, les heures restent sur la même ligne même si « La cérémonie » passe sur deux lignes.
 
 ## Méthode
 

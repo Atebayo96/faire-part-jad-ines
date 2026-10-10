@@ -77,8 +77,11 @@
     const live=!!o.live;
     const ev=e=>{ const d=at(e.start), where=[e.place,e.address].find(x=>x&&x!==e.title);
       const lk=live?`<p class="ct-lk">${e.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener" aria-label="${esc(L.route)}">${ic.pin}<span>${L.route}</span></a>`:''}<button type="button" data-cal="${esc(e.id)}" aria-label="${esc(L.cal)}">${ic.cal}<span>${L.cal}</span></button></p>`:'';
+      // toujours les mêmes cases, dans le même ordre (vides au besoin) : les colonnes partagent les lignes de la grille
+      // (subgrid, carte.css), chapeaux, heures et lieux restent alignés d'un moment à l'autre (« c'est pas aligné »)
       return `<div class="ct-ev"><p class="ct-ey">${esc(e.eyebrow||'')}</p>${days.size>1?`<p class="ct-wd">${esc(day(d,L))}</p>`:''}<p class="ct-hr">${esc(hour(d,L))}</p>`+
-        `${e.title?`<p class="ct-pl">${esc(e.title)}</p>`:''}${where?`<p class="ct-ad">${esc(where)}</p>`:''}${lk}</div>`; };
+        `<p class="ct-pl">${esc(e.title||'')}</p><p class="ct-ad">${esc(where||'')}</p>${lk}</div>`; };
+    const slots=4+(days.size>1?1:0)+(live?1:0);
     const dl=R.deadline?day(at(R.deadline+'T12:00'),L).replace(/^\S+\s/,''):'';
     const wa=String(R.whatsapp||'').trim();
     let rs;
@@ -96,7 +99,7 @@
         `<h1 class="ct-nm" style="font-family:${esc(ff)};font-style:${it?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};--nk:${nmSz}">${solo?esc(n1):`${esc(n1)} <i>&amp;</i> ${esc(n2)}`}</h1>`+
         `<p class="ct-tx">${esc(inv.intro&&inv.intro.text||L.joy)}</p>`+
         `<p class="ct-dl"><i></i><span>${esc(inv.intro&&inv.intro.dateText||day(main,L,true))}</span><i></i></p>`+
-        `<div class="ct-evs">${evs.map(ev).join('')}</div>`+
+        `<div class="ct-evs" style="--slots:${slots}">${evs.map(ev).join('')}</div>`+
         prog+dress+rs+
         `<p class="ct-made">${L.made}</p>`+
       `</div></div>`;

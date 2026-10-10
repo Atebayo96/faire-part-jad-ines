@@ -121,3 +121,12 @@
 .ct .ct-lk svg{width:40px;height:40px;padding:10px;border-radius:50%;border:1px solid color-mix(in srgb,var(--pal) 55%,transparent);background:rgba(255,255,255,.6);box-shadow:0 4px 10px -6px rgba(60,40,10,.35)}
 .ct .ct-lk span{position:static!important;width:auto!important;height:auto!important;overflow:visible!important;clip:auto!important}
 .ct .ct-lk a:active svg,.ct .ct-lk button:active svg{transform:scale(.94)}
+
+/* plusieurs moments côte à côte : une grille commune (subgrid) ; le chapeau se pose en bas de sa ligne, juste au-dessus
+   de l'heure, même s'il passe sur deux lignes dans une colonne étroite : les heures restent sur la même ligne */
+.ct-n2 .ct-evs,.ct-n3 .ct-evs{grid-template-rows:repeat(var(--slots),auto);row-gap:calc(4px*var(--k))}
+.ct-n2 .ct-ev,.ct-n3 .ct-ev{display:grid;grid-row:span var(--slots);grid-template-rows:subgrid;justify-items:center;gap:0}
+.ct-n2 .ct-ev>.ct-ey,.ct-n3 .ct-ev>.ct-ey{align-self:end;letter-spacing:.16em}
+.ct-ev>.ct-pl,.ct-ev>.ct-ad{align-self:start}
+.ct-ev>p:empty{display:none}
+.ct-n2 .ct-ev>p:empty,.ct-n3 .ct-ev>p:empty{display:block}
