@@ -182,6 +182,31 @@ export default {
   "gifts": [],
   "giftLabels": {}
  },
+ "carte-camille-antoine": {
+  "demo": true,
+  "couple": "Camille & Antoine",
+  "date": "2027-07-03T14:00:00+00:00",
+  "events": [
+   "e0",
+   "e1"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "e1",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
  "chiara-lucas": {
   "demo": true,
   "couple": "Chiara & Lucas",
@@ -886,6 +911,35 @@ export default {
    "Végétarien"
   ],
   "rsvpQuestion": "Un souhait pour les mariés ?",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "page-emma-louis": {
+  "demo": true,
+  "couple": "Emma & Louis",
+  "date": "2027-06-12T13:00:00+00:00",
+  "events": [
+   "e0",
+   "e1"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "e1",
+    "label": "La fête"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [
+   "Poisson",
+   "Viande",
+   "Végétarien"
+  ],
+  "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
  },

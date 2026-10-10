@@ -1,12 +1,17 @@
   /* la vitrine est en quatre pages (accueil, /modeles/, /formules/, /creer/) qui partagent ce script : chaque bloc
      ne tourne que si sa page a les éléments. Les anciennes ancres de la page unique renvoient vers la bonne page. */
   if(location.pathname==='/'&&location.hash){ const H={'#prix':'/formules/','#formules':'/formules/','#inclus':'/formules/','#faq':'/questions/','#pourquoi':'/formules/#pourquoi','#commencer':'/contact/','#composer':'/creer/','#modeles':'/modeles/','#continu':'/modeles/','#demos':'/modeles/'}; if(H[location.hash]) location.replace(H[location.hash]); }
-  const PLANS={essentiel:{name:'Essentiel',price:'99 €'},signature:{name:'Signature',price:'229 €'},couture:{name:'Couture',price:'dès 590 €'}};
+  /* Carte (29 €) et Page unique (59 €, ouverture +10 €, bouton Répondre +20 €), 10 octobre 2026 : tout le faire-part sur une
+     seule feuille, comme un faire-part papier (carte.js) ; la carte est cette feuille en image et en PDF. Le prix de la page
+     unique suit ses options (PLANS.page.price est réécrit par paint()). */
+  const PLANS={carte:{name:'Carte',price:'29 €'},page:{name:'Page unique',price:'59 €'},essentiel:{name:'Essentiel',price:'99 €'},signature:{name:'Signature',price:'229 €'},couture:{name:'Couture',price:'dès 590 €'}};
+  // formules en libre-service : composées dans le configurateur, en ligne (ou à télécharger) dès le paiement
+  const SELF=['carte','page','essentiel'], ONE=p=>p==='carte'||p==='page';
   // bouton de formule : sur /creer/, la commande Stripe s'ouvre (formule payable en ligne) ; ailleurs, le lien mène à /creer/?plan=…
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',e=>{ const sel=document.getElementById('planSel'); if(sel) sel.value=a.dataset.plan;
     // Essentiel en libre-service (api/commande.js) : le faire-part composé est publié dès le paiement ; sinon, lien de paiement Stripe
     if(window.SCEAU_EDIT) return;
-    const self=a.dataset.plan==='essentiel'&&window.SCEAU_AUTO&&window.SCEAU_COMPOSE;
+    const self=SELF.includes(a.dataset.plan)&&window.SCEAU_AUTO&&window.SCEAU_COMPOSE;
     const pay=(window.SCEAU_PAY||{})[a.dataset.plan]; if((self||pay)&&openOrder){ e.preventDefault(); openOrder(a.dataset.plan,self?null:pay); } }));
 
   let openOrder=null;
@@ -19,7 +24,7 @@
   /* tant que le paiement en ligne n'est pas branché (ni clé Stripe, ni lien de paiement), le bouton « Commander » mène au
      formulaire de contact : on le dit sous le bouton, au lieu de laisser croire qu'il ouvre le paiement */
   function payNote(){ const go=document.getElementById('cGo'); if(!go||window.SCEAU_EDIT) return; let n=document.getElementById('cPayNote');
-    const plan=go.dataset.plan, open=(plan==='essentiel'&&window.SCEAU_AUTO)||!!(window.SCEAU_PAY||{})[plan]||plan==='couture';
+    const plan=go.dataset.plan, open=(SELF.includes(plan)&&window.SCEAU_AUTO)||!!(window.SCEAU_PAY||{})[plan]||plan==='couture';
     if(!n){ n=document.createElement('p'); n.id='cPayNote'; go.parentNode.appendChild(n); }
     n.textContent=open?'':'Le paiement en ligne ouvre très bientôt. En attendant, ce bouton vous mène à notre formulaire avec votre composition : on vous répond sous 24 h.';
     n.hidden=open; }
@@ -28,12 +33,13 @@
   openOrder=function(plan,link){
     ordPlan=plan; ordLink=link; const P=PLANS[plan], self=!link;
     $o('ordT').textContent=`${P.name} · ${P.price}`;
-    const ch=choicesText(); $o('ordSub').textContent=self?'Votre faire-part, tel que vous le voyez dans l’aperçu, est en ligne dès votre paiement, avec votre tableau de bord. Vous pourrez modifier textes, lieux et horaires quand vous voulez.':ch?'Vos choix dans l’essai : '+ch+'. Tout reste modifiable ensuite.':'Vous choisirez le thème, les couleurs et les écrans avec nous juste après.';
+    const reply=!!(window.SCEAU_COMPOSE&&window.SCEAU_COMPOSE.opts().reply);
+    const ch=choicesText(); $o('ordSub').textContent=self&&plan==='carte'?'Votre faire-part, tel que vous le voyez dans l’aperçu, se télécharge dès votre paiement : l’image à envoyer sur WhatsApp et le PDF à imprimer.':self&&plan==='page'?`Votre page, telle que vous la voyez dans l’aperçu, est en ligne dès votre paiement${reply?', avec votre tableau de bord des réponses':''}. Vous pourrez modifier textes et horaires quand vous voulez.`:self?'Votre faire-part, tel que vous le voyez dans l’aperçu, est en ligne dès votre paiement, avec votre tableau de bord. Vous pourrez modifier textes, lieux et horaires quand vous voulez.':ch?'Vos choix dans l’essai : '+ch+'. Tout reste modifiable ensuite.':'Vous choisirez le thème, les couleurs et les écrans avec nous juste après.';
     // libre-service : prénoms et date viennent du configurateur
     $o('oName').hidden=$o('oDate').hidden=self;
-    $o('oWaiverT').textContent=self?'Je demande que mon faire-part soit publié dès mon paiement, et je reconnais perdre mon droit de rétractation dès sa publication (article L221-28 du Code de la consommation).':'Je demande que la création de mon faire-part commence dès mon paiement, et je reconnais perdre mon droit de rétractation dès ce commencement (article L221-28 du Code de la consommation).';
+    $o('oWaiverT').textContent=self&&plan==='carte'?'Je demande que mon faire-part soit mis à ma disposition dès mon paiement, et je reconnais perdre mon droit de rétractation dès ce moment (article L221-28 du Code de la consommation).':self?'Je demande que mon faire-part soit publié dès mon paiement, et je reconnais perdre mon droit de rétractation dès sa publication (article L221-28 du Code de la consommation).':'Je demande que la création de mon faire-part commence dès mon paiement, et je reconnais perdre mon droit de rétractation dès ce commencement (article L221-28 du Code de la consommation).';
     $o('oPay').textContent=`Payer ${P.price} avec Stripe`;
-    const promo=(window.SCEAU_PAY||{}).promo; $o('ordNote').textContent=(promo?`Offre de lancement : saisissez le code ${promo} sur la page de paiement. `:'')+(self?'Paiement sécurisé par Stripe. Juste après, vous voyez le lien de votre faire-part et votre tableau de bord ; vous les recevez aussi par e-mail.':'Paiement sécurisé par Stripe. Vous recevez votre reçu par e-mail, puis nous vous écrivons pour recueillir vos lieux, horaires et textes.');
+    const promo=(window.SCEAU_PAY||{}).promo; $o('ordNote').textContent=(promo?`Offre de lancement : saisissez le code ${promo} sur la page de paiement. `:'')+(self&&plan==='carte'?'Paiement sécurisé par Stripe. Juste après, vous téléchargez votre faire-part ; le lien pour le retélécharger vous est aussi envoyé par e-mail.':self?'Paiement sécurisé par Stripe. Juste après, vous voyez le lien de votre faire-part'+(plan==='page'&&!reply?'':' et votre tableau de bord')+' ; vous les recevez aussi par e-mail.':'Paiement sécurisé par Stripe. Vous recevez votre reçu par e-mail, puis nous vous écrivons pour recueillir vos lieux, horaires et textes.');
     if(!$o('oName').value&&$o('fNames')&&$o('fNames').value) $o('oName').value=$o('fNames').value;
     ord.hidden=false; document.body.style.overflow='hidden'; setTimeout(()=>$o('oEmail').focus(),50);
   };
@@ -48,11 +54,11 @@
     if(!$o('oWaiver').checked) return show('Cochez la case pour que nous puissions commencer la création dès votre paiement.');
     err.hidden=true; const btn=$o('oPay'); btn.disabled=true; btn.textContent='Ouverture du paiement…';
     if(!ordLink){ // Essentiel en libre-service : la fiche du faire-part part avec la commande, Stripe Checkout s'ouvre
-      try{ const r=await fetch('/api/commande',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,cgv:true,waiver:true,consent:true,fiche:window.SCEAU_COMPOSE.fiche(),config:window.SCEAU_COMPOSE.config()})});
+      try{ const r=await fetch('/api/commande',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,cgv:true,waiver:true,consent:true,plan:ordPlan,options:window.SCEAU_COMPOSE.opts(),fiche:window.SCEAU_COMPOSE.fiche(),config:window.SCEAU_COMPOSE.config()})});
         const j=await r.json().catch(()=>({})); if(!r.ok||!j.url) throw new Error(j.error||r.status);
         location.href=j.url; }
       catch(x){ btn.disabled=false; btn.textContent=`Payer ${PLANS[ordPlan].price} avec Stripe`;
-        show(String(x.message)==='plan'?'L’Essentiel comprend 2 événements : retirez-en un, ou passez en Signature.':'Le paiement n’a pas pu s’ouvrir. Réessayez dans un instant, ou écrivez-nous.'); }
+        show(String(x.message)==='plan'?(ONE(ordPlan)?'La carte et la page unique comprennent 3 moments : retirez-en un, ou passez en Essentiel.':'L’Essentiel comprend 2 événements : retirez-en un, ou passez en Signature.'):'Le paiement n’a pas pu s’ouvrir. Réessayez dans un instant, ou écrivez-nous.'); }
       return; }
     const ref='sc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
     const v=id=>($o(id)||{}).value||'';
@@ -224,7 +230,11 @@
   const CK=Object.keys(THEMES).filter(k=>THEMES[k].compose&&!THEMES[k].pending);
   const OCC_ON=CK.some(k=>THEMES[k].family==='nuits')?OCCS:OCCS.filter(o=>o.id==='mariage');
   const C={occ:OCC_ON.some(o=>o.id===urlOcc)?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:CK[0],fmt:'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
-    ev:null}; C.ev=OCC[C.occ].ev();
+    reply:false,paper:'coton',ev:null}; C.ev=OCC[C.occ].ev();
+  // carte et page unique : ce qui tient sur la feuille (le mot des familles, le programme, le dress code), 3 moments au plus
+  const ONE_X=['parents','program','dress'], one=()=>ONE(C.plan);
+  // prix de la page unique : 59 €, + 10 € avec l'ouverture, + 20 € avec le bouton Répondre et le tableau de bord
+  const pagePrice=()=>59+(C.op!=='none'?10:0)+(C.reply?20:0);
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
   const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église',fam:''},{id:'mosquee',name:'Mosquée',fam:'nuits'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'fete',name:'Soirée',x:1},{id:'cocktail',name:'Cocktail',x:1},{id:'sortie',name:'Sortie de cérémonie',x:1},{id:'photo',name:'Votre lieu',sig:true}];
   /* upsell sans frustration : les options de Signature (lieu peint d'après photo, 3e événement et plus, lien par famille,
@@ -240,7 +250,7 @@
   const xOn=()=>(C.fmt==='long'?[...LG_PARTS,...EXTRAS.filter(x=>LG_EXTRAS.includes(x.id))]:EXTRAS).filter(x=>C.x.has(x.id));
   const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
   const REVEALS=[{id:'non',name:'Aucune',sub:'La date s\'affiche'},{id:'scratch',name:'À gratter',sub:'Comme un ticket'},{id:'wheel',name:'La roue',sub:'Elle s\'arrête sur la date'},{id:'slot',name:'Jackpot',sub:'Jour, mois, année'}];
-  const OPENS=[{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'voile',name:'Voile',sub:'Il s\'ouvre par le milieu'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
+  const OPENS=[{id:'none',name:'Sans ouverture',sub:'La page s’affiche tout de suite'},{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'voile',name:'Voile',sub:'Il s\'ouvre par le milieu'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
   // thèmes qui ont leurs portiers (/img/open/<thème>-portier.webp) : ils apparaîtraient devant les grandes portes.
   // Vide pour l'instant : l'utilisateur les a trouvés « pas ouf », ils sont retirés (images conservées).
   const DOORMEN=[];
@@ -252,7 +262,7 @@
      téléphone), pour ne pas faire tourner huit animations en permanence ; les images suivent le thème (variables --sc, --op, --seal, --pc posées par paint) */
   const OV={env:'<i class="sc"></i><i class="eb"><i class="ein"><i class="ebd"></i><i class="ef"><img src="/img/open/env-flap.webp" alt=""><i class="es"></i></i></i></i>',cur:'<i class="sc"></i><i class="cu"></i>',
     voile:'<i class="sc"></i><i class="vl"></i><i class="vr"></i>',door:'<i class="sc"></i><i class="dl"></i><i class="dr"></i><i class="ow"></i><i class="fl"></i>',
-    non:'<i class="sc"></i><em class="dt">28 · 08</em>',scratch:'<i class="sc"></i><span class="rvm"></span>',wheel:'<i class="sc"></i><span class="rvm"></span>',slot:'<i class="sc"></i><span class="rvm"></span>'};
+    non:'<i class="sc"></i><em class="dt">28 · 08</em>',none:'<i class="pg1"><i></i></i>',scratch:'<i class="sc"></i><span class="rvm"></span>',wheel:'<i class="sc"></i><span class="rvm"></span>',slot:'<i class="sc"></i><span class="rvm"></span>'};
   /* ticket, roue et jackpot : le vrai jeu (reveal.js), aux couleurs choisies, réduit dans le petit téléphone ; « ceux-là
      c'est pas les mêmes, c'est dommage » : un dessin à part ne ressemblait pas au vrai. Au survol, la roue tourne, le
      ticket se gratte, les rouleaux défilent (vitrine.css) ; rien n'est cliquable dans la carte. */
@@ -291,9 +301,15 @@
     V.forEach(k=>{ const t=THEMES[k], b=document.createElement('button'); b.type='button'; b.className='fmtc'; b.dataset.id=k;
       b.innerHTML=`<span class="fv">${REEL.includes(k)?`<i class="tbp"><i class="tb scenes" style="background-image:url('/img/reel/scenes-${k}.webp')"></i></i>`:[1,2,4].map(n=>`<i style="background-image:url('/img/themes/${k}-${n}.webp?v=17')"></i>`).join('')}</span><b>${esc(t.amb||t.name)}</b><small>${esc(t.ambSub||'')}</small>`;
       b.onclick=()=>{ C.k=k; fixLieux(); paint(); }; box.appendChild(b); }); }
-  const PLANSUB={essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
+  const PLANSUB={carte:'L’image et le PDF, à envoyer et à imprimer',page:'Un lien, tout sur une page',essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
-  $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
+  $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true);
+  // le papier de la carte et de la page unique : trois vrais papiers en relief (carte.css), une vignette de chacun
+  [['coton','Coton','Épais, fait main'],['lin','Lin','Un tissage fin'],['verge','Vergé','Lignes de trame, classique']].forEach(([id,n,sub])=>{ const b=document.createElement('button'); b.type='button'; b.className='op-card'; b.dataset.id=id;
+    b.innerHTML=`<span class="pp ct ct-p-${id}" style="--paper:${(window.SceauCarte?SceauCarte.PAPERS[id].c:'#f8f2e7')}" aria-hidden="true"></span><b>${n}</b><small>${sub}</small>`; b.onclick=()=>{ C.paper=id; paint(); }; $('cPaper').appendChild(b); });
+  // options de la page unique : l'ouverture animée (+10 €) et le bouton Répondre avec le tableau de bord (+20 €)
+  [['op','L’ouverture animée','+ 10 €'],['reply','Le bouton « Répondre » et le tableau de bord','+ 20 €']].forEach(([id,n,pr])=>{ const b=document.createElement('button'); b.type='button'; b.className='op-card'; b.dataset.id=id;
+    b.innerHTML=`<b>${n}</b><small>${pr}</small>`; b.onclick=()=>{ if(id==='op') C.op=C.op==='none'?'env':'none'; else C.reply=!C.reply; paint(); if(id==='op'&&C.op!=='none') replayOp(500); }; $('cAddons').appendChild(b); }); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
   /* couleurs : celles du thème d'abord (pals dans themes.js, choisies par défaut), puis les dix couleurs communes.
      Elles colorent les boutons de l'aperçu, le sceau, la date à gratter, la roue et le jackpot. */
   const palsOf=k=>[...(THEMES[k].pals||[]).map((x,i)=>Object.assign({id:'t'+i,theme:true},x)),...PALS];
@@ -406,7 +422,7 @@
   const inpE=(pa,ph,max)=>`<input type="text" data-p="${pa}" maxlength="${max||80}" placeholder="${esc(ph||'')}">`;
   const areaE=pa=>`<textarea data-p="${pa}" rows="2" maxlength="240"></textarea>`;
   const ED={
-    rsvp:()=>`<p class="ed-lead">Sur le dernier écran, vos invités touchent <b>« Répondre »</b> et remplissent ce formulaire. Chaque réponse arrive dans votre tableau de bord.</p><div class="rv-mock" id="rsvpMock" aria-label="Le formulaire que voient vos invités"></div><p class="ed-sub">Réglez-le</p>${fldE('Les menus à choisir (séparés par des virgules ; vide s’il n’y a pas de choix)',inpE('rsvp.menu','Poisson, Viande, Végétarien',120))}${fldE('Une question à leur poser (facultatif)',inpE('rsvp.question','Une chanson qui vous fera danser ?',80))}${fldE('Votre WhatsApp, pour ceux qui préfèrent vous écrire (facultatif)',`<input type="tel" data-p="rsvp.whatsapp" maxlength="20" placeholder="+33 6 12 34 56 78" autocomplete="tel">`)}`,
+    rsvp:()=>one()&&!(C.plan==='page'&&C.reply)?`<p class="ed-lead">En bas de votre ${C.plan==='carte'?'carte':'page'} : « Réponse souhaitée avant le … », et votre numéro si vous le donnez. Vos invités vous répondent directement.</p>${fldE('Votre numéro (facultatif)',`<input type="tel" data-p="rsvp.whatsapp" maxlength="20" placeholder="06 12 34 56 78" autocomplete="tel">`)}${C.plan==='page'?'<button type="button" class="ed-add" data-reply>+ Le bouton « Répondre » et le tableau de bord · 20 €</button>':''}`:`<p class="ed-lead">Sur le dernier écran, vos invités touchent <b>« Répondre »</b> et remplissent ce formulaire. Chaque réponse arrive dans votre tableau de bord.</p><div class="rv-mock" id="rsvpMock" aria-label="Le formulaire que voient vos invités"></div><p class="ed-sub">Réglez-le</p>${fldE('Les menus à choisir (séparés par des virgules ; vide s’il n’y a pas de choix)',inpE('rsvp.menu','Poisson, Viande, Végétarien',120))}${fldE('Une question à leur poser (facultatif)',inpE('rsvp.question','Une chanson qui vous fera danser ?',80))}${fldE('Votre WhatsApp, pour ceux qui préfèrent vous écrire (facultatif)',`<input type="tel" data-p="rsvp.whatsapp" maxlength="20" placeholder="+33 6 12 34 56 78" autocomplete="tel">`)}`,
     photos:()=>`${fldE('Le lien de votre album partagé (Google Photos, iCloud…)','<input type="url" data-p="photos.url" maxlength="200" placeholder="https://…">')}<p class="ed-n">Vos invités y déposent leurs photos de la journée. Vous pourrez ajouter le lien plus tard.</p>`,
     table:()=>`<p class="ed-n">Avec un lien par famille, chaque famille voit sa table sur son faire-part. Vous nous donnez le plan de table après la commande.</p>`,
     parents:()=>`<div class="ed-row">${fldE('Première famille',inpE('parents.n1','Famille Alaoui',40))}${fldE('Seconde famille (facultatif)',inpE('parents.n2','Famille Haddad',40))}</div>${fldE('Leur phrase',areaE('parents.text'))}`,
@@ -428,10 +444,11 @@
   const setP=(pa,v)=>{ const ks=pa.split('.'), last=ks.pop(); ks.reduce((o,k)=>o[k],C.data)[last]=v; };
   const edTitle=id=>id==='gifts'?giftName():id==='rsvp'?'':((LG_PARTS.find(x=>x.id===id)||EXTRAS.find(x=>x.id===id)||{}).name||'');
   // un cadre ne se reconstruit que si ses parties changent (les champs gardent le focus pendant la frappe)
-  function edBox(host,ids){ if(!host) return; const key=ids.join(',')+'|'+C.occ+'|'+C.data.story.length+'|'+C.data.stay.length+'|'+C.data.program.length+'|'+C.data.faq.length+'|'+C.data.gifts.mode+'|'+C.data.gifts.items.length; if(host.dataset.key===key) return; host.dataset.key=key;
+  function edBox(host,ids){ if(!host) return; const key=ids.join(',')+'|'+C.plan+C.reply+'|'+C.occ+'|'+C.data.story.length+'|'+C.data.stay.length+'|'+C.data.program.length+'|'+C.data.faq.length+'|'+C.data.gifts.mode+'|'+C.data.gifts.items.length; if(host.dataset.key===key) return; host.dataset.key=key;
     host.innerHTML=ids.map(id=>`<div class="ed" data-ed="${id}"><b class="ed-t">${esc(edTitle(id))}</b>${ED[id]()}</div>`).join('');
     host.querySelectorAll('[data-p]').forEach(el=>{ const v=getP(el.dataset.p); el.value=v==null?'':v; el.addEventListener('input',()=>{ setP(el.dataset.p,el.value); paint(); }); });
     const NEW={story:()=>({when:'',title:'',text:''}),stay:()=>({icon:'info',title:'',text:''}),program:()=>({time:'',title:''}),faq:()=>({q:'',a:''}),'gifts.items':()=>({name:'',price:''})};
+    host.querySelectorAll('[data-reply]').forEach(b=>b.onclick=()=>{ C.reply=true; paint(); });
     host.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ const k=b.dataset.add; getP(k).push(NEW[k]()); paint(); });
     host.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ const pa=b.dataset.rm, j=pa.lastIndexOf('.'); getP(pa.slice(0,j)).splice(+pa.slice(j+1),1); paint(); });
     host.querySelectorAll('[data-gmode]').forEach(b=>b.onclick=()=>{ const g=C.data.gifts, was=GIFT_TX[g.mode]; g.mode=b.dataset.gmode;
@@ -445,7 +462,7 @@
       (r.whatsapp?`<span class="rm-wa">ou répondre sur WhatsApp</span>`:''); }
   function paintEd(long){
     $('cStory').querySelectorAll('li.part').forEach(l=>edBox(l.querySelector('.eds'),long?[...l.querySelectorAll('[data-x]')].map(b=>b.dataset.x).filter(id=>C.x.has(id)&&ED[id]&&!(id==='story'&&C.occ==='sbou3')):[]));
-    $('cStory').querySelectorAll('li.xs').forEach(l=>{ const id=l.dataset.xs, on=!long&&C.x.has(id)&&!(id==='story'&&C.occ==='sbou3');
+    $('cStory').querySelectorAll('li.xs').forEach(l=>{ const id=l.dataset.xs, on=!long&&C.x.has(id)&&!(id==='story'&&C.occ==='sbou3')&&(!one()||ONE_X.includes(id));
       if(l.hidden===on) l.hidden=!on; if(on) edBox(l.querySelector('.eds'),ED[id]?[id]:[]); else delete l.querySelector('.eds').dataset.key; });
     // la réponse se règle toujours (menus, question, WhatsApp), dans les deux formats
     edBox($('cStory').querySelector('.rsvp .eds'),['rsvp']); rsvpMock();
@@ -524,16 +541,20 @@
   { const sc=$('cpScroll'); if(sc){ let acc=0, t0=0, busy=0, y0=null;
     const go=d=>{ const now=Date.now(); if(now<busy) return; const h=sc.clientHeight, tops=[...sc.querySelectorAll('.pv-sc')].map(x=>x.offsetTop), st=sc.scrollTop;
       const cur=tops.reduce((a,t,i)=>t<=st+4?i:a,0), to=tops[Math.max(0,Math.min(tops.length-1,cur+d))]; if(to==null||Math.abs(to-st)<2) return; busy=now+600; sc.scrollTo({top:to,behavior:'smooth'}); };
-    sc.addEventListener('wheel',e=>{ e.preventDefault(); const now=Date.now(); if(now-t0>260) acc=0; t0=now; acc+=e.deltaY; if(Math.abs(acc)>=40){ go(acc>0?1:-1); acc=0; } },{passive:false});
+    // la feuille unique défile librement (pas de pages)
+    sc.addEventListener('wheel',e=>{ if(sc.classList.contains('one')) return; e.preventDefault(); const now=Date.now(); if(now-t0>260) acc=0; t0=now; acc+=e.deltaY; if(Math.abs(acc)>=40){ go(acc>0?1:-1); acc=0; } },{passive:false});
     sc.addEventListener('touchstart',e=>{ y0=e.touches[0].clientY; },{passive:true});
-    sc.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
-    sc.addEventListener('touchend',e=>{ if(y0==null) return; const dy=y0-e.changedTouches[0].clientY; y0=null; if(Math.abs(dy)>30) go(dy>0?1:-1); },{passive:true}); } }
+    sc.addEventListener('touchmove',e=>{ if(!sc.classList.contains('one')) e.preventDefault(); },{passive:false});
+    sc.addEventListener('touchend',e=>{ if(y0==null||sc.classList.contains('one')) return; const dy=y0-e.changedTouches[0].clientY; y0=null; if(Math.abs(dy)>30) go(dy>0?1:-1); },{passive:true}); } }
   { const sc=$('cpScroll'); if(sc){ let tk=false; const pvVis=()=>{ const st=sc.scrollTop, h=sc.clientHeight||1; sc.querySelectorAll('.pv-sc').forEach(x=>{ const off=Math.abs(x.offsetTop-st)/h>.004; if(x._off!==off){ x._off=off; x.classList.toggle('off',off); } }); };
     // un swipe : le texte s'éteint et réapparaît, animé, sur la page d'arrivée (il ne glisse jamais, comme invite.js)
     sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; cpFade(); pvVis(); }); } },{passive:true}); } }
   // défilement libre, sans calage ni fondu des textes : comme le vrai faire-part (invite.js)
   function paint(){
     buildPal();
+    // passage à la carte ou à la page unique (et retour) : l'ouverture devient une option de la page, la carte n'en a pas
+    if(C._pl!==C.plan){ if(C.plan==='carte'||(C.plan==='page'&&!ONE(C._pl||''))) C.op='none'; else if(!one()&&C.op==='none') C.op='env'; if(C.plan==='carte') C.reply=false; C._pl=C.plan; }
+    PLANS.page.price=pagePrice()+' €';
     const t=THEMES[C.k], p=palsOf(C.k).find(x=>x.id===C.pal)||palsOf(C.k)[0], f=FONTS.find(x=>x.id===C.font);
     $('cOpts').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',C.x.has(b.dataset.id)));
     buildAmb();
@@ -543,11 +564,21 @@
     $('cPalName').textContent=p.name;
     const needs=sigNeeds(); if(needs.length&&C.plan==='essentiel'&&!C.planPicked) C.plan='signature';
     $('cPlan').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan));
+    { const b=$('cPlan').querySelector('[data-id="page"] b'); if(b) b.textContent=`Page unique · ${PLANS.page.price}`; }
+    // carte et page unique : pas de révélation, de compte à rebours ni d'options du scène par scène ; l'ouverture est une option de la page
+    $('fldAddons').hidden=C.plan!=='page'; $('cAddons').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id==='op'?C.op!=='none':C.reply));
+    $('cOpen').querySelector('[data-id="none"]').hidden=C.plan!=='page'; $('cOneNote').hidden=C.plan!=='carte'; $('cOpen').closest('.fld').hidden=C.plan==='carte'; $('cOpenHint').hidden=C.plan!=='page';
+    $('fldReveal').hidden=one(); $('fldPaper').hidden=!one(); $('cPaper').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.paper)); $('cCount').closest('.fld').hidden=one(); $('cOpts').closest('.fld').hidden=one();
+    $('cpOp').hidden=one()&&C.op==='none'; $('cpReplay').hidden=$('cpOp').hidden;
+    { const at=$('cpAtelier'); if(at) at.hidden=!(one()&&new URLSearchParams(location.search).has('atelier')); }
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
       ['cGo','cpGo'].forEach(id=>{ const a=$(id); if(!a) return; a.dataset.plan=C.plan; a.href='/contact/?plan='+C.plan+'&theme='+C.k+'&format='+C.fmt+'&occasion='+C.occ+'&names='+encodeURIComponent(whoTxt())+'&date='+encodeURIComponent($('cDate').value||''); a.textContent=window.SCEAU_EDIT?'Enregistrer les modifications':C.plan==='couture'?'Nous écrire · Couture':`Commander · ${P.name} ${P.price}`; }); }
     if(window.SCEAU_PAYNOTE) window.SCEAU_PAYNOTE();
     // « Ensuite » : l'Essentiel est en libre-service (en ligne dès le paiement) ; Signature et Couture passent par nous
-    { const nx=$('cNext'), li=a=>a.map((x,i)=>`<li><b>${i+1}</b><span>${x}</span></li>`).join(''); if(nx) nx.innerHTML=C.plan==='essentiel'&&window.SCEAU_AUTO
+    { const nx=$('cNext'), li=a=>a.map((x,i)=>`<li><b>${i+1}</b><span>${x}</span></li>`).join(''); if(nx) nx.innerHTML=one()
+      ?li(window.SCEAU_AUTO?['Vous payez, paiement sécurisé par Stripe.',C.plan==='carte'?'Votre carte, telle que dans l’aperçu, se télécharge tout de suite : l’image pour WhatsApp et le PDF à imprimer.':`Votre page, telle que dans l’aperçu, est en ligne tout de suite : vous recevez son lien${C.reply?' et votre tableau de bord':''}.`,C.plan==='carte'?'Le lien pour la retélécharger vous est aussi envoyé par e-mail.':'Un horaire change ? Vous le modifiez vous-même, le lien reste le même.']
+        :['Vous commandez.','On vous écrit sous 24 h pour vérifier vos textes, adresses et horaires.',C.plan==='carte'?'Vous recevez votre carte en image et en PDF sous 48 h.':'Votre lien est prêt sous 48 h.'])
+      :C.plan==='essentiel'&&window.SCEAU_AUTO
       ?li(['Vous payez, paiement sécurisé par Stripe.','Votre faire-part, tel que dans l’aperçu, est en ligne tout de suite : vous recevez son lien et votre tableau de bord.','Un horaire ou un texte change ? Vous le modifiez vous-même, le lien de vos invités reste le même.'])
       :li(['Vous commandez, paiement sécurisé par Stripe.','On vous écrit sous 24 h pour vos textes, adresses, horaires et photos. La musique se choisit à ce moment-là.',C.plan==='couture'?'On fixe le calendrier ensemble.':C.plan==='essentiel'?'Vous validez l’aperçu : votre lien est prêt sous 48 h.':'Vous validez l’aperçu : votre lien est prêt en 3 à 5 jours.']); }
     { const long=C.fmt==='long';
@@ -562,14 +593,20 @@
       paintEd(long);
       // les options qui sont des écrans de la suite scène par scène n'existent pas dans le tableau (elles y sont des parties, ci-dessus)
       // un écran déjà ajouté n'est plus proposé : il est dans la liste, avec son « Retirer »
-      $('cExtras').querySelectorAll('button').forEach(b=>{ const id=b.dataset.id; b.hidden=long||C.x.has(id)||(id==='story'&&C.occ==='sbou3'); });
+      $('cExtras').querySelectorAll('button').forEach(b=>{ const id=b.dataset.id; b.hidden=long||C.x.has(id)||(id==='story'&&C.occ==='sbou3')||(one()&&!ONE_X.includes(id)); });
+      // une seule feuille : pas de décor par moment, le contenu tient sur la page
+      $('cStory').classList.toggle('one',one());
+      if(one()){ $('wz2Title').textContent=C.plan==='carte'?'Votre carte':'Votre page'; $('wzNav3').textContent='Contenu';
+        $('wz2Sub').textContent='Tout tient sur une seule feuille, comme un faire-part papier : vos moments avec leur heure et leur lieu, et si vous voulez le mot des familles, le programme et le dress code.';
+        $('cStory').querySelector('.home').innerHTML='<b>En haut</b><span>La peinture du thème, le sceau, vos prénoms et la date</span>';
+        $('cStory').querySelector('.rsvp .rsvp-h').innerHTML=C.plan==='page'&&C.reply?'<b>Le bouton « Répondre »</b><span>en bas de la page · + 20 €</span>':'<b>La réponse</b><span>écrite en bas de la feuille</span>'; }
       // compte à rebours : pas de page dédiée dans le tableau (il est en haut ou à la fin) ; pas de révélation de la date
       if(long&&C.cd==='page'){ C.cd='fin'; $('cCount').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.cd)); }
       $('cCount').querySelector('[data-id="page"]').hidden=long;
     }
     // (les cartes d'ambiance sont bâties par buildAmb())
     $('cStory').classList.toggle('ch',!!isChain(C.k));
-    $('cStoryT').textContent=C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
+    $('cStoryT').textContent=one()?'Sur la feuille, de haut en bas':C.fmt==='long'?'Le tableau, de haut en bas':'Vos écrans, dans l’ordre';
     $('cStory').querySelectorAll('li.ev').forEach(l=>{ const e=C.ev[+l.dataset.i];
       // du jour au soir : les vignettes suivent l'heure de l'événement (lieu peint en plein jour avant 18 h, s'il existe)
       const Jt=THEMES[C.k].jour&&THEMES[THEMES[C.k].jour], day=Jt&&parseInt(e.time||'15',10)<18, kOf=id=>day&&(id==='fond'||(Jt.lieux||[]).includes(id))?THEMES[C.k].jour:C.k;
@@ -581,9 +618,9 @@
       // la grande vignette reprend le décor choisi, avec son nom
       const sel=l.querySelector('[data-lieu][aria-pressed="true"]'), pic=l.querySelector('[data-pick] span');
       if(sel&&pic){ pic.style.backgroundImage=sel.firstChild.style.backgroundImage; pic.dataset.n=(sel.querySelector('em')||{}).textContent||sel.textContent.replace('Signature','').trim(); } });
-    $('cAddEv').hidden=C.ev.length>=6||C.occ!=='mariage';
-    // les 2 premiers moments sont dans l'Essentiel, le 3e passe en Signature
-    $('cAddEv').classList.toggle('sig',C.ev.length>=2); $('cAddEv').querySelector('i').textContent=C.ev.length>=2?'Signature':'';
+    $('cAddEv').hidden=C.ev.length>=(one()?3:6)||C.occ!=='mariage';
+    // les 2 premiers moments sont dans l'Essentiel, le 3e passe en Signature (la carte et la page unique en ont 3)
+    const sig3=C.ev.length>=2&&!one(); $('cAddEv').classList.toggle('sig',sig3); $('cAddEv').querySelector('i').textContent=sig3?'Signature':'';
     $('cpTint').style.background=p.c;
     const n1=nm1(), n2=nm2(), solo=isSolo(), oneShot=C.occ!=='mariage';
     const ini=(n1[0]||'').toUpperCase()+(solo?'':(n2[0]||'').toUpperCase());
@@ -663,19 +700,21 @@
     xp('table',K4,isJ(K4)?'':m4,c=>hd(c,'Le jour J','Votre table')+`<div class="tx" style="color:${c.tx};position:relative;font-size:26px;margin-top:6px">La table des Roses</div><div class="tx" style="color:${c.tx};position:relative;font-size:13px">Chaque famille voit sa table sur son lien personnel.</div>`);
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML='<div class="cp-bgs" id="cpBgs" aria-hidden="true"></div>'+pages.join(''); sc.scrollTop=st; tick();
+    // carte et page unique : l'aperçu est la feuille elle-même (carte.js), exactement comme le faire-part publié
+    sc.classList.toggle('one',one()); if(one()&&window.SceauCarte){ sc.innerHTML=SceauCarte.html(oneInvite(),{live:C.plan==='page'}); sc.scrollTop=st; SceauCarte.fit(sc); if(document.fonts) document.fonts.ready.then(()=>SceauCarte.fit(sc)); }
     drawQr(sc);
     // les prénoms de l'accueil tiennent sur une ligne dans le petit téléphone (comme sur un vrai téléphone, où ils tiennent) :
     // à 40 px, « Emma & Louis » passait sur deux lignes en Amiri et poussait la phrase sur le décor
     { const nm=sc.querySelector('.pv-sc .nm'); if(nm&&!t.stack){ nm.style.whiteSpace='nowrap'; let fs=parseFloat(nm.style.fontSize)||base, w=sc.clientWidth*.86; while(nm.scrollWidth>w&&fs>base*.62){ fs-=1; nm.style.fontSize=fs+'px'; } } }
     // décors : un cadre par suite de pages qui partagent la même image (comme les « runs » du moteur), image collante dedans
     cpRuns=[]; [...sc.querySelectorAll('.pv-sc')].forEach((s,i)=>{ const r=cpRuns[cpRuns.length-1]; if(r&&r.img===s.dataset.img&&r.sub===(s.dataset.sub||'')) r.b=i; else cpRuns.push({img:s.dataset.img,sub:s.dataset.sub||'',a:i,b:i}); });
-    $('cpBgs').innerHTML=cpRuns.map(r=>r.sub?`<div class="cp-bg cal"><i><img class="sub" src="${esc(r.sub)}" alt=""></i></div>`:`<div class="cp-bg"><i style="background-image:url('${esc(r.img)}');--img:url('${esc(r.img)}')"></i></div>`).join('');
+    if($('cpBgs')) $('cpBgs').innerHTML=cpRuns.map(r=>r.sub?`<div class="cp-bg cal"><i><img class="sub" src="${esc(r.sub)}" alt=""></i></div>`:`<div class="cp-bg"><i style="background-image:url('${esc(r.img)}');--img:url('${esc(r.img)}')"></i></div>`).join('');
     // calques : le fond du thème est peint une fois derrière tout (comme .sc.cal dans invite.css)
     const anyCal=cpRuns.some(r=>r.sub); sc.classList.toggle('cal',anyCal); sc.style.backgroundImage=anyCal?`url('/img/lieux/${C.k}-ciel.webp')`:''; // le ciel nu (tools/ciel.py), pas le fond et son jardin
     cpLayout();
     // grand tableau : l'aperçu est le vrai faire-part (invite.js) construit avec vos choix, dans le téléphone
     // modèles en chaîne : l'aperçu est le vrai faire-part (invite.js) peint d'un seul tenant, avec vos textes
-    const viaEngine=C.fmt==='long'||isChain(C.k);
+    const viaEngine=!one()&&(C.fmt==='long'||isChain(C.k));
     sc.hidden=viaEngine; $('cpPhone').classList.toggle('lg-off',!viaEngine);
     if(isChain(C.k)) lgRender(chainInvite(t,p,f,n1,n2,ds),150); else if(C.fmt==='long') lgRender(lgInvite(t,p,f,n1,n2,ds),120);
     { const h=sc.querySelector('.cp-rvl'); if(h&&window.SceauReveal) SceauReveal.mount(h,{kind:rv,date:d,pal:p.c,light:t.light&&t.scenes[0][4]!=='dark',scope:h.parentNode}); }
@@ -684,12 +723,13 @@
     if($('fFormat')) $('fFormat').value=FMTS.find(f=>f.id===C.fmt).name;
     $('fEvents').value=C.ev.map((e,i)=>`${i+1}. ${e.name} ${hm(e.time)}, ${e.place}`+(t.chain?(e.about?` : « ${e.about} »`:'')+((e.photos||[]).length?` (${e.photos.length} photo${e.photos.length>1?'s':''} : ${(e.photos||[]).map(x=>x.id||'non envoyée').join(', ')})`:''):` (${evTxt(e).toLowerCase()})`)).join(' ; ');
     window.SCEAU_PHOTOS=C.ev.flatMap(e=>(e.photos||[]).map(x=>x.id).filter(Boolean));
-    const needTxt=needs.length?(C.plan==='essentiel'?` Essentiel ne comprend pas ${needs.join(', ')} : vous pourrez les retirer, ou passer en Signature.`:` Avec ${needs.join(', ')}, c'est la formule Signature.`):(C.plan==='essentiel'?' Tout est compris dans Essentiel.':'');
+    const needTxt=one()?' '+(C.plan==='carte'?'L’image (1080 × 1920) à envoyer sur WhatsApp et le PDF A5 à imprimer.':`Un lien vers votre page${C.op!=='none'?', avec son ouverture':''}${C.reply?', le bouton « Répondre » et votre tableau de bord':''}.`):needs.length?(C.plan==='essentiel'?` Essentiel ne comprend pas ${needs.join(', ')} : vous pourrez les retirer, ou passer en Signature.`:` Avec ${needs.join(', ')}, c'est la formule Signature.`):(C.plan==='essentiel'?' Tout est compris dans Essentiel.':'');
     $('cRecap').textContent=needTxt.trim()||(C.plan==='signature'?'Votre lieu peint d’après photo, un lien par famille, français et anglais.':'');
     // récapitulatif, ligne par ligne
-    const sum=[...(OCC_ON.length>1?[['Occasion',OCCS.find(o=>o.id===C.occ).name+(C.occ==='sbou3'?(C.sexe==='fils'?' · un garçon':' · une fille'):'')]]:[]),['Thème',t.name+(t.amb?' · '+t.amb:'')],['Vous',`${whoTxt()} · ${ds}`],[C.fmt==='long'?'Tableau':'Écrans',`${C.fmt==='long'?'Illustration':'Accueil'} → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',xOn().map(x=>x.name).join(', ')||'—'],['Ouverture',OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'&&C.fmt!=='long'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')]];
+    const sum=[...(OCC_ON.length>1?[['Occasion',OCCS.find(o=>o.id===C.occ).name+(C.occ==='sbou3'?(C.sexe==='fils'?' · un garçon':' · une fille'):'')]]:[]),['Thème',t.name+(t.amb?' · '+t.amb:'')],['Vous',`${whoTxt()} · ${ds}`],[C.fmt==='long'?'Tableau':'Écrans',`${C.fmt==='long'?'Illustration':'Accueil'} → ${C.ev.map((e,i)=>`${e.name||'Événement '+(i+1)}${e.place?' ('+e.place+')':''} · ${evTxt(e).toLowerCase()}`).join(' → ')} → Réponse`],['En plus',xOn().filter(x=>!one()||ONE_X.includes(x.id)).map(x=>x.name).join(', ')||'—'],['Ouverture',C.plan==='carte'?'Aucune : image et PDF':one()?(C.op==='none'?'Sans ouverture':OPENS.find(o=>o.id===C.op).name+' · + 10 €'):OPENS.find(o=>o.id===C.op).name+(C.rvl!=='non'&&C.fmt!=='long'?' · date '+REVEALS.find(o=>o.id===C.rvl).name.toLowerCase():'')],...(C.plan==='page'?[['Réponses',C.reply?'Bouton « Répondre » et tableau de bord · + 20 €':'Écrites en bas de la page (votre numéro)']]:[])];
+    if(one()) sum.splice(sum.findIndex(x=>x[0]==='Écrans'),1,['Sur la feuille',C.ev.map((e,i)=>`${e.name||'Moment '+(i+1)} ${hm(e.time)}${e.place?' ('+e.place+')':''}`).join(' · ')]);
     $('cSum').innerHTML=sum.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
-    { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b>${t.amb?' · '+esc(t.amb):''}<br>${esc(whoTxt())} · ${esc(ds)}<br>${C.ev.map(e=>esc(evTxt(e))).join(' → ')}${xOn().length?` · +${xOn().length}`:''}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
+    { const cs=$('cpSum'); if(cs) cs.innerHTML=`<b>${esc(t.name)}</b>${t.amb?' · '+esc(t.amb):''}<br>${esc(whoTxt())} · ${esc(ds)}<br>${one()?`${C.ev.length} moment${C.ev.length>1?'s':''} sur une feuille`:C.ev.map(e=>esc(evTxt(e))).join(' → ')+(xOn().length?` · +${xOn().length}`:'')}<br>${esc(PLANS[C.plan].name)} · ${esc(PLANS[C.plan].price)}`; } if($('fDate')) $('fDate').value=$('cDate').value;
   }
   ['cN1','cN2','cDate'].forEach(id=>$(id).addEventListener('input',paint));
   /* aperçu du grand tableau : une fiche de faire-part (comme business/invites/*.json) faite des choix du configurateur,
@@ -736,10 +776,15 @@
     if(inv.gifts&&inv.gifts.mode!=='liste') inv.gifts.url=C.data.gifts.url||undefined;
     if(C.x.has('photos')&&/^https?:\/\//.test(C.data.photos.url||'')) inv.photos={text:'Partagez vos plus belles photos de la journée dans notre album commun.',url:C.data.photos.url};
     return JSON.parse(JSON.stringify(inv)); }
+  // la fiche d'une carte ou d'une page unique : la même, sur une seule feuille ("format": "page", carte.js)
+  function oneInvite(){ const inv=realInvite(); inv.format='page'; inv.paper=C.paper; inv.reply=C.plan==='page'&&C.reply; if(C.plan==='carte') inv.opening='none';
+    ['story','infos','gifts','faq','photos'].forEach(k=>delete inv[k]); ['parents','dress'].forEach(k=>{ if(!C.x.has(k)) delete inv[k]; }); return inv; }
   // les choix du configurateur, pour le rouvrir tel quel (modification par les mariés)
-  const snapshot=()=>({occ:C.occ,sexe:C.sexe,k:C.k,fmt:C.fmt,pal:C.pal,font:C.font,op:C.op,cd:C.cd,rvl:C.rvl,x:[...C.x],
+  const snapshot=()=>({plan:C.plan,reply:C.reply,paper:C.paper,occ:C.occ,sexe:C.sexe,k:C.k,fmt:C.fmt,pal:C.pal,font:C.font,op:C.op,cd:C.cd,rvl:C.rvl,x:[...C.x],
     n1:$('cN1').value,n2:$('cN2').value,date:$('cDate').value,ev:C.ev.map(({photos,...e})=>e),data:C.data});
-  window.SCEAU_COMPOSE={fiche:realInvite,config:snapshot}; window.SCEAU_REPAINT=()=>paint();
+  window.SCEAU_COMPOSE={fiche:()=>one()?oneInvite():realInvite(),config:snapshot,opts:()=>({opening:C.op!=='none',reply:C.plan==='page'&&C.reply})};
+  // atelier (/creer/?atelier=1, pour nous) : l'image et le PDF d'une carte commandée avant que le paiement en ligne soit branché
+  { const at=$('cpAtelier'); if(at) at.addEventListener('click',e=>{ const b=e.target.closest('[data-dl]'); if(b) SceauCarte[b.dataset.dl](oneInvite()); }); } window.SCEAU_REPAINT=()=>paint();
   let lgKey='', lgT=null;
   // QR de la cagnotte dans l'aperçu (qrcode.js, chargé une fois, à la première cagnotte)
   let qrLib=null;
@@ -810,7 +855,7 @@
     if(slug&&key){ window.SCEAU_EDIT=true;
       fetch('/api/fiche?s='+encodeURIComponent(slug),{headers:{Authorization:'Bearer '+key}}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{
         const g=j.config||{}; if(!THEMES[g.k]) throw 0;
-        Object.assign(C,{occ:g.occ||'mariage',sexe:g.sexe||'fille',k:g.k,fmt:'scenes',pal:g.pal,font:g.font||'theme',op:g.op||'env',cd:g.cd||'fin',rvl:g.rvl||'non',x:new Set(g.x||[]),plan:j.plan||'essentiel',planPicked:true});
+        Object.assign(C,{occ:g.occ||'mariage',sexe:g.sexe||'fille',k:g.k,fmt:'scenes',pal:g.pal,font:g.font||'theme',op:g.op||'env',cd:g.cd||'fin',rvl:g.rvl||'non',x:new Set(g.x||[]),plan:j.plan||'essentiel',_pl:j.plan||'essentiel',reply:!!g.reply,paper:g.paper||'coton',planPicked:true});
         if(g.ev&&g.ev.length) C.ev=g.ev; if(g.data) Object.assign(C.data,g.data);
         $('cN1').value=g.n1||''; $('cN2').value=g.n2||''; if(g.date){ $('cDate').value=g.date; }
         // les cadres de réglage se reconstruisent avec les textes des mariés (sinon ils gardent ceux de l'exemple)

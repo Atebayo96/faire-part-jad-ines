@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   if (req.method === 'PUT') {
     const b = req.body || {};
     let inv;
-    try { inv = sanitize(b.fiche, f.plan); } catch (e) { return res.status(400).json({ error: e.message }); }
+    try { inv = sanitize(b.fiche, f.plan, f.options); } catch (e) { return res.status(400).json({ error: e.message }); }
     const config = JSON.stringify(b.config || {}).length <= 60000 ? b.config || {} : f.config;
     // l'historique des versions : on garde la précédente, au cas où
     await save(`fiches-avant/${slug}/${Date.now()}.json`, f);

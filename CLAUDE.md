@@ -628,6 +628,26 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Version principale : les faire-part qui défilent, sans ouverture. La variante où chaque carte s'ouvre au centre
     (`OUVERTURES=1`) est gardée pour plus tard : les portes ont plu, l'enveloppe moins.
 
+47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
+    offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un
+    seul écran, comme les vrais faire-part papier, avec notre touche »). Un seul dessin, `carte.js` + `carte.css`
+    (`SceauCarte.html`) : la peinture du thème (`T.home`, les mains) dans une **arche**, le sceau de cire posé dessus, les
+    prénoms dans la police du thème, la date, les moments côte à côte (heure en grand), le programme, le dress code, la
+    réponse. Il sert au faire-part en ligne (fiche `"format": "page"`, `PG` dans invite.js : une seule page qui défile
+    librement, pas de décor derrière), à l'aperçu du configurateur et à l'export : **la Carte est la page unique figée**,
+    image 1080 × 1920 et PDF A5 dessinés dans le navigateur (`html-to-image.js`, MIT, PDF écrit à la main), réduits (`--k`)
+    pour tout tenir. Options de la page unique : l'ouverture (`"opening": "none"` sans, + 10 €) et le bouton Répondre avec
+    le tableau de bord (`"reply": true`, + 20 €) ; prix calculé côté serveur (`priceOf`, `_fiche.js`), une fiche ne peut pas
+    demander plus que ce qui a été payé (`options` de la commande). 3 moments au plus. La Carte n'a pas de lien en ligne :
+    payée, elle se télécharge depuis la page Merci (`GET /api/commande` rend sa fiche) et par le lien envoyé par e-mail.
+    Avant le paiement en ligne, `/creer/?atelier=1` montre deux boutons Image / PDF pour livrer une carte à la main.
+    **Pas d'encadré** (« les encadrés rectangulaires, on a l'impression que c'est pas la full page ») : la feuille va jusqu'aux
+    bords. **Trois vrais papiers** (`"paper"` : `coton`, `lin`, `verge`), choisis à l'étape Détails : « pas juste du grain,
+    de la profondeur » : relief SVG éclairé en lumière rasante (`feDiffuseLighting`), multiplié sur la teinte du papier, plus
+    la lumière de la feuille ; aucune image générée. L'encre (couleur du couple) est assombrie jusqu'à 4,6:1 contre le
+    papier **le plus sombre** du relief (`PAPERS[…].low`). Démos : `page-emma-louis` (coton, ouverture, réponses) et
+    `carte-camille-antoine` (lin, sans ouverture), `"kind": "page"` pour rester hors des galeries.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

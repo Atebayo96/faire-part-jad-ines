@@ -47,12 +47,14 @@ export default async function handler(req, res) {
 <link rel="preload" as="image" href="/img/hd/${esc(inv.theme)}-1.webp">
 <link rel="stylesheet" href="/invite.css">
 <link rel="stylesheet" href="/reveal.css">
+<link rel="stylesheet" href="/carte.css">
 </head>
 <body>
 <noscript><p style="padding:24px;font-family:sans-serif">${esc(title)}. Activez JavaScript pour ouvrir le faire-part.</p></noscript>
 <script>window.INVITE=${data};</script>
 <script src="/themes.js"></script>
 <script src="/reveal.js"></script>
+<script src="/carte.js"></script>
 <script src="/invite.js"></script>
 </body>
 </html>

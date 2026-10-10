@@ -1,0 +1,46 @@
+{
+ "demo": true,
+ "kind": "page",
+ "format": "page",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "carte-camille-antoine",
+ "theme": "doucefrance",
+ "couple": [
+  "Camille",
+  "Antoine"
+ ],
+ "date": "2027-07-03T16:00",
+ "opening": "none",
+ "reply": false,
+ "palette": "#6f63a3",
+ "intro": {
+  "eyebrow": "Nous vous invitons"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "La cérémonie",
+   "title": "Église Saint-André",
+   "start": "2027-07-03T16:00",
+   "address": "Lourmarin, Luberon"
+  },
+  {
+   "id": "e1",
+   "eyebrow": "Le dîner",
+   "title": "Bastide des Lavandes",
+   "start": "2027-07-03T19:30",
+   "address": "Lourmarin, Luberon"
+  }
+ ],
+ "dress": {
+  "title": "Champêtre chic",
+  "text": "Tons clairs, chaussures confortables"
+ },
+ "rsvp": {
+  "deadline": "2027-06-01",
+  "whatsapp": "06 12 34 56 78"
+ },
+ "paper": "lin"
+}

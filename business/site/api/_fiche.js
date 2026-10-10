@@ -18,9 +18,16 @@ const tidy = o => JSON.parse(JSON.stringify(o));
 /* Ce que l'Essentiel comprend (page Formules) : 2 événements, les lieux déjà peints du thème, une langue.
    Le lieu peint d'après photo, le lien par famille et l'anglais sont en Signature : le configurateur bascule alors
    la formule, et l'API refuse une fiche Essentiel qui les demande. */
-export const LIMITS = { essentiel: { events: 2 } };
+export const LIMITS = { essentiel: { events: 2 }, page: { events: 3 }, carte: { events: 3 } };
 
-export function sanitize(raw, plan = 'essentiel') {
+/* Page unique (59 €) et Carte (29 €), 10 octobre 2026 : tout le faire-part sur une seule feuille (carte.js). La carte est
+   cette feuille en image et en PDF, sans lien en ligne. L'ouverture (+10 €) et le bouton Répondre avec le tableau de bord
+   (+20 €) sont des options de la page unique : opts dit ce qui a été payé, la fiche ne peut pas en demander davantage. */
+export const PAGE_PRICE = { carte: 2900, page: 5900, opening: 1000, reply: 2000 };
+export const ONE_PAGE = ['page', 'carte'];
+export const priceOf = (plan, opts = {}) => plan === 'carte' ? PAGE_PRICE.carte : plan === 'page' ? PAGE_PRICE.page + (opts.opening ? PAGE_PRICE.opening : 0) + (opts.reply ? PAGE_PRICE.reply : 0) : 9900;
+
+export function sanitize(raw, plan = 'essentiel', opts = {}) {
   const r = raw || {}, th = META.themes[r.theme];
   if (!th || !th.compose) throw new Error('theme');
   const couple = arr(r.couple, 2).map(x => clean(x, 40)).filter(Boolean);
@@ -43,11 +50,14 @@ export function sanitize(raw, plan = 'essentiel') {
   const first = evs.map(e => e.start).sort()[0];
   const P = r.parents, ST = r.story, DR = r.dress, PR = r.program, FQ = r.faq, GF = r.gifts, R = r.rsvp || {};
   const gmode = GF ? pick(GF.mode, ['liste', 'cagnotte', 'lien'], 'lien') : null;
+  const one = ONE_PAGE.includes(plan);
   return tidy({
+    format: one ? 'page' : undefined, reply: one ? plan === 'page' && !!opts.reply : undefined,
+    paper: one ? pick(r.paper, ['coton', 'lin', 'verge'], 'coton') : undefined,
     theme: r.theme, couple, date: first, tz: 'Europe/Paris', lang: 'fr', kind: pick(r.kind, ['henne', 'sbou3'], undefined),
-    opening: pick(r.opening, ['env', 'cur', 'voile', 'door'], 'env'), palette: hex(r.palette),
+    opening: one && !(plan === 'page' && opts.opening) ? 'none' : pick(r.opening, ['env', 'cur', 'voile', 'door'], 'env'), palette: hex(r.palette),
     font: pick(r.font, ['script', 'classique', 'moderne', 'deco'], undefined),
-    countdown: pick(r.countdown, ['debut', 'page', 'fin', 'non'], 'fin'), reveal: pick(r.reveal, ['scratch', 'wheel', 'slot'], null),
+    countdown: one ? 'non' : pick(r.countdown, ['debut', 'page', 'fin', 'non'], 'fin'), reveal: one ? null : pick(r.reveal, ['scratch', 'wheel', 'slot'], null),
     intro: r.intro ? { eyebrow: txt(r.intro.eyebrow, 60), text: txt(r.intro.text, 200), dateText: txt(r.intro.dateText, 80) } : undefined,
     parents: P ? { eyebrow: txt(P.eyebrow, 60), names: arr(P.names, 2).map(x => clean(x, 60)).filter(Boolean), text: txt(P.text, 300) } : undefined,
     eventsTitle: typeof r.eventsTitle === 'string' ? clean(r.eventsTitle, 60) : undefined,
