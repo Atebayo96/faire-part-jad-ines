@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Créer votre faire-part — Save The Oui</title>
-<meta name="description" content="Composez votre faire-part en quelques étapes : votre thème, l'ouverture, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
+<meta name="description" content="Composez votre faire-part en quelques étapes : votre thème, l'ouverture, vos écrans, votre formule (dès 29 € la carte). Aperçu en direct.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Créer votre faire-part — Save The Oui">
 <meta property="og:description" content="Composez votre faire-part en quelques étapes : votre thème, l'ouverture, vos écrans (simple ou scène de votre lieu), votre formule. Aperçu en direct.">
@@ -16,6 +16,7 @@
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="/polices/polices.css">
 <link rel="stylesheet" href="/reveal.css">
+<link rel="stylesheet" href="/carte.css">
 <link rel="stylesheet" href="/vitrine.css">
 </head>
 <body data-page="creer">
@@ -60,7 +61,8 @@
 
         <div class="wz" data-step="2" hidden>
           <div class="step"><h3>L'ouverture</h3><p>Le premier geste de vos invités : ils touchent l'écran et le faire-part s'ouvre. Choisissez, l'aperçu la rejoue.</p></div>
-          <div class="fld"><span>Ouverture</span><div class="opts" id="cOpen"></div></div>
+          <p class="one-note" id="cOneNote" hidden>La carte s'envoie en image et s'imprime : elle n'a pas d'ouverture animée. Pour un lien qui s'ouvre au toucher, choisissez la page unique (ouverture en option) ou l'Essentiel.</p>
+          <div class="fld"><span>Ouverture</span><div class="opts" id="cOpen"></div><p class="hint" id="cOpenHint" hidden>Avec la page unique, l'ouverture est une option à 10 €.</p></div>
           <div class="fld" id="fldReveal"><span>Révélation de la date</span><div class="opts" id="cReveal"></div></div>
         </div>
 
@@ -73,6 +75,7 @@
 
         <div class="wz" data-step="4" hidden>
           <div class="step"><h3>Les détails</h3><p>Couleurs, police, compte à rebours : tout est déjà réglé pour votre thème. Changez ce que vous voulez, puis passez à la suite.</p></div>
+          <div class="fld" id="fldPaper" hidden><span>Le papier</span><div class="opts papers" id="cPaper"></div></div>
           <div class="fld"><span>Couleurs</span><div class="opts" id="cPal"></div><div class="sw-name" id="cPalName"></div></div>
           <div class="fld"><span>Police</span><div class="opts" id="cFonts"></div></div>
           <div class="fld"><span>Compte à rebours</span><div class="opts" id="cCount"></div></div>
@@ -83,6 +86,7 @@
           <div class="step"><h3>Votre faire-part</h3><p>Vérifiez, choisissez la formule, et c'est parti.</p></div>
           <dl class="sum" id="cSum"></dl>
           <div class="fld"><span>Formule</span><div class="opts" id="cPlan"></div><p class="hint" id="cRecap"></p></div>
+          <div class="fld" id="fldAddons" hidden><span>Options de la page unique</span><div class="opts addons" id="cAddons"></div></div>
           <div class="fld"><span>Ensuite</span>
             <ol class="next" id="cNext"><li><b>1</b><span>Vous commandez, paiement sécurisé par Stripe.</span></li><li><b>2</b><span>On vous écrit sous 24 h pour vos textes, adresses, horaires et photos. La musique se choisit à ce moment-là.</span></li><li><b>3</b><span>Vous validez l'aperçu : votre lien est prêt sous 48 h (Essentiel) ou 3 à 5 jours (Signature).</span></li></ol>
           </div>
@@ -106,6 +110,7 @@
           <div class="cp-flash" id="cpFlash" aria-hidden="true"></div>
         </div>
         <button type="button" class="replay" id="cpReplay">Rejouer l'ouverture</button>
+        <div class="atelier" id="cpAtelier" hidden><button type="button" class="btn" data-dl="png">Image</button><button type="button" class="btn" data-dl="pdf">PDF</button></div>
         <a class="btn solid" href="/contact/?plan=essentiel" id="cpGo" data-plan="essentiel">Commander</a>
         <div class="cp-mini-side"><div class="cp-sum" id="cpSum"></div><button type="button" class="lk" id="cpBig">Agrandir l'aperçu</button><div id="cpMiniSteps"></div></div>
         <button type="button" class="cp-close" id="cpClose" aria-label="Fermer l'aperçu">×</button>
@@ -142,6 +147,7 @@
 <script src="/paiement.js"></script>
 <script src="/themes.js"></script>
 <script src="/reveal.js"></script>
+<script src="/carte.js"></script>
 <script>window.SCEAU_DEMOS=[]/*DEMOS*/;window.SCEAU_CALQUES={}/*CALQUES*/;</script>
 <script src="/vitrine.js"></script>
 </body>

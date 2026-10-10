@@ -281,6 +281,13 @@
     `<div class="rv acts" style="--i:${rvI++};color:${c.tx}"><button type="button" class="b" data-rsvp style="color:${c.tx}">${ic.mail}${S.reply}</button></div>`+
     `<a class="made" href="/" target="_blank" rel="noopener" style="color:${c.ey}">${S.made} <b>Save the Oui</b></a>`);
 
+  /* page unique (formule « Page unique », 10 octobre 2026) : tout le faire-part sur une seule feuille, comme un faire-part
+     papier (carte.js). L'ouverture est en option ("opening": "none" sans), le bouton Répondre aussi ("reply": true). La
+     feuille défile librement si son contenu dépasse l'écran ; pas de décor derrière (elle est opaque). */
+  const PG=I.format==='page'&&!!window.SceauCarte;
+  if(PG){ pages.length=0; pages.push({n:K1,lt:true,role:'home',evi:0,html:`<section class="pg pg-ct" data-img="${img(K1)}">${SceauCarte.html(I,{live:true})}</section>`}); }
+  const FREE=!!(I.layout==='long'&&I.long)||PG;
+
   /* ---------- mise en page continue (comme un long rouleau peint) ----------
      une grande illustration qu'on descend, qui se fond dans des fonds texturés aux couleurs du thème ;
      entre deux parties, une guirlande à cheval sur la limite cache le changement de fond (aucune coupure) */
@@ -350,11 +357,12 @@
   /* ---------- montage ---------- */
   const runs=[], runOf=[];
   pages.forEach((p,i)=>{ const r=runs[runs.length-1]; if(r&&r.n===p.n) r.b=i; else runs.push({n:p.n,lt:p.lt,a:i,b:i}); runOf[i]=runs.length-1; });
+  if(PG) runs.length=0; // page unique : la feuille est opaque, pas de décor derrière
   document.title=I.title||(solo?n1:`${n1} & ${n2}`);
   const mu=I.music||T.music;
   const app=document.createElement('div'); app.id='app'; app.style.setProperty('--pal',pal);
   app.innerHTML=`
-    <div class="sc${LG?' sc-long':''}${!LG&&CAL.size?' cal':''}" id="sc"${!LG&&CAL.size?` style="background-image:url('${fond}')"`:''}><div class="bgs" id="bgs">${CH?`<div class="chv"><img class="chs" src="${esc(CH.src)}?v=${IMGV}" alt="" decoding="async"></div>`:LG?'':runs.map(r=>hasCal(r.n)?`<div class="bgl${r.lt?' light':''} cal"><div class="bg"><img class="sub" src="${cal(r.n)}" alt="" decoding="async"></div></div>`:`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
+    <div class="sc${LG?' sc-long':''}${!LG&&!PG&&CAL.size?' cal':''}" id="sc"${!LG&&!PG&&CAL.size?` style="background-image:url('${fond}')"`:''}><div class="bgs" id="bgs">${CH?`<div class="chv"><img class="chs" src="${esc(CH.src)}?v=${IMGV}" alt="" decoding="async"></div>`:LG||PG?'':runs.map(r=>hasCal(r.n)?`<div class="bgl${r.lt?' light':''} cal"><div class="bg"><img class="sub" src="${cal(r.n)}" alt="" decoding="async"></div></div>`:`<div class="bgl${r.lt?' light':''}"><div class="bg" style="background-image:url('${img(r.n)}');--img:url('${img(r.n)}')"></div></div>`).join('')}</div><div class="fxw"><canvas id="fx"></canvas></div>${LG?longHtml():pages.map(p=>p.html).join('')}</div>
     ${LG&&I.demo?`<a class="lg-want" href="/formules/">${S.want}</a>`:''}
     ${I.demo?`<a class="demo-tag" href="/modeles/">${S.demo} · Save the Oui</a>`:''}
     ${mu&&mu!=='none'?`<button type="button" class="snd" id="snd" aria-label="Musique">${ic.note.replace('<svg','<svg class="on"')}${ic.mute.replace('<svg','<svg class="off"')}</button><audio id="bgm" src="${esc(I.musicUrl||'/music/'+mu+'.mp3')}" loop preload="none"></audio>`:''}
@@ -478,7 +486,7 @@
   /* un geste = une page : le doigt, la molette ou le clavier amènent directement à la scène suivante (ou précédente).
      Une page plus haute que l'écran (programme, infos) se parcourt d'un écran à la fois avant de passer à la suivante. */
   let pgBusy=0;
-  function goPage(dir){ if(LG) return; const now=Date.now(); if(now<pgBusy) return; const h=sc.clientHeight, st=sc.scrollTop;
+  function goPage(dir){ if(FREE) return; const now=Date.now(); if(now<pgBusy) return; const h=sc.clientHeight, st=sc.scrollTop;
     const tops=secs.map(x=>x.offsetTop), cur=tops.reduce((a,t,i)=>t<=st+4?i:a,0), pg=secs[cur], end=pg.offsetTop+pg.offsetHeight-h;
     let to;
     if(dir>0) to=st<end-4?Math.min(end,st+h):(tops[cur+1]!=null?tops[cur+1]:st);
@@ -486,12 +494,12 @@
     if(Math.abs(to-st)<2) return; pgBusy=now+(reduce?150:650); sc.scrollTo({top:to,behavior:reduce?'auto':'smooth'}); }
   let ty0=null, wAcc=0, wT=0;
   sc.addEventListener('touchstart',e=>{ ty0=e.touches[0].clientY; },{passive:true});
-  sc.addEventListener('touchmove',e=>{ if(!opened||!LG) e.preventDefault(); },{passive:false});
-  sc.addEventListener('touchend',e=>{ if(!opened||LG||ty0==null) return; const dy=ty0-e.changedTouches[0].clientY; ty0=null; if(Math.abs(dy)>36) goPage(dy>0?1:-1); },{passive:true});
-  sc.addEventListener('wheel',e=>{ if(LG) return; e.preventDefault(); if(!opened) return; const now=Date.now(); if(now-wT>260) wAcc=0; wT=now; wAcc+=e.deltaY;
+  sc.addEventListener('touchmove',e=>{ if(!opened||!FREE) e.preventDefault(); },{passive:false});
+  sc.addEventListener('touchend',e=>{ if(!opened||FREE||ty0==null) return; const dy=ty0-e.changedTouches[0].clientY; ty0=null; if(Math.abs(dy)>36) goPage(dy>0?1:-1); },{passive:true});
+  sc.addEventListener('wheel',e=>{ if(FREE) return; e.preventDefault(); if(!opened) return; const now=Date.now(); if(now-wT>260) wAcc=0; wT=now; wAcc+=e.deltaY;
     if(Math.abs(wAcc)>=40){ goPage(wAcc>0?1:-1); wAcc=0; } },{passive:false});
   addEventListener('keydown',e=>{
-    if(!opened||LG||sheet.classList.contains('on')||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')) return;
+    if(!opened||FREE||sheet.classList.contains('on')||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')) return;
     const k={ArrowDown:1,ArrowUp:-1,PageDown:1,PageUp:-1,' ':1}[e.key];   // une page à la fois
     if(k){ e.preventDefault(); goPage(k); }
   });
@@ -501,7 +509,7 @@
       secs.forEach(x=>{ const d=Math.abs(x.offsetTop-st)/h, tall=x.offsetHeight>h*1.05&&st>=x.offsetTop&&st<=x.offsetTop+x.offsetHeight-h;
         // le texte ne glisse jamais : il est caché dès que la page bouge, et se révèle (.rv) une fois la page posée
         const o=(tall||d<.004)?1:0; if(x._o!==o){ x._o=o; x.style.opacity=o?'':'0'; if(o&&opened) x.classList.add('on'); else if(!o) x.classList.remove('on'); } }); };
-    if(!LG){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(vis); } },{passive:true}); addEventListener('resize',vis); } }
+    if(!FREE){ sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(vis); } },{passive:true}); addEventListener('resize',vis); } }
   // profondeur des calques : le sujet détouré glisse un peu moins vite que les pages (jamais plus de 6 % d'un écran)
   { const subs=layers.map((L,ri)=>({L,S:L.querySelector('.sub'),ri})).filter(x=>x.S); let tk=false;
     /* en partant, le bas du sujet (le sol) traçait une ligne droite sur le ciel (« des lignes nettes, c'est moche ») :
@@ -572,6 +580,9 @@
   }
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
+  // sans ouverture (option de la page unique) : la feuille est là tout de suite
+  if(PG){ SceauCarte.fit(sc); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>SceauCarte.fit(sc)); addEventListener('resize',()=>SceauCarte.fit(sc)); }
+  if(I.opening==='none'){ op.remove(); $('#flash').remove(); app.classList.add('opened'); opened=true; if(secs[0]) requestAnimationFrame(()=>secs[0].classList.add('on')); }
 
   /* ---------- particules ----------
      Des choses peintes qui tombent (ou montent) : pétales, feuilles, confettis d'or, œillets d'Inde, fleurs,

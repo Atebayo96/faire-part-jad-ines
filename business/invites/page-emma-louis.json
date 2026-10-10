@@ -1,0 +1,73 @@
+{
+ "demo": true,
+ "kind": "page",
+ "format": "page",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "page-emma-louis",
+ "theme": "dolcevita",
+ "couple": [
+  "Emma",
+  "Louis"
+ ],
+ "date": "2027-06-12T15:00",
+ "opening": "env",
+ "reply": true,
+ "palette": "#b08648",
+ "parents": {
+  "names": [
+   "Famille Martin",
+   "Famille Rossi"
+  ]
+ },
+ "intro": {
+  "eyebrow": "Ci sposiamo"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "La cérémonie",
+   "title": "Église Saint-Paul",
+   "start": "2027-06-12T15:00",
+   "address": "Paris 4e"
+  },
+  {
+   "id": "e1",
+   "eyebrow": "La fête",
+   "title": "Domaine des Roses",
+   "start": "2027-06-12T19:30",
+   "address": "Gambais, Yvelines"
+  }
+ ],
+ "program": {
+  "items": [
+   {
+    "time": "15h00",
+    "title": "La cérémonie"
+   },
+   {
+    "time": "17h00",
+    "title": "Le vin d'honneur"
+   },
+   {
+    "time": "19h30",
+    "title": "Le dîner"
+   },
+   {
+    "time": "23h00",
+    "title": "On danse"
+   }
+  ]
+ },
+ "rsvp": {
+  "deadline": "2027-05-12",
+  "title": "Serez-vous des nôtres ?",
+  "menu": [
+   "Poisson",
+   "Viande",
+   "Végétarien"
+  ]
+ },
+ "paper": "coton"
+}
