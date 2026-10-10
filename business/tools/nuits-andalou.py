@@ -156,6 +156,60 @@ J.update({
         "cushions around, in the soft daylight of a family living room with a carved window, in the lower part of the image. "
         "No people"),
 })
+# 10 octobre 2026, 16 images de plus accordées (~2,40 €) : « pourquoi il fait nuit déjà » (la mairie à 15 h dans le riad),
+# « le domaine, pourquoi c'est une mosquée », « pour l'Andalou pourquoi c'est coupé comme ça, et t'as abusé des oranges ».
+# Le riad de jour (nuitsjour-*, pris avant 18 h) est peint dans le même style que le riad de nuit, en plein jour ; la mairie
+# d'abord, qui sert ensuite de référence. La salle du riad devient une vraie salle de réception, sans dôme ni minaret.
+FEW = ("Very few oranges: at most one or two small orange trees in the whole picture, no oranges on tables, no fruit "
+       "scattered around. Every arch, wall and building is painted WHOLE up to its top, with the sky above it: nothing is "
+       "cut by the top of a frame or by a straight line.")
+DAYR = ("It is the SAME riad painting style as the references (same brushwork, colours of the walls, zellige, lanterns), "
+        "but in BRIGHT DAYLIGHT: a soft pale blue sky with a few light clouds, warm sunlight, lanterns unlit. " + DAY)
+NJ = ('nuitsjour', 'nuitsjour-mairie@new', 'nuits-1@new', 'nuits-3@new')
+A3 = ('alhambra', 'alhambra-1@new', 'alhambra-2@new', 'alhambra-maison@new')
+J.update({
+    'nuitsjour-mairie': (('nuitsjour', 'nuits-1@new', 'nuits-mairie@new', 'nuits-3@new'), DAYR, PEOPLE + " " + STYLE_ONLY +
+        " A classic French town hall (mairie) at three in the afternoon: its stone facade with a clock and a flag in the "
+        "sun, guests in suits, dresses and caftans seen from behind on the front steps, a couple of palm trees and potted plants"),
+    'nuitsjour-mains': (NJ, FOCUS_D, HANDS + " In daylight: the joined hands of the bride and groom with their wedding "
+        "rings, her hand with delicate henna, resting on embroidered velvet beside a small plate of dates and a brass "
+        "lantern, in the lower part of the image, a sunny riad courtyard softly blurred behind"),
+    'nuitsjour-fond': (NJ, DAYR, "The 'text only' screen of the invitation: almost the whole image is a calm pale blue sky "
+        "with a few light clouds. Only the lower 30% shows, painted whole and touching the bottom: the sunny rooftops and a "
+        "small minaret of an old medina, two palm trees. No people"),
+    'nuitsjour-salle': (NJ, DAYR, SYMBOL + " " + PEOPLE + " " + STYLE_ONLY + " A wedding reception venue in the afternoon: a "
+        "large elegant reception hall with tall windows and a wide entrance decorated with flowers and lanterns, guests "
+        "seen from behind arriving. NO dome, NO minaret: it is not a mosque"),
+    'nuitsjour-mosquee': (NJ, DAYR, PEOPLE + " A graceful mosque with its square minaret and carved horseshoe doorway in "
+        "the sun, seen from its courtyard with a fountain, a few guests seen from behind walking towards the door"),
+    'nuitsjour-jardin': (NJ, DAYR, PEOPLE + " A garden ceremony in the afternoon: an arch of white flowers at the end of "
+        "an aisle between rows of chairs with guests seen from behind, palm trees and bougainvillea"),
+    'nuitsjour-plage': (NJ, DAYR, PEOPLE + " A seaside ceremony in the afternoon: a light draped arch on the sand facing a "
+        "turquoise sea, a path of rose petals, a few guests seen from behind"),
+    'nuitsjour-cocktail': (NJ, DAYR, PEOPLE + " The reception on a riad terrace in the afternoon: low tables with mint tea, "
+        "pastries and dates, guests chatting seen from behind, the sunny rooftops of the medina beyond"),
+    'nuitsjour-sortie': (NJ, DAYR, PEOPLE + " Leaving the ceremony in the sunlight: the bride and groom seen from behind "
+        "walking out of a carved arched door under a shower of rose petals thrown by the guests on each side"),
+    'nuits-salle': (N2, NIGHT, SYMBOL + " " + PEOPLE + " " + STYLE_ONLY + " A wedding reception venue at night: a large "
+        "elegant reception hall with tall glowing windows and a wide entrance decorated with flowers and lanterns, guests "
+        "seen from behind arriving. NO dome, NO minaret: it is not a mosque"),
+    'alhambra-salle': (A3, DAY, SYMBOL + " " + FEW + " The wedding reception: one round table set with white linen, gold-rimmed "
+        "plates, crystal glasses and small lanterns with candles, on terracotta tiles in an Andalusian courtyard with carved "
+        "arcades, a little jasmine. No people, no water"),
+    'alhambra-3': (A3, DAY, SYMBOL + " " + FEW + " " + PEOPLE + " The wedding dinner in the golden afternoon light: a long "
+        "table on a terracotta terrace, set with white linen, candles and white flowers, carved arcades behind, guests seen "
+        "from behind taking their seats. No water"),
+    'alhambra-mains': (A3, FOCUS_D, HANDS + " " + FEW + " The joined hands of the bride and groom with their wedding rings, "
+        "resting on a carved marble ledge with a few white jasmine flowers, in the lower part of the image, the courtyard "
+        "arcades softly blurred behind"),
+    'alhambra-verres': (A3, FOCUS_D, HANDS + " " + FEW + " Two hands raising two glasses of mint lemonade that touch in a "
+        "toast, in the lower part of the image, the carved arcades softly blurred behind"),
+    'alhambra-fond': (A3, DAY, FEW + " The 'text only' screen of the invitation: almost the whole image is a calm pale sky. "
+        "Only the lower 30% shows, painted whole and touching the bottom: the towers and walls of the palace on its hill "
+        "and cypress trees. No people"),
+    'alhambra-prog': (A3, DAY, FEW + " A calm view of the palace terrace looking over the gardens and the city below, a "
+        "table set with white cloth and candles, cypresses. No people"),
+})
 ANCHORS = ['nuits-1', 'alhambra-1']
 NIGHTZ = (NIGHT, FOCUS_N)
 SRC = '/tmp/claude-0/nuits-andalou'
