@@ -678,7 +678,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `eglise`, `lieuAlt {eglise:'mairie'}` ; les images d'église restent dans img/ sans être proposées. **Une image de faire-part
     n'a pas à représenter un vrai lieu** (« ça peut être symbolique, illustratif, simple ») : jamais d'invraisemblance (des
     tables posées au bord d'un bassin, « où tu vois un domaine qui ressemble à ça ») ; dans le doute, un gros plan symbolique
-    (une table dressée, des lanternes, un plateau de henné) plutôt qu'un lieu inventé.
+    (une table dressée, des lanternes, un plateau de henné) plutôt qu'un lieu inventé. Repeints ainsi (5 images accordées, ~0,75 €, `SYMBOL` dans
+    `nuits-andalou.py`) : la salle, le dîner et la fête de l'Andalou (tables sur un vrai sol, plus d'eau), et un nouveau lieu
+    **« Henné à la maison »** (`maison`, les deux thèmes : le plateau de henné sur la table basse du salon, en gros plan).
 49. **Le compte à rebours se règle dans la liste des écrans** (« si je mets page dédiée elle se met au milieu, ça doit être
     paramétrable au moment des écrans ») : une ligne « Le compte à rebours » dans « Vos écrans, dans l'ordre », qui se range à
     l'endroit choisi : sous la date (accueil), **avant vos moments** (`page`), **après vos moments** (`apres`, nouveau), avec la

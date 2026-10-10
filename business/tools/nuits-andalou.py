@@ -131,6 +131,31 @@ J = {
     'alhambra-info': (A1, DAY, VIGNETTE + " The way to the wedding: a cypress-lined path climbing to the palace gate, a vintage "
         "car waiting at the foot of the hill. No people"),
 }
+# 10 octobre 2026, 5 images de plus accordées (~0,75 €) : « où tu vois un domaine qui ressemble à ça, les tables sont sur
+# l'eau » ; « les images ne doivent pas forcément représenter les lieux en vrai, ça peut être symbolique, illustratif, simple ».
+# Les anciennes salle, dîner et fête de l'Andalou sont remplacées, et un lieu « Henné à la maison » s'ajoute aux deux thèmes.
+SYMBOL = ("It is an illustration for a wedding invitation: SYMBOLIC, simple and elegant, not a literal venue. Everything is "
+          "physically plausible: tables and chairs stand on a solid floor, never next to or over water.")
+N2 = ('nuits', 'nuits-1@new', 'nuits-2@new', 'nuits-mains@new')
+A2 = ('alhambra', 'alhambra-1@new', 'alhambra-cocktail@new', 'alhambra-mains@new')
+J.update({
+    'alhambra-salle': (A2, DAY, SYMBOL + " The wedding reception: one round table beautifully set with white linen, gold-rimmed "
+        "plates, crystal glasses, small lanterns with candles and sprigs of orange blossom, on terracotta tiles under a carved "
+        "Andalusian arch, orange trees in pots on each side, the arcades softly behind. No people. No pool, no water"),
+    'alhambra-3': (A2, DAY, SYMBOL + " " + PEOPLE + " The wedding dinner in the golden afternoon light: a long table on a "
+        "terracotta terrace, set with white linen, candles and bowls of oranges, under carved arches, guests seen from behind "
+        "taking their seats. No pool, no water anywhere near the table"),
+    'alhambra-fete': (A2, NIGHT, SYMBOL + " " + PEOPLE + " The evening party: strings of warm lanterns across a palace "
+        "courtyard at night, a few couples dancing seen from behind as warm silhouettes on the tiled floor, orange trees in "
+        "pots. No tables, no pool, no water"),
+    'nuits-maison': (N2, FOCUS_N, SYMBOL + " The henna night at home, a close-up still life: a low carved wooden table on a "
+        "rug with a brass tray of henna cones, a small bowl of henna paste, rose petals and candles, embroidered cushions "
+        "around, in the warm lantern light of a family living room at night, in the lower part of the image. No people"),
+    'alhambra-maison': (A2, FOCUS_D, SYMBOL + " The henna night at home, a close-up still life: a low carved wooden table on "
+        "a rug with a brass tray of henna cones, a small bowl of henna paste, rose petals and orange blossoms, embroidered "
+        "cushions around, in the soft daylight of a family living room with a carved window, in the lower part of the image. "
+        "No people"),
+})
 ANCHORS = ['nuits-1', 'alhambra-1']
 NIGHTZ = (NIGHT, FOCUS_N)
 SRC = '/tmp/claude-0/nuits-andalou'

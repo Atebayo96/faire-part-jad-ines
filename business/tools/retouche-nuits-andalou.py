@@ -57,7 +57,8 @@ def erase_text(im, bx):
 JOBS = {  # clé : (opérations, texte blanc ?)
     'alhambra-mairie': ([('erase', (355, 285, 725, 365)), ('soften', 2, .2)], False),
     'alhambra-mains': ([('soften', 14, .42)], False),
-    'alhambra-fete': ([('darken', .62)], True),
+    'alhambra-fete': ([('darken', .55)], True),
+    'alhambra-3': ([('soften', 3, .3)], False),
     'nuits-eglise': ([('darken', .82)], True),
     'nuits-2': ([('darken', .82)], True),
 }

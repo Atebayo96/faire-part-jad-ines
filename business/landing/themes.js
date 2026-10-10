@@ -177,14 +177,15 @@ window.sceauDoorFit=function(root,box,wall,l,r){
 window.SCEAU_THEMES.nuits.compose=true; window.SCEAU_THEMES.alhambra.compose=true;
 // leurs lieux peints (img/lieux) : tous proposés, le thème n'impose pas la mosquée ; l'Andalou n'a pas d'église (-> mairie)
 /* pas d'église dans ces deux thèmes (« y'a pas d'église, y'a mairie et salle, ou henné à la maison », 10 octobre 2026) :
-   un moment prévu à l'église passe à la mairie ; les images d'église peintes ce jour-là restent dans img/ sans être proposées */
-['nuits','alhambra'].forEach(k=>{ const t=window.SCEAU_THEMES[k]; t.lieux=['mairie','salle','mosquee','jardin','plage']; t.lieuAlt={eglise:'mairie'}; });
+   un moment prévu à l'église passe à la mairie ; les images d'église peintes ce jour-là restent dans img/ sans être proposées.
+   « Henné à la maison » (maison) : un gros plan symbolique, le plateau de henné sur la table basse du salon */
+['nuits','alhambra'].forEach(k=>{ const t=window.SCEAU_THEMES[k]; t.lieux=['mairie','salle','maison','mosquee','jardin','plage']; t.lieuAlt={eglise:'mairie'}; });
 /* repeints le 10 octobre 2026 selon les règles de Dolce Vita (tools/nuits-andalou.py, 38 images accordées) : des peintures
    entières composées pour le plein écran (cover), sans calques ; l'accueil s'ouvre sur les mains, la réponse sur les verres
    (thé à la menthe, citronnade à la fleur d'oranger), chaque écran d'infos a sa scène, et la fête, le cocktail, la sortie
    sont des décors de plus. L'Andalou est de jour (texte foncé), sauf sa fête du soir. */
 ['nuits','alhambra'].forEach(k=>{ const t=window.SCEAU_THEMES[k]; t.nocal=true; t.home='mains'; t.extra=['fete','cocktail','sortie'];
-  t.cover=['1','2','3','4','mains','verres','fond','mairie','eglise','mosquee','salle','jardin','plage','fete','cocktail','sortie','prog','dress','info'];
+  t.cover=['1','2','3','4','mains','verres','fond','mairie','eglise','mosquee','maison','salle','jardin','plage','fete','cocktail','sortie','prog','dress','info'];
   t.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info',rsvp:'verres'}; });
 window.SCEAU_THEMES.alhambra.darkLieux=['fete'];
 window.SCEAU_BASMALA='﷽';

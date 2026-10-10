@@ -236,7 +236,7 @@
   // prix de la page unique : 59 €, + 10 € avec l'ouverture, + 20 € avec le bouton Répondre et le tableau de bord
   const pagePrice=()=>59+(C.op!=='none'?10:0)+(C.reply?20:0);
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
-  const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église'},{id:'mosquee',name:'Mosquée',fam:'nuits'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'fete',name:'Soirée',x:1},{id:'cocktail',name:'Cocktail',x:1},{id:'sortie',name:'Sortie de cérémonie',x:1},{id:'photo',name:'Votre lieu',sig:true}];
+  const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église'},{id:'mosquee',name:'Mosquée',fam:'nuits'},{id:'maison',name:'Henné à la maison',fam:'nuits'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'fete',name:'Soirée',x:1},{id:'cocktail',name:'Cocktail',x:1},{id:'sortie',name:'Sortie de cérémonie',x:1},{id:'photo',name:'Votre lieu',sig:true}];
   /* upsell sans frustration : les options de Signature (lieu peint d'après photo, 3e événement et plus, lien par famille,
      anglais) sont proposées au même endroit que les autres, avec l'étiquette « Signature ». On peut les choisir en Essentiel :
      la formule se met d'elle-même sur Signature et le récapitulatif explique pourquoi ; si l'on revient à Essentiel, il dit
