@@ -25,9 +25,10 @@ def darken(im, f):
     return Image.fromarray(np.clip(a * (1 - (1 - f) * m), 0, 255).astype('uint8'))
 
 
-def soften(im, blur, white):
+def soften(im, blur, white, top=.50, bot=.62):
+    # top/bot : où le flou s'arrête ; une transition plus longue efface un raccord net (les verres de l'Andalou)
     a = np.asarray(im).astype(float); b = np.asarray(im.filter(ImageFilter.GaussianBlur(blur))).astype(float)
-    m = ramp(a.shape[0]); out = a * (1 - m) + (b * (1 - white) + 255 * white) * m
+    m = ramp(a.shape[0], top, bot); out = a * (1 - m) + (b * (1 - white) + 255 * white) * m
     return Image.fromarray(np.clip(out, 0, 255).astype('uint8'))
 
 
@@ -56,11 +57,17 @@ def erase_text(im, bx):
 
 JOBS = {  # clé : (opérations, texte blanc ?)
     'alhambra-mairie': ([('erase', (355, 285, 725, 365)), ('soften', 2, .2)], False),
-    'alhambra-mains': ([('soften', 14, .42)], False),
     'alhambra-fete': ([('darken', .55)], True),
-    'alhambra-3': ([('soften', 3, .3)], False),
     'nuits-eglise': ([('darken', .82)], True),
     'nuits-2': ([('darken', .82)], True),
+    # deuxième série (16 images, même jour) : riad de jour, salle du riad, Andalou avec moins d'oranges
+    'alhambra-3': ([('soften', 4, .32)], False),
+    'alhambra-mains': ([('soften', 14, .42)], False),
+    'alhambra-verres': ([('soften', 16, .4, .5, .8)], False),
+    'nuitsjour-mairie': ([('soften', 3, .3)], False),
+    'nuitsjour-mains': ([('soften', 16, .45)], False),
+    'nuitsjour-sortie': ([('soften', 5, .4)], False),
+    'nuits-salle': ([('darken', .85)], True),
 }
 
 if __name__ == '__main__':

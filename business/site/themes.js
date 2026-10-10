@@ -188,6 +188,14 @@ window.SCEAU_THEMES.nuits.compose=true; window.SCEAU_THEMES.alhambra.compose=tru
   t.cover=['1','2','3','4','mains','verres','fond','mairie','eglise','mosquee','maison','salle','jardin','plage','fete','cocktail','sortie','prog','dress','info'];
   t.pageImg={program:'prog',dress:'dress',stay:'info',infos:'info',rsvp:'verres'}; });
 window.SCEAU_THEMES.alhambra.darkLieux=['fete'];
+/* le riad en plein jour (10 octobre 2026 : « pourquoi il fait nuit déjà, la mairie à 15 h ») : comme Dolce Vita, un moment qui
+   commence avant 18 h prend l'image de jour si elle existe (tools/nuits-andalou.py, nuitsjour-*). Le riad de jour n'a pas
+   de scènes 1 à 4 : « only » dit quelles images de jour existent (dayKey() dans invite.js et vitrine.js). */
+window.SCEAU_THEMES.nuitsjour=Object.assign({},window.SCEAU_THEMES.nuits,{name:'Mille et une nuits (jour)',compose:false,launch:false,light:true,jour:undefined,
+  color:'#4a2616',ey:'#6b3a1e',tx:'#4f2e1c',mono:['#4a2616','0 1px 0 rgba(255,255,255,.7),0 2px 8px rgba(255,255,255,.5)'],
+  only:['mains','fond','mairie','salle','mosquee','jardin','plage','cocktail','sortie'],lieux:['mairie','salle','mosquee','jardin','plage'],
+  darkLieux:[],home:'mains',pageImg:{},cover:['mains','fond','mairie','salle','mosquee','jardin','plage','cocktail','sortie']});
+window.SCEAU_THEMES.nuits.jour='nuitsjour';
 window.SCEAU_BASMALA='﷽';
 window.SCEAU_BASMALA_LABEL='Bismillah ar-Rahman ar-Rahim';
 window.sceauEy=function(t){ t=t==null?'':String(t); return /^\s*(bismillah|bismillah\s+ar-?rahman\s+ar-?rahim|basmala)\s*$/i.test(t)?{ar:true,text:window.SCEAU_BASMALA}:{ar:false,text:t}; };

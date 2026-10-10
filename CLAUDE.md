@@ -681,6 +681,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     (une table dressée, des lanternes, un plateau de henné) plutôt qu'un lieu inventé. Repeints ainsi (5 images accordées, ~0,75 €, `SYMBOL` dans
     `nuits-andalou.py`) : la salle, le dîner et la fête de l'Andalou (tables sur un vrai sol, plus d'eau), et un nouveau lieu
     **« Henné à la maison »** (`maison`, les deux thèmes : le plateau de henné sur la table basse du salon, en gros plan).
+    **Le riad vit du jour au soir, comme Dolce Vita** (« pourquoi il fait nuit déjà », la mairie à 15 h) : `nuits.jour =
+    'nuitsjour'` (même style, en plein jour, texte foncé), 9 images de jour (mains, fond, mairie, salle, mosquée, jardin, plage,
+    cocktail, sortie) ; un moment avant 18 h les prend. Le riad de jour n'a pas de scènes 1 à 4 : `only` (themes.js) liste les
+    images de jour qui existent et `dayKey()` (invite.js, vitrine.js) ne bascule que vers elles. **La salle n'est jamais un
+    lieu de culte** (« le domaine, pourquoi c'est une mosquée ») : une salle de réception, sans dôme ni minaret. **Pas
+    d'abus d'un motif** (« t'as abusé des oranges ») : un ou deux orangers au plus par image (`FEW`), rien de coupé par le haut.
+    Repeints ainsi le 10 octobre 2026 (16 images accordées, ~2,40 €) : le riad de jour, la salle du riad, la salle, le dîner,
+    les mains, les verres, le fond et le programme de l'Andalou ; 7 zones de texte retouchées dans la peinture.
 49. **Le compte à rebours se règle dans la liste des écrans** (« si je mets page dédiée elle se met au milieu, ça doit être
     paramétrable au moment des écrans ») : une ligne « Le compte à rebours » dans « Vos écrans, dans l'ordre », qui se range à
     l'endroit choisi : sous la date (accueil), **avant vos moments** (`page`), **après vos moments** (`apres`, nouveau), avec la
