@@ -51,6 +51,19 @@
     mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>'
   };
 
+  /* chaque thème a sa feuille (10 octobre 2026 : « le choix du thème change juste la photo au milieu, c'est pas ouf ») :
+     la forme du cadre de la peinture et l'ornement des filets suivent le thème.
+     arche : arche ronde, filets simples (Dolce Vita) · ogive : arc brisé, étoile à huit branches (Mille et une nuits)
+     outrepasse : arc en fer à cheval, losanges (Andalou) · medaillon : ovale, filets doubles (Old money)
+     bandeau : la peinture en haut de la feuille, toute la largeur, fondue dans le papier, brin de feuillage (Douce France) */
+  const STYLES={dolcevita:'arche',dolcevitajour:'arche',nuits:'ogive',nuitsjour:'ogive',alhambra:'outrepasse',oldmoney:'medaillon',doucefrance:'bandeau'};
+  const styleOf=k=>STYLES[k]||(TH()[k]&&TH()[k].family==='nuits'?'ogive':'arche');
+  // contour du cadre (viewBox 0 0 100 120, étiré à la taille du cadre) : masque de la peinture et filet à la couleur du couple
+  const FRAMES={ogive:'M2 120V54C2 30 26 18 50 2C74 18 98 30 98 54V120Z',outrepasse:'M10 120V66C-4 50 0 6 50 4C100 6 104 50 90 66V120Z'};
+  const frame=st=>{ const d=FRAMES[st]; if(!d) return '';
+    const m=`url('data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120' preserveAspectRatio='none'><path d='${d}'/></svg>`).replace(/'/g,'%27')}')`;
+    return {mask:m,svg:`<svg class="ct-fr" viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden="true"><path d="${d}"/><path class="in" d="${d}" transform="translate(50 63) scale(.9) translate(-50 -63)"/></svg>`}; };
+
   // la peinture de l'arche : le gros plan symbolique du thème (T.home, « les mains »), en plein jour si le premier moment est avant 18 h
   function artOf(inv){
     const T=TH()[inv.theme]||{}, ev=(inv.events||[])[0], h=ev?+(/T(\d{1,2})/.exec(ev.start)||[0,12])[1]:12;
@@ -59,7 +72,7 @@
     return `/img/hd/${inv.theme}-${k}.webp?v=${IMGV}`;
   }
 
-  /* la feuille. o.live : le faire-part en ligne (liens Itinéraire et Calendrier, bouton Répondre si inv.reply) ;
+  /* la feuille. o.fit : la feuille a la hauteur de son conteneur (aperçu, en ligne). o.live : le faire-part en ligne (liens Itinéraire et Calendrier, bouton Répondre si inv.reply) ;
      sinon la carte figée (tout est écrit, rien à toucher). o.page : 'story' (9:16), 'a5' (impression) ou rien (écran). */
   function html(inv,o){
     o=o||{}; const T=TH()[inv.theme]||{}, L=L10[inv.lang==='en'?'en':'fr'];
@@ -89,16 +102,17 @@
     else rs=(dl||wa)?`<p class="ct-rs">${L.rs}${dl?` ${L.before} ${esc(dl)}`:''}${wa?`<br>${L.by} ${live?`<a href="https://wa.me/${esc(wa.replace(/[^\d+]/g,'').replace(/^\+/,'').replace(/^0/,'33'))}" target="_blank" rel="noopener">${esc(wa)}</a>`:esc(wa)}`:''}</p>`:'';
     const prog=PR&&(PR.items||[]).length?`<div class="ct-pr"><p class="ct-ey">${esc(PR.eyebrow||L.prog)}</p><ul>${PR.items.slice(0,8).map(x=>`<li><b>${esc(x.time||'')}</b><span>${esc(x.title||'')}</span></li>`).join('')}</ul></div>`:'';
     const dress=DR&&(DR.title||DR.text)?`<p class="ct-dr"><b>${esc(DR.eyebrow||L.dress)}</b>${esc([DR.title,DR.text].filter(Boolean).join(' · '))}</p>`:'';
-    const cls=['ct','ct-p-'+pk,o.page?'ct-'+o.page:'',live?'ct-live':'',evs.length>1?'ct-n'+Math.min(evs.length,3):''].filter(Boolean).join(' ');
+    const st=styleOf(inv.theme), fr=frame(st);
+    const cls=['ct','ct-s-'+st,'ct-p-'+pk,o.page?'ct-'+o.page:'',live?'ct-live':'',live||o.fit?'ct-fit':'',evs.length>1?'ct-n'+Math.min(evs.length,3):''].filter(Boolean).join(' ');
     return `<div class="${cls}" style="--pal:${esc(pal)};--ink:${ink};--soft:${soft};--paper:${PP.c};--tx:${INK}">`+
       `<div class="ct-sheet">`+
-        `<div class="ct-arch"><img src="${esc(o.art||artOf(inv))}" alt="" decoding="async"></div>`+
+        `<div class="ct-arch"${fr?` style="-webkit-mask:${fr.mask} center/100% 100% no-repeat;mask:${fr.mask} center/100% 100% no-repeat"`:''}><img src="${esc(o.art||artOf(inv))}" alt="" decoding="async">${fr?fr.svg:''}</div>`+
         `<div class="ct-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sl};--m:${sm};--d:${sd}">${ini}</b></div>`+
         (P&&(P.names||[]).filter(Boolean).length?`<p class="ct-fam">${P.names.filter(Boolean).map(esc).join(' &amp; ')}</p>`:'')+
         `<p class="ct-ey ct-top${ey.ar?' ar':''}"${ey.ar?' lang="ar" dir="rtl"':''}>${esc(ey.text)}</p>`+
         `<h1 class="ct-nm" style="font-family:${esc(ff)};font-style:${it?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};--nk:${nmSz}">${solo?esc(n1):`${esc(n1)} <i>&amp;</i> ${esc(n2)}`}</h1>`+
         `<p class="ct-tx">${esc(inv.intro&&inv.intro.text||L.joy)}</p>`+
-        `<p class="ct-dl"><i></i><span>${esc(inv.intro&&inv.intro.dateText||day(main,L,true))}</span><i></i></p>`+
+        `<p class="ct-dl"><i></i><b class="ct-o" aria-hidden="true"></b><span>${esc(inv.intro&&inv.intro.dateText||day(main,L,true))}</span><b class="ct-o" aria-hidden="true"></b><i></i></p>`+
         `<div class="ct-evs" style="--slots:${slots}">${evs.map(ev).join('')}</div>`+
         prog+dress+rs+
         `<p class="ct-made">${L.made}</p>`+
@@ -114,11 +128,14 @@
     // les pastilles Y aller / Agenda : le mot s'il tient sur la ligne, sinon l'icône seule (classe ico)
     (root||document).querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); });
     // en ligne : s'il reste de la place sur l'écran, le texte grandit un peu (jusqu'à 118 %) pour composer une vraie page
-    (root||document).querySelectorAll('.ct-live').forEach(el=>{ const sh=el.querySelector('.ct-sheet'), box=el.parentNode; if(!sh||!box) return;
+    (root||document).querySelectorAll('.ct-fit').forEach(el=>{ const sh=el.querySelector('.ct-sheet'), box=el.parentNode; if(!sh||!box) return;
       const H=(box.closest('.sc,.pv-scroll')||box).clientHeight; if(!H) return;
       const need=()=>{ const top=sh.getBoundingClientRect().top; let b=0; [...sh.children].forEach(c=>{ if(!c.classList.contains('ct-made')) b=Math.max(b,c.getBoundingClientRect().bottom); }); return b-top+parseFloat(getComputedStyle(sh).paddingBottom); };
       sh.style.justifyContent='flex-start'; let k=1; el.style.setProperty('--k','1');
-      while(k<1.18){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need()>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
+      // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 74 %, pour que la signature reste sur l'écran
+      // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
+      if(need()>H) while(k>.74){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); if(need()<=H) break; }
+      else while(k<1.18){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need()>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
       sh.style.justifyContent=''; el.querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); }); }); }
 
   /* ---------- export : image et PDF ----------

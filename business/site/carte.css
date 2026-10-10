@@ -6,7 +6,7 @@
   position:relative;width:100%;height:100%;min-height:100%;background:var(--paper,#fbf7f0);color:var(--tx,#2b2621);
   font-family:"Cormorant Garamond",Georgia,serif;text-align:center;-webkit-font-smoothing:antialiased;text-shadow:none}
 .ct *{box-sizing:border-box;font-variant-numeric:lining-nums}
-.ct-live{height:auto}
+.ct-fit{height:auto}
 .ct p,.ct h1,.ct ul{margin:0}
 /* trois vrais papiers (10 octobre 2026 : « propose 3 types de papier, un truc bien, pas juste du grain : de la profondeur ») :
    un relief en SVG éclairé en lumière rasante (feDiffuseLighting), multiplié sur la teinte du papier, puis la lumière de
@@ -26,12 +26,12 @@
 /* la feuille */
 .ct-sheet{position:relative;height:100%;min-height:100%;display:flex;flex-direction:column;align-items:center;
   padding:calc(30px*var(--k)) calc(22px*var(--k)) calc(24px*var(--k));overflow:hidden}
-.ct-live{display:flex;flex-direction:column;flex:1 0 auto}
+.ct-fit{display:flex;flex-direction:column;flex:1 0 auto}
 /* en ligne et dans l'aperçu : la feuille a la hauteur exacte de l'écran, le contenu y est centré (et agrandi s'il reste de
    la place, fit() dans carte.js), la signature posée en bas. Avant, min-height:100svh prenait la hauteur de la fenêtre :
    dans le téléphone de l'aperçu, un grand vide restait sous le texte (« c'est moche »). */
-.ct-live .ct-sheet{flex:1 0 auto;height:auto;min-height:0;justify-content:center;padding-bottom:calc(54px*var(--k))}
-.ct-live .ct-made{position:absolute;left:0;right:0;bottom:calc(20px*var(--k));margin:0!important;padding:0}
+.ct-fit .ct-sheet{flex:1 0 auto;height:auto;min-height:0;justify-content:center;padding-bottom:calc(54px*var(--k))}
+.ct-fit .ct-made{position:absolute;left:0;right:0;bottom:calc(20px*var(--k));margin:0!important;padding:0}
 /* l'arche : le gros plan symbolique du thème (les mains, les alliances), cadré sur le sujet, en bas de l'image */
 .ct-arch{position:relative;flex:none;width:calc(150px*var(--k));aspect-ratio:3/3.6;border-radius:999px 999px 4px 4px;overflow:hidden;
   box-shadow:0 0 0 1.5px var(--paper),0 0 0 3px var(--pal),0 14px 30px -14px rgba(40,25,10,.5)}
@@ -53,7 +53,8 @@
 /* la date se voit en premier (règle 3) : 22 px en 600, entre deux filets à la couleur du couple */
 .ct-dl{display:flex;align-items:center;gap:calc(12px*var(--k));width:100%;max-width:21em;margin-top:var(--g2)!important;
   font:600 max(18px,calc(22px*var(--k)))/1.2 "Cormorant Garamond",Georgia,serif;color:var(--tx);font-variant-numeric:lining-nums}
-.ct-dl i{flex:1;height:1px;background:var(--pal);opacity:.8}
+.ct-dl span{white-space:nowrap}
+.ct-dl i{flex:1;min-width:10px;height:1px;background:var(--pal);opacity:.8}
 /* les moments : côte à côte comme sur un carton (deux colonnes séparées d'un filet), l'heure en grand chiffre */
 .ct-evs{display:grid;grid-template-columns:1fr;gap:var(--g2);width:100%;margin-top:var(--g3)}
 .ct-n2 .ct-evs{grid-template-columns:1fr 1fr;gap:0}
@@ -127,6 +128,45 @@
 .ct-n2 .ct-evs,.ct-n3 .ct-evs{grid-template-rows:repeat(var(--slots),auto);row-gap:calc(4px*var(--k))}
 .ct-n2 .ct-ev,.ct-n3 .ct-ev{display:grid;grid-row:span var(--slots);grid-template-rows:subgrid;justify-items:center;gap:0}
 .ct-n2 .ct-ev>.ct-ey,.ct-n3 .ct-ev>.ct-ey{align-self:end;letter-spacing:.16em}
-.ct-ev>.ct-pl,.ct-ev>.ct-ad{align-self:start}
+/* dans la grille (2 ou 3 moments), le lieu se cale en haut de sa ligne ; un moment seul est une colonne flex, où
+   align-self:start le collait à gauche (« À la maison » du sbouâ) : il reste centré */
+.ct-n2 .ct-ev>.ct-pl,.ct-n2 .ct-ev>.ct-ad,.ct-n3 .ct-ev>.ct-pl,.ct-n3 .ct-ev>.ct-ad{align-self:start}
 .ct-ev>p:empty{display:none}
 .ct-n2 .ct-ev>p:empty,.ct-n3 .ct-ev>p:empty{display:block}
+
+/* chaque thème a sa feuille (carte.js, STYLES) : la forme du cadre de la peinture et l'ornement des filets de la date.
+   Rien de sombre posé sur la peinture : seulement un filet à la couleur du couple qui suit le contour. */
+.ct-o{display:none;flex:none;width:calc(11px*var(--k));height:calc(11px*var(--k));background:var(--pal)}
+.ct-fr{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.ct-fr path{fill:none;stroke:var(--pal);stroke-width:4;vector-effect:non-scaling-stroke}
+.ct-fr path.in{stroke:var(--paper);stroke-width:1.2;opacity:.9}
+/* ogive (Mille et une nuits) : arc brisé, étoile à huit branches au bout des filets */
+.ct-s-ogive .ct-arch,.ct-s-outrepasse .ct-arch{border-radius:0;box-shadow:none;width:calc(138px*var(--k));aspect-ratio:3/3.8;overflow:visible}
+.ct-s-ogive .ct-arch,.ct-s-outrepasse .ct-arch{filter:drop-shadow(0 12px 16px rgba(40,25,10,.28))}
+.ct-s-ogive .ct-o{display:block;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat}
+.ct-s-ogive .ct-dl{gap:calc(8px*var(--k))}
+/* outrepassé (Andalou) : arc en fer à cheval, petits losanges, filets en pointillés comme un zellige */
+.ct-s-outrepasse .ct-o{display:block;width:calc(8px*var(--k));height:calc(8px*var(--k));transform:rotate(45deg)}
+.ct-s-outrepasse .ct-dl{gap:calc(9px*var(--k))}
+.ct-s-outrepasse .ct-dl i{height:2px;opacity:1;background:radial-gradient(circle,var(--pal) 45%,transparent 55%) center/6px 2px repeat-x}
+.ct-s-outrepasse .ct-ev+.ct-ev{border-left-style:dotted!important;border-left-width:2px!important}
+/* médaillon (Old money) : un ovale cerclé de deux filets, filets doubles, prénoms en capitales fines si la police s'y prête */
+.ct-s-medaillon .ct-arch{width:calc(140px*var(--k));aspect-ratio:3/3.9;border-radius:50%;
+  box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--pal),0 0 0 6px var(--paper),0 0 0 7px var(--pal),0 16px 30px -14px rgba(40,25,10,.45)}
+.ct-s-medaillon .ct-arch img{object-position:center 70%}
+.ct-s-medaillon .ct-seal{margin-top:calc(-30px*var(--k))}
+.ct-s-medaillon .ct-dl i{height:4px;background:none;border-top:1px solid var(--pal);border-bottom:1px solid var(--pal);opacity:.85}
+.ct-s-medaillon .ct-top{letter-spacing:.32em}
+.ct-s-medaillon .ct-evs{border-top:1px solid color-mix(in srgb,var(--pal) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--pal) 55%,transparent);padding:var(--g2) 0}
+/* bandeau (Douce France) : la peinture en haut, sur toute la largeur de la feuille, fondue dans le papier vers le bas,
+   brin de feuillage au bout des filets */
+.ct-s-bandeau .ct-sheet{padding-top:0}
+.ct-s-bandeau .ct-arch{width:calc(100% + 44px*var(--k));margin:0 calc(-22px*var(--k));aspect-ratio:auto;height:calc(210px*var(--k));border-radius:0;box-shadow:none;
+  -webkit-mask:linear-gradient(#000 55%,transparent);mask:linear-gradient(#000 55%,transparent)}
+.ct-s-bandeau .ct-arch img{object-position:center 72%}
+.ct-s-bandeau .ct-seal{margin-top:calc(-44px*var(--k))}
+.ct-s-bandeau .ct-o{display:block;width:calc(16px*var(--k));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat}
+.ct-s-bandeau .ct-dl b.ct-o:last-of-type{transform:scaleX(-1)}
+.ct-s-bandeau .ct-dl b.ct-o:first-of-type{transform:none}

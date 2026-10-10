@@ -717,7 +717,7 @@
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML='<div class="cp-bgs" id="cpBgs" aria-hidden="true"></div>'+pages.join(''); sc.scrollTop=st; tick();
     // carte et page unique : l'aperçu est la feuille elle-même (carte.js), exactement comme le faire-part publié
-    sc.classList.toggle('one',one()); if(one()&&window.SceauCarte){ sc.innerHTML=SceauCarte.html(oneInvite(),{live:C.plan==='page'}); sc.scrollTop=st; SceauCarte.fit(sc); if(document.fonts) document.fonts.ready.then(()=>SceauCarte.fit(sc)); }
+    sc.classList.toggle('one',one()); if(one()&&window.SceauCarte){ sc.innerHTML=SceauCarte.html(oneInvite(),{live:C.plan==='page',fit:true}); sc.scrollTop=st; SceauCarte.fit(sc); if(document.fonts) document.fonts.ready.then(()=>SceauCarte.fit(sc)); }
     drawQr(sc);
     // les prénoms de l'accueil tiennent sur une ligne dans le petit téléphone (comme sur un vrai téléphone, où ils tiennent) :
     // à 40 px, « Emma & Louis » passait sur deux lignes en Amiri et poussait la phrase sur le décor
@@ -851,11 +851,12 @@
   function closeOp(){ clearTimeout(opT); opT2.forEach(clearTimeout); opT2=[]; op.classList.remove('opening','gone'); cpFlash.classList.remove('bloom','soft','door'); op.dataset.type=C.op;
     op.style.setProperty('--door',`url('/img/open/${C.k}-portes.webp')`); { const D=op.querySelector('.op-doors'); if(D&&window.sceauDoorFit) sceauDoorFit(D,THEMES[C.k].door,D.querySelector('.op-wall'),D.querySelector('.op-leaf.l'),D.querySelector('.op-leaf.r')); } op.style.setProperty('--cur',`url('/img/open/${C.k}-rideau.webp')`);
     const mo=THEMES[C.k].mono; $('opMonoC').style.cssText=mo?`color:${mo[0]};text-shadow:${mo[1]}`:''; void op.offsetWidth; }
-  function playOp(){ if(op.classList.contains('opening')) return; op.classList.add('opening'); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
+  function playOp(){ if(op.classList.contains('opening')||C.op==='none') return; op.classList.add('opening'); const q=SEQ[C.op]||SEQ.env; if(q.cls) cpFlash.classList.add(q.cls);
     if(q.flash===0) cpFlash.classList.add('bloom');
     const ps=$('cpScroll'); ps.classList.remove('morph');
     opT2=[q.flash?setTimeout(()=>cpFlash.classList.add('bloom'),q.flash):0, setTimeout(()=>{ ps.scrollTop=0; if(q.morph){ ps.classList.add('morph'); opT2.push(setTimeout(()=>ps.classList.remove('morph'),1800)); } },q.morph?Math.max(0,q.gone-200):q.gone), setTimeout(()=>op.classList.add('gone'),q.gone)]; }
-  function replayOp(delay){ closeOp(); setTimeout(playOp,delay); }
+  // sans ouverture (page unique, carte) : rien à rejouer ; avant, la page faisait le « morph » de l'enveloppe (un zoom) à chaque clic sur un thème
+  function replayOp(delay){ if(C.op==='none') return; closeOp(); setTimeout(playOp,delay); }
   op.addEventListener('click',playOp);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playOp(); } });
   $('cpReplay').onclick=()=>replayOp(700);

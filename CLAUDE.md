@@ -654,6 +654,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     ni « Saint- / Paul » (`text-wrap: balance`). **Les moments côte à côte sont alignés** (« c'est pas aligné les dates ») : chaque
     colonne a les mêmes cases dans le même ordre et partage les lignes de la grille (`subgrid`, `--slots`) ; le chapeau se
     pose en bas de sa ligne, les heures restent sur la même ligne même si « La cérémonie » passe sur deux lignes.
+    **Chaque thème a sa feuille** (« le choix du thème change juste la photo au milieu, c'est pas ouf ») : `STYLES` dans carte.js
+    donne la forme du cadre de la peinture et l'ornement des filets de la date : arche ronde (Dolce Vita), arc brisé et étoile à
+    huit branches (Mille et une nuits), fer à cheval, losanges et pointillés (Andalou), médaillon ovale et filets doubles (Old
+    money), peinture en bandeau fondue dans le papier et brin de feuillage (Douce France). **La feuille tient dans l'écran,
+    signature comprise** : dans l'aperçu (carte comme page, `fit:true`, classe `ct-fit`) et en ligne, `fit()` réduit jusqu'à
+    74 % si le contenu dépasse (le « Save The Oui » sortait de l'écran). Un moment seul reste centré (« À la maison » se collait
+    à gauche). Pas de compte à rebours sur la feuille. Sans ouverture, cliquer un thème ne rejoue rien (la page faisait le zoom
+    du « morph » de l'enveloppe).
 
 48. **Mille et une nuits et l'Andalou reviennent dans le configurateur** (10 octobre 2026 : « rajoute le thème mille et une
     nuits et un autre thème arabe andalou ») : `compose:true` sur `nuits` et `alhambra` (fin de themes.js). Avec eux reviennent
