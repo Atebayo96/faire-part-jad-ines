@@ -54,12 +54,12 @@
   /* chaque thème a sa feuille (10 octobre 2026 : « le choix du thème change juste la photo au milieu, c'est pas ouf ») :
      la forme du cadre de la peinture et l'ornement des filets suivent le thème.
      arche : arche ronde, filets simples (Dolce Vita) · ogive : arc brisé, étoile à huit branches (Mille et une nuits)
-     outrepasse : arc en fer à cheval, losanges (Andalou) · medaillon : ovale, filets doubles (Old money)
+     outrepasse : arc polylobé, losanges (Andalou) · medaillon : ovale, filets doubles (Old money)
      bandeau : la peinture en haut de la feuille, toute la largeur, fondue dans le papier, brin de feuillage (Douce France) */
   const STYLES={dolcevita:'arche',dolcevitajour:'arche',nuits:'ogive',nuitsjour:'ogive',alhambra:'outrepasse',oldmoney:'medaillon',doucefrance:'bandeau'};
   const styleOf=k=>STYLES[k]||(TH()[k]&&TH()[k].family==='nuits'?'ogive':'arche');
   // contour du cadre (viewBox 0 0 100 120, étiré à la taille du cadre) : masque de la peinture et filet à la couleur du couple
-  const FRAMES={ogive:'M2 120V54C2 30 26 18 50 2C74 18 98 30 98 54V120Z',outrepasse:'M10 120V66C-4 50 0 6 50 4C100 6 104 50 90 66V120Z'};
+  const FRAMES={ogive:'M2 120V54C2 30 26 18 50 2C74 18 98 30 98 54V120Z',outrepasse:'M4 120V52A9.7 9.7 0 0 1 8.6 34A10.1 10.1 0 0 1 21.3 19.6A10.6 10.6 0 0 1 39.8 11.6A10.7 10.7 0 0 1 60.2 11.6A10.6 10.6 0 0 1 78.7 19.6A10.1 10.1 0 0 1 91.4 34A9.7 9.7 0 0 1 96 52V120Z'};
   const frame=st=>{ const d=FRAMES[st]; if(!d) return '';
     const m=`url('data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120' preserveAspectRatio='none'><path d='${d}'/></svg>`).replace(/'/g,'%27')}')`;
     return {mask:m,svg:`<svg class="ct-fr" viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden="true"><path d="${d}"/><path class="in" d="${d}" transform="translate(50 63) scale(.9) translate(-50 -63)"/></svg>`}; };
@@ -134,7 +134,10 @@
       sh.style.justifyContent='flex-start'; let k=1; el.style.setProperty('--k','1');
       // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 74 %, pour que la signature reste sur l'écran
       // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
-      if(need()>H) while(k>.74){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); if(need()<=H) break; }
+      // la peinture rapetisse d'abord (jusqu'à 62 %), le texte ensuite : une feuille ne dépasse jamais l'écran (« plus grand qu'une page »)
+      el.style.setProperty('--ak','1');
+      if(need()>H){ let a=1; while(a>.62&&need()>H){ a-=.04; el.style.setProperty('--ak',a.toFixed(2)); }
+        while(k>.74&&need()>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); } }
       else while(k<1.18){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need()>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
       sh.style.justifyContent=''; el.querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); }); }); }
 
@@ -153,6 +156,7 @@
     await Promise.all([...el.querySelectorAll('img')].map(im=>im.complete?0:new Promise(r=>{ im.onload=im.onerror=r; })));
     if(document.fonts&&document.fonts.ready) await document.fonts.ready;
     // le contenu tient dans la feuille : on réduit l'échelle par petits pas tant qu'il dépasse
+    for(let a=1;a>=.62;a-=.04){ el.style.setProperty('--ak',a.toFixed(2)); if(sh.scrollHeight<=sh.clientHeight+1) break; }
     for(let k=1;k>=.66;k-=.04){ el.style.setProperty('--k',k.toFixed(2)); fit(el); if(sh.scrollHeight<=sh.clientHeight+1) break; }
     return {el,host,F};
   }

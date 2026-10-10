@@ -656,10 +656,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     pose en bas de sa ligne, les heures restent sur la même ligne même si « La cérémonie » passe sur deux lignes.
     **Chaque thème a sa feuille** (« le choix du thème change juste la photo au milieu, c'est pas ouf ») : `STYLES` dans carte.js
     donne la forme du cadre de la peinture et l'ornement des filets de la date : arche ronde (Dolce Vita), arc brisé et étoile à
-    huit branches (Mille et une nuits), fer à cheval, losanges et pointillés (Andalou), médaillon ovale et filets doubles (Old
+    huit branches (Mille et une nuits), arc polylobé de l'Alhambra, losanges et pointillés (Andalou ; le fer à cheval, en
+    trou de serrure, n'a pas été validé), médaillon ovale et filets doubles (Old
     money), peinture en bandeau fondue dans le papier et brin de feuillage (Douce France). **La feuille tient dans l'écran,
     signature comprise** : dans l'aperçu (carte comme page, `fit:true`, classe `ct-fit`) et en ligne, `fit()` réduit jusqu'à
-    74 % si le contenu dépasse (le « Save The Oui » sortait de l'écran). Un moment seul reste centré (« À la maison » se collait
+    74 % si le contenu dépasse (le « Save The Oui » sortait de l'écran). **La peinture rapetisse d'abord** (`--ak`, jusqu'à 62 %, le
+    sceau suit à moitié), le texte ensuite : l'arc de Mille et une nuits gardait sa hauteur (taille minimale automatique d'un
+    bloc `aspect-ratio` en `overflow:visible`) et la feuille devenait « plus grande qu'une page » ; le cadre est en
+    `overflow:hidden; min-height:0`, l'image en absolu. Un moment seul reste centré (« À la maison » se collait
     à gauche). Pas de compte à rebours sur la feuille. Sans ouverture, cliquer un thème ne rejoue rien (la page faisait le zoom
     du « morph » de l'enveloppe).
 

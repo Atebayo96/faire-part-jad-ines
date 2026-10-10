@@ -33,11 +33,12 @@
 .ct-fit .ct-sheet{flex:1 0 auto;height:auto;min-height:0;justify-content:center;padding-bottom:calc(54px*var(--k))}
 .ct-fit .ct-made{position:absolute;left:0;right:0;bottom:calc(20px*var(--k));margin:0!important;padding:0}
 /* l'arche : le gros plan symbolique du thème (les mains, les alliances), cadré sur le sujet, en bas de l'image */
-.ct-arch{position:relative;flex:none;width:calc(150px*var(--k));aspect-ratio:3/3.6;border-radius:999px 999px 4px 4px;overflow:hidden;
+.ct-arch{position:relative;flex:none;width:calc(150px*var(--k)*var(--ak,1));aspect-ratio:3/3.6;border-radius:999px 999px 4px 4px;overflow:hidden;
   box-shadow:0 0 0 1.5px var(--paper),0 0 0 3px var(--pal),0 14px 30px -14px rgba(40,25,10,.5)}
-.ct-arch img{width:100%;height:100%;object-fit:cover;object-position:center 78%;display:block}
+.ct-arch img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 78%;display:block}
 /* le sceau de cire, posé sur le bas de l'arche, initiales gravées (même rendu que .seal dans invite.css) */
-.ct-seal{position:relative;z-index:2;flex:none;width:calc(66px*var(--k));height:calc(66px*var(--k));margin-top:calc(-36px*var(--k));
+/* le sceau suit la peinture quand elle rapetisse (--ak, fit() dans carte.js), à moitié : il ne la recouvre pas */
+.ct-seal{--sk:calc(var(--k)*(.45 + .55*var(--ak,1)));position:relative;z-index:2;flex:none;width:calc(66px*var(--sk));height:calc(66px*var(--sk));margin-top:calc(-36px*var(--sk));
   background:center/contain no-repeat;display:grid;place-items:center;container-type:inline-size;filter:drop-shadow(0 6px 9px rgba(0,0,0,.32))}
 .ct-seal b{font:400 24cqw/1.15 "Great Vibes",cursive;letter-spacing:-.01em;margin-top:2cqw;padding:0 .08em;white-space:nowrap;
   background:linear-gradient(165deg,var(--l) 0%,var(--m) 48%,var(--d) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
@@ -94,7 +95,7 @@
 .ct-story .ct-sheet,.ct-a5 .ct-sheet{justify-content:space-between}
 .ct-story .ct-evs,.ct-a5 .ct-evs{margin-top:var(--g2)}
 .ct-a5{--g3:calc(30px*var(--k))}
-.ct-a5 .ct-arch{width:calc(170px*var(--k))}
+.ct-a5 .ct-arch{width:calc(170px*var(--k)*var(--ak,1))}
 
 /* dans le faire-part en ligne (invite.js, "format": "page") : la feuille est la page, elle défile si le contenu dépasse */
 .pg.pg-ct{height:auto;min-height:100%;padding:0;display:block;overflow:visible}
@@ -141,31 +142,32 @@
 .ct-fr path{fill:none;stroke:var(--pal);stroke-width:4;vector-effect:non-scaling-stroke}
 .ct-fr path.in{stroke:var(--paper);stroke-width:1.2;opacity:.9}
 /* ogive (Mille et une nuits) : arc brisé, étoile à huit branches au bout des filets */
-.ct-s-ogive .ct-arch,.ct-s-outrepasse .ct-arch{border-radius:0;box-shadow:none;width:calc(138px*var(--k));aspect-ratio:3/3.8;overflow:visible}
+.ct-s-ogive .ct-arch,.ct-s-outrepasse .ct-arch{border-radius:0;box-shadow:none;width:calc(132px*var(--k)*var(--ak,1));aspect-ratio:3/3.7;overflow:hidden;min-height:0}
+.ct-s-outrepasse .ct-arch{width:calc(150px*var(--k)*var(--ak,1));aspect-ratio:3/3.3}
 .ct-s-ogive .ct-arch,.ct-s-outrepasse .ct-arch{filter:drop-shadow(0 12px 16px rgba(40,25,10,.28))}
 .ct-s-ogive .ct-o{display:block;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat}
 .ct-s-ogive .ct-dl{gap:calc(8px*var(--k))}
-/* outrepassé (Andalou) : arc en fer à cheval, petits losanges, filets en pointillés comme un zellige */
+/* outrepasse (Andalou) : arc polylobé de l'Alhambra (le fer à cheval faisait un trou de serrure, pas validé), petits losanges, filets en pointillés comme un zellige */
 .ct-s-outrepasse .ct-o{display:block;width:calc(8px*var(--k));height:calc(8px*var(--k));transform:rotate(45deg)}
 .ct-s-outrepasse .ct-dl{gap:calc(9px*var(--k))}
 .ct-s-outrepasse .ct-dl i{height:2px;opacity:1;background:radial-gradient(circle,var(--pal) 45%,transparent 55%) center/6px 2px repeat-x}
 .ct-s-outrepasse .ct-ev+.ct-ev{border-left-style:dotted!important;border-left-width:2px!important}
 /* médaillon (Old money) : un ovale cerclé de deux filets, filets doubles, prénoms en capitales fines si la police s'y prête */
-.ct-s-medaillon .ct-arch{width:calc(140px*var(--k));aspect-ratio:3/3.9;border-radius:50%;
+.ct-s-medaillon .ct-arch{width:calc(140px*var(--k)*var(--ak,1));aspect-ratio:3/3.9;border-radius:50%;
   box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--pal),0 0 0 6px var(--paper),0 0 0 7px var(--pal),0 16px 30px -14px rgba(40,25,10,.45)}
 .ct-s-medaillon .ct-arch img{object-position:center 70%}
-.ct-s-medaillon .ct-seal{margin-top:calc(-30px*var(--k))}
+.ct-s-medaillon .ct-seal{margin-top:calc(-30px*var(--sk))}
 .ct-s-medaillon .ct-dl i{height:4px;background:none;border-top:1px solid var(--pal);border-bottom:1px solid var(--pal);opacity:.85}
 .ct-s-medaillon .ct-top{letter-spacing:.32em}
 .ct-s-medaillon .ct-evs{border-top:1px solid color-mix(in srgb,var(--pal) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--pal) 55%,transparent);padding:var(--g2) 0}
 /* bandeau (Douce France) : la peinture en haut, sur toute la largeur de la feuille, fondue dans le papier vers le bas,
    brin de feuillage au bout des filets */
 .ct-s-bandeau .ct-sheet{padding-top:0}
-.ct-s-bandeau .ct-arch{width:calc(100% + 44px*var(--k));margin:0 calc(-22px*var(--k));aspect-ratio:auto;height:calc(210px*var(--k));border-radius:0;box-shadow:none;
+.ct-s-bandeau .ct-arch{width:calc(100% + 44px*var(--k));margin:0 calc(-22px*var(--k));aspect-ratio:auto;height:calc(210px*var(--k)*var(--ak,1));border-radius:0;box-shadow:none;
   -webkit-mask:linear-gradient(#000 55%,transparent);mask:linear-gradient(#000 55%,transparent)}
 .ct-s-bandeau .ct-arch img{object-position:center 72%}
-.ct-s-bandeau .ct-seal{margin-top:calc(-44px*var(--k))}
+.ct-s-bandeau .ct-seal{margin-top:calc(-44px*var(--sk))}
 .ct-s-bandeau .ct-o{display:block;width:calc(16px*var(--k));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat}
 .ct-s-bandeau .ct-dl b.ct-o:last-of-type{transform:scaleX(-1)}
