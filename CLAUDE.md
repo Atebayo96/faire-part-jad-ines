@@ -647,6 +647,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     la lumière de la feuille ; aucune image générée. L'encre (couleur du couple) est assombrie jusqu'à 4,6:1 contre le
     papier **le plus sombre** du relief (`PAPERS[…].low`). Démos : `page-emma-louis` (coton, ouverture, réponses) et
     `carte-camille-antoine` (aquarelle, sans ouverture), `"kind": "page"` pour rester hors des galeries.
+    **La feuille remplit l'écran** (« c'est moche » : un grand vide sous le texte dans l'aperçu, `min-height:100svh` prenait la
+    hauteur de la fenêtre) : en ligne et dans l'aperçu, la feuille a la hauteur du conteneur, le contenu est centré et grandit
+    jusqu'à 118 % s'il reste de la place (`fit()`), la signature en bas. **Y aller / Agenda** : un rond avec l'icône et le mot
+    en petit dessous (deux pastilles avec le mot passaient l'une sous l'autre). Pas de coupure « 13 / mai » (espace insécable)
+    ni « Saint- / Paul » (`text-wrap: balance`).
 
 ## Méthode
 

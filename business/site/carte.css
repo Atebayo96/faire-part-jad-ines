@@ -25,8 +25,13 @@
   background-blend-mode:normal,multiply,multiply;background-size:100% 100%,100% 100%,auto}
 /* la feuille */
 .ct-sheet{position:relative;height:100%;min-height:100%;display:flex;flex-direction:column;align-items:center;
-  padding:calc(30px*var(--k)) calc(30px*var(--k)) calc(24px*var(--k));overflow:hidden}
-.ct-live .ct-sheet{height:auto;min-height:100svh;padding-bottom:calc(30px*var(--k))}
+  padding:calc(30px*var(--k)) calc(22px*var(--k)) calc(24px*var(--k));overflow:hidden}
+.ct-live{display:flex;flex-direction:column;flex:1 0 auto}
+/* en ligne et dans l'aperçu : la feuille a la hauteur exacte de l'écran, le contenu y est centré (et agrandi s'il reste de
+   la place, fit() dans carte.js), la signature posée en bas. Avant, min-height:100svh prenait la hauteur de la fenêtre :
+   dans le téléphone de l'aperçu, un grand vide restait sous le texte (« c'est moche »). */
+.ct-live .ct-sheet{flex:1 0 auto;height:auto;min-height:0;justify-content:center;padding-bottom:calc(54px*var(--k))}
+.ct-live .ct-made{position:absolute;left:0;right:0;bottom:calc(20px*var(--k));margin:0!important;padding:0}
 /* l'arche : le gros plan symbolique du thème (les mains, les alliances), cadré sur le sujet, en bas de l'image */
 .ct-arch{position:relative;flex:none;width:calc(150px*var(--k));aspect-ratio:3/3.6;border-radius:999px 999px 4px 4px;overflow:hidden;
   box-shadow:0 0 0 1.5px var(--paper),0 0 0 3px var(--pal),0 14px 30px -14px rgba(40,25,10,.5)}
@@ -54,16 +59,16 @@
 .ct-n2 .ct-evs{grid-template-columns:1fr 1fr;gap:0}
 .ct-n3 .ct-evs{grid-template-columns:1fr 1fr 1fr;gap:0}
 .ct-n2 .ct-ev+.ct-ev,.ct-n3 .ct-ev+.ct-ev{border-left:1px solid color-mix(in srgb,var(--pal) 60%,transparent)}
-.ct-ev{display:flex;flex-direction:column;align-items:center;gap:calc(4px*var(--k));padding:0 calc(8px*var(--k));min-width:0}
+.ct-ev{display:flex;flex-direction:column;align-items:center;gap:calc(4px*var(--k));padding:0 calc(6px*var(--k));min-width:0}
 .ct-wd{font:500 max(15px,calc(17px*var(--k)))/1.25 "Cormorant Garamond",Georgia,serif}
 .ct-hr{font:600 calc(36px*var(--k))/1.05 "Cormorant Garamond",Georgia,serif;letter-spacing:.02em;font-variant-numeric:lining-nums;color:var(--ink)}
 .ct-n3 .ct-hr{font-size:calc(30px*var(--k))}
 .ct-pl{font:500 max(16px,calc(18px*var(--k)))/1.3 "Cormorant Garamond",Georgia,serif;overflow-wrap:anywhere}
 .ct-ad{font:400 max(14px,calc(15.5px*var(--k)))/1.35 "Cormorant Garamond",Georgia,serif;opacity:.92;overflow-wrap:anywhere}
 .ct-n3 .ct-pl{font-size:max(15px,calc(16px*var(--k)))}
-.ct-lk{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 12px;margin-top:calc(6px*var(--k))!important}
-.ct-lk a,.ct-lk button{display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 2px;border:0;background:none;cursor:pointer;
-  font:600 16px/1 "Cormorant Garamond",Georgia,serif;color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.ct-lk{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:calc(8px*var(--k))!important}
+.ct-lk a,.ct-lk button{display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:0 9px 0 7px;font-size:15px!important;border:1px solid color-mix(in srgb,var(--pal) 50%,transparent);border-radius:999px;background:rgba(255,255,255,.55);cursor:pointer;white-space:nowrap;
+  font:600 16px/1 "Cormorant Garamond",Georgia,serif;color:var(--ink);text-decoration:none}
 .ct-lk svg{width:17px;height:17px;flex:none}
 .ct-lk a:focus-visible,.ct-lk button:focus-visible,.ct-b:focus-visible,.ct-rs a:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
 /* le programme : heure à gauche, moment à droite, comme une liste gravée */
@@ -99,3 +104,20 @@
 @media (prefers-reduced-motion:reduce){.pg.pg-ct .ct>.ct-sheet>*{transition:none;transform:none}}
 /* chiffres alignés partout (le raccourci « font » des règles ci-dessus les remettait en chiffres elzéviriens : « 1er juin ») */
 .ct .ct-rs,.ct .ct-ad,.ct .ct-pl,.ct .ct-tx,.ct .ct-fam,.ct .ct-wd,.ct .ct-dr,.ct .ct-pr li,.ct .ct-lk a{font-variant-numeric:lining-nums}
+
+/* lignes équilibrées : pas de « Saint- / Paul » ni de mot seul sur la dernière ligne */
+.ct-pl,.ct-ad,.ct-rs,.ct-tx,.ct-dr,.ct-fam{text-wrap:balance}
+/* la feuille remplit le téléphone de l'aperçu et la page du faire-part */
+.pv-scroll.one{display:flex;flex-direction:column}
+.pg.pg-ct{display:flex;flex-direction:column}
+/* les deux pastilles d'un moment restent côte à côte ; dans une colonne trop étroite (téléphone de l'aperçu), seulement l'icône */
+.ct-lk{flex-wrap:nowrap;width:100%}
+.ct-lk.ico span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)} .ct-lk.ico a,.ct-lk.ico button{width:38px;padding:0;justify-content:center}
+/* Y aller / Agenda : un rond avec l'icône, le mot en petit dessous (comme les icônes d'un téléphone) : tient dans chaque
+   colonne, sur tous les écrans, sans perdre le mot (une pastille avec le mot passait sur deux lignes à 390 px) */
+.ct .ct-lk{gap:14px;flex-wrap:nowrap}
+.ct .ct-lk a,.ct .ct-lk button{flex-direction:column;gap:5px;width:auto;min-height:0;padding:0;border:0;border-radius:0;background:none;
+  font:500 12px/1.1 Inter,-apple-system,Arial,sans-serif!important;letter-spacing:.04em;color:var(--ink)}
+.ct .ct-lk svg{width:40px;height:40px;padding:10px;border-radius:50%;border:1px solid color-mix(in srgb,var(--pal) 55%,transparent);background:rgba(255,255,255,.6);box-shadow:0 4px 10px -6px rgba(60,40,10,.35)}
+.ct .ct-lk span{position:static!important;width:auto!important;height:auto!important;overflow:visible!important;clip:auto!important}
+.ct .ct-lk a:active svg,.ct .ct-lk button:active svg{transform:scale(.94)}

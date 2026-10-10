@@ -39,11 +39,11 @@
   // dates : "2027-06-12T15:00" telle qu'écrite (heure du lieu), sans conversion de fuseau
   const at=s=>{ const [d,t='12:00']=String(s).split('T'), [y,m,da]=d.split('-').map(Number), [h,mi]=t.split(':').map(Number); return new Date(Date.UTC(y,m-1,da,h||0,mi||0)); };
   const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
-  const L10={fr:{loc:'fr-FR',joy:'Ont la joie de vous convier à leur mariage',prog:'Le programme',dress:'Dress code',reply:'Répondre',route:'Itinéraire',cal:'Calendrier',
+  const L10={fr:{loc:'fr-FR',joy:'Ont la joie de vous convier à leur mariage',prog:'Le programme',dress:'Dress code',reply:'Répondre',route:'Y aller',cal:'Agenda',
       rs:'Réponse souhaitée',before:'avant le',by:'au',fams:'Avec leurs familles',made:'Save the Oui'},
-    en:{loc:'en-GB',joy:'Request the pleasure of your company at their wedding',prog:'The day',dress:'Dress code',reply:'RSVP',route:'Directions',cal:'Calendar',
+    en:{loc:'en-GB',joy:'Request the pleasure of your company at their wedding',prog:'The day',dress:'Dress code',reply:'RSVP',route:'Map',cal:'Calendar',
       rs:'Kindly reply',before:'by',by:'on',fams:'Together with their families',made:'Save the Oui'}};
-  const day=(d,L,year)=>{ const s=cap(d.toLocaleDateString(L.loc,Object.assign({weekday:'long',day:'numeric',month:'long',timeZone:'UTC'},year?{year:'numeric'}:{}))); return L.loc==='fr-FR'?s.replace(/(^|\s)1 (?=\D)/,'$11er '):s; };
+  const day=(d,L,year)=>{ const s=cap(d.toLocaleDateString(L.loc,Object.assign({weekday:'long',day:'numeric',month:'long',timeZone:'UTC'},year?{year:'numeric'}:{}))); const t=L.loc==='fr-FR'?s.replace(/(^|\s)1 (?=\D)/,'$11er '):s; return t.replace(/(\d+(?:er)?) (?=\D)/g,'$1\u00a0'); };
   const hour=(d,L)=>{ const s=d.toLocaleTimeString(L.loc,{hour:'2-digit',minute:'2-digit',timeZone:'UTC'}); return L.loc==='fr-FR'?s.replace(':','h'):s; };
   const ic={
     pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
@@ -76,7 +76,7 @@
     const P=inv.parents, PR=inv.program, DR=inv.dress, R=inv.rsvp||{};
     const live=!!o.live;
     const ev=e=>{ const d=at(e.start), where=[e.place,e.address].find(x=>x&&x!==e.title);
-      const lk=live?`<p class="ct-lk">${e.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener">${ic.pin}${L.route}</a>`:''}<button type="button" data-cal="${esc(e.id)}">${ic.cal}${L.cal}</button></p>`:'';
+      const lk=live?`<p class="ct-lk">${e.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener" aria-label="${esc(L.route)}">${ic.pin}<span>${L.route}</span></a>`:''}<button type="button" data-cal="${esc(e.id)}" aria-label="${esc(L.cal)}">${ic.cal}<span>${L.cal}</span></button></p>`:'';
       return `<div class="ct-ev"><p class="ct-ey">${esc(e.eyebrow||'')}</p>${days.size>1?`<p class="ct-wd">${esc(day(d,L))}</p>`:''}<p class="ct-hr">${esc(hour(d,L))}</p>`+
         `${e.title?`<p class="ct-pl">${esc(e.title)}</p>`:''}${where?`<p class="ct-ad">${esc(where)}</p>`:''}${lk}</div>`; };
     const dl=R.deadline?day(at(R.deadline+'T12:00'),L).replace(/^\S+\s/,''):'';
@@ -107,7 +107,16 @@
   function fit(root){ (root||document).querySelectorAll('.ct-nm').forEach(nm=>{ nm.style.whiteSpace='nowrap'; nm.style.fontSize='';
     const P=nm.parentNode, cs=getComputedStyle(P), max=P.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)-8;
     let fs=parseFloat(getComputedStyle(nm).fontSize); const min=fs*.62; while(nm.scrollWidth>max&&fs>min){ fs-=1; nm.style.fontSize=fs+'px'; }
-    if(nm.scrollWidth>max) nm.style.whiteSpace=''; }); }
+    if(nm.scrollWidth>max) nm.style.whiteSpace=''; });
+    // les pastilles Y aller / Agenda : le mot s'il tient sur la ligne, sinon l'icône seule (classe ico)
+    (root||document).querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); });
+    // en ligne : s'il reste de la place sur l'écran, le texte grandit un peu (jusqu'à 118 %) pour composer une vraie page
+    (root||document).querySelectorAll('.ct-live').forEach(el=>{ const sh=el.querySelector('.ct-sheet'), box=el.parentNode; if(!sh||!box) return;
+      const H=(box.closest('.sc,.pv-scroll')||box).clientHeight; if(!H) return;
+      const need=()=>{ const top=sh.getBoundingClientRect().top; let b=0; [...sh.children].forEach(c=>{ if(!c.classList.contains('ct-made')) b=Math.max(b,c.getBoundingClientRect().bottom); }); return b-top+parseFloat(getComputedStyle(sh).paddingBottom); };
+      sh.style.justifyContent='flex-start'; let k=1; el.style.setProperty('--k','1');
+      while(k<1.18){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need()>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
+      sh.style.justifyContent=''; el.querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); }); }); }
 
   /* ---------- export : image et PDF ----------
      La feuille est dessinée par le navigateur (html-to-image, MIT, /html-to-image.js, chargé à la demande) à la taille
