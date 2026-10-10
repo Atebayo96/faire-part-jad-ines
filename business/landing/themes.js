@@ -173,8 +173,11 @@ window.sceauDoorFit=function(root,box,wall,l,r){
 };
 /* 10 octobre 2026 : Mille et une nuits (le riad de nuit) et l'Andalou (palais de jour) reviennent dans le configurateur, à côté
    de Dolce Vita, Douce France et Old money (« rajoute le thème mille et une nuits et un autre thème arabe andalou »). Avec
-   eux reviennent l'occasion (mariage, henné, sbouâ), la Mosquée et la basmala (règles 17, 32, 35). Aucune image nouvelle. */
+   eux reviennent l'occasion (mariage, henné, sbouâ) et la basmala (règles 17, 35). Aucune image nouvelle. */
 window.SCEAU_THEMES.nuits.compose=true; window.SCEAU_THEMES.alhambra.compose=true;
+// leurs lieux peints (img/lieux) : tous proposés, le thème n'impose pas la mosquée ; l'Andalou n'a pas d'église (-> mairie)
+window.SCEAU_THEMES.nuits.lieux=['mairie','eglise','mosquee','salle','jardin','plage'];
+window.SCEAU_THEMES.alhambra.lieux=['mairie','mosquee','salle','jardin','plage']; window.SCEAU_THEMES.alhambra.lieuAlt={eglise:'mairie'};
 window.SCEAU_BASMALA='﷽';
 window.SCEAU_BASMALA_LABEL='Bismillah ar-Rahman ar-Rahim';
 window.sceauEy=function(t){ t=t==null?'':String(t); return /^\s*(bismillah|bismillah\s+ar-?rahman\s+ar-?rahim|basmala)\s*$/i.test(t)?{ar:true,text:window.SCEAU_BASMALA}:{ar:false,text:t}; };

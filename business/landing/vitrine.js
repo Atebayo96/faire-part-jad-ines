@@ -236,7 +236,7 @@
   // prix de la page unique : 59 €, + 10 € avec l'ouverture, + 20 € avec le bouton Répondre et le tableau de bord
   const pagePrice=()=>59+(C.op!=='none'?10:0)+(C.reply?20:0);
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
-  const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église',fam:''},{id:'mosquee',name:'Mosquée',fam:'nuits'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'fete',name:'Soirée',x:1},{id:'cocktail',name:'Cocktail',x:1},{id:'sortie',name:'Sortie de cérémonie',x:1},{id:'photo',name:'Votre lieu',sig:true}];
+  const LIEUX=[{id:'s2',name:'Le henné',occ:'henne'},{id:'mairie',name:'Mairie'},{id:'eglise',name:'Église'},{id:'mosquee',name:'Mosquée',fam:'nuits'},{id:'salle',name:'Salle'},{id:'jardin',name:'Jardin'},{id:'plage',name:'Plage'},{id:'fete',name:'Soirée',x:1},{id:'cocktail',name:'Cocktail',x:1},{id:'sortie',name:'Sortie de cérémonie',x:1},{id:'photo',name:'Votre lieu',sig:true}];
   /* upsell sans frustration : les options de Signature (lieu peint d'après photo, 3e événement et plus, lien par famille,
      anglais) sont proposées au même endroit que les autres, avec l'étiquette « Signature ». On peut les choisir en Essentiel :
      la formule se met d'elle-même sur Signature et le récapitulatif explique pourquoi ; si l'on revient à Essentiel, il dit
@@ -282,12 +282,15 @@
   const grp=k=>THEMES[k].group||k, GRPS=[...new Set(CK.map(grp))];
   const okLieu=(k,id)=>{ const L0=LIEUX.find(x=>x.id===id); if(L0&&L0.x) return (THEMES[k].extra||[]).includes(id); return !THEMES[k].lieux||THEMES[k].lieux.includes(id); };
   // une ambiance qui n'a pas tous les lieux : un lieu absent passe sur le premier qui existe
-  /* Mille et une nuits et l'Andalou (family:"nuits") : l'Église devient la Mosquée, et l'inverse en revenant à un autre thème ;
-     le nom d'exemple suit (l'Andalou n'a pas d'église peinte : l'écran restait sombre, le texte illisible) */
-  const PLACE={eglise:'Église Saint-Paul',mosquee:'La Grande Mosquée'};
-  const fixLieux=()=>C.ev.forEach(e=>{ const nu=THEMES[C.k].family==='nuits', from=nu?'eglise':'mosquee', to=nu?'mosquee':'eglise';
-    if(e.lieu===from){ e.lieu=to; if(e.place===PLACE[from]){ e.place=PLACE[to]; document.querySelectorAll(`#cStory li.ev[data-i="${C.ev.indexOf(e)}"] input[data-k="place"]`).forEach(i=>i.value=e.place); } }
-    if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=(THEMES[C.k].lieuAlt||{})[e.lieu]||THEMES[C.k].lieux[0]; });
+  /* Mille et une nuits et l'Andalou ne sont qu'un style (« la cérémonie peut avoir lieu à la mairie, c'est juste pour le
+     thème ») : tous leurs lieux peints sont proposés (mairie, église s'il existe, mosquée, salle…), rien n'est imposé. Un lieu
+     qui n'existe pas dans le thème passe sur son remplaçant (lieuAlt, ex. l'Andalou n'a pas d'église : la mairie), et le nom
+     d'exemple suit ; la Mosquée n'existe que dans cette famille. */
+  const PLACE={eglise:'Église Saint-Paul',mairie:'Hôtel de ville',mosquee:'La Grande Mosquée'};
+  const fixLieux=()=>C.ev.forEach((e,i)=>{ const was=e.lieu;
+    if(e.lieu==='mosquee'&&THEMES[C.k].family!=='nuits') e.lieu='eglise';
+    if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=(THEMES[C.k].lieuAlt||{})[e.lieu]||THEMES[C.k].lieux[0];
+    if(e.lieu!==was&&e.place===PLACE[was]&&PLACE[e.lieu]){ e.place=PLACE[e.lieu]; document.querySelectorAll(`#cStory li.ev[data-i="${i}"] input[data-k="place"]`).forEach(x=>x.value=e.place); } });
   fixLieux();
   GRPS.forEach(g=>{ const k0=CK.find(k=>grp(k)===g), t=THEMES[k0], b=document.createElement('button'); b.type='button'; b.className='th'; b.dataset.id=g;
     b.innerHTML=`<span style="background-image:url('/img/themes/${k0}-1.webp?v=17')"></span>${esc(t.name)}`;

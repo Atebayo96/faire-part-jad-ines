@@ -656,11 +656,18 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     pose en bas de sa ligne, les heures restent sur la même ligne même si « La cérémonie » passe sur deux lignes.
 
 48. **Mille et une nuits et l'Andalou reviennent dans le configurateur** (10 octobre 2026 : « rajoute le thème mille et une
-    nuits et un autre thème arabe andalou ») : `compose:true` sur `nuits` et `alhambra` (fin de themes.js), sans nouvelle image.
-    Avec eux reviennent l'occasion (mariage, henné, sbouâ) et la basmala. Dans la famille `nuits`, un moment à l'Église passe à
-    la **Mosquée** et l'inverse en revenant à un autre thème, nom d'exemple compris (`fixLieux()` dans vitrine.js : l'Andalou
-    n'a pas d'église peinte, l'écran restait sombre et le texte illisible). Le configurateur s'ouvre toujours sur Dolce Vita.
+    nuits et un autre thème arabe andalou ») : `compose:true` sur `nuits` et `alhambra` (fin de themes.js). Avec eux reviennent
+    l'occasion (mariage, henné, sbouâ) et la basmala. **Le thème n'est qu'un style** (« la cérémonie peut avoir lieu dans la
+    mairie, quand on dit mille et une nuits ou andalou c'est juste pour le thème ») : rien n'est imposé, tous leurs lieux peints
+    sont proposés (`lieux` dans themes.js : mairie, église pour le riad, mosquée, salle, jardin, plage) ; un lieu absent passe
+    sur son remplaçant (`lieuAlt` : l'Andalou n'a pas d'église, la mairie), le nom d'exemple suit (`fixLieux()`, vitrine.js).
+    Remplace le « Église devient Mosquée » de la règle 32 pour le configurateur. Le configurateur s'ouvre sur Dolce Vita.
     « Parlez-nous de ce lieu » n'apparaît que pour un modèle en chaîne (`.story:not(.ch) .ev-ab`).
+    **Leurs images ne suivent pas encore les règles de Dolce Vita** (« archi mal fait, mal coupé ») : l'Andalou est en
+    vignettes sur papier crème avec des coupures droites (règle 32e interdit), le riad a une mairie coupée sur le côté, un
+    jardin à bande unie et une « salle » qui est un manoir français ; aucun des deux n'a `mains`, `verres`, `fete`, `cocktail`,
+    `sortie`, `prog`, `dress`, `info` (règles 32g, 32h). À repeindre selon la méthode de `scenes-fete.py` (une génération par
+    image, composée pour le plein écran, posée en `cover`), **seulement avec l'accord chiffré de l'utilisateur**.
 49. **Le compte à rebours se règle dans la liste des écrans** (« si je mets page dédiée elle se met au milieu, ça doit être
     paramétrable au moment des écrans ») : une ligne « Le compte à rebours » dans « Vos écrans, dans l'ordre », qui se range à
     l'endroit choisi : sous la date (accueil), **avant vos moments** (`page`), **après vos moments** (`apres`, nouveau), avec la
