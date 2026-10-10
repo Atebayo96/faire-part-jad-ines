@@ -689,6 +689,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     d'abus d'un motif** (« t'as abusé des oranges ») : un ou deux orangers au plus par image (`FEW`), rien de coupé par le haut.
     Repeints ainsi le 10 octobre 2026 (16 images accordées, ~2,40 €) : le riad de jour, la salle du riad, la salle, le dîner,
     les mains, les verres, le fond et le programme de l'Andalou ; 7 zones de texte retouchées dans la peinture.
+    **En pause depuis le 10 octobre 2026** : l'utilisateur trouve encore trop d'oranges (la mairie de l'Andalou) et a voulu
+    essayer un style plus simple, « de l'illustration iconographique ». L'essai (`tools/icono-essai.py`, 4 images : aplats de
+    couleur pour le riad, dessin au trait pour l'Andalou, images gardées hors du site) **n'a pas plu** (« j'aime pas trop, on
+    fait une pause »). Rien n'a été publié de cet essai ; ne pas le reprendre tel quel, ne rien regénérer pour ces deux
+    thèmes sans nouvelle demande.
 49. **Le compte à rebours se règle dans la liste des écrans** (« si je mets page dédiée elle se met au milieu, ça doit être
     paramétrable au moment des écrans ») : une ligne « Le compte à rebours » dans « Vos écrans, dans l'ordre », qui se range à
     l'endroit choisi : sous la date (accueil), **avant vos moments** (`page`), **après vos moments** (`apres`, nouveau), avec la
