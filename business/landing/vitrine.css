@@ -1104,3 +1104,10 @@
 .papers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .papers .op-card{min-width:0}
 .papers .pp{display:block;width:100%;height:64px;margin-bottom:8px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+
+/* « Parlez-nous de ce lieu » n'existe que pour un modèle en chaîne (lieu peint après la commande, règle 32f) */
+.story:not(.ch) .ev-ab{display:none}
+
+/* la ligne « Le compte à rebours » de la liste des écrans : ses cinq choix sur une rangée qui passe à la ligne */
+.story li.cdl #cCount{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.story li.cdl #cCount .op-card{flex:1 1 140px}

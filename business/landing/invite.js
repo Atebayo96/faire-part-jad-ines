@@ -210,9 +210,10 @@
     (ST.photos&&ST.photos.length?rv('ph',null,ST.photos.slice(0,3).map((u,k)=>`<img src="${esc(u)}" alt="" loading="lazy" style="--r:${[-4,3,-2][k]}deg">`).join('')):'')+
     rv('st',c.tx,(ST.items||[]).map(x=>`<div><b>${esc(x.when)}</b><h4>${esc(x.title)}</h4>${x.text?`<p>${esc(x.text)}</p>`:''}</div>`).join('')),{cls:'tall'});
 
-  // 4. compte à rebours sur une page
-  if(I.countdown==='page') page(K1,(c)=>
+  // 4. compte à rebours sur une page : juste avant les moments ('page') ou juste après ('apres'), réglé à l'étape Écrans
+  const cdPage=n=>page(n,(c)=>
     head(c,S.soon,S.left,.8)+rv('',null,cdHtml(true,c.tx))+rv('dl',c.tx,`<i></i><span>${esc(fmtDay(main))}</span><i></i>`),{});
+  if(I.countdown==='page') cdPage(K1);
 
   // 5. événements
   events.forEach((e,i)=>{
@@ -229,6 +230,7 @@
   });
 
   ROLE='post';
+  if(I.countdown==='apres') cdPage(lastScene);
   // 6. le programme du jour (sur le décor du dernier événement)
   const PR=I.program;
   if(PR) page(pk('program',lastScene),(c,lt)=>

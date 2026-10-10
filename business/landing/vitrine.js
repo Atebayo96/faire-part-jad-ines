@@ -229,7 +229,7 @@
      Le henné et le sbouâ ne sont proposés que si un thème de la famille Mille et une nuits s'y compose. */
   const CK=Object.keys(THEMES).filter(k=>THEMES[k].compose&&!THEMES[k].pending);
   const OCC_ON=CK.some(k=>THEMES[k].family==='nuits')?OCCS:OCCS.filter(o=>o.id==='mariage');
-  const C={occ:OCC_ON.some(o=>o.id===urlOcc)?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:CK[0],fmt:'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
+  const C={occ:OCC_ON.some(o=>o.id===urlOcc)?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:CK.includes('dolcevita')?'dolcevita':CK[0],fmt:'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
     reply:false,paper:'coton',ev:null}; C.ev=OCC[C.occ].ev();
   // carte et page unique : ce qui tient sur la feuille (le mot des familles, le programme, le dress code), 3 moments au plus
   const ONE_X=['parents','program','dress'], one=()=>ONE(C.plan);
@@ -248,7 +248,8 @@
   // options retenues pour le format choisi (une option propre à l'autre format reste en mémoire, sans compter)
   const LG_PARTS=[{id:'parents',name:'Le mot des familles'},{id:'story',name:'Notre histoire'},{id:'album',name:'Bande de photos'},{id:'dress',name:'Dress code'},{id:'stay',name:'Bon à savoir'},{id:'gifts',name:'Liste de mariage'}];
   const xOn=()=>(C.fmt==='long'?[...LG_PARTS,...EXTRAS.filter(x=>LG_EXTRAS.includes(x.id))]:EXTRAS).filter(x=>C.x.has(x.id));
-  const COUNTS=[{id:'debut',name:'Au début',sub:'Sous la date'},{id:'page',name:'Page dédiée',sub:'Une page à part'},{id:'fin',name:'À la fin',sub:'Avec « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
+  // le compte à rebours se range dans la liste des écrans, à sa place (« ça doit être paramétrable au moment des écrans »)
+  const COUNTS=[{id:'debut',name:'Sous la date',sub:'Sur l’accueil'},{id:'page',name:'Avant vos moments',sub:'Un écran à part'},{id:'apres',name:'Après vos moments',sub:'Un écran à part'},{id:'fin',name:'Avec la réponse',sub:'Sous « Serez-vous des nôtres ? »'},{id:'non',name:'Aucun',sub:'Pas de compte à rebours'}];
   const REVEALS=[{id:'non',name:'Aucune',sub:'La date s\'affiche'},{id:'scratch',name:'À gratter',sub:'Comme un ticket'},{id:'wheel',name:'La roue',sub:'Elle s\'arrête sur la date'},{id:'slot',name:'Jackpot',sub:'Jour, mois, année'}];
   const OPENS=[{id:'none',name:'Sans ouverture',sub:'La page s’affiche tout de suite'},{id:'env',name:'Enveloppe',sub:'Le sceau se brise'},{id:'cur',name:'Rideau',sub:'Il se lève sur la scène'},{id:'voile',name:'Voile',sub:'Il s\'ouvre par le milieu'},{id:'door',name:'Grandes portes',sub:'Elles s\'ouvrent sur la lumière'}];
   // thèmes qui ont leurs portiers (/img/open/<thème>-portier.webp) : ils apparaîtraient devant les grandes portes.
@@ -281,7 +282,12 @@
   const grp=k=>THEMES[k].group||k, GRPS=[...new Set(CK.map(grp))];
   const okLieu=(k,id)=>{ const L0=LIEUX.find(x=>x.id===id); if(L0&&L0.x) return (THEMES[k].extra||[]).includes(id); return !THEMES[k].lieux||THEMES[k].lieux.includes(id); };
   // une ambiance qui n'a pas tous les lieux : un lieu absent passe sur le premier qui existe
-  const fixLieux=()=>C.ev.forEach(e=>{ if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=(THEMES[C.k].lieuAlt||{})[e.lieu]||THEMES[C.k].lieux[0]; });
+  /* Mille et une nuits et l'Andalou (family:"nuits") : l'Église devient la Mosquée, et l'inverse en revenant à un autre thème ;
+     le nom d'exemple suit (l'Andalou n'a pas d'église peinte : l'écran restait sombre, le texte illisible) */
+  const PLACE={eglise:'Église Saint-Paul',mosquee:'La Grande Mosquée'};
+  const fixLieux=()=>C.ev.forEach(e=>{ const nu=THEMES[C.k].family==='nuits', from=nu?'eglise':'mosquee', to=nu?'mosquee':'eglise';
+    if(e.lieu===from){ e.lieu=to; if(e.place===PLACE[from]){ e.place=PLACE[to]; document.querySelectorAll(`#cStory li.ev[data-i="${C.ev.indexOf(e)}"] input[data-k="place"]`).forEach(i=>i.value=e.place); } }
+    if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=(THEMES[C.k].lieuAlt||{})[e.lieu]||THEMES[C.k].lieux[0]; });
   fixLieux();
   GRPS.forEach(g=>{ const k0=CK.find(k=>grp(k)===g), t=THEMES[k0], b=document.createElement('button'); b.type='button'; b.className='th'; b.dataset.id=g;
     b.innerHTML=`<span style="background-image:url('/img/themes/${k0}-1.webp?v=17')"></span>${esc(t.name)}`;
@@ -340,6 +346,9 @@
     const xsLi=x=>{ const l=li('xs',`<div class="ev-h"><b>${esc(x.name)}</b><small><a href="#" data-rmx>Retirer</a></small></div><div class="eds"></div>`); l.dataset.xs=x.id;
       l.querySelector('[data-rmx]').onclick=ev=>{ ev.preventDefault(); C.x.delete(x.id); paint(); }; return l; };
     EXTRAS.filter(x=>PRE.includes(x.id)).forEach(xsLi);
+    // le compte à rebours : une ligne de la liste, déplacée à l'endroit choisi (paint) ; ses choix viennent de l'étape Détails
+    { const cl=li('cdl','<div class="ev-h"><b>Le compte à rebours</b><small>il se range à sa place</small></div>'), old=$('cCount').closest('.fld'); cl.appendChild($('cCount')); old.remove();
+      $('cCount').addEventListener('click',e=>{ if(!e.target.closest('button')) return; setTimeout(()=>{ const sc=$('cpScroll'), el=sc.querySelector('[data-cd]')||(C.cd==='fin'?[...sc.querySelectorAll('.pv-sc')].pop():C.cd==='debut'?sc.querySelector('.pv-sc'):null); if(el) sc.scrollTo({top:el.offsetTop,behavior:'smooth'}); },60); }); }
     // les événements se rangent avant ce repère, les écrans d'infos après
     const evEnd=li('ev-end',''); evEnd.hidden=true;
     EXTRAS.filter(x=>!PRE.includes(x.id)&&!OPTS.includes(x.id)).forEach(xsLi);
@@ -389,7 +398,7 @@
   $('cOcc').addEventListener('click',e=>{ if(!e.target.closest('button')) return;
     const all=Object.values(OCC).flatMap(o=>o.n);
     [$('cN1'),$('cN2')].forEach((inp,i)=>{ if(!inp.value.trim()||all.includes(inp.value.trim())) inp.value=OCC[C.occ].n[i]; });
-    C.ev=OCC[C.occ].ev(); resetEv(); occDefaults(); paint(); });
+    C.ev=OCC[C.occ].ev(); fixLieux(); resetEv(); occDefaults(); paint(); });
   if(C.occ!=='mariage'){ $('cN1').value=OCC[C.occ].n[0]; $('cN2').value=OCC[C.occ].n[1]; }
   opt($('cSexe'),[{id:'fille',name:'Une fille'},{id:'fils',name:'Un garçon'}],'sexe','',(b,o)=>{ b.className='chip'; b.textContent=o.name; });
   /* contenu des parties (grand tableau) et des écrans en plus (scène par scène) : chacun se règle dès qu'on le coche,
@@ -568,7 +577,7 @@
     // carte et page unique : pas de révélation, de compte à rebours ni d'options du scène par scène ; l'ouverture est une option de la page
     $('fldAddons').hidden=C.plan!=='page'; $('cAddons').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id==='op'?C.op!=='none':C.reply));
     $('cOpen').querySelector('[data-id="none"]').hidden=C.plan!=='page'; $('cOneNote').hidden=C.plan!=='carte'; $('cOpen').closest('.fld').hidden=C.plan==='carte'; $('cOpenHint').hidden=C.plan!=='page';
-    $('fldReveal').hidden=one(); $('fldPaper').hidden=!one(); $('cPaper').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.paper)); $('cCount').closest('.fld').hidden=one(); $('cOpts').closest('.fld').hidden=one();
+    $('fldReveal').hidden=one(); $('fldPaper').hidden=!one(); $('cPaper').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.paper)); $('cCount').closest('li').hidden=one(); $('cOpts').closest('.fld').hidden=one();
     $('cpOp').hidden=one()&&C.op==='none'; $('cpReplay').hidden=$('cpOp').hidden;
     { const at=$('cpAtelier'); if(at) at.hidden=!(one()&&new URLSearchParams(location.search).has('atelier')); }
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
@@ -601,8 +610,11 @@
         $('cStory').querySelector('.home').innerHTML='<b>En haut</b><span>La peinture du thème, le sceau, vos prénoms et la date</span>';
         $('cStory').querySelector('.rsvp .rsvp-h').innerHTML=C.plan==='page'&&C.reply?'<b>Le bouton « Répondre »</b><span>en bas de la page · + 20 €</span>':'<b>La réponse</b><span>écrite en bas de la feuille</span>'; }
       // compte à rebours : pas de page dédiée dans le tableau (il est en haut ou à la fin) ; pas de révélation de la date
-      if(long&&C.cd==='page'){ C.cd='fin'; $('cCount').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.cd)); }
-      $('cCount').querySelector('[data-id="page"]').hidden=long;
+      if(long&&(C.cd==='page'||C.cd==='apres')){ C.cd='fin'; $('cCount').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.cd)); }
+      $('cCount').querySelector('[data-id="page"]').hidden=$('cCount').querySelector('[data-id="apres"]').hidden=long;
+      // la ligne du compte à rebours se range à l'endroit choisi : sous l'accueil, avant ou après les moments, avec la réponse
+      { const box=$('cStory'), cl=box.querySelector('li.cdl'), evs=box.querySelectorAll('li.ev'), at={debut:box.querySelector('li.home').nextSibling,page:evs[0],apres:box.querySelector('li.ev-end'),fin:box.querySelector('li.rsvp'),non:box.querySelector('li.rsvp')}[C.cd];
+        if(cl&&at&&cl.nextSibling!==at&&cl!==at) box.insertBefore(cl,at); }
     }
     // (les cartes d'ambiance sont bâties par buildAmb())
     $('cStory').classList.toggle('ch',!!isChain(C.k));
@@ -682,10 +694,11 @@
     const hd=(c,ey,title)=>`<div class="ey" style="color:${c.ey};position:relative">${ey}</div>`+(title?`<div class="nm" style="${esc(nmCss(base*.62,c.nm))};position:relative">${title}</div>`:'');
     xp('parents',...pk('parents',K1,''),c=>hd(c,famEy(),'')+`<div class="pv-fam" style="color:${c.tx}">${[C.data.parents.n1,C.data.parents.n2].filter(Boolean).map(esc).join(' &amp; ')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.parents.text)}</div><div class="nm" style="${esc(nmCss(base*.6,c.nm))};position:relative">${names}</div>`);
     xp('story',K1,'',(c,lt)=>hd(c,'Notre histoire','Il était une fois')+card(c,lt,C.data.story.map(x=>[esc(x.when),esc([x.title,x.text].filter(Boolean).join(', '))])));
-    pages.push(evPage(0));
-    // page dediee au compte a rebours
-    if(C.cd==='page'){ const pg=page(dayKey('fond',hr(C.ev[0])<18),''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`)); }
-    C.ev.forEach((_,i)=>{ if(i) pages.push(evPage(i)); });
+    // page dédiée au compte à rebours : avant les moments ('page') ou après ('apres'), comme le moteur (invite.js)
+    const cdPg=(k)=>{ const pg=page(k,''); pages.push(pg.html(c=>`<div class="ey" style="color:${c.ey};position:relative">Le grand jour approche</div><div class="nm" style="${esc(nmCss(base*.8,c.nm))};position:relative">Plus que</div><div style="position:relative">${cdHtml(true,c.tx)}</div><div class="cp-dl" style="color:${pg.lt?p.c:'#fff'};position:relative"><i></i><span>${esc(ds)}</span><i></i></div>`).replace('<section ','<section data-cd="1" ')); };
+    if(C.cd==='page') cdPg(dayKey('fond',hr(C.ev[0])<18));
+    C.ev.forEach((_,i)=>pages.push(evPage(i)));
+    if(C.cd==='apres') cdPg(dayKey('fond',hr(C.ev[C.ev.length-1])<18));
     xp('program',...pk('program',dayKey('fond',hr(C.ev[C.ev.length-1])<18),''),(c,lt)=>hd(c,'Le programme','Le grand jour')+card(c,lt,C.data.program.filter(x=>x.time||x.title).map(x=>[esc(hm(x.time)),esc(x.title)])));
     const m4=t.scenes[3][4];
     xp('dress',...pk('dress',K4,isJ(K4)?'':m4),c=>hd(c,'Dress code',esc(C.data.dress.title))+`<div class="pv-sws">${C.data.dress.colors.map(x=>`<i style="background:${esc(x)}"></i>`).join('')}</div><div class="tx" style="color:${c.tx};position:relative">${esc(C.data.dress.text)}</div>`);
@@ -746,7 +759,7 @@
   function lgInvite(t,p,f,n1,n2,ds){
     const day=$('cDate').value||'2027-06-12', dl=new Date(weddingDate().getTime()-30*864e5).toISOString().slice(0,10);
     return {slug:'apercu',demo:true,layout:'long',theme:C.k,reveal:C.rvl==='non'?null:C.rvl,couple:isSolo()?[n1]:[n1,n2],date:day+'T15:00',tz:'Europe/Paris',opening:'cur',music:'none',
-      palette:p.c,font:f.id==='theme'?undefined:f.id,countdown:C.cd==='page'?'fin':C.cd,calques:[],anim:[],trans:[],families:{},album:C.x.has('album'),
+      palette:p.c,font:f.id==='theme'?undefined:f.id,countdown:C.cd==='page'||C.cd==='apres'?'fin':C.cd,calques:[],anim:[],trans:[],families:{},album:C.x.has('album'),
       intro:{eyebrow:t.scenes[0][0],text:introTxt(),dateText:ds},
       parents:C.x.has('parents')?{eyebrow:famEy(),names:[C.data.parents.n1,C.data.parents.n2].filter(Boolean),text:C.data.parents.text}:null,
       eventsTitle:C.occ==='mariage'?undefined:'',

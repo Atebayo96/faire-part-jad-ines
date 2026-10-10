@@ -655,6 +655,18 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     colonne a les mêmes cases dans le même ordre et partage les lignes de la grille (`subgrid`, `--slots`) ; le chapeau se
     pose en bas de sa ligne, les heures restent sur la même ligne même si « La cérémonie » passe sur deux lignes.
 
+48. **Mille et une nuits et l'Andalou reviennent dans le configurateur** (10 octobre 2026 : « rajoute le thème mille et une
+    nuits et un autre thème arabe andalou ») : `compose:true` sur `nuits` et `alhambra` (fin de themes.js), sans nouvelle image.
+    Avec eux reviennent l'occasion (mariage, henné, sbouâ) et la basmala. Dans la famille `nuits`, un moment à l'Église passe à
+    la **Mosquée** et l'inverse en revenant à un autre thème, nom d'exemple compris (`fixLieux()` dans vitrine.js : l'Andalou
+    n'a pas d'église peinte, l'écran restait sombre et le texte illisible). Le configurateur s'ouvre toujours sur Dolce Vita.
+    « Parlez-nous de ce lieu » n'apparaît que pour un modèle en chaîne (`.story:not(.ch) .ev-ab`).
+49. **Le compte à rebours se règle dans la liste des écrans** (« si je mets page dédiée elle se met au milieu, ça doit être
+    paramétrable au moment des écrans ») : une ligne « Le compte à rebours » dans « Vos écrans, dans l'ordre », qui se range à
+    l'endroit choisi : sous la date (accueil), **avant vos moments** (`page`), **après vos moments** (`apres`, nouveau), avec la
+    réponse (`fin`), ou aucun. L'aperçu le place exactement comme le moteur (`cdPage()` dans invite.js) : avant, l'aperçu le
+    mettait après le premier moment alors que le faire-part le mettait avant. Plus dans l'étape Détails.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

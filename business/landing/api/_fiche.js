@@ -57,7 +57,7 @@ export function sanitize(raw, plan = 'essentiel', opts = {}) {
     theme: r.theme, couple, date: first, tz: 'Europe/Paris', lang: 'fr', kind: pick(r.kind, ['henne', 'sbou3'], undefined),
     opening: one && !(plan === 'page' && opts.opening) ? 'none' : pick(r.opening, ['env', 'cur', 'voile', 'door'], 'env'), palette: hex(r.palette),
     font: pick(r.font, ['script', 'classique', 'moderne', 'deco'], undefined),
-    countdown: one ? 'non' : pick(r.countdown, ['debut', 'page', 'fin', 'non'], 'fin'), reveal: one ? null : pick(r.reveal, ['scratch', 'wheel', 'slot'], null),
+    countdown: one ? 'non' : pick(r.countdown, ['debut', 'page', 'apres', 'fin', 'non'], 'fin'), reveal: one ? null : pick(r.reveal, ['scratch', 'wheel', 'slot'], null),
     intro: r.intro ? { eyebrow: txt(r.intro.eyebrow, 60), text: txt(r.intro.text, 200), dateText: txt(r.intro.dateText, 80) } : undefined,
     parents: P ? { eyebrow: txt(P.eyebrow, 60), names: arr(P.names, 2).map(x => clean(x, 60)).filter(Boolean), text: txt(P.text, 300) } : undefined,
     eventsTitle: typeof r.eventsTitle === 'string' ? clean(r.eventsTitle, 60) : undefined,
