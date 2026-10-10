@@ -305,7 +305,7 @@
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
   $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true);
   // le papier de la carte et de la page unique : trois vrais papiers en relief (carte.css), une vignette de chacun
-  [['coton','Coton','Épais, fait main'],['lin','Lin','Un tissage fin'],['verge','Vergé','Lignes de trame, classique']].forEach(([id,n,sub])=>{ const b=document.createElement('button'); b.type='button'; b.className='op-card'; b.dataset.id=id;
+  [['coton','Coton','Épais, fait main'],['aquarelle','Aquarelle','Un grain profond'],['velin','Vélin','Lisse et satiné']].forEach(([id,n,sub])=>{ const b=document.createElement('button'); b.type='button'; b.className='op-card'; b.dataset.id=id;
     b.innerHTML=`<span class="pp ct ct-p-${id}" style="--paper:${(window.SceauCarte?SceauCarte.PAPERS[id].c:'#f8f2e7')}" aria-hidden="true"></span><b>${n}</b><small>${sub}</small>`; b.onclick=()=>{ C.paper=id; paint(); }; $('cPaper').appendChild(b); });
   // options de la page unique : l'ouverture animée (+10 €) et le bouton Répondre avec le tableau de bord (+20 €)
   [['op','L’ouverture animée','+ 10 €'],['reply','Le bouton « Répondre » et le tableau de bord','+ 20 €']].forEach(([id,n,pr])=>{ const b=document.createElement('button'); b.type='button'; b.className='op-card'; b.dataset.id=id;

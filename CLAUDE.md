@@ -642,11 +642,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     payée, elle se télécharge depuis la page Merci (`GET /api/commande` rend sa fiche) et par le lien envoyé par e-mail.
     Avant le paiement en ligne, `/creer/?atelier=1` montre deux boutons Image / PDF pour livrer une carte à la main.
     **Pas d'encadré** (« les encadrés rectangulaires, on a l'impression que c'est pas la full page ») : la feuille va jusqu'aux
-    bords. **Trois vrais papiers** (`"paper"` : `coton`, `lin`, `verge`), choisis à l'étape Détails : « pas juste du grain,
+    bords. **Trois vrais papiers** (`"paper"` : `coton`, `aquarelle`, `velin` ; Lin et Vergé, tissage et lignes trop réguliers, « font cheap » : retirés), choisis à l'étape Détails : « pas juste du grain,
     de la profondeur » : relief SVG éclairé en lumière rasante (`feDiffuseLighting`), multiplié sur la teinte du papier, plus
     la lumière de la feuille ; aucune image générée. L'encre (couleur du couple) est assombrie jusqu'à 4,6:1 contre le
     papier **le plus sombre** du relief (`PAPERS[…].low`). Démos : `page-emma-louis` (coton, ouverture, réponses) et
-    `carte-camille-antoine` (lin, sans ouverture), `"kind": "page"` pour rester hors des galeries.
+    `carte-camille-antoine` (aquarelle, sans ouverture), `"kind": "page"` pour rester hors des galeries.
 
 ## Méthode
 

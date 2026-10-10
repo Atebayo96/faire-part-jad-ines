@@ -53,7 +53,7 @@ export function sanitize(raw, plan = 'essentiel', opts = {}) {
   const one = ONE_PAGE.includes(plan);
   return tidy({
     format: one ? 'page' : undefined, reply: one ? plan === 'page' && !!opts.reply : undefined,
-    paper: one ? pick(r.paper, ['coton', 'lin', 'verge'], 'coton') : undefined,
+    paper: one ? pick(r.paper, ['coton', 'aquarelle', 'velin'], 'coton') : undefined,
     theme: r.theme, couple, date: first, tz: 'Europe/Paris', lang: 'fr', kind: pick(r.kind, ['henne', 'sbou3'], undefined),
     opening: one && !(plan === 'page' && opts.opening) ? 'none' : pick(r.opening, ['env', 'cur', 'voile', 'door'], 'env'), palette: hex(r.palette),
     font: pick(r.font, ['script', 'classique', 'moderne', 'deco'], undefined),

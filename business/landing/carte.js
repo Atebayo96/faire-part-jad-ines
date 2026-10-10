@@ -13,7 +13,7 @@
   const IMGV=23;
   const INK='#2b2621';
   // les trois papiers (carte.css, .ct-p-*) : leur teinte, et la plus sombre que prend le relief (pour mesurer l'encre)
-  const PAPERS={coton:{c:'#f8f2e7',low:'#ddd3c3'},lin:{c:'#f4f2ec',low:'#d9d5cc'},verge:{c:'#f3e9d6',low:'#ddd1b9'}};
+  const PAPERS={coton:{c:'#f8f2e7',low:'#ddd3c3'},aquarelle:{c:'#f9f6f0',low:'#d8d3ca'},velin:{c:'#f7f0e2',low:'#e0d6c4'}};
   // cires et relief des initiales gravées (mêmes valeurs que invite.js)
   const SEALS={or:['#fbe3a0','#c99a3a','#6e4a12'],bordeaux:['#d8737b','#8e2430','#3f0b10'],bleu:['#9bb4e8','#2f4f94','#0c1a3d'],
     sauge:['#e4ecd6','#8fa37f','#3f4d36'],terracotta:['#f5b085','#c0643f','#4f1f0c'],rose:['#fff0f2','#d99aa6','#7a4250']};
