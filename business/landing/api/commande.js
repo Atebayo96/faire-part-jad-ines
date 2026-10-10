@@ -61,7 +61,7 @@ export default async function handler(req, res) {
       let paid = false, payment = null;
       if (fake() && req.query.fake === '1') { paid = true; payment = { fake: true }; }
       else if (c.session) {
-        try { const s = await stripe('checkout/sessions/' + encodeURIComponent(c.session)); paid = s.payment_status === 'paid'; payment = { session: s.id, intent: s.payment_intent, amount: s.amount_total }; } catch { paid = false; }
+        try { const s = await stripe('checkout/sessions/' + encodeURIComponent(c.session)); paid = s.payment_status === 'paid' || s.payment_status === 'no_payment_required'; payment = { session: s.id, intent: s.payment_intent, amount: s.amount_total }; } catch { paid = false; }
       }
       if (!paid) return res.status(200).json({ status: 'pending' });
       c = await publish(ref, payment);

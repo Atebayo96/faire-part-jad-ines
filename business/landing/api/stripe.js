@@ -10,6 +10,9 @@ async function rawBody(req) {
   return Buffer.concat(parts).toString('utf8');
 }
 
+// une commande réglée entièrement par un code promo à 100 % est « no_payment_required », pas « paid »
+const PAID = ['paid', 'no_payment_required'];
+
 export function verify(raw, header, secret, now = Date.now()) {
   const h = Object.fromEntries(String(header || '').split(',').map(x => x.split('=')).filter(x => x.length === 2).map(([k, v]) => [k.trim(), v]));
   const sigs = String(header || '').split(',').filter(x => x.startsWith('v1=')).map(x => x.slice(3));
@@ -25,7 +28,7 @@ export default async function handler(req, res) {
   const raw = await rawBody(req);
   if (!verify(raw, req.headers['stripe-signature'], secret)) return res.status(400).json({ error: 'signature' });
   const ev = JSON.parse(raw), s = ev.data && ev.data.object;
-  if (ev.type !== 'checkout.session.completed' || !s || s.payment_status !== 'paid') return res.status(200).json({ ignored: true });
+  if (ev.type !== 'checkout.session.completed' || !s || !PAID.includes(s.payment_status)) return res.status(200).json({ ignored: true });
   const ref = s.client_reference_id || (s.metadata || {}).ref || '';
   // les commandes Signature passent par les liens de paiement (paiement.js) : leur référence ne commence pas par ess_
   if (!/^ess_[\w-]{10,80}$/.test(ref)) return res.status(200).json({ ignored: true });
