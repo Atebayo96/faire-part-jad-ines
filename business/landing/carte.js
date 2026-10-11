@@ -175,12 +175,12 @@
       const H=(box.closest('.sc,.pv-scroll')||box).clientHeight; if(!H) return;
       const need=()=>{ const top=sh.getBoundingClientRect().top; let b=0; [...sh.children].forEach(c=>{ if(!/ct-(made|back|pw|deco|seal)\b/.test(c.className)) b=Math.max(b,c.getBoundingClientRect().bottom); }); return b-top+parseFloat(getComputedStyle(sh).paddingBottom); };
       sh.style.justifyContent='flex-start'; let k=1; el.style.setProperty('--k','1');
-      // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 74 %, pour que la signature reste sur l'écran
+      // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 66 %, pour que la signature reste sur l'écran
       // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
-      if(need()>H) while(k>.74&&need()>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); }
+      if(need()>H) while(k>.66&&need()>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); }
       else while(k<1.06){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need()>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
       // pour le configurateur : la feuille déborde encore (over) ou a dû être réduite nettement (tight)
-      el.dataset.full=need()>H+1?'over':k<.88?'tight':'';
+      el.dataset.full=need()>H+1?'over':k<.8?'tight':'';
       sh.style.justifyContent=''; el.querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); }); });
     rim(root||document); }
 

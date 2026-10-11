@@ -698,7 +698,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **Le programme est une frise** (« si je rajoute le programme, on voit plus vraiment le reste, c'est plus qu'une page ») :
     les étapes côte à côte, l'heure au-dessus du moment, quatre par ligne au plus, plus petit que les moments. **Le cadre ne
     rétrécit pas avec le texte** (`--m`, `--pt`, `--pb` fixes) : une feuille pleine reste posée sur son fond, signature visible.
-    Mot des familles + programme tiennent ; avec le dress code en plus, la note « feuille pleine » s'affiche.
+    **Tout tient en diminuant un peu** (« c'est bien, faut juste diminuer un peu ») : `fit()` réduit jusqu'à 66 % et les tailles
+    plancher de la feuille sont plus basses (15/14/13/12,5 px, jamais sous 11) : mot des familles + 3 moments + programme +
+    dress code tiennent sur un écran. **Trois moments côte à côte** (« quand on ajoute un moment, ça part en steak ») :
+    colonnes égales `minmax(0,1fr)` (le lieu ne déborde plus sur la colonne voisine), chapeau sur deux lignes au besoin, icône
+    et lieu plus petits.
     **Chaque moment a son adresse** (champ « L'adresse (pour l'itinéraire) », `e.addr`, toutes formules), écrite sous le nom du
     lieu et utilisée par « Y aller ». **Les paraphes d'une calligraphie ne sont plus coupés** (`.ct-nm` a une marge intérieure :
     la dorure en `background-clip:text` s'arrêtait à la boîte du mot). Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de
