@@ -689,7 +689,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     colonne à l'autre). Le doré de la planche, pâle et verdâtre une fois détouré, est recoloré d'un or soutenu.
     **Les icônes sont pressées dans le papier** (le gaufrage blanc sur blanc ne se voyait plus : « on voit même plus les icônes,
     faut qu'on ait l'impression qu'elles ont été pressées dans le papier ») : trois calques masqués par l'icône, le creux plus
-    sombre que la feuille, son bord haut-gauche dans l'ombre, le papier autour qui accroche la lumière en bas à droite. Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de
+    sombre que la feuille, son bord haut-gauche dans l'ombre, le papier autour qui accroche la lumière en bas à droite.
+    **La dorure reste en option** (« laisser en doré aussi, pour voir la différence ») : étape Détails, « Les icônes des
+    moments » : Pressées (par défaut) ou Dorées (fiche `"icons": "or"`, classe `ct-ic-or`, validé par `_fiche.js`). Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de
     ville : alliances), puis le lieu. **Mille et une nuits et l'Andalou : pas de verres ni de « fête »** (« c'est plus musulman ») :
     le moment d'exemple s'appelle « La réception » (`fixLieux()`), son icône est **l'assiette et ses couverts**
     (`ico-assiette.webp`, 1 génération accordée, ~0,15 € ; elle sert aussi au dîner partout), le cocktail prend le bouquet.

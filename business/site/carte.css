@@ -269,3 +269,7 @@
 .ct-ic i{background:color-mix(in srgb,var(--paper) 35%,#4a3518)}
 .ct-ic b{background:color-mix(in srgb,var(--paper) 62%,#7a5c32);-webkit-mask-position:calc(50% + var(--o)) calc(50% + var(--o));mask-position:calc(50% + var(--o)) calc(50% + var(--o))}
 .ct-n2 .ct-ev>.ct-ic,.ct-n3 .ct-ev>.ct-ic{align-self:end}
+/* les icônes en dorure (option, fiche "icons": "or") : l'icône dorée elle-même, posée sur le papier avec son relief */
+.ct-ic-or .ct-ic span::before,.ct-ic-or .ct-ic b{display:none}
+.ct-ic-or .ct-ic i{-webkit-mask:none;mask:none;background:var(--ic) center/contain no-repeat;
+  filter:drop-shadow(-.6px -.6px 0 rgba(255,255,255,.9)) drop-shadow(.8px 1px .4px rgba(60,40,10,.35))}

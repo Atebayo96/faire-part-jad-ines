@@ -144,7 +144,7 @@
     const prog=PR&&(PR.items||[]).length?`<div class="ct-pr"><p class="ct-ey">${esc(PR.eyebrow||L.prog)}</p><ul>${PR.items.slice(0,8).map(x=>`<li><b>${esc(x.time||'')}</b><span>${esc(x.title||'')}</span></li>`).join('')}</ul></div>`:'';
     const dress=DR&&(DR.title||DR.text)?`<p class="ct-dr"><b>${esc(DR.eyebrow||L.dress)}</b>${esc([DR.title,DR.text].filter(Boolean).join(' · '))}</p>`:'';
     const st=styleOf(inv.theme);
-    const cls=['ct','ct-s-'+st,'ct-p-'+pk,o.page?'ct-'+o.page:'',live?'ct-live':'',live||o.fit?'ct-fit':'',evs.length>1?'ct-n'+Math.min(evs.length,3):''].filter(Boolean).join(' ');
+    const cls=['ct','ct-s-'+st,'ct-p-'+pk,o.page?'ct-'+o.page:'',live?'ct-live':'',inv.icons==='or'?'ct-ic-or':'',live||o.fit?'ct-fit':'',evs.length>1?'ct-n'+Math.min(evs.length,3):''].filter(Boolean).join(' ');
     return `<div class="${cls}" style="--pal:${esc(pal)};--ink:${ink};--ink2:${ink2};--soft:${soft};--paper:${PP.c};--tx:${INK}">`+
       `<div class="ct-sheet">`+
         `<div class="ct-back" aria-hidden="true" style="background-image:url('/img/carte/${FOND[st]}-fond.webp?v=${CARTEV}')"></div>`+

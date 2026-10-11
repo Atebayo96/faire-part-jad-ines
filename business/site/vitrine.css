@@ -1111,3 +1111,7 @@
 /* la ligne « Le compte à rebours » de la liste des écrans : ses cinq choix sur une rangée qui passe à la ligne */
 .story li.cdl #cCount{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .story li.cdl #cCount .op-card{flex:1 1 140px}
+/* le choix des icônes de la carte : une alliance pressée ou dorée sur un carré de papier */
+.pp.ic-presse,.pp.ic-or{display:grid;place-items:center;background:#f6efe2}
+.pp.ic-presse i,.pp.ic-or i{width:60%;height:60%;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat;background:#b6a68c;filter:drop-shadow(.8px .8px 0 #fff)}
+.pp.ic-or i{-webkit-mask:none;mask:none;background:var(--ic) center/contain no-repeat;filter:drop-shadow(0 1px 1px rgba(60,40,10,.35))}

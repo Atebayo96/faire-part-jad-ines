@@ -230,7 +230,7 @@
   const CK=Object.keys(THEMES).filter(k=>THEMES[k].compose&&!THEMES[k].pending);
   const OCC_ON=CK.some(k=>THEMES[k].family==='nuits')?OCCS:OCCS.filter(o=>o.id==='mariage');
   const C={occ:OCC_ON.some(o=>o.id===urlOcc)?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:CK.includes('dolcevita')?'dolcevita':CK[0],fmt:'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
-    reply:false,paper:'coton',ev:null}; C.ev=OCC[C.occ].ev();
+    reply:false,paper:'coton',icons:'presse',ev:null}; C.ev=OCC[C.occ].ev();
   // carte et page unique : ce qui tient sur la feuille (le mot des familles, le programme, le dress code), 3 moments au plus
   const ONE_X=['parents','program','dress'], one=()=>ONE(C.plan);
   // prix de la page unique : 59 €, + 10 € avec l'ouverture, + 20 € avec le bouton Répondre et le tableau de bord
@@ -319,6 +319,9 @@
   // le papier de la carte et de la page unique : trois vrais papiers en relief (carte.css), une vignette de chacun
   [['coton','Coton','Épais, fait main'],['aquarelle','Aquarelle','Un grain profond'],['velin','Vélin','Lisse et satiné']].forEach(([id,n,sub])=>{ const b=document.createElement('button'); b.type='button'; b.className='op-card'; b.dataset.id=id;
     b.innerHTML=`<span class="pp ct ct-p-${id}" style="--paper:${(window.SceauCarte?SceauCarte.PAPERS[id].c:'#f8f2e7')}" aria-hidden="true"></span><b>${n}</b><small>${sub}</small>`; b.onclick=()=>{ C.paper=id; paint(); }; $('cPaper').appendChild(b); });
+  // les icônes des moments : pressées dans le papier (par défaut) ou en dorure (« laisser en doré aussi, pour voir la différence »)
+  [['presse','Pressées','Enfoncées dans le papier'],['or','Dorées','À la feuille d’or']].forEach(([id,n,sub])=>{ const b=document.createElement('button'); b.type='button'; b.className='op-card'; b.dataset.id=id;
+    b.innerHTML=`<span class="pp ic-${id}" aria-hidden="true"><i style="--ic:url('/img/carte/ico-alliances.webp')"></i></span><b>${n}</b><small>${sub}</small>`; b.onclick=()=>{ C.icons=id; paint(); }; $('cIcons').appendChild(b); });
   // options de la page unique : l'ouverture animée (+10 €) et le bouton Répondre avec le tableau de bord (+20 €)
   [['op','L’ouverture animée','+ 10 €'],['reply','Le bouton « Répondre » et le tableau de bord','+ 20 €']].forEach(([id,n,pr])=>{ const b=document.createElement('button'); b.type='button'; b.className='op-card'; b.dataset.id=id;
     b.innerHTML=`<b>${n}</b><small>${pr}</small>`; b.onclick=()=>{ if(id==='op') C.op=C.op==='none'?'env':'none'; else C.reply=!C.reply; paint(); if(id==='op'&&C.op!=='none') replayOp(500); }; $('cAddons').appendChild(b); }); // avant le clic du bouton (capture) : un choix de la main de l'utilisateur n'est plus changé
@@ -583,7 +586,7 @@
     // carte et page unique : pas de révélation, de compte à rebours ni d'options du scène par scène ; l'ouverture est une option de la page
     $('fldAddons').hidden=C.plan!=='page'; $('cAddons').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id==='op'?C.op!=='none':C.reply));
     $('cOpen').querySelector('[data-id="none"]').hidden=C.plan!=='page'; $('cOneNote').hidden=C.plan!=='carte'; $('cOpen').closest('.fld').hidden=C.plan==='carte'; $('cOpenHint').hidden=C.plan!=='page';
-    $('fldReveal').hidden=one(); $('fldPaper').hidden=!one(); $('cPaper').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.paper)); $('cCount').closest('li').hidden=one(); $('cOpts').closest('.fld').hidden=one();
+    $('fldReveal').hidden=one(); $('fldPaper').hidden=!one(); $('fldIcons').hidden=!one(); $('cIcons').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.icons)); $('cPaper').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.paper)); $('cCount').closest('li').hidden=one(); $('cOpts').closest('.fld').hidden=one();
     $('cpOp').hidden=one()&&C.op==='none'; $('cpReplay').hidden=$('cpOp').hidden;
     { const at=$('cpAtelier'); if(at) at.hidden=!(one()&&new URLSearchParams(location.search).has('atelier')); }
     { const sel=document.getElementById('planSel'); if(sel) sel.value=C.plan; const P=PLANS[C.plan];
@@ -796,10 +799,10 @@
     if(C.x.has('photos')&&/^https?:\/\//.test(C.data.photos.url||'')) inv.photos={text:'Partagez vos plus belles photos de la journée dans notre album commun.',url:C.data.photos.url};
     return JSON.parse(JSON.stringify(inv)); }
   // la fiche d'une carte ou d'une page unique : la même, sur une seule feuille ("format": "page", carte.js)
-  function oneInvite(){ const inv=realInvite(); inv.format='page'; inv.paper=C.paper; inv.reply=C.plan==='page'&&C.reply; if(C.plan==='carte') inv.opening='none';
+  function oneInvite(){ const inv=realInvite(); inv.format='page'; inv.paper=C.paper; inv.icons=C.icons; inv.reply=C.plan==='page'&&C.reply; if(C.plan==='carte') inv.opening='none';
     ['story','infos','gifts','faq','photos'].forEach(k=>delete inv[k]); ['parents','dress'].forEach(k=>{ if(!C.x.has(k)) delete inv[k]; }); return inv; }
   // les choix du configurateur, pour le rouvrir tel quel (modification par les mariés)
-  const snapshot=()=>({plan:C.plan,reply:C.reply,paper:C.paper,occ:C.occ,sexe:C.sexe,k:C.k,fmt:C.fmt,pal:C.pal,font:C.font,op:C.op,cd:C.cd,rvl:C.rvl,x:[...C.x],
+  const snapshot=()=>({plan:C.plan,reply:C.reply,paper:C.paper,icons:C.icons,occ:C.occ,sexe:C.sexe,k:C.k,fmt:C.fmt,pal:C.pal,font:C.font,op:C.op,cd:C.cd,rvl:C.rvl,x:[...C.x],
     n1:$('cN1').value,n2:$('cN2').value,date:$('cDate').value,ev:C.ev.map(({photos,...e})=>e),data:C.data});
   window.SCEAU_COMPOSE={fiche:()=>one()?oneInvite():realInvite(),config:snapshot,opts:()=>({opening:C.op!=='none',reply:C.plan==='page'&&C.reply})};
   // atelier (/creer/?atelier=1, pour nous) : l'image et le PDF d'une carte commandée avant que le paiement en ligne soit branché
@@ -875,7 +878,7 @@
     if(slug&&key){ window.SCEAU_EDIT=true;
       fetch('/api/fiche?s='+encodeURIComponent(slug),{headers:{Authorization:'Bearer '+key}}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(j=>{
         const g=j.config||{}; if(!THEMES[g.k]) throw 0;
-        Object.assign(C,{occ:g.occ||'mariage',sexe:g.sexe||'fille',k:g.k,fmt:'scenes',pal:g.pal,font:g.font||'theme',op:g.op||'env',cd:g.cd||'fin',rvl:g.rvl||'non',x:new Set(g.x||[]),plan:j.plan||'essentiel',_pl:j.plan||'essentiel',reply:!!g.reply,paper:g.paper||'coton',planPicked:true});
+        Object.assign(C,{occ:g.occ||'mariage',sexe:g.sexe||'fille',k:g.k,fmt:'scenes',pal:g.pal,font:g.font||'theme',op:g.op||'env',cd:g.cd||'fin',rvl:g.rvl||'non',x:new Set(g.x||[]),plan:j.plan||'essentiel',_pl:j.plan||'essentiel',reply:!!g.reply,paper:g.paper||'coton',icons:g.icons||'presse',planPicked:true});
         if(g.ev&&g.ev.length) C.ev=g.ev; if(g.data) Object.assign(C.data,g.data);
         $('cN1').value=g.n1||''; $('cN2').value=g.n2||''; if(g.date){ $('cDate').value=g.date; }
         // les cadres de réglage se reconstruisent avec les textes des mariés (sinon ils gardent ceux de l'exemple)
