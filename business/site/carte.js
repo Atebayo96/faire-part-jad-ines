@@ -55,9 +55,9 @@
      niveaux, que tout n'apparaisse pas sur le même plan »). Plus de photo : cinq plans, du fond vers l'avant :
        1. le fond (.ct-back) à la couleur du thème et à son motif (maïolique, nuit étoilée, zellige, treillis, indienne),
        2. le passe-partout (.ct-under), une carte de couleur un peu plus grande que la feuille,
-       3. la feuille de papier (.ct-panel), découpée à la forme du thème, posée avec son ombre ; un gaufrage à sec (.ct-emb,
-          même teinte que le papier, seulement lumière et ombre) sous le texte,
-       4. le texte,
+       3. la feuille de papier (.ct-panel), découpée à la forme du thème, posée avec son ombre,
+       4. le texte, imprimé dans le papier : chaque ligne est enfoncée (typographie), l'encre prend le grain du papier, les
+          prénoms et les heures sont en dorure à chaud (pas de motif gaufré derrière le texte : « c'est pas ça que je voulais »),
        5. les illustrations (.ct-d), posées par-dessus les coins avec leur ombre, et le sceau de cire.
      Tout est dessiné ici en SVG (aucune image générée) ; les illustrations restent dans les coins, jamais sur le texte. */
   const STYLES={dolcevita:'arche',dolcevitajour:'arche',nuits:'ogive',nuitsjour:'ogive',alhambra:'outrepasse',oldmoney:'medaillon',doucefrance:'bandeau'};
@@ -109,14 +109,6 @@
   const OLIVE=svg('0 0 130 80',branch([[4,6],[60,10],[122,64]],6,{l:20,w:3.6,c:['#7f9474','#93a688','#6c8162'],stem:'#6b5d3e',sw:1.4,ang:38})+
     `<ellipse cx="70" cy="40" rx="5" ry="6.5" fill="#3d3a4f" transform="rotate(-30 70 40)"/><ellipse cx="96" cy="50" rx="4.5" ry="6" fill="#4a4660" transform="rotate(-20 96 50)"/>`);
 
-  // le gaufrage à sec, au centre de la feuille (même teinte que le papier : seulement un relief)
-  const EMB={
-    arche:svg('0 0 200 200',[0,30,60,90,120,150].map(a=>`<ellipse cx="100" cy="100" rx="96" ry="30" transform="rotate(${a} 100 100)"/>`).join('')+`<circle cx="100" cy="100" r="22"/><circle cx="100" cy="100" r="96"/>`),
-    ogive:svg('0 0 200 200',star8(100,100,94,'none','#000')+star8(100,100,66,'none','#000')+`<circle cx="100" cy="100" r="40"/>`),
-    outrepasse:svg('0 0 200 200',star8(100,100,94,'none','#000')+star8(100,100,50,'none','#000')+[0,45,90,135].map(a=>`<path d="M100 6V194" transform="rotate(${a} 100 100)"/>`).join('')),
-    medaillon:svg('0 0 200 200',branch([[100,190],[14,170],[30,30]],9,{l:20,w:6,c:['none'],stem:'#000',ang:42})+branch([[100,190],[186,170],[170,30]],9,{l:20,w:6,c:['none'],stem:'#000',ang:42})),
-    bandeau:svg('0 0 200 200',`<circle cx="100" cy="100" r="34"/>`+Array.from({length:16},(_,i)=>`<path d="M100 56L100 14" transform="rotate(${i*22.5} 100 100)"/>`).join(''))
-  };
   // les illustrations de chaque style : [classe de position, dessin]
   const DECO={
     arche:[['tl',LEMON],['br',LEMON]],
@@ -132,7 +124,7 @@
   function html(inv,o){
     o=o||{}; const T=TH()[inv.theme]||{}, L=L10[inv.lang==='en'?'en':'fr'];
     const pk=PAPERS[inv.paper]?inv.paper:'coton', PP=PAPERS[pk];
-    const pal=inv.palette||'#b8975a', ink=inkOf(pal,4.6,PP.low), soft=inkOf(pal,3.2,PP.low);
+    const pal=inv.palette||'#b8975a', ink=inkOf(pal,4.6,PP.low), soft=inkOf(pal,3.2,PP.low), ink2=hex(rgb(ink).map(v=>v*.62));
     const sealName=SEALS[inv.seal]?inv.seal:sealOf(pal), [sl,sm,sd]=SEALS[sealName];
     const n1=inv.couple[0]||'', n2=inv.couple[1]||'', solo=!n2;
     const F=FONTS[inv.font]||null, ff=F?F.css:(T.font||'"Cormorant Garamond",Georgia,serif'), it=F?!!F.italic:!!T.italic, up=F?!!F.upper:!!T.upper;
@@ -159,10 +151,10 @@
     const dress=DR&&(DR.title||DR.text)?`<p class="ct-dr"><b>${esc(DR.eyebrow||L.dress)}</b>${esc([DR.title,DR.text].filter(Boolean).join(' · '))}</p>`:'';
     const st=styleOf(inv.theme);
     const cls=['ct','ct-s-'+st,'ct-p-'+pk,o.page?'ct-'+o.page:'',live?'ct-live':'',live||o.fit?'ct-fit':'',evs.length>1?'ct-n'+Math.min(evs.length,3):''].filter(Boolean).join(' ');
-    return `<div class="${cls}" style="--pal:${esc(pal)};--ink:${ink};--soft:${soft};--paper:${PP.c};--tx:${INK}">`+
+    return `<div class="${cls}" style="--pal:${esc(pal)};--ink:${ink};--ink2:${ink2};--soft:${soft};--paper:${PP.c};--tx:${INK}">`+
       `<div class="ct-sheet">`+
         `<div class="ct-back" aria-hidden="true"></div>`+
-        `<div class="ct-pw" aria-hidden="true"><div class="ct-under ct-sh"></div><div class="ct-panel ct-sh"><div class="ct-emb">${EMB[st]||''}</div></div></div>`+
+        `<div class="ct-pw" aria-hidden="true"><div class="ct-under ct-sh"></div><div class="ct-panel ct-sh"></div></div>`+
         `<div class="ct-deco" aria-hidden="true">${decoOf(st)}</div>`+
         `<div class="ct-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sl};--m:${sm};--d:${sd}">${ini}</b></div>`+
         (P&&(P.names||[]).filter(Boolean).length?`<p class="ct-fam">${P.names.filter(Boolean).map(esc).join(' &amp; ')}</p>`:'')+

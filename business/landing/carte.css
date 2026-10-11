@@ -145,7 +145,7 @@
 .ct-s-outrepasse .ct-dl i{height:2px;opacity:1;background:radial-gradient(circle,var(--pal) 45%,transparent 55%) center/6px 2px repeat-x}
 .ct-s-outrepasse .ct-ev+.ct-ev{border-left-style:dotted!important;border-left-width:2px!important}
 .ct-s-medaillon .ct-dl i{height:4px;background:none;border-top:1px solid var(--pal);border-bottom:1px solid var(--pal);opacity:.85}
-.ct-s-medaillon .ct-top{letter-spacing:.32em}
+.ct-s-medaillon .ct-top{letter-spacing:.24em}
 .ct-s-medaillon .ct-evs{border-top:1px solid color-mix(in srgb,var(--pal) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--pal) 55%,transparent);padding:var(--g2) 0}
 .ct-s-bandeau .ct-o{display:block;width:calc(16px*var(--k));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat}
@@ -155,7 +155,7 @@
 /* ---------- les plans de la feuille (carte.js, STYLES / DECO / EMB) ----------
    11 octobre 2026 : « des symboles, des illustrations qui viennent habiller la feuille pour en faire une œuvre », « de la
    profondeur et des niveaux ». Du fond vers l'avant : le fond du thème, le passe-partout, la feuille découpée et son ombre
-   (avec le gaufrage), le texte, les illustrations et le sceau. Le texte est toujours sur la feuille claire : l'encre est
+   le texte imprimé dans le papier, les illustrations et le sceau. Le texte est toujours sur la feuille claire : l'encre est
    mesurée contre le papier (inkOf). La signature est sur le fond : --mk, mesurée contre --bk (4,5:1 au moins). */
 .ct-sheet>.ct-back{position:absolute;inset:0;z-index:0;background:var(--bkp,none),var(--bk,#e9e2d4);background-size:var(--bks,40px 40px),auto}
 .ct-sheet>.ct-pw{position:absolute;z-index:1;top:var(--pt);left:var(--m);right:var(--m);bottom:var(--pb);
@@ -166,10 +166,6 @@
   background-image:radial-gradient(ellipse 110% 70% at 30% 12%,rgba(255,255,255,.5),rgba(255,255,255,0) 60%),
     radial-gradient(ellipse 130% 100% at 50% 45%,rgba(255,255,255,1) 55%,rgba(222,208,186,1)),var(--tex,none);
   background-blend-mode:normal,multiply,multiply;background-size:100% 100%,100% 100%,auto}
-/* le gaufrage à sec : même teinte que le papier, un filet d'ombre et sa lumière dessous */
-.ct-emb{position:absolute;left:50%;top:52%;width:min(92%,calc(320px*var(--k)));aspect-ratio:1;translate:-50% -50%;filter:drop-shadow(0 1.2px 0 rgba(255,255,255,.95))}
-.ct-emb svg{width:100%;height:100%;display:block;overflow:visible}
-.ct-emb svg *{fill:none!important;stroke:rgba(110,84,48,.15)!important;stroke-width:1.1!important}
 /* les illustrations : posées par-dessus la feuille, dans les coins, avec leur ombre (on les voit au-dessus du papier) */
 .ct-sheet>.ct-deco{position:absolute;inset:0;z-index:3;pointer-events:none}
 .ct-d{position:absolute;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2)) drop-shadow(0 8px 10px rgba(0,0,0,.16))}
@@ -229,3 +225,22 @@
 /* dans une colonne, l'heure tient dans sa colonne (« 15h0019h30 » quand le texte grandissait) */
 .ct-n2 .ct-hr{font-size:min(calc(36px*var(--k)),17cqw)}
 .ct-n3 .ct-hr{font-size:min(calc(30px*var(--k)),12cqw)}
+/* le texte est imprimé dans la feuille (11 octobre 2026 : « dans les écrits, des reliefs, des textures, pour rajouter de la
+   profondeur ») : chaque ligne est enfoncée dans le papier (typographie : un filet de lumière sous la lettre, une ombre fine
+   au-dessus), l'encre se mélange au papier et en garde le grain (multiply : elle ne peut que foncer, le contraste mesuré
+   reste acquis), les prénoms et les heures sont en dorure à chaud (dégradé de l'encre vers plus foncé, jamais plus clair,
+   avec son relief). La signature, sur le fond, n'est pas concernée. */
+.ct-sheet>:not(.ct-back):not(.ct-pw):not(.ct-deco):not(.ct-seal):not(.ct-made){mix-blend-mode:multiply}
+.ct-sheet>:not(.ct-back):not(.ct-pw):not(.ct-deco):not(.ct-seal):not(.ct-made),.ct-sheet>:not(.ct-made) *{text-shadow:0 1px 0 rgba(255,255,255,.75),0 -.6px 0 rgba(60,40,15,.22)}
+.ct-nm,.ct-hr{background:linear-gradient(172deg,var(--ink) 0%,var(--ink2) 38%,var(--ink) 52%,var(--ink2) 80%,var(--ink) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent!important;text-shadow:none!important;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.85)) drop-shadow(0 -.6px 0 rgba(40,25,8,.35))}
+.ct-nm i{background:inherit;-webkit-background-clip:text;background-clip:text}
+/* les moments côte à côte, alignés : le chapeau sur une ligne, l'heure un peu plus petite et à distance du filet */
+.ct-n2 .ct-ev,.ct-n3 .ct-ev{padding:0 calc(7px*var(--k))}
+.ct-n2 .ct-ev>.ct-ey,.ct-n3 .ct-ev>.ct-ey{white-space:nowrap;letter-spacing:.03em;font-size:11px}
+.ct-n2 .ct-hr{font-size:min(calc(32px*var(--k)),14cqw)}
+.ct-n3 .ct-hr{font-size:min(calc(27px*var(--k)),10.5cqw)}
+.ct-n2 .ct-lk,.ct-n3 .ct-lk{gap:8px}
+.ct-n2 .ct .ct-lk svg,.ct.ct-n2 .ct-lk svg,.ct.ct-n3 .ct-lk svg{width:36px;height:36px;padding:9px}
+.ct.ct-n2 .ct-lk a,.ct.ct-n2 .ct-lk button,.ct.ct-n3 .ct-lk a,.ct.ct-n3 .ct-lk button{font-size:11.5px!important;letter-spacing:0}
