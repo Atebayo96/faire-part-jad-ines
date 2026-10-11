@@ -89,9 +89,12 @@
 .ct-b:active{transform:scale(.97)}
 .ct-b svg{width:32px;height:32px;flex:none;padding:8px;border-radius:50%;color:#fff;background:var(--ink)}
 .ct-acts+.ct-rs{margin-top:var(--g1)!important}
-/* la signature, sous la feuille, en blanc sur le fond peint (11 octobre 2026 : « pas la peine de mettre une pastille pour
-   le contraste, mets-le en blanc ») ; une ombre portée douce la détache des motifs */
-.ct-sheet>.ct-made{position:absolute;left:0;right:0;bottom:calc(var(--pb)/2 - 6px);margin:0!important;padding:0;font:600 11.5px/1 Inter,-apple-system,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.55),0 0 6px rgba(0,0,0,.35)}
+/* la signature : le logo Save The Oui (« SAVE THE » en capitales espacées, « Oui » en Great Vibes, comme .logo de la vitrine),
+   en blanc sur le fond peint, petit (« fais-le en calligraphie, et plus petit ») ; une ombre douce le détache des motifs */
+.ct-sheet>.ct-made{position:absolute;left:0;right:0;bottom:calc(var(--pb)/2 - 8px);margin:0!important;padding:0;display:flex;justify-content:center;align-items:baseline;gap:5px;
+  color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.55),0 0 6px rgba(0,0,0,.35);white-space:nowrap}
+.ct-made span{font:500 10.5px/1 "Inter Tight",Inter,-apple-system,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.ct-made b{font:400 19px/1 "Great Vibes",cursive;position:relative;top:1px}
 /* formats d'export : la feuille remplit exactement le format, l'espace en trop se répartit (rien n'est collé en haut) */
 /* l'image et le PDF sont plus larges qu'un téléphone : texte centré (étiré vers les bords, il passait sous les illustrations),
    illustrations ramenées à leur taille sur un téléphone (--dz) */

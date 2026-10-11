@@ -40,9 +40,9 @@
   const at=s=>{ const [d,t='12:00']=String(s).split('T'), [y,m,da]=d.split('-').map(Number), [h,mi]=t.split(':').map(Number); return new Date(Date.UTC(y,m-1,da,h||0,mi||0)); };
   const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
   const L10={fr:{loc:'fr-FR',joy:'Ont la joie de vous convier à leur mariage',prog:'Le programme',dress:'Dress code',reply:'Répondre',route:'Y aller',cal:'Agenda',
-      rs:'Réponse souhaitée',before:'avant le',by:'au',fams:'Avec leurs familles',made:'Save the Oui'},
+      rs:'Réponse souhaitée',before:'avant le',by:'au',fams:'Avec leurs familles'},
     en:{loc:'en-GB',joy:'Request the pleasure of your company at their wedding',prog:'The day',dress:'Dress code',reply:'RSVP',route:'Map',cal:'Calendar',
-      rs:'Kindly reply',before:'by',by:'on',fams:'Together with their families',made:'Save the Oui'}};
+      rs:'Kindly reply',before:'by',by:'on',fams:'Together with their families'}};
   const day=(d,L,year)=>{ const s=cap(d.toLocaleDateString(L.loc,Object.assign({weekday:'long',day:'numeric',month:'long',timeZone:'UTC'},year?{year:'numeric'}:{}))); const t=L.loc==='fr-FR'?s.replace(/(^|\s)1 (?=\D)/,'$11er '):s; return t.replace(/(\d+(?:er)?) (?=\D)/g,'$1\u00a0'); };
   const hour=(d,L)=>{ const s=d.toLocaleTimeString(L.loc,{hour:'2-digit',minute:'2-digit',timeZone:'UTC'}); return L.loc==='fr-FR'?s.replace(':','h'):s; };
   const ic={
@@ -145,7 +145,7 @@
         `<p class="ct-dl"><i></i><b class="ct-o" aria-hidden="true"></b><span>${esc(inv.intro&&inv.intro.dateText||day(main,L,true))}</span><b class="ct-o" aria-hidden="true"></b><i></i></p>`+
         `<div class="ct-evs" style="--slots:${slots}">${evs.map(ev).join('')}</div>`+
         prog+dress+rs+
-        `<p class="ct-made">${L.made}</p>`+
+        `<p class="ct-made"><span>Save the</span> <b>Oui</b></p>`+
       `</div></div>`;
   }
 
