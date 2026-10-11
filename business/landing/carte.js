@@ -175,17 +175,42 @@
     // en ligne : s'il reste de la place sur l'écran, le texte grandit un peu (jusqu'à 106 %) pour composer une vraie page
     (root||document).querySelectorAll('.ct-fit').forEach(el=>{ const sh=el.querySelector('.ct-sheet'), box=el.parentNode; if(!sh||!box) return;
       const H=(box.closest('.sc,.pv-scroll')||box).clientHeight; if(!H) return;
+      // une illustration pas encore chargée n'a pas de hauteur : la mise en page se refait quand elle arrive
+      el.querySelectorAll('.ct-deco img,.ct-pw img').forEach(im=>{ if(!im.complete&&!im._fit){ im._fit=1; im.addEventListener('load',()=>fit(el.parentNode),{once:true}); } });
       /* les mesures à l'écran sont réduites quand l'aperçu l'est (téléphone à 31 % dans le bandeau du configurateur sur
          téléphone) : on les ramène à l'échelle de la feuille, sinon tout « tenait » et la feuille débordait (iPhone 16) */
-      const need=()=>{ const R=sh.getBoundingClientRect(), z=sh.offsetHeight?R.height/sh.offsetHeight:1; let b=0; [...sh.children].forEach(c=>{ if(!/ct-(made|back|pw|deco|seal)\b/.test(c.className)) b=Math.max(b,c.getBoundingClientRect().bottom); }); return (b-R.top)/(z||1)+parseFloat(getComputedStyle(sh).paddingBottom); };
-      sh.style.justifyContent='flex-start'; let k=1; el.style.setProperty('--k','1');
-      // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 66 %, pour que la signature reste sur l'écran
-      // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
-      if(need()>H) while(k>.66&&need()>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); }
-      else while(k<1.06){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need()>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
+      const TXT=c=>!/ct-(made|back|pw|deco|seal)\b/.test(c.className);
+      /* free : la bande du bas réservée aux illustrations (--pbx) est libérée ; le texte peut y descendre tant qu'aucune
+         ligne ne touche une illustration ou une volute des coins (mesuré ligne par ligne, 6 px de marge) */
+      const art=()=>{ const R=sh.getBoundingClientRect(); return [...sh.querySelectorAll('.ct-deco img,.ct-deco .ct-sc,.ct-pw img,.ct-pw .ct-sc')].map(e=>e.getBoundingClientRect()).filter(r=>r.width&&r.top>R.top+R.height/2); };
+      const hits=A=>{ if(!A.length) return false; const rs=[]; [...sh.children].filter(TXT).forEach(c=>{ const w=document.createTreeWalker(c,NodeFilter.SHOW_TEXT); let n;
+          while((n=w.nextNode())){ if(!n.nodeValue.trim()) continue; const g=document.createRange(); g.selectNodeContents(n); rs.push(...g.getClientRects()); }
+          c.querySelectorAll('img,svg').forEach(x=>rs.push(x.getBoundingClientRect())); });
+        const z=sh.offsetHeight?sh.getBoundingClientRect().height/sh.offsetHeight:1, m=6*z;
+        return rs.some(r=>r.width&&A.some(a=>r.left<a.right+m&&r.right>a.left-m&&r.top<a.bottom+m&&r.bottom>a.top-m)); };
+      let A=[];
+      const need=free=>{ const R=sh.getBoundingClientRect(), z=sh.offsetHeight?R.height/sh.offsetHeight:1; let b=0; [...sh.children].forEach(c=>{ if(TXT(c)) b=Math.max(b,c.getBoundingClientRect().bottom); });
+        const v=(b-R.top)/(z||1)+parseFloat(getComputedStyle(sh).paddingBottom); // les filets de la date gardent au moins 8 px (en grandissant, « Samedi 12 juin 2027 » les écrasait)
+        const dl=[...sh.querySelectorAll('.ct-dl i')].some(i=>i.getBoundingClientRect().width<8*z);
+        return (free&&hits(A))||dl?v+9999:v; };
+      const run=free=>{ el.style.setProperty('--pbx',free?'0px':''); sh.style.justifyContent='flex-start'; let k=1; el.style.setProperty('--k','1'); el.style.setProperty('--air','1');
+        if(free) A=art();
+        // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 66 %, pour que la signature reste sur l'écran
+        // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
+        if(need(free)>H) while(k>.66&&need(free)>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); }
+        else while(k<1.06){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need(free)>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
+        /* peu de contenu (les écrans de base) : le texte ne grandit qu'un peu, puis ce sont les respirations entre les blocs
+           (--air, multiplie --g1/--g2/--g3) qui s'ouvrent, jusqu'à 2,4 fois, pour que la feuille soit composée sur toute sa
+           hauteur (11 octobre 2026 : « faut savoir l'aérer quand y'a pas beaucoup d'info, y'a trop d'espace blanc ») */
+        let a=1; if(need(free)<=H) while(a<2.4){ el.style.setProperty('--air',(a+.1).toFixed(2)); if(need(free)>H){ el.style.setProperty('--air',a.toFixed(2)); break; } a+=.1; }
+        return {k,a,ok:need(free)<=H+1}; };
+      // d'abord la bande du bas libérée ; si le texte y touche une illustration ou doit rapetisser davantage, on la réserve
+      const g=run(false), f=run(true), free=f.ok&&(f.k>g.k||(f.k===g.k&&f.a>=g.a)); if(!free) run(false);
+      const r=free?f:g;
       // pour le configurateur : la feuille déborde encore (over) ou a dû être réduite nettement (tight)
-      el.dataset.full=need()>H+1?'over':k<.8?'tight':'';
-      sh.style.justifyContent=''; el.querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); }); });
+      el.dataset.full=need(free)>H+1?'over':r.k<.8?'tight':'';
+      // bande libérée : le texte reste posé tel qu'il a été mesuré (recentré, il redescendait sur l'illustration du bas)
+      sh.style.justifyContent=free?'flex-start':''; el.querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); }); });
     rim(root||document); }
 
   /* ---------- export : image et PDF ----------

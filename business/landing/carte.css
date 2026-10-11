@@ -2,7 +2,7 @@
    peinture du thème dans une arche, le sceau de cire, la couleur du couple en filets et en encre (assombrie jusqu'à 4,5:1).
    Tailles : celles du faire-part (--fs-* dans invite.css : chapeaux 13 px, texte 18 px, heure en grand chiffre, date 22 px
    en 600), multipliées par --k, que l'export réduit pour tout faire tenir dans le format ; rien sous 11,5 px. */
-.ct{--k:1;font-variant-numeric:lining-nums;--g1:calc(10px*var(--k));--g2:calc(18px*var(--k));--g3:calc(26px*var(--k));
+.ct{--k:1;--air:1;font-variant-numeric:lining-nums;--g1:calc(10px*var(--k)*var(--air));--g2:calc(18px*var(--k)*var(--air));--g3:calc(26px*var(--k)*var(--air));
   position:relative;width:100%;height:100%;min-height:100%;background:var(--paper,#fbf7f0);color:var(--tx,#2b2621);
   font-family:"Cormorant Garamond",Georgia,serif;text-align:center;-webkit-font-smoothing:antialiased;text-shadow:none}
 .ct *{box-sizing:border-box;font-variant-numeric:lining-nums}
