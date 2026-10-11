@@ -290,7 +290,10 @@
   const fixLieux=()=>C.ev.forEach((e,i)=>{ const was=e.lieu;
     if(e.lieu==='mosquee'&&THEMES[C.k].family!=='nuits') e.lieu='eglise';
     if(e.bg==='scene'&&!['photo','s2'].includes(e.lieu)&&!okLieu(C.k,e.lieu)) e.lieu=(THEMES[C.k].lieuAlt||{})[e.lieu]||THEMES[C.k].lieux[0];
-    if(e.lieu!==was&&e.place===PLACE[was]&&PLACE[e.lieu]){ e.place=PLACE[e.lieu]; document.querySelectorAll(`#cStory li.ev[data-i="${i}"] input[data-k="place"]`).forEach(x=>x.value=e.place); } });
+    if(e.lieu!==was&&e.place===PLACE[was]&&PLACE[e.lieu]){ e.place=PLACE[e.lieu]; document.querySelectorAll(`#cStory li.ev[data-i="${i}"] input[data-k="place"]`).forEach(x=>x.value=e.place); }
+    // Mille et une nuits et l'Andalou : « La réception », pas « La fête » (« c'est plus musulman, pas dire la fête ») ; le nom d'exemple seulement
+    const nuits=THEMES[C.k].family==='nuits', nm=nuits&&e.name==='La fête'?'La réception':!nuits&&e.name==='La réception'?'La fête':null;
+    if(nm){ e.name=nm; document.querySelectorAll(`#cStory li.ev[data-i="${i}"] input[data-k="name"]`).forEach(x=>x.value=nm); } });
   fixLieux();
   GRPS.forEach(g=>{ const k0=CK.find(k=>grp(k)===g), t=THEMES[k0], b=document.createElement('button'); b.type='button'; b.className='th'; b.dataset.id=g;
     b.innerHTML=`<span style="background-image:url('/img/themes/${k0}-1.webp?v=18')"></span>${esc(t.name)}`;

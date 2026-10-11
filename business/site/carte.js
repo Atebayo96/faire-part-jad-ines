@@ -79,10 +79,15 @@
      dorure gravée, tools/carte-icones.py), choisie d'après le nom du moment, son lieu et l'occasion */
   const ICO=[['henne',/henn/],['berceau',/sbou|naissance|bapt|aqiqa/],['mairie',/mairie|civil|hôtel de ville|hotel de ville/],
     ['cocktail',/cocktail|vin d.honneur|ap[ée]ritif|aperitivo/],['diner',/d[îi]ner|repas|d[ée]jeuner|brunch|banquet/],
-    ['alliances',/c[ée]r[ée]monie|[ée]glise|mosqu|religieu|b[ée]n[ée]diction|nikah|kitab|alliance|oui/],['coupes',/f[êe]te|soir[ée]e|r[ée]ception|bal|danse|party/]];
-  function icoOf(e,inv){ const t=[e.eyebrow,e.title,e.lieu,inv.kind].filter(Boolean).join(' ').toLowerCase();
+    ['alliances',/c[ée]r[ée]monie|[ée]glise|mosqu|religieu|b[ée]n[ée]diction|nikah|kitab|alliance|oui/],['coupes',/f[êe]te|soir[ée]e|r[ée]ception|\bbal\b|danse|party|salle|domaine/]];
+  /* le nom du moment décide d'abord (« La cérémonie » à l'hôtel de ville : les alliances), puis son lieu. Pour Mille et une
+     nuits et l'Andalou, pas de verres (« c'est plus musulman ») : la réception a la cloche du dîner, le cocktail le bouquet. */
+  function icoOf(e,inv){
     if(inv.kind==='sbou3') return 'berceau'; if(inv.kind==='henne') return 'henne';
-    const f=ICO.find(([,re])=>re.test(t)); return f?f[0]:'bouquet'; }
+    const T=TH()[inv.theme]||{}, halal=T.family==='nuits', pick=t=>{ const f=ICO.find(([,re])=>re.test(String(t||'').toLowerCase())); return f&&f[0]; };
+    let k=pick(e.eyebrow)||pick([e.title,e.lieu].filter(Boolean).join(' '))||'bouquet';
+    if(halal) k={coupes:'diner',cocktail:'bouquet'}[k]||k;
+    return k; }
   const FOND={arche:'dolcevita',ogive:'nuits',outrepasse:'alhambra',medaillon:'oldmoney',bandeau:'doucefrance'};
   /* le gaufrage à sec (11 octobre 2026, photo d'un faire-part gaufré : « c'est du papier gaufré, c'est bien ») : une double
      bordure en relief qui suit la découpe de la feuille (dessinée par rim() à la taille réelle de la feuille) et des volutes
@@ -128,7 +133,7 @@
       const lk=live?`<p class="ct-lk">${e.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener" aria-label="${esc(L.route)}">${ic.pin}<span>${L.route}</span></a>`:''}<button type="button" data-cal="${esc(e.id)}" aria-label="${esc(L.cal)}">${ic.cal}<span>${L.cal}</span></button></p>`:'';
       // toujours les mêmes cases, dans le même ordre (vides au besoin) : les colonnes partagent les lignes de la grille
       // (subgrid, carte.css), chapeaux, heures et lieux restent alignés d'un moment à l'autre (« c'est pas aligné »)
-      return `<div class="ct-ev"><p class="ct-ic"><img src="/img/carte/ico-${ico}.webp?v=${CARTEV}" alt="" decoding="async"></p><p class="ct-ey">${esc(e.eyebrow||'')}</p>${days.size>1?`<p class="ct-wd">${esc(day(d,L))}</p>`:''}<p class="ct-hr">${esc(hour(d,L))}</p>`+
+      return `<div class="ct-ev"><p class="ct-ic"><span><i style="--ic:url('/img/carte/ico-${ico}.webp?v=${CARTEV}')"></i></span></p><p class="ct-ey">${esc(e.eyebrow||'')}</p>${days.size>1?`<p class="ct-wd">${esc(day(d,L))}</p>`:''}<p class="ct-hr">${esc(hour(d,L))}</p>`+
         `<p class="ct-pl">${esc(e.title||'')}</p><p class="ct-ad">${esc(where||'')}</p>${lk}</div>`; };
     const slots=5+(days.size>1?1:0)+(live?1:0);
     const dl=R.deadline?day(at(R.deadline+'T12:00'),L).replace(/^\S+\s/,''):'';
