@@ -2,6 +2,8 @@
 dorure gravée, sur une carte verte). Découpe : la carte verte, une grille de 4 × 2, détourage du vert, poussières retirées
 (on garde le grand morceau et ce qui est près de lui), puis la dorure recolorée d'un or soutenu (le vert faisait un or pâle
 et verdâtre sur le papier).
+L'assiette et ses couverts (ico-assiette.webp, réception et dîner) : 1 génération de plus le même jour (~0,15 €),
+détourée à part, traits épaissis pour rester lisibles une fois pressés.
 Usage : python3 business/tools/carte-icones.py planche.png   →   business/landing/img/carte/ico-<nom>.webp"""
 import sys
 import numpy as np

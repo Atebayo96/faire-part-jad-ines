@@ -691,7 +691,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     faut qu'on ait l'impression qu'elles ont été pressées dans le papier ») : trois calques masqués par l'icône, le creux plus
     sombre que la feuille, son bord haut-gauche dans l'ombre, le papier autour qui accroche la lumière en bas à droite. Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de
     ville : alliances), puis le lieu. **Mille et une nuits et l'Andalou : pas de verres ni de « fête »** (« c'est plus musulman ») :
-    le moment d'exemple s'appelle « La réception » (`fixLieux()`), son icône est la cloche du dîner, le cocktail prend le bouquet.
+    le moment d'exemple s'appelle « La réception » (`fixLieux()`), son icône est **l'assiette et ses couverts**
+    (`ico-assiette.webp`, 1 génération accordée, ~0,15 € ; elle sert aussi au dîner partout), le cocktail prend le bouquet.
     Texte de ces deux feuilles remonté (40 px sous l'arc au lieu de 62), lanternes un peu plus petites.
     **Plus d'ornement aux bouts des filets de la date** (étoile, losanges, brin de feuillage : « retire ça ») : seulement les filets. **Pas de motif derrière le texte** : un
     gaufrage de cercles ou de carrés a été refusé (« c'est pas ça que je voulais : dans les écrits, des reliefs, des textures »). Puis les illustrations en SVG avec leur ombre (citronnier ; lanternes et croissant ; rosaces de zellige et jasmin ;
