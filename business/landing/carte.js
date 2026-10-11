@@ -141,7 +141,7 @@
     let rs;
     if(live&&inv.reply) rs=`<div class="ct-acts"><button type="button" class="ct-b" data-rsvp>${ic.mail}${L.reply}</button></div>${dl?`<p class="ct-rs">${L.rs} ${L.before} ${esc(dl)}</p>`:''}`;
     else rs=(dl||wa)?`<p class="ct-rs">${L.rs}${dl?` ${L.before} ${esc(dl)}`:''}${wa?`<br>${L.by} ${live?`<a href="https://wa.me/${esc(wa.replace(/[^\d+]/g,'').replace(/^\+/,'').replace(/^0/,'33'))}" target="_blank" rel="noopener">${esc(wa)}</a>`:esc(wa)}`:''}</p>`:'';
-    const prog=PR&&(PR.items||[]).length?`<div class="ct-pr"><p class="ct-ey">${esc(PR.eyebrow||L.prog)}</p><ul>${PR.items.slice(0,8).map(x=>`<li><b>${esc(x.time||'')}</b><span>${esc(x.title||'')}</span></li>`).join('')}</ul></div>`:'';
+    const prog=PR&&(PR.items||[]).length?`<div class="ct-pr" style="--n:${Math.min(PR.items.slice(0,8).length,4)}"><p class="ct-ey">${esc(PR.eyebrow||L.prog)}</p><ul>${PR.items.slice(0,8).map(x=>`<li><b>${esc(x.time||'')}</b><span>${esc(x.title||'')}</span></li>`).join('')}</ul></div>`:'';
     const dress=DR&&(DR.title||DR.text)?`<p class="ct-dr"><b>${esc(DR.eyebrow||L.dress)}</b>${esc([DR.title,DR.text].filter(Boolean).join(' · '))}</p>`:'';
     const st=styleOf(inv.theme);
     const cls=['ct','ct-s-'+st,'ct-p-'+pk,o.page?'ct-'+o.page:'',live?'ct-live':'',inv.icons==='or'?'ct-ic-or':'',live||o.fit?'ct-fit':'',evs.length>1?'ct-n'+Math.min(evs.length,3):''].filter(Boolean).join(' ');

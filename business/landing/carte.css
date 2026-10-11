@@ -24,7 +24,8 @@
     radial-gradient(ellipse 130% 100% at 50% 45%,rgba(255,255,255,1) 55%,rgba(222,208,186,1)),var(--tex,none);
   background-blend-mode:normal,multiply,multiply;background-size:100% 100%,100% 100%,auto}
 /* la feuille */
-.ct{--m:calc(12px*var(--k));--pt:calc(40px*var(--k));--pb:calc(34px*var(--k));--pbx:0px}
+/* le cadre (fond peint autour de la feuille) ne rétrécit pas avec le texte : une feuille pleine reste une feuille posée sur son fond */
+.ct{--m:12px;--pt:40px;--pb:34px;--pbx:0px}
 .ct-sheet{position:relative;height:100%;min-height:100%;display:flex;flex-direction:column;align-items:center;container-type:inline-size;
   padding:calc(var(--pt) + 44px*var(--k)) calc(var(--m) + 26px*var(--k)) calc(var(--pb) + 22px*var(--k) + var(--pbx));overflow:hidden}
 .ct-sheet>*{position:relative;z-index:2}
@@ -274,3 +275,12 @@
 .ct-ic-or .ct-ic span::before,.ct-ic-or .ct-ic b{display:none}
 .ct-ic-or .ct-ic i{-webkit-mask:none;mask:none;background:var(--ic) center/contain no-repeat;
   filter:drop-shadow(-.6px -.6px 0 rgba(255,255,255,.9)) drop-shadow(.8px 1px .4px rgba(60,40,10,.35))}
+/* le programme en frise (« si je rajoute le programme, on voit plus vraiment le reste ») : les étapes côte à côte, l'heure au-dessus
+   du moment, quatre par ligne au plus ; il prend deux lignes au lieu d'une par étape et reste plus discret que les moments */
+.ct-pr{max-width:none;margin-top:var(--g2)}
+.ct-pr ul{grid-template-columns:repeat(var(--n,4),1fr);gap:calc(8px*var(--k)) 0;margin-top:calc(6px*var(--k))!important}
+.ct-pr li{display:flex;flex-direction:column;align-items:center;gap:1px;text-align:center;padding:0 calc(4px*var(--k));
+  font:400 max(13.5px,calc(15px*var(--k)))/1.2 "Cormorant Garamond",Georgia,serif;text-wrap:balance}
+.ct-pr li+li{border-left:1px solid color-mix(in srgb,var(--pal) 35%,transparent)}
+.ct-pr li:nth-child(4n+1){border-left:0}
+.ct-pr li b{text-align:center;font-size:max(15px,calc(17px*var(--k)))}

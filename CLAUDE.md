@@ -695,6 +695,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **La place est limitée et on le dit** (« l'écran est trop long, faut dire à la personne que c'est limité ») : `fit()` marque
     la feuille (`data-full` : `tight` si le texte a été nettement réduit, `over` si elle déborde encore) et le configurateur
     affiche une note à l'étape Contenu (`full()`, `#cFull`) : retirer une partie, raccourcir, ou passer à l'Essentiel.
+    **Le programme est une frise** (« si je rajoute le programme, on voit plus vraiment le reste, c'est plus qu'une page ») :
+    les étapes côte à côte, l'heure au-dessus du moment, quatre par ligne au plus, plus petit que les moments. **Le cadre ne
+    rétrécit pas avec le texte** (`--m`, `--pt`, `--pb` fixes) : une feuille pleine reste posée sur son fond, signature visible.
+    Mot des familles + programme tiennent ; avec le dress code en plus, la note « feuille pleine » s'affiche.
     **Chaque moment a son adresse** (champ « L'adresse (pour l'itinéraire) », `e.addr`, toutes formules), écrite sous le nom du
     lieu et utilisée par « Y aller ». **Les paraphes d'une calligraphie ne sont plus coupés** (`.ct-nm` a une marge intérieure :
     la dorure en `background-clip:text` s'arrêtait à la boîte du mot). Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de
