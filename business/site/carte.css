@@ -258,10 +258,14 @@
 .ct-s-medaillon .ct-sc-tl,.ct-s-medaillon .ct-sc-tr,.ct-s-bandeau .ct-sc-tl,.ct-s-bandeau .ct-sc-tr{width:19cqw}
 .ct-s-medaillon .ct-top{letter-spacing:.16em}
 .ct-s-arche .ct-sheet{padding-top:calc(var(--pt) + 66px*var(--k))}
-/* l'icône du moment, gaufrée dans la feuille (« mets les icônes en gaufré, comme si c'était dans la page ») : la forme de
-   l'icône (masque) a la teinte du papier, à peine plus sombre ; seules l'ombre et la lumière la dessinent, comme les volutes */
+/* l'icône du moment, pressée dans le papier (« qu'on ait l'impression qu'elles ont été pressées dans le papier ») : le creux
+   est d'une teinte plus sombre que la feuille ; la lumière vient d'en haut à gauche, donc le bord haut-gauche du creux est
+   dans l'ombre (<i>, visible là où la face <b> décalée ne le couvre pas) et le bord bas-droit du papier autour accroche la
+   lumière (::before blanc, décalé, derrière). Trois calques masqués par la même icône, aucune image de plus. */
 .ct-ic{display:flex;justify-content:center;margin-bottom:calc(4px*var(--k))!important}
-.ct-ic span{display:block;filter:drop-shadow(-.7px -.7px 0 rgba(255,255,255,.95)) drop-shadow(.9px 1.2px .4px rgba(95,72,40,.5)) drop-shadow(1.4px 2px 1.5px rgba(95,72,40,.18))}
-.ct-ic i{display:block;width:calc(52px*var(--k));height:calc(32px*var(--k));background:color-mix(in srgb,var(--paper) 92%,#8a6d45);
-  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
+.ct-ic span{--o:max(1px,calc(1.1px*var(--k)));position:relative;display:block;width:calc(60px*var(--k));height:calc(40px*var(--k))}
+.ct-ic span::before,.ct-ic i,.ct-ic b{content:"";position:absolute;inset:0;display:block;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
+.ct-ic span::before{background:rgba(255,255,255,.95);translate:var(--o) var(--o)}
+.ct-ic i{background:color-mix(in srgb,var(--paper) 35%,#4a3518)}
+.ct-ic b{background:color-mix(in srgb,var(--paper) 62%,#7a5c32);-webkit-mask-position:calc(50% + var(--o)) calc(50% + var(--o));mask-position:calc(50% + var(--o)) calc(50% + var(--o))}
 .ct-n2 .ct-ev>.ct-ic,.ct-n3 .ct-ev>.ct-ic{align-self:end}

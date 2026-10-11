@@ -133,7 +133,7 @@
       const lk=live?`<p class="ct-lk">${e.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener" aria-label="${esc(L.route)}">${ic.pin}<span>${L.route}</span></a>`:''}<button type="button" data-cal="${esc(e.id)}" aria-label="${esc(L.cal)}">${ic.cal}<span>${L.cal}</span></button></p>`:'';
       // toujours les mêmes cases, dans le même ordre (vides au besoin) : les colonnes partagent les lignes de la grille
       // (subgrid, carte.css), chapeaux, heures et lieux restent alignés d'un moment à l'autre (« c'est pas aligné »)
-      return `<div class="ct-ev"><p class="ct-ic"><span><i style="--ic:url('/img/carte/ico-${ico}.webp?v=${CARTEV}')"></i></span></p><p class="ct-ey">${esc(e.eyebrow||'')}</p>${days.size>1?`<p class="ct-wd">${esc(day(d,L))}</p>`:''}<p class="ct-hr">${esc(hour(d,L))}</p>`+
+      return `<div class="ct-ev"><p class="ct-ic"><span style="--ic:url('/img/carte/ico-${ico}.webp?v=${CARTEV}')"><i><b></b></i></span></p><p class="ct-ey">${esc(e.eyebrow||'')}</p>${days.size>1?`<p class="ct-wd">${esc(day(d,L))}</p>`:''}<p class="ct-hr">${esc(hour(d,L))}</p>`+
         `<p class="ct-pl">${esc(e.title||'')}</p><p class="ct-ad">${esc(where||'')}</p>${lk}</div>`; };
     const slots=5+(days.size>1?1:0)+(live?1:0);
     const dl=R.deadline?day(at(R.deadline+'T12:00'),L).replace(/^\S+\s/,''):'';

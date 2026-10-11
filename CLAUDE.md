@@ -687,8 +687,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     soirée), mairie, cloche de dîner, main au henné, berceau (sbouâ), verre (cocktail, vin d'honneur), bouquet (le reste) ;
     choisie d'après le nom du moment et son lieu (`icoOf()`), au-dessus du chapeau, dans la grille commune (alignée d'une
     colonne à l'autre). Le doré de la planche, pâle et verdâtre une fois détouré, est recoloré d'un or soutenu.
-    **Les icônes sont gaufrées** (« comme si c'était dans la page ») : la forme de l'icône en masque, teinte du papier, dessinée
-    par la lumière et l'ombre comme les volutes (plus de dorure). Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de
+    **Les icônes sont pressées dans le papier** (le gaufrage blanc sur blanc ne se voyait plus : « on voit même plus les icônes,
+    faut qu'on ait l'impression qu'elles ont été pressées dans le papier ») : trois calques masqués par l'icône, le creux plus
+    sombre que la feuille, son bord haut-gauche dans l'ombre, le papier autour qui accroche la lumière en bas à droite. Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de
     ville : alliances), puis le lieu. **Mille et une nuits et l'Andalou : pas de verres ni de « fête »** (« c'est plus musulman ») :
     le moment d'exemple s'appelle « La réception » (`fixLieux()`), son icône est la cloche du dîner, le cocktail prend le bouquet.
     Texte de ces deux feuilles remonté (40 px sous l'arc au lieu de 62), lanternes un peu plus petites.
