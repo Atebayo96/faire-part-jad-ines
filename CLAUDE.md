@@ -681,7 +681,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     mange les chaînes des lanternes et les tiges. Les illustrations suivent l'échelle du texte (`--k`) et leur place est
     réservée en haut et en bas (`--pbx`, padding-top par style) ; à l'export (plus large), texte centré et `--dz: .78`.
     La signature est le logo (« SAVE THE » + « Oui » en Great Vibes), petit, en blanc sur le fond peint, avec une ombre portée
-    douce (pastille retirée : « mets-le en blanc » ; « fais-le en calligraphie et plus petit »). **Pas de motif derrière le texte** : un
+    douce (pastille retirée : « mets-le en blanc » ; « fais-le en calligraphie et plus petit »).
+    **Une icône dorée par moment** (« des beaux icônes bien illustrés » ; 1 génération accordée, ~0,15 € : une planche de 8 icônes
+    à la dorure gravée, `tools/carte-icones.py`, `img/carte/ico-*.webp`) : alliances (cérémonie, église, mosquée), coupes (fête,
+    soirée), mairie, cloche de dîner, main au henné, berceau (sbouâ), verre (cocktail, vin d'honneur), bouquet (le reste) ;
+    choisie d'après le nom du moment et son lieu (`icoOf()`), au-dessus du chapeau, dans la grille commune (alignée d'une
+    colonne à l'autre). Le doré de la planche, pâle et verdâtre une fois détouré, est recoloré d'un or soutenu. **Pas de motif derrière le texte** : un
     gaufrage de cercles ou de carrés a été refusé (« c'est pas ça que je voulais : dans les écrits, des reliefs, des textures »). Puis les illustrations en SVG avec leur ombre (citronnier ; lanternes et croissant ; rosaces de zellige et jasmin ;
     fleurons d'angle et laurier doré ; lavande nouée et olivier) et le sceau à cheval sur le haut de la feuille. Aucune image
     générée. Les illustrations restent dans les coins : celles du bas réservent leur place sous le texte (`--pbx`), jamais

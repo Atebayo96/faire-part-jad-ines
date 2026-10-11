@@ -266,3 +266,8 @@
 .ct-s-medaillon .ct-sc-tl,.ct-s-medaillon .ct-sc-tr,.ct-s-bandeau .ct-sc-tl,.ct-s-bandeau .ct-sc-tr{width:19cqw}
 .ct-s-medaillon .ct-top{letter-spacing:.16em}
 .ct-s-arche .ct-sheet{padding-top:calc(var(--pt) + 66px*var(--k))}
+/* l'icône dorée du moment, au-dessus du chapeau, en relief comme le reste (lumière en haut à gauche) */
+.ct-ic{display:flex;justify-content:center;margin-bottom:calc(4px*var(--k))!important}
+.ct-ic img{height:calc(30px*var(--k));width:auto;max-width:calc(56px*var(--k));display:block;
+  filter:drop-shadow(-.6px -.6px 0 rgba(255,255,255,.9)) drop-shadow(.8px 1px .4px rgba(60,40,10,.35))}
+.ct-n2 .ct-ev>.ct-ic,.ct-n3 .ct-ev>.ct-ic{align-self:end}
