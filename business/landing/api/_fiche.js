@@ -18,7 +18,7 @@ const tidy = o => JSON.parse(JSON.stringify(o));
 /* Ce que l'Essentiel comprend (page Formules) : 2 événements, les lieux déjà peints du thème, une langue.
    Le lieu peint d'après photo, le lien par famille et l'anglais sont en Signature : le configurateur bascule alors
    la formule, et l'API refuse une fiche Essentiel qui les demande. */
-export const LIMITS = { essentiel: { events: 2 }, page: { events: 3 }, carte: { events: 3 } };
+export const LIMITS = { essentiel: { events: 2 }, page: { events: 2 }, carte: { events: 2 } };
 
 /* Page unique (59 €) et Carte (29 €), 10 octobre 2026 : tout le faire-part sur une seule feuille (carte.js). La carte est
    cette feuille en image et en PDF, sans lien en ligne. L'ouverture (+10 €) et le bouton Répondre avec le tableau de bord

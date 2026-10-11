@@ -58,7 +58,7 @@
         const j=await r.json().catch(()=>({})); if(!r.ok||!j.url) throw new Error(j.error||r.status);
         location.href=j.url; }
       catch(x){ btn.disabled=false; btn.textContent=`Payer ${PLANS[ordPlan].price} avec Stripe`;
-        show(String(x.message)==='plan'?(ONE(ordPlan)?'La carte et la page unique comprennent 3 moments : retirez-en un, ou passez en Essentiel.':'L’Essentiel comprend 2 événements : retirez-en un, ou passez en Signature.'):'Le paiement n’a pas pu s’ouvrir. Réessayez dans un instant, ou écrivez-nous.'); }
+        show(String(x.message)==='plan'?(ONE(ordPlan)?'La carte et la page unique comprennent 2 moments : retirez-en un, ou passez en Essentiel.':'L’Essentiel comprend 2 événements : retirez-en un, ou passez en Signature.'):'Le paiement n’a pas pu s’ouvrir. Réessayez dans un instant, ou écrivez-nous.'); }
       return; }
     const ref='sc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
     const v=id=>($o(id)||{}).value||'';
@@ -231,7 +231,7 @@
   const OCC_ON=CK.some(k=>THEMES[k].family==='nuits')?OCCS:OCCS.filter(o=>o.id==='mariage');
   const C={occ:OCC_ON.some(o=>o.id===urlOcc)?urlOcc:'mariage',sexe:'fille',k:CK.includes(urlTheme)?urlTheme:CK.includes('dolcevita')?'dolcevita':CK[0],fmt:'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
     reply:false,paper:'coton',icons:'presse',ev:null}; C.ev=OCC[C.occ].ev();
-  // carte et page unique : ce qui tient sur la feuille (le mot des familles, le programme, le dress code), 3 moments au plus
+  // carte et page unique : ce qui tient sur la feuille (le mot des familles, le programme, le dress code), 2 moments
   const ONE_X=['parents','program','dress'], one=()=>ONE(C.plan);
   /* une feuille a une place limitée (« l'écran est trop long, faut dire à la personne que c'est limité ») : quand fit() a dû
      réduire le texte (carte.js, data-full), une phrase le dit à l'étape du contenu et propose de retirer une partie */
@@ -620,7 +620,7 @@
       // une seule feuille : pas de décor par moment, le contenu tient sur la page
       $('cStory').classList.toggle('one',one());
       if(one()){ $('wz2Title').textContent=C.plan==='carte'?'Votre carte':'Votre page'; $('wzNav3').textContent='Contenu';
-        $('wz2Sub').textContent='Tout tient sur une seule feuille, comme un faire-part papier : la place est limitée (3 moments au plus). vos moments avec leur heure et leur lieu, et si vous voulez le mot des familles, le programme et le dress code.';
+        $('wz2Sub').textContent='Tout tient sur une seule feuille, comme un faire-part papier : la place est limitée : vos deux moments avec leur heure et leur lieu, et si vous voulez le mot des familles, le programme et le dress code.';
         $('cStory').querySelector('.home').innerHTML='<b>En haut</b><span>La peinture du thème, le sceau, vos prénoms et la date</span>';
         $('cStory').querySelector('.rsvp .rsvp-h').innerHTML=C.plan==='page'&&C.reply?'<b>Le bouton « Répondre »</b><span>en bas de la page · + 20 €</span>':'<b>La réponse</b><span>écrite en bas de la feuille</span>'; }
       // compte à rebours : pas de page dédiée dans le tableau (il est en haut ou à la fin) ; pas de révélation de la date
@@ -646,7 +646,8 @@
       // la grande vignette reprend le décor choisi, avec son nom
       const sel=l.querySelector('[data-lieu][aria-pressed="true"]'), pic=l.querySelector('[data-pick] span');
       if(sel&&pic){ pic.style.backgroundImage=sel.firstChild.style.backgroundImage; pic.dataset.n=(sel.querySelector('em')||{}).textContent||sel.textContent.replace('Signature','').trim(); } });
-    $('cAddEv').hidden=C.ev.length>=(one()?3:6)||C.occ!=='mariage';
+    // carte et page unique : deux moments, pas de « + Un moment de la journée » (« faut trop le configurer »)
+    $('cAddEv').hidden=one()||C.ev.length>=6||C.occ!=='mariage';
     // les 2 premiers moments sont dans l'Essentiel, le 3e passe en Signature (la carte et la page unique en ont 3)
     const sig3=C.ev.length>=2&&!one(); $('cAddEv').classList.toggle('sig',sig3); $('cAddEv').querySelector('i').textContent=sig3?'Signature':'';
     $('cpTint').style.background=p.c;
@@ -806,7 +807,7 @@
     if(C.x.has('photos')&&/^https?:\/\//.test(C.data.photos.url||'')) inv.photos={text:'Partagez vos plus belles photos de la journée dans notre album commun.',url:C.data.photos.url};
     return JSON.parse(JSON.stringify(inv)); }
   // la fiche d'une carte ou d'une page unique : la même, sur une seule feuille ("format": "page", carte.js)
-  function oneInvite(){ const inv=realInvite(); inv.format='page'; inv.paper=C.paper; inv.icons=C.icons; inv.countdown='non'; inv.reply=C.plan==='page'&&C.reply; if(C.plan==='carte') inv.opening='none';
+  function oneInvite(){ const inv=realInvite(); inv.format='page'; inv.events=inv.events.slice(0,2); inv.paper=C.paper; inv.icons=C.icons; inv.countdown='non'; inv.reply=C.plan==='page'&&C.reply; if(C.plan==='carte') inv.opening='none';
     ['story','infos','gifts','faq','photos'].forEach(k=>delete inv[k]); ['parents','dress'].forEach(k=>{ if(!C.x.has(k)) delete inv[k]; }); return inv; }
   // les choix du configurateur, pour le rouvrir tel quel (modification par les mariés)
   const snapshot=()=>({plan:C.plan,reply:C.reply,paper:C.paper,icons:C.icons,occ:C.occ,sexe:C.sexe,k:C.k,fmt:C.fmt,pal:C.pal,font:C.font,op:C.op,cd:C.cd,rvl:C.rvl,x:[...C.x],

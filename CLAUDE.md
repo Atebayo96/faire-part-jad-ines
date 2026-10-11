@@ -638,7 +638,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     image 1080 × 1920 et PDF A5 dessinés dans le navigateur (`html-to-image.js`, MIT, PDF écrit à la main), réduits (`--k`)
     pour tout tenir. Options de la page unique : l'ouverture (`"opening": "none"` sans, + 10 €) et le bouton Répondre avec
     le tableau de bord (`"reply": true`, + 20 €) ; prix calculé côté serveur (`priceOf`, `_fiche.js`), une fiche ne peut pas
-    demander plus que ce qui a été payé (`options` de la commande). 3 moments au plus. La Carte n'a pas de lien en ligne :
+    demander plus que ce qui a été payé (`options` de la commande). 2 moments (le « + Un moment de la journée » est retiré pour la carte et la page unique : « faut trop le configurer »). La Carte n’a pas de lien en ligne :
     payée, elle se télécharge depuis la page Merci (`GET /api/commande` rend sa fiche) et par le lien envoyé par e-mail.
     Avant le paiement en ligne, `/creer/?atelier=1` montre deux boutons Image / PDF pour livrer une carte à la main.
     **Pas d'encadré** (« les encadrés rectangulaires, on a l'impression que c'est pas la full page ») : la feuille va jusqu'aux
