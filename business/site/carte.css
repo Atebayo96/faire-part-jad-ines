@@ -45,7 +45,8 @@
 .ct-ey{font:500 max(11.5px,calc(13px*var(--k)))/1.3 Inter,-apple-system,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
 .ct-ey.ar{font:400 min(max(18px,calc(22px*var(--k))),8.4cqw)/1.4 Amiri,serif;letter-spacing:0;text-transform:none}
 .ct-top{margin-top:var(--g1)!important}
-.ct-nm{margin-top:calc(6px*var(--k))!important;font-size:calc(46px*var(--k)*var(--nk,1));line-height:1.08;color:var(--ink);overflow-wrap:anywhere}
+/* les paraphes d'une calligraphie (Great Vibes) dépassent la boîte du mot : sans marge, la dorure (background-clip:text) les coupait */
+.ct-nm{padding:.14em .3em .2em;margin-bottom:-.2em!important;margin-top:calc(6px*var(--k) - .14em)!important;font-size:calc(46px*var(--k)*var(--nk,1));line-height:1.08;color:var(--ink);overflow-wrap:anywhere}
 .ct-nm i{font-style:inherit;font-size:.72em}
 .ct-tx{margin-top:var(--g1)!important;max-width:17em;font:italic 400 max(16px,calc(18px*var(--k)))/1.45 "Cormorant Garamond",Georgia,serif}
 /* la date se voit en premier (règle 3) : 22 px en 600, entre deux filets à la couleur du couple */

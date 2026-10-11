@@ -233,6 +233,11 @@
     reply:false,paper:'coton',icons:'presse',ev:null}; C.ev=OCC[C.occ].ev();
   // carte et page unique : ce qui tient sur la feuille (le mot des familles, le programme, le dress code), 3 moments au plus
   const ONE_X=['parents','program','dress'], one=()=>ONE(C.plan);
+  /* une feuille a une place limitée (« l'écran est trop long, faut dire à la personne que c'est limité ») : quand fit() a dû
+     réduire le texte (carte.js, data-full), une phrase le dit à l'étape du contenu et propose de retirer une partie */
+  function full(){ let n=$('cFull'); if(!n){ n=document.createElement('p'); n.id='cFull'; n.className='one-note full'; $('wz2Sub').after(n); }
+    const ct=one()&&$('cpScroll').querySelector('.ct'), f=ct&&ct.dataset.full;
+    n.hidden=!f; if(f) n.innerHTML=f==='over'?'<b>Votre feuille est pleine.</b> Tout ne tient plus sur un écran : retirez une partie (le programme, le dress code ou le mot des familles), raccourcissez un texte, ou passez à l’<b>Essentiel</b>, qui a un écran par moment.':'<b>Votre feuille est bien remplie.</b> Le texte a été un peu réduit pour tout faire tenir. Une partie de plus ne tiendrait pas : pour en ajouter, passez à l’<b>Essentiel</b>, un écran par moment.'; }
   // prix de la page unique : 59 €, + 10 € avec l'ouverture, + 20 € avec le bouton Répondre et le tableau de bord
   const pagePrice=()=>59+(C.op!=='none'?10:0)+(C.reply?20:0);
   // les lieux déjà dessinés dans chaque thème (/img/lieux/<thème>-<lieu>.webp) ; « fond » = le décor des écrans simples
@@ -373,7 +378,7 @@
       const l=li('ev',`<div class="ev-h"><b>Événement ${i+1}</b><small>${i<2?'inclus':'<i class="sig-tag">Signature</i>'}${i>=2?' · <a href="#" data-rm>Retirer</a>':''}</small></div>
         <div class="ev-b"><button type="button" class="ev-pic" data-pick aria-expanded="false"><span></span><em>Changer le décor</em></button>
         <label class="ev-ph"><input type="file" accept="image/*" multiple data-ph hidden><span class="ev-ph-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg></span><em>Ajouter des photos du lieu</em></label>
-        <div class="ev-f"><label class="ed-f"><span>Le moment</span><input type="text" data-k="name" maxlength="40" placeholder="La cérémonie"></label><label class="ed-f"><span>À quelle heure</span><input type="time" data-k="time"></label><label class="ed-f ev-pl"><span>Où (le nom du lieu)</span><input type="text" data-k="place" maxlength="60" placeholder="Église Saint-Paul"></label><label class="ed-f ev-ab"><span>Parlez-nous de ce lieu</span><textarea data-k="about" rows="2" maxlength="400" placeholder="Une petite chapelle en pierre au milieu des vignes, une allée de platanes, une grande terrasse…"></textarea></label><div class="ev-th"></div><p class="ev-dn"></p></div></div>
+        <div class="ev-f"><label class="ed-f"><span>Le moment</span><input type="text" data-k="name" maxlength="40" placeholder="La cérémonie"></label><label class="ed-f"><span>À quelle heure</span><input type="time" data-k="time"></label><label class="ed-f ev-pl"><span>Où (le nom du lieu)</span><input type="text" data-k="place" maxlength="60" placeholder="Église Saint-Paul"></label><label class="ed-f ev-pl"><span>L’adresse (pour l’itinéraire)</span><input type="text" data-k="addr" maxlength="120" placeholder="12 rue de la Paix, 75002 Paris" autocomplete="street-address"></label><label class="ed-f ev-ab"><span>Parlez-nous de ce lieu</span><textarea data-k="about" rows="2" maxlength="400" placeholder="Une petite chapelle en pierre au milieu des vignes, une allée de platanes, une grande terrasse…"></textarea></label><div class="ev-th"></div><p class="ev-dn"></p></div></div>
         <div class="lieux" role="group" aria-label="Le décor de cet écran"><button type="button" data-lieu="simple"><span></span><em>Texte seul</em></button>${LIEUX.map(x=>`<button type="button" data-lieu="${x.id}"${x.sig?' class="sig"':''}><span>${x.sig?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>':''}</span>${x.sig?'Votre lieu<i>Signature</i>':x.name}</button>`).join('')}</div>`);
       l.dataset.i=i;
       l.querySelectorAll('input[data-k],textarea[data-k]').forEach(inp=>{ inp.value=e[inp.dataset.k]||''; inp.addEventListener('input',()=>{ e[inp.dataset.k]=inp.value; paint(); }); });
@@ -615,7 +620,7 @@
       // une seule feuille : pas de décor par moment, le contenu tient sur la page
       $('cStory').classList.toggle('one',one());
       if(one()){ $('wz2Title').textContent=C.plan==='carte'?'Votre carte':'Votre page'; $('wzNav3').textContent='Contenu';
-        $('wz2Sub').textContent='Tout tient sur une seule feuille, comme un faire-part papier : vos moments avec leur heure et leur lieu, et si vous voulez le mot des familles, le programme et le dress code.';
+        $('wz2Sub').textContent='Tout tient sur une seule feuille, comme un faire-part papier : la place est limitée (3 moments au plus). vos moments avec leur heure et leur lieu, et si vous voulez le mot des familles, le programme et le dress code.';
         $('cStory').querySelector('.home').innerHTML='<b>En haut</b><span>La peinture du thème, le sceau, vos prénoms et la date</span>';
         $('cStory').querySelector('.rsvp .rsvp-h').innerHTML=C.plan==='page'&&C.reply?'<b>Le bouton « Répondre »</b><span>en bas de la page · + 20 €</span>':'<b>La réponse</b><span>écrite en bas de la feuille</span>'; }
       // compte à rebours : pas de page dédiée dans le tableau (il est en haut ou à la fin) ; pas de révélation de la date
@@ -723,7 +728,7 @@
     pages.push(scene(3,C.cd==='fin'));
     const sc=$('cpScroll'), st=sc.scrollTop; sc.innerHTML='<div class="cp-bgs" id="cpBgs" aria-hidden="true"></div>'+pages.join(''); sc.scrollTop=st; tick();
     // carte et page unique : l'aperçu est la feuille elle-même (carte.js), exactement comme le faire-part publié
-    sc.classList.toggle('one',one()); if(one()&&window.SceauCarte){ sc.innerHTML=SceauCarte.html(oneInvite(),{live:C.plan==='page',fit:true}); sc.scrollTop=st; SceauCarte.fit(sc); if(document.fonts) document.fonts.ready.then(()=>SceauCarte.fit(sc)); }
+    sc.classList.toggle('one',one()); if(!one()) full(); if(one()&&window.SceauCarte){ sc.innerHTML=SceauCarte.html(oneInvite(),{live:C.plan==='page',fit:true}); sc.scrollTop=st; SceauCarte.fit(sc); full(); if(document.fonts) document.fonts.ready.then(()=>{ SceauCarte.fit(sc); full(); }); }
     drawQr(sc);
     // les prénoms de l'accueil tiennent sur une ligne dans le petit téléphone (comme sur un vrai téléphone, où ils tiennent) :
     // à 40 px, « Emma & Louis » passait sur deux lignes en Amiri et poussait la phrase sur le décor
@@ -772,7 +777,7 @@
       intro:{eyebrow:t.scenes[0][0],text:introTxt(),dateText:ds},
       parents:C.x.has('parents')?{eyebrow:famEy(),names:[C.data.parents.n1,C.data.parents.n2].filter(Boolean),text:C.data.parents.text}:null,
       eventsTitle:C.occ==='mariage'?undefined:'',
-      events:C.ev.map((e,i)=>({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||e.name||'',start:day+'T'+(e.time||'15:00'),address:e.place||'',lieu:e.bg==='scene'&&!['photo','s2'].includes(e.lieu)?e.lieu:(e.bg!=='scene'&&C.occ==='sbou3'?'fond':undefined),note:e.bg==='scene'&&e.lieu==='photo'?'Ici, votre lieu peint d’après votre photo':undefined})),
+      events:C.ev.map((e,i)=>({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||e.name||'',start:day+'T'+(e.time||'15:00'),address:e.addr||e.place||'',lieu:e.bg==='scene'&&!['photo','s2'].includes(e.lieu)?e.lieu:(e.bg!=='scene'&&C.occ==='sbou3'?'fond':undefined),note:e.bg==='scene'&&e.lieu==='photo'?'Ici, votre lieu peint d’après votre photo':undefined})),
       story:C.x.has('story')&&C.occ!=='sbou3'?{title:'Notre histoire',items:C.data.story.filter(x=>x.when||x.title)}:null,
       dress:C.x.has('dress')?{eyebrow:'Dress code',title:C.data.dress.title,text:C.data.dress.text,colors:C.data.dress.colors}:null,
       infos:C.x.has('stay')?C.data.stay.filter(x=>x.title||x.text):[],
@@ -788,7 +793,7 @@
     const inv=lgInvite(t,p,f,nm1(),nm2(),ds0.charAt(0).toUpperCase()+ds0.slice(1)), day=$('cDate').value||'2027-06-12';
     ['slug','demo','layout','music','calques','anim','trans','families','album'].forEach(k=>delete inv[k]);
     Object.assign(inv,{opening:C.op,countdown:C.cd,kind:C.occ==='mariage'?undefined:C.occ,
-      events:C.ev.map((e,i)=>Object.assign({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||'',start:day+'T'+(e.time||'15:00'),address:e.place||''},
+      events:C.ev.map((e,i)=>Object.assign({id:'e'+i,eyebrow:e.name||'Événement '+(i+1),title:e.place||'',start:day+'T'+(e.time||'15:00'),address:e.addr||e.place||''},
         e.bg!=='scene'?{bg:'simple'}:e.lieu==='s2'?{scene:2}:{lieu:e.lieu})),
       infos:inv.infos.map(x=>({icon:x.icon,title:x.title,text:x.text}))});
     // la date du faire-part : l'heure du premier événement

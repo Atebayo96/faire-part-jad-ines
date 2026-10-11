@@ -691,7 +691,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     faut qu'on ait l'impression qu'elles ont été pressées dans le papier ») : trois calques masqués par l'icône, le creux plus
     sombre que la feuille, son bord haut-gauche dans l'ombre, le papier autour qui accroche la lumière en bas à droite.
     **La dorure reste en option** (« laisser en doré aussi, pour voir la différence ») : étape Détails, « Les icônes des
-    moments » : Pressées (par défaut) ou Dorées (fiche `"icons": "or"`, classe `ct-ic-or`, validé par `_fiche.js`). Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de
+    moments » : Pressées (par défaut) ou Dorées (fiche `"icons": "or"`, classe `ct-ic-or`, validé par `_fiche.js`).
+    **La place est limitée et on le dit** (« l'écran est trop long, faut dire à la personne que c'est limité ») : `fit()` marque
+    la feuille (`data-full` : `tight` si le texte a été nettement réduit, `over` si elle déborde encore) et le configurateur
+    affiche une note à l'étape Contenu (`full()`, `#cFull`) : retirer une partie, raccourcir, ou passer à l'Essentiel.
+    **Chaque moment a son adresse** (champ « L'adresse (pour l'itinéraire) », `e.addr`, toutes formules), écrite sous le nom du
+    lieu et utilisée par « Y aller ». **Les paraphes d'une calligraphie ne sont plus coupés** (`.ct-nm` a une marge intérieure :
+    la dorure en `background-clip:text` s'arrêtait à la boîte du mot). Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de
     ville : alliances), puis le lieu. **Mille et une nuits et l'Andalou : pas de verres ni de « fête »** (« c'est plus musulman ») :
     le moment d'exemple s'appelle « La réception » (`fixLieux()`), son icône est **l'assiette et ses couverts**
     (`ico-assiette.webp`, 1 génération accordée, ~0,15 € ; elle sert aussi au dîner partout), le cocktail prend le bouquet.
