@@ -89,8 +89,9 @@
 .ct-b:active{transform:scale(.97)}
 .ct-b svg{width:32px;height:32px;flex:none;padding:8px;border-radius:50%;color:#fff;background:var(--ink)}
 .ct-acts+.ct-rs{margin-top:var(--g1)!important}
-/* la signature, sous la feuille, sur une pastille de la couleur du fond (--mk mesurée contre --bk : le fond peint est trop riche pour porter un texte) */
-.ct-sheet>.ct-made{position:absolute;left:50%;translate:-50% 0;white-space:nowrap;background:var(--bk);padding:5px 12px 4px;border-radius:999px;bottom:calc(var(--pb)/2 - 6px);margin:0!important;padding:0;font:500 11.5px/1 Inter,-apple-system,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--mk,var(--ink))}
+/* la signature, sous la feuille, en blanc sur le fond peint (11 octobre 2026 : « pas la peine de mettre une pastille pour
+   le contraste, mets-le en blanc ») ; une ombre portée douce la détache des motifs */
+.ct-sheet>.ct-made{position:absolute;left:0;right:0;bottom:calc(var(--pb)/2 - 6px);margin:0!important;padding:0;font:600 11.5px/1 Inter,-apple-system,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.55),0 0 6px rgba(0,0,0,.35)}
 /* formats d'export : la feuille remplit exactement le format, l'espace en trop se répartit (rien n'est collé en haut) */
 /* l'image et le PDF sont plus larges qu'un téléphone : texte centré (étiré vers les bords, il passait sous les illustrations),
    illustrations ramenées à leur taille sur un téléphone (--dz) */

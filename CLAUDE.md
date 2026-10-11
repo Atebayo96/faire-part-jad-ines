@@ -680,7 +680,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     blanche ou un carré foncé, ou avec un liseré d'autocollant : second détourage seulement pour ces images (`INNER`), sinon il
     mange les chaînes des lanternes et les tiges. Les illustrations suivent l'échelle du texte (`--k`) et leur place est
     réservée en haut et en bas (`--pbx`, padding-top par style) ; à l'export (plus large), texte centré et `--dz: .78`.
-    La signature est sur une pastille de la couleur du fond (`--bk`) : le fond peint est trop riche pour porter un texte. **Pas de motif derrière le texte** : un
+    La signature est en blanc sur le fond peint, avec une ombre portée douce (la pastille a été retirée : « mets-le en blanc »). **Pas de motif derrière le texte** : un
     gaufrage de cercles ou de carrés a été refusé (« c'est pas ça que je voulais : dans les écrits, des reliefs, des textures »). Puis les illustrations en SVG avec leur ombre (citronnier ; lanternes et croissant ; rosaces de zellige et jasmin ;
     fleurons d'angle et laurier doré ; lavande nouée et olivier) et le sceau à cheval sur le haut de la feuille. Aucune image
     générée. Les illustrations restent dans les coins : celles du bas réservent leur place sous le texte (`--pbx`), jamais
