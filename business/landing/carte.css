@@ -142,9 +142,9 @@
 /* outrepasse (Andalou) : l'arc brisé de Mille et une nuits (polylobé et fer à cheval pas validés), petits losanges, filets en pointillés comme un zellige */
 .ct-s-outrepasse .ct-o{display:block;width:calc(8px*var(--k));height:calc(8px*var(--k));transform:rotate(45deg)}
 .ct-s-outrepasse .ct-dl{gap:calc(9px*var(--k))}
-.ct-s-outrepasse .ct-dl i{height:2px;opacity:1;background:radial-gradient(circle,var(--pal) 45%,transparent 55%) center/6px 2px repeat-x}
-.ct-s-outrepasse .ct-ev+.ct-ev{border-left-style:dotted!important;border-left-width:2px!important}
-.ct-s-medaillon .ct-dl i{height:4px;background:none;border-top:1px solid var(--pal);border-bottom:1px solid var(--pal);opacity:.85}
+.ct-s-outrepasse .ct-dl i{height:2px;opacity:1;box-shadow:none;background:radial-gradient(circle,var(--pal) 45%,transparent 55%) center/6px 2px repeat-x}
+.ct.ct-s-outrepasse .ct-ev+.ct-ev{background:radial-gradient(circle,var(--pal) 45%,transparent 55%) left top/2px 6px repeat-y}
+.ct-s-medaillon .ct-dl i{height:4px;background:none;box-shadow:none;border-top:1px solid var(--pal);border-bottom:1px solid var(--pal);opacity:.85}
 .ct-s-medaillon .ct-top{letter-spacing:.24em}
 .ct-s-medaillon .ct-evs{border-top:1px solid color-mix(in srgb,var(--pal) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--pal) 55%,transparent);padding:var(--g2) 0}
 .ct-s-bandeau .ct-o{display:block;width:calc(16px*var(--k));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat;
@@ -231,11 +231,20 @@
    reste acquis), les prénoms et les heures sont en dorure à chaud (dégradé de l'encre vers plus foncé, jamais plus clair,
    avec son relief). La signature, sur le fond, n'est pas concernée. */
 .ct-sheet>:not(.ct-back):not(.ct-pw):not(.ct-deco):not(.ct-seal):not(.ct-made){mix-blend-mode:multiply}
-.ct-sheet>:not(.ct-back):not(.ct-pw):not(.ct-deco):not(.ct-seal):not(.ct-made),.ct-sheet>:not(.ct-made) *{text-shadow:0 1px 0 rgba(255,255,255,.75),0 -.6px 0 rgba(60,40,15,.22)}
-.ct-nm,.ct-hr{background:linear-gradient(172deg,var(--ink) 0%,var(--ink2) 38%,var(--ink) 52%,var(--ink2) 80%,var(--ink) 100%);
+.ct-sheet>:not(.ct-back):not(.ct-pw):not(.ct-deco):not(.ct-seal):not(.ct-made),.ct-sheet>:not(.ct-made):not(.ct-seal):not(.ct-deco) *{
+  text-shadow:0 1.3px 0 rgba(255,255,255,.95),0 -1px 0 rgba(50,32,10,.4),0 0 2.5px rgba(60,40,15,.14)}
+/* dorure : le dégradé de l'encre (jamais plus clair qu'elle), un grain de feuille d'or, et un relief marqué */
+.ct-nm,.ct-hr{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.05'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23g)' opacity='.45'/%3E%3C/svg%3E"),
+  linear-gradient(170deg,var(--ink) 0%,var(--ink2) 30%,var(--ink) 46%,var(--ink2) 62%,var(--ink) 78%,var(--ink2) 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent!important;text-shadow:none!important;
-  filter:drop-shadow(0 1px 0 rgba(255,255,255,.85)) drop-shadow(0 -.6px 0 rgba(40,25,8,.35))}
+  filter:drop-shadow(0 1.4px 0 rgba(255,255,255,.95)) drop-shadow(0 -1px 0 rgba(30,18,4,.5)) drop-shadow(0 2px 2px rgba(40,25,8,.2))}
 .ct-nm i{background:inherit;-webkit-background-clip:text;background-clip:text}
+/* les filets sont des filets d'or enfoncés dans le papier */
+.ct-dl i{height:1.5px;opacity:1;background:linear-gradient(90deg,var(--ink2),var(--pal) 30%,var(--ink) 55%,var(--pal) 80%,var(--ink2));box-shadow:0 1px 0 rgba(255,255,255,.9),0 -.5px 0 rgba(40,25,8,.25)}
+.ct-n2 .ct-ev+.ct-ev,.ct-n3 .ct-ev+.ct-ev{border-left:0;background:linear-gradient(var(--pal),var(--ink2),var(--pal)) left/1.5px 100% no-repeat;box-shadow:inset 1px 0 0 rgba(255,255,255,.0)}
+/* le grain du papier, plus profond, et l'épaisseur de la carte (un liseré sous la découpe, avant son ombre) */
+.ct-panel::after{content:"";position:absolute;inset:0;background:var(--tex,none);mix-blend-mode:multiply;opacity:.45;pointer-events:none}
+.ct-sheet>.ct-pw{filter:drop-shadow(0 1.6px 0 rgba(125,104,72,.85)) drop-shadow(0 1px 1px rgba(0,0,0,.22)) drop-shadow(0 14px 20px rgba(0,0,0,.32))}
 /* les moments côte à côte, alignés : le chapeau sur une ligne, l'heure un peu plus petite et à distance du filet */
 .ct-n2 .ct-ev,.ct-n3 .ct-ev{padding:0 calc(7px*var(--k))}
 .ct-n2 .ct-ev>.ct-ey,.ct-n3 .ct-ev>.ct-ey{white-space:nowrap;letter-spacing:.03em;font-size:11px}

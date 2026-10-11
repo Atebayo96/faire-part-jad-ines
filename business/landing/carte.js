@@ -124,7 +124,9 @@
   function html(inv,o){
     o=o||{}; const T=TH()[inv.theme]||{}, L=L10[inv.lang==='en'?'en':'fr'];
     const pk=PAPERS[inv.paper]?inv.paper:'coton', PP=PAPERS[pk];
-    const pal=inv.palette||'#b8975a', ink=inkOf(pal,4.6,PP.low), soft=inkOf(pal,3.2,PP.low), ink2=hex(rgb(ink).map(v=>v*.62));
+    // le grain renforcé de la feuille (.ct-panel::after, multiply à 45 %) fonce le papier jusqu'à 81 % : l'encre est mesurée contre ce pire point
+    const low=hex(rgb(PP.low).map(v=>v*.81));
+    const pal=inv.palette||'#b8975a', ink=inkOf(pal,4.6,low), soft=inkOf(pal,3.2,low), ink2=hex(rgb(ink).map(v=>v*.62));
     const sealName=SEALS[inv.seal]?inv.seal:sealOf(pal), [sl,sm,sd]=SEALS[sealName];
     const n1=inv.couple[0]||'', n2=inv.couple[1]||'', solo=!n2;
     const F=FONTS[inv.font]||null, ff=F?F.css:(T.font||'"Cormorant Garamond",Georgia,serif'), it=F?!!F.italic:!!T.italic, up=F?!!F.upper:!!T.upper;

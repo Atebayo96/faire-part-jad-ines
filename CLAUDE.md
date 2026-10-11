@@ -662,7 +662,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     découpée à la forme du thème et posée avec son ombre (arche ronde ; arc brisé pour Mille et une nuits et l'Andalou ; coins
     rentrés pour Old money ; bord festonné pour Douce France), puis le texte **imprimé dans le papier** : chaque ligne
     enfoncée (filet de lumière dessous, ombre fine dessus), l'encre en `mix-blend-mode: multiply` qui garde le grain du papier,
-    prénoms et heures en dorure (dégradé de l'encre vers plus foncé, jamais plus clair). **Pas de motif derrière le texte** : un
+    prénoms et heures en dorure (dégradé de l'encre vers plus foncé, jamais plus clair, grain de feuille d'or, relief marqué).
+    **Reliefs augmentés** (« augmente les reliefs ») : impression plus profonde (lumière 1,3 px dessous, ombre 1 px dessus, foulée
+    autour de la lettre), filets d'or enfoncés (date, colonne), grain du papier renforcé (`.ct-panel::after`, multiply 45 % :
+    l'encre est mesurée contre le papier assombri à 81 %), épaisseur de la carte (liseré de 1,6 px sous la découpe). **Pas de motif derrière le texte** : un
     gaufrage de cercles ou de carrés a été refusé (« c'est pas ça que je voulais : dans les écrits, des reliefs, des textures »). Puis les illustrations en SVG avec leur ombre (citronnier ; lanternes et croissant ; rosaces de zellige et jasmin ;
     fleurons d'angle et laurier doré ; lavande nouée et olivier) et le sceau à cheval sur le haut de la feuille. Aucune image
     générée. Les illustrations restent dans les coins : celles du bas réservent leur place sous le texte (`--pbx`), jamais
