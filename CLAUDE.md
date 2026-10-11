@@ -686,7 +686,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     à la dorure gravée, `tools/carte-icones.py`, `img/carte/ico-*.webp`) : alliances (cérémonie, église, mosquée), coupes (fête,
     soirée), mairie, cloche de dîner, main au henné, berceau (sbouâ), verre (cocktail, vin d'honneur), bouquet (le reste) ;
     choisie d'après le nom du moment et son lieu (`icoOf()`), au-dessus du chapeau, dans la grille commune (alignée d'une
-    colonne à l'autre). Le doré de la planche, pâle et verdâtre une fois détouré, est recoloré d'un or soutenu. **Pas de motif derrière le texte** : un
+    colonne à l'autre). Le doré de la planche, pâle et verdâtre une fois détouré, est recoloré d'un or soutenu.
+    **Plus d'ornement aux bouts des filets de la date** (étoile, losanges, brin de feuillage : « retire ça ») : seulement les filets. **Pas de motif derrière le texte** : un
     gaufrage de cercles ou de carrés a été refusé (« c'est pas ça que je voulais : dans les écrits, des reliefs, des textures »). Puis les illustrations en SVG avec leur ombre (citronnier ; lanternes et croissant ; rosaces de zellige et jasmin ;
     fleurons d'angle et laurier doré ; lavande nouée et olivier) et le sceau à cheval sur le haut de la feuille. Aucune image
     générée. Les illustrations restent dans les coins : celles du bas réservent leur place sous le texte (`--pbx`), jamais

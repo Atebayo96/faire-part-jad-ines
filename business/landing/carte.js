@@ -150,7 +150,7 @@
         `<p class="ct-ey ct-top${ey.ar?' ar':''}"${ey.ar?' lang="ar" dir="rtl"':''}>${esc(ey.text)}</p>`+
         `<h1 class="ct-nm" style="font-family:${esc(ff)};font-style:${it?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};--nk:${nmSz}">${solo?esc(n1):`${esc(n1)} <i>&amp;</i> ${esc(n2)}`}</h1>`+
         `<p class="ct-tx">${esc(inv.intro&&inv.intro.text||L.joy)}</p>`+
-        `<p class="ct-dl"><i></i><b class="ct-o" aria-hidden="true"></b><span>${esc(inv.intro&&inv.intro.dateText||day(main,L,true))}</span><b class="ct-o" aria-hidden="true"></b><i></i></p>`+
+        `<p class="ct-dl"><i></i><span>${esc(inv.intro&&inv.intro.dateText||day(main,L,true))}</span><i></i></p>`+
         `<div class="ct-evs" style="--slots:${slots}">${evs.map(ev).join('')}</div>`+
         prog+dress+rs+
         `<p class="ct-made"><span>Save the</span> <b>Oui</b></p>`+

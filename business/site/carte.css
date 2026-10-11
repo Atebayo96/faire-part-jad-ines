@@ -141,23 +141,15 @@
 .ct-ev>p:empty{display:none}
 .ct-n2 .ct-ev>p:empty,.ct-n3 .ct-ev>p:empty{display:block}
 
-.ct-o{display:none;flex:none;width:calc(11px*var(--k));height:calc(11px*var(--k));background:var(--pal)}
 /* ogive (Mille et une nuits) : arc brisé, étoile à huit branches au bout des filets */
-.ct-s-ogive .ct-o{display:block;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat;
-  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat}
 .ct-s-ogive .ct-dl{gap:calc(8px*var(--k))}
 /* outrepasse (Andalou) : l'arc brisé de Mille et une nuits (polylobé et fer à cheval pas validés), petits losanges, filets en pointillés comme un zellige */
-.ct-s-outrepasse .ct-o{display:block;width:calc(8px*var(--k));height:calc(8px*var(--k));transform:rotate(45deg)}
 .ct-s-outrepasse .ct-dl{gap:calc(9px*var(--k))}
 .ct-s-outrepasse .ct-dl i{height:2px;opacity:1;box-shadow:none;background:radial-gradient(circle,var(--pal) 45%,transparent 55%) center/6px 2px repeat-x}
 .ct.ct-s-outrepasse .ct-ev+.ct-ev{background:radial-gradient(circle,var(--pal) 45%,transparent 55%) left top/2px 6px repeat-y}
 .ct-s-medaillon .ct-dl i{height:4px;background:none;box-shadow:none;border-top:1px solid var(--pal);border-bottom:1px solid var(--pal);opacity:.85}
 .ct-s-medaillon .ct-top{letter-spacing:.24em}
 .ct-s-medaillon .ct-evs{border-top:1px solid color-mix(in srgb,var(--pal) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--pal) 55%,transparent);padding:var(--g2) 0}
-.ct-s-bandeau .ct-o{display:block;width:calc(16px*var(--k));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat;
-  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat}
-.ct-s-bandeau .ct-dl b.ct-o:last-of-type{transform:scaleX(-1)}
-.ct-s-bandeau .ct-dl b.ct-o:first-of-type{transform:none}
 
 /* ---------- les plans de la feuille (carte.js, STYLES / DECO / EMB) ----------
    11 octobre 2026 : « des symboles, des illustrations qui viennent habiller la feuille pour en faire une œuvre », « de la
