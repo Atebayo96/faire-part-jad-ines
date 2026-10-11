@@ -669,7 +669,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **Gaufrage à sec** (photo d'un faire-part gaufré : « c'est du papier gaufré, c'est bien ») : une double bordure en relief qui
     suit la découpe de chaque feuille (`rim()` la dessine à la taille réelle, rappelée par `fit()`) et des volutes gaufrées dans
     les coins (`SCROLL`, en bas seulement pour les feuilles en arc), blanc sur blanc : lumière en haut à gauche, ombre en bas à
-    droite. Jamais derrière le texte. Les fleurons dorés d'Old money ont été retirés (ils se posaient sur les volutes). **Pas de motif derrière le texte** : un
+    droite. Jamais derrière le texte. Les fleurons dorés d'Old money ont été retirés (ils se posaient sur les volutes). **Plus de passe-partout de couleur**
+    (« les bordures en plus avec les bordures gaufrées, c'est pas ouf, on garde que les gaufrées »). **Le texte est en relief,
+    comme gaufré** (« que le texte apparaisse comme gaufré ») : lumière en haut à gauche, ombre en bas à droite, la même que le
+    gaufrage du bord (plus enfoncé). Texte à 26 px des bords, 64 px sous le haut pour Old money et Douce France (volutes du haut). **Pas de motif derrière le texte** : un
     gaufrage de cercles ou de carrés a été refusé (« c'est pas ça que je voulais : dans les écrits, des reliefs, des textures »). Puis les illustrations en SVG avec leur ombre (citronnier ; lanternes et croissant ; rosaces de zellige et jasmin ;
     fleurons d'angle et laurier doré ; lavande nouée et olivier) et le sceau à cheval sur le haut de la feuille. Aucune image
     générée. Les illustrations restent dans les coins : celles du bas réservent leur place sous le texte (`--pbx`), jamais

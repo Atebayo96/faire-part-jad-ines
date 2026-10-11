@@ -54,7 +54,7 @@
      des icônes, des illustrations qui viennent habiller la feuille pour en faire une œuvre » ; « de la profondeur et des
      niveaux, que tout n'apparaisse pas sur le même plan »). Plus de photo : cinq plans, du fond vers l'avant :
        1. le fond (.ct-back) à la couleur du thème et à son motif (maïolique, nuit étoilée, zellige, treillis, indienne),
-       2. le passe-partout (.ct-under), une carte de couleur un peu plus grande que la feuille,
+       2. (le passe-partout de couleur a été retiré : « les bordures en plus avec les bordures gaufrées, c'est pas ouf »),
        3. la feuille de papier (.ct-panel), découpée à la forme du thème, posée avec son ombre,
        4. le texte, imprimé dans le papier : chaque ligne est enfoncée (typographie), l'encre prend le grain du papier, les
           prénoms et les heures sont en dorure à chaud (pas de motif gaufré derrière le texte : « c'est pas ça que je voulais »),
@@ -174,7 +174,7 @@
     return `<div class="${cls}" style="--pal:${esc(pal)};--ink:${ink};--ink2:${ink2};--soft:${soft};--paper:${PP.c};--tx:${INK}">`+
       `<div class="ct-sheet">`+
         `<div class="ct-back" aria-hidden="true"></div>`+
-        `<div class="ct-pw" aria-hidden="true"><div class="ct-under ct-sh"></div><div class="ct-panel ct-sh"><svg class="ct-rim"></svg>${SCROLLS[st].map(c=>`<i class="ct-sc ct-sc-${c}">${SCROLL}</i>`).join('')}</div></div>`+
+        `<div class="ct-pw" aria-hidden="true"><div class="ct-panel ct-sh"><svg class="ct-rim"></svg>${SCROLLS[st].map(c=>`<i class="ct-sc ct-sc-${c}">${SCROLL}</i>`).join('')}</div></div>`+
         `<div class="ct-deco" aria-hidden="true">${decoOf(st)}</div>`+
         `<div class="ct-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sl};--m:${sm};--d:${sd}">${ini}</b></div>`+
         (P&&(P.names||[]).filter(Boolean).length?`<p class="ct-fam">${P.names.filter(Boolean).map(esc).join(' &amp; ')}</p>`:'')+
