@@ -175,7 +175,9 @@
     // en ligne : s'il reste de la place sur l'écran, le texte grandit un peu (jusqu'à 106 %) pour composer une vraie page
     (root||document).querySelectorAll('.ct-fit').forEach(el=>{ const sh=el.querySelector('.ct-sheet'), box=el.parentNode; if(!sh||!box) return;
       const H=(box.closest('.sc,.pv-scroll')||box).clientHeight; if(!H) return;
-      const need=()=>{ const top=sh.getBoundingClientRect().top; let b=0; [...sh.children].forEach(c=>{ if(!/ct-(made|back|pw|deco|seal)\b/.test(c.className)) b=Math.max(b,c.getBoundingClientRect().bottom); }); return b-top+parseFloat(getComputedStyle(sh).paddingBottom); };
+      /* les mesures à l'écran sont réduites quand l'aperçu l'est (téléphone à 31 % dans le bandeau du configurateur sur
+         téléphone) : on les ramène à l'échelle de la feuille, sinon tout « tenait » et la feuille débordait (iPhone 16) */
+      const need=()=>{ const R=sh.getBoundingClientRect(), z=sh.offsetHeight?R.height/sh.offsetHeight:1; let b=0; [...sh.children].forEach(c=>{ if(!/ct-(made|back|pw|deco|seal)\b/.test(c.className)) b=Math.max(b,c.getBoundingClientRect().bottom); }); return (b-R.top)/(z||1)+parseFloat(getComputedStyle(sh).paddingBottom); };
       sh.style.justifyContent='flex-start'; let k=1; el.style.setProperty('--k','1');
       // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 66 %, pour que la signature reste sur l'écran
       // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
