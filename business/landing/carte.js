@@ -95,11 +95,9 @@
   const ROSE=svg('0 0 80 80',`<circle cx="40" cy="40" r="37" fill="#f6efe2" stroke="url(#ctGd)" stroke-width="2"/>`+star8(40,40,30,'#2f6b6a','url(#ctGd)')+star8(40,40,18,'#f6efe2','url(#ctGd)')+
     `<circle cx="40" cy="40" r="8" fill="#b4543a" stroke="url(#ctGd)" stroke-width="1.2"/>`+[0,45,90,135,180,225,270,315].map(a=>`<circle cx="40" cy="7" r="2" fill="url(#ctGd)" transform="rotate(${a} 40 40)"/>`).join(''),grad('ctGd',GOLD));
   const JASMIN=svg('0 0 120 70',branch([[2,62],[50,64],[112,30]],4,{l:16,w:5,c:['#4c7a52','#3a6342'],stem:'#5b6b44',sw:1.4})+bloom(70,44,4)+bloom(96,30,4.4)+bloom(42,52,3.4)+bloom(112,22,3));
-  // Old money : deux rameaux de laurier dorés qui se croisent, un fleuron d'angle
+  // Old money : deux rameaux de laurier dorés qui se croisent (les fleurons d'angle dorés gênaient les volutes gaufrées)
   const LAUREL=svg('0 0 200 90',branch([[100,86],[40,84],[8,20]],7,{l:17,w:5.2,c:['url(#ctGd)','#b98f3e'],stem:'#9c6f1c',ang:40})+branch([[100,86],[160,84],[192,20]],7,{l:17,w:5.2,c:['url(#ctGd)','#b98f3e'],stem:'#9c6f1c',ang:40})+
     `<path d="M88 84Q100 76 112 84Q100 92 88 84Z" fill="#1f4a3a"/><path d="M96 86L88 98M104 86L112 98" stroke="#1f4a3a" stroke-width="3" stroke-linecap="round"/>`,grad('ctGd',GOLD));
-  const CORNER=svg('0 0 60 60',`<path d="M4 56V14Q4 4 14 4H56" fill="none" stroke="url(#ctGd)" stroke-width="2"/><path d="M10 56V18Q10 10 18 10H56" fill="none" stroke="url(#ctGd)" stroke-width="1"/>`+
-    `<path d="M4 4C14 8 18 14 20 20C14 18 8 14 4 4Z" fill="url(#ctGd)"/>`+leaf(20,20,45,14,4,'url(#ctGd)',false),grad('ctGd',GOLD));
   // Douce France : un bouquet de lavande noué d'un ruban, un rameau d'olivier
   const lav=(x0,y0,x1,y1)=>{ const n=9; let s=`<path d="M${x0} ${y0}L${x1} ${y1}" stroke="#6f8457" stroke-width="1.3"/>`;
     for(let i=0;i<n;i++){ const t=.55+i/n*.45, x=x0+(x1-x0)*t, y=y0+(y1-y0)*t, a=Math.atan2(y1-y0,x1-x0)*180/Math.PI;
@@ -114,9 +112,29 @@
     arche:[['tl',LEMON],['br',LEMON]],
     ogive:[['lt1',lantern(26)],['lt2',lantern(8)],['lt3',lantern(40)],['mo',MOON]],
     outrepasse:[['tl',ROSE],['tr',ROSE],['bl',JASMIN],['br',JASMIN]],
-    medaillon:[['tl',CORNER],['tr',CORNER],['bc',LAUREL]],
+    medaillon:[['bc',LAUREL]],
     bandeau:[['bl',LAVENDER],['tr',OLIVE]]
   };
+  /* le gaufrage à sec (11 octobre 2026, photo d'un faire-part gaufré : « c'est du papier gaufré, c'est bien ») : une double
+     bordure en relief qui suit la découpe de la feuille (dessinée par rim() à la taille réelle de la feuille) et des volutes
+     dans les coins, blanc sur blanc (seulement lumière et ombre, carte.css .ct-rim, .ct-sc). Jamais derrière le texte : les
+     volutes sont dans les coins, la bordure sur le bord ; les coins du haut seulement quand la feuille a des coins. */
+  const SCROLL=svg('0 0 100 100','<path d="M6 62C6 32 16 14 42 8C62 3 80 7 96 5"/><path d="M62 6C32 6 14 16 8 42C3 62 7 80 5 96"/>'+
+    '<path d="M30 30C18 30 13 19 21 12C29 6 40 13 35 22C31 28 24 25 26 20"/><path d="M8 46C14 35 24 31 35 35C27 37 18 41 8 46Z" class="f"/><path d="M46 8C35 14 31 24 35 35C37 27 41 18 46 8Z" class="f"/>'+
+    '<path d="M35 35C47 47 59 41 61 31C62 25 56 23 53 27"/><path d="M35 35C47 47 41 59 31 61C25 62 23 56 27 53"/><circle cx="52" cy="13" r="2.4" class="f"/><circle cx="13" cy="52" r="2.4" class="f"/>');
+  const SCROLLS={arche:['bl','br'],ogive:['bl','br'],outrepasse:['bl','br'],medaillon:['tl','tr','bl','br'],bandeau:['tl','tr','bl','br']};
+  // le contour de la feuille, rentré de i px (mêmes formes que .ct-sh dans carte.css)
+  function rimPath(st,w,h,i,k,T){ const f=v=>v.toFixed(1);
+    if(st==='arche'){ const ry=92*k; return `M${f(i)} ${f(h-i)}V${f(ry)}A${f(w/2-i)} ${f(ry-i)} 0 0 1 ${f(w-i)} ${f(ry)}V${f(h-i)}Z`; }
+    if(st==='ogive'||st==='outrepasse'){ const X=x=>f(i+x/100*(w-2*i)), Y=y=>f(i*1.6+y/26*(T-i)); return `M${X(0)} ${f(h-i)}V${Y(20)}C${X(14)} ${Y(15)} ${X(34)} ${Y(11)} ${X(50)} ${Y(0)}C${X(66)} ${Y(11)} ${X(86)} ${Y(15)} ${X(100)} ${Y(20)}V${f(h-i)}Z`; }
+    if(st==='medaillon'){ const R=20*k+i; return `M${f(R)} ${f(i)}H${f(w-R)}A${f(R-i)} ${f(R-i)} 0 0 0 ${f(w-i)} ${f(R)}V${f(h-R)}A${f(R-i)} ${f(R-i)} 0 0 0 ${f(w-R)} ${f(h-i)}H${f(R)}A${f(R-i)} ${f(R-i)} 0 0 0 ${f(i)} ${f(h-R)}V${f(R)}A${f(R-i)} ${f(R-i)} 0 0 0 ${f(R)} ${f(i)}Z`; }
+    const t=i+8*k; return `M${f(i+6)} ${f(t)}H${f(w-i-6)}Q${f(w-i)} ${f(t)} ${f(w-i)} ${f(t+6)}V${f(h-i-6)}Q${f(w-i)} ${f(h-i)} ${f(w-i-6)} ${f(h-i)}H${f(i+6)}Q${f(i)} ${f(h-i)} ${f(i)} ${f(h-i-6)}V${f(t+6)}Q${f(i)} ${f(t)} ${f(i+6)} ${f(t)}Z`; }
+  function rim(root){ const L=root.matches&&root.matches('.ct')?[root]:[...root.querySelectorAll('.ct')];
+    L.forEach(el=>{ const sv=el.querySelector('.ct-rim'), pw=el.querySelector('.ct-pw'), sh=el.querySelector('.ct-sheet'); if(!sv||!pw) return;
+      const w=pw.clientWidth, h=pw.clientHeight; if(!w||!h) return;
+      const st=(el.className.match(/ct-s-(\w+)/)||[])[1], k=parseFloat(getComputedStyle(el).getPropertyValue('--k'))||1, cs=getComputedStyle(sh);
+      const T=.24*(sh.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight));
+      sv.setAttribute('viewBox',`0 0 ${w} ${h}`); sv.innerHTML=`<path d="${rimPath(st,w,h,7*k,k,T)}"/><path class="in" d="${rimPath(st,w,h,12*k,k,T)}"/>`; }); }
   const decoOf=st=>(DECO[st]||[]).map(([p,s])=>`<div class="ct-d ct-d-${p}">${s}</div>`).join('');
 
   /* la feuille. o.fit : la feuille a la hauteur de son conteneur (aperçu, en ligne). o.live : le faire-part en ligne (liens Itinéraire et Calendrier, bouton Répondre si inv.reply) ;
@@ -156,7 +174,7 @@
     return `<div class="${cls}" style="--pal:${esc(pal)};--ink:${ink};--ink2:${ink2};--soft:${soft};--paper:${PP.c};--tx:${INK}">`+
       `<div class="ct-sheet">`+
         `<div class="ct-back" aria-hidden="true"></div>`+
-        `<div class="ct-pw" aria-hidden="true"><div class="ct-under ct-sh"></div><div class="ct-panel ct-sh"></div></div>`+
+        `<div class="ct-pw" aria-hidden="true"><div class="ct-under ct-sh"></div><div class="ct-panel ct-sh"><svg class="ct-rim"></svg>${SCROLLS[st].map(c=>`<i class="ct-sc ct-sc-${c}">${SCROLL}</i>`).join('')}</div></div>`+
         `<div class="ct-deco" aria-hidden="true">${decoOf(st)}</div>`+
         `<div class="ct-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sl};--m:${sm};--d:${sd}">${ini}</b></div>`+
         (P&&(P.names||[]).filter(Boolean).length?`<p class="ct-fam">${P.names.filter(Boolean).map(esc).join(' &amp; ')}</p>`:'')+
@@ -187,7 +205,8 @@
       // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
       if(need()>H) while(k>.74&&need()>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); }
       else while(k<1.06){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need()>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
-      sh.style.justifyContent=''; el.querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); }); }); }
+      sh.style.justifyContent=''; el.querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); }); });
+    rim(root||document); }
 
   /* ---------- export : image et PDF ----------
      La feuille est dessinée par le navigateur (html-to-image, MIT, /html-to-image.js, chargé à la demande) à la taille

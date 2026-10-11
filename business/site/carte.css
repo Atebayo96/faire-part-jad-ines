@@ -253,3 +253,18 @@
 .ct-n2 .ct-lk,.ct-n3 .ct-lk{gap:8px}
 .ct-n2 .ct .ct-lk svg,.ct.ct-n2 .ct-lk svg,.ct.ct-n3 .ct-lk svg{width:36px;height:36px;padding:9px}
 .ct.ct-n2 .ct-lk a,.ct.ct-n2 .ct-lk button,.ct.ct-n3 .ct-lk a,.ct.ct-n3 .ct-lk button{font-size:11.5px!important;letter-spacing:0}
+/* le gaufrage à sec (carte.js, rim() et SCROLL) : relief blanc sur blanc, la lumière vient d'en haut à gauche */
+.ct-rim{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;
+  filter:drop-shadow(-.8px -.8px 0 rgba(255,255,255,.95)) drop-shadow(1px 1.3px .6px rgba(105,80,45,.42)) drop-shadow(1.6px 2.2px 2px rgba(105,80,45,.16))}
+.ct-rim path{fill:none;stroke:#fbf7ef;stroke-width:2.2}
+.ct-rim path.in{stroke-width:1.1}
+.ct-sc{position:absolute;width:24cqw;aspect-ratio:1;pointer-events:none;
+  filter:drop-shadow(-.8px -.8px 0 rgba(255,255,255,.95)) drop-shadow(1px 1.3px .6px rgba(105,80,45,.42)) drop-shadow(1.6px 2.2px 2px rgba(105,80,45,.16))}
+.ct-sc svg{width:100%;height:100%;display:block;overflow:visible}
+.ct-sc path,.ct-sc circle{fill:none;stroke:#fbf7ef;stroke-width:2.4;stroke-linecap:round}
+.ct-sc .f{fill:#fbf7ef;stroke-width:.8}
+.ct-sc-tl{left:calc(16px*var(--k));top:calc(16px*var(--k))}
+.ct-sc-tr{right:calc(16px*var(--k));top:calc(16px*var(--k));transform:scaleX(-1)}
+.ct-sc-bl{left:calc(16px*var(--k));bottom:calc(16px*var(--k));transform:scaleY(-1)}
+.ct-sc-br{right:calc(16px*var(--k));bottom:calc(16px*var(--k));transform:scale(-1,-1)}
+.ct-s-bandeau .ct-sc-tl,.ct-s-bandeau .ct-sc-tr{top:calc(24px*var(--k))}
