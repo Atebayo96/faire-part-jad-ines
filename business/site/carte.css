@@ -24,21 +24,18 @@
     radial-gradient(ellipse 130% 100% at 50% 45%,rgba(255,255,255,1) 55%,rgba(222,208,186,1)),var(--tex,none);
   background-blend-mode:normal,multiply,multiply;background-size:100% 100%,100% 100%,auto}
 /* la feuille */
-.ct-sheet{position:relative;height:100%;min-height:100%;display:flex;flex-direction:column;align-items:center;
-  padding:calc(30px*var(--k)) calc(22px*var(--k)) calc(24px*var(--k));overflow:hidden}
+.ct{--m:calc(12px*var(--k));--pt:calc(40px*var(--k));--pb:calc(34px*var(--k));--pbx:0px}
+.ct-sheet{position:relative;height:100%;min-height:100%;display:flex;flex-direction:column;align-items:center;container-type:inline-size;
+  padding:calc(var(--pt) + 44px*var(--k)) calc(var(--m) + 20px*var(--k)) calc(var(--pb) + 22px*var(--k) + var(--pbx));overflow:hidden}
+.ct-sheet>*{position:relative;z-index:2}
 .ct-fit{display:flex;flex-direction:column;flex:1 0 auto}
 /* en ligne et dans l'aperçu : la feuille a la hauteur exacte de l'écran, le contenu y est centré (et agrandi s'il reste de
    la place, fit() dans carte.js), la signature posée en bas. Avant, min-height:100svh prenait la hauteur de la fenêtre :
    dans le téléphone de l'aperçu, un grand vide restait sous le texte (« c'est moche »). */
-.ct-fit .ct-sheet{flex:1 0 auto;height:auto;min-height:0;justify-content:center;padding-bottom:calc(54px*var(--k))}
-.ct-fit .ct-made{position:absolute;left:0;right:0;bottom:calc(20px*var(--k));margin:0!important;padding:0}
-/* l'arche : le gros plan symbolique du thème (les mains, les alliances), cadré sur le sujet, en bas de l'image */
-.ct-arch{position:relative;flex:none;width:calc(150px*var(--k)*var(--ak,1));aspect-ratio:3/3.6;border-radius:999px 999px 4px 4px;overflow:hidden;
-  box-shadow:0 0 0 1.5px var(--paper),0 0 0 3px var(--pal),0 14px 30px -14px rgba(40,25,10,.5)}
-.ct-arch img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 78%;display:block}
-/* le sceau de cire, posé sur le bas de l'arche, initiales gravées (même rendu que .seal dans invite.css) */
-/* le sceau suit la peinture quand elle rapetisse (--ak, fit() dans carte.js), à moitié : il ne la recouvre pas */
-.ct-seal{--sk:calc(var(--k)*(.45 + .55*var(--ak,1)));position:relative;z-index:2;flex:none;width:calc(66px*var(--sk));height:calc(66px*var(--sk));margin-top:calc(-36px*var(--sk));
+.ct-fit .ct-sheet{flex:1 0 auto;height:auto;min-height:0;justify-content:center}
+
+/* le sceau de cire, posé à cheval sur le haut de la feuille (le plan le plus en avant), initiales gravées (même rendu que .seal dans invite.css) */
+.ct-seal{--sk:var(--k);position:absolute;z-index:4;left:50%;top:calc(var(--pt) - 33px*var(--sk));translate:-50% 0;width:calc(66px*var(--sk));height:calc(66px*var(--sk));
   background:center/contain no-repeat;display:grid;place-items:center;container-type:inline-size;filter:drop-shadow(0 6px 9px rgba(0,0,0,.32))}
 .ct-seal b{font:400 24cqw/1.15 "Great Vibes",cursive;letter-spacing:-.01em;margin-top:2cqw;padding:0 .08em;white-space:nowrap;
   background:linear-gradient(165deg,var(--l) 0%,var(--m) 48%,var(--d) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
@@ -46,7 +43,7 @@
 .ct-seal b i{font-style:normal;font-size:.62em;margin:0 .02em}
 .ct-fam{margin-top:var(--g1)!important;font:500 max(15px,calc(17px*var(--k)))/1.35 "Cormorant Garamond",Georgia,serif;color:var(--tx)}
 .ct-ey{font:500 max(11.5px,calc(13px*var(--k)))/1.3 Inter,-apple-system,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
-.ct-ey.ar{font:400 max(18px,calc(22px*var(--k)))/1.4 Amiri,serif;letter-spacing:0;text-transform:none}
+.ct-ey.ar{font:400 min(max(18px,calc(22px*var(--k))),8.4cqw)/1.4 Amiri,serif;letter-spacing:0;text-transform:none}
 .ct-top{margin-top:var(--g1)!important}
 .ct-nm{margin-top:calc(6px*var(--k))!important;font-size:calc(46px*var(--k)*var(--nk,1));line-height:1.08;color:var(--ink);overflow-wrap:anywhere}
 .ct-nm i{font-style:inherit;font-size:.72em}
@@ -92,12 +89,12 @@
 .ct-b:active{transform:scale(.97)}
 .ct-b svg{width:32px;height:32px;flex:none;padding:8px;border-radius:50%;color:#fff;background:var(--ink)}
 .ct-acts+.ct-rs{margin-top:var(--g1)!important}
-.ct-made{margin-top:auto!important;padding-top:var(--g2);font:500 11.5px/1 Inter,-apple-system,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);opacity:.9}
+/* la signature, sous la feuille, sur le fond du thème (--mk : couleur mesurée contre --bk) */
+.ct-sheet>.ct-made{position:absolute;left:0;right:0;bottom:calc(var(--pb)/2 - 6px);margin:0!important;padding:0;font:500 11.5px/1 Inter,-apple-system,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--mk,var(--ink))}
 /* formats d'export : la feuille remplit exactement le format, l'espace en trop se répartit (rien n'est collé en haut) */
 .ct-story .ct-sheet,.ct-a5 .ct-sheet{justify-content:space-between}
 .ct-story .ct-evs,.ct-a5 .ct-evs{margin-top:var(--g2)}
 .ct-a5{--g3:calc(30px*var(--k))}
-.ct-a5 .ct-arch{width:calc(170px*var(--k)*var(--ak,1))}
 
 /* dans le faire-part en ligne (invite.js, "format": "page") : la feuille est la page, elle défile si le contenu dépasse */
 .pg.pg-ct{height:auto;min-height:100%;padding:0;display:block;overflow:visible}
@@ -137,15 +134,8 @@
 .ct-ev>p:empty{display:none}
 .ct-n2 .ct-ev>p:empty,.ct-n3 .ct-ev>p:empty{display:block}
 
-/* chaque thème a sa feuille (carte.js, STYLES) : la forme du cadre de la peinture et l'ornement des filets de la date.
-   Rien de sombre posé sur la peinture : seulement un filet à la couleur du couple qui suit le contour. */
 .ct-o{display:none;flex:none;width:calc(11px*var(--k));height:calc(11px*var(--k));background:var(--pal)}
-.ct-fr{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.ct-fr path{fill:none;stroke:var(--pal);stroke-width:4;vector-effect:non-scaling-stroke}
-.ct-fr path.in{stroke:var(--paper);stroke-width:1.2;opacity:.9}
 /* ogive (Mille et une nuits) : arc brisé, étoile à huit branches au bout des filets */
-.ct-s-ogive .ct-arch,.ct-s-outrepasse .ct-arch{border-radius:0;box-shadow:none;width:calc(132px*var(--k)*var(--ak,1));aspect-ratio:3/3.7;overflow:hidden;min-height:0}
-.ct-s-ogive .ct-arch,.ct-s-outrepasse .ct-arch{filter:drop-shadow(0 12px 16px rgba(40,25,10,.28))}
 .ct-s-ogive .ct-o{display:block;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0l2.6 3.7 4.5-.8-.8 4.5L20 10l-3.7 2.6.8 4.5-4.5-.8L10 20l-2.6-3.7-4.5.8.8-4.5L0 10l3.7-2.6-.8-4.5 4.5.8z'/%3E%3C/svg%3E") center/contain no-repeat}
 .ct-s-ogive .ct-dl{gap:calc(8px*var(--k))}
@@ -154,23 +144,88 @@
 .ct-s-outrepasse .ct-dl{gap:calc(9px*var(--k))}
 .ct-s-outrepasse .ct-dl i{height:2px;opacity:1;background:radial-gradient(circle,var(--pal) 45%,transparent 55%) center/6px 2px repeat-x}
 .ct-s-outrepasse .ct-ev+.ct-ev{border-left-style:dotted!important;border-left-width:2px!important}
-/* médaillon (Old money) : un ovale cerclé de deux filets, filets doubles, prénoms en capitales fines si la police s'y prête */
-.ct-s-medaillon .ct-arch{width:calc(140px*var(--k)*var(--ak,1));aspect-ratio:3/3.9;border-radius:50%;
-  box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--pal),0 0 0 6px var(--paper),0 0 0 7px var(--pal),0 16px 30px -14px rgba(40,25,10,.45)}
-.ct-s-medaillon .ct-arch img{object-position:center 70%}
-.ct-s-medaillon .ct-seal{margin-top:calc(-30px*var(--sk))}
 .ct-s-medaillon .ct-dl i{height:4px;background:none;border-top:1px solid var(--pal);border-bottom:1px solid var(--pal);opacity:.85}
 .ct-s-medaillon .ct-top{letter-spacing:.32em}
 .ct-s-medaillon .ct-evs{border-top:1px solid color-mix(in srgb,var(--pal) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--pal) 55%,transparent);padding:var(--g2) 0}
-/* bandeau (Douce France) : la peinture en haut, sur toute la largeur de la feuille, fondue dans le papier vers le bas,
-   brin de feuillage au bout des filets */
-/* la peinture touche le haut de la feuille : le contenu part du haut (centré, il laissait une bande de papier au-dessus) */
-.ct-s-bandeau .ct-sheet,.ct-fit.ct-s-bandeau .ct-sheet{padding-top:0;justify-content:flex-start}
-.ct-s-bandeau .ct-arch{width:calc(100% + 44px*var(--k));margin:0 calc(-22px*var(--k));aspect-ratio:auto;height:calc(210px*var(--k)*var(--ak,1));border-radius:0;box-shadow:none;
-  -webkit-mask:linear-gradient(#000 55%,transparent);mask:linear-gradient(#000 55%,transparent)}
-.ct-s-bandeau .ct-arch img{object-position:center 72%}
-.ct-s-bandeau .ct-seal{margin-top:calc(-44px*var(--sk))}
 .ct-s-bandeau .ct-o{display:block;width:calc(16px*var(--k));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M0 6h9M12 6c3-5 8-6 12-5-1 4-6 7-12 5zM12 6c3 4 7 5 10 4' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M12 6c3-5 8-6 12-5-1 4-6 7-12 5z'/%3E%3C/svg%3E") center/contain no-repeat}
 .ct-s-bandeau .ct-dl b.ct-o:last-of-type{transform:scaleX(-1)}
 .ct-s-bandeau .ct-dl b.ct-o:first-of-type{transform:none}
+
+/* ---------- les plans de la feuille (carte.js, STYLES / DECO / EMB) ----------
+   11 octobre 2026 : « des symboles, des illustrations qui viennent habiller la feuille pour en faire une œuvre », « de la
+   profondeur et des niveaux ». Du fond vers l'avant : le fond du thème, le passe-partout, la feuille découpée et son ombre
+   (avec le gaufrage), le texte, les illustrations et le sceau. Le texte est toujours sur la feuille claire : l'encre est
+   mesurée contre le papier (inkOf). La signature est sur le fond : --mk, mesurée contre --bk (4,5:1 au moins). */
+.ct-sheet>.ct-back{position:absolute;inset:0;z-index:0;background:var(--bkp,none),var(--bk,#e9e2d4);background-size:var(--bks,40px 40px),auto}
+.ct-sheet>.ct-pw{position:absolute;z-index:1;top:var(--pt);left:var(--m);right:var(--m);bottom:var(--pb);
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.22)) drop-shadow(0 12px 18px rgba(0,0,0,.3))}
+.ct-under,.ct-panel{position:absolute;inset:0}
+.ct-under{inset:calc(-5px*var(--k));background:var(--mat,var(--pal))}
+.ct-panel{background-color:var(--paper,#f8f2e7);overflow:hidden;
+  background-image:radial-gradient(ellipse 110% 70% at 30% 12%,rgba(255,255,255,.5),rgba(255,255,255,0) 60%),
+    radial-gradient(ellipse 130% 100% at 50% 45%,rgba(255,255,255,1) 55%,rgba(222,208,186,1)),var(--tex,none);
+  background-blend-mode:normal,multiply,multiply;background-size:100% 100%,100% 100%,auto}
+/* le gaufrage à sec : même teinte que le papier, un filet d'ombre et sa lumière dessous */
+.ct-emb{position:absolute;left:50%;top:52%;width:min(92%,calc(320px*var(--k)));aspect-ratio:1;translate:-50% -50%;filter:drop-shadow(0 1.2px 0 rgba(255,255,255,.95))}
+.ct-emb svg{width:100%;height:100%;display:block;overflow:visible}
+.ct-emb svg *{fill:none!important;stroke:rgba(110,84,48,.15)!important;stroke-width:1.1!important}
+/* les illustrations : posées par-dessus la feuille, dans les coins, avec leur ombre (on les voit au-dessus du papier) */
+.ct-sheet>.ct-deco{position:absolute;inset:0;z-index:3;pointer-events:none}
+.ct-d{position:absolute;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2)) drop-shadow(0 8px 10px rgba(0,0,0,.16))}
+.ct-d svg{display:block;width:100%;height:auto;overflow:visible}
+
+/* arche (Dolce Vita) : carrelage de maïolique bleu, feuille en arche, branches de citronnier */
+.ct-s-arche{--pbx:calc(60px*var(--k));--bk:#cfe0ec;--mk:#1d3c5e;--mat:#2d5f8f;--bks:38px 38px;
+  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='38'%3E%3Cg fill='none' stroke='%232d5f8f' stroke-opacity='.32' stroke-width='1.2'%3E%3Ccircle r='19'/%3E%3Ccircle cx='38' r='19'/%3E%3Ccircle cy='38' r='19'/%3E%3Ccircle cx='38' cy='38' r='19'/%3E%3Ccircle cx='19' cy='19' r='6'/%3E%3C/g%3E%3C/svg%3E")}
+.ct-s-arche .ct-sh{border-radius:50% 50% calc(8px*var(--k)) calc(8px*var(--k)) / calc(92px*var(--k)) calc(92px*var(--k)) calc(8px*var(--k)) calc(8px*var(--k))}
+.ct-s-arche .ct-d-tl{width:50cqw;left:calc(var(--m) - 24px*var(--k));top:calc(var(--pt) - 36px*var(--k))}
+.ct-s-arche .ct-d-br{width:50cqw;right:calc(var(--m) - 26px*var(--k));bottom:calc(var(--pb) - 24px*var(--k));transform:scale(-1,-1)}
+/* ogive (Mille et une nuits) : nuit étoilée, feuille en arc brisé sur un passe-partout doré, lanternes et croissant */
+.ct-s-ogive{--bk:#15223f;--mk:#ecd9a0;--mat:linear-gradient(135deg,#f6e3a1,#b8862e 45%,#f1d58c 70%,#a67a26);--bks:96px 96px;
+  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cg fill='%23e9cf88'%3E%3Cpath d='M20 10l1.6 4.4L26 16l-4.4 1.6L20 22l-1.6-4.4L14 16l4.4-1.6z' opacity='.55'/%3E%3Cpath d='M70 52l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z' opacity='.5'/%3E%3Ccircle cx='48' cy='28' r='1' opacity='.6'/%3E%3Ccircle cx='86' cy='12' r='.8' opacity='.5'/%3E%3Ccircle cx='12' cy='70' r='1' opacity='.45'/%3E%3Ccircle cx='40' cy='84' r='.7' opacity='.5'/%3E%3C/g%3E%3C/svg%3E")}
+.ct-s-ogive .ct-sh,.ct-s-outrepasse .ct-sh{
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 26' preserveAspectRatio='none'%3E%3Cpath d='M0 26V20C14 15 34 11 50 0C66 11 86 15 100 20V26Z'/%3E%3C/svg%3E") top/100% 24cqw no-repeat,linear-gradient(#000 0 0) bottom/100% calc(100% - 24cqw + 1px) no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 26' preserveAspectRatio='none'%3E%3Cpath d='M0 26V20C14 15 34 11 50 0C66 11 86 15 100 20V26Z'/%3E%3C/svg%3E") top/100% 24cqw no-repeat,linear-gradient(#000 0 0) bottom/100% calc(100% - 24cqw + 1px) no-repeat}
+.ct-s-ogive .ct-sheet,.ct-s-outrepasse .ct-sheet{padding-top:calc(var(--pt) + 50px*var(--k))}
+.ct-s-ogive .ct-d{filter:drop-shadow(0 4px 6px rgba(0,0,0,.35)) drop-shadow(0 0 10px rgba(255,200,110,.35))}
+.ct-s-ogive .ct-d-lt1{width:16cqw;left:1cqw;top:0}
+.ct-s-ogive .ct-d-lt2{width:12cqw;left:19cqw;top:0}
+.ct-s-ogive .ct-d-lt3{width:16cqw;right:2cqw;top:0}
+.ct-s-ogive .ct-d-mo{width:16cqw;right:21cqw;top:3cqw}
+/* outrepasse (Andalou) : zellige sur terre cuite, même arc brisé (« fais le cadre comme Mille et une nuits »), rosaces et jasmin */
+.ct-s-outrepasse{--pbx:calc(52px*var(--k));--bk:#9e4b2e;--mk:#fff3e4;--mat:#2f6b6a;--bks:44px 44px;
+  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cg fill='none' stroke='%23fbe6cf' stroke-opacity='.26' stroke-width='1.1'%3E%3Crect x='14' y='14' width='16' height='16'/%3E%3Crect x='14' y='14' width='16' height='16' transform='rotate(45 22 22)'/%3E%3Cpath d='M0 22H8M36 22H44M22 0V8M22 36V44'/%3E%3C/g%3E%3C/svg%3E")}
+.ct-s-outrepasse .ct-d-tl,.ct-s-outrepasse .ct-d-tr{width:20cqw;top:calc(var(--pt) + 6cqw)}
+.ct-s-outrepasse .ct-d-tl{left:calc(var(--m) - 5cqw)}
+.ct-s-outrepasse .ct-d-tr{right:calc(var(--m) - 5cqw)}
+.ct-s-outrepasse .ct-d-bl,.ct-s-outrepasse .ct-d-br{width:54cqw;bottom:calc(var(--pb) - 8px*var(--k))}
+.ct-s-outrepasse .ct-d-bl{left:calc(var(--m) - 10px*var(--k))}
+.ct-s-outrepasse .ct-d-br{right:calc(var(--m) - 10px*var(--k));transform:scaleX(-1)}
+/* medaillon (Old money) : vert bouteille et treillis, feuille aux coins rentrés sur passe-partout doré, fleurons et laurier */
+.ct-s-medaillon{--bk:#22402f;--mk:#efe3c4;--mat:linear-gradient(135deg,#f6e3a1,#b8862e 45%,#f1d58c 70%,#a67a26);--bks:26px 26px;--pbx:calc(56px*var(--k));
+  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cpath d='M0 0L26 26M26 0L0 26' stroke='%23f3e7c8' stroke-opacity='.09' stroke-width='1'/%3E%3C/svg%3E")}
+.ct-s-medaillon .ct-sh{--r:calc(20px*var(--k));
+  -webkit-mask:radial-gradient(circle at 0 0,#0000 var(--r),#000 calc(var(--r) + .5px)) top left/51% 51% no-repeat,radial-gradient(circle at 100% 0,#0000 var(--r),#000 calc(var(--r) + .5px)) top right/51% 51% no-repeat,radial-gradient(circle at 0 100%,#0000 var(--r),#000 calc(var(--r) + .5px)) bottom left/51% 51% no-repeat,radial-gradient(circle at 100% 100%,#0000 var(--r),#000 calc(var(--r) + .5px)) bottom right/51% 51% no-repeat;
+  mask:radial-gradient(circle at 0 0,#0000 var(--r),#000 calc(var(--r) + .5px)) top left/51% 51% no-repeat,radial-gradient(circle at 100% 0,#0000 var(--r),#000 calc(var(--r) + .5px)) top right/51% 51% no-repeat,radial-gradient(circle at 0 100%,#0000 var(--r),#000 calc(var(--r) + .5px)) bottom left/51% 51% no-repeat,radial-gradient(circle at 100% 100%,#0000 var(--r),#000 calc(var(--r) + .5px)) bottom right/51% 51% no-repeat}
+.ct-s-medaillon .ct-under{--r:calc(25px*var(--k))}
+.ct-s-medaillon .ct-d{filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+.ct-s-medaillon .ct-d-tl,.ct-s-medaillon .ct-d-tr{width:15cqw;top:calc(var(--pt) + 26px*var(--k))}
+.ct-s-medaillon .ct-d-tl{left:calc(var(--m) + 8px*var(--k))}
+.ct-s-medaillon .ct-d-tr{right:calc(var(--m) + 8px*var(--k));transform:scaleX(-1)}
+.ct-s-medaillon .ct-d-bc{width:62cqw;left:50%;translate:-50% 0;bottom:calc(var(--pb) + 4px*var(--k))}
+/* bandeau (Douce France) : indienne lavande, feuille festonnée, bouquet de lavande et rameau d'olivier */
+.ct-s-bandeau{--pbx:calc(70px*var(--k));--bk:#d9cfe7;--mk:#45346a;--mat:#fffaf1;--bks:30px 30px;
+  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cg fill='%237c5fb4' fill-opacity='.3'%3E%3Ccircle cx='8' cy='6' r='1.6'/%3E%3Ccircle cx='8' cy='10' r='1.6'/%3E%3Ccircle cx='6' cy='8' r='1.6'/%3E%3Ccircle cx='10' cy='8' r='1.6'/%3E%3Ccircle cx='23' cy='22' r='1.2'/%3E%3C/g%3E%3C/svg%3E")}
+.ct-s-bandeau .ct-sh{
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 12' preserveAspectRatio='none'%3E%3Cpath d='M0 12V7A7 6 0 0 1 14 7A7 6 0 0 1 28 7V12Z'/%3E%3C/svg%3E") top left/calc(28px*var(--k)) calc(12px*var(--k)) repeat-x,linear-gradient(#000 0 0) bottom/100% calc(100% - 11px*var(--k)) no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 12' preserveAspectRatio='none'%3E%3Cpath d='M0 12V7A7 6 0 0 1 14 7A7 6 0 0 1 28 7V12Z'/%3E%3C/svg%3E") top left/calc(28px*var(--k)) calc(12px*var(--k)) repeat-x,linear-gradient(#000 0 0) bottom/100% calc(100% - 11px*var(--k)) no-repeat}
+.ct-s-bandeau .ct-d-bl{width:34cqw;left:calc(var(--m) - 14px*var(--k));bottom:calc(var(--pb) - 20px*var(--k))}
+.ct-s-bandeau .ct-d-tr{width:58cqw;right:calc(var(--m) - 22px*var(--k));top:calc(var(--pt) - 26px*var(--k))}
+/* en ligne : les plans arrivent l'un après l'autre (la feuille, puis les illustrations, puis le texte) */
+.pg.pg-ct .ct>.ct-sheet>.ct-pw,.pg.pg-ct .ct>.ct-sheet>.ct-deco{transition-delay:0s}
+.pg.pg-ct .ct>.ct-sheet>.ct-deco{transition-delay:.25s}
+.pg.pg-ct .ct>.ct-sheet>.ct-back{opacity:1!important;transform:none!important}
+/* dans une colonne, l'heure tient dans sa colonne (« 15h0019h30 » quand le texte grandissait) */
+.ct-n2 .ct-hr{font-size:min(calc(36px*var(--k)),17cqw)}
+.ct-n3 .ct-hr{font-size:min(calc(30px*var(--k)),12cqw)}

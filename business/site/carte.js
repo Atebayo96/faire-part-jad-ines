@@ -10,7 +10,6 @@
 (function(){
   const TH=()=>window.SCEAU_THEMES||{};
   const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const IMGV=24;
   const INK='#2b2621';
   // les trois papiers (carte.css, .ct-p-*) : leur teinte, et la plus sombre que prend le relief (pour mesurer l'encre)
   const PAPERS={coton:{c:'#f8f2e7',low:'#ddd3c3'},aquarelle:{c:'#f9f6f0',low:'#d8d3ca'},velin:{c:'#f7f0e2',low:'#e0d6c4'}};
@@ -51,26 +50,82 @@
     mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>'
   };
 
-  /* chaque thème a sa feuille (10 octobre 2026 : « le choix du thème change juste la photo au milieu, c'est pas ouf ») :
-     la forme du cadre de la peinture et l'ornement des filets suivent le thème.
-     arche : arche ronde, filets simples (Dolce Vita) · ogive : arc brisé, étoile à huit branches (Mille et une nuits)
-     outrepasse : le même arc brisé que Mille et une nuits (l'arc polylobé et le fer à cheval n'ont pas été validés), losanges (Andalou) · medaillon : ovale, filets doubles (Old money)
-     bandeau : la peinture en haut de la feuille, toute la largeur, fondue dans le papier, brin de feuillage (Douce France) */
+  /* chaque thème habille la feuille (11 octobre 2026 : « la différence, c'est pas de mettre des images, mais des symboles,
+     des icônes, des illustrations qui viennent habiller la feuille pour en faire une œuvre » ; « de la profondeur et des
+     niveaux, que tout n'apparaisse pas sur le même plan »). Plus de photo : cinq plans, du fond vers l'avant :
+       1. le fond (.ct-back) à la couleur du thème et à son motif (maïolique, nuit étoilée, zellige, treillis, indienne),
+       2. le passe-partout (.ct-under), une carte de couleur un peu plus grande que la feuille,
+       3. la feuille de papier (.ct-panel), découpée à la forme du thème, posée avec son ombre ; un gaufrage à sec (.ct-emb,
+          même teinte que le papier, seulement lumière et ombre) sous le texte,
+       4. le texte,
+       5. les illustrations (.ct-d), posées par-dessus les coins avec leur ombre, et le sceau de cire.
+     Tout est dessiné ici en SVG (aucune image générée) ; les illustrations restent dans les coins, jamais sur le texte. */
   const STYLES={dolcevita:'arche',dolcevitajour:'arche',nuits:'ogive',nuitsjour:'ogive',alhambra:'outrepasse',oldmoney:'medaillon',doucefrance:'bandeau'};
   const styleOf=k=>STYLES[k]||(TH()[k]&&TH()[k].family==='nuits'?'ogive':'arche');
-  // contour du cadre (viewBox 0 0 100 120, étiré à la taille du cadre) : masque de la peinture et filet à la couleur du couple
-  const FRAMES={ogive:'M2 120V54C2 30 26 18 50 2C74 18 98 30 98 54V120Z',outrepasse:'M2 120V54C2 30 26 18 50 2C74 18 98 30 98 54V120Z'};
-  const frame=st=>{ const d=FRAMES[st]; if(!d) return '';
-    const m=`url('data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120' preserveAspectRatio='none'><path d='${d}'/></svg>`).replace(/'/g,'%27')}')`;
-    return {mask:m,svg:`<svg class="ct-fr" viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden="true"><path d="${d}"/><path class="in" d="${d}" transform="translate(50 63) scale(.9) translate(-50 -63)"/></svg>`}; };
+  const f1=n=>+n.toFixed(1);
+  // une feuille : base au point (x, y), angle a (degrés), longueur l, demi-largeur w, nervure claire
+  const leaf=(x,y,a,l,w,c,rib)=>`<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(a)})"><path d="M0 0C${f1(l*.3)} ${f1(-w)} ${f1(l*.72)} ${f1(-w*.9)} ${l} 0C${f1(l*.72)} ${f1(w*.9)} ${f1(l*.3)} ${f1(w)} 0 0Z" fill="${c}"/>${rib===false?'':`<path d="M${f1(l*.06)} 0L${f1(l*.9)} 0" stroke="rgba(255,255,255,.38)" stroke-width=".7" fill="none"/>`}</g>`;
+  // une branche : tige en courbe (P0, P1, P2), n paires de feuilles le long, une feuille au bout
+  function branch(P,n,o){ const B=t=>[(1-t)**2*P[0][0]+2*(1-t)*t*P[1][0]+t*t*P[2][0],(1-t)**2*P[0][1]+2*(1-t)*t*P[1][1]+t*t*P[2][1]];
+    const D=t=>{ const a=2*(1-t)*(P[1][0]-P[0][0])+2*t*(P[2][0]-P[1][0]), b=2*(1-t)*(P[1][1]-P[0][1])+2*t*(P[2][1]-P[1][1]); return Math.atan2(b,a)*180/Math.PI; };
+    let s=`<path d="M${P[0]}Q${P[1]} ${P[2]}" stroke="${o.stem}" stroke-width="${o.sw||1.6}" fill="none" stroke-linecap="round"/>`;
+    for(let i=1;i<=n;i++){ const t=i/(n+1)*.92+.04, [x,y]=B(t), d=D(t), k=1-t*.35, c=o.c[i%o.c.length];
+      s+=leaf(x,y,d-(o.ang||48),o.l*k,o.w*k,c)+(o.alt?'':leaf(x,y,d+(o.ang||48),o.l*k,o.w*k,o.c[(i+1)%o.c.length])); }
+    const [x,y]=B(1); return s+leaf(x,y,D(1),o.l*.9,o.w*.9,o.c[0]); }
+  const grad=(id,stops,r)=>r?`<radialGradient id="${id}" cx=".35" cy=".3" r=".75">${stops.map((c,i)=>`<stop offset="${i/(stops.length-1)}" stop-color="${c}"/>`).join('')}</radialGradient>`
+    :`<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">${stops.map((c,i)=>`<stop offset="${i/(stops.length-1)}" stop-color="${c}"/>`).join('')}</linearGradient>`;
+  const GOLD=['#fbeaa8','#d9ad4f','#9c6f1c'];
+  const svg=(vb,body,defs)=>`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">${defs?`<defs>${defs}</defs>`:''}${body}</svg>`;
+  // étoile à huit branches (deux carrés tournés), centre (x, y), rayon r
+  const star8=(x,y,r,fill,stroke)=>{ const q=r*.72; return `<g transform="translate(${x} ${y})" fill="${fill}" ${stroke?`stroke="${stroke}" stroke-width="${f1(r/14)}"`:''}><rect x="${-q}" y="${-q}" width="${2*q}" height="${2*q}"/><rect x="${-q}" y="${-q}" width="${2*q}" height="${2*q}" transform="rotate(45)"/></g>`; };
 
-  // la peinture de l'arche : le gros plan symbolique du thème (T.home, « les mains »), en plein jour si le premier moment est avant 18 h
-  function artOf(inv){
-    const T=TH()[inv.theme]||{}, ev=(inv.events||[])[0], h=ev?+(/T(\d{1,2})/.exec(ev.start)||[0,12])[1]:12;
-    const J=T.jour&&TH()[T.jour], k=T.home||1;
-    if(J&&h<18&&J.home) return `/img/hd/${T.jour}-${J.home}.webp?v=${IMGV}`;
-    return `/img/hd/${inv.theme}-${k}.webp?v=${IMGV}`;
-  }
+  // Dolce Vita : une branche de citronnier (feuilles, deux citrons, fleurs blanches)
+  const lemon=(x,y,a,s)=>`<g transform="translate(${x} ${y}) rotate(${a}) scale(${s||1})"><path d="M-14 0C-14-9-7-12 0-12C8-12 13-7 15-1L19 0L15 2C13 8 7 12 0 12C-8 12-14 8-14 0Z" fill="url(#ctLm)" stroke="#b77d0a" stroke-width=".7"/><ellipse cx="-4" cy="-5" rx="5" ry="2.6" fill="#fffbd6" opacity=".7"/></g>`;
+  const bloom=(x,y,r)=>`<g transform="translate(${x} ${y})">${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="${-r}" rx="${f1(r*.62)}" ry="${r}" transform="rotate(${a})" fill="#fffdf7" stroke="#e7dcc5" stroke-width=".5"/>`).join('')}<circle r="${f1(r*.45)}" fill="#f2c94c"/></g>`;
+  const LEMON=svg('0 0 140 120',branch([[2,6],[52,8],[96,62]],5,{l:22,w:7,c:['#4f8a43','#3c7238','#62a052'],stem:'#6a5530',sw:2})+lemon(78,64,30)+lemon(52,46,62,.86)+bloom(104,40,4.4)+bloom(26,30,3.6)+bloom(114,74,3.2),
+    grad('ctLm',['#fff4a6','#f5d132','#d99a0c'],1));
+  // Mille et une nuits : une lanterne ciselée qui pend à sa chaîne (h = longueur de la chaîne)
+  const lantern=h=>svg(`0 0 40 ${h+64}`,`<path d="M20 0V${h}" stroke="url(#ctGd)" stroke-width="1.2" stroke-dasharray="2.2 1.6"/><circle cx="20" cy="${h+2}" r="2.4" fill="none" stroke="url(#ctGd)" stroke-width="1.2"/>`+
+    `<g transform="translate(0 ${h+4})"><path d="M20 0C27 0 31 6 32 11H8C9 6 13 0 20 0Z" fill="url(#ctGd)"/><path d="M8 11H32L36 18H4Z" fill="url(#ctGd)"/>`+
+    `<path d="M5 18H35L31 44H9Z" fill="url(#ctGl)" stroke="url(#ctGd)" stroke-width="1.4"/><path d="M20 18V44M12.5 18L14 44M27.5 18L26 44" stroke="url(#ctGd)" stroke-width=".9"/>`+
+    `${[24,31,38].map(y=>`<path d="M${y<30?10:11} ${y}H${y<30?30:29}" stroke="url(#ctGd)" stroke-width=".6" stroke-dasharray="1.5 1.5"/>`).join('')}<path d="M9 44H31L27 50H13Z" fill="url(#ctGd)"/><path d="M20 50V58" stroke="url(#ctGd)" stroke-width="1.6"/><circle cx="20" cy="59" r="1.8" fill="url(#ctGd)"/></g>`,
+    grad('ctGd',GOLD)+`<radialGradient id="ctGl" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#fff6d0"/><stop offset=".5" stop-color="#ffd27a"/><stop offset="1" stop-color="#e08a2c"/></radialGradient>`);
+  const MOON=svg('0 0 60 60',`<path d="M38 6A24 24 0 1 0 54 44A19 19 0 1 1 38 6Z" fill="url(#ctGd)"/>`+star8(14,12,4,'url(#ctGd)')+star8(50,18,2.6,'url(#ctGd)'),grad('ctGd',GOLD));
+  // Andalou : une rosace de zellige (étoile à huit branches dans son cercle, entrelacs) et un brin de jasmin
+  const ROSE=svg('0 0 80 80',`<circle cx="40" cy="40" r="37" fill="#f6efe2" stroke="url(#ctGd)" stroke-width="2"/>`+star8(40,40,30,'#2f6b6a','url(#ctGd)')+star8(40,40,18,'#f6efe2','url(#ctGd)')+
+    `<circle cx="40" cy="40" r="8" fill="#b4543a" stroke="url(#ctGd)" stroke-width="1.2"/>`+[0,45,90,135,180,225,270,315].map(a=>`<circle cx="40" cy="7" r="2" fill="url(#ctGd)" transform="rotate(${a} 40 40)"/>`).join(''),grad('ctGd',GOLD));
+  const JASMIN=svg('0 0 120 70',branch([[2,62],[50,64],[112,30]],4,{l:16,w:5,c:['#4c7a52','#3a6342'],stem:'#5b6b44',sw:1.4})+bloom(70,44,4)+bloom(96,30,4.4)+bloom(42,52,3.4)+bloom(112,22,3));
+  // Old money : deux rameaux de laurier dorés qui se croisent, un fleuron d'angle
+  const LAUREL=svg('0 0 200 90',branch([[100,86],[40,84],[8,20]],7,{l:17,w:5.2,c:['url(#ctGd)','#b98f3e'],stem:'#9c6f1c',ang:40})+branch([[100,86],[160,84],[192,20]],7,{l:17,w:5.2,c:['url(#ctGd)','#b98f3e'],stem:'#9c6f1c',ang:40})+
+    `<path d="M88 84Q100 76 112 84Q100 92 88 84Z" fill="#1f4a3a"/><path d="M96 86L88 98M104 86L112 98" stroke="#1f4a3a" stroke-width="3" stroke-linecap="round"/>`,grad('ctGd',GOLD));
+  const CORNER=svg('0 0 60 60',`<path d="M4 56V14Q4 4 14 4H56" fill="none" stroke="url(#ctGd)" stroke-width="2"/><path d="M10 56V18Q10 10 18 10H56" fill="none" stroke="url(#ctGd)" stroke-width="1"/>`+
+    `<path d="M4 4C14 8 18 14 20 20C14 18 8 14 4 4Z" fill="url(#ctGd)"/>`+leaf(20,20,45,14,4,'url(#ctGd)',false),grad('ctGd',GOLD));
+  // Douce France : un bouquet de lavande noué d'un ruban, un rameau d'olivier
+  const lav=(x0,y0,x1,y1)=>{ const n=9; let s=`<path d="M${x0} ${y0}L${x1} ${y1}" stroke="#6f8457" stroke-width="1.3"/>`;
+    for(let i=0;i<n;i++){ const t=.55+i/n*.45, x=x0+(x1-x0)*t, y=y0+(y1-y0)*t, a=Math.atan2(y1-y0,x1-x0)*180/Math.PI;
+      s+=`<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="3.4" ry="2" transform="rotate(${f1(a+(i%2?35:-35))} ${f1(x)} ${f1(y)})" fill="${i%3?'#7c5fb4':'#9a80cf'}"/>`; } return s; };
+  const LAVENDER=svg('0 0 120 130',lav(60,128,18,8)+lav(60,128,40,2)+lav(60,128,62,0)+lav(60,128,84,4)+lav(60,128,104,14)+
+    `<path d="M48 96Q60 102 72 96" stroke="#d9c7e9" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M60 99C46 92 40 104 50 108C56 108 58 102 60 99C62 102 64 108 70 108C80 104 74 92 60 99Z" fill="#e8dcf2" stroke="#b9a2d2" stroke-width=".8"/><path d="M58 101L50 124M62 101L72 122" stroke="#d9c7e9" stroke-width="4" stroke-linecap="round"/>`);
+  const OLIVE=svg('0 0 130 80',branch([[4,6],[60,10],[122,64]],6,{l:20,w:3.6,c:['#7f9474','#93a688','#6c8162'],stem:'#6b5d3e',sw:1.4,ang:38})+
+    `<ellipse cx="70" cy="40" rx="5" ry="6.5" fill="#3d3a4f" transform="rotate(-30 70 40)"/><ellipse cx="96" cy="50" rx="4.5" ry="6" fill="#4a4660" transform="rotate(-20 96 50)"/>`);
+
+  // le gaufrage à sec, au centre de la feuille (même teinte que le papier : seulement un relief)
+  const EMB={
+    arche:svg('0 0 200 200',[0,30,60,90,120,150].map(a=>`<ellipse cx="100" cy="100" rx="96" ry="30" transform="rotate(${a} 100 100)"/>`).join('')+`<circle cx="100" cy="100" r="22"/><circle cx="100" cy="100" r="96"/>`),
+    ogive:svg('0 0 200 200',star8(100,100,94,'none','#000')+star8(100,100,66,'none','#000')+`<circle cx="100" cy="100" r="40"/>`),
+    outrepasse:svg('0 0 200 200',star8(100,100,94,'none','#000')+star8(100,100,50,'none','#000')+[0,45,90,135].map(a=>`<path d="M100 6V194" transform="rotate(${a} 100 100)"/>`).join('')),
+    medaillon:svg('0 0 200 200',branch([[100,190],[14,170],[30,30]],9,{l:20,w:6,c:['none'],stem:'#000',ang:42})+branch([[100,190],[186,170],[170,30]],9,{l:20,w:6,c:['none'],stem:'#000',ang:42})),
+    bandeau:svg('0 0 200 200',`<circle cx="100" cy="100" r="34"/>`+Array.from({length:16},(_,i)=>`<path d="M100 56L100 14" transform="rotate(${i*22.5} 100 100)"/>`).join(''))
+  };
+  // les illustrations de chaque style : [classe de position, dessin]
+  const DECO={
+    arche:[['tl',LEMON],['br',LEMON]],
+    ogive:[['lt1',lantern(26)],['lt2',lantern(8)],['lt3',lantern(40)],['mo',MOON]],
+    outrepasse:[['tl',ROSE],['tr',ROSE],['bl',JASMIN],['br',JASMIN]],
+    medaillon:[['tl',CORNER],['tr',CORNER],['bc',LAUREL]],
+    bandeau:[['bl',LAVENDER],['tr',OLIVE]]
+  };
+  const decoOf=st=>(DECO[st]||[]).map(([p,s])=>`<div class="ct-d ct-d-${p}">${s}</div>`).join('');
 
   /* la feuille. o.fit : la feuille a la hauteur de son conteneur (aperçu, en ligne). o.live : le faire-part en ligne (liens Itinéraire et Calendrier, bouton Répondre si inv.reply) ;
      sinon la carte figée (tout est écrit, rien à toucher). o.page : 'story' (9:16), 'a5' (impression) ou rien (écran). */
@@ -102,11 +157,13 @@
     else rs=(dl||wa)?`<p class="ct-rs">${L.rs}${dl?` ${L.before} ${esc(dl)}`:''}${wa?`<br>${L.by} ${live?`<a href="https://wa.me/${esc(wa.replace(/[^\d+]/g,'').replace(/^\+/,'').replace(/^0/,'33'))}" target="_blank" rel="noopener">${esc(wa)}</a>`:esc(wa)}`:''}</p>`:'';
     const prog=PR&&(PR.items||[]).length?`<div class="ct-pr"><p class="ct-ey">${esc(PR.eyebrow||L.prog)}</p><ul>${PR.items.slice(0,8).map(x=>`<li><b>${esc(x.time||'')}</b><span>${esc(x.title||'')}</span></li>`).join('')}</ul></div>`:'';
     const dress=DR&&(DR.title||DR.text)?`<p class="ct-dr"><b>${esc(DR.eyebrow||L.dress)}</b>${esc([DR.title,DR.text].filter(Boolean).join(' · '))}</p>`:'';
-    const st=styleOf(inv.theme), fr=frame(st);
+    const st=styleOf(inv.theme);
     const cls=['ct','ct-s-'+st,'ct-p-'+pk,o.page?'ct-'+o.page:'',live?'ct-live':'',live||o.fit?'ct-fit':'',evs.length>1?'ct-n'+Math.min(evs.length,3):''].filter(Boolean).join(' ');
     return `<div class="${cls}" style="--pal:${esc(pal)};--ink:${ink};--soft:${soft};--paper:${PP.c};--tx:${INK}">`+
       `<div class="ct-sheet">`+
-        `<div class="ct-arch"${fr?` style="-webkit-mask:${fr.mask} center/100% 100% no-repeat;mask:${fr.mask} center/100% 100% no-repeat"`:''}><img src="${esc(o.art||artOf(inv))}" alt="" decoding="async">${fr?fr.svg:''}</div>`+
+        `<div class="ct-back" aria-hidden="true"></div>`+
+        `<div class="ct-pw" aria-hidden="true"><div class="ct-under ct-sh"></div><div class="ct-panel ct-sh"><div class="ct-emb">${EMB[st]||''}</div></div></div>`+
+        `<div class="ct-deco" aria-hidden="true">${decoOf(st)}</div>`+
         `<div class="ct-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sl};--m:${sm};--d:${sd}">${ini}</b></div>`+
         (P&&(P.names||[]).filter(Boolean).length?`<p class="ct-fam">${P.names.filter(Boolean).map(esc).join(' &amp; ')}</p>`:'')+
         `<p class="ct-ey ct-top${ey.ar?' ar':''}"${ey.ar?' lang="ar" dir="rtl"':''}>${esc(ey.text)}</p>`+
@@ -127,18 +184,15 @@
     if(nm.scrollWidth>max) nm.style.whiteSpace=''; });
     // les pastilles Y aller / Agenda : le mot s'il tient sur la ligne, sinon l'icône seule (classe ico)
     (root||document).querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); });
-    // en ligne : s'il reste de la place sur l'écran, le texte grandit un peu (jusqu'à 118 %) pour composer une vraie page
+    // en ligne : s'il reste de la place sur l'écran, le texte grandit un peu (jusqu'à 106 %) pour composer une vraie page
     (root||document).querySelectorAll('.ct-fit').forEach(el=>{ const sh=el.querySelector('.ct-sheet'), box=el.parentNode; if(!sh||!box) return;
       const H=(box.closest('.sc,.pv-scroll')||box).clientHeight; if(!H) return;
-      const need=()=>{ const top=sh.getBoundingClientRect().top; let b=0; [...sh.children].forEach(c=>{ if(!c.classList.contains('ct-made')) b=Math.max(b,c.getBoundingClientRect().bottom); }); return b-top+parseFloat(getComputedStyle(sh).paddingBottom); };
+      const need=()=>{ const top=sh.getBoundingClientRect().top; let b=0; [...sh.children].forEach(c=>{ if(!/ct-(made|back|pw|deco|seal)\b/.test(c.className)) b=Math.max(b,c.getBoundingClientRect().bottom); }); return b-top+parseFloat(getComputedStyle(sh).paddingBottom); };
       sh.style.justifyContent='flex-start'; let k=1; el.style.setProperty('--k','1');
       // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 74 %, pour que la signature reste sur l'écran
       // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
-      // la peinture rapetisse d'abord (jusqu'à 62 %), le texte ensuite : une feuille ne dépasse jamais l'écran (« plus grand qu'une page »)
-      el.style.setProperty('--ak','1');
-      if(need()>H){ let a=1; while(a>.62&&need()>H){ a-=.04; el.style.setProperty('--ak',a.toFixed(2)); }
-        while(k>.74&&need()>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); } }
-      else while(k<1.18){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need()>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
+      if(need()>H) while(k>.74&&need()>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); }
+      else while(k<1.06){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need()>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
       sh.style.justifyContent=''; el.querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); }); }); }
 
   /* ---------- export : image et PDF ----------
@@ -156,7 +210,6 @@
     await Promise.all([...el.querySelectorAll('img')].map(im=>im.complete?0:new Promise(r=>{ im.onload=im.onerror=r; })));
     if(document.fonts&&document.fonts.ready) await document.fonts.ready;
     // le contenu tient dans la feuille : on réduit l'échelle par petits pas tant qu'il dépasse
-    for(let a=1;a>=.62;a-=.04){ el.style.setProperty('--ak',a.toFixed(2)); if(sh.scrollHeight<=sh.clientHeight+1) break; }
     for(let k=1;k>=.66;k-=.04){ el.style.setProperty('--k',k.toFixed(2)); fit(el); if(sh.scrollHeight<=sh.clientHeight+1) break; }
     return {el,host,F};
   }
@@ -185,5 +238,5 @@
     const xref=len; put(`xref\n0 6\n0000000000 65535 f \n${[1,2,3,4,5].map(n=>String(offs[n]).padStart(10,'0')+' 00000 n \n').join('')}trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
     const blob=new Blob(parts,{type:'application/pdf'}); if(dl!==false) save(blob,fileName(inv,'pdf')); return blob;
   }
-  window.SceauCarte={PAPERS,html,fit,png,pdf,artOf,inkOf,ratio};
+  window.SceauCarte={PAPERS,html,fit,png,pdf,inkOf,ratio};
 })();

@@ -654,12 +654,18 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     ni « Saint- / Paul » (`text-wrap: balance`). **Les moments côte à côte sont alignés** (« c'est pas aligné les dates ») : chaque
     colonne a les mêmes cases dans le même ordre et partage les lignes de la grille (`subgrid`, `--slots`) ; le chapeau se
     pose en bas de sa ligne, les heures restent sur la même ligne même si « La cérémonie » passe sur deux lignes.
-    **Chaque thème a sa feuille** (« le choix du thème change juste la photo au milieu, c'est pas ouf ») : `STYLES` dans carte.js
-    donne la forme du cadre de la peinture et l'ornement des filets de la date : arche ronde (Dolce Vita), arc brisé et étoile à
-    huit branches (Mille et une nuits), pour l'Andalou le même arc brisé, avec losanges et pointillés (le fer à cheval
-    puis l'arc polylobé n'ont pas été validés : « fais le cadre comme Mille et une nuits »), médaillon ovale et filets doubles (Old
-    money), peinture en bandeau fondue dans le papier et brin de feuillage (Douce France ; le bandeau touche le haut de la feuille,
-    le contenu part du haut). La date reste au centre entre deux filets de même longueur (`flex:1 1 0`), même large. **La feuille tient dans l'écran,
+    **Chaque thème habille sa feuille, sans photo** (11 octobre 2026 : « la différence, c'est pas de mettre des images, mais des
+    symboles, des icônes, des illustrations qui viennent habiller la feuille pour en faire une œuvre » ; « de la profondeur et
+    des niveaux, que tout n'apparaisse pas sur le même plan »). Cinq plans (`STYLES`, `EMB`, `DECO` dans carte.js ; `.ct-back`,
+    `.ct-under`, `.ct-panel`, `.ct-emb`, `.ct-d` dans carte.css) : le fond du thème à motif (maïolique bleue, nuit étoilée,
+    zellige sur terre cuite, treillis vert bouteille, indienne lavande), le passe-partout de couleur, la feuille de papier
+    découpée à la forme du thème et posée avec son ombre (arche ronde ; arc brisé pour Mille et une nuits et l'Andalou ; coins
+    rentrés pour Old money ; bord festonné pour Douce France), un gaufrage à sec sous le texte (même teinte que le papier), puis
+    le texte, puis les illustrations en SVG avec leur ombre (citronnier ; lanternes et croissant ; rosaces de zellige et jasmin ;
+    fleurons d'angle et laurier doré ; lavande nouée et olivier) et le sceau à cheval sur le haut de la feuille. Aucune image
+    générée. Les illustrations restent dans les coins : celles du bas réservent leur place sous le texte (`--pbx`), jamais
+    sur une ligne. La signature est sur le fond (`--mk`). Le texte grandit au plus de 6 % (au-delà, « 15h0019h30 »), l'heure
+    tient dans sa colonne, la basmala dans la feuille (`8.4cqw`). La date reste au centre entre deux filets de même longueur (`flex:1 1 0`), même large. **La feuille tient dans l'écran,
     signature comprise** : dans l'aperçu (carte comme page, `fit:true`, classe `ct-fit`) et en ligne, `fit()` réduit jusqu'à
     74 % si le contenu dépasse (le « Save The Oui » sortait de l'écran). **La peinture rapetisse d'abord** (`--ak`, jusqu'à 62 %, le
     sceau suit à moitié), le texte ensuite : l'arc de Mille et une nuits gardait sa hauteur (taille minimale automatique d'un
