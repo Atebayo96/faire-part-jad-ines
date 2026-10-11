@@ -672,7 +672,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     droite. Jamais derrière le texte. Les fleurons dorés d'Old money ont été retirés (ils se posaient sur les volutes). **Plus de passe-partout de couleur**
     (« les bordures en plus avec les bordures gaufrées, c'est pas ouf, on garde que les gaufrées »). **Le texte est en relief,
     comme gaufré** (« que le texte apparaisse comme gaufré ») : lumière en haut à gauche, ombre en bas à droite, la même que le
-    gaufrage du bord (plus enfoncé). Texte à 26 px des bords, 64 px sous le haut pour Old money et Douce France (volutes du haut). **Pas de motif derrière le texte** : un
+    gaufrage du bord (plus enfoncé). Texte à 26 px des bords, 64 px sous le haut pour Old money et Douce France (volutes du haut).
+    **Fonds et illustrations peints** (« ça fait très digital, faut les générer avec une vraie qualité » ; 15 images accordées,
+    ~2,25 €, `tools/carte-art.py`, `img/carte/`) : un fond par thème (zellige, maïolique aux citrons, indienne lavande, nuit
+    étoilée, damas vert) et deux illustrations détourées (rosace et jasmin ; citrons et bouquet de bougainvillier ; lavande et
+    olivier ; lanternes et croissant ; laurier autour du sceau et roses anglaises). Gemini pose parfois l'objet sur une carte
+    blanche ou un carré foncé, ou avec un liseré d'autocollant : second détourage seulement pour ces images (`INNER`), sinon il
+    mange les chaînes des lanternes et les tiges. Les illustrations suivent l'échelle du texte (`--k`) et leur place est
+    réservée en haut et en bas (`--pbx`, padding-top par style) ; à l'export (plus large), texte centré et `--dz: .78`.
+    La signature est sur une pastille de la couleur du fond (`--bk`) : le fond peint est trop riche pour porter un texte. **Pas de motif derrière le texte** : un
     gaufrage de cercles ou de carrés a été refusé (« c'est pas ça que je voulais : dans les écrits, des reliefs, des textures »). Puis les illustrations en SVG avec leur ombre (citronnier ; lanternes et croissant ; rosaces de zellige et jasmin ;
     fleurons d'angle et laurier doré ; lavande nouée et olivier) et le sceau à cheval sur le haut de la feuille. Aucune image
     générée. Les illustrations restent dans les coins : celles du bas réservent leur place sous le texte (`--pbx`), jamais

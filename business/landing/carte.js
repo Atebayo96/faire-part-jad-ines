@@ -9,6 +9,7 @@
    Lit window.SCEAU_THEMES (themes.js). */
 (function(){
   const TH=()=>window.SCEAU_THEMES||{};
+  const CARTEV=1;
   const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const INK='#2b2621';
   // les trois papiers (carte.css, .ct-p-*) : leur teinte, et la plus sombre que prend le relief (pour mesurer l'encre)
@@ -59,62 +60,22 @@
        4. le texte, imprimé dans le papier : chaque ligne est enfoncée (typographie), l'encre prend le grain du papier, les
           prénoms et les heures sont en dorure à chaud (pas de motif gaufré derrière le texte : « c'est pas ça que je voulais »),
        5. les illustrations (.ct-d), posées par-dessus les coins avec leur ombre, et le sceau de cire.
-     Tout est dessiné ici en SVG (aucune image générée) ; les illustrations restent dans les coins, jamais sur le texte. */
+     Fonds et illustrations sont peints (img/carte) ; les illustrations restent dans les coins, jamais sur le texte. */
   const STYLES={dolcevita:'arche',dolcevitajour:'arche',nuits:'ogive',nuitsjour:'ogive',alhambra:'outrepasse',oldmoney:'medaillon',doucefrance:'bandeau'};
   const styleOf=k=>STYLES[k]||(TH()[k]&&TH()[k].family==='nuits'?'ogive':'arche');
-  const f1=n=>+n.toFixed(1);
-  // une feuille : base au point (x, y), angle a (degrés), longueur l, demi-largeur w, nervure claire
-  const leaf=(x,y,a,l,w,c,rib)=>`<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(a)})"><path d="M0 0C${f1(l*.3)} ${f1(-w)} ${f1(l*.72)} ${f1(-w*.9)} ${l} 0C${f1(l*.72)} ${f1(w*.9)} ${f1(l*.3)} ${f1(w)} 0 0Z" fill="${c}"/>${rib===false?'':`<path d="M${f1(l*.06)} 0L${f1(l*.9)} 0" stroke="rgba(255,255,255,.38)" stroke-width=".7" fill="none"/>`}</g>`;
-  // une branche : tige en courbe (P0, P1, P2), n paires de feuilles le long, une feuille au bout
-  function branch(P,n,o){ const B=t=>[(1-t)**2*P[0][0]+2*(1-t)*t*P[1][0]+t*t*P[2][0],(1-t)**2*P[0][1]+2*(1-t)*t*P[1][1]+t*t*P[2][1]];
-    const D=t=>{ const a=2*(1-t)*(P[1][0]-P[0][0])+2*t*(P[2][0]-P[1][0]), b=2*(1-t)*(P[1][1]-P[0][1])+2*t*(P[2][1]-P[1][1]); return Math.atan2(b,a)*180/Math.PI; };
-    let s=`<path d="M${P[0]}Q${P[1]} ${P[2]}" stroke="${o.stem}" stroke-width="${o.sw||1.6}" fill="none" stroke-linecap="round"/>`;
-    for(let i=1;i<=n;i++){ const t=i/(n+1)*.92+.04, [x,y]=B(t), d=D(t), k=1-t*.35, c=o.c[i%o.c.length];
-      s+=leaf(x,y,d-(o.ang||48),o.l*k,o.w*k,c)+(o.alt?'':leaf(x,y,d+(o.ang||48),o.l*k,o.w*k,o.c[(i+1)%o.c.length])); }
-    const [x,y]=B(1); return s+leaf(x,y,D(1),o.l*.9,o.w*.9,o.c[0]); }
-  const grad=(id,stops,r)=>r?`<radialGradient id="${id}" cx=".35" cy=".3" r=".75">${stops.map((c,i)=>`<stop offset="${i/(stops.length-1)}" stop-color="${c}"/>`).join('')}</radialGradient>`
-    :`<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">${stops.map((c,i)=>`<stop offset="${i/(stops.length-1)}" stop-color="${c}"/>`).join('')}</linearGradient>`;
-  const GOLD=['#fbeaa8','#d9ad4f','#9c6f1c'];
-  const svg=(vb,body,defs)=>`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">${defs?`<defs>${defs}</defs>`:''}${body}</svg>`;
-  // étoile à huit branches (deux carrés tournés), centre (x, y), rayon r
-  const star8=(x,y,r,fill,stroke)=>{ const q=r*.72; return `<g transform="translate(${x} ${y})" fill="${fill}" ${stroke?`stroke="${stroke}" stroke-width="${f1(r/14)}"`:''}><rect x="${-q}" y="${-q}" width="${2*q}" height="${2*q}"/><rect x="${-q}" y="${-q}" width="${2*q}" height="${2*q}" transform="rotate(45)"/></g>`; };
-
-  // Dolce Vita : une branche de citronnier (feuilles, deux citrons, fleurs blanches)
-  const lemon=(x,y,a,s)=>`<g transform="translate(${x} ${y}) rotate(${a}) scale(${s||1})"><path d="M-14 0C-14-9-7-12 0-12C8-12 13-7 15-1L19 0L15 2C13 8 7 12 0 12C-8 12-14 8-14 0Z" fill="url(#ctLm)" stroke="#b77d0a" stroke-width=".7"/><ellipse cx="-4" cy="-5" rx="5" ry="2.6" fill="#fffbd6" opacity=".7"/></g>`;
-  const bloom=(x,y,r)=>`<g transform="translate(${x} ${y})">${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="${-r}" rx="${f1(r*.62)}" ry="${r}" transform="rotate(${a})" fill="#fffdf7" stroke="#e7dcc5" stroke-width=".5"/>`).join('')}<circle r="${f1(r*.45)}" fill="#f2c94c"/></g>`;
-  const LEMON=svg('0 0 140 120',branch([[2,6],[52,8],[96,62]],5,{l:22,w:7,c:['#4f8a43','#3c7238','#62a052'],stem:'#6a5530',sw:2})+lemon(78,64,30)+lemon(52,46,62,.86)+bloom(104,40,4.4)+bloom(26,30,3.6)+bloom(114,74,3.2),
-    grad('ctLm',['#fff4a6','#f5d132','#d99a0c'],1));
-  // Mille et une nuits : une lanterne ciselée qui pend à sa chaîne (h = longueur de la chaîne)
-  const lantern=h=>svg(`0 0 40 ${h+64}`,`<path d="M20 0V${h}" stroke="url(#ctGd)" stroke-width="1.2" stroke-dasharray="2.2 1.6"/><circle cx="20" cy="${h+2}" r="2.4" fill="none" stroke="url(#ctGd)" stroke-width="1.2"/>`+
-    `<g transform="translate(0 ${h+4})"><path d="M20 0C27 0 31 6 32 11H8C9 6 13 0 20 0Z" fill="url(#ctGd)"/><path d="M8 11H32L36 18H4Z" fill="url(#ctGd)"/>`+
-    `<path d="M5 18H35L31 44H9Z" fill="url(#ctGl)" stroke="url(#ctGd)" stroke-width="1.4"/><path d="M20 18V44M12.5 18L14 44M27.5 18L26 44" stroke="url(#ctGd)" stroke-width=".9"/>`+
-    `${[24,31,38].map(y=>`<path d="M${y<30?10:11} ${y}H${y<30?30:29}" stroke="url(#ctGd)" stroke-width=".6" stroke-dasharray="1.5 1.5"/>`).join('')}<path d="M9 44H31L27 50H13Z" fill="url(#ctGd)"/><path d="M20 50V58" stroke="url(#ctGd)" stroke-width="1.6"/><circle cx="20" cy="59" r="1.8" fill="url(#ctGd)"/></g>`,
-    grad('ctGd',GOLD)+`<radialGradient id="ctGl" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#fff6d0"/><stop offset=".5" stop-color="#ffd27a"/><stop offset="1" stop-color="#e08a2c"/></radialGradient>`);
-  const MOON=svg('0 0 60 60',`<path d="M38 6A24 24 0 1 0 54 44A19 19 0 1 1 38 6Z" fill="url(#ctGd)"/>`+star8(14,12,4,'url(#ctGd)')+star8(50,18,2.6,'url(#ctGd)'),grad('ctGd',GOLD));
-  // Andalou : une rosace de zellige (étoile à huit branches dans son cercle, entrelacs) et un brin de jasmin
-  const ROSE=svg('0 0 80 80',`<circle cx="40" cy="40" r="37" fill="#f6efe2" stroke="url(#ctGd)" stroke-width="2"/>`+star8(40,40,30,'#2f6b6a','url(#ctGd)')+star8(40,40,18,'#f6efe2','url(#ctGd)')+
-    `<circle cx="40" cy="40" r="8" fill="#b4543a" stroke="url(#ctGd)" stroke-width="1.2"/>`+[0,45,90,135,180,225,270,315].map(a=>`<circle cx="40" cy="7" r="2" fill="url(#ctGd)" transform="rotate(${a} 40 40)"/>`).join(''),grad('ctGd',GOLD));
-  const JASMIN=svg('0 0 120 70',branch([[2,62],[50,64],[112,30]],4,{l:16,w:5,c:['#4c7a52','#3a6342'],stem:'#5b6b44',sw:1.4})+bloom(70,44,4)+bloom(96,30,4.4)+bloom(42,52,3.4)+bloom(112,22,3));
-  // Old money : deux rameaux de laurier dorés qui se croisent (les fleurons d'angle dorés gênaient les volutes gaufrées)
-  const LAUREL=svg('0 0 200 90',branch([[100,86],[40,84],[8,20]],7,{l:17,w:5.2,c:['url(#ctGd)','#b98f3e'],stem:'#9c6f1c',ang:40})+branch([[100,86],[160,84],[192,20]],7,{l:17,w:5.2,c:['url(#ctGd)','#b98f3e'],stem:'#9c6f1c',ang:40})+
-    `<path d="M88 84Q100 76 112 84Q100 92 88 84Z" fill="#1f4a3a"/><path d="M96 86L88 98M104 86L112 98" stroke="#1f4a3a" stroke-width="3" stroke-linecap="round"/>`,grad('ctGd',GOLD));
-  // Douce France : un bouquet de lavande noué d'un ruban, un rameau d'olivier
-  const lav=(x0,y0,x1,y1)=>{ const n=9; let s=`<path d="M${x0} ${y0}L${x1} ${y1}" stroke="#6f8457" stroke-width="1.3"/>`;
-    for(let i=0;i<n;i++){ const t=.55+i/n*.45, x=x0+(x1-x0)*t, y=y0+(y1-y0)*t, a=Math.atan2(y1-y0,x1-x0)*180/Math.PI;
-      s+=`<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="3.4" ry="2" transform="rotate(${f1(a+(i%2?35:-35))} ${f1(x)} ${f1(y)})" fill="${i%3?'#7c5fb4':'#9a80cf'}"/>`; } return s; };
-  const LAVENDER=svg('0 0 120 130',lav(60,128,18,8)+lav(60,128,40,2)+lav(60,128,62,0)+lav(60,128,84,4)+lav(60,128,104,14)+
-    `<path d="M48 96Q60 102 72 96" stroke="#d9c7e9" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M60 99C46 92 40 104 50 108C56 108 58 102 60 99C62 102 64 108 70 108C80 104 74 92 60 99Z" fill="#e8dcf2" stroke="#b9a2d2" stroke-width=".8"/><path d="M58 101L50 124M62 101L72 122" stroke="#d9c7e9" stroke-width="4" stroke-linecap="round"/>`);
-  const OLIVE=svg('0 0 130 80',branch([[4,6],[60,10],[122,64]],6,{l:20,w:3.6,c:['#7f9474','#93a688','#6c8162'],stem:'#6b5d3e',sw:1.4,ang:38})+
-    `<ellipse cx="70" cy="40" rx="5" ry="6.5" fill="#3d3a4f" transform="rotate(-30 70 40)"/><ellipse cx="96" cy="50" rx="4.5" ry="6" fill="#4a4660" transform="rotate(-20 96 50)"/>`);
-
-  // les illustrations de chaque style : [classe de position, dessin]
+  const svg=(vb,body)=>`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
+  /* les illustrations et les fonds sont peints (11 octobre 2026 : « ça fait très digital, faut les générer avec une vraie
+     qualité » ; 15 images accordées, business/tools/carte-art.py) : img/carte/<thème>-fond.webp derrière la feuille,
+     img/carte/<thème>-<objet>.webp détourés dans les coins. [classe de position, image] */
+  const ART=k=>`<img src="/img/carte/${k}.webp?v=${CARTEV}" alt="" decoding="async">`;
   const DECO={
-    arche:[['tl',LEMON],['br',LEMON]],
-    ogive:[['lt1',lantern(26)],['lt2',lantern(8)],['lt3',lantern(40)],['mo',MOON]],
-    outrepasse:[['tl',ROSE],['tr',ROSE],['bl',JASMIN],['br',JASMIN]],
-    medaillon:[['bc',LAUREL]],
-    bandeau:[['bl',LAVENDER],['tr',OLIVE]]
+    arche:[['tl',ART('dolcevita-citrons')],['br',ART('dolcevita-bouquet')]],
+    ogive:[['lt',ART('nuits-lanternes')],['mo',ART('nuits-lune')]],
+    outrepasse:[['tl',ART('alhambra-rosace')],['tr',ART('alhambra-rosace')],['bl',ART('alhambra-jasmin')]],
+    medaillon:[['bc',ART('oldmoney-laurier')],['bl',ART('oldmoney-roses')]],
+    bandeau:[['bl',ART('doucefrance-lavande')],['tr',ART('doucefrance-olivier')]]
   };
+  const FOND={arche:'dolcevita',ogive:'nuits',outrepasse:'alhambra',medaillon:'oldmoney',bandeau:'doucefrance'};
   /* le gaufrage à sec (11 octobre 2026, photo d'un faire-part gaufré : « c'est du papier gaufré, c'est bien ») : une double
      bordure en relief qui suit la découpe de la feuille (dessinée par rim() à la taille réelle de la feuille) et des volutes
      dans les coins, blanc sur blanc (seulement lumière et ombre, carte.css .ct-rim, .ct-sc). Jamais derrière le texte : les
@@ -173,7 +134,7 @@
     const cls=['ct','ct-s-'+st,'ct-p-'+pk,o.page?'ct-'+o.page:'',live?'ct-live':'',live||o.fit?'ct-fit':'',evs.length>1?'ct-n'+Math.min(evs.length,3):''].filter(Boolean).join(' ');
     return `<div class="${cls}" style="--pal:${esc(pal)};--ink:${ink};--ink2:${ink2};--soft:${soft};--paper:${PP.c};--tx:${INK}">`+
       `<div class="ct-sheet">`+
-        `<div class="ct-back" aria-hidden="true"></div>`+
+        `<div class="ct-back" aria-hidden="true" style="background-image:url('/img/carte/${FOND[st]}-fond.webp?v=${CARTEV}')"></div>`+
         `<div class="ct-pw" aria-hidden="true"><div class="ct-panel ct-sh"><svg class="ct-rim"></svg>${SCROLLS[st].map(c=>`<i class="ct-sc ct-sc-${c}">${SCROLL}</i>`).join('')}</div></div>`+
         `<div class="ct-deco" aria-hidden="true">${decoOf(st)}</div>`+
         `<div class="ct-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sl};--m:${sm};--d:${sd}">${ini}</b></div>`+

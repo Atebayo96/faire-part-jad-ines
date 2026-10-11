@@ -89,10 +89,13 @@
 .ct-b:active{transform:scale(.97)}
 .ct-b svg{width:32px;height:32px;flex:none;padding:8px;border-radius:50%;color:#fff;background:var(--ink)}
 .ct-acts+.ct-rs{margin-top:var(--g1)!important}
-/* la signature, sous la feuille, sur le fond du thème (--mk : couleur mesurée contre --bk) */
-.ct-sheet>.ct-made{position:absolute;left:0;right:0;bottom:calc(var(--pb)/2 - 6px);margin:0!important;padding:0;font:500 11.5px/1 Inter,-apple-system,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--mk,var(--ink))}
+/* la signature, sous la feuille, sur une pastille de la couleur du fond (--mk mesurée contre --bk : le fond peint est trop riche pour porter un texte) */
+.ct-sheet>.ct-made{position:absolute;left:50%;translate:-50% 0;white-space:nowrap;background:var(--bk);padding:5px 12px 4px;border-radius:999px;bottom:calc(var(--pb)/2 - 6px);margin:0!important;padding:0;font:500 11.5px/1 Inter,-apple-system,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--mk,var(--ink))}
 /* formats d'export : la feuille remplit exactement le format, l'espace en trop se répartit (rien n'est collé en haut) */
-.ct-story .ct-sheet,.ct-a5 .ct-sheet{justify-content:space-between}
+/* l'image et le PDF sont plus larges qu'un téléphone : texte centré (étiré vers les bords, il passait sous les illustrations),
+   illustrations ramenées à leur taille sur un téléphone (--dz) */
+.ct-story .ct-sheet,.ct-a5 .ct-sheet{justify-content:center}
+.ct-story,.ct-a5{--dz:.78}
 .ct-story .ct-evs,.ct-a5 .ct-evs{margin-top:var(--g2)}
 .ct-a5{--g3:calc(30px*var(--k))}
 
@@ -157,7 +160,7 @@
    profondeur et des niveaux ». Du fond vers l'avant : le fond du thème, le passe-partout, la feuille découpée et son ombre
    le texte imprimé dans le papier, les illustrations et le sceau. Le texte est toujours sur la feuille claire : l'encre est
    mesurée contre le papier (inkOf). La signature est sur le fond : --mk, mesurée contre --bk (4,5:1 au moins). */
-.ct-sheet>.ct-back{position:absolute;inset:0;z-index:0;background:var(--bkp,none),var(--bk,#e9e2d4);background-size:var(--bks,40px 40px),auto}
+.ct-sheet>.ct-back{position:absolute;inset:0;z-index:0;background:var(--bk,#e9e2d4) center/cover no-repeat}
 .ct-sheet>.ct-pw{position:absolute;z-index:1;top:var(--pt);left:var(--m);right:var(--m);bottom:var(--pb);
   filter:drop-shadow(0 1px 1px rgba(0,0,0,.22)) drop-shadow(0 12px 18px rgba(0,0,0,.3))}
 .ct-panel{position:absolute;inset:0}
@@ -168,54 +171,43 @@
 /* les illustrations : posées par-dessus la feuille, dans les coins, avec leur ombre (on les voit au-dessus du papier) */
 .ct-sheet>.ct-deco{position:absolute;inset:0;z-index:3;pointer-events:none}
 .ct-d{position:absolute;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2)) drop-shadow(0 8px 10px rgba(0,0,0,.16))}
-.ct-d svg{display:block;width:100%;height:auto;overflow:visible}
+.ct-d img{display:block;width:100%;height:auto}
 
 /* arche (Dolce Vita) : carrelage de maïolique bleu, feuille en arche, branches de citronnier */
-.ct-s-arche{--pbx:calc(60px*var(--k));--bk:#cfe0ec;--mk:#1d3c5e;--mat:#2d5f8f;--bks:38px 38px;
-  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='38'%3E%3Cg fill='none' stroke='%232d5f8f' stroke-opacity='.32' stroke-width='1.2'%3E%3Ccircle r='19'/%3E%3Ccircle cx='38' r='19'/%3E%3Ccircle cy='38' r='19'/%3E%3Ccircle cx='38' cy='38' r='19'/%3E%3Ccircle cx='19' cy='19' r='6'/%3E%3C/g%3E%3C/svg%3E")}
+.ct-s-arche{--pbx:calc(76px*var(--k));--bk:#cfe0ec;--mk:#1d3c5e;}
 .ct-s-arche .ct-sh{border-radius:50% 50% calc(8px*var(--k)) calc(8px*var(--k)) / calc(92px*var(--k)) calc(92px*var(--k)) calc(8px*var(--k)) calc(8px*var(--k))}
-.ct-s-arche .ct-d-tl{width:50cqw;left:calc(var(--m) - 24px*var(--k));top:calc(var(--pt) - 36px*var(--k))}
-.ct-s-arche .ct-d-br{width:50cqw;right:calc(var(--m) - 26px*var(--k));bottom:calc(var(--pb) - 24px*var(--k));transform:scale(-1,-1)}
+.ct-s-arche .ct-d-tl{width:calc(36cqw*var(--k)*var(--dz,1));left:calc(var(--m) - 26px*var(--k));top:calc(var(--pt) - 40px*var(--k))}
+.ct-s-arche .ct-d-br{width:calc(40cqw*var(--k)*var(--dz,1));right:calc(var(--m) - 18px*var(--k));bottom:calc(var(--pb) - 22px*var(--k))}
 /* ogive (Mille et une nuits) : nuit étoilée, feuille en arc brisé sur un passe-partout doré, lanternes et croissant */
-.ct-s-ogive{--bk:#15223f;--mk:#ecd9a0;--mat:linear-gradient(135deg,#f6e3a1,#b8862e 45%,#f1d58c 70%,#a67a26);--bks:96px 96px;
-  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cg fill='%23e9cf88'%3E%3Cpath d='M20 10l1.6 4.4L26 16l-4.4 1.6L20 22l-1.6-4.4L14 16l4.4-1.6z' opacity='.55'/%3E%3Cpath d='M70 52l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z' opacity='.5'/%3E%3Ccircle cx='48' cy='28' r='1' opacity='.6'/%3E%3Ccircle cx='86' cy='12' r='.8' opacity='.5'/%3E%3Ccircle cx='12' cy='70' r='1' opacity='.45'/%3E%3Ccircle cx='40' cy='84' r='.7' opacity='.5'/%3E%3C/g%3E%3C/svg%3E")}
+.ct-s-ogive{--bk:#15223f;--mk:#ecd9a0;}
 .ct-s-ogive .ct-sh,.ct-s-outrepasse .ct-sh{
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 26' preserveAspectRatio='none'%3E%3Cpath d='M0 26V20C14 15 34 11 50 0C66 11 86 15 100 20V26Z'/%3E%3C/svg%3E") top/100% 24cqw no-repeat,linear-gradient(#000 0 0) bottom/100% calc(100% - 24cqw + 1px) no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 26' preserveAspectRatio='none'%3E%3Cpath d='M0 26V20C14 15 34 11 50 0C66 11 86 15 100 20V26Z'/%3E%3C/svg%3E") top/100% 24cqw no-repeat,linear-gradient(#000 0 0) bottom/100% calc(100% - 24cqw + 1px) no-repeat}
-.ct-s-ogive .ct-sheet,.ct-s-outrepasse .ct-sheet{padding-top:calc(var(--pt) + 50px*var(--k))}
-.ct-s-ogive .ct-d{filter:drop-shadow(0 4px 6px rgba(0,0,0,.35)) drop-shadow(0 0 10px rgba(255,200,110,.35))}
-.ct-s-ogive .ct-d-lt1{width:16cqw;left:1cqw;top:0}
-.ct-s-ogive .ct-d-lt2{width:12cqw;left:19cqw;top:0}
-.ct-s-ogive .ct-d-lt3{width:16cqw;right:2cqw;top:0}
-.ct-s-ogive .ct-d-mo{width:16cqw;right:21cqw;top:3cqw}
+.ct-s-ogive .ct-sheet,.ct-s-outrepasse .ct-sheet{padding-top:calc(var(--pt) + 62px*var(--k))}
+.ct-s-ogive .ct-d{filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
+.ct-s-ogive .ct-d-lt{width:calc(28cqw*var(--k)*var(--dz,1));left:2cqw;top:0}
+.ct-s-ogive .ct-d-mo{width:calc(28cqw*var(--k)*var(--dz,1));right:4cqw;top:3cqw}
 /* outrepasse (Andalou) : zellige sur terre cuite, même arc brisé (« fais le cadre comme Mille et une nuits »), rosaces et jasmin */
-.ct-s-outrepasse{--pbx:calc(52px*var(--k));--bk:#9e4b2e;--mk:#fff3e4;--mat:#2f6b6a;--bks:44px 44px;
-  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cg fill='none' stroke='%23fbe6cf' stroke-opacity='.26' stroke-width='1.1'%3E%3Crect x='14' y='14' width='16' height='16'/%3E%3Crect x='14' y='14' width='16' height='16' transform='rotate(45 22 22)'/%3E%3Cpath d='M0 22H8M36 22H44M22 0V8M22 36V44'/%3E%3C/g%3E%3C/svg%3E")}
-.ct-s-outrepasse .ct-d-tl,.ct-s-outrepasse .ct-d-tr{width:20cqw;top:calc(var(--pt) + 6cqw)}
+.ct-s-outrepasse{--pbx:calc(78px*var(--k));--bk:#9e4b2e;--mk:#fff3e4;}
+.ct-s-outrepasse .ct-d-tl,.ct-s-outrepasse .ct-d-tr{width:calc(24cqw*var(--k)*var(--dz,1));top:calc(var(--pt) + 4cqw)}
 .ct-s-outrepasse .ct-d-tl{left:calc(var(--m) - 5cqw)}
 .ct-s-outrepasse .ct-d-tr{right:calc(var(--m) - 5cqw)}
-.ct-s-outrepasse .ct-d-bl,.ct-s-outrepasse .ct-d-br{width:54cqw;bottom:calc(var(--pb) - 8px*var(--k))}
+.ct-s-outrepasse .ct-d-bl{width:calc(48cqw*var(--k)*var(--dz,1));bottom:calc(var(--pb) - 14px*var(--k))}
 .ct-s-outrepasse .ct-d-bl{left:calc(var(--m) - 10px*var(--k))}
-.ct-s-outrepasse .ct-d-br{right:calc(var(--m) - 10px*var(--k));transform:scaleX(-1)}
 /* medaillon (Old money) : vert bouteille et treillis, feuille aux coins rentrés sur passe-partout doré, fleurons et laurier */
-.ct-s-medaillon{--bk:#22402f;--mk:#efe3c4;--mat:linear-gradient(135deg,#f6e3a1,#b8862e 45%,#f1d58c 70%,#a67a26);--bks:26px 26px;--pbx:calc(56px*var(--k));
-  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cpath d='M0 0L26 26M26 0L0 26' stroke='%23f3e7c8' stroke-opacity='.09' stroke-width='1'/%3E%3C/svg%3E")}
+.ct-s-medaillon{--bk:#22402f;--mk:#efe3c4;--pbx:calc(70px*var(--k));}
 .ct-s-medaillon .ct-sh{--r:calc(20px*var(--k));
   -webkit-mask:radial-gradient(circle at 0 0,#0000 var(--r),#000 calc(var(--r) + .5px)) top left/51% 51% no-repeat,radial-gradient(circle at 100% 0,#0000 var(--r),#000 calc(var(--r) + .5px)) top right/51% 51% no-repeat,radial-gradient(circle at 0 100%,#0000 var(--r),#000 calc(var(--r) + .5px)) bottom left/51% 51% no-repeat,radial-gradient(circle at 100% 100%,#0000 var(--r),#000 calc(var(--r) + .5px)) bottom right/51% 51% no-repeat;
   mask:radial-gradient(circle at 0 0,#0000 var(--r),#000 calc(var(--r) + .5px)) top left/51% 51% no-repeat,radial-gradient(circle at 100% 0,#0000 var(--r),#000 calc(var(--r) + .5px)) top right/51% 51% no-repeat,radial-gradient(circle at 0 100%,#0000 var(--r),#000 calc(var(--r) + .5px)) bottom left/51% 51% no-repeat,radial-gradient(circle at 100% 100%,#0000 var(--r),#000 calc(var(--r) + .5px)) bottom right/51% 51% no-repeat}
-.ct-s-medaillon .ct-d{filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
-.ct-s-medaillon .ct-d-tl,.ct-s-medaillon .ct-d-tr{width:15cqw;top:calc(var(--pt) + 26px*var(--k))}
-.ct-s-medaillon .ct-d-tl{left:calc(var(--m) + 8px*var(--k))}
-.ct-s-medaillon .ct-d-tr{right:calc(var(--m) + 8px*var(--k));transform:scaleX(-1)}
-.ct-s-medaillon .ct-d-bc{width:62cqw;left:50%;translate:-50% 0;bottom:calc(var(--pb) + 4px*var(--k))}
+.ct-s-medaillon .ct-d-bc{width:calc(38cqw*var(--k)*var(--dz,1));left:50%;translate:-50% 0;top:calc(var(--pt) - 52px*var(--k))}
+.ct-s-medaillon .ct-d-bl{width:calc(42cqw*var(--k)*var(--dz,1));left:calc(var(--m) - 20px*var(--k));bottom:calc(var(--pb) - 22px*var(--k))}
 /* bandeau (Douce France) : indienne lavande, feuille festonnée, bouquet de lavande et rameau d'olivier */
-.ct-s-bandeau{--pbx:calc(70px*var(--k));--bk:#d9cfe7;--mk:#45346a;--mat:#fffaf1;--bks:30px 30px;
-  --bkp:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cg fill='%237c5fb4' fill-opacity='.3'%3E%3Ccircle cx='8' cy='6' r='1.6'/%3E%3Ccircle cx='8' cy='10' r='1.6'/%3E%3Ccircle cx='6' cy='8' r='1.6'/%3E%3Ccircle cx='10' cy='8' r='1.6'/%3E%3Ccircle cx='23' cy='22' r='1.2'/%3E%3C/g%3E%3C/svg%3E")}
+.ct-s-bandeau{--pbx:calc(84px*var(--k));--bk:#d9cfe7;--mk:#45346a;}
 .ct-s-bandeau .ct-sh{
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 12' preserveAspectRatio='none'%3E%3Cpath d='M0 12V7A7 6 0 0 1 14 7A7 6 0 0 1 28 7V12Z'/%3E%3C/svg%3E") top left/calc(28px*var(--k)) calc(12px*var(--k)) repeat-x,linear-gradient(#000 0 0) bottom/100% calc(100% - 11px*var(--k)) no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 12' preserveAspectRatio='none'%3E%3Cpath d='M0 12V7A7 6 0 0 1 14 7A7 6 0 0 1 28 7V12Z'/%3E%3C/svg%3E") top left/calc(28px*var(--k)) calc(12px*var(--k)) repeat-x,linear-gradient(#000 0 0) bottom/100% calc(100% - 11px*var(--k)) no-repeat}
-.ct-s-bandeau .ct-d-bl{width:34cqw;left:calc(var(--m) - 14px*var(--k));bottom:calc(var(--pb) - 20px*var(--k))}
-.ct-s-bandeau .ct-d-tr{width:58cqw;right:calc(var(--m) - 22px*var(--k));top:calc(var(--pt) - 26px*var(--k))}
+.ct-s-bandeau .ct-d-bl{width:calc(27cqw*var(--k)*var(--dz,1));left:calc(var(--m) - 10px*var(--k));bottom:calc(var(--pb) - 20px*var(--k))}
+.ct-s-bandeau .ct-d-tr{width:calc(40cqw*var(--k)*var(--dz,1));right:calc(var(--m) - 18px*var(--k));top:calc(var(--pt) - 30px*var(--k))}
 /* en ligne : les plans arrivent l'un après l'autre (la feuille, puis les illustrations, puis le texte) */
 .pg.pg-ct .ct>.ct-sheet>.ct-pw,.pg.pg-ct .ct>.ct-sheet>.ct-deco{transition-delay:0s}
 .pg.pg-ct .ct>.ct-sheet>.ct-deco{transition-delay:.25s}
@@ -269,3 +261,4 @@
 .ct-s-medaillon .ct-sheet,.ct-s-bandeau .ct-sheet{padding-top:calc(var(--pt) + 64px*var(--k))}
 .ct-s-medaillon .ct-sc-tl,.ct-s-medaillon .ct-sc-tr,.ct-s-bandeau .ct-sc-tl,.ct-s-bandeau .ct-sc-tr{width:19cqw}
 .ct-s-medaillon .ct-top{letter-spacing:.16em}
+.ct-s-arche .ct-sheet{padding-top:calc(var(--pt) + 66px*var(--k))}
