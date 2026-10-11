@@ -181,20 +181,19 @@
          téléphone) : on les ramène à l'échelle de la feuille, sinon tout « tenait » et la feuille débordait (iPhone 16) */
       const TXT=c=>!/ct-(made|back|pw|deco|seal)\b/.test(c.className);
       /* free : la bande du bas réservée aux illustrations (--pbx) est libérée ; le texte peut y descendre tant qu'aucune
-         ligne ne touche une illustration ou une volute des coins (mesuré ligne par ligne, 6 px de marge) */
-      const art=()=>{ const R=sh.getBoundingClientRect(); return [...sh.querySelectorAll('.ct-deco img,.ct-deco .ct-sc,.ct-pw img,.ct-pw .ct-sc')].map(e=>e.getBoundingClientRect()).filter(r=>r.width&&r.top>R.top+R.height/2); };
+         ligne ne touche une illustration ou une volute des coins (mesuré ligne par ligne, 10 px de marge ; les volutes sont dans .ct-panel pour certains thèmes) */
+      // à remesurer à chaque fois : la feuille s'allonge avec le texte, et les volutes du bas avec elle
+      const art=()=>{ const R=sh.getBoundingClientRect(); return [...sh.querySelectorAll('.ct-sc,.ct-deco img,.ct-pw img')].map(e=>e.getBoundingClientRect()).filter(r=>r.width&&r.top>R.top+R.height/2); };
       const hits=A=>{ if(!A.length) return false; const rs=[]; [...sh.children].filter(TXT).forEach(c=>{ const w=document.createTreeWalker(c,NodeFilter.SHOW_TEXT); let n;
           while((n=w.nextNode())){ if(!n.nodeValue.trim()) continue; const g=document.createRange(); g.selectNodeContents(n); rs.push(...g.getClientRects()); }
           c.querySelectorAll('img,svg').forEach(x=>rs.push(x.getBoundingClientRect())); });
-        const z=sh.offsetHeight?sh.getBoundingClientRect().height/sh.offsetHeight:1, m=6*z;
+        const z=sh.offsetHeight?sh.getBoundingClientRect().height/sh.offsetHeight:1, m=10*z;
         return rs.some(r=>r.width&&A.some(a=>r.left<a.right+m&&r.right>a.left-m&&r.top<a.bottom+m&&r.bottom>a.top-m)); };
-      let A=[];
       const need=free=>{ const R=sh.getBoundingClientRect(), z=sh.offsetHeight?R.height/sh.offsetHeight:1; let b=0; [...sh.children].forEach(c=>{ if(TXT(c)) b=Math.max(b,c.getBoundingClientRect().bottom); });
         const v=(b-R.top)/(z||1)+parseFloat(getComputedStyle(sh).paddingBottom); // les filets de la date gardent au moins 8 px (en grandissant, « Samedi 12 juin 2027 » les écrasait)
         const dl=[...sh.querySelectorAll('.ct-dl i')].some(i=>i.getBoundingClientRect().width<8*z);
-        return (free&&hits(A))||dl?v+9999:v; };
+        return hits(art())||dl?v+9999:v; };
       const run=free=>{ el.style.setProperty('--pbx',free?'0px':''); sh.style.justifyContent='flex-start'; let k=1; el.style.setProperty('--k','1'); el.style.setProperty('--air','1');
-        if(free) A=art();
         // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 66 %, pour que la signature reste sur l'écran
         // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
         if(need(free)>H) while(k>.66&&need(free)>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); }

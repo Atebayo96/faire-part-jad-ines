@@ -1059,8 +1059,20 @@
 .ed-lead{margin:0 0 4px;font-size:15px;line-height:1.45;color:var(--ink)}
 .ed-t:empty{display:none}
 /* « Ajouter un écran » : un seul groupe de choix */
-.story>li.more.add .opts{display:flex;flex-wrap:wrap;gap:8px}
-#cAddEv{font-weight:600}
+/* « Ajouter » bien visible : un bloc teinté, une ligne pleine largeur par choix avec un « + » rond, le nom et sa phrase */
+.story>li.more.add{background:#f6f1e8;border:1px solid #e4dccd;border-radius:12px;padding:18px 16px}
+.story>li.more.add .ev-h b{font:600 17px Inter,sans-serif}
+.story>li.more.add .ev-h small{display:block;margin-top:2px;font-size:13px;color:var(--muted)}
+.story>li.more.add .opts{display:grid;gap:8px}
+.story>li.more.add .chip.x{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;background:#fff;border:1px solid #e4dccd;border-radius:10px;font-size:14px;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:border-color .15s,transform .1s}
+.story>li.more.add .chip.x:hover{border-color:var(--ink)}
+.story>li.more.add .chip.x:active{transform:scale(.99)}
+.story>li.more.add .chip.x[hidden]{display:none}
+.story>li.more.add .pl{flex:0 0 28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font:500 18px/1 Inter,sans-serif}
+.story>li.more.add .nm{display:grid;gap:2px;flex:1;min-width:0}
+.story>li.more.add .nm b{font:600 14px Inter,sans-serif;color:var(--ink)}
+.story>li.more.add .nm small{font:400 13px/1.35 Inter,sans-serif;color:var(--muted)}
+.story>li.more.add .chip.x i{margin-left:auto}
 /* le bouton « Répondre » : le formulaire que voient les invités, en petit, qui suit les réglages */
 .rv-mock{display:grid;gap:8px;padding:16px;border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 24px -18px rgba(0,0,0,.35)}
 .rv-mock .rm-t{font:500 20px/1.2 "Cormorant Garamond",Georgia,serif;text-align:center;margin-bottom:2px;color:var(--ink)}
@@ -1117,3 +1129,4 @@
 .pp.ic-or i{-webkit-mask:none;mask:none;background:var(--ic) center/contain no-repeat;filter:drop-shadow(0 1px 1px rgba(60,40,10,.35))}
 .one-note.full{background:#fff4e0;border:1px solid #f0d3a0}
 .story li[hidden]{display:none!important}
+.story>li.more.add .chip.sig i{border-left:0;padding-left:0;margin-left:auto}

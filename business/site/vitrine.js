@@ -363,7 +363,11 @@
      la même liste, à sa place, et s'ajoute au même endroit, en bas. Le lien par famille et l'anglais ne sont pas des écrans :
      ils restent dans « Détails » (OPTS). */
   const OPTS=['famille','en'], PRE=['parents','story'];
-  EXTRAS.forEach(x=>{ const b=document.createElement('button'); b.type='button'; b.className='chip x'+(x.sig?' sig':''); b.dataset.id=x.id; b.innerHTML=esc(x.name)+(x.sig?'<i>Signature</i>':'');
+  /* « Ajouter » se voit (11 octobre 2026 : « faut pouvoir facilement voir si on veut rajouter des écrans, là c'est caché ») :
+     une ligne par choix, un « + », le nom et ce qu'il apporte, en une phrase */
+  const XD={parents:'Vos parents vous présentent',story:'Vos dates clés, en quelques lignes',program:'Les heures de la journée',dress:'La tenue et ses couleurs',stay:'Hôtel, navettes, parking…',faq:'Les réponses aux questions qu’on vous posera',gifts:'Une liste, une cagnotte ou un lien',photos:'Un album où chacun dépose ses photos',table:'Chaque famille voit sa table'};
+  const addRow=(n,d)=>`<span class="pl" aria-hidden="true">+</span><span class="nm"><b>${esc(n)}</b>${d?`<small>${esc(d)}</small>`:''}</span>`;
+  EXTRAS.forEach(x=>{ const b=document.createElement('button'); b.type='button'; b.className='chip x'+(x.sig?' sig':''); b.dataset.id=x.id; b.innerHTML=OPTS.includes(x.id)?esc(x.name)+(x.sig?'<i>Signature</i>':''):addRow(x.name,XD[x.id])+(x.sig?'<i>Signature</i>':'');
     b.onclick=()=>{ const on=!C.x.has(x.id); on?C.x.add(x.id):C.x.delete(x.id); paint(); if(on){ const el=$('cpScroll').querySelector(`[data-x="${x.id}"]`); if(el) $('cpScroll').scrollTo({top:el.offsetTop,behavior:'smooth'}); } };
     (OPTS.includes(x.id)?$('cOpts'):$('cExtras')).appendChild(b); });
   let resetEv=()=>{};
@@ -386,7 +390,7 @@
     EXTRAS.filter(x=>!PRE.includes(x.id)&&!OPTS.includes(x.id)).forEach(xsLi);
     // un seul « Ajouter » : un moment (heure, lieu, décor) ou un écran d'infos, c'est pareil pour les mariés (« ça rejoint
     // la même chose ») ; il se range tout seul à sa place dans la liste
-    const more=li('more add',`<div class="ev-h"><b>+ Ajouter un écran</b><small>il se range à sa place</small></div><div class="opts" id="cExtrasIn"><button type="button" class="chip x" id="cAddEv">Un moment de la journée<i></i></button></div>`);
+    const more=li('more add',`<div class="ev-h"><b>Ajouter un écran</b><small>touchez pour l’ajouter : il se range tout seul à sa place</small></div><div class="opts" id="cExtrasIn"><button type="button" class="chip x" id="cAddEv">${addRow('Un moment de la journée','Une heure, un lieu, un décor')}<i></i></button></div>`);
     const xin=more.querySelector('#cExtrasIn'); [...$('cExtras').children].forEach(b=>xin.appendChild(b)); $('cExtras').remove(); xin.id='cExtras';
     const sendPhoto=f=>new Promise((ok,ko)=>{ const im=new Image(); im.onload=async()=>{ try{ const k=Math.min(1,1600/Math.max(im.width,im.height)), cv=document.createElement('canvas');
         cv.width=Math.round(im.width*k); cv.height=Math.round(im.height*k); cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
@@ -507,7 +511,7 @@
     // la réponse se règle toujours (menus, question, WhatsApp), dans les deux formats
     edBox($('cStory').querySelector('.rsvp .eds'),['rsvp']); rsvpMock();
     // la liste prend le nom de l'occasion ; « Notre histoire » n'a pas de sens pour un sbouâ
-    document.querySelectorAll('#cStory [data-x="gifts"],#cExtras [data-id="gifts"],#cStory [data-xs="gifts"] .ev-h b').forEach(b=>b.textContent=giftName());
+    document.querySelectorAll('#cStory [data-x="gifts"],#cExtras [data-id="gifts"] b,#cStory [data-xs="gifts"] .ev-h b').forEach(b=>b.textContent=giftName());
     const st=$('cStory').querySelector('[data-x="story"]'); if(st) st.hidden=kid();
   }
   const edText=()=>{ const d=C.data, on=id=>C.x.has(id), o=[];
@@ -634,6 +638,10 @@
       // les options qui sont des écrans de la suite scène par scène n'existent pas dans le tableau (elles y sont des parties, ci-dessus)
       // un écran déjà ajouté n'est plus proposé : il est dans la liste, avec son « Retirer »
       $('cExtras').querySelectorAll('button').forEach(b=>{ const id=b.dataset.id; b.hidden=long||C.x.has(id)||(id==='story'&&kid())||(one()&&!ONE_X.includes(id)); });
+      // le bloc dit ce qu'on ajoute (une feuille n'a pas d'écrans) et disparaît quand il ne reste rien à ajouter
+      { const ad=$('cStory').querySelector('li.more.add'); if(ad){ ad.querySelector('.ev-h b').textContent=one()?'Ajouter à votre feuille':'Ajouter un écran';
+        ad.querySelector('.ev-h small').textContent=one()?'touchez pour l’ajouter : il se place tout seul sur la feuille':'touchez pour l’ajouter : il se range tout seul à sa place';
+        ad.hidden=![...$('cExtras').querySelectorAll('button')].some(b=>!b.hidden); } }
       // une seule feuille : pas de décor par moment, le contenu tient sur la page
       $('cStory').classList.toggle('one',one());
       if(one()){ $('wz2Title').textContent=C.plan==='carte'?'Votre carte':'Votre page'; $('wzNav3').textContent='Contenu';
