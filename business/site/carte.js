@@ -79,7 +79,7 @@
      dorure gravée, tools/carte-icones.py), choisie d'après le nom du moment, son lieu et l'occasion */
   const ICO=[['henne',/henn/],['berceau',/sbou|naissance|bapt|aqiqa/],['mairie',/mairie|civil|hôtel de ville|hotel de ville/],
     ['cocktail',/cocktail|vin d.honneur|ap[ée]ritif|aperitivo/],['diner',/d[îi]ner|repas|d[ée]jeuner|brunch|banquet/],
-    ['alliances',/c[ée]r[ée]monie|[ée]glise|mosqu|religieu|b[ée]n[ée]diction|nikah|kitab|alliance|oui/],['coupes',/f[êe]te|soir[ée]e|r[ée]ception|\bbal\b|danse|party|salle|domaine/]];
+    ['alliances',/fian[cç]ailles|noces|c[ée]r[ée]monie|[ée]glise|mosqu|religieu|b[ée]n[ée]diction|nikah|kitab|alliance|oui/],['coupes',/f[êe]te|soir[ée]e|r[ée]ception|\bbal\b|danse|party|salle|domaine/]];
   /* le nom du moment décide d'abord (« La cérémonie » à l'hôtel de ville : les alliances), puis son lieu. Pour Mille et une
      nuits et l'Andalou, pas de verres (« c'est plus musulman ») : la réception a l'assiette et les couverts, le cocktail le bouquet. */
   function icoOf(e,inv){

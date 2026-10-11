@@ -55,7 +55,7 @@ export function sanitize(raw, plan = 'essentiel', opts = {}) {
     format: one ? 'page' : undefined, reply: one ? plan === 'page' && !!opts.reply : undefined,
     paper: one ? pick(r.paper, ['coton', 'aquarelle', 'velin'], 'coton') : undefined,
     icons: one ? pick(r.icons, ['presse', 'or'], 'presse') : undefined,
-    theme: r.theme, couple, date: first, tz: 'Europe/Paris', lang: 'fr', kind: pick(r.kind, ['henne', 'sbou3'], undefined),
+    theme: r.theme, couple, date: first, tz: 'Europe/Paris', lang: 'fr', kind: pick(r.kind, ['henne', 'sbou3', 'bapteme', 'fiancailles', 'anniv'], undefined),
     opening: one && !(plan === 'page' && opts.opening) ? 'none' : pick(r.opening, ['env', 'cur', 'voile', 'door'], 'env'), palette: hex(r.palette),
     font: pick(r.font, ['script', 'classique', 'moderne', 'deco'], undefined),
     countdown: one ? 'non' : pick(r.countdown, ['debut', 'page', 'apres', 'fin', 'non'], 'fin'), reveal: one ? null : pick(r.reveal, ['scratch', 'wheel', 'slot'], null),

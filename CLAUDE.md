@@ -511,6 +511,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     /modeles/, jamais prises comme démo principale d'un thème. Le champ `occasion` part avec la demande.
     À faire quand le quota Gemini revient : des scènes propres au sbouâ (berceau, plateau de dattes et de lait, bougies),
     aujourd'hui l'accueil et la réponse reprennent les scènes du thème.
+    **Les occasions suivent le thème** (11 octobre 2026 : « henné, sbouâ, c'est surtout pour les musulmans, faut mettre aussi
+    le baptême et autre ») : `OCCS` dans vitrine.js, `fam` = famille de thèmes. Pour tous : Mariage, Fiançailles, Anniversaire
+    de mariage ; Henné et Sbouâ seulement avec Mille et une nuits et l'Andalou (`family:"nuits"`) ; **Baptême** seulement avec
+    les autres thèmes (l'enfant et ses parents, fille ou garçon, deux moments : église et déjeuner). Changer de thème vers une
+    autre famille ramène au Mariage (`fixOcc()`). `kid` = faire-part d'un enfant (sbouâ, baptême), `multi` = plusieurs
+    moments (mariage, baptême). Hors des thèmes `nuits`, le chapeau de l'accueil suit l'occasion (`eyOf()` : « Baptême »,
+    « Nos fiançailles », « Nos noces ») au lieu de « Ci sposiamo ». `kind` de la fiche : `henne`, `sbou3`, `bapteme`,
+    `fiancailles`, `anniv` (`_fiche.js`). Reste : l'accueil d'un baptême ou d'un sbouâ montre encore les mains et les
+    alliances du thème ; des images propres (berceau, dragées, cierge) demandent une génération, donc un accord chiffré.
 36. **Andalou et Maghrébin.** « Andalou » est le nom affiché du thème `alhambra`. « Maghrébin » (`maghreb` : médina
     blanche, portes bleues, zellige, de Chefchaouen à Sidi Bou Saïd, thème clair) est défini partout (themes.js, scènes,
     portes, grand tableau) mais `pending:true` tant que ses images n'existent pas :
