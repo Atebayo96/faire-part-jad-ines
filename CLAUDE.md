@@ -702,7 +702,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     plancher de la feuille sont plus basses (15/14/13/12,5 px, jamais sous 11) : mot des familles + 3 moments + programme +
     dress code tiennent sur un écran. **Trois moments côte à côte** (« quand on ajoute un moment, ça part en steak ») :
     colonnes égales `minmax(0,1fr)` (le lieu ne déborde plus sur la colonne voisine), chapeau sur deux lignes au besoin, icône
-    et lieu plus petits.
+    et lieu plus petits. **Le dress code montre ses couleurs** en petits rectangles, comme des échantillons de tissu (`.ct-sw`,
+    jusqu'à 6 couleurs de la fiche, liseré clair et ombre fine pour que le crème se voie aussi).
     **Chaque moment a son adresse** (champ « L'adresse (pour l'itinéraire) », `e.addr`, toutes formules), écrite sous le nom du
     lieu et utilisée par « Y aller ». **Les paraphes d'une calligraphie ne sont plus coupés** (`.ct-nm` a une marge intérieure :
     la dorure en `background-clip:text` s'arrêtait à la boîte du mot). Le nom du moment décide d'abord (« La cérémonie » à l'hôtel de

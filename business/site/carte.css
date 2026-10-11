@@ -293,3 +293,7 @@
 .ct-n3 .ct-ic span{width:calc(46px*var(--k));height:calc(32px*var(--k))}
 .ct-n3 .ct-pl{font-size:max(13px,calc(15px*var(--k)))!important;hyphens:auto}
 .ct-n3 .ct-ad{font-size:max(12px,calc(13.5px*var(--k)))!important}
+/* les échantillons du dress code : petits rectangles côte à côte, posés sur le papier (liseré clair, ombre fine) */
+.ct-sw{display:flex;justify-content:center;gap:calc(6px*var(--k));margin-top:calc(8px*var(--k))}
+.ct-sw i{display:block;width:calc(28px*var(--k));height:calc(15px*var(--k));border-radius:2px;
+  box-shadow:inset 0 0 0 1px rgba(40,25,10,.18),0 0 0 1.5px rgba(255,255,255,.9),0 1px 2px rgba(60,40,10,.35)}
