@@ -631,7 +631,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un
     seul écran, comme les vrais faire-part papier, avec notre touche »). Un seul dessin, `carte.js` + `carte.css`
-    (`SceauCarte.html`) : la peinture du thème (`T.home`, les mains) dans une **arche**, le sceau de cire posé dessus, les
+    (`SceauCarte.html`) : la feuille habillée du thème (plus de photo depuis le 11 octobre, voir plus bas), le sceau de cire, les
     prénoms dans la police du thème, la date, les moments côte à côte (heure en grand), le programme, le dress code, la
     réponse. Il sert au faire-part en ligne (fiche `"format": "page"`, `PG` dans invite.js : une seule page qui défile
     librement, pas de décor derrière), à l'aperçu du configurateur et à l'export : **la Carte est la page unique figée**,
