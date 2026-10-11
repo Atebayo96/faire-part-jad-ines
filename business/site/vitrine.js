@@ -627,6 +627,8 @@
       if(long&&(C.cd==='page'||C.cd==='apres')){ C.cd='fin'; $('cCount').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.cd)); }
       $('cCount').querySelector('[data-id="page"]').hidden=$('cCount').querySelector('[data-id="apres"]').hidden=long;
       // la ligne du compte à rebours se range à l'endroit choisi : sous l'accueil, avant ou après les moments, avec la réponse
+      // carte et page unique : pas de compte à rebours (« ça n'a pas de sens sur une carte ») : la ligne disparaît de la liste
+      { const c0=$('cStory').querySelector('li.cdl'); if(c0) c0.hidden=one(); }
       { const box=$('cStory'), cl=box.querySelector('li.cdl'), evs=box.querySelectorAll('li.ev'), at={debut:box.querySelector('li.home').nextSibling,page:evs[0],apres:box.querySelector('li.ev-end'),fin:box.querySelector('li.rsvp'),non:box.querySelector('li.rsvp')}[C.cd];
         if(cl&&at&&cl.nextSibling!==at&&cl!==at) box.insertBefore(cl,at); }
     }
@@ -804,7 +806,7 @@
     if(C.x.has('photos')&&/^https?:\/\//.test(C.data.photos.url||'')) inv.photos={text:'Partagez vos plus belles photos de la journée dans notre album commun.',url:C.data.photos.url};
     return JSON.parse(JSON.stringify(inv)); }
   // la fiche d'une carte ou d'une page unique : la même, sur une seule feuille ("format": "page", carte.js)
-  function oneInvite(){ const inv=realInvite(); inv.format='page'; inv.paper=C.paper; inv.icons=C.icons; inv.reply=C.plan==='page'&&C.reply; if(C.plan==='carte') inv.opening='none';
+  function oneInvite(){ const inv=realInvite(); inv.format='page'; inv.paper=C.paper; inv.icons=C.icons; inv.countdown='non'; inv.reply=C.plan==='page'&&C.reply; if(C.plan==='carte') inv.opening='none';
     ['story','infos','gifts','faq','photos'].forEach(k=>delete inv[k]); ['parents','dress'].forEach(k=>{ if(!C.x.has(k)) delete inv[k]; }); return inv; }
   // les choix du configurateur, pour le rouvrir tel quel (modification par les mariés)
   const snapshot=()=>({plan:C.plan,reply:C.reply,paper:C.paper,icons:C.icons,occ:C.occ,sexe:C.sexe,k:C.k,fmt:C.fmt,pal:C.pal,font:C.font,op:C.op,cd:C.cd,rvl:C.rvl,x:[...C.x],

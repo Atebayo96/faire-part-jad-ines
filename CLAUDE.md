@@ -715,7 +715,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     sceau suit à moitié), le texte ensuite : l'arc de Mille et une nuits gardait sa hauteur (taille minimale automatique d'un
     bloc `aspect-ratio` en `overflow:visible`) et la feuille devenait « plus grande qu'une page » ; le cadre est en
     `overflow:hidden; min-height:0`, l'image en absolu. Un moment seul reste centré (« À la maison » se collait
-    à gauche). Pas de compte à rebours sur la feuille. Sans ouverture, cliquer un thème ne rejoue rien (la page faisait le zoom
+    à gauche). **Pas de compte à rebours sur la carte ni la page unique** (« ça n'a pas de sens sur une carte ») : la ligne
+    « Le compte à rebours » est masquée de la liste des écrans (`.story li[hidden]` l'emporte sur le `display:grid` des lignes)
+    et la fiche part avec `countdown: 'non'`. Sans ouverture, cliquer un thème ne rejoue rien (la page faisait le zoom
     du « morph » de l'enveloppe).
 
 48. **Mille et une nuits et l'Andalou reviennent dans le configurateur** (10 octobre 2026 : « rajoute le thème mille et une
