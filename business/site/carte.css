@@ -297,3 +297,5 @@
 .ct-sw{display:flex;justify-content:center;gap:calc(6px*var(--k));margin-top:calc(8px*var(--k))}
 .ct-sw i{display:block;width:calc(28px*var(--k));height:calc(15px*var(--k));border-radius:2px;
   box-shadow:inset 0 0 0 1px rgba(40,25,10,.18),0 0 0 1.5px rgba(255,255,255,.9),0 1px 2px rgba(60,40,10,.35)}
+/* feuille pleine : les volutes gaufrées du bas s'effacent plutôt que d'être recouvertes par le texte (fit() dans carte.js) */
+.ct-nosc .ct-sc-bl,.ct-nosc .ct-sc-br{display:none}

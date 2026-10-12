@@ -814,6 +814,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     mesure la partie peinte des illustrations du haut (pixels opaques, `opaq()`, pas leur boîte) et, pour les arcs brisés
     (Mille et une nuits, Andalou), les deux coins au-dessus de l'épaule de l'arc ; tant qu'une ligne y touche, le texte
     descend (`--ptx`, ajouté à tous les `padding-top` de la feuille) et la mise en page se refait.
+    **Feuille pleine** (« si je mets tout, la réponse souhaitée est un peu sur l'ornement, c'est dommage ») : au plus petit
+    (`--k` 0,66), les respirations se resserrent jusqu'à la moitié (`--air` 0,5) ; si le texte touche encore les volutes
+    gaufrées du bas, elles s'effacent (`.ct-nosc`) plutôt que d'être recouvertes. Les illustrations peintes restent.
+    **Y aller et Agenda : les icônes seules** (« en gardant les icônes, les gens vont comprendre ») : le mot n'est plus écrit
+    sous le rond (il reste en `aria-label` et en `title`), la place gagnée va au texte.
 
 ## Méthode
 

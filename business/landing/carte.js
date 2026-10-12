@@ -130,7 +130,7 @@
     const P=inv.parents, PR=inv.program, DR=inv.dress, R=inv.rsvp||{};
     const live=!!o.live;
     const ev=e=>{ const d=at(e.start), where=[e.place,e.address].find(x=>x&&x!==e.title), ico=icoOf(e,inv);
-      const lk=live?`<p class="ct-lk">${e.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener" aria-label="${esc(L.route)}">${ic.pin}<span>${L.route}</span></a>`:''}<button type="button" data-cal="${esc(e.id)}" aria-label="${esc(L.cal)}">${ic.cal}<span>${L.cal}</span></button></p>`:'';
+      const lk=live?`<p class="ct-lk">${e.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener" aria-label="${esc(L.route)}" title="${esc(L.route)}">${ic.pin}</a>`:''}<button type="button" data-cal="${esc(e.id)}" aria-label="${esc(L.cal)}" title="${esc(L.cal)}">${ic.cal}</button></p>`:'';
       // toujours les mêmes cases, dans le même ordre (vides au besoin) : les colonnes partagent les lignes de la grille
       // (subgrid, carte.css), chapeaux, heures et lieux restent alignés d'un moment à l'autre (« c'est pas aligné »)
       return `<div class="ct-ev"><p class="ct-ic"><span style="--ic:url('/img/carte/ico-${ico}.webp?v=${CARTEV}')"><i><b></b></i></span></p><p class="ct-ey">${esc(e.eyebrow||'')}</p>${days.size>1?`<p class="ct-wd">${esc(day(d,L))}</p>`:''}<p class="ct-hr">${esc(hour(d,L))}</p>`+
@@ -204,6 +204,8 @@
         // trop plein (trois moments, programme…) : on réduit d'abord, jusqu'à 66 %, pour que la signature reste sur l'écran
         // (« le Save The Oui n'est pas visible ») ; sinon on agrandit
         if(need(free)>H) while(k>.66&&need(free)>H){ k-=.02; el.style.setProperty('--k',k.toFixed(2)); }
+        // toujours trop plein au plus petit : les respirations se resserrent (jusqu'à la moitié) avant que le texte ne touche le bas
+        if(need(free)>H){ let a=1; while(a>.5&&need(free)>H){ a-=.05; el.style.setProperty('--air',a.toFixed(2)); } if(need(free)>H) return {k,a,ok:false}; return {k,a,ok:true}; }
         else while(k<1.06){ el.style.setProperty('--k',(k+.03).toFixed(2)); if(need(free)>H){ el.style.setProperty('--k',k.toFixed(2)); break; } k+=.03; }
         /* peu de contenu (les écrans de base) : le texte ne grandit qu'un peu, puis ce sont les respirations entre les blocs
            (--air, multiplie --g1/--g2/--g3) qui s'ouvrent, jusqu'à 2,4 fois, pour que la feuille soit composée sur toute sa
@@ -211,7 +213,7 @@
         let a=1; if(need(free)<=H) while(a<2.4){ el.style.setProperty('--air',(a+.1).toFixed(2)); if(need(free)>H){ el.style.setProperty('--air',a.toFixed(2)); break; } a+=.1; }
         return {k,a,ok:need(free)<=H+1}; };
       // d'abord la bande du bas libérée ; si le texte y touche une illustration ou doit rapetisser davantage, on la réserve
-      el.style.setProperty('--ptx','0px');
+      el.style.setProperty('--ptx','0px'); el.classList.remove('ct-nosc');
       const g=run(false), f=run(true), free=f.ok&&(f.k>g.k||(f.k===g.k&&f.a>=g.a)); if(!free) run(false);
       let r=free?f:g;
       /* en haut aussi, jamais de texte sur une illustration (12 octobre 2026 : le mot des familles passait sous le nœud du
@@ -225,6 +227,10 @@
           A.push({left:P.left-99,right:P.left+w,top:P.top-99,bottom:y},{left:P.right-w,right:P.right+99,top:P.top-99,bottom:y}); }
         return A; };
       for(let px=0;px<96&&hits(topArt());){ px+=6; el.style.setProperty('--ptx',px+'px'); r=run(free); }
+      /* dernier recours, feuille pleine (« la réponse souhaitée est un peu sur l'ornement, c'est dommage ») : les volutes
+         gaufrées du bas s'effacent plutôt que d'être recouvertes ; les illustrations peintes, elles, restent */
+      const vol=()=>{ const R=sh.getBoundingClientRect(); return [...sh.querySelectorAll('.ct-sc')].map(e=>e.getBoundingClientRect()).filter(q=>q.width&&q.top>R.top+R.height/2); };
+      if(hits(vol())){ el.classList.add('ct-nosc'); r=run(free); }
       // pour le configurateur : la feuille déborde encore (over) ou a dû être réduite nettement (tight)
       el.dataset.full=need(free)>H+1?'over':r.k<.8?'tight':'';
       // bande libérée : le texte reste posé tel qu'il a été mesuré (recentré, il redescendait sur l'illustration du bas)
