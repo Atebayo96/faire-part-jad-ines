@@ -154,8 +154,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     la prépare : couleur en haut, masque en bas (`img/open/<thème>-porte.mp4` et `.webm`, ~400 Ko ; le vide derrière les
     battants, sol compris, est reconnu à sa couleur, le masque ne fait que grandir, bord adouci d'un pixel, liseré vert
     retiré), plus l'affiche `-porte.webp`. invite.js (`T.doorVid`, aujourd'hui l'Andalou) recompose chaque image dans un
-    canvas : on voit le faire-part par l'entrebâillement, avec une démarcation nette ; léger zoom (1 → 1,12 sur la durée de la
-    vidéo), puis **un flash court et doux** pour passer à la page (`flashVid`, 0,9 s, demandé par l'utilisateur : il remplace,
+    canvas : on voit le faire-part par l'entrebâillement, avec une démarcation nette (l'ombre presque noire de la pièce le long
+    de l'arc fait partie du vide : « les petits trucs noirs qui sont restés », `pousse()`) ; **on entre dans la porte** (« comme
+    si on rentre dans la porte et on arrive sur le haut du faire-part ») : zoom doux jusqu'à 1,14 pendant l'ouverture, puis
+    plongée dans l'embrasure jusqu'à 4,2 (`opVidZoom`, centré sur l'ouverture), la page se pose dessous (`morph`), puis **un flash court et doux** pour passer à la page (`flashVid`, 0,9 s, demandé par l'utilisateur : il remplace,
     pour les portes en vidéo, le « plus de flash » ci-dessous). Si la vidéo ne peut pas être lue, les battants en CSS reprennent.
     Clé fal.ai : jamais dans le dépôt (variable `FAL_KEY` de l'environnement). Démo : `page-leila-mehdi` (ouverture Portes).
     **Pas d'animation du sceau** (6 octobre 2026) : un essai où le sceau de l'enveloppe glissait jusqu'à l'accueil a été

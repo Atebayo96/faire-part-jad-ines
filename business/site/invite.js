@@ -598,6 +598,8 @@
         setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); },200);
         // le flash part un peu avant la fin, la porte s'efface sous son pic
         const end=Math.max(1200,(v.duration-.45)*1000);
+        // la page se pose pendant qu'on traverse la porte (même geste que l'enveloppe, morph)
+        setTimeout(()=>{ app.classList.add('morph'); setTimeout(()=>app.classList.remove('morph'),1800); },v.duration*620);
         setTimeout(()=>{ flash.classList.add('vid','bloom'); setTimeout(()=>op.classList.add('gone'),260); setTimeout(()=>{ op.remove(); flash.remove(); },1200); },end);
       }).catch(()=>{ DV.off(); op.classList.remove('opening'); open(); });
       return; }

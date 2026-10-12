@@ -23,7 +23,17 @@ W = 540
 
 def vide(a):
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
-    return (g >= r - 6) & (g > b + 8) & ((r + g + b) / 3 < 150)
+    lum = (r + g + b) / 3
+    # la pièce (vert olive) et son ombre presque noire le long de l'arc (« les petits trucs noirs qui sont restés »)
+    return (g >= r - 6) & (((g > b + 8) & (lum < 150)) | (lum < 70))
+
+
+def pousse(k, cand, n=8):
+    """étend le vide aux pixels candidats qui le touchent (ombres, bord adouci par la compression)"""
+    for _ in range(n):
+        d = np.asarray(Image.fromarray((k * 255).astype('uint8')).filter(ImageFilter.MaxFilter(3))) > 127
+        k = k | (d & cand)
+    return k
 
 
 def main():
@@ -41,6 +51,9 @@ def main():
         # nettoie les points isolés, referme les trous
         m = Image.fromarray((k * 255).astype('uint8')).filter(ImageFilter.MinFilter(3)).filter(ImageFilter.MaxFilter(5)).filter(ImageFilter.MinFilter(3))
         k = np.asarray(m) > 127
+        # tout ce qui est sombre et pas du bois, au contact du vide, en fait partie
+        lum = a.sum(2) / 3
+        k = pousse(k, (lum < 95) & ((a[..., 0] - a[..., 1]) < 22))
         # le sol : sous le vide, ce qui n'est pas du bois (le bois est nettement plus rouge que vert)
         y0 = int(H * .80)
         r, g = a[..., 0], a[..., 1]
