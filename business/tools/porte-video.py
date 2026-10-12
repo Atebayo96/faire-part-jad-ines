@@ -114,10 +114,13 @@ def pousse(k, cand, n=8):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('theme'); p.add_argument('src'); p.add_argument('--debut', type=float, default=0.4)
+    p.add_argument('--vert', action='store_true', help='vidéo sur fond vert pur (image de fin imposée) : incrustation simple')
     o = p.parse_args()
     t = tempfile.mkdtemp()
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(o.debut), '-i', o.src, '-vf', f'scale={W}:-2,fps=24', f'{t}/%04d.png'], check=True)
     fs = sorted(glob.glob(f'{t}/*.png'))
+    if o.vert:
+        return fini(o, t, fs, vert)
     global REF
     z = np.asarray(Image.open(fs[-1]).convert('RGB')).astype(np.int16); h, w = z.shape[:2]
     c = z[int(h * .4):int(h * .6), int(w * .45):int(w * .55)].reshape(-1, 3)
@@ -157,6 +160,24 @@ def main():
         c = a.copy(); c[..., 1] = np.where(edge, np.minimum(c[..., 1], c[..., 0]), c[..., 1])
         out = np.concatenate([c, np.repeat(A[..., None], 3, 2)], 0).astype('uint8')
         Image.fromarray(out).save(f)
+    fini(o, t, fs, None)
+
+def vert(a):
+    """fond vert pur (« sur fond vert », 12 octobre 2026) : transparence douce d'après l'avance du vert sur le rouge et le
+    bleu, et le reflet vert retiré du bord du bois et du stuc"""
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    d = (g - np.maximum(r, b)).astype(np.float32)  # en flottants : (d - 30) * 255 dépassait les entiers 16 bits
+    A = np.clip(255 - (d - 30) * 255 / 50, 0, 255)
+    c = a.copy(); c[..., 1] = np.minimum(g, np.maximum(r, b) + 8)
+    return c, A
+
+
+def fini(o, t, fs, f):
+    if f:
+        for x in fs:
+            a = np.asarray(Image.open(x).convert('RGB')).astype(np.int16)
+            c, A = f(a)
+            Image.fromarray(np.concatenate([c, np.repeat(A[..., None], 3, 2)], 0).astype('uint8')).save(x)
     dst = os.path.join(B, 'landing', 'img', 'open', f'{o.theme}-porte.mp4')
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-framerate', '24', '-i', f'{t}/%04d.png', '-c:v', 'libx264', '-preset', 'slow',
                     '-crf', '24', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', dst], check=True)
@@ -166,6 +187,7 @@ def main():
     # la première image (portes fermées) sert d'affiche, sans attendre la vidéo
     Image.open(fs[0]).crop((0, 0, W, Image.open(fs[0]).size[1] // 2)).save(dst.replace('.mp4', '.webp'), quality=88)
     print(dst, os.path.getsize(dst) // 1024, 'Ko,', len(fs), 'images')
+
 
 
 if __name__ == '__main__':
