@@ -412,9 +412,16 @@
        de l'écran, il reste continu. On avance doucement (1 → 1,14) pendant que les battants s'ouvrent, puis on plonge dans
        l'embrasure (jusqu'à 4,2) : « comme si on rentre dans la porte et on arrive sur le haut du faire-part » */
     const zoom=p=>p<.62?1+.14*(1-Math.cos(Math.PI*p/.62))/2:1.14+3.06*Math.pow((p-.62)/.38,2.2);
-    const loop=()=>{ draw(); if(v.duration) D.style.transform=`scale(${zoom(Math.min(1,v.currentTime/v.duration)).toFixed(4)})`;
+    /* l'image de la vidéo n'est envoyée à la carte graphique que quand la vidéo en a une nouvelle (24 par seconde,
+       requestVideoFrameCallback) : la renvoyer à chaque image de l'écran (60 par seconde) faisait accrocher l'iPhone
+       (« pourquoi c'est saccadé »). Seul le zoom, presque gratuit, suit l'écran. */
+    let lastT=-1;
+    const frame=()=>{ draw(); if(!v.paused&&!v.ended) v.requestVideoFrameCallback(frame); };
+    const loop=()=>{
+      if(v.requestVideoFrameCallback){ if(lastT<0){ lastT=0; v.requestVideoFrameCallback(frame); } }
+      else if(v.currentTime!==lastT){ lastT=v.currentTime; draw(); }
+      if(v.duration) D.style.transform=`scale(${zoom(Math.min(1,v.currentTime/v.duration)).toFixed(4)})`;
       if(!v.paused&&!v.ended) requestAnimationFrame(loop); };
-    v.addEventListener('loadeddata',draw,{once:true});
     DV={v,D,loop,off:()=>{ D.classList.remove('vid','ready'); cv.remove(); DV=null; }};
   }
   const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], bgs=$('#bgs'), fxc=$('#fx'), chImg=$('#bgs .chs');
@@ -610,9 +617,8 @@
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
     if(DV){ const {v,D,loop}=DV, flash=$('#flash');
+      startFx();
       v.play().then(()=>{ loop(); D.style.setProperty('--vd',v.duration+'s');
-        setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); },200);
-        // le flash part un peu avant la fin, la porte s'efface sous son pic
         // la page se pose pendant qu'on traverse la porte (même geste que l'enveloppe, morph)
         setTimeout(()=>{ app.classList.add('morph'); setTimeout(()=>app.classList.remove('morph'),1800); },v.duration*600);
         // plus de flash (« retire l'illumination qui sert à rien ») : la porte, sortie de l'écran par le plongeon, s'efface
@@ -632,6 +638,10 @@
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
   // sans ouverture (option de la page unique) : la feuille est là tout de suite
   if(PG){ SceauCarte.fit(sc); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>SceauCarte.fit(sc)); addEventListener('resize',()=>SceauCarte.fit(sc)); }
+  // porte en vidéo : le faire-part est monté derrière la porte fermée dès le chargement, son apparition (le fond du thème,
+  // puis le papier) se joue cachée ; quand les battants s'entrouvrent, il est déjà entièrement posé (sinon on voyait un
+  // instant le fond du thème par l'entrebâillement, « un truc vert »)
+  if(DV){ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); layoutStrip(); }
   if(I.opening==='none'){ op.remove(); $('#flash').remove(); app.classList.add('opened'); opened=true; if(secs[0]) requestAnimationFrame(()=>secs[0].classList.add('on')); }
 
   /* ---------- particules ----------

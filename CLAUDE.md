@@ -167,6 +167,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     serrure a sauté ») : le noir n'est pris pour du vide qu'en haut de l'arc ou s'il est neutre, l'interstice des premières
     images est pris rangée par rangée puis lissé sur la hauteur, et toute avancée de moins de 71 px de haut est retirée.
     Si la vidéo ne peut pas être lue (ou sans WebGL), les battants en CSS reprennent.
+    **Le faire-part est monté derrière la porte fermée dès le chargement** (« pendant une mini-seconde il n'y a pas le
+    faire-part mais un truc vert ») : son apparition (le fond du thème, puis le papier) se jouait au toucher, et l'on voyait le
+    zellige par l'entrebâillement. L'affiche `-porte.webp` reste jusqu'à la première image jouée. **L'image de la vidéo
+    n'est envoyée à la carte graphique que quand la vidéo en a une nouvelle** (`requestVideoFrameCallback`, 24 par seconde) ;
+    la renvoyer à chaque image de l'écran (60 par seconde) faisait accrocher l'iPhone. Seul le zoom suit l'écran.
     **Fond vert imposé par l'image de fin** (« on peut pas demander direct à fal.ai de générer l'ouverture sur fond vert ? ») :
     la consigne seule ne suffit pas (Kling peignait une pièce olive ou brune, et le haut des battants, dans l'ombre, se
     découpait mal : « le bout de la porte est mal fait »). On passe par Kling 1.6 pro (0,475 $ les 5 s), qui accepte une
