@@ -166,6 +166,13 @@
 
   /* les prénoms tiennent sur une ligne : réduits pas à pas (jusqu'à 62 %) s'ils dépassent la largeur de la feuille ;
      sinon (prénoms très longs) ils passent à la ligne. À rappeler quand la police est chargée. */
+  // la partie peinte d'une illustration détourée, en fractions de l'image [x0, y0, x1, y1] (sa boîte a de grandes marges transparentes)
+  function opaq(im){ if(im._bb) return im._bb; if(!im.complete||!im.naturalWidth) return [0,0,1,1];
+    try{ const c=document.createElement('canvas'), w=c.width=80, h=c.height=Math.max(1,Math.round(80*im.naturalHeight/im.naturalWidth)), x=c.getContext('2d');
+      x.drawImage(im,0,0,w,h); const d=x.getImageData(0,0,w,h).data; let x0=w,y0=h,x1=-1,y1=-1;
+      for(let y=0;y<h;y++) for(let i=0;i<w;i++) if(d[(y*w+i)*4+3]>60){ if(i<x0)x0=i; if(i>x1)x1=i; if(y<y0)y0=y; if(y>y1)y1=y; }
+      im._bb=x1<0?[0,0,0,0]:[x0/w,y0/h,(x1+1)/w,(y1+1)/h]; }catch(e){ im._bb=[0,0,1,1]; }
+    return im._bb; }
   function fit(root){ (root||document).querySelectorAll('.ct-nm').forEach(nm=>{ nm.style.whiteSpace='nowrap'; nm.style.fontSize='';
     const P=nm.parentNode, cs=getComputedStyle(P), max=P.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)-8;
     let fs=parseFloat(getComputedStyle(nm).fontSize); const min=fs*.62; while(nm.scrollWidth>max&&fs>min){ fs-=1; nm.style.fontSize=fs+'px'; }
@@ -204,8 +211,20 @@
         let a=1; if(need(free)<=H) while(a<2.4){ el.style.setProperty('--air',(a+.1).toFixed(2)); if(need(free)>H){ el.style.setProperty('--air',a.toFixed(2)); break; } a+=.1; }
         return {k,a,ok:need(free)<=H+1}; };
       // d'abord la bande du bas libérée ; si le texte y touche une illustration ou doit rapetisser davantage, on la réserve
+      el.style.setProperty('--ptx','0px');
       const g=run(false), f=run(true), free=f.ok&&(f.k>g.k||(f.k===g.k&&f.a>=g.a)); if(!free) run(false);
-      const r=free?f:g;
+      let r=free?f:g;
+      /* en haut aussi, jamais de texte sur une illustration (12 octobre 2026 : le mot des familles passait sous le nœud du
+         laurier d'Old money, sur les lanternes et le bord de l'arc de Mille et une nuits, « ça déborde ») : on mesure la
+         partie peinte de chaque illustration du haut (pixels opaques, pas sa boîte) et, pour les arcs brisés, les deux coins
+         au-dessus de l'épaule de l'arc ; tant qu'une ligne y touche, le texte descend (--ptx) et la mise en page se refait */
+      const topArt=()=>{ const R=sh.getBoundingClientRect(), A=[...sh.querySelectorAll('.ct-deco img,.ct-pw img')].map(im=>{ const q=im.getBoundingClientRect(), b=opaq(im);
+          return {left:q.left+b[0]*q.width,right:q.left+b[2]*q.width,top:q.top+b[1]*q.height,bottom:q.top+b[3]*q.height}; }).filter(q=>q.right>q.left&&q.top<R.top+R.height/2);
+        if(/ct-s-(ogive|outrepasse)/.test(el.className)){ const P=el.querySelector('.ct-panel').getBoundingClientRect(), z=sh.offsetHeight?R.height/sh.offsetHeight:1, cs=getComputedStyle(sh);
+          const T=.24*(sh.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight))*z, y=P.top+T*15/26, w=P.width*.3;
+          A.push({left:P.left-99,right:P.left+w,top:P.top-99,bottom:y},{left:P.right-w,right:P.right+99,top:P.top-99,bottom:y}); }
+        return A; };
+      for(let px=0;px<96&&hits(topArt());){ px+=6; el.style.setProperty('--ptx',px+'px'); r=run(free); }
       // pour le configurateur : la feuille déborde encore (over) ou a dû être réduite nettement (tight)
       el.dataset.full=need(free)>H+1?'over':r.k<.8?'tight':'';
       // bande libérée : le texte reste posé tel qu'il a été mesuré (recentré, il redescendait sur l'illustration du bas)

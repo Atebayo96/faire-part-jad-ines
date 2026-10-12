@@ -13,7 +13,7 @@
  ],
  "date": "2027-07-10T15:00",
  "opening": "env",
- "reply": true,
+ "reply": false,
  "palette": "#c9a35a",
  "intro": {
   "eyebrow": "Bismillah"
@@ -36,12 +36,7 @@
  ],
  "rsvp": {
   "deadline": "2027-05-15",
-  "title": "Serez-vous des nôtres ?",
-  "menu": [
-   "Poisson",
-   "Viande",
-   "Végétarien"
-  ]
+  "whatsapp": "06 12 34 56 78"
  },
  "paper": "coton",
  "parents": {

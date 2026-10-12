@@ -800,6 +800,20 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `page-nour-ilyes` (Mille et une nuits), `page-leila-mehdi` (Andalou). Le configurateur s'ouvre sur la **Page unique**
     quand l'adresse ne dit pas de formule ; les boutons « Créer » de l'accueil et des modèles mènent à `/creer/?plan=page`.
     Pas de photos de personnes ni de scènes peintes sur l'accueil tant que l'offre est la feuille.
+    **Le choix reste ouvert** (« si je clique, ça me fait direct page unique, pas le choix ») : chaque carte de /modeles/ a
+    deux boutons, Carte 29 € et Page unique 59 € ; l'étape 1 du configurateur commence par « Votre faire-part » (`#cPlan1` :
+    Carte, Page unique, Faire-part animé dès 99 €), la formule reste réglable au récapitulatif. Chaque exemple dit ce qu'il
+    montre, prix des options compris (« page unique avec l'ouverture animée (+ 10 €) et le bouton « Répondre » (+ 20 €) ») :
+    l'utilisateur ne comprenait pas pourquoi une page unique avait un bouton Répondre. Victoire & Charles et Nour & Ilyes
+    sont sans bouton Répondre (réponse par numéro), Emma & Louis et Leïla & Mehdi avec.
+    **Les styles de la vitrine ne touchent jamais la feuille** : `.hero h1` et `.hero p` s'appliquaient aux prénoms et aux
+    textes de la feuille posée dans le téléphone de l'accueil (prénoms géants, texte sur les illustrations) ; ils sont
+    limités à `.hero-copy`. Toute règle de la vitrine sur une balise nue (`h1`, `p`) doit viser son bloc, pas la section.
+    **En haut aussi, jamais de texte sur une illustration** (« Mille et une nuits pas ouf, ça déborde ; Old money aussi » :
+    le mot des familles passait sous le nœud du laurier, sur les lanternes et le bord de l'arc brisé). `fit()` (carte.js)
+    mesure la partie peinte des illustrations du haut (pixels opaques, `opaq()`, pas leur boîte) et, pour les arcs brisés
+    (Mille et une nuits, Andalou), les deux coins au-dessus de l'épaule de l'arc ; tant qu'une ligne y touche, le texte
+    descend (`--ptx`, ajouté à tous les `padding-top` de la feuille) et la mise en page se refait.
 
 ## Méthode
 

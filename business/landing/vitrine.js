@@ -199,10 +199,11 @@
   const lazy=(el,fn)=>{ if(!('IntersectionObserver' in window)) return fn(); const io=new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)){ io.disconnect(); fn(); } },{rootMargin:'300px'}); io.observe(el); };
   { const g=document.getElementById('feuilles');
     if(g) FLS.forEach(d=>{ const t=THEMES[d.theme], inv=d.fiche, c=document.createElement('div'); c.className='fl-card';
-      const opts=[inv.opening!=='none'?'ouverture animée':'',inv.reply?'bouton Répondre':''].filter(Boolean).join(', ');
+      // ce que montre l'exemple, avec le prix des options (« pourquoi y'a le bouton Répondre ? ») : la page unique, et ses deux options
+      const opts=[inv.opening!=='none'?'l’ouverture animée (+ 10 €)':'',inv.reply?'le bouton « Répondre » et le tableau de bord (+ 20 €)':''].filter(Boolean);
       c.innerHTML=`<a class="fl-ph" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener" aria-label="Voir en ligne le faire-part ${esc(t.name)} de ${esc(d.couple)}"></a>
-        <div class="fl-meta"><h3>${esc(t.name)}</h3><p>${esc(FL_TX[d.theme]||t.short)}</p><p class="fl-ex">Exemple : ${esc(d.couple)}${opts?' · '+esc(opts):''}</p>
-        <div class="fl-acts">${t.compose?`<a class="btn solid" href="/creer/?plan=page&amp;theme=${esc(d.theme)}">Créer le mien</a>`:''}<a class="fl-demo" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener">Voir en ligne →</a></div></div>`;
+        <div class="fl-meta"><h3>${esc(t.name)}</h3><p>${esc(FL_TX[d.theme]||t.short)}</p><p class="fl-ex">Exemple : ${esc(d.couple)}, page unique${opts.length?' avec '+esc(opts.join(' et ')):''}.</p>
+        <div class="fl-acts">${t.compose?`<div class="fl-two"><a class="btn" href="/creer/?plan=carte&amp;theme=${esc(d.theme)}">Carte<small>29 €</small></a><a class="btn solid" href="/creer/?plan=page&amp;theme=${esc(d.theme)}">Page unique<small>59 €</small></a></div>`:''}<a class="fl-demo" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener">Voir en ligne →</a></div></div>`;
       g.appendChild(c); const ph=c.querySelector('.fl-ph'); lazy(ph,()=>sheet(ph,inv)); }); }
   // l'accueil : un téléphone qui passe d'une feuille à l'autre, en fondu
   { const ph=document.getElementById('flHero'), lb=document.getElementById('flHeroLb');
@@ -372,6 +373,10 @@
   const PLANSUB={carte:'L’image et le PDF, à envoyer et à imprimer',page:'Un lien, tout sur une page',essentiel:'2 événements, lieux de notre bibliothèque',signature:'+ votre lieu peint d’après photo, un lien par famille',couture:'tout sur mesure, on vous écrit'};
   opt($('cPlan'),Object.keys(PLANS),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLANS[id].name} · ${PLANS[id].price}</b><small>${PLANSUB[id]}</small>`; });
   $('cPlan').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true);
+  // le format se choisit dès l'étape 1 (12 octobre 2026 : « si je clique, ça me fait direct page unique, pas le choix ») ; la formule reste réglable au récapitulatif
+  const PLAN1={carte:['Carte · 29 €','L’image et le PDF, une seule feuille'],page:['Page unique · dès 59 €','La même feuille, en lien'],essentiel:['Faire-part animé · dès 99 €','Un moment par écran, vos lieux peints']};
+  opt($('cPlan1'),Object.keys(PLAN1),'plan','',(b,id)=>{ b.className='op-card'; b.innerHTML=`<b>${PLAN1[id][0]}</b><small>${PLAN1[id][1]}</small>`; });
+  $('cPlan1').addEventListener('click',e=>{ if(e.target.closest('button')) C.planPicked=true; },true);
   // le papier de la carte et de la page unique : trois vrais papiers en relief (carte.css), une vignette de chacun
   [['coton','Coton','Épais, fait main'],['aquarelle','Aquarelle','Un grain profond'],['velin','Vélin','Lisse et satiné']].forEach(([id,n,sub])=>{ const b=document.createElement('button'); b.type='button'; b.className='op-card'; b.dataset.id=id;
     b.innerHTML=`<span class="pp ct ct-p-${id}" style="--paper:${(window.SceauCarte?SceauCarte.PAPERS[id].c:'#f8f2e7')}" aria-hidden="true"></span><b>${n}</b><small>${sub}</small>`; b.onclick=()=>{ C.paper=id; paint(); }; $('cPaper').appendChild(b); });
@@ -641,6 +646,7 @@
     $('cPalName').textContent=p.name;
     const needs=sigNeeds(); if(needs.length&&C.plan==='essentiel'&&!C.planPicked) C.plan='signature';
     $('cPlan').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan));
+    $('cPlan1').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===C.plan||(b.dataset.id==='essentiel'&&!ONE(C.plan))));
     { const b=$('cPlan').querySelector('[data-id="page"] b'); if(b) b.textContent=`Page unique · ${PLANS.page.price}`; }
     // carte et page unique : pas de révélation, de compte à rebours ni d'options du scène par scène ; l'ouverture est une option de la page
     $('fldAddons').hidden=C.plan!=='page'; $('cAddons').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id==='op'?C.op!=='none':C.reply));
@@ -953,7 +959,7 @@
         ambG=''; palK=''; resetEv(); paint();
         const bar=document.createElement('p'); bar.className='edit-bar'; bar.innerHTML=`Vous modifiez votre faire-part en ligne. Le lien de vos invités reste le même : <a href="/d/${esc(slug)}/" target="_blank" rel="noopener">voir le faire-part</a>.`;
         $('composer').prepend(bar);
-        $('cPlan').closest('.fld').hidden=true; document.querySelectorAll('.next').forEach(x=>x.closest('.fld').hidden=true);
+        $('cPlan').closest('.fld').hidden=true; $('cPlan1').closest('.fld').hidden=true; document.querySelectorAll('.next').forEach(x=>x.closest('.fld').hidden=true);
         const save=async ev=>{ ev.preventDefault(); ev.stopPropagation(); const a=ev.currentTarget; if(a.dataset.busy) return; a.dataset.busy=1; a.textContent='Enregistrement…';
           let msg='Enregistré. Vos invités voient déjà la nouvelle version.';
           try{ const r=await fetch('/api/fiche',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify({s:slug,fiche:realInvite(),config:snapshot()})});

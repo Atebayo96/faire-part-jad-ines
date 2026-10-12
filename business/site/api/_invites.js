@@ -992,11 +992,7 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
-  "rsvpMenu": [
-   "Poisson",
-   "Viande",
-   "Végétarien"
-  ],
+  "rsvpMenu": [],
   "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}
@@ -1021,11 +1017,7 @@ export default {
   ],
   "families": {},
   "familyLabels": {},
-  "rsvpMenu": [
-   "Poisson",
-   "Viande",
-   "Végétarien"
-  ],
+  "rsvpMenu": [],
   "rsvpQuestion": "",
   "gifts": [],
   "giftLabels": {}

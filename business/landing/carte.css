@@ -27,7 +27,7 @@
 /* le cadre (fond peint autour de la feuille) ne rétrécit pas avec le texte : une feuille pleine reste une feuille posée sur son fond */
 .ct{--m:12px;--pt:40px;--pb:34px;--pbx:0px}
 .ct-sheet{position:relative;height:100%;min-height:100%;display:flex;flex-direction:column;align-items:center;container-type:inline-size;
-  padding:calc(var(--pt) + 44px*var(--k)) calc(var(--m) + 26px*var(--k)) calc(var(--pb) + 22px*var(--k) + var(--pbx));overflow:hidden}
+  padding:calc(var(--pt) + var(--ptx,0px) + 44px*var(--k)) calc(var(--m) + 26px*var(--k)) calc(var(--pb) + 22px*var(--k) + var(--pbx));overflow:hidden}
 .ct-sheet>*{position:relative;z-index:2}
 .ct-fit{display:flex;flex-direction:column;flex:1 0 auto}
 /* en ligne et dans l'aperçu : la feuille a la hauteur exacte de l'écran, le contenu y est centré (et agrandi s'il reste de
@@ -181,7 +181,7 @@
 .ct-s-ogive .ct-sh,.ct-s-outrepasse .ct-sh{
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 26' preserveAspectRatio='none'%3E%3Cpath d='M0 26V20C14 15 34 11 50 0C66 11 86 15 100 20V26Z'/%3E%3C/svg%3E") top/100% 24cqw no-repeat,linear-gradient(#000 0 0) bottom/100% calc(100% - 24cqw + 1px) no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 26' preserveAspectRatio='none'%3E%3Cpath d='M0 26V20C14 15 34 11 50 0C66 11 86 15 100 20V26Z'/%3E%3C/svg%3E") top/100% 24cqw no-repeat,linear-gradient(#000 0 0) bottom/100% calc(100% - 24cqw + 1px) no-repeat}
-.ct-s-ogive .ct-sheet,.ct-s-outrepasse .ct-sheet{padding-top:calc(var(--pt) + 40px*var(--k))}
+.ct-s-ogive .ct-sheet,.ct-s-outrepasse .ct-sheet{padding-top:calc(var(--pt) + var(--ptx,0px) + 40px*var(--k))}
 .ct-s-ogive .ct-d{filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
 .ct-s-ogive .ct-d-lt{width:calc(22cqw*var(--k)*var(--dz,1));left:1cqw;top:0}
 .ct-s-ogive .ct-d-mo{width:calc(28cqw*var(--k)*var(--dz,1));right:4cqw;top:3cqw}
@@ -256,10 +256,10 @@
 .ct-sc-bl{left:calc(16px*var(--k));bottom:calc(16px*var(--k));transform:scaleY(-1)}
 .ct-sc-br{right:calc(16px*var(--k));bottom:calc(16px*var(--k));transform:scale(-1,-1)}
 .ct-s-bandeau .ct-sc-tl,.ct-s-bandeau .ct-sc-tr{top:calc(24px*var(--k))}
-.ct-s-medaillon .ct-sheet,.ct-s-bandeau .ct-sheet{padding-top:calc(var(--pt) + 64px*var(--k))}
+.ct-s-medaillon .ct-sheet,.ct-s-bandeau .ct-sheet{padding-top:calc(var(--pt) + var(--ptx,0px) + 64px*var(--k))}
 .ct-s-medaillon .ct-sc-tl,.ct-s-medaillon .ct-sc-tr,.ct-s-bandeau .ct-sc-tl,.ct-s-bandeau .ct-sc-tr{width:19cqw}
 .ct-s-medaillon .ct-top{letter-spacing:.16em}
-.ct-s-arche .ct-sheet{padding-top:calc(var(--pt) + 66px*var(--k))}
+.ct-s-arche .ct-sheet{padding-top:calc(var(--pt) + var(--ptx,0px) + 66px*var(--k))}
 /* l'icône du moment, pressée dans le papier (« qu'on ait l'impression qu'elles ont été pressées dans le papier ») : le creux
    est d'une teinte plus sombre que la feuille ; la lumière vient d'en haut à gauche, donc le bord haut-gauche du creux est
    dans l'ombre (<i>, visible là où la face <b> décalée ne le couvre pas) et le bord bas-droit du papier autour accroche la
