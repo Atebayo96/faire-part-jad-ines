@@ -150,9 +150,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     on voit directement la page. Les lignes ci-dessous sur la lumière des portes sont remplacées.
     **Portes en vidéo** (12 octobre 2026 : « les portes s'ouvrent machinalement, c'est pas logique » ; « la vidéo est super
     bien faite ») : une vraie ouverture générée par fal.ai (Kling 2.1, image-to-video depuis `img/open/<thème>-portes.webp`,
-    consigne : caméra fixe, battants qui s'ouvrent vers l'intérieur avec leur poids, fond uni derrière). `tools/porte-video.py`
+    consigne : caméra fixe, battants qui s'ouvrent vers l'intérieur avec leur poids et **en entier, jusqu'aux murs, en 3 secondes**, fond uni derrière ; la première vidéo s'arrêtait à mi-course). `tools/porte-video.py`
     la prépare : couleur en haut, masque en bas (`img/open/<thème>-porte.mp4` et `.webm`, ~400 Ko ; le vide derrière les
-    battants, sol compris, est reconnu à sa couleur, le masque ne fait que grandir, bord adouci d'un pixel, liseré vert
+    battants, sol compris, est reconnu à la couleur du mur lue au centre de la dernière image (elle change d'une vidéo à
+    l'autre), on ne garde que la zone d'un seul tenant au milieu de l'embrasure (l'ombre des colonnes de stuc faisait des
+    traits), tout ce qui est sous le mur du fond est du sol, le masque ne fait que grandir, bord adouci d'un pixel, liseré vert
     retiré), plus l'affiche `-porte.webp`. invite.js (`T.doorVid`, aujourd'hui l'Andalou) recompose chaque image dans un
     canvas : on voit le faire-part par l'entrebâillement, avec une démarcation nette (l'ombre presque noire de la pièce le long
     de l'arc fait partie du vide : « les petits trucs noirs qui sont restés », `pousse()`) ; **on entre dans la porte** (« comme

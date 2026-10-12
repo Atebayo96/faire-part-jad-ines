@@ -21,11 +21,34 @@ B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = 540
 
 
+REF = None  # couleur du mur du fond, lue au centre de la dernière image (portes ouvertes)
+
+
 def vide(a):
+    """le mur du fond (sa teinte varie d'une vidéo à l'autre : vert olive, brun olive) et son ombre presque noire le long
+    de l'arc (« les petits trucs noirs qui sont restés ») ; le bois des battants est bien plus rouge, le stuc bien plus clair"""
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
     lum = (r + g + b) / 3
-    # la pièce (vert olive) et son ombre presque noire le long de l'arc (« les petits trucs noirs qui sont restés »)
-    return (g >= r - 6) & (((g > b + 8) & (lum < 150)) | (lum < 70))
+    rg, gb, L = REF
+    teinte = (np.abs((r - g) - rg) < 12) & (np.abs((g - b) - gb) < 16) & (lum < L * 1.35)
+    return teinte | ((lum < 60) & ((r - g) < rg + 12))
+
+
+def garde_centre(k):
+    from PIL import ImageDraw
+    h, w = k.shape
+    im = Image.fromarray((k * 255).astype('uint8')).copy()  # sans copie, floodfill n'écrit pas dans l'image
+    for fy in (.3, .45, .6, .75):
+        y = int(h * fy)
+        for dx in range(0, int(w * .12)):
+            for x in (w // 2 - dx, w // 2 + dx):
+                if im.getpixel((x, y)) == 255:
+                    ImageDraw.floodfill(im, (x, y), 128)
+                    break
+            else:
+                continue
+            break
+    return np.asarray(im) == 128
 
 
 def pousse(k, cand, n=8):
@@ -43,6 +66,11 @@ def main():
     t = tempfile.mkdtemp()
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(o.debut), '-i', o.src, '-vf', f'scale={W}:-2,fps=24', f'{t}/%04d.png'], check=True)
     fs = sorted(glob.glob(f'{t}/*.png'))
+    global REF
+    z = np.asarray(Image.open(fs[-1]).convert('RGB')).astype(np.int16); h, w = z.shape[:2]
+    c = z[int(h * .4):int(h * .6), int(w * .45):int(w * .55)].reshape(-1, 3)
+    m = np.median(c, 0); REF = (m[0] - m[1], m[1] - m[2], m.mean())
+    print('mur du fond', m.astype(int))
     acc = None
     for f in fs:
         a = np.asarray(Image.open(f).convert('RGB')).astype(np.int16)
@@ -53,13 +81,16 @@ def main():
         k = np.asarray(m) > 127
         # tout ce qui est sombre et pas du bois, au contact du vide, en fait partie
         lum = a.sum(2) / 3
-        k = pousse(k, (lum < 95) & ((a[..., 0] - a[..., 1]) < 22))
+        k = pousse(k, (lum < 95) & ((a[..., 0] - a[..., 1]) < REF[0] + 10))
         # le sol : sous le vide, ce qui n'est pas du bois (le bois est nettement plus rouge que vert)
+        # seulement la zone d'un seul tenant au milieu de l'embrasure : l'ombre au bord des colonnes de stuc, sombre elle
+        # aussi, faisait des traits verticaux en dehors de l'arc
+        k = garde_centre(k)
+        # le mur du fond à 80 % de la hauteur : tout ce qui est dessous, dans la même colonne, est la plinthe ou le sol
+        # (le parquet est aussi rouge que le bois des battants : on ne peut pas le reconnaître à sa couleur)
         y0 = int(H * .80)
-        r, g = a[..., 0], a[..., 1]
-        for x in np.where(k[y0])[0]:
-            col = (r[y0:, x] - g[y0:, x]) < 34
-            k[y0:, x] |= col
+        cols = np.where(k[y0])[0]
+        k[y0:, cols] = True
         acc = k if acc is None else (acc | k)
         al = Image.fromarray(((~acc) * 255).astype('uint8')).filter(ImageFilter.GaussianBlur(.8))
         A = np.asarray(al).astype(np.int16)
