@@ -31,7 +31,11 @@ def vide(a):
     lum = (r + g + b) / 3
     rg, gb, L = REF
     teinte = (np.abs((r - g) - rg) < 12) & (np.abs((g - b) - gb) < 16) & (lum < L * 1.35)
-    return teinte | ((lum < 60) & ((r - g) < rg + 12))
+    # l'ombre presque noire : seulement le long de l'arc, en haut (plus bas, c'est le métal des poignées : « la serrure a sauté »)
+    haut = np.zeros_like(lum, bool); haut[:int(a.shape[0] * .32)] = True
+    # l'interstice des premières images est presque noir et neutre ; le métal des poignées est plus clair et doré
+    noir = (lum < 45) & (np.abs(r - g) < 10)
+    return teinte | ((lum < 60) & ((r - g) < rg + 12) & haut) | noir
 
 
 def garde_centre(k):
@@ -49,6 +53,54 @@ def garde_centre(k):
                 continue
             break
     return np.asarray(im) == 128
+
+
+def ouvre_vertical(k, y0, n):
+    """érosion puis dilatation verticales (fenêtre n) sous la rangée y0"""
+    b = k[y0:].astype(np.int32)
+    def win(m, full):
+        c = np.vstack([np.zeros((1, m.shape[1]), np.int32), np.cumsum(m, 0)])
+        h = m.shape[0]; r = n // 2
+        lo = np.clip(np.arange(h) - r, 0, h); hi = np.clip(np.arange(h) + r + 1, 0, h)
+        s = c[hi] - c[lo]
+        return (s == (hi - lo)[:, None]) if full else (s > 0)
+    e = win(b, True).astype(np.int32)
+    d = win(e, False)
+    k = k.copy(); k[y0:] = d
+    return k
+
+
+def interstice(k, a):
+    h, w = k.shape
+    lum = a.sum(2) / 3
+    sombre = k | ((lum < 75) & ((a[..., 0] - a[..., 1]) < 38))
+    ys = slice(int(h * .3), int(h * .8))
+    xs = np.where(k[ys])[1]
+    xc = int(np.median(xs)) if len(xs) > 50 else w // 2
+    k = k.copy()
+    X0 = np.full(h, np.nan); X1 = np.full(h, np.nan)
+    for y in range(int(h * .08), h):
+        row = sombre[y]
+        x = next((x for d in range(0, int(w * .06)) for x in (xc - d, xc + d) if row[x]), None)
+        if x is None:
+            continue
+        x0 = x
+        while x0 > 0 and row[x0 - 1]: x0 -= 1
+        x1 = x
+        while x1 < w - 1 and row[x1 + 1]: x1 += 1
+        if x1 - x0 < w * .9:
+            X0[y], X1[y] = x0, x1
+    # bords lissés sur la hauteur (médiane sur 61 rangées) : le métal sombre d'une poignée élargissait l'interstice sur
+    # quelques rangées et laissait une encoche (« la serrure a sauté »)
+    r = 30
+    for y in range(h):
+        if np.isnan(X0[y]):
+            continue
+        a0 = X0[max(0, y - r):y + r + 1]; a1 = X1[max(0, y - r):y + r + 1]
+        x0 = int(np.nanmedian(a0)); x1 = int(np.nanmedian(a1))
+        if x1 > x0:
+            k[y, x0:x1 + 1] = True
+    return k
 
 
 def pousse(k, cand, n=8):
@@ -81,11 +133,17 @@ def main():
         k = np.asarray(m) > 127
         # tout ce qui est sombre et pas du bois, au contact du vide, en fait partie
         lum = a.sum(2) / 3
-        k = pousse(k, (lum < 95) & ((a[..., 0] - a[..., 1]) < REF[0] + 10))
+        haut = np.zeros_like(k); haut[:int(H * .32)] = True
+        k = pousse(k, (lum < 95) & ((a[..., 0] - a[..., 1]) < REF[0] + 10) & haut)
         # le sol : sous le vide, ce qui n'est pas du bois (le bois est nettement plus rouge que vert)
+        # l'interstice des premières images : une ombre brune très sombre entre les deux battants. Rangée par rangée, depuis
+        # le milieu de l'interstice, on prend tout ce qui est sombre et d'un seul tenant (sinon il était découpé par morceaux)
+        k = interstice(k, a)
         # seulement la zone d'un seul tenant au milieu de l'embrasure : l'ombre au bord des colonnes de stuc, sombre elle
         # aussi, faisait des traits verticaux en dehors de l'arc
         k = garde_centre(k)
+        # sous l'arc, toute avancée de moins de 71 px de haut est retirée (ouverture verticale) : c'est une poignée (environ 50 px)
+        k = ouvre_vertical(k, int(H * .35), 71)
         # le mur du fond à 80 % de la hauteur : tout ce qui est dessous, dans la même colonne, est la plinthe ou le sol
         # (le parquet est aussi rouge que le bois des battants : on ne peut pas le reconnaître à sa couleur)
         y0 = int(H * .80)

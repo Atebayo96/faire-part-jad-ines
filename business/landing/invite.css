@@ -499,7 +499,8 @@ a{color:inherit}
 .op-vid{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:cover;display:block}
 /* on entre dans la porte (« comme si on rentre dans la porte et on arrive sur le haut du faire-part ») : la caméra avance
    doucement pendant que les battants s'ouvrent, puis plonge dans l'embrasure, qui grandit jusqu'à sortir de l'écran */
-.op.opening .op-doors.vid{transform-origin:50% 54%;animation:opVidZoom var(--vd,4.6s) linear both}
+.op-doors.vid{transform-origin:50% 54%}
+.op.opening .op-doors.vid{animation:none}
 @keyframes opVidZoom{
   0%{transform:scale(1);animation-timing-function:cubic-bezier(.4,0,.6,1)}
   62%{transform:scale(1.14);animation-timing-function:cubic-bezier(.55,0,.85,.35)}

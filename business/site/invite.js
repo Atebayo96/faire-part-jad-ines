@@ -384,20 +384,36 @@
   /* portes en vidéo (12 octobre 2026 : « les portes s'ouvrent machinalement » ; T.doorVid dans themes.js) : une vraie ouverture
      filmée (fal.ai, Kling), préparée par tools/porte-video.py dans img/open/<thème>-porte.mp4 : la couleur en haut, le masque
      en bas. Chaque image est recomposée dans un canvas, le vide derrière les battants devient transparent : on voit le
-     faire-part à travers, avec un bord net. Léger zoom pendant l'ouverture, puis un flash court et doux pour passer à la page.
+     faire-part à travers, avec un bord net. On entre dans la porte, puis elle s'efface (le flash a été retiré).
      Sans vidéo lisible (lecture refusée, mouvement réduit), les battants en CSS reprennent la main. */
   let DV=null;
-  if((I.opening||'env')==='door'&&T.doorVid&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  if((I.opening||'env')==='door'&&T.doorVid&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&document.createElement('canvas').getContext('webgl')){
     const D=$('#op .op-doors'); D.classList.add('vid'); D.style.setProperty('--doorv',`url('/img/open/${I.theme}-porte.webp?v=${IMGV}')`); D.insertAdjacentHTML('beforeend','<canvas class="op-vid" aria-hidden="true"></canvas>');
-    const cv=D.querySelector('.op-vid'), ctx=cv.getContext('2d'), off=document.createElement('canvas'), oc=off.getContext('2d',{willReadFrequently:true});
+    const cv=D.querySelector('.op-vid');
     const v=document.createElement('video'); v.muted=true; v.playsInline=true; v.setAttribute('playsinline',''); v.setAttribute('muted',''); v.preload='auto'; v.src=`/img/open/${I.theme}-porte.${v.canPlayType('video/mp4; codecs="avc1.42E01E"')?'mp4':'webm'}?v=${IMGV}`;
-    let out=null;
-    const draw=()=>{ const w=v.videoWidth, h=v.videoHeight>>1; if(!w) return;
-      if(cv.width!==w){ cv.width=off.width=w; cv.height=h; off.height=h*2; out=ctx.createImageData(w,h); }
-      oc.drawImage(v,0,0); const d=oc.getImageData(0,0,w,h*2).data, o=out.data, n=w*h*4;
-      for(let i=0;i<n;i+=4){ o[i]=d[i]; o[i+1]=d[i+1]; o[i+2]=d[i+2]; o[i+3]=d[n+i]; }
-      ctx.putImageData(out,0,0); D.classList.add('ready'); };
-    const loop=()=>{ draw(); if(!v.paused&&!v.ended) (v.requestVideoFrameCallback?v.requestVideoFrameCallback(loop):requestAnimationFrame(loop)); };
+    /* la recomposition se fait sur la carte graphique (WebGL) : la couleur en haut de la vidéo, la transparence en bas.
+       En JavaScript, pixel par pixel, elle saccadait sur téléphone (« pourquoi c'est saccadé, faut que ce soit continu ») */
+    const gl=cv.getContext('webgl',{alpha:true,premultipliedAlpha:true,antialias:false});
+    let draw=()=>{};
+    if(gl){ const sh=(t,src)=>{ const o=gl.createShader(t); gl.shaderSource(o,src); gl.compileShader(o); return o; }, pr=gl.createProgram();
+      gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 p;varying vec2 u;void main(){u=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}'));
+      gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,'precision mediump float;uniform sampler2D t;varying vec2 u;void main(){vec3 c=texture2D(t,vec2(u.x,u.y*.5)).rgb;float a=texture2D(t,vec2(u.x,.5+u.y*.5)).r;gl_FragColor=vec4(c*a,a);}'));
+      gl.linkProgram(pr); gl.useProgram(pr);
+      gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+      const loc=gl.getAttribLocation(pr,'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+      gl.bindTexture(gl.TEXTURE_2D,gl.createTexture());
+      [gl.TEXTURE_WRAP_S,gl.TEXTURE_WRAP_T].forEach(k=>gl.texParameteri(gl.TEXTURE_2D,k,gl.CLAMP_TO_EDGE));
+      [gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER].forEach(k=>gl.texParameteri(gl.TEXTURE_2D,k,gl.LINEAR));
+      draw=()=>{ const w=v.videoWidth, h=v.videoHeight>>1; if(!w) return;
+        if(cv.width!==w){ cv.width=w; cv.height=h; gl.viewport(0,0,w,h); }
+        gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,v); gl.drawArrays(gl.TRIANGLE_STRIP,0,4); D.classList.add('ready'); };
+    }
+    /* le zoom suit la vidéo (pas l'horloge) : si la vidéo prend du retard, la caméra l'attend ; recalculé à chaque image
+       de l'écran, il reste continu. On avance doucement (1 → 1,14) pendant que les battants s'ouvrent, puis on plonge dans
+       l'embrasure (jusqu'à 4,2) : « comme si on rentre dans la porte et on arrive sur le haut du faire-part » */
+    const zoom=p=>p<.62?1+.14*(1-Math.cos(Math.PI*p/.62))/2:1.14+3.06*Math.pow((p-.62)/.38,2.2);
+    const loop=()=>{ draw(); if(v.duration) D.style.transform=`scale(${zoom(Math.min(1,v.currentTime/v.duration)).toFixed(4)})`;
+      if(!v.paused&&!v.ended) requestAnimationFrame(loop); };
     v.addEventListener('loadeddata',draw,{once:true});
     DV={v,D,loop,off:()=>{ D.classList.remove('vid','ready'); cv.remove(); DV=null; }};
   }
@@ -597,10 +613,12 @@
       v.play().then(()=>{ loop(); D.style.setProperty('--vd',v.duration+'s');
         setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); },200);
         // le flash part un peu avant la fin, la porte s'efface sous son pic
-        const end=Math.max(1200,(v.duration-.45)*1000);
         // la page se pose pendant qu'on traverse la porte (même geste que l'enveloppe, morph)
-        setTimeout(()=>{ app.classList.add('morph'); setTimeout(()=>app.classList.remove('morph'),1800); },v.duration*620);
-        setTimeout(()=>{ flash.classList.add('vid','bloom'); setTimeout(()=>op.classList.add('gone'),260); setTimeout(()=>{ op.remove(); flash.remove(); },1200); },end);
+        setTimeout(()=>{ app.classList.add('morph'); setTimeout(()=>app.classList.remove('morph'),1800); },v.duration*600);
+        // plus de flash (« retire l'illumination qui sert à rien ») : la porte, sortie de l'écran par le plongeon, s'efface
+        // à la fin de la vidéo (pas à heure fixe : elle peut prendre du retard)
+        let fin=false; const bye=()=>{ if(fin) return; fin=true; op.classList.add('gone'); setTimeout(()=>{ op.remove(); flash.remove(); },700); };
+        v.addEventListener('timeupdate',()=>{ if(v.duration&&v.currentTime>v.duration-.35) bye(); }); v.addEventListener('ended',bye);
       }).catch(()=>{ DV.off(); op.classList.remove('opening'); open(); });
       return; }
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
