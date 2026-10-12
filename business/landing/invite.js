@@ -381,6 +381,26 @@
   const bd=document.createElement('div'); bd.className='bd'; bd.style.backgroundImage=`url('${LG?LG.base+'/'+LG.hero.src:img(1)}')`;
   document.body.append(bd,app);
   { const D=$('#op .op-doors'); if(D&&window.sceauDoorFit) sceauDoorFit(D,T.door,D.querySelector('.op-wall'),D.querySelector('.op-leaf.l'),D.querySelector('.op-leaf.r')); }
+  /* portes en vidéo (12 octobre 2026 : « les portes s'ouvrent machinalement » ; T.doorVid dans themes.js) : une vraie ouverture
+     filmée (fal.ai, Kling), préparée par tools/porte-video.py dans img/open/<thème>-porte.mp4 : la couleur en haut, le masque
+     en bas. Chaque image est recomposée dans un canvas, le vide derrière les battants devient transparent : on voit le
+     faire-part à travers, avec un bord net. Léger zoom pendant l'ouverture, puis un flash court et doux pour passer à la page.
+     Sans vidéo lisible (lecture refusée, mouvement réduit), les battants en CSS reprennent la main. */
+  let DV=null;
+  if((I.opening||'env')==='door'&&T.doorVid&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const D=$('#op .op-doors'); D.classList.add('vid'); D.style.setProperty('--doorv',`url('/img/open/${I.theme}-porte.webp?v=${IMGV}')`); D.insertAdjacentHTML('beforeend','<canvas class="op-vid" aria-hidden="true"></canvas>');
+    const cv=D.querySelector('.op-vid'), ctx=cv.getContext('2d'), off=document.createElement('canvas'), oc=off.getContext('2d',{willReadFrequently:true});
+    const v=document.createElement('video'); v.muted=true; v.playsInline=true; v.setAttribute('playsinline',''); v.setAttribute('muted',''); v.preload='auto'; v.src=`/img/open/${I.theme}-porte.${v.canPlayType('video/mp4; codecs="avc1.42E01E"')?'mp4':'webm'}?v=${IMGV}`;
+    let out=null;
+    const draw=()=>{ const w=v.videoWidth, h=v.videoHeight>>1; if(!w) return;
+      if(cv.width!==w){ cv.width=off.width=w; cv.height=h; off.height=h*2; out=ctx.createImageData(w,h); }
+      oc.drawImage(v,0,0); const d=oc.getImageData(0,0,w,h*2).data, o=out.data, n=w*h*4;
+      for(let i=0;i<n;i+=4){ o[i]=d[i]; o[i+1]=d[i+1]; o[i+2]=d[i+2]; o[i+3]=d[n+i]; }
+      ctx.putImageData(out,0,0); D.classList.add('ready'); };
+    const loop=()=>{ draw(); if(!v.paused&&!v.ended) (v.requestVideoFrameCallback?v.requestVideoFrameCallback(loop):requestAnimationFrame(loop)); };
+    v.addEventListener('loadeddata',draw,{once:true});
+    DV={v,D,loop,off:()=>{ D.classList.remove('vid','ready'); cv.remove(); DV=null; }};
+  }
   const sc=$('#sc'), secs=[...sc.querySelectorAll('.pg')], layers=[...$('#bgs').querySelectorAll('.bgl')], bgs=$('#bgs'), fxc=$('#fx'), chImg=$('#bgs .chs');
   if(CH){ let tk=false; sc.addEventListener('scroll',()=>{ if(!tk){ tk=true; requestAnimationFrame(()=>{ tk=false; chScroll(); }); } },{passive:true}); chImg.addEventListener('load',layoutStrip); }
 
@@ -573,6 +593,14 @@
   function open(){
     if(op.classList.contains('opening')) return;
     op.classList.add('opening'); playMusic();
+    if(DV){ const {v,D,loop}=DV, flash=$('#flash');
+      v.play().then(()=>{ loop(); D.style.setProperty('--vd',v.duration+'s');
+        setTimeout(()=>{ app.classList.add('opened'); opened=true; sc.scrollTop=0; if(secs[0]) secs[0].classList.add('on'); if(layers[0]) layers[0].classList.add('on'); startFx(); layoutStrip(); },200);
+        // le flash part un peu avant la fin, la porte s'efface sous son pic
+        const end=Math.max(1200,(v.duration-.45)*1000);
+        setTimeout(()=>{ flash.classList.add('vid','bloom'); setTimeout(()=>op.classList.add('gone'),260); setTimeout(()=>{ op.remove(); flash.remove(); },1200); },end);
+      }).catch(()=>{ DV.off(); op.classList.remove('opening'); open(); });
+      return; }
     const q=SEQ[op.dataset.type]||SEQ.env, flash=$('#flash');
     if(q.cls) flash.classList.add(q.cls);
     if(q.flash) setTimeout(()=>flash.classList.add('bloom'),q.flash); else if(q.flash===0) flash.classList.add('bloom');

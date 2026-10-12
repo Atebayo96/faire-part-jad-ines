@@ -148,6 +148,16 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **Plus aucune lumière aux portes** (« le flash sert à rien ») : ni flash (`flash: null`), ni salle éclairée
     (`.op-room` masquée), ni lueur (`opGlow` coupée), ni éclat dans les cartes (`.ov-door .fl`). Par l'entrebâillement,
     on voit directement la page. Les lignes ci-dessous sur la lumière des portes sont remplacées.
+    **Portes en vidéo** (12 octobre 2026 : « les portes s'ouvrent machinalement, c'est pas logique » ; « la vidéo est super
+    bien faite ») : une vraie ouverture générée par fal.ai (Kling 2.1, image-to-video depuis `img/open/<thème>-portes.webp`,
+    consigne : caméra fixe, battants qui s'ouvrent vers l'intérieur avec leur poids, fond uni derrière). `tools/porte-video.py`
+    la prépare : couleur en haut, masque en bas (`img/open/<thème>-porte.mp4` et `.webm`, ~400 Ko ; le vide derrière les
+    battants, sol compris, est reconnu à sa couleur, le masque ne fait que grandir, bord adouci d'un pixel, liseré vert
+    retiré), plus l'affiche `-porte.webp`. invite.js (`T.doorVid`, aujourd'hui l'Andalou) recompose chaque image dans un
+    canvas : on voit le faire-part par l'entrebâillement, avec une démarcation nette ; léger zoom (1 → 1,12 sur la durée de la
+    vidéo), puis **un flash court et doux** pour passer à la page (`flashVid`, 0,9 s, demandé par l'utilisateur : il remplace,
+    pour les portes en vidéo, le « plus de flash » ci-dessous). Si la vidéo ne peut pas être lue, les battants en CSS reprennent.
+    Clé fal.ai : jamais dans le dépôt (variable `FAL_KEY` de l'environnement). Démo : `page-leila-mehdi` (ouverture Portes).
     **Pas d'animation du sceau** (6 octobre 2026) : un essai où le sceau de l'enveloppe glissait jusqu'à l'accueil a été
     refusé (« c'est pas ouf, on le redécouvre après, ça me va ») : le sceau de l'accueil apparaît avec le texte.
     Toute nouvelle ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à

@@ -208,3 +208,6 @@ window.SCEAU_MUSIC={
   raga:{name:"Rāga Bilāval",by:"Traditionnel"},
   funiculi:{name:"Funiculì, Funiculà",by:"Luigi Denza"}
 };
+
+// ouverture « Portes » en vidéo (img/open/<thème>-porte.mp4, tools/porte-video.py) : seulement les thèmes qui l'ont
+window.SCEAU_THEMES.alhambra.doorVid=true;
