@@ -1130,3 +1130,45 @@
 .one-note.full{background:#fff4e0;border:1px solid #f0d3a0}
 .story li[hidden]{display:none!important}
 .story>li.more.add .chip.sig i{border-left:0;padding-left:0;margin-left:auto}
+
+/* la Carte et la Page unique en avant (12 octobre 2026) : la vraie feuille (carte.js), dessinée à 360 × 740 puis réduite
+   à la largeur de sa case (fl-in, transform posé par vitrine.js). Accueil : un téléphone qui passe d'une feuille à l'autre ;
+   /modeles/ et l'accueil : une carte par thème, avec « Créer le mien » et la démo en ligne. */
+.fl-ph,.fl-hero{position:relative;overflow:hidden;aspect-ratio:360/740;background:#e9e4da}
+.fl-in{position:absolute;left:0;top:0;width:360px;height:740px;transform-origin:0 0;display:flex;flex-direction:column;pointer-events:none}
+.fl-in .ct{min-height:100%}
+.feuilles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+@media (max-width:1100px){ .feuilles{grid-template-columns:repeat(3,minmax(0,1fr))} }
+@media (max-width:760px){ .feuilles{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px} }
+.fl-card{min-width:0;display:flex;flex-direction:column;background:var(--bg-2)}
+.fl-ph{display:block;border-radius:0}
+.fl-meta{padding:16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.fl-meta h3{margin:0;font-size:22px}
+.fl-meta p{margin:0;font-size:14px;line-height:1.45;color:var(--muted)}
+.fl-meta .fl-ex{font-size:13px}
+.fl-acts{margin-top:auto;padding-top:12px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.fl-acts .btn{height:44px;padding:0 14px;font-size:15px}
+.fl-demo{font-size:14px;text-align:center;text-decoration:none;font-weight:500}
+.fl-demo:hover{text-decoration:underline}
+@media (max-width:560px){ .fl-meta{padding:12px} .fl-meta h3{font-size:18px} .fl-acts .btn{font-size:14px} }
+/* accueil : le téléphone */
+.fl-phone{justify-self:center;width:min(280px,70vw);text-align:center}
+.fl-hero{border-radius:34px;border:8px solid #111;background:#111;box-shadow:0 30px 50px -30px rgba(0,0,0,.5)}
+.fl-it{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;pointer-events:none}
+.fl-it.on{opacity:1;pointer-events:auto}
+.fl-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.fl-nav p{margin:0;font-size:14px;color:var(--muted)}
+.fl-nav p b{color:var(--ink);font-weight:600}
+.fl-nav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:16px;cursor:pointer;color:var(--ink)}
+/* deux formules mises en avant, puis la ligne vers les faire-part animés */
+.offers.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:820px){ .offers.two{grid-template-columns:1fr} }
+.offer ul{margin:4px 0 6px;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.offer li{padding-left:22px;position:relative}
+.offer li::before{content:"✓";position:absolute;left:0;font-weight:600}
+.offer .plus{color:var(--muted);font-size:14px}
+.more-anim{margin-top:22px;padding:20px 22px;border:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between}
+.more-anim p{margin:0;max-width:44em;font-size:15px;line-height:1.5}
+.flow.three{grid-template-columns:repeat(3,1fr)}
+@media (max-width:820px){ .flow.three{grid-template-columns:1fr} .flow.three .n::after{display:none} }
+.flow.three>div:last-child .n::after{display:none}

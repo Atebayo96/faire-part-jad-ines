@@ -1,0 +1,53 @@
+{
+ "demo": true,
+ "kind": "page",
+ "format": "page",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "page-nour-ilyes",
+ "theme": "nuits",
+ "couple": [
+  "Nour",
+  "Ilyes"
+ ],
+ "date": "2027-07-10T15:00",
+ "opening": "env",
+ "reply": true,
+ "palette": "#c9a35a",
+ "intro": {
+  "eyebrow": "Bismillah"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "La cérémonie",
+   "title": "Hôtel de ville",
+   "start": "2027-07-10T15:00",
+   "address": "Montreuil"
+  },
+  {
+   "id": "e1",
+   "eyebrow": "La réception",
+   "title": "Salle Le Palacio",
+   "start": "2027-07-10T19:30",
+   "address": "Saint-Ouen"
+  }
+ ],
+ "rsvp": {
+  "deadline": "2027-05-15",
+  "title": "Serez-vous des nôtres ?",
+  "menu": [
+   "Poisson",
+   "Viande",
+   "Végétarien"
+  ]
+ },
+ "paper": "coton",
+ "parents": {
+  "names": [
+   "Famille Benali",
+   "Famille Haddad"
+  ]
+ }
+}

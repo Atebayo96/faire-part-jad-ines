@@ -1,0 +1,57 @@
+{
+ "demo": true,
+ "kind": "page",
+ "format": "page",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "page-victoire-charles",
+ "theme": "oldmoney",
+ "couple": [
+  "Victoire",
+  "Charles"
+ ],
+ "date": "2027-06-19T15:30",
+ "opening": "env",
+ "reply": true,
+ "palette": "#1f2b44",
+ "intro": {
+  "eyebrow": "Nous vous invitons"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "La cérémonie",
+   "title": "Chapelle Saint-Hubert",
+   "start": "2027-06-19T15:30",
+   "address": "Honfleur, Normandie"
+  },
+  {
+   "id": "e1",
+   "eyebrow": "Le dîner",
+   "title": "Manoir de la Prée",
+   "start": "2027-06-19T19:30",
+   "address": "Honfleur, Normandie"
+  }
+ ],
+ "rsvp": {
+  "deadline": "2027-05-15",
+  "title": "Serez-vous des nôtres ?",
+  "menu": [
+   "Poisson",
+   "Viande",
+   "Végétarien"
+  ]
+ },
+ "paper": "velin",
+ "parents": {
+  "names": [
+   "Famille de Villiers",
+   "Famille Aubrac"
+  ]
+ },
+ "dress": {
+  "title": "Black tie",
+  "text": "Robe longue, smoking"
+ }
+}

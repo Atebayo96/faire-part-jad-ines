@@ -363,6 +363,9 @@ def main():
             demos.append({'slug': inv['slug'], 'theme': inv['theme'], 'couple': ' & '.join(inv['couple']), 'opening': inv.get('opening', 'env'), 'layout': inv.get('layout', 'pages'), 'reveal': inv.get('reveal'), 'kind': inv.get('kind'),
                           'events': len(inv['events']), 'families': bool(inv.get('families')), 'lang': inv.get('lang', 'fr'),
                           'music': inv.get('music') or T[inv['theme']].get('music'), 'thumb': f"/img/themes/{inv['theme']}-2.webp"})
+            # carte et page unique : la vitrine dessine la feuille en direct (carte.js), elle a besoin de la fiche entière
+            if inv.get('format') == 'page':
+                demos[-1]['fiche'] = inv
     # modèles dont la peinture en chaîne existe (img/chaine/<thème>/meta.json, tools/chaine.py)
     chains = sorted(d for d in os.listdir(os.path.join(SITE, 'img', 'chaine')) if os.path.exists(os.path.join(SITE, 'img', 'chaine', d, 'meta.json')))
     for u in PAGES:

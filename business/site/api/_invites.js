@@ -943,6 +943,93 @@ export default {
   "gifts": [],
   "giftLabels": {}
  },
+ "page-leila-mehdi": {
+  "demo": true,
+  "couple": "Leïla & Mehdi",
+  "date": "2027-05-22T12:30:00+00:00",
+  "events": [
+   "e0",
+   "e1"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "e1",
+    "label": "La réception"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [
+   "Poisson",
+   "Viande",
+   "Végétarien"
+  ],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "page-nour-ilyes": {
+  "demo": true,
+  "couple": "Nour & Ilyes",
+  "date": "2027-07-10T13:00:00+00:00",
+  "events": [
+   "e0",
+   "e1"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "e1",
+    "label": "La réception"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [
+   "Poisson",
+   "Viande",
+   "Végétarien"
+  ],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "page-victoire-charles": {
+  "demo": true,
+  "couple": "Victoire & Charles",
+  "date": "2027-06-19T13:30:00+00:00",
+  "events": [
+   "e0",
+   "e1"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "La cérémonie"
+   },
+   {
+    "id": "e1",
+    "label": "Le dîner"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [
+   "Poisson",
+   "Viande",
+   "Végétarien"
+  ],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
  "priya-arjun": {
   "demo": true,
   "couple": "Priya & Arjun",

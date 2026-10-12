@@ -182,6 +182,39 @@
   });
   if('IntersectionObserver' in window&&document.getElementById('car')) new IntersectionObserver(es=>{ es.forEach(en=>{ inView=en.isIntersecting; }); },{threshold:.2}).observe(document.getElementById('car'));
 
+  /* la Carte et la Page unique en avant (12 octobre 2026 : « on va restructurer notre offre au début sur carte et page
+     unique, c'est un truc prêt à sortir ») : l'accueil et /modeles/ montrent la vraie feuille (carte.js), dessinée en direct
+     d'après les fiches de démo (format page), à la taille d'un téléphone (360 × 740) puis réduite à la largeur de sa case. */
+  const FL_ORD=['dolcevita','doucefrance','oldmoney','nuits','alhambra'];
+  const FL_TX={dolcevita:'Maïolique aux citrons, feuille en arche, bouquet de bougainvillier.',doucefrance:'Indienne lavande, feuille festonnée, brins d’olivier.',
+    oldmoney:'Damas vert bouteille, couronne de laurier, roses anglaises.',nuits:'Nuit étoilée, arc brisé, lanternes et croissant.',alhambra:'Zellige sur terre cuite, rosace et jasmin.'};
+  const FLS=(window.SCEAU_DEMOS||[]).filter(d=>d.fiche&&FL_ORD.includes(d.theme)).sort((a,b)=>FL_ORD.indexOf(a.theme)-FL_ORD.indexOf(b.theme));
+  const FW=360;
+  function sheet(box,inv){ if(!window.SceauCarte) return;
+    box.insertAdjacentHTML('beforeend',`<div class="fl-in" aria-hidden="true">${SceauCarte.html(inv,{fit:true,live:inv.opening!=='none'||!!inv.reply})}</div>`);
+    const inn=box.lastElementChild, sz=()=>{ inn.style.transform=`scale(${box.clientWidth/FW})`; };
+    sz(); if('ResizeObserver' in window) new ResizeObserver(sz).observe(box);
+    SceauCarte.fit(inn); if(document.fonts) document.fonts.ready.then(()=>SceauCarte.fit(inn)); return inn; }
+  // dessinée quand elle approche de l'écran : dix feuilles d'un coup ralentissaient l'arrivée sur la page
+  const lazy=(el,fn)=>{ if(!('IntersectionObserver' in window)) return fn(); const io=new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)){ io.disconnect(); fn(); } },{rootMargin:'300px'}); io.observe(el); };
+  { const g=document.getElementById('feuilles');
+    if(g) FLS.forEach(d=>{ const t=THEMES[d.theme], inv=d.fiche, c=document.createElement('div'); c.className='fl-card';
+      const opts=[inv.opening!=='none'?'ouverture animée':'',inv.reply?'bouton Répondre':''].filter(Boolean).join(', ');
+      c.innerHTML=`<a class="fl-ph" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener" aria-label="Voir en ligne le faire-part ${esc(t.name)} de ${esc(d.couple)}"></a>
+        <div class="fl-meta"><h3>${esc(t.name)}</h3><p>${esc(FL_TX[d.theme]||t.short)}</p><p class="fl-ex">Exemple : ${esc(d.couple)}${opts?' · '+esc(opts):''}</p>
+        <div class="fl-acts">${t.compose?`<a class="btn solid" href="/creer/?plan=page&amp;theme=${esc(d.theme)}">Créer le mien</a>`:''}<a class="fl-demo" href="/d/${esc(d.slug)}/" target="_blank" rel="noopener">Voir en ligne →</a></div></div>`;
+      g.appendChild(c); const ph=c.querySelector('.fl-ph'); lazy(ph,()=>sheet(ph,inv)); }); }
+  // l'accueil : un téléphone qui passe d'une feuille à l'autre, en fondu
+  { const ph=document.getElementById('flHero'), lb=document.getElementById('flHeroLb');
+    if(ph&&FLS.length){ const its=FLS.map(d=>{ const a=document.createElement('a'); a.className='fl-it'; a.href=`/d/${d.slug}/`; a.target='_blank'; a.rel='noopener';
+        a.setAttribute('aria-label',`Voir en ligne le faire-part ${THEMES[d.theme].name} de ${d.couple}`); ph.appendChild(a); return a; });
+      let cur=-1; const show=i=>{ i=(i+its.length)%its.length; if(its[cur]) its[cur].classList.remove('on'); cur=i; const a=its[i];
+        if(!a.firstChild) sheet(a,FLS[i].fiche); a.classList.add('on'); if(lb) lb.innerHTML=`<b>${esc(THEMES[FLS[i].theme].name)}</b> · ${esc(FLS[i].couple)}`;
+        const n=its[(i+1)%its.length]; if(!n.firstChild) setTimeout(()=>{ if(!n.firstChild) sheet(n,FLS[(i+1)%its.length].fiche); },600); };
+      show(0);
+      if(!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(()=>{ if(!document.hidden) show(cur+1); },4500);
+      ph.parentNode.querySelectorAll('[data-fd]').forEach(b=>b.onclick=()=>show(cur+ +b.dataset.fd)); } }
+
   if(document.getElementById('models')){
   /* catalogue avec filtre par style */
   const models=document.getElementById('models'), filters=document.getElementById('filters');
@@ -244,7 +277,7 @@
   // le configurateur ne propose que les thèmes compose:true (themes.js)
   const CK=Object.keys(THEMES).filter(k=>THEMES[k].compose&&!THEMES[k].pending);
   const K0=CK.includes(urlTheme)?urlTheme:CK.includes('dolcevita')?'dolcevita':CK[0];
-  const C={occ:OCCS.some(o=>o.id===urlOcc&&occOk(o,K0))?urlOcc:'mariage',sexe:'fille',k:K0,fmt:'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'essentiel',
+  const C={occ:OCCS.some(o=>o.id===urlOcc&&occOk(o,K0))?urlOcc:'mariage',sexe:'fille',k:K0,fmt:'scenes',pal:'t0',font:'theme',op:'env',cd:'fin',rvl:'non',x:new Set(),plan:PLANS[urlPlan]?urlPlan:'page',
     reply:false,paper:'coton',icons:'presse',ev:null}; C.ev=OCC[C.occ].ev();
   // carte et page unique : ce qui tient sur la feuille (le mot des familles, le programme, le dress code), 2 moments
   const ONE_X=['parents','program','dress'], one=()=>ONE(C.plan);

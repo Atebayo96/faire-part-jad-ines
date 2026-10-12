@@ -787,6 +787,20 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     feuille » pour la carte et la page unique), et chaque choix est une ligne pleine largeur : un « + » rond, le nom en gras et
     ce qu'il apporte en une phrase (`XD`, `addRow()` dans vitrine.js). Il disparaît quand il ne reste rien à ajouter.
 
+51. **L'offre commence par la Carte et la Page unique** (12 octobre 2026 : « on va restructurer notre offre au début sur carte
+    et page unique, là on a fait le tour, je valide, c'est un truc prêt à sortir, mets-le en avant ; la page modèles est pas
+    ouf »). La feuille (règle 47) est validée telle quelle. **Accueil** : « Tout votre faire-part sur une seule feuille », un
+    téléphone qui passe d'une feuille à l'autre en fondu (`#flHero`), « Cinq modèles, cinq papiers habillés » (`#feuilles`),
+    comment ça marche en 3 temps, puis deux formules seulement (Carte 29 €, Page unique dès 59 €) et une ligne « Envie de
+    plus ? » vers le faire-part animé (dès 99 €, `/formules/`). **/modeles/** : les feuilles d'abord, la galerie des scènes
+    ensuite (« Le faire-part animé, un moment par écran »). Les feuilles sont **la vraie feuille dessinée en direct**
+    (`sheet()` dans vitrine.js : `SceauCarte.html` à 360 × 740, réduite à la largeur de la case, dessinée quand elle approche
+    de l'écran), d'après les fiches de démo au format page (`build-site.py` ajoute `fiche` aux démos `format: page`). Une démo
+    par thème : `page-emma-louis` (Dolce Vita), `carte-camille-antoine` (Douce France), `page-victoire-charles` (Old money),
+    `page-nour-ilyes` (Mille et une nuits), `page-leila-mehdi` (Andalou). Le configurateur s'ouvre sur la **Page unique**
+    quand l'adresse ne dit pas de formule ; les boutons « Créer » de l'accueil et des modèles mènent à `/creer/?plan=page`.
+    Pas de photos de personnes ni de scènes peintes sur l'accueil tant que l'offre est la feuille.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

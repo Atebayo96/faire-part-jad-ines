@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Modèles — Save The Oui</title>
-<meta name="description" content="Nos faire-part à ouvrir : un style pour chaque mariage et chaque culture, et douze thèmes prêts à composer avec vos prénoms.">
+<meta name="description" content="Nos faire-part de mariage sur une seule feuille, comme en papier : cinq thèmes, en image et PDF dès 29 €, en lien dès 59 €. Et le faire-part animé, un moment par écran, dès 99 €.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Modèles — Save The Oui">
-<meta property="og:description" content="Nos faire-part à ouvrir : un style pour chaque mariage et chaque culture, et douze thèmes prêts à composer avec vos prénoms.">
+<meta property="og:description" content="Nos faire-part de mariage sur une seule feuille, comme en papier : cinq thèmes, en image et PDF dès 29 €, en lien dès 59 €. Et le faire-part animé, un moment par écran, dès 99 €.">
 <meta property="og:image" content="https://savetheoui.fr/og-sceau.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -16,6 +16,7 @@
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="/polices/polices.css">
 <link rel="stylesheet" href="/vitrine.css">
+<link rel="stylesheet" href="/carte.css">
 </head>
 <body data-page="modeles">
 
@@ -24,16 +25,26 @@
     <a class="logo" href="/"><span>Save the</span><b>Oui</b></a>
     <div class="links">
       <a href="/">Accueil</a><a href="/modeles/" aria-current="page">Modèles</a><a href="/formules/">Formules</a><a href="/questions/">Questions</a>
-      <a class="btn solid" href="/creer/"><span>Créer votre faire-part</span><em>Créer</em></a>
+      <a class="btn solid" href="/creer/?plan=page"><span>Créer votre faire-part</span><em>Créer</em></a>
     </div>
   </div>
 </nav>
 
+<section id="feuilles-sec">
+  <div class="wrap">
+    <div class="head">
+      <h1 class="h2">Nos modèles, sur une seule feuille.</h1>
+      <p>Tout votre faire-part sur une page, comme en papier : chaque thème habille sa feuille, vos textes sont imprimés dans le papier. En image et en PDF dès 29 €, en lien dès 59 €. Ouvrez les exemples sur votre téléphone.</p>
+    </div>
+    <div class="feuilles" id="feuilles"></div>
+  </div>
+</section>
+
 <section id="modeles">
   <div class="wrap">
     <div class="head">
-      <h1 class="h2">Nos modèles, peints pour vous.</h1>
-      <p>Chaque faire-part est une seule peinture qu\'on descend, du jour à la nuit, un moment par écran. Ouvrez les exemples sur votre téléphone : le vôtre sera peint d\'après vos lieux et vos photos.</p>
+      <h2>Le faire-part animé, un moment par écran.</h2>
+      <p>Pour aller plus loin, dès 99 € : l'enveloppe s'ouvre au sceau de vos initiales, et chaque moment a son écran, son lieu peint en grand.</p>
     </div>
     <div class="filters" id="filters" role="group" aria-label="Filtrer par style"></div>
     <div class="models" id="models"></div>
@@ -47,6 +58,7 @@
 <script src="/paiement.js"></script>
 <script src="/themes.js"></script>
 <script>window.SCEAU_DEMOS=[]/*DEMOS*/;window.SCEAU_CALQUES={}/*CALQUES*/;</script>
+<script src="/carte.js"></script>
 <script src="/vitrine.js"></script>
 </body>
 </html>

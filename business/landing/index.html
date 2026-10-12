@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Save The Oui — Le faire-part de mariage qui s'ouvre</title>
-<meta name="description" content="Un faire-part de mariage en un lien : l'enveloppe s'ouvre au sceau de vos initiales, vos lieux dessinés défilent, les réponses arrivent chez vous. Dès 99 €, en ligne dès le paiement.">
+<title>Save The Oui — Le faire-part de mariage sur une seule feuille</title>
+<meta name="description" content="Votre faire-part de mariage sur une seule feuille, comme en papier : papier gaufré, sceau de cire, prénoms en dorure. En image et PDF dès 29 €, en lien dès 59 €, prêt dès le paiement.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Save The Oui — Le faire-part de mariage qui s'ouvre">
-<meta property="og:description" content="Un faire-part de mariage en un lien : l'enveloppe s'ouvre au sceau de vos initiales, vos lieux dessinés défilent, les réponses arrivent chez vous. Dès 99 €, en ligne dès le paiement.">
+<meta property="og:title" content="Save The Oui — Le faire-part de mariage sur une seule feuille">
+<meta property="og:description" content="Votre faire-part de mariage sur une seule feuille, comme en papier : papier gaufré, sceau de cire, prénoms en dorure. En image et PDF dès 29 €, en lien dès 59 €, prêt dès le paiement.">
 <meta property="og:image" content="https://savetheoui.fr/og-sceau.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -16,6 +16,7 @@
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="/polices/polices.css">
 <link rel="stylesheet" href="/vitrine.css">
+<link rel="stylesheet" href="/carte.css">
 </head>
 <body data-page="accueil">
 
@@ -24,7 +25,7 @@
     <a class="logo" href="/"><span>Save the</span><b>Oui</b></a>
     <div class="links">
       <a href="/" aria-current="page">Accueil</a><a href="/modeles/">Modèles</a><a href="/formules/">Formules</a><a href="/questions/">Questions</a>
-      <a class="btn solid" href="/creer/"><span>Créer votre faire-part</span><em>Créer</em></a>
+      <a class="btn solid" href="/creer/?plan=page"><span>Créer votre faire-part</span><em>Créer</em></a>
     </div>
   </div>
 </nav>
@@ -32,67 +33,48 @@
 <header class="hero">
   <div class="wrap grid">
     <div class="hero-copy">
-      <p class="label">Faire-part de mariage animés</p>
-      <h1 style="margin-top:18px">Votre mariage, peint et animé.</h1>
-      <p>Un faire-part de mariage en un lien : l'enveloppe s'ouvre au sceau de vos initiales, votre musique démarre, et vos lieux dessinés défilent, <b>un moment par écran</b>. Les réponses de vos invités arrivent chez vous. Dès 99 €, en ligne dès le paiement.</p>
+      <p class="label">Faire-part de mariage</p>
+      <h1 style="margin-top:18px">Tout votre faire-part sur une seule feuille.</h1>
+      <p>Comme un faire-part papier, avec notre touche : le papier gaufré, le sceau de cire à vos initiales, vos prénoms en dorure. <b>En image et en PDF dès 29 €</b>, ou <b>en lien dès 59 €</b>, avec l'itinéraire et les réponses de vos invités. Prêt dès le paiement.</p>
     </div>
-    <div class="car duo" id="car" aria-label="Nos faire-part">
-      <div class="duo-col" data-kind="all">
-        <p class="duo-k">Huit thèmes, deux formats</p>
-        <p class="duo-s">Un moment par écran, vos lieux en grand. Ouvrez les exemples sur votre téléphone.</p>
-        <div class="duo-ph"></div>
-        <div class="duo-nav"><button type="button" class="car-arrow" data-d="-1" aria-label="Exemple précédent">←</button><div class="car-label" aria-live="polite"><b></b><span></span><a class="car-open" target="_blank" rel="noopener">Ouvrir la démo →</a></div><button type="button" class="car-arrow" data-d="1" aria-label="Exemple suivant">→</button></div>
-      </div>
+    <div class="car fl-phone">
+      <div class="fl-hero" id="flHero" aria-label="Nos faire-part sur une seule feuille"></div>
+      <div class="fl-nav"><button type="button" data-fd="-1" aria-label="Modèle précédent">←</button><p id="flHeroLb" aria-live="polite"></p><button type="button" data-fd="1" aria-label="Modèle suivant">→</button></div>
     </div>
     <div class="hero-more">
       <div class="ctas">
-        <a class="btn solid" href="/creer/">Créer votre faire-part</a>
+        <a class="btn solid" href="/creer/?plan=page">Créer votre faire-part</a>
         <a class="btn" href="/modeles/">Voir les modèles</a>
       </div>
       <div class="facts">
-        <div><b>Vos lieux</b><span>peints d'après photo : deux couples n'ont jamais le même</span></div>
-        <div><b>Tout de suite</b><span>en ligne dès le paiement, dès 99 €, invités illimités</span></div>
-        <div><b>1 lien</b><span>WhatsApp, réponses, calendrier, FR · EN</span></div>
+        <div><b>29 €</b><span>la carte : l'image pour WhatsApp et le PDF à imprimer</span></div>
+        <div><b>59 €</b><span>la page unique : un lien, l'itinéraire et l'agenda</span></div>
+        <div><b>Tout de suite</b><span>aperçu en direct, prêt dès le paiement</span></div>
       </div>
     </div>
   </div>
 </header>
 
+<section id="nos-modeles">
+  <div class="wrap">
+    <div class="head">
+      <h2>Cinq modèles, cinq papiers habillés.</h2>
+      <p>Chaque thème habille sa feuille : son fond peint, sa découpe, ses illustrations. Vos textes sont imprimés dans le papier, les prénoms et les heures en dorure.</p>
+    </div>
+    <div class="feuilles" id="feuilles"></div>
+  </div>
+</section>
+
 <section id="recevez">
   <div class="wrap">
     <div class="head">
-      <h2>Ce que vous recevez.</h2>
-      <p>Pas un fichier à transférer : un faire-part vivant, et tout ce qui va autour jusqu'au jour J.</p>
+      <h2>Comment ça marche</h2>
+      <p>Dix minutes, et votre faire-part est prêt à partir.</p>
     </div>
-    <div class="flow">
-      <div><div class="n"><b>01</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10 6h4"/><path d="m9.5 13 2 2 3.5-4"/></svg><h3>Un lien</h3><p>À votre nom, à envoyer sur WhatsApp. Un lien par famille si vous le souhaitez.</p></div>
-      <div><div class="n"><b>02</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="1.5"/><path d="m3.5 7 8.5 6.5L20.5 7"/><circle cx="12" cy="13.5" r="2.2"/></svg><h3>L'enveloppe s'ouvre</h3><p>Au sceau de vos initiales, d'un toucher. Votre musique démarre.</p></div>
-      <div><div class="n"><b>03</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18M5 20V10l7-5 7 5v10"/><path d="M10 20v-5h4v5"/></svg><h3>Vos lieux défilent</h3><p>Vos lieux dessinés, vos horaires, l'itinéraire et le calendrier en un toucher.</p></div>
-      <div><div class="n"><b>04</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="m9 10.5 2 2 4-4"/></svg><h3>Les réponses arrivent</h3><p>Qui vient, combien, les allergies et les petits mots : dans votre tableau de bord, par événement. <a href="/tableau/?demo=emma-louis" target="_blank" rel="noopener">Voir un exemple →</a></p></div>
-    </div>
-  </div>
-</section>
-
-<section id="formats">
-  <div class="wrap">
-    <div class="head">
-      <h2>Nos modèles, peints pour vous.</h2>
-      <p>Votre faire-part se descend comme un tableau, du jour à la nuit : la cérémonie au soleil, le dîner au crépuscule. Le vôtre est peint d'après vos lieux.</p>
-    </div>
-    <div class="fmt2">
-      <a href="/d/giulia-hugo/" target="_blank" rel="noopener"><img src="/img/themes/dolcevita-2.webp?v=12" alt="" loading="lazy"><div><b>Dolce Vita</b><p>La côte amalfitaine : citronniers, chapelle blanche et dîner face à la mer.</p><em>Ouvrir l'exemple →</em></div></a>
-      <a href="/d/constance-henri/" target="_blank" rel="noopener"><img src="/img/themes/oldmoney-2.webp?v=12" alt="" loading="lazy"><div><b>Old money</b><p>Un manoir anglais, une chapelle dans le parc et un dîner sous la tente.</p><em>Ouvrir l'exemple →</em></div></a>
-    </div>
-  </div>
-</section>
-
-<section id="comment">
-  <div class="wrap">
-    <div class="head"><h2>Comment ça marche</h2><p>Trois étapes, et votre faire-part est prêt à partir.</p></div>
-    <div class="steps">
-      <div><img src="/img/people/choisir-photo.webp" alt="Un couple d'une trentaine d'années, assis en tailleur, compare les thèmes de faire-part sur un ordinateur portable" loading="lazy" width="720" height="900"><b>01</b><h3>Choisissez votre modèle</h3><p>Dolce Vita ou Old money. Essayez-le avec vos prénoms, en direct, et parlez-nous de vos lieux.</p></div>
-      <div><img src="/img/people/parametrer-photo.webp" alt="À une table de café, une jeune femme fait défiler sur son téléphone les scènes de lieux de son faire-part" loading="lazy" width="720" height="900"><b>02</b><h3>Composez vos écrans</h3><p>Vos prénoms, la date, et pour chaque événement : un écran simple, ou une scène de votre lieu (mairie, église, salle, jardin, plage).</p></div>
-      <div><img src="/img/people/mamie-photo.webp" alt="Une grand-mère d'aujourd'hui, lunettes rondes et carré blanc, lit le faire-part à la terrasse d'un café" loading="lazy" width="720" height="900"><b>03</b><h3>Recevez votre lien</h3><p>Un lien prêt à envoyer sur WhatsApp, un par famille si vous voulez. Les réponses de vos invités arrivent dans votre tableau de bord.</p></div>
+    <div class="flow three">
+      <div><div class="n"><b>01</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><h3>Choisissez votre modèle</h3><p>Le thème, le papier (coton, aquarelle ou vélin), votre couleur.</p></div>
+      <div><div class="n"><b>02</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg><h3>Écrivez vos textes</h3><p>Vos prénoms, la date, vos deux moments. Le programme, le dress code et le mot des familles si vous voulez. Tout s'affiche en direct.</p></div>
+      <div><div class="n"><b>03</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="m9 10.5 2 2 4-4"/></svg><h3>Envoyez-le</h3><p>La carte se télécharge en image et en PDF ; la page unique a son lien, à envoyer sur WhatsApp. Les réponses arrivent dans votre tableau de bord (+ 20 €).</p></div>
     </div>
   </div>
 </section>
@@ -100,17 +82,14 @@
 <section id="offres">
   <div class="wrap">
     <div class="head">
-      <h2>Du papier au faire-part animé. Un prix fixe, invités illimités.</h2>
+      <h2>Un prix fixe, invités illimités.</h2>
       <p>300 invités en papier coûtent 500 à 900 € avec l'envoi. Ici, le prix ne dépend pas du nombre d'invités.</p>
     </div>
-    <div class="offers">
-      <div class="offer"><h3>Carte <small>29 €</small></h3><p>Tout votre faire-part sur une seule feuille, comme en papier : <b>l'image pour WhatsApp et le PDF à imprimer</b>, à télécharger dès le paiement.</p><a class="btn" href="/creer/?plan=carte" data-plan="carte">Choisir</a></div>
-      <div class="offer"><h3>Page unique <small>dès 59 €</small></h3><p>La même feuille en lien, avec l'itinéraire et le calendrier. En option : l'ouverture animée (+ 10 €), le bouton « Répondre » et le tableau de bord (+ 20 €).</p><a class="btn" href="/creer/?plan=page" data-plan="page">Choisir</a></div>
-      <div class="offer"><h3>Essentiel <small>99 €</small></h3><p>Un de nos thèmes, deux événements, vos lieux parmi ceux déjà peints (mairie, église, salle, jardin, plage). En ligne dès le paiement.</p><a class="btn" href="/creer/?plan=essentiel" data-plan="essentiel">Choisir</a></div>
-      <div class="offer"><h3>Signature <small>229 €</small></h3><p>Tout Essentiel, plus <b>votre vrai lieu peint d'après photo</b>, jusqu'à 6 événements, un lien personnel par famille, français et anglais, save-the-date et vidéo.</p><a class="btn solid" href="/creer/?plan=signature" data-plan="signature">Choisir</a></div>
-      <div class="offer"><h3>Couture <small>dès 590 €</small></h3><p>Un univers créé pour vous : tous vos lieux peints, direction artistique dédiée, événements et langues illimités.</p><a class="btn" href="/contact/?plan=couture" data-plan="couture">Nous écrire</a></div>
+    <div class="offers two">
+      <div class="offer"><h3>Carte <small>29 €</small></h3><p>Tout votre faire-part sur une seule feuille, comme en papier.</p><ul><li>L'image à envoyer sur WhatsApp</li><li>Le PDF A5 à imprimer</li><li>À télécharger dès le paiement</li></ul><a class="btn" href="/creer/?plan=carte" data-plan="carte">Créer ma carte</a></div>
+      <div class="offer"><h3>Page unique <small>dès 59 €</small></h3><p>La même feuille, en lien, à ouvrir sur son téléphone.</p><ul><li>L'itinéraire et l'agenda en un toucher</li><li>En ligne dès le paiement, modifiable ensuite</li><li class="plus">En option : l'ouverture animée (+ 10 €), le bouton « Répondre » et votre tableau de bord (+ 20 €)</li></ul><a class="btn solid" href="/creer/?plan=page" data-plan="page">Créer ma page</a></div>
     </div>
-    <p class="cont-more"><a href="/formules/">Comparer les formules en détail →</a></p>
+    <div class="more-anim"><p><b>Envie de plus ?</b> Le faire-part animé, un moment par écran, vos lieux peints : dès 99 €.</p><a class="fl-demo" href="/formules/">Voir toutes les formules →</a></div>
   </div>
 </section>
 
@@ -121,6 +100,7 @@
 <script src="/paiement.js"></script>
 <script src="/themes.js"></script>
 <script>window.SCEAU_DEMOS=[]/*DEMOS*/;window.SCEAU_CALQUES={}/*CALQUES*/;</script>
+<script src="/carte.js"></script>
 <script src="/vitrine.js"></script>
 </body>
 </html>
