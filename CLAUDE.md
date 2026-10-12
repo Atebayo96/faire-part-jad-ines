@@ -159,8 +159,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     canvas : on voit le faire-part par l'entrebâillement, avec une démarcation nette (l'ombre presque noire de la pièce le long
     de l'arc fait partie du vide : « les petits trucs noirs qui sont restés », `pousse()`) ; **on entre dans la porte** (« comme
     si on rentre dans la porte et on arrive sur le haut du faire-part ») : zoom doux jusqu'à 1,14 pendant l'ouverture, puis
-    plongée dans l'embrasure jusqu'à 4,2 (`opVidZoom`, centré sur l'ouverture), la page se pose dessous (`morph`), puis **un flash court et doux** pour passer à la page (`flashVid`, 0,9 s, demandé par l'utilisateur : il remplace,
-    pour les portes en vidéo, le « plus de flash » ci-dessous). Si la vidéo ne peut pas être lue, les battants en CSS reprennent.
+    plongée dans l'embrasure jusqu'à 4,2 (centré sur l'ouverture), la page se pose dessous (`morph`), et la porte s'efface à la
+    fin de la vidéo. **Pas de flash** : essayé, puis retiré (« retire l'illumination qui sert à rien »). **Continu, jamais
+    saccadé** : la recomposition se fait en WebGL (shader : couleur en haut, transparence en bas ; pixel par pixel en
+    JavaScript, elle saccadait), et le zoom est calculé à chaque image de l'écran **d'après l'avancement de la vidéo**
+    (`currentTime`), pas d'après l'horloge : si la vidéo prend du retard, la caméra l'attend. **Les poignées restent** (« la
+    serrure a sauté ») : le noir n'est pris pour du vide qu'en haut de l'arc ou s'il est neutre, l'interstice des premières
+    images est pris rangée par rangée puis lissé sur la hauteur, et toute avancée de moins de 71 px de haut est retirée.
+    Si la vidéo ne peut pas être lue (ou sans WebGL), les battants en CSS reprennent.
     Clé fal.ai : jamais dans le dépôt (variable `FAL_KEY` de l'environnement). Démo : `page-leila-mehdi` (ouverture Portes).
     **Pas d'animation du sceau** (6 octobre 2026) : un essai où le sceau de l'enveloppe glissait jusqu'à l'accueil a été
     refusé (« c'est pas ouf, on le redécouvre après, ça me va ») : le sceau de l'accueil apparaît avec le texte.
