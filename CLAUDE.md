@@ -167,6 +167,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     serrure a sauté ») : le noir n'est pris pour du vide qu'en haut de l'arc ou s'il est neutre, l'interstice des premières
     images est pris rangée par rangée puis lissé sur la hauteur, et toute avancée de moins de 71 px de haut est retirée.
     Si la vidéo ne peut pas être lue (ou sans WebGL), les battants en CSS reprennent.
+    **Fond vert imposé par l'image de fin** (« on peut pas demander direct à fal.ai de générer l'ouverture sur fond vert ? ») :
+    la consigne seule ne suffit pas (Kling peignait une pièce olive ou brune, et le haut des battants, dans l'ombre, se
+    découpait mal : « le bout de la porte est mal fait »). On passe par Kling 1.6 pro (0,475 $ les 5 s), qui accepte une
+    image de fin (`tail_image_url`) : la porte de départ avec l'embrasure remplie de vert pur #00FF00. La vidéo arrive
+    alors sur du vert, et `porte-video.py --vert` fait une incrustation simple (transparence douce selon l'avance du vert,
+    reflet vert retiré du bord). C'est la méthode pour les autres portes. Défaut connu : le battant gauche se dissout un peu
+    au lieu de finir son pivot (vers 3,7 s), caché par le plongeon.
     Clé fal.ai : jamais dans le dépôt (variable `FAL_KEY` de l'environnement). Démo : `page-leila-mehdi` (ouverture Portes).
     **Pas d'animation du sceau** (6 octobre 2026) : un essai où le sceau de l'enveloppe glissait jusqu'à l'accueil a été
     refusé (« c'est pas ouf, on le redécouvre après, ça me va ») : le sceau de l'accueil apparaît avec le texte.
