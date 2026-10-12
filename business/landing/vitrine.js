@@ -501,10 +501,13 @@
   const famEy=()=>({henne:'Avec ses parents',sbou3:'Avec ses grands-parents',bapteme:'Avec ses grands-parents',anniv:'Avec leurs enfants'})[C.occ]||'Avec leurs familles';
   const ICONS=[['hotel','Dormir'],['car','Venir'],['kids','Enfants'],['dress','Tenue'],['gift','Cadeau'],['info','Autre']];
   const fldE=(lab,h)=>`<label class="ed-f"><span>${lab}</span>${h}</label>`;
+  // la date limite de réponse : un mois avant le mariage, tant que les mariés ne l'ont pas choisie (« je peux pas modifier la date »)
+  const dlDef=()=>new Date(weddingDate().getTime()-30*864e5).toISOString().slice(0,10);
+  const dlE=()=>fldE('Réponse souhaitée avant le',`<input type="date" data-p="rsvp.deadline" data-def="${dlDef()}">`);
   const inpE=(pa,ph,max)=>`<input type="text" data-p="${pa}" maxlength="${max||80}" placeholder="${esc(ph||'')}">`;
   const areaE=pa=>`<textarea data-p="${pa}" rows="2" maxlength="240"></textarea>`;
   const ED={
-    rsvp:()=>one()&&!(C.plan==='page'&&C.reply)?`<p class="ed-lead">En bas de votre ${C.plan==='carte'?'carte':'page'} : « Réponse souhaitée avant le … », et votre numéro si vous le donnez. Vos invités vous répondent directement.</p>${fldE('Votre numéro (facultatif)',`<input type="tel" data-p="rsvp.whatsapp" maxlength="20" placeholder="06 12 34 56 78" autocomplete="tel">`)}${C.plan==='page'?'<button type="button" class="ed-add" data-reply>+ Le bouton « Répondre » et le tableau de bord · 20 €</button>':''}`:`<p class="ed-lead">Sur le dernier écran, vos invités touchent <b>« Répondre »</b> et remplissent ce formulaire. Chaque réponse arrive dans votre tableau de bord.</p><div class="rv-mock" id="rsvpMock" aria-label="Le formulaire que voient vos invités"></div><p class="ed-sub">Réglez-le</p>${fldE('Les menus à choisir (séparés par des virgules ; vide s’il n’y a pas de choix)',inpE('rsvp.menu','Poisson, Viande, Végétarien',120))}${fldE('Une question à leur poser (facultatif)',inpE('rsvp.question','Une chanson qui vous fera danser ?',80))}${fldE('Votre WhatsApp, pour ceux qui préfèrent vous écrire (facultatif)',`<input type="tel" data-p="rsvp.whatsapp" maxlength="20" placeholder="+33 6 12 34 56 78" autocomplete="tel">`)}`,
+    rsvp:()=>one()&&!(C.plan==='page'&&C.reply)?`<p class="ed-lead">En bas de votre ${C.plan==='carte'?'carte':'page'} : « Réponse souhaitée avant le … », et votre numéro si vous le donnez. Vos invités vous répondent directement.</p>${dlE()}${fldE('Votre numéro (facultatif)',`<input type="tel" data-p="rsvp.whatsapp" maxlength="20" placeholder="06 12 34 56 78" autocomplete="tel">`)}${C.plan==='page'?'<button type="button" class="ed-add" data-reply>+ Le bouton « Répondre » et le tableau de bord · 20 €</button>':''}`:`<p class="ed-lead">Sur le dernier écran, vos invités touchent <b>« Répondre »</b> et remplissent ce formulaire. Chaque réponse arrive dans votre tableau de bord.</p><div class="rv-mock" id="rsvpMock" aria-label="Le formulaire que voient vos invités"></div><p class="ed-sub">Réglez-le</p>${dlE()}${fldE('Les menus à choisir (séparés par des virgules ; vide s’il n’y a pas de choix)',inpE('rsvp.menu','Poisson, Viande, Végétarien',120))}${fldE('Une question à leur poser (facultatif)',inpE('rsvp.question','Une chanson qui vous fera danser ?',80))}${fldE('Votre WhatsApp, pour ceux qui préfèrent vous écrire (facultatif)',`<input type="tel" data-p="rsvp.whatsapp" maxlength="20" placeholder="+33 6 12 34 56 78" autocomplete="tel">`)}`,
     photos:()=>`${fldE('Le lien de votre album partagé (Google Photos, iCloud…)','<input type="url" data-p="photos.url" maxlength="200" placeholder="https://…">')}<p class="ed-n">Vos invités y déposent leurs photos de la journée. Vous pourrez ajouter le lien plus tard.</p>`,
     table:()=>`<p class="ed-n">Avec un lien par famille, chaque famille voit sa table sur son faire-part. Vous nous donnez le plan de table après la commande.</p>`,
     parents:()=>`<div class="ed-row">${fldE('Première famille',inpE('parents.n1','Famille Alaoui',40))}${fldE('Seconde famille (facultatif)',inpE('parents.n2','Famille Haddad',40))}</div>${fldE('Leur phrase',areaE('parents.text'))}`,
@@ -528,7 +531,7 @@
   // un cadre ne se reconstruit que si ses parties changent (les champs gardent le focus pendant la frappe)
   function edBox(host,ids){ if(!host) return; const key=ids.join(',')+'|'+C.plan+C.reply+'|'+C.occ+'|'+C.data.story.length+'|'+C.data.stay.length+'|'+C.data.program.length+'|'+C.data.faq.length+'|'+C.data.gifts.mode+'|'+C.data.gifts.items.length; if(host.dataset.key===key) return; host.dataset.key=key;
     host.innerHTML=ids.map(id=>`<div class="ed" data-ed="${id}"><b class="ed-t">${esc(edTitle(id))}</b>${ED[id]()}</div>`).join('');
-    host.querySelectorAll('[data-p]').forEach(el=>{ const v=getP(el.dataset.p); el.value=v==null?'':v; el.addEventListener('input',()=>{ setP(el.dataset.p,el.value); paint(); }); });
+    host.querySelectorAll('[data-p]').forEach(el=>{ const v=getP(el.dataset.p); el.value=v==null||v===''?(el.dataset.def||''):v; el.addEventListener('input',()=>{ setP(el.dataset.p,el.value); paint(); }); });
     const NEW={story:()=>({when:'',title:'',text:''}),stay:()=>({icon:'info',title:'',text:''}),program:()=>({time:'',title:''}),faq:()=>({q:'',a:''}),'gifts.items':()=>({name:'',price:''})};
     host.querySelectorAll('[data-reply]').forEach(b=>b.onclick=()=>{ C.reply=true; paint(); });
     host.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ const k=b.dataset.add; getP(k).push(NEW[k]()); paint(); });
@@ -839,7 +842,7 @@
     if(C.x.has('photos')) inv.photos={eyebrow:'Vos photos',text:'Partagez vos plus belles photos de la soirée dans notre album commun.',url:'demo'};
     return inv; }
   function lgInvite(t,p,f,n1,n2,ds){
-    const day=$('cDate').value||'2027-06-12', dl=new Date(weddingDate().getTime()-30*864e5).toISOString().slice(0,10);
+    const day=$('cDate').value||'2027-06-12', dl=C.data.rsvp.deadline||dlDef();
     return {slug:'apercu',demo:true,layout:'long',theme:C.k,reveal:C.rvl==='non'?null:C.rvl,couple:isSolo()?[n1]:[n1,n2],date:day+'T15:00',tz:'Europe/Paris',opening:'cur',music:'none',
       palette:p.c,font:f.id==='theme'?undefined:f.id,countdown:C.cd==='page'||C.cd==='apres'?'fin':C.cd,calques:[],anim:[],trans:[],families:{},album:C.x.has('album'),
       intro:{eyebrow:eyOf(t),text:introTxt(),dateText:ds},

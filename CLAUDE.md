@@ -819,6 +819,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     gaufrées du bas, elles s'effacent (`.ct-nosc`) plutôt que d'être recouvertes. Les illustrations peintes restent.
     **Y aller et Agenda : les icônes seules** (« en gardant les icônes, les gens vont comprendre ») : le mot n'est plus écrit
     sous le rond (il reste en `aria-label` et en `title`), la place gagnée va au texte.
+    **La date de réponse se choisit** (« je peux pas modifier la date en bas, réponse souhaitée avant le 13 mai ») : champ
+    « Réponse souhaitée avant le » dans le réglage de la réponse, carte, page unique et faire-part animé (`dlE()`,
+    `C.data.rsvp.deadline` ; par défaut un mois avant le mariage, `dlDef()`, affiché dans le champ par `data-def`).
+    **Le jasmin de l'Andalou est réduit de moitié** (24 cqw au lieu de 48 : « il sert à rien et bloque le texte »).
 
 ## Méthode
 

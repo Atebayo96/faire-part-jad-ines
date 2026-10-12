@@ -190,7 +190,7 @@
 .ct-s-outrepasse .ct-d-tl,.ct-s-outrepasse .ct-d-tr{width:calc(24cqw*var(--k)*var(--dz,1));top:calc(var(--pt) + 4cqw)}
 .ct-s-outrepasse .ct-d-tl{left:calc(var(--m) - 5cqw)}
 .ct-s-outrepasse .ct-d-tr{right:calc(var(--m) - 5cqw)}
-.ct-s-outrepasse .ct-d-bl{width:calc(48cqw*var(--k)*var(--dz,1));bottom:calc(var(--pb) - 14px*var(--k))}
+.ct-s-outrepasse .ct-d-bl{width:calc(24cqw*var(--k)*var(--dz,1));bottom:calc(var(--pb) - 14px*var(--k))}
 .ct-s-outrepasse .ct-d-bl{left:calc(var(--m) - 10px*var(--k))}
 /* medaillon (Old money) : vert bouteille et treillis, feuille aux coins rentrés sur passe-partout doré, fleurons et laurier */
 .ct-s-medaillon{--bk:#22402f;--mk:#efe3c4;--pbx:calc(70px*var(--k));}
