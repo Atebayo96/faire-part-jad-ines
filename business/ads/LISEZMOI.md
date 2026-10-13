@@ -11,9 +11,9 @@ Il faut le site servi en local : `python3 -m http.server 8765 -d business/site`.
 | `parcours/` | `save-the-oui-etapes-9x16.mp4` | « 3 étapes » : le vrai configurateur filmé (prénoms tapés, l'aperçu agrandi à côté, le thème Douce France touché, « Commander »), puis le lien envoyé dans une conversation et l'enveloppe ouverte par l'invité. |
 | `parcours/` | `save-the-oui-direct-9x16.mp4` | « Vous réglez, vous voyez » : le faire-part change au toucher d'un panneau de réglages (thème, couleur du sceau, ouverture en portes). |
 | `parcours/` | `save-the-oui-oui-9x16.mp4` | « Ce soir vous composez, demain les oui arrivent » : la soirée de commande, le lien prêt, envoyé à la famille, les premières réponses en notification, le tableau de bord. |
-| `feuille/` | `save-the-oui-feuille-prix-9x16.mp4` (18 s) | Carte et Page unique. Accroche prix : « 200 faire-part en papier : 700 € » barré, « Le nôtre : 29 € », la carte Douce France en gros plan, envoyée dans une conversation de famille, puis les 5 univers. |
-| `feuille/` | `save-the-oui-feuille-univers-9x16.mp4` (18 s) | Accroche « 5 univers. Lequel est le vôtre ? » : les feuilles défilent au rythme, gros plan sur le gaufrage d'Old money, les 3 papiers côte à côte, Carte (PNG · PDF) ou Page unique (un lien). |
-| `feuille/` | `save-the-oui-feuille-mamie-9x16.mp4` (18 s) | Accroche « POV : Mamie reçoit votre faire-part » : le lien dans la conversation, la page unique de l'Andalou, l'agenda, la réponse en trois touchers, puis les oui qui arrivent sur le téléphone des mariés. |
+| `feuille/` | `save-the-oui-feuille-univers-9x16.mp4` (15,5 s) | Carte et Page unique. « Cinq univers. Un seul vous ressemble. » : les 5 feuilles sur un carrousel incurvé, chaque univers au centre quand la voix le nomme, puis « Dès 29 € ». Voix off et musique ElevenLabs. |
+| `feuille/` | `save-the-oui-feuille-collage-9x16.mp4` (16 s) | Style *paper collage* + typographie cinétique : le vrai faire-part d'Emma & Louis s'assemble couche par couche en stop motion (fond peint, papier coton, sceau, prénoms, date, moments), chaque couche sur son mot, légendes sur bandes de papier déchiré ; puis les cinq univers scotchés autour et la carte de fin (`collage.html`). |
+| `feuille/` | `save-the-oui-feuille-mamie-9x16.mp4` (18 s) | « POV : Mamie reçoit votre faire-part » : le lien, la page unique de l'Andalou, l'agenda, la réponse en trois touchers, puis le vrai tableau de bord des mariés (pas de notifications : elles n'existent pas). |
 | `statiques/` | `crea-1.jpg` à `crea-5.jpg` (4:5, 1080 × 1350) | Visuels fixes pour le fil Instagram et Facebook, un par angle de la fiche 17 : diaspora (« De Paris à Tanger »), prix contre le papier, l'ouverture aux portes, le tableau de bord, Canva contre nous. Source : `statiques/crea.html` (polices et images du site en `file://`), capturée avec Playwright. |
 
 Rendus :
@@ -21,7 +21,7 @@ Rendus :
 - carrousel : `node business/ads/carrousel/render.js full business/landing/music/valse.mp3 30 1920` (ou `1350` pour le 4:5 ; `OUVERTURES=1` devant pour la variante) ; la liste des univers est `carrousel/themes.json`.
 
 - parcours : `node business/ads/parcours/captures.js` (configurateur, faire-part, tableau de bord, dans `caps/`), puis `node business/ads/parcours/render.js full <etapes|direct|oui> business/landing/music/valse.mp3 <début>`
-- feuille : `node business/ads/feuille/render.js full <prix|univers|mamie> business/landing/music/valse.mp3 1.3` (`preview` pour quelques images) ; les feuilles sont dessinées en direct par `carte.js` d'après les fiches de démo (`business/invites/`), aucune image générée.
+- feuille : `node business/ads/feuille/render.js full <univers|mamie|collage>` (`preview` pour quelques images) ; les feuilles sont dessinées en direct par `carte.js` d'après les fiches de démo (`business/invites/`), aucune image générée. Son : `audio/` (voix off `voix.py`, musique `musique.py`, ElevenLabs, clé `ELEVENLABS_API_KEY` de l'environnement, jamais dans le dépôt), mixé par render.js d'après `window.AUDIO` ; `caps/tb.png` = le vrai tableau de bord (`caps.js`).
 
 Règles : jamais d'image prolongée ou détourée (`*-eglise` en 9:21, `img/calques/`) ; l'ouverture montrée est toujours celle du vrai moteur.
 
