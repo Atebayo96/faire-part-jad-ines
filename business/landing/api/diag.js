@@ -1,5 +1,5 @@
 // TEMPORAIRE (recette du 13 octobre 2026, aperçu seulement) : diagnostic Stripe avec la clé du site. À supprimer après.
-import { readOne, save, keyHash, same } from './_store.js';
+import { readOne, save, readAll, keyHash, same } from './_store.js';
 const TOKEN = '7UO5-RSUQnfYkcfLLuKFkKKZ';
 async function stripe(path, params) {
   const r = await fetch('https://api.stripe.com/v1/' + path, { method: params ? 'POST' : 'GET',
@@ -12,6 +12,20 @@ export default async function handler(req, res) {
   const b = req.body || {};
   if (b.action === 'promo') return res.status(200).json(await stripe('promotion_codes?code=' + encodeURIComponent(b.code || 'TESTOUI')));
   if (b.action === 'account') { const a = await stripe('account'); return res.status(200).json({ status: a.status, id: a.body.id, name: a.body.settings && a.body.settings.dashboard && a.body.settings.dashboard.display_name, error: a.body.error }); }
+  if (b.action === 'blob') {
+    // réécriture d'un même fichier : lit-on la nouvelle version tout de suite ? (soupçon de cache Vercel Blob)
+    const p = 'diag/test-' + Date.now() + '.json', out = [];
+    await save(p, { v: 1 }); out.push(['après v1', (await readOne(p)).v]);
+    await save(p, { v: 2 }); out.push(['après v2, readOne', (await readOne(p)).v]);
+    out.push(['après v2, readAll', (await readAll('diag/')).filter(x => x.pathname === p).map(x => x.v)]);
+    await new Promise(r => setTimeout(r, 3000)); out.push(['3 s plus tard', (await readOne(p)).v]);
+    const { put, get, head } = await import('@vercel/blob');
+    const h = await head(p).catch(e => ({ err: e.message })); out.push(['head', h.url || h.err, h.cacheControl]);
+    const r = await put(p, JSON.stringify({ v: 3 }), { access: 'private', contentType: 'application/json', addRandomSuffix: false, allowOverwrite: true, cacheControlMaxAge: 60 });
+    out.push(['put v3 cacheControlMaxAge 60 ->', r.url, (await readOne(p)).v]);
+    const g = await get(p, { access: 'private', useCache: false }).catch(e => ({ err: e.message })); out.push(['get useCache:false', g.err || JSON.parse(await new Response(g.stream).text()).v]);
+    return res.status(200).json(out);
+  }
   if (b.action === 'coupon') return res.status(200).json(await stripe('coupons/' + encodeURIComponent(b.id)));
   if (b.action === 'last') { const l = await stripe('checkout/sessions?limit=5'); return res.status(200).json({ status: l.status, error: l.body.error, data: (l.body.data || []).map(s => ({ id: s.id, ref: s.metadata && s.metadata.ref, status: s.status, payment_status: s.payment_status, amount_total: s.amount_total, success_url: s.success_url, created: s.created })) }); }
   if (b.action === 'session') {
