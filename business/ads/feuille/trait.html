@@ -1,0 +1,126 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<!-- Pub « trait » (style line art, 9:16, 15,5 s) : accroche « Ce faire-part n'a jamais été imprimé. » Un seul trait d'or dessine
+     l'arche, l'encre, l'enveloppe et le timbre (barrés), écrit les prénoms ; puis la couleur arrive : la vraie feuille (carte.js,
+     Emma & Louis) apparaît sous le dessin, glisse dans un téléphone dessiné, les « Oui ! » arrivent ; les cinq univers remplissent
+     cinq arches ; le trait écrit le logo. Calé sur la voix off (audio/trait.json). render(t) est déterministe ; render.js filme. -->
+<link rel="stylesheet" href="/polices/polices.css">
+<link rel="stylesheet" href="/carte.css">
+<style>
+:root{--ink:#1d1a15;--gold:#a9823a}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden}
+#st{position:absolute;inset:0;overflow:hidden;background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .33 0 0 0 0 .2 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
+  radial-gradient(110% 75% at 50% 45%,#fdfaf3 0%,#f3ecdf 100%)}
+.abs{position:absolute}
+.sheet{position:absolute;overflow:hidden;transform-origin:50% 50%}
+.sheet .fl-in{position:absolute;left:0;top:0;width:360px;height:740px;transform-origin:0 0;display:flex;flex-direction:column}
+.sheet .fl-in .ct{min-height:100%}
+#main{left:240px;top:360px;width:600px;height:1233px;box-shadow:0 30px 60px -26px rgba(60,40,10,.45)}
+.mini{width:300px;height:616px;border-radius:4px;box-shadow:0 18px 30px -14px rgba(60,40,10,.4)}
+svg{position:absolute;left:0;top:0;overflow:visible}
+.ln{fill:none;stroke:url(#g);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.tx{stroke:url(#g);stroke-width:2.2;stroke-linejoin:round}
+.x{fill:none;stroke:#9a3b2e;stroke-width:6;stroke-linecap:round}
+</style></head><body>
+<div id="st">
+  <div id="minis"></div>
+  <div id="main" class="sheet"></div>
+  <svg id="sv" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9a24f"/><stop offset=".5" stop-color="#9c7630"/><stop offset="1" stop-color="#c49a46"/></linearGradient></defs>
+    <g id="art"></g><g id="top"></g>
+  </svg>
+</div>
+<script src="/themes.js"></script>
+<script src="/carte.js"></script>
+<script>
+const F=window.FICHES, $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
+const lin=(t,a,b)=>Math.min(1,Math.max(0,(t-a)/(b-a))), eo=x=>1-Math.pow(1-x,3), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const mk=(par,tag,at)=>{ const e=document.createElementNS(NS,tag); for(const k in at) e.setAttribute(k,at[k]); par.appendChild(e); return e; };
+// ---- un trait qui se dessine : [élément, début, fin, groupe]
+const LINES=[];
+function line(par,d,a,b,cls){ const p=mk(par,'path',{d,class:cls||'ln'}); LINES.push({p,a,b}); return p; }
+// ---- un texte écrit lettre à lettre (contour d'or, puis l'encre remplit)
+const TEXTS=[];
+function write(par,str,x,y,a,b,o){ o=o||{}; const g=mk(par,'g',{}), ref=mk(g,'text',{x,y,'font-family':o.font||'Cormorant Garamond','font-size':o.size||80,'font-style':o.it?'italic':'normal','font-weight':o.w||500,'text-anchor':'middle','letter-spacing':o.ls||0});
+  ref.textContent=str; const chars=[]; const n=str.length;
+  for(let i=0;i<n;i++){ if(str[i]===' ') continue; const p=ref.getStartPositionOfChar(i);
+    const c=mk(g,'text',{x:p.x,y:p.y,'font-family':o.font||'Cormorant Garamond','font-size':o.size||80,'font-style':o.it?'italic':'normal','font-weight':o.w||500,class:'tx',fill:o.fill||'#1d1a15'});
+    c.textContent=str[i]; chars.push({c,k:i/n}); }
+  ref.remove(); const L=(o.size||80)*5; TEXTS.push({chars,a,b,L,fillLag:o.lag==null?.18:o.lag}); return g; }
+function drawAll(t){
+  LINES.forEach(({p,a,b})=>{ if(!p._L) p._L=p.getTotalLength()+2; const k=eio(lin(t,a,b)); p.style.strokeDasharray=p._L; p.style.strokeDashoffset=p._L*(1-k); p.style.opacity=k>0?1:0; });
+  TEXTS.forEach(({chars,a,b,L,fillLag})=>chars.forEach(({c,k})=>{ const s=a+(b-a)*k*.8, u=lin(t,s,s+(b-a)*.35+.15);
+    c.style.strokeDasharray=L; c.style.strokeDashoffset=L*(1-u); c.style.fillOpacity=lin(t,s+fillLag,s+fillLag+.25); c.style.opacity=u>0?1:0; })); }
+const fade=(el,t,a,b,c,d)=>{ el.style.opacity=Math.min(lin(t,a,b),1-lin(t,c==null?1e9:c,d==null?1e9:d)); };
+// ---- le dessin (après le chargement des polices : les lettres sont placées d'après la police)
+const G={}; const ARC=[[60,300],[390,300],[720,300],[225,980],[555,980]];
+function build(){
+// ---- le dessin
+const art=$('art');
+const grp=k=>G[k]=mk(art,'g',{});
+// 1. l'accroche et l'arche
+grp('hook'); write(G.hook,'Ce faire-part',540,215,-.7,.9,{size:92});
+write(G.hook,'n’a jamais été imprimé.',540,320,.5,1.9,{size:92,it:true,fill:'#8a6a2c'});
+grp('arch'); line(G.arch,'M262,1535 V708 A278,278 0 0 1 818,708 V1535 Z',0,2.1);
+line(G.arch,'M286,1511 V712 A254,254 0 0 1 794,712 V1511 Z',.5,2.4);
+// brins de feuillage aux coins du bas
+const sprig=(x,y,s)=>`M${x},${y} q${30*s},-40 ${70*s},-70 M${x+22*s},${y-22} q${-6*s},-26 ${10*s},-44 q${16*s},18 ${-10*s},44 M${x+46*s},${y-46} q${4*s},-26 ${26*s},-36 q${6*s},24 ${-26*s},36`;
+line(G.arch,sprig(300,1490,1),1.2,2.6); line(G.arch,sprig(780,1490,-1),1.2,2.6);
+// 2. l'encre, l'enveloppe, le timbre, barrés
+grp('ico'); G.ico.setAttribute('transform','translate(540 1000) scale(1.2) translate(-540 -1000)');
+const ink='M350,1060 h70 v-60 q0,-18 -16,-24 v-20 h-38 v20 q-16,6 -16,24 Z M360,956 h50 v-14 h-50 Z M368,1000 h34';
+const env='M478,970 h124 v86 h-124 Z M478,970 l62,48 l62,-48 M478,1056 l44,-40 M602,1056 l-44,-40';
+const stamp=(()=>{ let d='M660,958'; for(let i=0;i<6;i++) d+=` q${8},-8 16,0`; for(let i=0;i<6;i++) d+=` q8,8 0,16`; for(let i=0;i<6;i++) d+=` q-8,8 -16,0`; for(let i=0;i<6;i++) d+=` q-8,-8 0,-16`;
+  return d+' Z M676,1046 l22,-34 l16,20 l12,-14 l18,28 Z M720,990 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0'; })();
+line(G.ico,ink,2.15,2.75).setAttribute('transform','translate(12 0)'); line(G.ico,env,2.9,3.5); line(G.ico,stamp,3.75,4.35).setAttribute('transform','translate(-12 0)');
+line(G.ico,'M330,1080 L440,940',2.7,2.95,'x').setAttribute('transform','translate(12 0)'); line(G.ico,'M466,1080 L614,950',3.45,3.7,'x'); line(G.ico,'M660,1074 L752,952',4.3,4.55,'x').setAttribute('transform','translate(-12 0)');
+// 3. un trait d'or, et les prénoms
+grp('nm'); line(G.nm,'M330,960 C420,920 470,1000 540,960 S660,920 750,960',4.9,5.7);
+write(G.nm,'Emma & Louis',540,880,6.35,7.0,{font:'Great Vibes',size:106,w:400,fill:'#8a6a2c',lag:.1});
+write(G.nm,'12 · 06 · 2027',540,1060,6.75,7.2,{size:56,ls:4});
+// 4. le téléphone, les « Oui ! »
+grp('ph'); line(G.ph,'M300,320 h480 a60,60 0 0 1 60,60 v1160 a60,60 0 0 1 -60,60 h-480 a60,60 0 0 1 -60,-60 v-1160 a60,60 0 0 1 60,-60 Z',7.55,8.2);
+line(G.ph,'M480,350 h120',8.0,8.25);
+const bub=(x,y,w,a,str,flip)=>{ line(G.ph,`M${x+24},${y} h${w-48} a24,24 0 0 1 24,24 v52 a24,24 0 0 1 -24,24 h${flip?-(w-70):-(w-48)} ${flip?'l-22,20 v-20':''} h${flip?-26:0} a24,24 0 0 1 -24,-24 v-52 a24,24 0 0 1 24,-24 Z`,a,a+.35);
+  write(G.ph,str,x+w/2,y+68,a+.2,a+.6,{size:54,it:true,fill:'#8a6a2c'}); };
+bub(40,520,230,8.75,'Oui !'); bub(820,840,220,9.0,'Oui !',1); bub(30,1200,250,9.25,'On sera là');
+// 5. cinq arches
+grp('five');
+const archAt=(x,y,w,h)=>`M${x},${y+h} V${y+w/2} A${w/2},${w/2} 0 0 1 ${x+w},${y+w/2} V${y+h} Z`;
+ARC.forEach(([x,y],i)=>line(G.five,archAt(x,y,300,616),10.15+i*.12,10.7+i*.12));
+write(G.five,'dès 29 €',540,1720,11.2,11.8,{size:110,it:true,fill:'#8a6a2c'});
+// 6. la fin : le sceau et le logo
+grp('end');
+const seal=(()=>{ let d=''; for(let i=0;i<=48;i++){ const a=i/48*Math.PI*2, r=112+(i%2?7:-3); d+=(i?'L':'M')+(540+r*Math.cos(a)).toFixed(1)+','+(700+r*Math.sin(a)).toFixed(1); } return d+'Z'; })();
+line(G.end,seal,12.65,13.3); line(G.end,'M540,700 m-84,0 a84,84 0 1,0 168,0 a84,84 0 1,0 -168,0',12.9,13.4);
+write(G.end,'O',540,745,13.0,13.4,{font:'Great Vibes',size:120,w:400,fill:'#8a6a2c'});
+write(G.end,'SAVE THE',380,1030,13.2,13.6,{font:'Inter',size:40,w:500,ls:12});
+write(G.end,'Oui',690,1050,13.35,13.9,{font:'Great Vibes',size:190,w:400,fill:'#1d1a15',lag:.12});
+write(G.end,'Carte 29 € · Page unique 59 €',540,1250,13.9,14.5,{size:56});
+write(G.end,'SAVETHEOUI.FR',540,1350,14.2,14.7,{font:'Inter',size:30,w:500,ls:6,fill:'#6b665d'});
+}
+// ---- les vraies feuilles
+const sheet=(box,inv,w)=>{ box.innerHTML=`<div class="fl-in" style="transform:scale(${w/360})">${SceauCarte.html(inv,{fit:true})}</div>`; };
+sheet($('main'),F['page-emma-louis'],600);
+const ORD=['page-emma-louis','carte-camille-antoine','page-victoire-charles','page-nour-ilyes','page-leila-mehdi'];
+const minis=ORD.map((s,i)=>{ const m=document.createElement('div'); m.className='sheet mini'; m.style.left=ARC[i][0]+'px'; m.style.top=ARC[i][1]+'px'; sheet(m,F[s],300); $('minis').appendChild(m); return m; });
+window.AUDIO={d:15.5,music:'m-trait',vo:[['trait',.2,0,13.7]]};
+window.render=t=>{
+  drawAll(t);
+  fade(G.hook,t,-1,0,2.0,2.3); fade(G.ico,t,-1,0,4.75,5.0);
+  fade(G.arch,t,-1,0,6.95,7.25); fade(G.nm,t,-1,0,6.95,7.2);
+  fade(G.ph,t,-1,0,9.9,10.15); fade(G.five,t,-1,0,12.4,12.65); fade(G.end,t,-1,0);
+  // la couleur arrive : la vraie feuille sous le dessin, révélée en cercle depuis les prénoms
+  const m=$('main'), r=eio(lin(t,6.95,7.6)), p=eio(lin(t,7.5,8.2));
+  m.style.clipPath=`circle(${(r*95).toFixed(1)}% at 50% 40%)`; m.style.opacity=r>0?1-lin(t,9.9,10.15):0;
+  m.style.transform=`translate(0px,${-16*p}px) scale(${1-.2*p})`; m.style.borderRadius=(p*14/(1-.2*p)).toFixed(1)+'px';
+  // les cinq univers : chaque feuille monte dans son arche
+  minis.forEach((mm,i)=>{ const k=eio(lin(t,10.45+i*.12,10.95+i*.12)); mm.style.clipPath=`inset(${((1-k)*100).toFixed(1)}% 0 0 0 round 150px 150px 0 0)`; mm.style.opacity=(k>0?1:0)*(1-lin(t,12.4,12.65)); });
+};
+window.ready=async()=>{ await document.fonts.ready; await Promise.all(['92px "Cormorant Garamond"','italic 92px "Cormorant Garamond"','124px "Great Vibes"','40px Inter'].map(f=>document.fonts.load(f))); build();
+  await Promise.all([...document.images].map(im=>im.complete?0:new Promise(r=>{ im.onload=im.onerror=r; })));
+  document.querySelectorAll('.fl-in').forEach(b=>SceauCarte.fit(b.parentNode)); await new Promise(r=>setTimeout(r,400));
+  document.querySelectorAll('.fl-in').forEach(b=>SceauCarte.fit(b.parentNode)); };
+</script>
+</body></html>
