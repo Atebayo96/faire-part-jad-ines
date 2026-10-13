@@ -57,6 +57,10 @@
   .st{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
   .st::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor;flex:none}
   .acts{display:flex;flex-wrap:wrap;gap:6px}
+  td .fix{display:block;margin-top:6px}
+  .old{margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:6px;background:var(--bg-2)}
+  .old h3{margin:0 0 6px;font:500 15px Inter}.old p{margin:0 0 10px;color:var(--muted);font-size:14px;line-height:1.45}
+  .old ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}.old li{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;font-size:14px}
   .lnk{font-size:12px;color:var(--muted);word-break:break-all}
   /* sur téléphone, les familles s'empilent en cartes : le bouton « Relancer » reste visible, pas caché dans un tableau qui défile */
   @media (max-width:720px){
@@ -123,7 +127,13 @@
   }
 
   const inv=data.invite, evs=inv.events||[], fams=inv.families||{}, seen=data.seen||{}, menus=inv.menu||[], question=inv.question||'';
-  let R=data.responses||[];
+  /* une personne qui a répondu deux fois (deux téléphones, sans son lien) : seule sa dernière réponse compte (R) ; les plus
+     anciennes (OLD) sont montrées à part, jamais cachées : ce peut être un homonyme, que les mariés marquent « autre personne » */
+  let ALL=data.responses||[], R=[], OLD=[];
+  const norm=n=>String(n||'').toLowerCase().replace(/\s+/g,' ').trim();
+  function split(){ const last=new Map(); ALL.slice().sort((a,b)=>a.at<b.at?-1:1).forEach(r=>{ if(!r.distinct) last.set(norm(r.name),r); });
+    R=ALL.filter(r=>r.distinct||last.get(norm(r.name))===r); OLD=ALL.filter(r=>!R.includes(r)); }
+  split();
   document.title='Réponses · '+inv.couple;
   document.getElementById('who').textContent=inv.couple;
   const attending=r=>Object.values(r.events).some(Boolean);
@@ -178,15 +188,22 @@
     <h2>Toutes les réponses</h2>
     <div class="tools"><input id="q" type="search" placeholder="Chercher un nom, un message…" aria-label="Chercher"><button class="btn" id="csv">Exporter (CSV)</button><button class="btn" id="addMan">+ Ajouter une réponse à la main</button>${data.demo?'':'<button class="btn" id="reload">Actualiser</button>'}</div>
     <div class="man" id="man" hidden></div>
-    <div class="tbl"><table><thead><tr><th data-s="name">Nom</th><th data-s="guests">Pers.</th>${evs.map(e=>`<th>${esc(e.label)}</th>`).join('')}<th>Qui vient</th><th>Régime</th>${question?`<th>${esc(question)}</th>`:''}<th>Message</th><th data-s="at">Reçu</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>`;
+    <div class="tbl"><table><thead><tr><th data-s="name">Nom</th><th data-s="guests">Pers.</th>${evs.map(e=>`<th>${esc(e.label)}</th>`).join('')}<th>Qui vient</th><th>Régime</th>${question?`<th>${esc(question)}</th>`:''}<th>Message</th><th data-s="at">Reçu</th></tr></thead><tbody id="rows"></tbody></table></div>
+    <div id="old"></div>`;
 
   let sortK='at', dir=-1;
   function draw(){
     const qq=(document.getElementById('q').value||'').toLowerCase();
     const rows=R.filter(r=>!qq||[r.name,r.message,r.diet,r.answer,fams[r.family],...(r.people||[]).map(p=>p.name+' '+p.menu)].join(' ').toLowerCase().includes(qq))
       .sort((a,b)=>(a[sortK]>b[sortK]?1:a[sortK]<b[sortK]?-1:0)*dir);
-    document.getElementById('rows').innerHTML=rows.map(r=>`<tr><td>${esc(r.name)}${r.family?`<small>${esc(fams[r.family]||r.family)}</small>`:''}${r.manual?'<small>saisie à la main</small>':''}</td><td>${attending(r)?nb(r):'–'}</td>${evs.map(e=>`<td>${e.id in r.events?(r.events[e.id]?'<span class="y">Oui</span>':'<span class="n">Non</span>'):'<small>–</small>'}</td>`).join('')}<td>${pplHtml(r)}</td><td>${esc(r.diet)}</td>${question?`<td>${esc(r.answer)}</td>`:''}<td>${esc(r.message)}</td><td><small>${fmt(r.at)}</small></td><td><button class="btn sm" data-edit="${esc(r.rid||'')}">Corriger</button></td></tr>`).join('')||`<tr><td colspan="${7+evs.length+(question?1:0)}" style="color:var(--muted)">Aucune réponse pour le moment.</td></tr>`;
-    stats(); famRows();
+    document.getElementById('rows').innerHTML=rows.map(r=>`<tr><td>${esc(r.name)}${r.family?`<small>${esc(fams[r.family]||r.family)}</small>`:''}${r.manual?'<small>saisie à la main</small>':''}<button class="btn sm fix" data-edit="${esc(r.rid||'')}">Corriger</button></td><td>${attending(r)?nb(r):'–'}</td>${evs.map(e=>`<td>${e.id in r.events?(r.events[e.id]?'<span class="y">Oui</span>':'<span class="n">Non</span>'):'<small>–</small>'}</td>`).join('')}<td>${pplHtml(r)}</td><td>${esc(r.diet)}</td>${question?`<td>${esc(r.answer)}</td>`:''}<td>${esc(r.message)}</td><td><small>${fmt(r.at)}</small></td></tr>`).join('')||`<tr><td colspan="${6+evs.length+(question?1:0)}" style="color:var(--muted)">Aucune réponse pour le moment.</td></tr>`;
+    stats(); famRows(); oldRows();
+  }
+  function oldRows(){
+    const el=document.getElementById('old');
+    el.innerHTML=OLD.length?`<div class="old"><h3>${OLD.length===1?'Une réponse remplacée':OLD.length+' réponses remplacées'}</h3>
+      <p>Ces invités ont répondu une deuxième fois sous le même nom : seule leur dernière réponse est comptée ci-dessus. Si c’est en fait une autre personne (un homonyme), touchez « C’est une autre personne ».</p>
+      <ul>${OLD.map(r=>`<li><span><b>${esc(r.name)}</b> · ${fmt(r.at)} · ${attending(r)?nb(r)+' pers. · '+evs.filter(e=>r.events[e.id]).map(e=>esc(e.label)).join(', '):'ne vient pas'}</span><button class="btn sm" data-distinct="${esc(r.rid)}">C’est une autre personne</button></li>`).join('')}</ul></div>`:'';
   }
   draw();
   document.getElementById('q').addEventListener('input',draw);
@@ -239,13 +256,19 @@
         if(!data.demo){ const res=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(row)}); if(!res.ok) throw 0; const j=await res.json(); row.rid=j.rid; }
         else row.rid=r&&r.rid||'demo-'+Date.now();
         row.at=new Date().toISOString(); delete row.invite;
-        R=R.filter(x=>x.rid!==row.rid); R.push(row);
+        const was=ALL.find(x=>x.rid===row.rid); if(was&&was.distinct) row.distinct=true;
+        ALL=ALL.filter(x=>x.rid!==row.rid); ALL.push(row); split();
         man.hidden=true; man.innerHTML=''; draw();
       }catch(x){ err.textContent='Impossible d’enregistrer. Vérifiez votre connexion et réessayez.'; }
     };
   }
   document.getElementById('addMan').onclick=()=>openMan(null);
   main.addEventListener('click',e=>{ const b=e.target.closest('[data-edit]'); if(!b) return; openMan(R.find(r=>r.rid===b.dataset.edit)||null); });
+  main.addEventListener('click',async e=>{ const b=e.target.closest('[data-distinct]'); if(!b) return; const r=ALL.find(x=>x.rid===b.dataset.distinct); if(!r) return;
+    b.disabled=true;
+    try{ if(!data.demo){ const res=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify({invite:inv.slug,rid:r.rid,distinct:true})}); if(!res.ok) throw 0; }
+      r.distinct=true; split(); draw(); }
+    catch(x){ b.disabled=false; b.textContent='Échec, réessayez'; } });
 })();
 </script>
 </body>

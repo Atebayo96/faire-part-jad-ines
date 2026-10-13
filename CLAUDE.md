@@ -618,6 +618,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **Un message par cause** (6 octobre 2026) : sans réponse, le tableau dit « Pas encore de réponse » (c'est normal au
     début) ; « Vérifiez votre connexion » n'apparaît que sans réseau ; faire-part introuvable (404), lien invalide (401),
     panne (5xx, avec « Réessayer ») ont chacun leur phrase. Avant, toute erreur disait « vérifiez votre connexion ».
+    **Aucune réponse n'est cachée sans le dire** (13 octobre 2026) : deux réponses au même nom (un invité qui répond de
+    deux téléphones sans son lien) ne comptent qu'une fois, la plus récente ; les plus anciennes sont listées à part sous le
+    tableau (`replaced`, « Une réponse remplacée ») avec « C'est une autre personne » pour un homonyme (`distinct`, POST
+    `api/rsvp` avec la clé du tableau de bord). « Corriger » est sous le nom (en dernière colonne, il sortait du tableau).
+    Recette du 13 octobre 2026 (serveur local, paiement simulé) : réponse, stockage après redémarrage, lien personnel sur un
+    autre téléphone, saisie à la main, CSV, clés refusées : tout passe, faire-part animé et page unique.
     On ne prend pas : la liste des invités visible, les commentaires, la vérification du téléphone ou du mail pour
     répondre, le prix par invité (voir la fiche 16, § 5).
 
