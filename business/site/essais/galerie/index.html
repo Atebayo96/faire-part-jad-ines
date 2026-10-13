@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>La Galerie</title>
+<meta name="description" content="Giulia & Hugo, exposition d'un seul jour : samedi 28 août 2027, Ravello.">
+<link rel="stylesheet" href="/polices/polices.css">
+<style>
+:root{
+  --sp-1:10px;--sp-2:18px;--sp-3:28px;
+  --fs-cap:13px;--fs-body:18px;--fs-date:22px;--fs-hour:clamp(34px,10vw,42px);--fs-men:11.5px;
+  --gold-l:#fbe3a0;--gold-m:#c99a3a;--gold-d:#6e4a12;
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"Inter Tight","Inter",system-ui,sans-serif;
+  --caps:"Cinzel",Georgia,serif;
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .45 0 0 0 0 .38 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --mottle:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .006' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 -.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:clip}
+html{scroll-behavior:smooth}
+body{background:#2a1e17;color:#2a231b;font:400 var(--fs-body)/1.45 var(--serif);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{display:block;max-width:100%}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+
+/* ---------- les murs ---------- */
+.salle{position:relative;min-height:100svh;padding:0 16px 120px;display:flex;flex-direction:column;align-items:center;
+  --wall:#ebe2d2;--wall-d:#dccfb9;--ink:#2a231b;--ink2:#5a4b39;--trim:#f4ede1;--trim-d:#cbbda5;--dado:#d9ccb4;--floor:#7b5a3e;
+  background:var(--wall);color:var(--ink);isolation:isolate}
+.salle::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;
+  background:var(--mottle) center/900px 900px,var(--noise) 0 0/220px 220px;
+  opacity:.5;mix-blend-mode:soft-light}
+.salle::after{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;
+  background:radial-gradient(120% 70% at 50% 35%,transparent 55%,rgba(60,40,20,.10) 100%)}
+.sage{--wall:#4b5945;--wall-d:#414e3c;--ink:#f6efe1;--ink2:#e6dcc8;--trim:#5b6a54;--trim-d:#36412f;--dado:#3e4a39;--floor:#5a4130}
+.pompei{--wall:#6b2a21;--wall-d:#5c231b;--ink:#f6ead8;--ink2:#ead8bf;--trim:#7c3328;--trim-d:#4a1a13;--dado:#561f18;--floor:#4e3626}
+.noce{--wall:#3a2a1f;--wall-d:#2f2219;--ink:#f4e9d6;--ink2:#e2d3ba;--trim:#4a3627;--trim-d:#22170f;--dado:#2c1f16;--floor:#3b2a1e}
+.ocre{--wall:#e6d3ae;--wall-d:#d6c095;--ink:#2a2116;--ink2:#56442c;--trim:#efe0c2;--trim-d:#bfa57a;--dado:#d1bb90;--floor:#7b5a3e}
+
+/* corniche avec l'inscription de la salle, comme au-dessus des portes d'un palais */
+.corniche{align-self:stretch;margin:0 -16px;height:84px;position:relative;display:grid;place-items:center;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.18) 0 2px,transparent 2px 9px,rgba(0,0,0,.14) 9px 11px,rgba(255,255,255,.14) 11px 13px,transparent 13px 62px,rgba(0,0,0,.10) 62px 64px,rgba(255,255,255,.22) 64px 66px,transparent 66px 74px,rgba(0,0,0,.22) 74px 76px,transparent 76px),
+    linear-gradient(180deg,var(--trim) 0 76px,transparent 76px);
+  box-shadow:0 14px 18px -10px rgba(30,18,8,.35)}
+.corniche span{font:500 var(--fs-cap)/1 var(--caps);letter-spacing:.32em;text-transform:uppercase;color:var(--ink);padding-left:.32em;margin-top:-8px;
+  text-shadow:0 1px 0 rgba(255,255,255,.18),0 -1px 0 rgba(0,0,0,.25)}
+/* lambris, plinthe et parquet en bas de chaque salle */
+.salle .socle{position:absolute;left:0;right:0;bottom:0;height:96px;z-index:-1;pointer-events:none;
+  background:
+    linear-gradient(180deg,var(--trim) 0 3px,var(--trim-d) 3px 5px,transparent 5px),
+    linear-gradient(180deg,transparent 0 58px,var(--trim) 58px 70px,var(--trim-d) 70px 72px,transparent 72px),
+    repeating-linear-gradient(90deg,transparent 0 118px,rgba(0,0,0,.10) 118px 119px,rgba(255,255,255,.08) 119px 120px),
+    linear-gradient(180deg,transparent 0 72px,var(--floor) 72px),
+    linear-gradient(180deg,var(--dado),var(--dado))}
+.salle .socle::after{content:"";position:absolute;left:0;right:0;bottom:0;height:24px;
+  background:repeating-linear-gradient(100deg,rgba(0,0,0,.12) 0 2px,transparent 2px 46px),linear-gradient(180deg,rgba(0,0,0,.25),rgba(255,230,190,.06))}
+
+.cap{font:500 var(--fs-cap)/1.3 var(--caps);letter-spacing:.24em;text-transform:uppercase;color:var(--ink2);padding-left:.24em}
+.h2{font:400 clamp(34px,9.5vw,52px)/1.08 "Italiana",var(--serif);letter-spacing:.02em;text-align:center;margin-top:var(--sp-1);color:var(--ink)}
+.lead{font:italic 400 20px/1.45 var(--serif);color:var(--ink2);text-align:center;max-width:30ch;margin:var(--sp-1) auto 0}
+.room-head{text-align:center;margin-top:var(--sp-3);max-width:560px}
+
+/* ---------- l'accrochage : lampe de cimaise, cadre, peinture ---------- */
+.hang{position:relative;margin-top:calc(var(--sp-3) + 34px);width:min(80vw,440px);
+  transform:scale(calc(.9 + .1 * var(--p,1))) translateY(calc((1 - var(--p,1)) * 26px));transform-origin:50% 40%}
+/* flaque de lumière sur le mur, sous la lampe ; elle s'allume quand on entre dans la salle */
+.hang::before{content:"";position:absolute;left:-30%;right:-30%;top:-40px;height:125%;z-index:-1;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 42%,rgba(255,236,196,.38),rgba(255,236,196,.14) 55%,transparent 98%);
+  opacity:var(--lit,0);transition:opacity 1.2s ease .2s}
+.dark-wall .hang::before{background:radial-gradient(50% 50% at 50% 42%,rgba(255,214,150,.24),rgba(255,214,150,.09) 55%,transparent 98%)}
+.on .hang{--lit:1}
+.lamp{position:absolute;left:50%;top:-34px;width:46%;height:34px;translate:-50% 0;z-index:3;pointer-events:none}
+.lamp::before{content:"";position:absolute;left:0;right:0;top:0;height:13px;border-radius:7px 7px 9px 9px;
+  background:linear-gradient(180deg,#f3dc9c 0%,#c69a46 35%,#8a6223 70%,#5a3d12 100%);
+  box-shadow:0 3px 5px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,250,220,.7)}
+.lamp::after{content:"";position:absolute;left:50%;top:12px;width:30%;height:24px;translate:-50% 0;
+  background:linear-gradient(90deg,#6b4a18,#d8b261 30%,#7a561c 45%,transparent 45% 55%,#6b4a18 55%,#d8b261 85%,#7a561c);
+  -webkit-mask:linear-gradient(90deg,#000 0 12%,transparent 12% 88%,#000 88%);mask:linear-gradient(90deg,#000 0 12%,transparent 12% 88%,#000 88%)}
+.lamp i{position:absolute;left:4%;right:4%;top:11px;height:30px;
+  background:linear-gradient(180deg,rgba(255,240,205,.55),transparent);filter:blur(5px);opacity:var(--lit,0);transition:opacity 1.2s ease .2s}
+
+/* cadre doré sculpté : moulure bombée, rang de perles, filet sombre, marie-louise en lin, puis la toile */
+.fr{--fw:clamp(16px,4.6vw,24px);position:relative;padding:var(--fw);border-radius:2px;
+  background:
+    repeating-linear-gradient(90deg,rgba(255,240,190,.10) 0 2px,rgba(80,50,10,.08) 2px 5px),
+    linear-gradient(158deg,#5a3a0e 0%,#a97c2e 9%,#e9cd86 17%,#b98b3a 27%,#7a5219 40%,#a8792c 52%,#dcbd73 63%,#9c7029 74%,#5e3f10 86%,#a27630 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(60,36,6,.85),
+    inset 2px 2px 0 1px rgba(255,246,206,.55),
+    inset -2px -2px 0 1px rgba(70,42,8,.55),
+    inset 0 0 0 3px rgba(90,58,14,.35),inset 0 0 0 4px rgba(240,214,150,.35),
+    0 2px 2px rgba(20,10,0,.35),
+    0 18px 26px -6px rgba(30,16,4,.48),
+    0 42px 60px -18px rgba(30,16,4,.42)}
+/* bombé de la moulure : clair en haut (la lampe), sombre en bas */
+.fr::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:2px;
+  background:
+    linear-gradient(180deg,rgba(255,244,205,.55) 0%,rgba(255,244,205,0) 22%,rgba(40,22,0,0) 70%,rgba(40,22,0,.42) 100%),
+    linear-gradient(90deg,rgba(40,22,0,.25),transparent 12%,transparent 88%,rgba(40,22,0,.3));
+  mix-blend-mode:soft-light}
+/* gorge au milieu de la moulure (ombre et reflet) */
+.fr::after{content:"";position:absolute;inset:calc(var(--fw) * .34);pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(70,42,8,.5),inset 1px 1px 0 1px rgba(255,240,190,.45),0 0 0 1px rgba(255,236,170,.35)}
+/* rosettes aux quatre coins */
+.fr .ro{position:absolute;width:calc(var(--fw) * 1.05);aspect-ratio:1;border-radius:50%;z-index:2;pointer-events:none;
+  background:radial-gradient(circle at 38% 34%,#fff5cf 0 10%,#e7c36c 22%,#a9792a 46%,#6d4612 62%,transparent 64%),
+    conic-gradient(from 0deg,#d8ad55,#7b5418,#f2d68a,#7b5418,#d8ad55,#7b5418,#f2d68a,#7b5418,#d8ad55);
+  -webkit-mask:radial-gradient(circle,#000 0 66%,transparent 68%);mask:radial-gradient(circle,#000 0 66%,transparent 68%);
+  filter:drop-shadow(1px 2px 1px rgba(50,28,4,.55))}
+.fr .ro:nth-child(1){left:calc(var(--fw) * -.02);top:calc(var(--fw) * -.02)}
+.fr .ro:nth-child(2){right:calc(var(--fw) * -.02);top:calc(var(--fw) * -.02)}
+.fr .ro:nth-child(3){left:calc(var(--fw) * -.02);bottom:calc(var(--fw) * -.02)}
+.fr .ro:nth-child(4){right:calc(var(--fw) * -.02);bottom:calc(var(--fw) * -.02)}
+.pearl{position:relative;z-index:1;padding:6px;
+  background:radial-gradient(circle at 40% 36%,#fff3c6 0 14%,#e0b85f 32%,#9b6c22 56%,#4e3209 74%) 0 0/8px 8px;
+  box-shadow:inset 0 0 0 1px rgba(60,36,6,.7),0 0 0 1px rgba(255,236,170,.4)}
+.lip{padding:3px;background:linear-gradient(135deg,#3b2606,#a77b2c 40%,#e9cc80 55%,#5a3a0c)}
+.slip{padding:clamp(8px,2.4vw,13px);background:#e9e0cb var(--noise) 0 0/160px;
+  box-shadow:inset 0 0 0 1px rgba(90,70,40,.35),inset 2px 2px 3px rgba(255,255,255,.5),inset -1px -1px 2px rgba(90,70,40,.25)}
+.canvas{position:relative;aspect-ratio:4/5;overflow:hidden;background:#1a2440;
+  box-shadow:0 0 0 1px rgba(40,28,10,.5),-2px -2px 3px rgba(60,40,10,.35)}
+.canvas img{width:100%;height:100%;object-fit:cover;object-position:50% 100%}
+/* craquelure et reflet de vernis, très légers : jamais un voile */
+.canvas::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(122deg,rgba(255,255,255,.07) 0 18%,transparent 34%);mix-blend-mode:screen}
+.hang.small{width:min(66vw,320px)}
+.fr.thin{--fw:12px;background:linear-gradient(160deg,#3a2414,#7a5232 30%,#4a2e18 60%,#2a190c);
+  box-shadow:inset 0 0 0 1px #1c1007,inset 1px 1px 0 1px rgba(255,220,170,.25),0 14px 20px -6px rgba(30,16,4,.45),0 30px 46px -16px rgba(30,16,4,.35)}
+.fr.thin::after{inset:4px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4),0 0 0 1px rgba(255,220,170,.12)}
+
+/* ---------- cartel ---------- */
+.cartel{position:relative;margin-top:var(--sp-3);width:min(100%,360px);background:#f8f4ea;color:#1f1b16;padding:20px 20px 18px;border-radius:1px;
+  box-shadow:0 1px 0 #d5ccb9,0 2px 0 #c3b9a4,0 6px 10px -2px rgba(30,18,6,.35),0 16px 24px -12px rgba(30,18,6,.35);
+  font-family:var(--sans);transition:opacity .9s ease .3s,transform .9s ease .3s}
+.salle:not(.on) .cartel.rv{opacity:0;transform:translateY(12px)}
+.cartel .inv{position:absolute;top:14px;right:16px;font:500 var(--fs-men)/1 var(--sans);letter-spacing:.06em;color:#6a6152}
+.cartel .art{font:600 13px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#1f1b16;padding-right:92px}
+.cartel .bio{font:400 13px/1.4 var(--sans);color:#5a5246;margin-top:3px}
+.cartel .ttl{font:italic 500 28px/1.12 var(--serif);margin-top:var(--sp-2);color:#1a1612}
+.cartel .sub{font:400 18px/1.4 var(--serif);color:#3d362d;margin-top:4px}
+.cartel hr{border:0;border-top:1px solid #d6cdbb;margin:var(--sp-2) 0}
+.cartel .day{font:500 var(--fs-date)/1.2 var(--serif);color:#1f1b16;text-align:center}
+.cartel .hr{font:600 var(--fs-hour)/1.05 var(--serif);font-variant-numeric:lining-nums;letter-spacing:.02em;text-align:center;color:#1a1612;margin-top:4px}
+.cartel .hr small{font-size:.5em;font-weight:500;color:#5a5246;margin-left:6px;letter-spacing:.04em}
+.cartel .pl{font:500 15px/1.4 var(--sans);color:#2f2a23;text-align:center;margin-top:var(--sp-1)}
+.cartel .med{font:italic 400 14px/1.45 var(--sans);color:#5a5246;margin-top:var(--sp-2)}
+.cartel .cred{font:400 13px/1.4 var(--sans);color:#5a5246;margin-top:2px}
+.acts{display:flex;gap:10px;justify-content:center;margin-top:var(--sp-3)}
+.acts .b{flex:1 1 0;max-width:200px}
+
+/* ---------- boutons : pastilles ---------- */
+.b{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 18px 0 5px;border-radius:23px;border:0;cursor:pointer;text-decoration:none;
+  font:500 17px/1 var(--serif);color:#231d16;white-space:nowrap;
+  background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:0 0 0 1px rgba(80,60,30,.18),0 4px 10px -4px rgba(40,24,8,.35),inset 0 1px 0 rgba(255,255,255,.9);
+  transition:transform .15s ease,box-shadow .15s ease}
+.b:active{transform:scale(.97)}
+.b:focus-visible{outline:2px solid #8a5d16;outline-offset:3px}
+.b .md{flex:0 0 36px;height:36px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#fbe6a6,#c99a3a 55%,#7a5216);box-shadow:inset 0 1px 0 rgba(255,250,220,.7),0 1px 2px rgba(60,36,6,.4)}
+.b .md svg{width:17px;height:17px;stroke:#2d1d05;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.b.solid{background:#1f1a14;color:#f6eedf;box-shadow:0 0 0 1px rgba(0,0,0,.3),0 6px 14px -6px rgba(0,0,0,.6)}
+.b.solid:focus-visible{outline-color:#e7c46e}
+
+/* ---------- entrée ---------- */
+.entree{justify-content:flex-start;text-align:center;padding-bottom:140px}
+.portail{margin-top:var(--sp-3);display:flex;flex-direction:column;align-items:center;max-width:560px}
+.fronton{width:min(86vw,420px);height:78px;position:relative;margin-bottom:var(--sp-2);filter:drop-shadow(0 6px 6px rgba(30,8,4,.35))}
+.fronton::before{content:"";position:absolute;inset:0 0 16px;clip-path:polygon(50% 0,100% 100%,0 100%);
+  background:linear-gradient(180deg,#b3594a,#8a3a2e 30%,#5a2119)}
+.fronton::after{content:"";position:absolute;inset:9px 26px 16px;clip-path:polygon(50% 0,100% 100%,0 100%);
+  background:radial-gradient(60% 90% at 50% 100%,#7d3328,#5e231b)}
+.fronton .rule{position:absolute;left:-3%;right:-3%;bottom:0;height:16px;
+  background:linear-gradient(180deg,#b3594a 0 2px,#7a3127 2px 6px,transparent 6px),
+    repeating-linear-gradient(90deg,#8e3d30 0 7px,#3e140e 7px 11px) 0 6px/100% 7px no-repeat,
+    linear-gradient(180deg,transparent 13px,#9a4637 13px)}
+.seal{width:96px;height:96px;background:url("/img/seals/or.webp") center/contain no-repeat;display:grid;place-items:center;container-type:inline-size;
+  filter:drop-shadow(0 8px 12px rgba(0,0,0,.45));margin-top:var(--sp-2)}
+.seal b{font:400 24cqw/1.15 "Great Vibes",cursive;letter-spacing:-.01em;margin-top:2cqw;padding:0 .08em;white-space:nowrap;
+  background:linear-gradient(165deg,#c08a2c 0%,#6e4a12 48%,#3a2405 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(255,244,214,.75)) drop-shadow(0 -1px .6px rgba(40,22,4,.75)) drop-shadow(0 1.5px 1.5px rgba(40,22,4,.35))}
+.seal b i{font-style:normal;font-size:.62em;margin:0 .02em}
+.mostra{font:500 var(--fs-cap)/1.5 var(--caps);letter-spacing:.34em;text-transform:uppercase;color:var(--ink2);margin-top:var(--sp-3);padding-left:.34em}
+.names{margin-top:var(--sp-2);font:italic 400 clamp(52px,16vw,96px)/.98 "Bodoni Moda",var(--serif);color:var(--ink);letter-spacing:-.01em}
+.names .amp{display:block;font:400 .5em/1.3 "Great Vibes",cursive;color:#efd9a4}
+.expo{font:400 22px/1.35 "Italiana",var(--serif);letter-spacing:.06em;color:var(--ink);margin-top:var(--sp-2)}
+.dl{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:var(--sp-1);font:600 var(--fs-date)/1.2 var(--serif);font-variant-numeric:lining-nums;color:var(--ink)}
+.dl::before,.dl::after{content:"";height:1px;width:34px;background:linear-gradient(90deg,transparent,#d9b56a)}
+.dl::after{transform:scaleX(-1)}
+.lieu{font:400 18px/1.45 var(--serif);color:var(--ink2);margin-top:6px}
+/* billet d'entrée */
+.billet{margin-top:var(--sp-3);display:flex;width:min(100%,340px);background:#f5ecd9;color:#2a2117;border-radius:6px;position:relative;
+  box-shadow:0 10px 22px -8px rgba(0,0,0,.55);font-family:var(--sans);transform:rotate(-1.5deg)}
+.billet .l{flex:1;padding:14px 16px;text-align:left;border-right:2px dashed #c9b893}
+.billet .r{width:86px;display:grid;place-items:center;padding:10px 6px;text-align:center}
+.billet::before,.billet::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:var(--wall);right:78px}
+.billet::before{top:-8px}.billet::after{bottom:-8px}
+.billet .k{font:600 11.5px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#6a5536}
+.billet .v{font:500 18px/1.3 var(--serif);margin-top:2px}
+.billet .n{font:600 26px/1 var(--serif);font-variant-numeric:lining-nums;color:#6b2a21}
+.entrez{margin-top:var(--sp-3);display:inline-flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;font:500 var(--fs-cap)/1 var(--caps);letter-spacing:.3em;color:var(--ink2);padding-left:.3em}
+.entrez svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.4;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(6px)}}
+
+/* ---------- avant-propos (texte de salle) ---------- */
+.mural{max-width:560px;margin-top:var(--sp-3);text-align:left}
+.mural p{font:400 19px/1.55 var(--serif);color:var(--ink)}
+.mural p+p{margin-top:var(--sp-1)}
+.mural .dc::first-letter{float:left;font:400 64px/.82 "Bodoni Moda",var(--serif);margin:6px 10px 0 0;color:#6b2a21}
+.mural .sig{margin-top:var(--sp-2);text-align:right;font:400 30px/1.2 "Great Vibes",cursive;color:#3a2a1a}
+.mural .sig small{display:block;font:500 var(--fs-cap)/1.3 var(--caps);letter-spacing:.2em;text-transform:uppercase;color:var(--ink2)}
+
+/* ---------- plan du musée ---------- */
+.plan{margin-top:var(--sp-3);width:min(100%,520px);background:#f6f0e2;color:#211c15;padding:22px 18px 24px;border-radius:2px;
+  box-shadow:0 2px 0 #d6cbb4,0 18px 30px -12px rgba(30,18,6,.45);position:relative}
+.plan .pin{position:absolute;top:-7px;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fbe6a6,#a77b2c 60%,#5a3a0c);box-shadow:0 2px 3px rgba(0,0,0,.4)}
+.plan .pin.pa{left:18px}.plan .pin.pb{right:18px}
+.plan h3{font:500 var(--fs-cap)/1.3 var(--caps);letter-spacing:.24em;text-transform:uppercase;text-align:center;color:#5a4b39;padding-left:.24em}
+.plan .pt{font:400 30px/1.15 "Italiana",var(--serif);text-align:center;margin-top:6px}
+.plan svg.map{display:block;width:100%;height:auto;margin-top:var(--sp-2)}
+.legend{list-style:none;margin-top:var(--sp-2);display:grid;gap:var(--sp-2)}
+.legend li{display:grid;grid-template-columns:34px 76px 1fr;align-items:start;column-gap:12px}
+.legend .t{padding-top:1px}
+.legend .no{width:30px;height:30px;border-radius:50%;background:#6b2a21;color:#fbf2e2;display:grid;place-items:center;font:600 15px/1 var(--sans)}
+.legend .t{font:600 26px/1 var(--serif);font-variant-numeric:lining-nums;color:#1a1612}
+.legend b{display:block;font:600 19px/1.25 var(--serif)}
+.legend span{display:block;font:400 16px/1.4 var(--serif);color:#4d4335}
+
+/* ---------- études de couleur (dress code) ---------- */
+.etudes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 22px;margin-top:calc(var(--sp-3) + 10px);width:min(100%,460px)}
+.etude{display:flex;flex-direction:column;align-items:center}
+.etude .fr{--fw:11px;width:100%}
+.etude .pearl{padding:4px;background-size:6px 6px}
+.etude .slip{padding:7px}
+.etude .sw{aspect-ratio:1;background:var(--c);position:relative;overflow:hidden}
+.etude .sw::after{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(118deg,rgba(255,255,255,.10) 0 3px,rgba(0,0,0,.05) 3px 7px,transparent 7px 13px),var(--noise) 0 0/120px;mix-blend-mode:soft-light}
+.etude .lab{margin-top:var(--sp-2);background:#f8f4ea;color:#1f1b16;padding:8px 10px;text-align:center;width:100%;font:italic 500 16px/1.25 var(--serif);
+  box-shadow:0 1px 0 #cfc5b1,0 4px 8px -3px rgba(30,18,6,.35)}
+.etude .lab small{display:block;font:400 12px/1.3 var(--sans);font-style:normal;letter-spacing:.06em;color:#5a5246;margin-top:2px}
+.wall-text{max-width:30ch;text-align:center;margin-top:var(--sp-2);font:400 19px/1.5 var(--serif);color:var(--ink)}
+
+/* ---------- informations (signalétique) ---------- */
+.signs{display:grid;gap:var(--sp-2);margin-top:var(--sp-3);width:min(100%,520px)}
+.sign{display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:start;padding:18px;border:1px solid rgba(246,239,225,.35);border-radius:2px;background:rgba(0,0,0,.12)}
+.sign .ic{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--wall)}
+.sign .ic svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sign h4{font:600 13px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.sign p{font:400 18px/1.45 var(--serif);color:var(--ink);margin-top:6px}
+.sign .b{margin-top:var(--sp-2)}
+
+/* ---------- livre d'or ---------- */
+.pupitre{margin-top:var(--sp-3);width:min(100%,560px);position:relative;padding-bottom:26px}
+.pupitre::after{content:"";position:absolute;left:8%;right:8%;bottom:0;height:26px;border-radius:0 0 6px 6px;
+  background:linear-gradient(180deg,#6a4529,#3c2414);box-shadow:0 10px 16px -6px rgba(0,0,0,.6)}
+.livre{position:relative;background:#7a2b22;padding:10px;border-radius:6px;box-shadow:0 20px 34px -12px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,220,180,.15)}
+.page{background:#f7f0e0 var(--noise) 0 0/200px;color:#221c15;padding:26px 22px 26px;border-radius:2px;position:relative;
+  box-shadow:inset 0 0 30px rgba(140,110,60,.18),inset -6px 0 12px -6px rgba(80,55,20,.25)}
+.page h3{font:400 34px/1.1 "Italiana",var(--serif);text-align:center}
+.page .q{font:italic 400 19px/1.45 var(--serif);text-align:center;color:#4d4335;margin-top:6px}
+.page .dead{font:500 13px/1.4 var(--sans);letter-spacing:.06em;text-align:center;color:#5a4b39;margin-top:var(--sp-1)}
+.f{margin-top:var(--sp-2)}
+.f > label,.f > .lbl{display:block;font:600 13px/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#4d4335}
+.f input[type=text]{display:block;width:100%;margin-top:6px;border:0;border-bottom:1px solid #a89878;background:transparent;padding:8px 2px;font:italic 400 22px/1.3 var(--serif);color:#1a1612;border-radius:0}
+.f input[type=text]::placeholder{color:#7a6e5c}
+.f input[type=text]:focus{outline:none;border-bottom-color:#6b2a21;box-shadow:0 1px 0 #6b2a21}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:var(--sp-1)}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-flex;align-items:center;height:44px;padding:0 18px;border-radius:22px;border:1px solid #b9a988;font:500 17px/1 var(--serif);color:#2a231b;cursor:pointer;background:rgba(255,255,255,.5)}
+.chip input:checked + span{background:#2a1f15;border-color:#2a1f15;color:#f8efdc}
+.chip input:focus-visible + span{outline:2px solid #8a5d16;outline-offset:2px}
+.page .send{display:flex;justify-content:center;margin-top:var(--sp-3)}
+.merci{display:none;text-align:center;padding:var(--sp-2) 0}
+.merci .sg{font:400 46px/1.15 "Great Vibes",cursive;color:#2a1f15}
+.merci p{font:italic 400 20px/1.45 var(--serif);color:#4d4335;margin-top:var(--sp-1)}
+.signed .merci{display:block}.signed form{display:none}
+
+/* ---------- boutique ---------- */
+.shop-sign{margin-top:var(--sp-3);background:#1f1a14;color:#f3e7cf;padding:12px 26px;font:500 14px/1 var(--caps);letter-spacing:.32em;padding-left:calc(26px + .32em);box-shadow:0 8px 14px -6px rgba(0,0,0,.45)}
+.etagere{margin-top:calc(var(--sp-3) + 6px);width:min(100%,560px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:end;position:relative;padding-bottom:22px}
+.etagere::after{content:"";position:absolute;left:-10px;right:-10px;bottom:0;height:16px;background:linear-gradient(180deg,#a47a4f,#6b4a2c 60%,#4a3220);box-shadow:0 10px 14px -6px rgba(30,18,6,.5)}
+.obj{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative;z-index:1}
+.col{display:flex;flex-direction:column;align-items:center;width:100%}
+.obj .it{width:100%;filter:drop-shadow(0 8px 8px rgba(30,18,6,.35))}
+.cat{aspect-ratio:3/4;background:#f6f1e6;padding:10% 10% 0;display:flex;flex-direction:column;align-items:center}
+.cat img{width:100%;aspect-ratio:1;object-fit:cover;object-position:50% 100%}
+.cat i{font:400 11.5px/1.2 "Italiana",var(--serif);font-style:normal;letter-spacing:.06em;color:#2a231b;margin-top:7%;text-align:center}
+.carte{aspect-ratio:2/3;background:#fff;padding:7%;transform:rotate(3deg)}
+.carte img{width:100%;height:100%;object-fit:cover;object-position:50% 85%}
+.voyage{aspect-ratio:3/4;background:linear-gradient(160deg,#2f5e83,#1d3d5c);border-radius:4px;display:grid;place-items:center;text-align:center;color:#f2e6cd;padding:10%}
+.voyage b{font:400 12px/1.3 var(--caps);letter-spacing:.14em}
+.voyage svg{width:46%;height:auto;stroke:#e9cf8f;fill:none;stroke-width:1.4;margin:0 auto 8%}
+.tag{margin-top:12px;background:#f8f4ea;color:#1f1b16;padding:6px 6px;text-align:center;font:500 14px/1.25 var(--serif);width:100%;box-shadow:0 1px 0 #cfc5b1,0 3px 6px -2px rgba(30,18,6,.3)}
+.tag small{display:block;font:500 11.5px/1.3 var(--sans);letter-spacing:.06em;color:#5a5246}
+.uscita{margin-top:calc(var(--sp-3) * 2);display:flex;flex-direction:column;align-items:center;gap:var(--sp-1);text-align:center}
+.exit{display:inline-flex;align-items:center;gap:12px;background:#1f5a3a;color:#fff;padding:10px 18px;border-radius:3px;font:600 14px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;box-shadow:0 6px 12px -6px rgba(0,0,0,.5)}
+.exit svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2}
+.thanks{font:400 30px/1.2 "Italiana",var(--serif);margin-top:var(--sp-2)}
+.logo{margin-top:var(--sp-3);display:flex;align-items:baseline;gap:6px;color:var(--ink2);text-decoration:none}
+.logo span{font:500 12px/1 var(--sans);letter-spacing:.28em}
+.logo em{font:400 28px/1 "Great Vibes",cursive;font-style:normal;color:var(--ink)}
+
+@media (min-width:860px){
+  .salle{padding-bottom:150px}
+  .duo{display:flex;align-items:flex-end;gap:56px;justify-content:center;margin-top:calc(var(--sp-3) + 20px)}
+  .duo .hang{margin-top:34px;width:420px}
+  .duo .cartel{margin-top:0;margin-bottom:40px}
+  .duo.rev{flex-direction:row-reverse}
+  .duo .col .cartel{margin-top:var(--sp-3);margin-bottom:0}
+  .duo .col{width:auto}
+  .duo .mural{margin-top:0;max-width:420px;margin-bottom:60px}
+}
+@media (max-width:370px){
+  .b{padding:0 14px 0 5px;gap:8px}
+  .legend li{grid-template-columns:30px 66px 1fr;column-gap:10px}
+  .legend .t{font-size:23px}
+  .cartel{padding:18px 16px 16px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hang{transform:none!important}
+  .hang::before,.lamp i{transition:none}
+  .cartel{transition:none}
+  .salle:not(.on) .cartel.rv{opacity:1;transform:none}
+  .entrez svg{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ENTRÉE -->
+<section class="salle pompei entree on dark-wall" id="entree" aria-label="Entrée de l'exposition">
+  <div class="corniche"><span>Museo · Villa Cimbrone</span></div>
+  <div class="portail">
+    <div class="fronton" aria-hidden="true"><div class="rule"></div></div>
+    <div class="seal" role="img" aria-label="Sceau G & H"><b>G<i>&amp;</i>H</b></div>
+    <p class="mostra">Exposition d'un seul jour</p>
+    <h1 class="names">Giulia<span class="amp">&amp;</span>Hugo</h1>
+    <p class="expo">Ci sposiamo</p>
+    <p class="dl">Samedi 28 août 2027</p>
+    <p class="lieu">Ravello, côte amalfitaine</p>
+    <div class="billet" aria-label="Billet d'entrée">
+      <div class="l">
+        <div class="k">Biglietto d'ingresso</div>
+        <div class="v">Invitation valable pour vous et les vôtres</div>
+      </div>
+      <div class="r"><div><div class="k">N°</div><div class="n">0828</div></div></div>
+    </div>
+    <a class="entrez" href="#salle-1">Entrez<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+  </div>
+  <div class="socle"></div>
+</section>
+
+<!-- SALLE I : avant-propos et les mains -->
+<section class="salle" id="salle-1">
+  <div class="corniche"><span>Sala I · Avant-propos</span></div>
+  <div class="room-head"><h2 class="h2">Avant-propos</h2></div>
+  <div class="duo">
+    <div class="mural">
+      <p class="dc">Certaines histoires se gardent pour soi. D'autres s'accrochent au mur, pour que tout le monde les voie.</p>
+      <p>Nos enfants, Giulia et Hugo, se disent oui à Ravello. Nous serions heureux que vous traversiez avec eux les salles de cette journée, de la chapelle jusqu'à la terrasse.</p>
+      <p class="sig">Bianchi &amp; Moreau<small>Les familles</small></p>
+    </div>
+    <div class="col">
+      <div class="hang"><div class="lamp"><i></i></div>
+        <div class="fr"><span class="ro"></span><span class="ro"></span><span class="ro"></span><span class="ro"></span>
+          <div class="pearl"><div class="lip"><div class="slip"><div class="canvas"><img src="/img/hd/dolcevita-mains.webp" alt="Deux mains jointes et leurs alliances sur une nappe blanche, un citron, des bougainvilliers, la côte au crépuscule"></div></div></div></div>
+        </div>
+      </div>
+      <div class="cartel rv">
+        <span class="inv">Inv. GH 2027.01</span>
+        <p class="art">Giulia &amp; Hugo</p>
+        <p class="bio">Italienne et français, Ravello, 2027</p>
+        <p class="ttl">Les mains promises</p>
+        <p class="med">Huile sur toile, citron de la côte et bougainvillier</p>
+        <p class="cred">Don des familles Bianchi et Moreau</p>
+      </div>
+    </div>
+  </div>
+  <div class="socle"></div>
+</section>
+
+<!-- SALLE II : la cérémonie -->
+<section class="salle sage dark-wall" id="salle-2">
+  <div class="corniche"><span>Sala II · La cerimonia</span></div>
+  <div class="room-head"><p class="cap">Premier moment</p><h2 class="h2">La cérémonie</h2></div>
+  <div class="duo">
+    <div class="hang"><div class="lamp"><i></i></div>
+      <div class="fr"><span class="ro"></span><span class="ro"></span><span class="ro"></span><span class="ro"></span>
+        <div class="pearl"><div class="lip"><div class="slip"><div class="canvas"><img src="/img/hd/dolcevita-2.webp" alt="Les mariés de dos marchent vers une petite chapelle blanche fleurie, au-dessus de la mer, au crépuscule" loading="lazy"></div></div></div></div>
+      </div>
+    </div>
+    <div class="cartel rv">
+      <span class="inv">Inv. GH 2027.17</span>
+      <p class="art">Giulia &amp; Hugo</p>
+      <p class="bio">Ravello, 2027</p>
+      <p class="ttl">La cérémonie</p>
+      <p class="sub">À la petite chapelle</p>
+      <hr>
+      <p class="day">Samedi 28 août</p>
+      <p class="hr">17h00</p>
+      <p class="pl">Villa Cimbrone, Ravello</p>
+      <div class="acts" data-ev="0"></div>
+      <p class="med">Huile sur toile, fleurs de bougainvillier et promesses</p>
+      <p class="cred">Collection particulière des mariés</p>
+    </div>
+  </div>
+  <div class="socle"></div>
+</section>
+
+<!-- SALLE III : le dîner -->
+<section class="salle pompei dark-wall" id="salle-3">
+  <div class="corniche"><span>Sala III · La cena</span></div>
+  <div class="room-head"><p class="cap">Second moment</p><h2 class="h2">Le dîner</h2></div>
+  <div class="duo rev">
+    <div class="hang"><div class="lamp"><i></i></div>
+      <div class="fr"><span class="ro"></span><span class="ro"></span><span class="ro"></span><span class="ro"></span>
+        <div class="pearl"><div class="lip"><div class="slip"><div class="canvas"><img src="/img/hd/dolcevita-3.webp" alt="Une longue table dressée sous une pergola de citronniers et de guirlandes lumineuses, face à la mer et au village illuminé" loading="lazy"></div></div></div></div>
+      </div>
+    </div>
+    <div class="cartel rv">
+      <span class="inv">Inv. GH 2027.1930</span>
+      <p class="art">Giulia &amp; Hugo</p>
+      <p class="bio">Ravello, 2027</p>
+      <p class="ttl">Le dîner</p>
+      <p class="sub">Face à la mer</p>
+      <hr>
+      <p class="day">Samedi 28 août</p>
+      <p class="hr">19h30<small>jusqu'à 1h</small></p>
+      <p class="pl">Terrasse de l'infini, Villa Cimbrone</p>
+      <div class="acts" data-ev="1"></div>
+      <p class="med">Huile, citrons de la côte et lumières de Ravello</p>
+      <p class="cred">Œuvre présentée une seule soirée</p>
+    </div>
+  </div>
+  <div class="socle"></div>
+</section>
+
+<!-- PLAN DE L'EXPOSITION : le programme -->
+<section class="salle" id="plan">
+  <div class="corniche"><span>Pianta · Le parcours</span></div>
+  <div class="room-head"><p class="cap">Plan de l'exposition</p><h2 class="h2">Le parcours</h2><p class="lead">Le 28 août, de salle en salle, jusqu'au bout de la nuit.</p></div>
+  <div class="plan">
+    <span class="pin pa"></span><span class="pin pb"></span>
+    <h3>Vous êtes ici</h3>
+    <p class="pt">Le 28 août</p>
+    <svg class="map" viewBox="0 0 320 190" aria-hidden="true">
+      <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#cdbf9f" stroke-width="2"/></pattern></defs>
+      <rect x="8" y="8" width="304" height="174" fill="url(#hatch)" opacity=".5"/>
+      <g fill="#fbf7ee" stroke="#2a231b" stroke-width="3">
+        <rect x="16" y="16" width="92" height="74"/>
+        <rect x="108" y="16" width="96" height="74"/>
+        <rect x="204" y="16" width="100" height="158"/>
+        <rect x="16" y="90" width="188" height="84"/>
+      </g>
+      <!-- portes -->
+      <g stroke="#fbf7ee" stroke-width="5"><line x1="108" y1="44" x2="108" y2="62"/><line x1="204" y1="40" x2="204" y2="60"/><line x1="204" y1="120" x2="204" y2="142"/><line x1="40" y1="174" x2="62" y2="174"/></g>
+      <path d="M51 182 L51 132 L62 110 L62 54 L156 54 L254 54 L254 130 L110 130" fill="none" stroke="#6b2a21" stroke-width="2" stroke-dasharray="3 5" stroke-linecap="round"/>
+      <g font-family="Inter Tight, Inter, sans-serif" font-weight="600" font-size="14" text-anchor="middle">
+        <circle cx="62" cy="54" r="13" fill="#6b2a21"/><text x="62" y="59" fill="#fbf2e2">1</text>
+        <circle cx="156" cy="54" r="13" fill="#6b2a21"/><text x="156" y="59" fill="#fbf2e2">2</text>
+        <circle cx="254" cy="96" r="13" fill="#6b2a21"/><text x="254" y="101" fill="#fbf2e2">3</text>
+        <circle cx="110" cy="130" r="13" fill="#6b2a21"/><text x="110" y="135" fill="#fbf2e2">4</text>
+      </g>
+      <path d="M44 186 l7 -9 l7 9 z" fill="#2a231b"/>
+    </svg>
+    <ol class="legend">
+      <li><span class="no">1</span><span class="t">17h00</span><div><b>La cérémonie</b><span>À la petite chapelle</span></div></li>
+      <li><span class="no">2</span><span class="t">18h00</span><div><b>Aperitivo</b><span>Spritz et citrons de la côte</span></div></li>
+      <li><span class="no">3</span><span class="t">19h30</span><div><b>Le dîner</b><span>Face à la mer</span></div></li>
+      <li><span class="no">4</span><span class="t">22h30</span><div><b>Gelato e musica</b><span>On danse sur la terrasse</span></div></li>
+    </ol>
+  </div>
+  <div class="socle"></div>
+</section>
+
+<!-- SALLE IV : études de couleur (dress code) -->
+<section class="salle ocre" id="salle-4">
+  <div class="corniche"><span>Sala IV · Studi di colore</span></div>
+  <div class="room-head"><p class="cap">Salle IV · La tenue</p><h2 class="h2">Élégance d'été</h2>
+    <p class="wall-text">Lin, soie et couleurs de la côte. Les talons fins et les pavés ne s'aiment pas.</p></div>
+  <div class="etudes">
+    <div class="etude"><div class="fr thin"><div class="slip"><div class="sw" style="--c:#f3e3c3"></div></div></div><p class="lab">Lin de Ravello<small>Étude n° 1</small></p></div>
+    <div class="etude"><div class="fr"><div class="pearl"><div class="lip"><div class="slip"><div class="sw" style="--c:#e7b04d"></div></div></div></div></div><p class="lab">Or de citron<small>Étude n° 2</small></p></div>
+    <div class="etude"><div class="fr"><div class="pearl"><div class="lip"><div class="slip"><div class="sw" style="--c:#7fb4d6"></div></div></div></div></div><p class="lab">Bleu d'Amalfi<small>Étude n° 3</small></p></div>
+    <div class="etude"><div class="fr thin"><div class="slip"><div class="sw" style="--c:#e58f7a"></div></div></div><p class="lab">Corail du soir<small>Étude n° 4</small></p></div>
+  </div>
+  <div class="socle"></div>
+</section>
+
+<!-- INFORMATIONS -->
+<section class="salle sage dark-wall" id="infos">
+  <div class="corniche"><span>Informazioni · Accès</span></div>
+  <div class="room-head"><p class="cap">Accueil des visiteurs</p><h2 class="h2">Venir et dormir</h2></div>
+  <div class="signs">
+    <div class="sign"><span class="ic"><svg viewBox="0 0 24 24"><path d="M2 16l3-1 4-6h7l4 5h2v3h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 17h6"/></svg></span>
+      <div><h4>Venir</h4><p>Aéroport de Naples, puis navette privée le 27 et le 28 août.</p></div></div>
+    <div class="sign"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 19V7M3 14h18v5M21 14v-2a3 3 0 00-3-3h-7v5"/><circle cx="7" cy="11" r="2"/></svg></span>
+      <div><h4>Dormir à Ravello</h4><p>Nous avons réservé des chambres à l'Hotel Villa Fraulo et au Palazzo Avino.</p>
+      <a class="b" href="#infos" onclick="return false"><span class="md"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>Réserver</a></div></div>
+  </div>
+  <div class="hang small"><div class="lamp"><i></i></div>
+    <div class="fr"><span class="ro"></span><span class="ro"></span><span class="ro"></span><span class="ro"></span>
+      <div class="pearl"><div class="lip"><div class="slip"><div class="canvas"><img src="/img/hd/dolcevita-salle.webp" alt="Un palais de Ravello illuminé le soir, entouré de citronniers" loading="lazy"></div></div></div></div>
+    </div>
+  </div>
+  <div class="cartel rv">
+    <span class="inv">Inv. GH 2027.27</span>
+    <p class="art">Giulia &amp; Hugo</p>
+    <p class="bio">Ravello, 2027</p>
+    <p class="ttl">Palazzo, la nuit venue</p>
+    <p class="med">Huile sur toile, oreillers moelleux</p>
+    <p class="cred">Chambres réservées pour les invités</p>
+  </div>
+  <div class="socle"></div>
+</section>
+
+<!-- LIVRE D'OR : la réponse -->
+<section class="salle noce dark-wall" id="livre">
+  <div class="corniche"><span>Libro d'oro</span></div>
+  <div class="room-head"><p class="cap">Avant de partir</p><h2 class="h2">Le livre d'or</h2><p class="lead">Laissez un mot, et dites-nous si vous serez des nôtres.</p></div>
+  <div class="pupitre">
+    <div class="livre"><div class="page" id="page">
+      <form id="rsvp" novalidate>
+        <h3>Serez-vous des&nbsp;nôtres&nbsp;?</h3>
+        <p class="dead">Réponse souhaitée avant le 1er juillet 2027</p>
+        <div class="f"><label for="nom">Votre nom</label><input type="text" id="nom" placeholder="Prénom et nom" autocomplete="name"></div>
+        <div class="f"><span class="lbl">Votre réponse</span>
+          <div class="chips"><label class="chip"><input type="radio" name="oui" value="oui" checked><span>Oui, avec joie</span></label><label class="chip"><input type="radio" name="oui" value="non"><span>Hélas, non</span></label></div></div>
+        <div class="f" id="fMenu"><span class="lbl">Votre menu</span>
+          <div class="chips"><label class="chip"><input type="radio" name="menu" value="Poisson" checked><span>Poisson</span></label><label class="chip"><input type="radio" name="menu" value="Viande"><span>Viande</span></label><label class="chip"><input type="radio" name="menu" value="Végétarien"><span>Végétarien</span></label></div></div>
+        <div class="f"><label for="chanson">Votre chanson pour danser</label><input type="text" id="chanson" placeholder="Volare, Azzurro…"></div>
+        <div class="send"><button class="b solid" type="submit"><span class="md"><svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></span>Signer le livre d'or</button></div>
+      </form>
+      <div class="merci" aria-live="polite"><p class="sg" id="sg">Merci</p><p id="mtx">A presto in Italia !</p></div>
+    </div></div>
+  </div>
+  <div class="socle"></div>
+</section>
+
+<!-- BOUTIQUE ET SORTIE -->
+<section class="salle" id="boutique">
+  <div class="corniche"><span>Bookshop · Uscita</span></div>
+  <div class="room-head"><p class="cap">En sortant</p><h2 class="h2">La boutique du musée</h2><p class="lead">Notre liste de mariage, pour ceux qui voudraient repartir avec un souvenir… ou nous en offrir un.</p></div>
+  <div class="etagere">
+    <div class="obj"><div class="it cat"><img src="/img/hd/dolcevita-1.webp" alt="" loading="lazy"><i>Giulia &amp; Hugo<br>Catalogue</i></div><p class="tag">L'album photo<small>Prix libre</small></p></div>
+    <div class="obj"><div class="it carte"><img src="/img/hd/dolcevita-verres.webp" alt="" loading="lazy"></div><p class="tag">Un dîner à deux<small>Prix libre</small></p></div>
+    <div class="obj"><div class="it voyage"><div><svg viewBox="0 0 24 24"><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/><circle cx="12" cy="12" r="9"/></svg><b>Napoli<br>Tokyo</b></div></div><p class="tag">Lune de miel<small>Prix libre</small></p></div>
+  </div>
+  <div style="margin-top:var(--sp-3)"><a class="b solid" href="#boutique" onclick="return false"><span class="md"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 016 0"/></svg></span>Voir la liste de mariage</a></div>
+  <div class="uscita">
+    <span class="exit"><svg viewBox="0 0 24 24"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10"/></svg>Uscita · Sortie</span>
+    <p class="thanks">Merci de votre visite</p>
+    <p class="lead" style="margin-top:0">À samedi 28 août, à Ravello.</p>
+    <a class="logo" href="/" aria-label="Save The Oui"><span>SAVE THE</span><em>Oui</em></a>
+  </div>
+  <div class="socle"></div>
+</section>
+
+<script>
+(function(){
+  var EV=[
+    {t:'La cérémonie · Giulia & Hugo',s:'20270828T170000',e:'20270828T183000',loc:'Villa Cimbrone, Ravello',uid:'gh-ceremonie'},
+    {t:'Le dîner · Giulia & Hugo',s:'20270828T193000',e:'20270829T010000',loc:"Terrasse de l'infini, Villa Cimbrone, Ravello",uid:'gh-diner'}
+  ];
+  var IC={map:'<svg viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0112 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>',
+          cal:'<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>'};
+  function ics(e){
+    var s=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Save The Oui//FR','BEGIN:VEVENT','UID:'+e.uid+'@savetheoui',
+      'DTSTART;TZID=Europe/Rome:'+e.s,'DTEND;TZID=Europe/Rome:'+e.e,'SUMMARY:'+e.t,'LOCATION:'+e.loc.replace(/,/g,'\\,'),'END:VEVENT','END:VCALENDAR'].join('\r\n');
+    return 'data:text/calendar;charset=utf-8,'+encodeURIComponent(s);
+  }
+  document.querySelectorAll('.acts[data-ev]').forEach(function(box){
+    var e=EV[+box.dataset.ev];
+    box.innerHTML='<a class="b" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.loc)+'"><span class="md">'+IC.map+'</span>Itinéraire</a>'+
+      '<a class="b" download="'+e.uid+'.ics" href="'+ics(e)+'"><span class="md">'+IC.cal+'</span>Calendrier</a>';
+  });
+
+  // la lumière s'allume quand on entre dans la salle ; le tableau vient vers nous en arrivant
+  var rooms=[].slice.call(document.querySelectorAll('.salle'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting)x.target.classList.add('on')})},{threshold:.18});
+    rooms.forEach(function(r){io.observe(r)});
+  } else rooms.forEach(function(r){r.classList.add('on')});
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hangs=[].slice.call(document.querySelectorAll('.hang'));
+  var tick=false;
+  function upd(){
+    tick=false; var vh=innerHeight;
+    hangs.forEach(function(h){
+      var r=h.getBoundingClientRect();
+      var p=(vh-r.top)/(vh*.75); p=Math.max(0,Math.min(1,p));
+      p=1-Math.pow(1-p,2);
+      h.style.setProperty('--p',p.toFixed(3));
+    });
+  }
+  if(!reduce){addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});addEventListener('resize',upd);upd();}
+
+  // livre d'or (démo : rien n'est envoyé)
+  var f=document.getElementById('rsvp'),menu=document.getElementById('fMenu');
+  f.addEventListener('change',function(){menu.style.display=f.oui.value==='non'?'none':''});
+  f.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var n=(document.getElementById('nom').value||'').trim()||'Un invité';
+    document.getElementById('sg').textContent=n;
+    document.getElementById('mtx').textContent=f.oui.value==='non'?'Grazie, on pensera à vous.':'A presto in Italia ! Votre menu : '+f.menu.value.toLowerCase()+'.';
+    document.getElementById('page').classList.add('signed');
+  });
+})();
+</script>
+</body>
+</html>

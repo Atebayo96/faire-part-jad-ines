@@ -4,5 +4,16 @@
       "mcp__Higgsfield",
       "mcp__Higgsfield__*"
     ]
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "hostinger@claude-plugins-official": true
   }
 }

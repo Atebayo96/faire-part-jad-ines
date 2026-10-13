@@ -654,7 +654,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `STRIPE_WEBHOOK_SECRET` (événement `checkout.session.completed` vers `/api/stripe`), et pour l'e-mail `RESEND_API_KEY`
     (+ `SCEAU_MAIL_FROM`). `RESEND_API_KEY` est posée sur Vercel depuis le 13 octobre 2026 ; le domaine `savetheoui.fr` est
     ajouté dans Resend, son DNS est chez Hostinger (`dns-parking.com`, pas chez Vercel) : DKIM `resend._domainkey` et les
-    CNAME `send` / `rsend` s'y ajoutent à la main. Tant que Resend ne dit pas « verified », aucun e-mail ne part. Sans clé Stripe, l'Essentiel reprend l'ancien chemin. Test local : `SCEAU_LOCAL=1
+    CNAME `send` / `rsend` s'y ajoutent à la main. Domaine vérifié le 13 octobre 2026 (e-mail de test parti). `savetheoui.fr` n'a pas de boîte de réception (aucun MX) : les réponses des mariés vont à `SCEAU_MAIL_REPLY_TO` (en-tête `reply_to`, `_publish.js`) = `savetheoui@gmail.com`, la boîte de la marque (jamais l’adresse perso de l’utilisateur). Sans clé Stripe, l'Essentiel reprend l'ancien chemin. Test local : `SCEAU_LOCAL=1
     SCEAU_STRIPE_FAKE=1` (paiement simulé). Signature et Couture restent faits par nous (liens de paiement, `paiement.js`).
     Tout ce qui promet un délai dit « en ligne dès le paiement » pour l'Essentiel (formules, accueil, questions, CGV, « Ensuite »).
     Tant que le paiement n'est pas branché (ni `STRIPE_SECRET_KEY`, ni lien de paiement), le bouton « Commander » mène au
