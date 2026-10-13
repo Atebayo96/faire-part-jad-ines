@@ -12,7 +12,7 @@ D={'chinois':"a pair of red lacquered Chinese doors with gold studs and round br
    'oldmoney':"a pair of dark green painted panelled doors with brass lion knockers, boxwood topiary carved in relief",
    'afro':"a pair of carved wooden doors with kente and wax patterns painted in warm orange and indigo, cowrie-shell handles",
    'maghreb':"a pair of studded cobalt blue medina doors with black iron nails and a brass hand-of-Fatima knocker, in a whitewashed horseshoe arch",
-   'alhambra':"a pair of tall Andalusian cedar doors with carved geometric star patterns, set in an ivory stucco horseshoe arch, bronze handles",
+   'alhambra':"a pair of tall Andalusian cedar double doors with carved geometric star patterns and bronze handles, seen very close so that the two doors alone fill the whole frame: no stucco arch, no wall, no frame around them",  # 13 oct. 2026 : l'arc en stuc et le mur autour (« génère des portes normales, comme les autres »)
    'desert':"a pair of caidal tent flaps in heavy ochre and indigo embroidered cloth with geometric Berber motifs and gold tassels, closed in the middle",
    'emeraude':"a pair of monumental palace doors in deep emerald lacquer with chiselled gold geometric star inlays and heavy gold ring knockers",
    'doucefrance':"a pair of tall weathered pale blue wooden double doors of a Provençal bastide with wrought-iron hinges and a round iron knocker, seen very close so that the two doors alone fill the whole frame: no stone wall, no roses, no lavender, no frame around them"}  # 6 oct. 2026 : la première version montrait le mur, les roses et la lavande autour (« on a dit des portes normales »)

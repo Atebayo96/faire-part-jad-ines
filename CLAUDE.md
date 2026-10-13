@@ -180,6 +180,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     reflet vert retiré du bord). C'est la méthode pour les autres portes. Défaut connu : le battant gauche se dissout un peu
     au lieu de finir son pivot (vers 3,7 s), caché par le plongeon.
     Clé fal.ai : jamais dans le dépôt (variable `FAL_KEY` de l'environnement). Démo : `page-leila-mehdi` (ouverture Portes).
+    **Retiré le 13 octobre 2026** (« c'est mal fait, génère des portes normales, comme les autres ») : la porte de l'Andalou
+    était posée dans son arc de stuc, avec le mur autour, alors que toutes les autres sont deux battants qui remplissent
+    l'écran. Elle est repeinte pleine (`portes.py alhambra --portes`, 1 génération, même consigne que Douce France : « les
+    deux portes seules remplissent le cadre, pas d'arc, pas de mur »), et l'Andalou s'ouvre comme les autres (battants en
+    CSS). La vidéo, faite sur l'ancienne porte, est supprimée ; le code (`T.doorVid`, `porte-video.py`) reste pour plus tard.
+    **Toute porte est pleine** : deux battants d'un bord à l'autre, jamais d'arc, de mur ni de décor autour.
     **Pas d'animation du sceau** (6 octobre 2026) : un essai où le sceau de l'enveloppe glissait jusqu'à l'accueil a été
     refusé (« c'est pas ouf, on le redécouvre après, ça me va ») : le sceau de l'accueil apparaît avec le texte.
     Toute nouvelle ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à
