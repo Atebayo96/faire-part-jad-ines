@@ -7,6 +7,13 @@
 <meta name="theme-color" content="#e9dcc0">
 <title>Giulia &amp; Hugo · Affiches</title>
 <link rel="stylesheet" href="/polices/polices.css">
+<!-- les six peintures sont préchargées : une affiche se colle complète, sa peinture doit être là dès la première image -->
+<link rel="preload" as="image" href="/img/hd/dolcevitajour-mains.webp">
+<link rel="preload" as="image" href="/img/hd/dolcevitajour-2.webp">
+<link rel="preload" as="image" href="/img/hd/dolcevita-3.webp">
+<link rel="preload" as="image" href="/img/hd/dolcevitajour-4.webp">
+<link rel="preload" as="image" href="/img/hd/dolcevitajour-dress.webp">
+<link rel="preload" as="image" href="/img/hd/dolcevita-verres.webp">
 <style>
 /* Les fichiers de polices de Google sont variables : on ouvre toute la plage de graisses. */
 @font-face{font-family:'JostV';font-style:normal;font-weight:300 700;src:url(/polices/jost-35841fe7.woff2) format('woff2');font-display:swap}
@@ -130,19 +137,19 @@ body{
 .pp::before{background:var(--trame) 0 0/4px 4px repeat;opacity:var(--tr)}
 .pp::after{background:var(--fibre) 0 0/300px 300px repeat;opacity:var(--gr)}
 /* les fonds rayonnants et les peintures sont dans des enfants : ils reçoivent le même grain par-dessus (sans texte dedans) */
-.p1 .scene::after,.p3 .moon::after,.p6 .duo::after,.p1 .band::after{
+.p1 .scene::after,.p6 .duo::after,.p1 .band::after{
   content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;
   background:var(--trame) 0 0/4px 4px repeat,var(--fibre) 0 0/300px 300px repeat;opacity:var(--gr);
 }
 .p1 .band::after{z-index:-1} /* la bande de nuit : grain sous le 28 et la date (la bande est déjà un contexte, z 1) */
 /* ces cadres sont des contextes d'empilement (translate) : le multiply n'y voit pas l'aplat de la planche. Ils portent
    donc eux-mêmes la couleur de l'aplat, sinon le grain s'affichait en clair dans les rayons transparents. */
-.p1 .scene{background:var(--lemon)}.p3 .moon{background:var(--navy)}.p6 .duo{background:var(--bouga)}
+.p1 .scene{background:var(--lemon)}.p6 .duo{background:var(--bouga)}
 /* ---------- Plans : chaque niveau glisse à sa profondeur (translate seul, le transform reste à la révélation) ---------- */
 .pp > *{translate:calc(var(--px) * var(--z,0) * 7px) calc(var(--py) * var(--z,0) * 7px)}
 .pp > .row,.pp > .rule,.pp > .fit,.pp > .day,.pp > .hour,.pp > .body,.pp > .acts,.pp > .tt{--z:1}
-.pp > .fig,.pp > .scene,.pp > .moon,.pp > .duo,.pp > .card,.pp > .split,.pp > .band{--z:.4}
-.p1 .scene::before,.p3 .moon::before,.p6 .duo::before{inset:-10px;translate:calc(var(--px) * -4px) calc(var(--py) * -4px)}
+.pp > .fig,.pp > .scene,.pp > .duo,.pp > .card,.pp > .split,.pp > .band{--z:.4}
+.p1 .scene::before,.p6 .duo::before{inset:-10px;translate:calc(var(--px) * -4px) calc(var(--py) * -4px)}
 /* ---------- Relief d'impression : les grands caractères sont foulés dans le papier (lumière fine en bas à droite, ombre
    en haut à gauche), et la seconde encre est décalée d'un demi-pixel (repérage) ---------- */
 .fit,.hour,.p4 .tr .t,.day,.p1 .band .n28{
@@ -192,7 +199,7 @@ body{
   background-blend-mode:normal,multiply,normal;mix-blend-mode:multiply;
 }
 .fig::after{z-index:3}
-.scene .fig::before,.moon .fig::before,.duo .fig::before{background:none} /* déjà grainés par leur cadre */
+.scene .fig::before,.duo .fig::before{background:none} /* déjà grainés par leur cadre */
 .arch{border-radius:999px 999px 0 0}
 .disc{border-radius:50%;flex:0 0 auto;aspect-ratio:1}
 /* filet d'impression autour de la forme */
@@ -245,21 +252,19 @@ body.seri .fig img{filter:url(#seri)}
 /* II. Cérémonie : terre cuite, crème */
 .p2 .pp{background:var(--terra);color:var(--cream);--btn-bg:var(--cream);--btn-fg:var(--navy);--btn-md:var(--terra);--btn-mdfg:var(--cream);--plate:var(--terra);--reg:rgba(236,191,58,.4)}
 .p2 .fig{width:70%;border-radius:999px 999px 0 0;overflow:visible}
-.p2 .fig img,.p5 .fig img{border-radius:inherit}
-.p2 .fig::after,.p5 .fig::after{content:"";position:absolute;inset:-8px -8px 0;border:2px solid var(--cream);border-bottom:0;border-radius:999px 999px 0 0;pointer-events:none}
+.p2 .fig img,.p3 .fig img,.p5 .fig img{border-radius:inherit}
+.p2 .fig::after,.p3 .fig::after,.p5 .fig::after{content:"";position:absolute;inset:-8px -8px 0;border:2px solid var(--cream);border-bottom:0;border-radius:999px 999px 0 0;pointer-events:none}
 .p2 .fig img{object-position:50% 100%}
 .p2 .hour{font-size:min(31cqw,26cqh)}
 
 /* III. Dîner : nuit, citron */
 .p3 .pp{background:var(--navy);color:var(--cream);--btn-bg:var(--lemon);--btn-fg:var(--navy);--btn-md:var(--navy);--btn-mdfg:var(--lemon);--plate:var(--navy);--reg:rgba(243,231,204,.3)}
 .p3 .hour{color:var(--lemon);font-size:min(36cqw,24cqh)}
-.p3 .moon{position:relative;flex:1 1 auto;min-height:0;width:100%;display:flex;justify-content:center;align-items:center;container-type:size}
-.p3 .moon .ring{width:min(80cqw,100cqh);height:min(80cqw,100cqh);border-radius:50%;border:2px solid var(--lemon);padding:6px;flex:0 0 auto}
-.p3 .moon{width:calc(100% + 32px)}
-.p3 .moon::before{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 50%,transparent 0 12px,rgba(236,191,58,.5) 12px 13.5px);-webkit-mask:radial-gradient(circle closest-side at 50% 50%,#000 70%,transparent 116%);mask:radial-gradient(circle closest-side at 50% 50%,#000 70%,transparent 116%)}
-.p3 .moon .ring{position:relative;background:var(--navy)}
-.p3 .moon .fig{height:100%;border-radius:50%}
-.p3 .moon .fig img{object-position:50% 92%}
+/* la peinture du dîner est dans une arche, comme la chapelle (II) et le balcon (V) : les anneaux concentriques ont été refusés */
+.p3 .fig{width:70%;border-radius:999px 999px 0 0;overflow:visible}
+/* calée en bas et agrandie (la scène remplit l'arche, pas le ciel de nuit) ; le cadre laisse déborder son liseré, donc
+   c'est l'image qui est découpée à la forme de l'arche */
+.p3 .fig img{object-position:50% 100%;top:auto;bottom:0;height:135%;clip-path:inset(calc(100% - 100% / 1.35) 0 0 0 round 999px 999px 0 0)}
 
 /* IV. Programme : papier crème, encres brique et nuit */
 .p4 .pp{background:var(--cream);color:var(--navy);--plate:var(--cream);--bleed:var(--navy);--tr:0;--gr:.4; /* papier nu : pas de trame, et la brique des heures (6,7:1) garde sa marge */--lip:rgba(255,255,255,.75);--dent:rgba(60,35,0,.28);--reg:rgba(138,49,32,.42)}
@@ -298,14 +303,32 @@ body.seri .fig img{filter:url(#seri)}
 /* ---------- Révélation du texte, une fois l'affiche posée ---------- */
 .rv{opacity:0;transform:translateY(10px)}
 /* les plans n'arrivent pas pareil : le texte (devant) monte, la peinture (derrière) se pose en reculant un peu */
-.fig.rv,.scene.rv,.moon.rv,.duo.rv,.card.rv,.split.rv,.band.rv{transform:translateY(4px) scale(1.025)}
+.fig.rv,.scene.rv,.duo.rv,.card.rv,.split.rv,.band.rv{transform:translateY(4px) scale(1.025)}
 .pst.lit .rv{opacity:1;transform:none;transition:opacity .7s ease, transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--d,0) * 90ms + 60ms)}
-.pst.lit .fig.rv,.pst.lit .scene.rv,.pst.lit .moon.rv,.pst.lit .duo.rv,.pst.lit .card.rv,.pst.lit .split.rv{transition-duration:1s,1.3s}
+.pst.lit .fig.rv,.pst.lit .scene.rv,.pst.lit .duo.rv,.pst.lit .card.rv,.pst.lit .split.rv{transition-duration:1s,1.3s}
+/* une affiche qu'on découvre en décollant celle du dessus est déjà imprimée : son texte est là, sans révélation */
+.pst.still .rv{transition:none!important}
 
-/* ---------- Transition : bandes de couleur ---------- */
-#wipe{position:absolute;inset:0;z-index:20;pointer-events:none;display:flex;flex-direction:column}
-#wipe i{flex:1;transform:scaleY(0);transform-origin:50% 100%}
-#wipe.up i{transform-origin:50% 0}
+/* ---------- Transition : le colleur d'affiches ----------
+   La nouvelle affiche est collée PAR-DESSUS l'ancienne : elle se déroule depuis le haut (clip-path qui descend), la
+   feuille encore libre penche un peu hors du mur et se plaque en ondulant (rotateX amorti), son ombre portée se réduit
+   quand elle se plaque. L'ancienne reste entière dessous jusqu'à être recouverte. En revenant, l'affiche du dessus se
+   décolle par le bas (le bord remonte, l'ombre revient) et laisse réapparaître la précédente, intacte.
+   Les ombres ne s'animent jamais (peinture) : deux ombres fixes (posée / soulevée) dont on croise l'opacité, dans une
+   couche `#under` découpée au même bord que la feuille ; le rouleau de papier (`.edge`) glisse en translateY. */
+.pst.top{z-index:4}
+#under,#over{position:absolute;left:var(--pm-x);right:var(--pm-x);top:var(--pm-t);bottom:var(--pm-b);pointer-events:none;visibility:hidden}
+#under{z-index:3}#over{z-index:5;overflow:visible}
+#under i{position:absolute;inset:0;border-radius:1.5px;display:block}
+#under .sh1{box-shadow:0 1px 1.5px rgba(0,0,0,.45), 0 8px 18px rgba(0,0,0,.42), 0 28px 60px rgba(0,0,0,.45)}
+#under .sh2{box-shadow:0 3px 3px rgba(0,0,0,.35), 0 26px 34px rgba(0,0,0,.5), 0 60px 90px rgba(0,0,0,.5);opacity:0}
+/* le rouleau : l'envers du papier, éclairé dessus, dans l'ombre dessous, et sa ligne de contact */
+#over .edge{
+  position:absolute;left:0;right:0;top:0;height:15px;border-radius:0 0 3px 3px;
+  background:linear-gradient(180deg,#fcf7ea 0%,#efe4ca 38%,#cdbc9a 70%,#8d7b5c 92%,rgba(40,25,10,.55) 100%);
+  box-shadow:0 2px 3px rgba(0,0,0,.35);
+}
+#under.go,#over.go{visibility:visible}
 
 /* ---------- Repères ---------- */
 #dots{position:absolute;right:max(3px,calc(var(--pm-x) - 12px));top:50%;transform:translateY(-50%);z-index:15;display:flex;flex-direction:column;gap:6px}
@@ -414,7 +437,7 @@ body.seri .fig img{filter:url(#seri)}
       <div class="rule s1 rv" style="--d:0"></div>
       <p class="hour s3 rv" style="--d:1">19h30</p>
       <p class="day s2 rv" style="--d:2">Samedi 28 août</p>
-      <div class="moon s3 rv" style="--d:3"><div class="ring"><div class="fig"><img src="/img/hd/dolcevita-3.webp" alt="Le dîner sous la pergola, face à la mer, à la nuit tombée"></div></div></div>
+      <div class="fig s3 rv" style="--d:3"><img src="/img/hd/dolcevita-3.webp" alt="Le dîner sous la pergola, face à la mer, à la nuit tombée"></div>
       <h2 class="fit s3 rv" style="--d:4" data-fit data-max="8"><span class="fl">Face à la mer</span></h2>
       <p class="body s1 rv nowrap" style="--d:4">Terrasse de l'infini · jusqu'à 1 h</p>
       <div class="acts s2 rv" style="--d:5">
@@ -478,7 +501,8 @@ body.seri .fig img{filter:url(#seri)}
     <div class="imp"><span><b>Save The Oui</b> · Stampa d'arte</span><span class="nb">06 / 06</span></div>
   </section>
 
-  <div id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div id="under" aria-hidden="true"><i class="sh1"></i><i class="sh2"></i></div>
+  <div id="over" aria-hidden="true"><div class="edge"></div></div>
   <nav id="dots" aria-label="Affiches"></nav>
 
   <!-- Le billet de réponse (factice) -->
@@ -519,7 +543,8 @@ body.seri .fig img{filter:url(#seri)}
   var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var stage=document.getElementById('stage');
   var P=[].slice.call(document.querySelectorAll('.pst'));
-  var wipe=document.getElementById('wipe'), bands=[].slice.call(wipe.children);
+  var under=document.getElementById('under'), over=document.getElementById('over');
+  var sh2=under.querySelector('.sh2'), edge=over.querySelector('.edge');
   var dots=document.getElementById('dots');
   var cur=0, busy=false;
 
@@ -547,35 +572,56 @@ body.seri .fig img{filter:url(#seri)}
     cur=i;mark();
     requestAnimationFrame(function(){requestAnimationFrame(function(){P[i].classList.add('lit')})});
   }
+  /* Le colleur d'affiches. En avant : la nouvelle affiche est collée par-dessus l'ancienne, déroulée depuis le haut ;
+     l'ancienne reste entière dessous. En arrière : l'affiche du dessus se décolle par le bas et laisse réapparaître la
+     précédente. Dans les deux sens, l'affiche est déjà imprimée (complète dès la première image, pas de révélation du
+     texte après la pose). Durée 820 ms, courbe avec du poids (inertie puis freinage).
+     Seuls clip-path, transform et opacity sont animés. */
   function go(i){
     if(busy||i===cur||i<0||i>=P.length) return;
-    var down=i>cur;
-    P[cur].classList.remove('lit');
-    if(RM){land(i);return}
+    var down=i>cur, from=P[cur], to=P[i];
     busy=true;
-    var cols=P[i].dataset.c.split(',');
-    var order=down?[0,1,2,3]:[3,2,1,0];
-    wipe.className=down?'':'up';
-    bands.forEach(function(b,k){b.style.background=cols[[2,3,1,0][k]]||cols[0]});
-    /* les bandes montent l'une après l'autre, couvrent la page, puis repartent */
-    var T=420, st=70;
-    bands.forEach(function(b,k){
-      var d=order.indexOf(k)*st;
-      b.animate([{transform:'scaleY(0)'},{transform:'scaleY(1)'}],{duration:T,delay:d,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
-    });
-    setTimeout(function(){
-      land(i);
-      P[i].classList.remove('lit');
-      bands.forEach(function(b,k){
-        var d=order.indexOf(k)*st;
-        b.style.transformOrigin=down?'50% 0':'50% 100%';
-        var a=b.animate([{transform:'scaleY(1)'},{transform:'scaleY(0)'}],{duration:T,delay:d,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
-        if(k===order[3]) a.onfinish=function(){
-          bands.forEach(function(x){x.getAnimations().forEach(function(z){z.cancel()});x.style.transformOrigin=''});
-          busy=false;P[i].classList.add('lit');
-        };
-      });
-    },T+3*st+40);
+    if(RM){
+      /* mouvement réduit : un simple fondu de la nouvelle affiche, complète, par-dessus l'ancienne */
+      to.classList.add('on','top','still','lit');
+      var f=to.animate([{opacity:0},{opacity:1}],{duration:350,easing:'ease',fill:'forwards'});
+      f.onfinish=function(){f.cancel();from.classList.remove('on','lit');to.classList.remove('top','still');cur=i;mark();busy=false};
+      return;
+    }
+    var H=from.offsetHeight, D=820, E='cubic-bezier(.62,.02,.2,1)', K={duration:D,easing:E,fill:'forwards'};
+    var sheet=down?to:from;          /* la feuille qui bouge : celle qu'on colle, ou celle qu'on décolle */
+    var e0=down?0:H, e1=down?H:0;    /* le bord collé : il descend quand on colle, il remonte quand on décolle */
+    /* dans les deux sens, l'affiche qu'on pose ou qu'on redécouvre est déjà imprimée : complète dès la première image
+       (`still` : pas de révélation du texte après la pose) */
+    to.classList.add('on','still','lit');
+    (down?to:from).classList.add('top');
+    under.classList.add('go');over.classList.add('go');
+    /* l'inclinaison du parallaxe du moment est gardée dans les images clés, pour ne pas sauter à la fin */
+    var cs=getComputedStyle(stage), px=parseFloat(cs.getPropertyValue('--px'))||0, py=parseFloat(cs.getPropertyValue('--py'))||0;
+    var rx=-py*1.8, ry=px*2.4;
+    function tf(a){return 'perspective(1500px) rotateX('+(rx+a).toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg)'}
+    var A=[];
+    /* la feuille, découpée au bord collé */
+    A.push(sheet.animate([{clipPath:'inset(0px 0px '+(H-e0)+'px 0px)'},{clipPath:'inset(0px 0px '+(H-e1)+'px 0px)'}],K));
+    /* sa partie libre penche hors du mur ; en se collant elle se plaque et ondule (amorti) ; en se décollant elle se soulève */
+    sheet.style.transformOrigin='50% 0';
+    A.push(sheet.animate(down
+      ?[{transform:tf(-7),offset:0},{transform:tf(-4),offset:.45},{transform:tf(1.1),offset:.74},{transform:tf(-.4),offset:.9},{transform:tf(0),offset:1}]
+      :[{transform:tf(0),offset:0},{transform:tf(-1.5),offset:.3},{transform:tf(-6),offset:1}],
+      {duration:D,easing:'ease-in-out',fill:'forwards'}));
+    /* l'ombre portée : découpée 64 px sous le bord (l'ombre du rouleau sur l'affiche du dessous) ; posée <-> soulevée */
+    A.push(under.animate([{clipPath:'inset(-120px -120px '+(H-e0-64)+'px -120px)'},{clipPath:'inset(-120px -120px '+(H-e1-64)+'px -120px)'}],K));
+    A.push(sh2.animate(down?[{opacity:1},{opacity:0}]:[{opacity:0},{opacity:1}],{duration:D,easing:'ease-in-out',fill:'forwards'}));
+    /* le rouleau de papier suit le bord, et s'efface quand il sort de la feuille */
+    A.push(edge.animate([{transform:'translateY('+(e0-2)+'px)'},{transform:'translateY('+(e1-2)+'px)'}],K));
+    A.push(edge.animate(down?[{opacity:1,offset:0},{opacity:1,offset:.9},{opacity:0,offset:1}]:[{opacity:0,offset:0},{opacity:1,offset:.1},{opacity:1,offset:1}],{duration:D,fill:'forwards'}));
+    A[0].onfinish=function(){
+      A.forEach(function(a){a.cancel()});
+      sheet.style.transformOrigin='';
+      under.classList.remove('go');over.classList.remove('go');
+      from.classList.remove('on','top','lit');to.classList.remove('top','still');cur=i;mark();
+      busy=false;
+    };
   }
   /* toucher */
   var y0=null;
