@@ -15,24 +15,32 @@
    peinte mesurée ; les peintures sont des planches.
    ============================================================ */
 :root{
-  --paper:#f4eee3; --paper2:#ece3d3; --ink:#1d1a16; --ink2:#4f4538; --gold:#5e4620;
+  --paper:#f4eee3; --paper2:#ece3d3; --ink:#1a1612; --ink2:#413729; --gold:#4f3a18;
   --med:#8c6d32; --cream:#f6eddb; --desk:#1b1712; --cloth:#1e2a56; --cloth2:#0f1530;
   --sp1:10px; --sp2:18px; --sp3:28px;
   --fs-lab:12px; --fs-cap:11.5px; --fs-body:clamp(19px,5cqi,23px);
   --pw:100vw; --ph:100vh;
-  /* ---- matière (13 octobre 2026 : « il nous faut de la profondeur, une gestion des textures ») ----
-     Deux papiers en relief SVG éclairé en lumière rasante (feDiffuseLighting, comme carte.css), multipliés sur la teinte :
-     coton épais pour les pages de texte, satiné plus lisse pour les pages de planches. L'encre est mesurée contre le papier
-     assombri par le relief (pire pixel ≈ 87 % de la teinte : --gold passé de #6e5428 à #5e4620, --ink2 de #5c5145 à #4f4538,
-     les légendes sous l'ombre portée des planches tombaient à 4,0 ; mesuré ≥ 4,5:1 sur chaque ligne, contrast.js). */
-  --tex-coton:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.035' numOctaves='5' seed='3' stitchTiles='stitch' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' seed='9' stitchTiles='stitch' result='b'/%3E%3CfeComposite in='a' in2='b' operator='arithmetic' k2='.7' k3='.45' result='h0'/%3E%3CfeColorMatrix in='h0' type='luminanceToAlpha' result='h'/%3E%3CfeDiffuseLighting in='h' surfaceScale='4.6' diffuseConstant='1.22' lighting-color='%23fff' result='l'%3E%3CfeDistantLight azimuth='225' elevation='42'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer in='l'%3E%3CfeFuncR type='linear' slope='0.42' intercept='0.58'/%3E%3CfeFuncG type='linear' slope='0.42' intercept='0.58'/%3E%3CfeFuncB type='linear' slope='0.42' intercept='0.58'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23p%29'/%3E%3C/svg%3E");
-  --tex-satin:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' seed='21' stitchTiles='stitch' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.45' numOctaves='2' seed='4' stitchTiles='stitch' result='b'/%3E%3CfeComposite in='a' in2='b' operator='arithmetic' k2='.75' k3='.3' result='h0'/%3E%3CfeColorMatrix in='h0' type='luminanceToAlpha' result='h'/%3E%3CfeDiffuseLighting in='h' surfaceScale='3.6' diffuseConstant='1.22' lighting-color='%23fff' result='l'%3E%3CfeDistantLight azimuth='225' elevation='50'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer in='l'%3E%3CfeFuncR type='linear' slope='0.4' intercept='0.6'/%3E%3CfeFuncG type='linear' slope='0.4' intercept='0.6'/%3E%3CfeFuncB type='linear' slope='0.4' intercept='0.6'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23p%29'/%3E%3C/svg%3E");
+  /* ---- matière (13 octobre 2026 : « il nous faut de la profondeur, une gestion des textures » ; puis « on voit que c'est de la
+     fausse texture, un truc fait sur PC ») ----
+     Un vrai papier d'édition a plusieurs échelles, et n'est uniforme nulle part. Le papier est donc bâti en couches, dans deux
+     tuiles SVG de tailles premières entre elles (727 × 619 et 523 × 431 : leurs périodes ne coïncident jamais, la répétition
+     ne se voit pas), éclairées par UNE source cohérente (lumière rasante en haut à gauche, feDiffuseLighting) :
+       · tuile A « vergé » : marbrures larges et douces (nuages de densité, 60 à 260 px), fibres couchées (deux turbulences
+         anisotropes, l'une étirée en long, l'autre plus courte et oblique), puis le grain fin (le toucher) ; relief éclairé ;
+       · tuile B « chaleur » : des nuages de teinte (zones plus chaudes et un peu plus denses) et un second grain, plus serré.
+     Les deux sont posées PAR-DESSUS tout le contenu de la page (.pg.paper::before, z 7, multiply) : le grain passe dans
+     l'encre des lettres et sur les planches, avec la même phase partout. L'encre est mesurée contre le papier assombri par le
+     relief (pire pixel), ≥ 4,5:1 sur chaque ligne (contrast.js). */
+  --tex-verge:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='727' height='619'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0042' numOctaves='2' seed='11' stitchTiles='stitch' result='m'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.028 .42' numOctaves='2' seed='5' stitchTiles='stitch' result='f1'/%3E%3CfeTurbulence type='turbulence' baseFrequency='.16 .05' numOctaves='2' seed='8' stitchTiles='stitch' result='f2'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.52' numOctaves='2' seed='3' stitchTiles='stitch' result='g'/%3E%3CfeComposite in='m' in2='f1' operator='arithmetic' k2='.6' k3='.07' result='h1'/%3E%3CfeComposite in='h1' in2='f2' operator='arithmetic' k2='1' k3='.05' result='h2'/%3E%3CfeComposite in='h2' in2='g' operator='arithmetic' k2='1' k3='.15' result='h3'/%3E%3CfeColorMatrix in='h3' type='luminanceToAlpha' result='h'/%3E%3CfeDiffuseLighting in='h' surfaceScale='3.2' diffuseConstant='1.1' lighting-color='%23fff' result='l'%3E%3CfeDistantLight azimuth='225' elevation='38'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer in='l' result='L'%3E%3CfeFuncR type='linear' slope='0.4' intercept='0.6'/%3E%3CfeFuncG type='linear' slope='0.4' intercept='0.6'/%3E%3CfeFuncB type='linear' slope='0.4' intercept='0.6'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix in='m' type='matrix' values='.14 0 0 0 .86 .18 0 0 0 .82 .24 0 0 0 .76 0 0 0 0 1' result='w'/%3E%3CfeBlend in='L' in2='w' mode='multiply'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23p%29'/%3E%3C/svg%3E");
+  --tex-chaleur:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='523' height='431'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0075' numOctaves='1' seed='17' stitchTiles='stitch' result='c'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='1' seed='23' stitchTiles='stitch' result='g'/%3E%3CfeComposite in='c' in2='g' operator='arithmetic' k2='.72' k3='.28' result='h'/%3E%3CfeColorMatrix in='h' type='matrix' values='.1 0 0 0 .9 .14 0 0 0 .86 .2 0 0 0 .8 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23p%29'/%3E%3C/svg%3E");
   /* toile de reliure : un tissage serré éclairé de biais, posé sur le bleu nuit de la couverture */
   --tex-cloth:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .25' numOctaves='2' seed='7' stitchTiles='stitch' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.25 .9' numOctaves='2' seed='3' stitchTiles='stitch' result='b'/%3E%3CfeComposite in='a' in2='b' operator='arithmetic' k2='.5' k3='.5' result='h0'/%3E%3CfeColorMatrix in='h0' type='luminanceToAlpha' result='h'/%3E%3CfeDiffuseLighting in='h' surfaceScale='3' diffuseConstant='1.1' lighting-color='%23fff' result='l'%3E%3CfeDistantLight azimuth='225' elevation='38'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer in='l'%3E%3CfeFuncR type='linear' slope='0.45' intercept='0.55'/%3E%3CfeFuncG type='linear' slope='0.45' intercept='0.55'/%3E%3CfeFuncB type='linear' slope='0.45' intercept='0.55'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23c%29'/%3E%3C/svg%3E");
   /* grain de feuille d'or (dorure à chaud) */
   --grain-or:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.05'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23g)' opacity='.45'/%3E%3C/svg%3E");
   /* le texte foulé dans le papier : ombre fine en haut à gauche, filet de lumière en bas à droite */
-  --press:-.6px -.8px 0 rgba(45,28,8,.26),.7px .9px 0 rgba(255,255,255,.88),1.4px 1.8px 2px rgba(45,28,8,.10);
+  --press:-.7px -.9px 0 rgba(45,28,8,.34),.8px 1px 0 rgba(255,255,255,.95),1.6px 2px 2.4px rgba(45,28,8,.14);
+  /* foulage plus profond pour les titres et les grands chiffres */
+  --press2:-.9px -1.1px 0 rgba(45,28,8,.4),.8px 1px 0 rgba(255,255,255,.5),2px 2.6px 3px rgba(45,28,8,.18);
   /* le gaufrage à sec (blanc sur blanc) : lumière en haut à gauche, ombre en bas à droite */
   --emb:drop-shadow(-.8px -.8px 0 rgba(255,255,255,.95)) drop-shadow(1px 1.3px .6px rgba(105,80,45,.42)) drop-shadow(1.6px 2.2px 2px rgba(105,80,45,.16));
 }
@@ -55,18 +63,26 @@ img{display:block}
 /* le papier : son relief (coton épais sur les pages de texte, satiné sur les pages de planches), puis la lumière de la feuille,
    plus claire en haut à gauche, un peu d'ombre vers le bas et le bord. Le relief reste sous le texte ; l'encre la plus claire
    (--gold, --ink2) est mesurée contre son pixel le plus sombre. */
-.pg.paper{background-color:var(--paper);
-  background-image:radial-gradient(ellipse 120% 70% at 22% 8%,rgba(255,255,255,.55),rgba(255,255,255,0) 60%),
-    linear-gradient(160deg,rgba(255,255,255,0) 55%,rgba(90,66,30,.07) 100%)}
-.pg.paper::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.3;mix-blend-mode:multiply;background:var(--tex-coton)}
-.pg.paper.front::before,.pg.paper.op::before,.pg.paper.rep::before{opacity:.26;background:var(--tex-satin)}
-/* pages de planches : un vernis très discret, une lumière qui glisse en travers de la page satinée */
-.pg.paper.front,.pg.paper.op,.pg.paper.rep{background-image:linear-gradient(112deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 34%,rgba(255,255,255,0) 66%,rgba(255,255,255,.14) 100%),
-  radial-gradient(ellipse 120% 70% at 22% 8%,rgba(255,255,255,.45),rgba(255,255,255,0) 60%),linear-gradient(160deg,rgba(255,255,255,0) 55%,rgba(90,66,30,.07) 100%)}
-/* le pli de la page qui tourne : seulement pendant le geste. Un filet de lumière glisse sur le papier avant l'ombre du pli. */
+/* La lumière de la page n'est pas plate : la feuille est légèrement bombée vers la reliure (ombre douce et progressive dans
+   la gouttière, côté --gut), un peu plus claire vers le bord extérieur et vers le haut à gauche (la source), et le coin
+   inférieur extérieur, à peine relevé, accroche la lumière. Une page seule (téléphone) est une page de droite. */
+.pg.paper{--gut:left;--out:right;background-color:var(--paper);
+  background-image:radial-gradient(ellipse 120% 70% at 22% 8%,rgba(255,255,255,.5),rgba(255,255,255,0) 60%),
+    radial-gradient(ellipse 55% 40% at var(--out) 100%,rgba(255,255,255,.42),rgba(255,255,255,0) 70%),
+    linear-gradient(to var(--out),rgba(60,40,14,.1),rgba(60,40,14,.035) 30%,rgba(255,255,255,0) 55%,rgba(255,255,255,.16) 100%),
+    linear-gradient(160deg,rgba(255,255,255,0) 55%,rgba(90,66,30,.06) 100%)}
+.spread .pg.paper.L{--gut:right;--out:left}
+/* le papier par-dessus tout (planches et encre comprises : tout est imprimé DANS la feuille), même phase sur toute la page ;
+   et l'ombre de la gouttière, qui continue sur les planches */
+.pg.paper::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:7;opacity:.62;mix-blend-mode:multiply;
+  background-image:var(--tex-verge),var(--tex-chaleur),linear-gradient(to var(--out),rgba(70,48,18,.16),rgba(70,48,18,.05) 26%,rgba(70,48,18,0) 50%);
+  background-size:727px 619px,523px 431px,100% 100%}
+/* le pli de la page qui tourne : seulement pendant le geste. Un filet de lumière glisse sur le papier avant l'ombre du pli,
+   puis tout s'éteint : la dernière image du geste est la page posée, au pixel près. */
 .pg.turning::after,.leaf .face::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:9;opacity:0;
-  background:linear-gradient(90deg,rgba(255,255,255,0) 22%,rgba(255,255,255,.16) 44%,rgba(30,20,8,0) 58%,rgba(30,20,8,.14) 78%,rgba(30,20,8,.4) 100%);animation:shade .9s ease-in-out forwards}
-@keyframes shade{0%{opacity:0}55%{opacity:1}100%{opacity:.6}}
+  background:linear-gradient(90deg,rgba(255,255,255,0) 22%,rgba(255,255,255,.16) 44%,rgba(30,20,8,0) 58%,rgba(30,20,8,.14) 78%,rgba(30,20,8,.4) 100%);animation:shade 1.1s ease-in-out forwards}
+.leaf .face.back::after{transform:scaleX(-1)}
+@keyframes shade{0%{opacity:0}45%{opacity:1}78%{opacity:.5}100%{opacity:0}}
 /* l'ombre que la page qui se soulève porte sur la page du dessous, et qui se déplace avec elle */
 .pg.under::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:9;opacity:0;
   background:linear-gradient(90deg,rgba(20,12,4,.42),rgba(20,12,4,.18) 30%,rgba(20,12,4,0) 70%);background-size:200% 100%;animation:cast .9s cubic-bezier(.45,.05,.25,1) forwards}
@@ -83,8 +99,8 @@ img{display:block}
 .spread .pg.L,.spread .pg.R,.leaf .face{box-shadow:0 30px 60px -20px rgba(0,0,0,.55),0 8px 18px -10px rgba(0,0,0,.4)}
 /* la reliure : un vrai creux au milieu de la double page (le papier plonge dans le pli, un filet de lumière sur la crête) */
 .spread .pg.L::after,.spread .pg.R::after{content:"";position:absolute;top:0;bottom:0;width:64px;pointer-events:none;z-index:8}
-.spread .pg.L::after{right:0;background:linear-gradient(90deg,rgba(40,28,12,0),rgba(40,28,12,.06) 45%,rgba(40,28,12,.2) 86%,rgba(255,255,255,.22) 95%,rgba(40,28,12,.34) 100%)}
-.spread .pg.R::after{left:0;background:linear-gradient(270deg,rgba(40,28,12,0),rgba(40,28,12,.07) 45%,rgba(40,28,12,.24) 88%,rgba(255,255,255,.14) 94%,rgba(40,28,12,.42) 100%)}
+.spread .pg.L::after{right:0;background:linear-gradient(90deg,rgba(40,28,12,0),rgba(40,28,12,.06) 45%,rgba(40,28,12,.2) 85%,rgba(255,255,255,.18) 92%,rgba(255,255,255,.14) 95%,rgba(40,28,12,.34) 100%)}
+.spread .pg.R::after{left:0;background:linear-gradient(270deg,rgba(40,28,12,0),rgba(40,28,12,.07) 45%,rgba(40,28,12,.24) 87%,rgba(255,255,255,.12) 92%,rgba(255,255,255,.1) 95%,rgba(40,28,12,.42) 100%)}
 .spread .pg.cover.R::after,.spread .pg.back.L::after{display:none}
 /* la tranche : derrière les deux pages, le bloc du livre (quelques feuillets qui dépassent, un peu décalés) et les plats de la reliure */
 .spread .stage::before,.spread .stage::after{content:"";position:absolute;pointer-events:none;transition:opacity .4s}
@@ -99,7 +115,10 @@ img{display:block}
 .spread .cover .bgimg{object-position:50% 100%;--pt:54%}
 .spread .cover .pi::before{--pt:54%}
 .spread .colo .mid::before{height:28px;margin-bottom:var(--sp1)}
-.spread .mast{font-size:clamp(78px,19cqi,150px)}
+.spread .colo .mid{max-width:37ch}
+.spread .colo .txt2{font-size:19px}
+.spread .colo .seal{width:84px;height:84px}
+.spread .mast{font-size:clamp(78px,17cqi,150px)}
 .leaf{position:absolute;top:0;width:var(--pw);height:var(--ph);transform-style:preserve-3d;z-index:6}
 .leaf .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
 .leaf .face.back{transform:rotateY(180deg)}
@@ -129,11 +148,19 @@ p{margin:0}
    Les titres et les grands chiffres sont foulés (typographie à l'ancienne : enfoncés d'un cheveu dans la feuille) ; les
    prénoms et les chiffres romains des chapitres sont en dorure à chaud (dégradé de l'or vers plus foncé, jamais plus clair,
    grain de feuille d'or, relief marqué) ; les filets sont pressés dans le papier (un trait, un filet de lumière dessous). */
-.ci,.fam h2,.toc-h,.ev h3,.ev .hour,.ev .day,.title .day,.prog h2,.dress h2,.stay h2,.rep h2,.tl .h,.stay .k,.toc .n,.sign,.fam .txt::first-letter{text-shadow:var(--press)}
-.ev .hour,.toc-h,.op h2,.prog h2,.dress h2,.stay h2,.rep h2,.fam h2,.ev h3{text-shadow:-.7px -.9px 0 rgba(45,28,8,.3),.7px .9px 0 rgba(255,255,255,.5),1.6px 2.2px 3px rgba(45,28,8,.12)}
+.ci,.ev .day,.title .day,.tl .h,.stay .k,.toc .n,.sign,.fam .txt::first-letter,.stay h3,.tl .w,.toc .t{text-shadow:var(--press)}
+.ev .hour,.toc-h,.op h2,.prog h2,.dress h2,.stay h2,.rep h2,.fam h2,.ev h3{text-shadow:var(--press2)}
+/* L'impression (« on voit que c'est un texte PC ») : l'encre a bavé d'un cheveu dans les fibres. Le filtre #ink (SVG inline,
+   en bas de la page) déplace le bord des lettres d'après un bruit fin (feDisplacementMap, 1 px), l'adoucit (flou .3 px) et
+   le redurcit (courbe d'alpha) : des bords un peu irréguliers, plus de lettres au scalpel. Statique : rasterisé une fois par
+   bloc, jamais recalculé pendant le geste (le feuillet qui tourne est un clone composité). Le grain du papier passe dans les
+   lettres grâce à la texture posée par-dessus en multiply (.pg.paper::before). */
+.pg.paper .pi > *,.pg.paper .pi .body > div,.pg.paper .pi .when,.pg.paper .pi .ttl,.pg.paper .pi .it2 > div{filter:url(#ink)}
+.pg.paper .pi .pl,.pg.paper .pi .acts,.pg.paper .pi .body,.pg.paper .pi .chap,.pg.paper .pi .mid,.pg.paper .pi .top,.pg.paper .pi .items,.pg.paper .pi .it2,.pg.paper .pi .sw,.pg.paper .pi .orn,.pg.paper .pi .seal{filter:none}
+.pg.paper .pi .pl .cap,.pg.paper .pi .chap .ttl,.pg.paper .pi .sw span,.pg.paper .pi .dress .vert,.pg.paper .pi .top .vert{filter:url(#ink)}
 .pg .names,.pg.op .num{background:var(--grain-or),linear-gradient(168deg,#7a5c2a 0%,#5e4620 28%,#4a3614 46%,#6b4f24 64%,#4a3614 84%,#5e4620 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(-1px -1px 0 rgba(255,255,255,.9)) drop-shadow(1.1px 1.4px 0 rgba(30,18,4,.4)) drop-shadow(2px 3px 3px rgba(40,25,8,.2))}
+  filter:drop-shadow(-1px -1px 0 rgba(255,255,255,.9)) drop-shadow(1.2px 1.5px 0 rgba(30,18,4,.45)) drop-shadow(2.2px 3.2px 3px rgba(40,25,8,.22))}
 .names .amp{color:transparent;background:inherit;-webkit-background-clip:text;background-clip:text}
 .toc,.tl{border-top-color:rgba(29,26,22,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.85)}
 .toc li,.tl li{box-shadow:0 1px 0 rgba(255,255,255,.85)}
@@ -148,22 +175,22 @@ p{margin:0}
 
 /* planches : un détail cadré par choix, jamais une image tronquée */
 .pl{margin:0;display:flex;flex-direction:column;min-height:0}
-/* une peinture collée sur la page a une épaisseur : un liseré de papier clair (passe-partout), un bord qui prend la lumière en
-   haut à gauche, une ombre portée douce en bas à droite ; et un vernis discret (reflet en travers) */
-.pl .im{position:relative;overflow:hidden;flex:1 1 auto;min-height:0;background:#141a33;border:4px solid #fbf7ef;
-  box-shadow:inset 0 0 0 1px rgba(60,40,10,.22),-1px -1px 0 rgba(255,255,255,.9),0 0 0 1px rgba(60,40,10,.16),0 1px 1px rgba(40,26,8,.22),0 10px 22px -8px rgba(40,26,8,.5)}
+/* La peinture est IMPRIMÉE DANS LA PAGE (« l'encadré blanc, pas ouf, on ne voit pas bien qu'elle est dans le livre ») :
+   plus de passe-partout, de liseré, d'ombre portée ni de vernis. Le bord est net et sans cadre ; l'encre « boit » un peu
+   (désaturation et contraste adoucis), les noirs sont des noirs d'encre (#1a1612 au plus sombre : calque en « lighten »),
+   et le grain du papier passe par-dessus, avec l'ombre de la gouttière (.pg.paper::before). */
+.pl .im{position:relative;overflow:hidden;flex:1 1 auto;min-height:0;background:#1a1612}
 .pl .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--fx,50%) var(--fy,50%);
-  transform:scale(var(--z,1));transform-origin:var(--fx,50%) var(--fy,50%)}
-.pl .im::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
-  background:linear-gradient(118deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0) 72%,rgba(255,255,255,.06) 100%);
-  box-shadow:inset 1px 1px 0 rgba(0,0,0,.28),inset -1px -1px 0 rgba(255,255,255,.18)}
+  transform:scale(var(--z,1));transform-origin:var(--fx,50%) var(--fy,50%);filter:saturate(.9) contrast(.93) brightness(1.02)}
+.pl .im::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:#1a1612;mix-blend-mode:lighten}
 
 /* révélation douce du texte, une fois la page posée */
 .rv{opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--d,0) * 90ms + 120ms)}
 .pg.on .rv,.leaf .rv{opacity:1;transform:none}
-.leaf .rv{transition:none}
-/* sur le feuillet qui tourne (clone en 3D), Chromium peint l'ombre du texte foulé sans le texte : pas de relief le temps du geste */
-.leaf .face *{text-shadow:none!important}
+/* Une page qui arrive par un tourne-page est déjà imprimée (« quand je tourne les pages, l'image disparaît et les effets
+   changent ») : la révélation ne joue qu'à l'ouverture du livre et aux sauts du sommaire. Pendant le geste, la page
+   d'arrivée et le clone du feuillet (.leaf) sont posés d'un coup, sans transition, avec exactement le rendu posé. */
+.leaf .rv,.pg.still .rv{transition:none}
 
 /* ---------- sceau de cire, initiales gravées ---------- */
 .seal{width:96px;height:96px;background:url(/img/seals/or.webp) center/contain no-repeat;display:grid;place-items:center;container-type:inline-size;
@@ -221,7 +248,7 @@ p{margin:0}
 .mast span{display:block}
 .mast .amp{font-style:italic;font-size:.62em;margin:0 .06em 0 .02em;display:inline;letter-spacing:0;color:transparent;background:inherit;-webkit-background-clip:text;background-clip:text}
 .mast .l2{padding-left:.38em}
-.cv-lines{margin-top:clamp(16px,3cqb,30px);display:grid;gap:8px;max-width:62%}
+.cv-lines{margin-top:clamp(16px,3cqb,30px);display:grid;gap:8px;max-width:74%}
 .cv-lines .t{font:italic 400 clamp(22px,6cqi,30px)/1.2 "Cormorant Garamond",serif;color:var(--cream)}
 .cv-lines .d{font:500 13px/1.4 "Inter",sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#e9dcc0}
 .hint{margin-top:18px;display:inline-flex;align-items:center;gap:10px;font:500 var(--fs-cap)/1 "Inter",sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#e9dcc0}
@@ -244,7 +271,7 @@ p{margin:0}
 
 /* ============ 2 · Avant-propos ============ */
 .fam .pl{margin:var(--sp3) auto 0;flex:0 1 auto;width:min(100%,calc(var(--ph) * .42));align-self:center}
-.fam .pl .im{aspect-ratio:1/1.08;flex:none;box-shadow:0 1px 0 rgba(0,0,0,.05),0 14px 30px -18px rgba(40,26,8,.55)}
+.fam .pl .im{aspect-ratio:1/1.08;flex:0 1 auto;min-height:120px}
 .fam h2{margin:var(--sp3) 0 var(--sp2);font:italic 400 clamp(34px,9.6cqi,50px)/1 "Bodoni Moda",serif;letter-spacing:-.01em}
 .fam .txt::first-letter{float:left;font:400 3.15em/.82 "Bodoni Moda",serif;margin:.06em .1em 0 0;color:var(--gold)}
 .sign{margin-top:var(--sp2);font:italic 400 clamp(20px,5.4cqi,24px)/1.3 "Cormorant Garamond",serif;color:var(--ink)}
@@ -263,12 +290,7 @@ p{margin:0}
 /* ============ 4 · Frontispice ============ */
 .front .pi{align-items:center}
 .front figure{margin:auto 0;display:flex;flex-direction:column;align-items:flex-start;min-height:0}
-.front img{max-height:calc(var(--ph) - 170px);max-width:100%;width:auto;height:auto;border:5px solid #fbf7ef;
-  box-shadow:-1px -1px 0 rgba(255,255,255,.9),0 0 0 1px rgba(60,40,10,.18),0 1px 1px rgba(40,26,8,.22),0 16px 30px -12px rgba(40,26,8,.55)}
-/* les planches pleine page (chapitres, réponse) touchent les bords : pas de passe-partout, seulement le vernis et la lèvre de la planche */
-.op .pl .im,.rep .pl .im{border:0;box-shadow:none}
-.op .pl .im::after,.rep .pl .im::after{box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.2)}
-.op .pl,.rep .pl{filter:drop-shadow(0 -2px 3px rgba(40,26,8,.18))}
+.front .pl .im{flex:none;height:calc(var(--ph) - 170px);width:auto;max-width:100%;aspect-ratio:9/16}
 
 /* ============ Chapitres : pages d'ouverture ============ */
 .op .pi{padding-bottom:0}
@@ -283,7 +305,6 @@ p{margin:0}
 .op.top .pi{padding-top:0;padding-bottom:18px}
 .op.top .pl{margin:0 calc(var(--mx) * -1) var(--sp3);order:-1}
 .op.top .chap{margin-top:0}
-.op.top .pl{filter:drop-shadow(0 3px 4px rgba(40,26,8,.2))}
 
 /* ============ Moments ============ */
 .ev .when{margin-top:var(--sp3)}
@@ -437,7 +458,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
   <div class="pi">
     <div class="rh"><span>Avant-propos</span><span>Bianchi · Moreau</span></div>
     <figure class="pl rv" style="--d:0;--fx:50%;--fy:100%">
-      <div class="im"><img src="/img/hd/dolcevita-mains.webp" alt="Deux mains l'une sur l'autre, une alliance, un citron et du bougainvillier sur une nappe blanche" loading="lazy"></div>
+      <div class="im"><img src="/img/hd/dolcevita-mains.webp" alt="Deux mains l'une sur l'autre, une alliance, un citron et du bougainvillier sur une nappe blanche"></div>
       <figcaption class="cap"><b>Pl. I</b>Les mains. Huile sur toile, détail.</figcaption>
     </figure>
     <h2 class="rv" style="--d:1">Le mot des familles</h2>
@@ -469,8 +490,8 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
 <section class="pg paper front" aria-label="Frontispice">
   <div class="pi">
     <div class="rh"><span>Frontispice</span><span>Pl. II</span></div>
-    <figure class="rv" style="--d:0">
-      <img src="/img/hd/dolcevita-4.webp" alt="Terrasse aux citronniers au-dessus de la mer, au crépuscule, peinture à l'huile" loading="lazy">
+    <figure class="pl rv" style="--d:0">
+      <div class="im"><img src="/img/hd/dolcevita-4.webp" alt="Terrasse aux citronniers au-dessus de la mer, au crépuscule, peinture à l'huile"></div>
       <figcaption class="cap"><b>Pl. II</b>Ravello, l'heure bleue. Huile sur toile.</figcaption>
     </figure>
     <div class="fo">4<span>Frontispice</span></div>
@@ -490,7 +511,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
     </div>
     <p class="txt2 it sub rv" style="--d:3">Où l'on monte, entre les citronniers, jusqu'à la petite chapelle.</p>
     <figure class="pl" style="--fx:50%;--fy:100%">
-      <div class="im"><img src="/img/hd/dolcevita-2.webp" alt="Les mariés de dos marchent vers une chapelle illuminée, entourés de leurs invités" loading="lazy"></div>
+      <div class="im"><img src="/img/hd/dolcevita-2.webp" alt="Les mariés de dos marchent vers une chapelle illuminée, entourés de leurs invités"></div>
     </figure>
   </div>
 </section>
@@ -511,7 +532,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
         <p class="txt2 rv" style="--d:4">Côte amalfitaine</p>
       </div>
       <figure class="pl rv" style="--d:3;--fx:72%;--fy:78%;--z:1.12">
-        <div class="im"><img src="/img/hd/dolcevita-eglise.webp" alt="La chapelle et son clocher, détail" loading="lazy"></div>
+        <div class="im"><img src="/img/hd/dolcevita-eglise.webp" alt="La chapelle et son clocher, détail"></div>
         <figcaption class="cap"><b>Pl. III</b>La chapelle, détail.</figcaption>
       </figure>
     </div>
@@ -527,7 +548,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
 <section class="pg paper op top" aria-label="Chapitre deuxième : le dîner">
   <div class="pi">
     <figure class="pl" style="--fx:50%;--fy:100%">
-      <div class="im"><img src="/img/hd/dolcevita-3.webp" alt="Un long dîner sous une pergola de citronniers et de guirlandes, face à la mer" loading="lazy"></div>
+      <div class="im"><img src="/img/hd/dolcevita-3.webp" alt="Un long dîner sous une pergola de citronniers et de guirlandes, face à la mer"></div>
     </figure>
     <div class="chap">
       <span class="num rv" style="--d:0">II</span>
@@ -552,7 +573,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
     </div>
     <div class="body rev">
       <figure class="pl rv" style="--d:3;--fx:10%;--fy:84%;--z:1.08">
-        <div class="im"><img src="/img/hd/dolcevita-1.webp" alt="Une table dressée sous la pergola fleurie, détail" loading="lazy"></div>
+        <div class="im"><img src="/img/hd/dolcevita-1.webp" alt="Une table dressée sous la pergola fleurie, détail"></div>
         <figcaption class="cap"><b>Pl. IV</b>La table, détail.</figcaption>
       </figure>
       <div>
@@ -581,7 +602,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
       <li><span class="h">22h30</span><span class="w">Gelato e musica<span class="x">On danse sur la terrasse</span></span></li>
     </ol>
     <figure class="pl rv" style="--d:2;--fx:50%;--fy:84%;--z:1.1">
-      <div class="im"><img src="/img/hd/dolcevita-cocktail.webp" alt="L'aperitivo au comptoir, citrons et spritz, détail" loading="lazy"></div>
+      <div class="im"><img src="/img/hd/dolcevita-cocktail.webp" alt="L'aperitivo au comptoir, citrons et spritz, détail"></div>
       <figcaption class="cap"><b>Pl. V</b>L'aperitivo, détail.</figcaption>
     </figure>
     <div class="fo">9<span>Le programme</span></div>
@@ -595,7 +616,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
     <div class="top">
       <p class="lab vert rv" style="--d:0">Le vestiaire · Dress code</p>
       <figure class="pl rv" style="--d:1;--fx:30%;--fy:88%;--z:1.2">
-        <div class="im"><img src="/img/hd/dolcevita-dress.webp" alt="Une robe de soie et une veste de lin suspendues sur un balcon face à la mer, détail" loading="lazy"></div>
+        <div class="im"><img src="/img/hd/dolcevita-dress.webp" alt="Une robe de soie et une veste de lin suspendues sur un balcon face à la mer, détail"></div>
         <figcaption class="cap"><b>Pl. VI</b>Soie et lin, détail.</figcaption>
       </figure>
     </div>
@@ -617,7 +638,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
     <div class="rh"><span>V · Le séjour</span><span>Naples · Ravello</span></div>
     <h2 class="rv" style="--d:0">Le <em>séjour</em></h2>
     <figure class="pl rv" style="--d:1;--fx:70%;--fy:82%;--z:1.15">
-      <div class="im"><img src="/img/hd/dolcevita-info.webp" alt="Un petit port, des barques et un escalier fleuri au pied d'une maison, détail" loading="lazy"></div>
+      <div class="im"><img src="/img/hd/dolcevita-info.webp" alt="Un petit port, des barques et un escalier fleuri au pied d'une maison, détail"></div>
       <figcaption class="cap"><b>Pl. VII</b>Le port, détail.</figcaption>
     </figure>
     <div class="items">
@@ -639,7 +660,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
       <a class="lnk" href="https://wa.me/33612345678?text=Bonjour%20Giulia%20et%20Hugo%2C%20" target="_blank" rel="noopener">ou sur WhatsApp</a>
     </div>
     <figure class="pl" style="--fx:50%;--fy:84%;--z:1.04">
-      <div class="im"><img src="/img/hd/dolcevita-verres.webp" alt="Deux verres de spritz qui trinquent au-dessus de la mer" loading="lazy"></div>
+      <div class="im"><img src="/img/hd/dolcevita-verres.webp" alt="Deux verres de spritz qui trinquent au-dessus de la mer"></div>
     </figure>
     <div class="fo"><span>La réponse</span>12</div>
   </div>
@@ -664,7 +685,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
 
 <!-- 14 · Quatrième de couverture -->
 <section class="pg back" aria-label="Quatrième de couverture">
-  <img class="bgimg" src="/img/hd/dolcevitajour-2.webp" alt="Les mariés devant la chapelle en plein jour, la mer derrière, peinture à l'huile" loading="lazy">
+  <img class="bgimg" src="/img/hd/dolcevitajour-2.webp" alt="Les mariés devant la chapelle en plein jour, la mer derrière, peinture à l'huile">
   <div class="pi">
     <p class="bk rv" style="--d:0">A presto<br>in Italia.</p>
     <p class="bk2 rv" style="--d:1">Giulia &amp; Hugo<br>28 · VIII · MMXXVII</p>
@@ -673,6 +694,15 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
 
 </div>
 </main>
+<!-- l'encre qui bave dans les fibres (voir « L'impression » dans le CSS) : un filtre statique, rasterisé une fois par bloc -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="ink" x="-3%" y="-6%" width="106%" height="112%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="1" seed="2" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation=".3" result="b"/>
+    <feComponentTransfer in="b"><feFuncA type="gamma" amplitude="1" exponent=".72" offset="0"/></feComponentTransfer>
+  </filter>
+</svg>
 <button class="nav prev" id="prev" aria-label="Page précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M15 4 7 12l8 8"/></svg></button>
 <button class="nav next" id="next" aria-label="Page suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m9 4 8 8-8 8"/></svg></button>
 <div class="prog-bar" id="bar" aria-hidden="true"></div>
@@ -728,7 +758,7 @@ function layout(){
 function visible(){ if(!spread) return [pages[i]]; if(k===0) return [pages[0]]; return [pages[2*k-1],pages[2*k]].filter(Boolean) }
 function show(){
   const vis=spread?(k===0?[0]:[2*k-1,2*k]):[i];
-  pages.forEach((p,n)=>{p.classList.remove('cur','L','R','under','turning');if(!vis.includes(n))p.classList.remove('on');p.inert=true;p.setAttribute('aria-hidden','true')});
+  pages.forEach((p,n)=>{p.classList.remove('cur','L','R','under','turning');if(!vis.includes(n))p.classList.remove('on','still');p.inert=true;p.setAttribute('aria-hidden','true')});
   if(!spread){ pages[i].classList.add('cur') }
   else if(k===0){ pages[0].classList.add('R') }
   else { pages[2*k-1].classList.add('L'); pages[2*k]&&pages[2*k].classList.add('R') }
@@ -748,12 +778,12 @@ function go(d){
   busy=true;
   const P='perspective(2000px) ';
   if(d>0){
-    b.classList.add('under','on');
+    b.classList.add('still','under','on');
     a.classList.add('turning');
     a.animate([{transform:P+'rotateY(0deg)'},{transform:P+'rotateY(-104deg)'}],{duration:900,easing:EASE}).finished.then(()=>{busy=false;i=j;show()});
   } else {
     a.classList.add('under');
-    b.classList.add('turning','on'); b.style.visibility='visible';
+    b.classList.add('still','turning','on'); b.style.visibility='visible';
     b.animate([{transform:P+'rotateY(-104deg)'},{transform:P+'rotateY(0deg)'}],{duration:900,easing:EASE}).finished.then(()=>{b.style.visibility='';busy=false;i=j;show()});
   }
 }
@@ -769,15 +799,15 @@ function goSpread(d){
     const oldR=k===0?pages[0]:pages[2*k];
     front=face(oldR,'front','R'); back=face(newL,'back','L');
     leaf.style.left=pw+'px'; leaf.style.transformOrigin='0 50%';
-    newR&&(newR.classList.add('R','on'),newR.style.zIndex=1,newR.inert=true);
-    newL&&newL.classList.add('on');
+    newR&&(newR.classList.add('still','R','on'),newR.style.zIndex=1,newR.inert=true);
+    newL&&newL.classList.add('still','on');
     oldR.style.visibility='hidden';
   } else {
     const oldL=pages[2*k-1];
     front=face(oldL,'front','L'); back=face(newR,'back','R');
     leaf.style.left='0px'; leaf.style.transformOrigin='100% 50%';
-    newL&&(newL.classList.add('L','on'),newL.style.zIndex=1,newL.inert=true);
-    newR&&newR.classList.add('on');
+    newL&&(newL.classList.add('still','L','on'),newL.style.zIndex=1,newL.inert=true);
+    newR&&newR.classList.add('still','on');
     oldL.style.visibility='hidden';
   }
   leaf.append(front,back); stage.appendChild(leaf);
