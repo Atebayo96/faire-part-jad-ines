@@ -210,4 +210,5 @@ window.SCEAU_MUSIC={
 };
 
 // ouverture « Portes » en vidéo (img/open/<thème>-porte.mp4, tools/porte-video.py) : seulement les thèmes qui l'ont
-window.SCEAU_THEMES.alhambra.doorVid=true;
+// (13 oct. 2026 : l'Andalou a une nouvelle porte pleine, « des portes normales comme les autres » : sa vidéo, faite sur
+// l'ancienne porte dans son arc, est retirée ; aucun thème n'a de porte en vidéo pour l'instant)

@@ -180,6 +180,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     reflet vert retiré du bord). C'est la méthode pour les autres portes. Défaut connu : le battant gauche se dissout un peu
     au lieu de finir son pivot (vers 3,7 s), caché par le plongeon.
     Clé fal.ai : jamais dans le dépôt (variable `FAL_KEY` de l'environnement). Démo : `page-leila-mehdi` (ouverture Portes).
+    **Retiré le 13 octobre 2026** (« c'est mal fait, génère des portes normales, comme les autres ») : la porte de l'Andalou
+    était posée dans son arc de stuc, avec le mur autour, alors que toutes les autres sont deux battants qui remplissent
+    l'écran. Elle est repeinte pleine (`portes.py alhambra --portes`, 1 génération, même consigne que Douce France : « les
+    deux portes seules remplissent le cadre, pas d'arc, pas de mur »), et l'Andalou s'ouvre comme les autres (battants en
+    CSS). La vidéo, faite sur l'ancienne porte, est supprimée ; le code (`T.doorVid`, `porte-video.py`) reste pour plus tard.
+    **Toute porte est pleine** : deux battants d'un bord à l'autre, jamais d'arc, de mur ni de décor autour.
     **Pas d'animation du sceau** (6 octobre 2026) : un essai où le sceau de l'enveloppe glissait jusqu'à l'accueil a été
     refusé (« c'est pas ouf, on le redécouvre après, ça me va ») : le sceau de l'accueil apparaît avec le texte.
     Toute nouvelle ouverture se vérifie **image par image** (capture toutes les 250 ms au format téléphone) : à
@@ -618,6 +624,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **Un message par cause** (6 octobre 2026) : sans réponse, le tableau dit « Pas encore de réponse » (c'est normal au
     début) ; « Vérifiez votre connexion » n'apparaît que sans réseau ; faire-part introuvable (404), lien invalide (401),
     panne (5xx, avec « Réessayer ») ont chacun leur phrase. Avant, toute erreur disait « vérifiez votre connexion ».
+    **Aucune réponse n'est cachée sans le dire** (13 octobre 2026) : deux réponses au même nom (un invité qui répond de
+    deux téléphones sans son lien) ne comptent qu'une fois, la plus récente ; les plus anciennes sont listées à part sous le
+    tableau (`replaced`, « Une réponse remplacée ») avec « C'est une autre personne » pour un homonyme (`distinct`, POST
+    `api/rsvp` avec la clé du tableau de bord). « Corriger » est sous le nom (en dernière colonne, il sortait du tableau).
+    Recette du 13 octobre 2026 (serveur local, paiement simulé) : réponse, stockage après redémarrage, lien personnel sur un
+    autre téléphone, saisie à la main, CSV, clés refusées : tout passe, faire-part animé et page unique.
     On ne prend pas : la liste des invités visible, les commentaires, la vérification du téléphone ou du mail pour
     répondre, le prix par invité (voir la fiche 16, § 5).
 
@@ -640,7 +652,9 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     le tableau de bord et « Modifier mon faire-part » (`/creer/?edit=<slug>#k=<clé>`, `api/fiche.js`). Les réponses,
     cadeaux et ouvertures passent par `getInvite()` (dépôt ou stockage). À brancher sur Vercel : `STRIPE_SECRET_KEY`,
     `STRIPE_WEBHOOK_SECRET` (événement `checkout.session.completed` vers `/api/stripe`), et pour l'e-mail `RESEND_API_KEY`
-    (+ `SCEAU_MAIL_FROM`). Sans clé Stripe, l'Essentiel reprend l'ancien chemin. Test local : `SCEAU_LOCAL=1
+    (+ `SCEAU_MAIL_FROM`). `RESEND_API_KEY` est posée sur Vercel depuis le 13 octobre 2026 ; le domaine `savetheoui.fr` est
+    ajouté dans Resend, son DNS est chez Hostinger (`dns-parking.com`, pas chez Vercel) : DKIM `resend._domainkey` et les
+    CNAME `send` / `rsend` s'y ajoutent à la main. Tant que Resend ne dit pas « verified », aucun e-mail ne part. Sans clé Stripe, l'Essentiel reprend l'ancien chemin. Test local : `SCEAU_LOCAL=1
     SCEAU_STRIPE_FAKE=1` (paiement simulé). Signature et Couture restent faits par nous (liens de paiement, `paiement.js`).
     Tout ce qui promet un délai dit « en ligne dès le paiement » pour l'Essentiel (formules, accueil, questions, CGV, « Ensuite »).
     Tant que le paiement n'est pas branché (ni `STRIPE_SECRET_KEY`, ni lien de paiement), le bouton « Commander » mène au

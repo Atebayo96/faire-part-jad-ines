@@ -16,6 +16,15 @@ export default async function handler(req, res) {
     if (b.website) return res.status(200).json({ ok: true });
     if (inv.demo) return res.status(200).json({ ok: true, demo: true });
     const byOwner = owner(req, b.invite);
+    // les mariés disent qu'une réponse au même nom qu'une autre vient d'une autre personne (deux « Marie Martin ») :
+    // elle n'est plus remplacée par la plus récente dans le tableau de bord
+    if (byOwner && b.distinct && /^[\w-]{10,80}$/.test(b.rid || '')) {
+      if (!ready()) return res.status(503).json({ error: 'storage' });
+      const p = `rsvp/${b.invite}/${b.rid}.json`, old = await readOne(p);
+      if (!old) return res.status(404).json({ error: 'rid' });
+      await save(p, Object.assign(old, { distinct: true }));
+      return res.status(200).json({ ok: true, rid: b.rid });
+    }
     const name = clean(b.name, 120);
     if (!name) return res.status(400).json({ error: 'name' });
     const fam = b.family && inv.families[b.family] ? b.family : null;
@@ -35,8 +44,9 @@ export default async function handler(req, res) {
     if (!rid) { rid = id(); rkey = newKey(); }
     const row = { at: new Date().toISOString(), name, family: fam, guests, events, people, diet: clean(b.diet, 200), answer: clean(b.answer, 300), message: clean(b.message, 1000) };
     if (byOwner && b.manual) row.manual = true;
-    const old = rkey == null ? await readOne(`rsvp/${b.invite}/${rid}.json`) : null;
-    row.k = old ? old.k : keyHash(rkey);
+    const old = await readOne(`rsvp/${b.invite}/${rid}.json`);
+    row.k = rkey == null && old ? old.k : keyHash(rkey);
+    if (old && old.distinct) row.distinct = true;
     await save(`rsvp/${b.invite}/${rid}.json`, row);
     return res.status(200).json(rkey == null ? { ok: true, rid } : { ok: true, rid, rkey });
   }
@@ -56,12 +66,17 @@ export default async function handler(req, res) {
     if (!owner(req, slug)) return res.status(401).json({ error: 'key' });
     if (!ready()) return res.status(503).json({ error: 'storage' });
     const rows = (await readAll(`rsvp/${slug}/`)).sort((a, b) => a.at < b.at ? -1 : 1);
-    // une personne qui répond deux fois : on garde sa dernière réponse
-    const last = new Map(); for (const r of rows) last.set(r.name.toLowerCase().replace(/\s+/g, ' '), r);
+    // une personne qui répond deux fois (deux téléphones, sans son lien personnel) : on compte sa dernière réponse ; les plus
+    // anciennes restent dans la liste, marquées « replaced » (le tableau de bord les montre à part : ce peut être un homonyme,
+    // que les mariés marquent « autre personne », distinct)
+    const last = new Map();
+    for (const r of rows) { const n = r.name.toLowerCase().replace(/\s+/g, ' ').trim(); if (!r.distinct) last.set(n, r); }
+    const keep = new Set(last.values());
+    const tidy = ({ k, pathname, ...r }) => Object.assign({ rid: pathname.slice(`rsvp/${slug}/`.length, -5) }, r);
     // ouvertures des liens par famille (api/seen.js) : { famille: { first, last, n } }
     const seen = {}; for (const s of await readAll(`seen/${slug}/`)) { const f = s.pathname.slice(`seen/${slug}/`.length, -5); seen[f] = { first: s.first, last: s.last, n: s.n }; }
     return res.status(200).json({ invite: { slug, couple: inv.couple, online: !!inv.online, events: inv.eventList, families: inv.familyLabels, menu: inv.rsvpMenu || [], question: inv.rsvpQuestion || '' },
-      responses: [...last.values()].map(({ k, pathname, ...r }) => Object.assign({ rid: pathname.slice(`rsvp/${slug}/`.length, -5) }, r)), seen });
+      responses: rows.map(r => Object.assign(tidy(r), r.distinct || keep.has(r) ? {} : { replaced: true })), seen });
   }
   res.status(405).json({ error: 'method' });
 }
