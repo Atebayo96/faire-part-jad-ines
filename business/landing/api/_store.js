@@ -18,7 +18,10 @@ export async function save(pathname, data) {
 export async function readOne(pathname) {
   if (LOCAL) { try { return JSON.parse(await fs.readFile(path.join(DIR, pathname), 'utf8')); } catch { return null; } }
   const { get } = await import('@vercel/blob');
-  try { const g = await get(pathname, { access: 'private' }); return g ? JSON.parse(await new Response(g.stream).text()) : null; } catch { return null; }
+  // useCache:false : sans ça, un fichier réécrit (réponse modifiée, commande payée) se lisait encore dans son ancienne
+  // version pendant des secondes ou des minutes (cache du CDN, max-age d'un mois) : une correction des mariés faite
+  // sur cette vieille lecture écrasait la modification de l'invité (recette du 13 octobre 2026)
+  try { const g = await get(pathname, { access: 'private', useCache: false }); return g ? JSON.parse(await new Response(g.stream).text()) : null; } catch { return null; }
 }
 
 export async function readAll(prefix) {
@@ -32,7 +35,7 @@ export async function readAll(prefix) {
   do {
     const r = await list({ prefix, cursor, limit: 1000 });
     const rows = await Promise.all(r.blobs.map(async b => {
-      const g = await get(b.url, { access: 'private' });
+      const g = await get(b.url, { access: 'private', useCache: false });
       return g ? { pathname: b.pathname, ...JSON.parse(await new Response(g.stream).text()) } : null;
     }));
     out.push(...rows.filter(Boolean)); cursor = r.cursor;

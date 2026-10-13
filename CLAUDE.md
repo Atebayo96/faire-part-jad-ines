@@ -630,6 +630,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `api/rsvp` avec la clé du tableau de bord). « Corriger » est sous le nom (en dernière colonne, il sortait du tableau).
     Recette du 13 octobre 2026 (serveur local, paiement simulé) : réponse, stockage après redémarrage, lien personnel sur un
     autre téléphone, saisie à la main, CSV, clés refusées : tout passe, faire-part animé et page unique.
+    **Recette en prod du 13 octobre 2026** (commande à 0 € avec le code `TESTOUI` appliqué par l'API, faire-part
+    `test-recette`) : paiement, publication, e-mail, réponses, lien personnel, tableau de bord, CSV : tout passe, **sauf
+    la modification d'une réponse**, qui se relisait dans son ancienne version pendant des secondes ou des minutes (cache
+    du CDN de Vercel Blob sur un fichier réécrit) : une correction des mariés faite sur cette vieille lecture a écrasé la
+    modification de l'invité. Corrigé : toute lecture du stockage se fait `useCache:false` (`_store.js`). Le code `TESTOUI`
+    tapé sur la page Stripe était refusé (« code non valide ») alors qu'il est valide par l'API : cause non trouvée, sans
+    effet sur les clients (pas de code promo vendu). La clé Stripe de **l'aperçu** Vercel est celle du bac à sable Stripe,
+    celle de la **prod** est en Live : un test de paiement se fait en prod.
     On ne prend pas : la liste des invités visible, les commentaires, la vérification du téléphone ou du mail pour
     répondre, le prix par invité (voir la fiche 16, § 5).
 
