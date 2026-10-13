@@ -15,11 +15,26 @@
    peinte mesurée ; les peintures sont des planches.
    ============================================================ */
 :root{
-  --paper:#f4eee3; --paper2:#ece3d3; --ink:#1d1a16; --ink2:#5c5145; --gold:#6e5428;
-  --med:#8c6d32; --cream:#f6eddb; --desk:#1b1712;
+  --paper:#f4eee3; --paper2:#ece3d3; --ink:#1d1a16; --ink2:#4f4538; --gold:#5e4620;
+  --med:#8c6d32; --cream:#f6eddb; --desk:#1b1712; --cloth:#1e2a56; --cloth2:#0f1530;
   --sp1:10px; --sp2:18px; --sp3:28px;
   --fs-lab:12px; --fs-cap:11.5px; --fs-body:clamp(19px,5cqi,23px);
   --pw:100vw; --ph:100vh;
+  /* ---- matière (13 octobre 2026 : « il nous faut de la profondeur, une gestion des textures ») ----
+     Deux papiers en relief SVG éclairé en lumière rasante (feDiffuseLighting, comme carte.css), multipliés sur la teinte :
+     coton épais pour les pages de texte, satiné plus lisse pour les pages de planches. L'encre est mesurée contre le papier
+     assombri par le relief (pire pixel ≈ 87 % de la teinte : --gold passé de #6e5428 à #5e4620, --ink2 de #5c5145 à #4f4538,
+     les légendes sous l'ombre portée des planches tombaient à 4,0 ; mesuré ≥ 4,5:1 sur chaque ligne, contrast.js). */
+  --tex-coton:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.035' numOctaves='5' seed='3' stitchTiles='stitch' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' seed='9' stitchTiles='stitch' result='b'/%3E%3CfeComposite in='a' in2='b' operator='arithmetic' k2='.7' k3='.45' result='h0'/%3E%3CfeColorMatrix in='h0' type='luminanceToAlpha' result='h'/%3E%3CfeDiffuseLighting in='h' surfaceScale='4.6' diffuseConstant='1.22' lighting-color='%23fff' result='l'%3E%3CfeDistantLight azimuth='225' elevation='42'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer in='l'%3E%3CfeFuncR type='linear' slope='0.42' intercept='0.58'/%3E%3CfeFuncG type='linear' slope='0.42' intercept='0.58'/%3E%3CfeFuncB type='linear' slope='0.42' intercept='0.58'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23p%29'/%3E%3C/svg%3E");
+  --tex-satin:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' seed='21' stitchTiles='stitch' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.45' numOctaves='2' seed='4' stitchTiles='stitch' result='b'/%3E%3CfeComposite in='a' in2='b' operator='arithmetic' k2='.75' k3='.3' result='h0'/%3E%3CfeColorMatrix in='h0' type='luminanceToAlpha' result='h'/%3E%3CfeDiffuseLighting in='h' surfaceScale='3.6' diffuseConstant='1.22' lighting-color='%23fff' result='l'%3E%3CfeDistantLight azimuth='225' elevation='50'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer in='l'%3E%3CfeFuncR type='linear' slope='0.4' intercept='0.6'/%3E%3CfeFuncG type='linear' slope='0.4' intercept='0.6'/%3E%3CfeFuncB type='linear' slope='0.4' intercept='0.6'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23p%29'/%3E%3C/svg%3E");
+  /* toile de reliure : un tissage serré éclairé de biais, posé sur le bleu nuit de la couverture */
+  --tex-cloth:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .25' numOctaves='2' seed='7' stitchTiles='stitch' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.25 .9' numOctaves='2' seed='3' stitchTiles='stitch' result='b'/%3E%3CfeComposite in='a' in2='b' operator='arithmetic' k2='.5' k3='.5' result='h0'/%3E%3CfeColorMatrix in='h0' type='luminanceToAlpha' result='h'/%3E%3CfeDiffuseLighting in='h' surfaceScale='3' diffuseConstant='1.1' lighting-color='%23fff' result='l'%3E%3CfeDistantLight azimuth='225' elevation='38'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer in='l'%3E%3CfeFuncR type='linear' slope='0.45' intercept='0.55'/%3E%3CfeFuncG type='linear' slope='0.45' intercept='0.55'/%3E%3CfeFuncB type='linear' slope='0.45' intercept='0.55'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23c%29'/%3E%3C/svg%3E");
+  /* grain de feuille d'or (dorure à chaud) */
+  --grain-or:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.05'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23g)' opacity='.45'/%3E%3C/svg%3E");
+  /* le texte foulé dans le papier : ombre fine en haut à gauche, filet de lumière en bas à droite */
+  --press:-.6px -.8px 0 rgba(45,28,8,.26),.7px .9px 0 rgba(255,255,255,.88),1.4px 1.8px 2px rgba(45,28,8,.10);
+  /* le gaufrage à sec (blanc sur blanc) : lumière en haut à gauche, ombre en bas à droite */
+  --emb:drop-shadow(-.8px -.8px 0 rgba(255,255,255,.95)) drop-shadow(1px 1.3px .6px rgba(105,80,45,.42)) drop-shadow(1.6px 2.2px 2px rgba(105,80,45,.16));
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:var(--desk)}
@@ -35,15 +50,30 @@ img{display:block}
   container-type:size;background:var(--paper);transform-origin:0 50%;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .pg.cur{visibility:visible;z-index:2}
 .pg.under{visibility:visible;z-index:1}
-.pg.turning{visibility:visible;z-index:4;box-shadow:-10px 0 40px rgba(0,0,0,.28)}
+.pg.turning{visibility:visible;z-index:4;box-shadow:-1px 0 0 rgba(255,250,240,.55),-14px 0 44px rgba(0,0,0,.34),-3px 0 6px rgba(0,0,0,.18)}
 .pg.alt{background:var(--paper2)}
-/* grain du papier, très léger (mesuré : l'encre la plus claire reste au-dessus de 5:1) */
-.pg.paper::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.55;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .28  0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
-/* le pli de la page qui tourne : seulement pendant le geste */
+/* le papier : son relief (coton épais sur les pages de texte, satiné sur les pages de planches), puis la lumière de la feuille,
+   plus claire en haut à gauche, un peu d'ombre vers le bas et le bord. Le relief reste sous le texte ; l'encre la plus claire
+   (--gold, --ink2) est mesurée contre son pixel le plus sombre. */
+.pg.paper{background-color:var(--paper);
+  background-image:radial-gradient(ellipse 120% 70% at 22% 8%,rgba(255,255,255,.55),rgba(255,255,255,0) 60%),
+    linear-gradient(160deg,rgba(255,255,255,0) 55%,rgba(90,66,30,.07) 100%)}
+.pg.paper::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.3;mix-blend-mode:multiply;background:var(--tex-coton)}
+.pg.paper.front::before,.pg.paper.op::before,.pg.paper.rep::before{opacity:.26;background:var(--tex-satin)}
+/* pages de planches : un vernis très discret, une lumière qui glisse en travers de la page satinée */
+.pg.paper.front,.pg.paper.op,.pg.paper.rep{background-image:linear-gradient(112deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 34%,rgba(255,255,255,0) 66%,rgba(255,255,255,.14) 100%),
+  radial-gradient(ellipse 120% 70% at 22% 8%,rgba(255,255,255,.45),rgba(255,255,255,0) 60%),linear-gradient(160deg,rgba(255,255,255,0) 55%,rgba(90,66,30,.07) 100%)}
+/* le pli de la page qui tourne : seulement pendant le geste. Un filet de lumière glisse sur le papier avant l'ombre du pli. */
 .pg.turning::after,.leaf .face::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:9;opacity:0;
-  background:linear-gradient(90deg,rgba(30,20,8,0) 40%,rgba(30,20,8,.32));animation:shade .9s ease-in-out forwards}
+  background:linear-gradient(90deg,rgba(255,255,255,0) 22%,rgba(255,255,255,.16) 44%,rgba(30,20,8,0) 58%,rgba(30,20,8,.14) 78%,rgba(30,20,8,.4) 100%);animation:shade .9s ease-in-out forwards}
 @keyframes shade{0%{opacity:0}55%{opacity:1}100%{opacity:.6}}
+/* l'ombre que la page qui se soulève porte sur la page du dessous, et qui se déplace avec elle */
+.pg.under::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:9;opacity:0;
+  background:linear-gradient(90deg,rgba(20,12,4,.42),rgba(20,12,4,.18) 30%,rgba(20,12,4,0) 70%);background-size:200% 100%;animation:cast .9s cubic-bezier(.45,.05,.25,1) forwards}
+@keyframes cast{0%{opacity:.9;background-position:-100% 0}45%{opacity:.75}100%{opacity:0;background-position:100% 0}}
+/* parallaxe léger pendant le geste (téléphone) : la planche glisse un peu moins vite que le doigt */
+.pg.cur .pl .im{translate:calc(var(--px,0) * 1px) 0;transition:translate .55s cubic-bezier(.2,.7,.2,1)}
+.pg.cur.drag .pl .im{transition:none}
 
 /* double page (ordinateur) */
 .spread .stage{width:calc(var(--pw) * 2)}
@@ -51,11 +81,24 @@ img{display:block}
 .spread .pg.L{visibility:visible;left:0;z-index:2}
 .spread .pg.R{visibility:visible;left:var(--pw);z-index:2}
 .spread .pg.L,.spread .pg.R,.leaf .face{box-shadow:0 30px 60px -20px rgba(0,0,0,.55),0 8px 18px -10px rgba(0,0,0,.4)}
-.spread .pg.L::after,.spread .pg.R::after{content:"";position:absolute;top:0;bottom:0;width:34px;pointer-events:none;z-index:8}
-.spread .pg.L::after{right:0;background:linear-gradient(90deg,rgba(40,28,12,0),rgba(40,28,12,.14))}
-.spread .pg.R::after{left:0;background:linear-gradient(270deg,rgba(40,28,12,0),rgba(40,28,12,.16))}
-.spread .pg.cover.R::after{display:none}
-.spread .cover .bgimg{object-position:50% 62%}
+/* la reliure : un vrai creux au milieu de la double page (le papier plonge dans le pli, un filet de lumière sur la crête) */
+.spread .pg.L::after,.spread .pg.R::after{content:"";position:absolute;top:0;bottom:0;width:64px;pointer-events:none;z-index:8}
+.spread .pg.L::after{right:0;background:linear-gradient(90deg,rgba(40,28,12,0),rgba(40,28,12,.06) 45%,rgba(40,28,12,.2) 86%,rgba(255,255,255,.22) 95%,rgba(40,28,12,.34) 100%)}
+.spread .pg.R::after{left:0;background:linear-gradient(270deg,rgba(40,28,12,0),rgba(40,28,12,.07) 45%,rgba(40,28,12,.24) 88%,rgba(255,255,255,.14) 94%,rgba(40,28,12,.42) 100%)}
+.spread .pg.cover.R::after,.spread .pg.back.L::after{display:none}
+/* la tranche : derrière les deux pages, le bloc du livre (quelques feuillets qui dépassent, un peu décalés) et les plats de la reliure */
+.spread .stage::before,.spread .stage::after{content:"";position:absolute;pointer-events:none;transition:opacity .4s}
+.spread .stage::before{z-index:0;left:-9px;right:-9px;top:3px;bottom:-7px;
+  background:repeating-linear-gradient(90deg,#efe6d4 0 1px,#cbbfa8 1px 2px,#e6dcc8 2px 3px) left/9px 100% no-repeat,
+    repeating-linear-gradient(90deg,#e6dcc8 0 1px,#cbbfa8 1px 2px,#efe6d4 2px 3px) right/9px 100% no-repeat,
+    repeating-linear-gradient(0deg,#cbbfa8 0 1px,#eee5d3 1px 2.5px) bottom/100% 7px no-repeat;
+  box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.spread .stage::after{z-index:-1;left:-20px;right:-20px;top:-9px;bottom:-16px;background-color:var(--cloth);background-image:var(--tex-cloth);background-blend-mode:multiply;
+  box-shadow:0 40px 80px -24px rgba(0,0,0,.75),0 10px 24px -10px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.06)}
+.spread .stage.closed::before,.spread .stage.closed::after{opacity:0}
+.spread .cover .bgimg{object-position:50% 100%;--pt:54%}
+.spread .cover .pi::before{--pt:54%}
+.spread .colo .mid::before{height:28px;margin-bottom:var(--sp1)}
 .spread .mast{font-size:clamp(78px,19cqi,150px)}
 .leaf{position:absolute;top:0;width:var(--pw);height:var(--ph);transform-style:preserve-3d;z-index:6}
 .leaf .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
@@ -74,7 +117,7 @@ img{display:block}
   font:italic 400 15px/1 "Bodoni Moda",serif;color:var(--ink2)}
 .fo span{font:500 var(--fs-cap)/1 "Inter",sans-serif;letter-spacing:.22em;text-transform:uppercase;font-style:normal}
 .lab{font:500 var(--fs-lab)/1.3 "Inter",sans-serif;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0}
-.cap{font:400 var(--fs-cap)/1.45 "Inter",sans-serif;letter-spacing:.04em;color:var(--ink2);margin:8px 0 0}
+.cap{font:400 var(--fs-cap)/1.45 "Inter",sans-serif;letter-spacing:.04em;color:var(--ink2);margin:11px 0 0}
 .cap b{font-weight:600;color:var(--ink);letter-spacing:.14em;text-transform:uppercase;margin-right:.5em}
 p{margin:0}
 .txt{font:500 var(--fs-body)/1.45 "Cormorant Garamond",serif;color:var(--ink)}
@@ -82,19 +125,49 @@ p{margin:0}
 .it{font-style:italic;font-weight:400}
 .rule{height:1px;background:currentColor;opacity:.35;border:0;margin:0}
 
+/* ---------- l'encre dans le papier ----------
+   Les titres et les grands chiffres sont foulés (typographie à l'ancienne : enfoncés d'un cheveu dans la feuille) ; les
+   prénoms et les chiffres romains des chapitres sont en dorure à chaud (dégradé de l'or vers plus foncé, jamais plus clair,
+   grain de feuille d'or, relief marqué) ; les filets sont pressés dans le papier (un trait, un filet de lumière dessous). */
+.ci,.fam h2,.toc-h,.ev h3,.ev .hour,.ev .day,.title .day,.prog h2,.dress h2,.stay h2,.rep h2,.tl .h,.stay .k,.toc .n,.sign,.fam .txt::first-letter{text-shadow:var(--press)}
+.ev .hour,.toc-h,.op h2,.prog h2,.dress h2,.stay h2,.rep h2,.fam h2,.ev h3{text-shadow:-.7px -.9px 0 rgba(45,28,8,.3),.7px .9px 0 rgba(255,255,255,.5),1.6px 2.2px 3px rgba(45,28,8,.12)}
+.pg .names,.pg.op .num{background:var(--grain-or),linear-gradient(168deg,#7a5c2a 0%,#5e4620 28%,#4a3614 46%,#6b4f24 64%,#4a3614 84%,#5e4620 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(-1px -1px 0 rgba(255,255,255,.9)) drop-shadow(1.1px 1.4px 0 rgba(30,18,4,.4)) drop-shadow(2px 3px 3px rgba(40,25,8,.2))}
+.names .amp{color:transparent;background:inherit;-webkit-background-clip:text;background-clip:text}
+.toc,.tl{border-top-color:rgba(29,26,22,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.85)}
+.toc li,.tl li{box-shadow:0 1px 0 rgba(255,255,255,.85)}
+/* gaufrage à sec : les fleurons blanc sur blanc (cul-de-lampe de la page de titre, bandeau du colophon), jamais derrière un texte */
+.pg .orn{filter:var(--emb);color:#fbf7ef}
+.pg .orn::before,.pg .orn::after{opacity:1;height:1.5px}
+.pg .orn i{border-width:1.5px}
+.title .mid::after,.colo .mid::before{content:"";display:block;width:140px;height:44px;flex:none;filter:var(--emb);pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 64' fill='none' stroke='%23fbf7ef' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M100 18l12 14-12 14-12-14z'/%3E%3Cpath d='M100 26l5 6-5 6-5-6z' fill='%23fbf7ef'/%3E%3Cpath d='M84 32C70 32 62 20 46 22c-14 2-22 12-34 10M116 32c14 0 22-12 38-10 14 2 22 12 34 10'/%3E%3Cpath d='M46 22c-6-6-16-4-16 4s12 10 14 2M154 22c6-6 16-4 16 4s-12 10-14 2'/%3E%3Cpath d='M78 40c-10 4-20 4-28 0M122 40c10 4 20 4 28 0'/%3E%3Ccircle cx='12' cy='32' r='2.2' fill='%23fbf7ef'/%3E%3Ccircle cx='188' cy='32' r='2.2' fill='%23fbf7ef'/%3E%3C/svg%3E") center/contain no-repeat}
+.title .mid::after{margin-top:var(--sp3)}
+.colo .mid::before{margin-bottom:var(--sp2);height:36px}
+
 /* planches : un détail cadré par choix, jamais une image tronquée */
 .pl{margin:0;display:flex;flex-direction:column;min-height:0}
-.pl .im{position:relative;overflow:hidden;flex:1 1 auto;min-height:0;background:#141a33}
+/* une peinture collée sur la page a une épaisseur : un liseré de papier clair (passe-partout), un bord qui prend la lumière en
+   haut à gauche, une ombre portée douce en bas à droite ; et un vernis discret (reflet en travers) */
+.pl .im{position:relative;overflow:hidden;flex:1 1 auto;min-height:0;background:#141a33;border:4px solid #fbf7ef;
+  box-shadow:inset 0 0 0 1px rgba(60,40,10,.22),-1px -1px 0 rgba(255,255,255,.9),0 0 0 1px rgba(60,40,10,.16),0 1px 1px rgba(40,26,8,.22),0 10px 22px -8px rgba(40,26,8,.5)}
 .pl .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--fx,50%) var(--fy,50%);
   transform:scale(var(--z,1));transform-origin:var(--fx,50%) var(--fy,50%)}
+.pl .im::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:linear-gradient(118deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0) 72%,rgba(255,255,255,.06) 100%);
+  box-shadow:inset 1px 1px 0 rgba(0,0,0,.28),inset -1px -1px 0 rgba(255,255,255,.18)}
 
 /* révélation douce du texte, une fois la page posée */
 .rv{opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--d,0) * 90ms + 120ms)}
 .pg.on .rv,.leaf .rv{opacity:1;transform:none}
+.leaf .rv{transition:none}
+/* sur le feuillet qui tourne (clone en 3D), Chromium peint l'ombre du texte foulé sans le texte : pas de relief le temps du geste */
+.leaf .face *{text-shadow:none!important}
 
 /* ---------- sceau de cire, initiales gravées ---------- */
 .seal{width:96px;height:96px;background:url(/img/seals/or.webp) center/contain no-repeat;display:grid;place-items:center;container-type:inline-size;
-  filter:drop-shadow(0 8px 12px rgba(60,38,8,.35));flex:none}
+  filter:drop-shadow(0 1px 1px rgba(40,26,8,.4)) drop-shadow(0 3px 3px rgba(40,26,8,.22)) drop-shadow(0 12px 16px rgba(60,38,8,.32));flex:none}
 .seal b{font:400 24cqw/1.15 "Great Vibes",cursive;letter-spacing:-.01em;margin-top:2cqw;padding:0 .08em;white-space:nowrap;
   background:linear-gradient(165deg,#fbe3a0 0%,#c99a3a 48%,#6e4a12 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 1px 0 rgba(255,244,214,.55)) drop-shadow(0 -1px .6px rgba(40,22,4,.75)) drop-shadow(0 1.5px 1.5px rgba(40,22,4,.35))}
@@ -117,13 +190,36 @@ p{margin:0}
   border-bottom:1px solid currentColor;padding-bottom:4px;background:none;border-top:0;border-left:0;border-right:0;cursor:pointer}
 
 /* ============ 0 · Couverture ============ */
-.cover{background:#0b1029}
-.cover .bgimg{position:absolute;left:0;bottom:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
-.cover .pi{padding-top:clamp(24px,5cqb,48px);color:var(--cream)}
-.cv-k{display:flex;justify-content:space-between;font:500 var(--fs-cap)/1 "Inter",sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#e9dcc0}
-.mast{margin:clamp(14px,3cqb,30px) 0 0;font:400 clamp(78px,25cqi,150px)/.86 "Bodoni Moda",serif;letter-spacing:-.035em;color:var(--cream)}
+/* Un vrai livre relié : toile bleu nuit (tissage éclairé de biais), coins un peu usés, le dos à gauche avec son mors,
+   la peinture collée sur le plat (vignette contrecollée, filet d'or autour, vernis), le titre en dorure à chaud. */
+.cover,.pg.back{background-color:var(--cloth);
+  background-image:radial-gradient(circle at 0 0,rgba(255,255,255,.16),rgba(255,255,255,0) 70px),radial-gradient(circle at 100% 0,rgba(255,255,255,.13),rgba(255,255,255,0) 70px),
+    radial-gradient(circle at 100% 100%,rgba(255,255,255,.13),rgba(255,255,255,0) 70px),radial-gradient(circle at 0 100%,rgba(255,255,255,.12),rgba(255,255,255,0) 70px),
+    radial-gradient(ellipse 100% 70% at 40% 20%,rgba(255,255,255,.08),rgba(0,0,0,0) 60%),linear-gradient(160deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.35) 100%)}
+.cover::before,.pg.back::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:var(--tex-cloth);mix-blend-mode:multiply;opacity:.85}
+.cover .bgimg,.pg.back .bgimg{--pt:51%;position:absolute;left:8.5%;top:var(--pt);width:83%;height:calc(100% - var(--pt) - 5.5%);object-fit:cover;object-position:50% 100%;z-index:1;
+  box-shadow:0 0 0 1px #0a0e20,0 0 0 3px rgba(214,180,110,.62),0 0 0 4px #0a0e20,0 2px 2px 3px rgba(0,0,0,.45),0 18px 30px -6px rgba(0,0,0,.7)}
+.pg.back .bgimg{--pt:42%}
+.cover .pi,.pg.back .pi{padding-top:clamp(24px,5cqb,48px);color:var(--cream);padding-left:calc(var(--mx) + 10px)}
+/* le vernis de la vignette (au-dessus de l'image : .pi est devant) et le dos du livre, à gauche, avec le creux du mors */
+.cover .pi::before,.pg.back .pi::before{--pt:51%;content:"";position:absolute;left:8.5%;top:var(--pt);width:83%;height:calc(100% - var(--pt) - 5.5%);pointer-events:none;z-index:1;
+  background:linear-gradient(118deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 32%,rgba(255,255,255,0) 70%,rgba(255,255,255,.05) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 1px 0 0 rgba(255,255,255,.1),inset -1px -1px 0 rgba(0,0,0,.35)}
+.pg.back .pi::before{--pt:42%}
+.cover .pi::after,.pg.back .pi::after{content:"";position:absolute;top:0;bottom:0;width:26px;pointer-events:none;z-index:2;
+  background:linear-gradient(90deg,rgba(0,0,0,.42),rgba(0,0,0,.12) 38%,rgba(255,255,255,.09) 52%,rgba(0,0,0,.36) 66%,rgba(0,0,0,.1) 82%,rgba(0,0,0,0))}
+.cover .pi::after{left:0}
+.pg.back .pi::after{right:0;transform:scaleX(-1)}
+.spread .pg.back .pi::after{display:none}
+.cv-k{display:flex;justify-content:space-between;font:500 var(--fs-cap)/1 "Inter",sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#e9dcc0;
+  text-shadow:0 -1px 0 rgba(0,0,0,.5)}
+/* dorure à chaud sur la toile : l'or, ses reflets, son grain, enfoncé d'un cheveu dans le tissu */
+.mast,.pg.back .bk{background:var(--grain-or),linear-gradient(168deg,#f4dfa2 0%,#d4b060 22%,#b58b36 38%,#e9cc84 54%,#b58b36 72%,#d9b868 88%,#f1dc9e 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 -1px 0 rgba(0,0,0,.65)) drop-shadow(0 1px 0 rgba(255,240,200,.18)) drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.mast{margin:clamp(14px,3cqb,30px) 0 0;font:400 clamp(78px,25cqi,150px)/.86 "Bodoni Moda",serif;letter-spacing:-.035em;padding:.06em .1em 0 0}
 .mast span{display:block}
-.mast .amp{font-style:italic;font-size:.62em;color:#e6c98a;margin:0 .06em 0 .02em;display:inline;letter-spacing:0}
+.mast .amp{font-style:italic;font-size:.62em;margin:0 .06em 0 .02em;display:inline;letter-spacing:0;color:transparent;background:inherit;-webkit-background-clip:text;background-clip:text}
 .mast .l2{padding-left:.38em}
 .cv-lines{margin-top:clamp(16px,3cqb,30px);display:grid;gap:8px;max-width:62%}
 .cv-lines .t{font:italic 400 clamp(22px,6cqi,30px)/1.2 "Cormorant Garamond",serif;color:var(--cream)}
@@ -167,7 +263,12 @@ p{margin:0}
 /* ============ 4 · Frontispice ============ */
 .front .pi{align-items:center}
 .front figure{margin:auto 0;display:flex;flex-direction:column;align-items:flex-start;min-height:0}
-.front img{max-height:calc(var(--ph) - 170px);max-width:100%;width:auto;height:auto;box-shadow:0 1px 0 rgba(0,0,0,.05),0 14px 30px -18px rgba(40,26,8,.55)}
+.front img{max-height:calc(var(--ph) - 170px);max-width:100%;width:auto;height:auto;border:5px solid #fbf7ef;
+  box-shadow:-1px -1px 0 rgba(255,255,255,.9),0 0 0 1px rgba(60,40,10,.18),0 1px 1px rgba(40,26,8,.22),0 16px 30px -12px rgba(40,26,8,.55)}
+/* les planches pleine page (chapitres, réponse) touchent les bords : pas de passe-partout, seulement le vernis et la lèvre de la planche */
+.op .pl .im,.rep .pl .im{border:0;box-shadow:none}
+.op .pl .im::after,.rep .pl .im::after{box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.2)}
+.op .pl,.rep .pl{filter:drop-shadow(0 -2px 3px rgba(40,26,8,.18))}
 
 /* ============ Chapitres : pages d'ouverture ============ */
 .op .pi{padding-bottom:0}
@@ -182,6 +283,7 @@ p{margin:0}
 .op.top .pi{padding-top:0;padding-bottom:18px}
 .op.top .pl{margin:0 calc(var(--mx) * -1) var(--sp3);order:-1}
 .op.top .chap{margin-top:0}
+.op.top .pl{filter:drop-shadow(0 3px 4px rgba(40,26,8,.2))}
 
 /* ============ Moments ============ */
 .ev .when{margin-top:var(--sp3)}
@@ -247,12 +349,10 @@ p{margin:0}
 .logo span{font:500 12px/1 "Inter",sans-serif;letter-spacing:.32em}
 .logo em{font:400 30px/1 "Great Vibes",cursive;font-style:normal}
 
-/* ============ Quatrième ============ */
-.back{background:#a7c6e6}
-.back .bgimg{position:absolute;left:0;bottom:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
-.back .pi{padding-top:clamp(40px,8cqb,90px)}
-.back .bk{font:italic 400 clamp(54px,16cqi,96px)/.9 "Bodoni Moda",serif;letter-spacing:-.03em;color:var(--ink)}
-.back .bk2{margin-top:var(--sp2);font:500 13px/1.5 "Inter",sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--ink)}
+/* ============ Quatrième ============ (règles en .pg.back : le dos du feuillet qui tourne est aussi « .face.back ») */
+.pg.back .pi{padding-top:clamp(40px,8cqb,90px)}
+.pg.back .bk{font:italic 400 clamp(54px,16cqi,96px)/.9 "Bodoni Moda",serif;letter-spacing:-.03em;padding:.08em .14em .1em 0}
+.pg.back .bk2{margin-top:var(--sp2);font:500 13px/1.5 "Inter",sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#e9dcc0;text-shadow:0 -1px 0 rgba(0,0,0,.5)}
 
 /* ---------- navigation ---------- */
 .nav{position:fixed;top:50%;z-index:20;width:46px;height:46px;margin-top:-23px;border-radius:50%;border:1px solid rgba(246,237,219,.35);
@@ -293,7 +393,8 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
   .rv{transition:opacity .2s ease;transform:none}
   .hint i{animation:none}
   .stage{transition:none}
-  .pg.turning::after,.leaf .face::after{animation:none}
+  .pg.turning::after,.leaf .face::after,.pg.under::after{animation:none}
+  .pg.cur .pl .im{transition:none}
 }
 </style>
 </head>
@@ -689,8 +790,12 @@ function goTo(n){ if(busy) return; if(spread){k=n===0?0:Math.ceil(n/2)} else i=n
 
 /* gestes */
 let x0=null,y0=0,t0=0;
-book.addEventListener('touchstart',e=>{const t=e.touches[0];x0=t.clientX;y0=t.clientY;t0=Date.now()},{passive:true});
+book.addEventListener('touchstart',e=>{const t=e.touches[0];x0=t.clientX;y0=t.clientY;t0=Date.now();if(!spread&&!reduce)pages[i].classList.add('drag')},{passive:true});
+/* parallaxe : pendant le geste, la planche de la page suit le doigt à 6 %, le texte reste en place (deux plans) */
+book.addEventListener('touchmove',e=>{ if(x0===null||spread||reduce||busy) return; const t=e.touches[0],dx=t.clientX-x0,dy=t.clientY-y0;
+  if(Math.abs(dx)>Math.abs(dy)) pages[i].style.setProperty('--px',(Math.max(-120,Math.min(120,dx))*.06).toFixed(1)) },{passive:true});
 book.addEventListener('touchend',e=>{ if(x0===null) return; const t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0; x0=null;
+  const cur=pages[i]; cur.classList.remove('drag'); cur.style.removeProperty('--px');
   if(Math.abs(dx)>36&&Math.abs(dx)>Math.abs(dy)*1.2) go(dx<0?1:-1) },{passive:true});
 book.addEventListener('click',e=>{
   if(e.target.closest('a,button,input,select,label,dialog')) return;
