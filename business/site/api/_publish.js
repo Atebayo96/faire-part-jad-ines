@@ -57,7 +57,8 @@ ${a(L.edit, 'Modifier mon faire-part')}
 <p>Une question ? Répondez simplement à cet e-mail.</p><p>Save The Oui</p></div>`;
   try {
     const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from, to: [to], subject: `${L.dl ? 'Votre faire-part est prêt' : 'Votre faire-part est en ligne'} · ${couple}`, html }) });
+      // les réponses des mariés vont à une vraie boîte (savetheoui.fr n'a pas de boîte de réception) : SCEAU_MAIL_REPLY_TO
+      body: JSON.stringify({ from, to: [to], ...(process.env.SCEAU_MAIL_REPLY_TO ? { reply_to: process.env.SCEAU_MAIL_REPLY_TO } : {}), subject: `${L.dl ? 'Votre faire-part est prêt' : 'Votre faire-part est en ligne'} · ${couple}`, html }) });
     return r.ok;
   } catch { return false; }
 }
