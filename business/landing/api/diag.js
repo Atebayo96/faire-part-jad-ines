@@ -26,6 +26,11 @@ export default async function handler(req, res) {
     const g = await get(p, { access: 'private', useCache: false }).catch(e => ({ err: e.message })); out.push(['get useCache:false', g.err || JSON.parse(await new Response(g.stream).text()).v]);
     return res.status(200).json(out);
   }
+  if (b.action === 'read') {
+    // le même fichier, lu avec et sans le cache du CDN (useCache:false = ?cache=0 sur l'adresse privée)
+    const { get } = await import('@vercel/blob'); const rd = async o => { const g = await get(b.path, { access: 'private', ...o }); const j = JSON.parse(await new Response(g.stream).text()); return [j.at, j.message, j.events]; };
+    return res.status(200).json({ cache: await rd({}), nocache: await rd({ useCache: false }) });
+  }
   if (b.action === 'coupon') return res.status(200).json(await stripe('coupons/' + encodeURIComponent(b.id)));
   if (b.action === 'last') { const l = await stripe('checkout/sessions?limit=5'); return res.status(200).json({ status: l.status, error: l.body.error, data: (l.body.data || []).map(s => ({ id: s.id, ref: s.metadata && s.metadata.ref, status: s.status, payment_status: s.payment_status, amount_total: s.amount_total, success_url: s.success_url, created: s.created })) }); }
   if (b.action === 'session') {
