@@ -1,0 +1,296 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<!-- Pubs « feuille » (TikTok, Reels, 9:16, 18 s) : la Carte et la Page unique, avec les vraies feuilles dessinées par carte.js
+     (fiches de démo de business/invites, injectées par render.js dans window.FICHES). Trois montages (window.V) :
+       prix   : « 200 faire-part en papier : 700 € » → « le nôtre : 29 € », la carte envoyée en un message ;
+       univers: « 5 univers, lequel est le vôtre ? » → gaufrage en gros plan, 3 papiers, Carte ou Page unique ;
+       mamie  : « POV : Mamie reçoit votre faire-part » → elle ouvre la page, répond, les oui arrivent chez les mariés.
+     render(t) est déterministe ; render.js filme image par image. Aucune image générée. -->
+<link rel="stylesheet" href="/polices/polices.css">
+<link rel="stylesheet" href="/carte.css">
+<style>
+:root{--ink:#16140f;--mute:#6b665d;--bg:#f6f2ea;--gold:#8a6a2c;--red:#a8322a}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+#st{position:absolute;inset:0;overflow:hidden;background:radial-gradient(100% 70% at 50% 55%,#fffdf8 0%,var(--bg) 75%)}
+.abs{position:absolute}
+.cap{left:60px;right:60px;text-align:center;color:var(--ink);font:500 74px/1.08 "Cormorant Garamond",serif;opacity:0}
+.cap i{font-style:italic;font-weight:400;color:var(--gold)}
+.cap small{display:block;font:600 26px/1 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);margin-bottom:22px}
+/* la feuille, toujours dessinée à 360 × 740 puis réduite ou agrandie (comme .fl-in de la vitrine) */
+.box{position:absolute;overflow:hidden;background:#e9e4da}
+.fl-in{position:absolute;left:0;top:0;width:360px;height:740px;transform-origin:0 0;display:flex;flex-direction:column;pointer-events:none}
+.fl-in .ct{min-height:100%}
+/* téléphone : écran 540 × 1110 (la feuille à 1,5) */
+#ph{left:252px;top:360px;width:576px;height:1146px;border-radius:78px;background:#0d0d0f;padding:18px;box-shadow:0 60px 110px -30px rgba(40,25,5,.42),0 0 0 2px #2b2b30 inset;transform-origin:50% 50%}
+#scr{position:relative;width:540px;height:1110px;border-radius:62px;overflow:hidden;background:#fff}
+#scr>.box{left:0;top:0;width:540px;height:1110px}
+#tap{width:104px;height:104px;margin:-52px 0 0 -52px;border-radius:50%;background:rgba(20,20,20,.26);border:3px solid rgba(255,255,255,.92);z-index:40;opacity:0}
+/* messagerie (générique) */
+#chat{position:absolute;inset:0;background:#ece5d8;font-family:Inter,sans-serif;opacity:0}
+#chat .hd{height:150px;background:#fbf8f2;display:flex;align-items:flex-end;gap:18px;padding:0 26px 22px;border-bottom:1px solid #e2dacb}
+#chat .av{width:62px;height:62px;border-radius:50%;background:#b9a27a;color:#fff;display:flex;align-items:center;justify-content:center;font:600 28px/1 Inter}
+#chat .hd b{display:block;font:600 27px/1.2 Inter;color:#1d1a16}#chat .hd small{font:500 20px/1.3 Inter;color:#7a7365}
+.bub{position:absolute;max-width:80%;padding:14px 18px;border-radius:24px;font:500 24px/1.35 Inter;color:#1d1a16;box-shadow:0 1px 1px rgba(0,0,0,.08);opacity:0}
+.bub.in{left:20px;background:#fff;border-top-left-radius:6px}
+.bub.out{right:20px;background:#e3f1d9;border-top-right-radius:6px}
+.bub .who{display:block;font:600 19px/1 Inter;color:#9a6a2c;margin-bottom:8px}
+.bub .tm{display:block;text-align:right;font:500 17px/1 Inter;color:#8a8475;margin-top:6px}
+.bub .thumb{position:relative;width:300px;height:617px;border-radius:14px;overflow:hidden;margin:-2px -4px 10px}
+.bub .lnk{position:relative;width:380px;border-radius:16px;overflow:hidden;background:#f6f3ee;margin:-4px -6px 12px}
+.bub .lnk .box{position:relative;width:380px;height:300px}
+.bub .lnk div.t{padding:12px 16px}.bub .lnk b{display:block;font:600 23px/1.25 Inter}.bub .lnk small{display:block;margin-top:6px;font:500 19px/1 Inter;color:#7a7365}
+/* formulaire de réponse (feuille qui monte, comme sur le faire-part) */
+#form{position:absolute;left:0;right:0;bottom:0;height:720px;border-radius:40px 40px 0 0;background:#fffdf9;box-shadow:0 -20px 60px rgba(0,0,0,.25);padding:44px 40px;transform:translateY(110%);font-family:Inter,sans-serif;z-index:20}
+#form h4{font:500 44px/1.1 "Cormorant Garamond",serif;color:var(--ink);text-align:center}
+#form .sub{font:500 21px/1.3 Inter;color:var(--mute);text-align:center;margin:10px 0 30px}
+#form .row{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid #ece6da}
+#form .row b{font:600 27px/1 Inter;color:#1d1a16}
+#form .yn{display:flex;gap:10px}
+#form .yn span{height:58px;min-width:96px;padding:0 22px;border-radius:29px;border:2px solid #e3dccd;display:flex;align-items:center;justify-content:center;font:600 23px/1 Inter;color:#3d3a33}
+#form .yn span.on{background:var(--ink);border-color:var(--ink);color:#fff}
+#form .mn{display:flex;gap:10px;margin-top:4px}
+#form .mn span{height:52px;padding:0 20px;border-radius:26px;background:#f2ede3;display:flex;align-items:center;font:500 21px/1 Inter;color:#3d3a33}
+#form .mn span.on{background:#8a6a2c;color:#fff}
+#form .go{margin-top:34px;height:84px;border-radius:42px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font:500 34px/1 "Cormorant Garamond",serif}
+#merci{position:absolute;inset:0;background:#fffdf9;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;border-radius:40px 40px 0 0}
+#merci .ok{width:120px;height:120px;border-radius:50%;background:#2f6b45;color:#fff;font:600 64px/120px Inter;text-align:center}
+#merci p{margin-top:26px;font:500 46px/1.1 "Cormorant Garamond",serif;color:var(--ink)}
+#toast{position:absolute;left:50%;bottom:70px;transform:translateX(-50%);background:rgba(22,20,15,.9);color:#fff;border-radius:30px;padding:18px 30px;font:600 22px/1 Inter,sans-serif;white-space:nowrap;opacity:0;z-index:30}
+/* écran verrouillé des mariés */
+#lock{position:absolute;inset:0;opacity:0;background:linear-gradient(180deg,#2a2f45 0%,#4b3d52 55%,#7a5a52 100%);font-family:Inter,sans-serif;z-index:25}
+#lock .hr{position:absolute;left:0;right:0;top:120px;text-align:center;color:#fff;font:300 150px/1 "Inter Tight",Inter,sans-serif;letter-spacing:-.02em}
+#lock .dy{position:absolute;left:0;right:0;top:92px;text-align:center;color:rgba(255,255,255,.85);font:500 26px/1 Inter}
+.nt{position:absolute;left:18px;right:18px;border-radius:30px;background:rgba(250,248,244,.95);box-shadow:0 18px 40px -10px rgba(0,0,0,.35);
+  padding:20px 22px;display:flex;gap:16px;align-items:center;opacity:0}
+.nt .ic{flex:none;width:62px;height:62px;border-radius:16px;background:#16140f url(/img/seals/or.webp) center/82% no-repeat}
+.nt b{display:block;font:600 21px/1.2 Inter;color:#1d1a16}.nt span{display:block;font:500 22px/1.3 Inter;color:#3d3a33;margin-top:4px}
+.nt em{font-style:normal;color:#8a8475;font-size:18px;float:right}
+#tally{position:absolute;left:0;right:0;bottom:120px;text-align:center;color:#fff;opacity:0}
+#tally b{display:block;font:500 150px/1 "Cormorant Garamond",serif}
+#tally span{font:600 24px/1 Inter;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+/* accroche « prix » */
+#hk{left:0;right:0;top:600px;text-align:center;color:var(--ink)}
+#hk small{display:block;font:600 30px/1 Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+#hk .n{position:relative;display:inline-block;margin-top:34px;font:500 300px/1 "Cormorant Garamond",serif;font-variant-numeric:lining-nums tabular-nums}
+#hk .n s{position:absolute;left:-4%;top:52%;height:16px;width:108%;background:var(--red);border-radius:8px;transform-origin:0 50%;transform:scaleX(0) rotate(-6deg)}
+#hk .ln{margin-top:30px;font:500 40px/1.4 "Cormorant Garamond",serif;color:#3d3a33}
+#hk .ln span{display:inline-block;opacity:0}
+#us{left:0;right:0;top:700px;text-align:center;opacity:0}
+#us small{display:block;font:500 70px/1 "Cormorant Garamond",serif;font-style:italic;color:var(--ink)}
+#us b{display:block;margin-top:10px;font:500 330px/1 "Cormorant Garamond",serif;color:var(--gold);font-variant-numeric:lining-nums}
+/* étiquette sous le téléphone */
+.pill{left:50%;white-space:nowrap;background:var(--ink);color:#fbf7ef;border-radius:60px;padding:22px 46px;font:500 40px/1 "Cormorant Garamond",serif;opacity:0}
+.pill small{font:600 20px/1 Inter;letter-spacing:.18em;text-transform:uppercase;color:#cdbf9f;margin-left:16px;vertical-align:middle}
+/* trois papiers, carte ou page */
+.tri{opacity:0}
+.tri .box{border-radius:22px;box-shadow:0 30px 60px -24px rgba(40,25,5,.45)}
+.tri .tag{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);white-space:nowrap;background:rgba(22,20,15,.88);color:#fff;border-radius:24px;padding:12px 22px;font:600 20px/1 Inter,sans-serif;letter-spacing:.06em}
+.tri .lb{position:absolute;left:0;right:0;text-align:center;font:500 46px/1 "Cormorant Garamond",serif;color:var(--ink)}
+.tri .lb small{display:block;margin-top:10px;font:600 21px/1.3 Inter;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+/* fin */
+#end{inset:0;z-index:50;opacity:0;background:radial-gradient(100% 70% at 50% 45%,#fffdf8 0%,var(--bg) 75%)}
+#endseal{left:50%;top:420px;width:230px;height:230px;margin-left:-115px;background:url(/img/seals/or.webp) center/contain no-repeat;display:flex;align-items:center;justify-content:center;
+  font:400 110px/1 "Great Vibes",cursive;color:#6e4f17;text-shadow:-1px -1px 0 rgba(255,236,170,.55),1px 1px 1px rgba(60,35,5,.7)}
+#logo{left:0;right:0;top:720px;text-align:center;color:var(--ink);white-space:nowrap}
+#logo span{font:500 40px/1 "Inter Tight",Inter,sans-serif;letter-spacing:.32em;text-transform:uppercase}
+#logo b{font:400 180px/1 "Great Vibes",cursive;font-weight:400;margin-left:12px;position:relative;top:15px}
+#etag{top:980px;opacity:1}
+#price{left:50%;top:1240px;white-space:nowrap;background:var(--ink);color:#fbf7ef;border-radius:60px;padding:28px 56px;font:500 44px/1 "Cormorant Garamond",serif}
+#url{left:0;right:0;top:1400px;text-align:center;font:500 32px/1 Inter,sans-serif;letter-spacing:.16em;color:var(--mute)}
+</style></head><body>
+<div id="st">
+  <div id="caps"></div>
+  <div id="hk" class="abs"><small>200 faire-part en papier</small><div class="n"><span id="cnt">0</span> €<s id="strike"></s></div>
+    <div class="ln"><span>impression</span> · <span>enveloppes</span> · <span>timbres</span></div></div>
+  <div id="us" class="abs"><small>Le nôtre :</small><b>29 €</b></div>
+  <div id="ph" class="abs"><div id="scr">
+    <div id="lays"></div>
+    <div id="chat"><div class="hd"><div class="av" id="cav">F</div><div><b id="cnm">Famille</b><small id="cmb"></small></div></div><div id="bubs"></div></div>
+    <div id="toast"></div>
+    <div id="form"><h4>Serez-vous des nôtres ?</h4><p class="sub">Réponse souhaitée avant le 15 mai</p>
+      <div class="row"><b>Mamie</b><div class="yn"><span id="y1">Oui</span><span>Non</span></div></div>
+      <div class="row"><b>Papi</b><div class="yn"><span id="y2">Oui</span><span>Non</span></div></div>
+      <div class="row" style="display:block"><b>Menu</b><div class="mn" style="margin-top:16px"><span id="m1">Poisson</span><span>Viande</span><span>Végétarien</span></div></div>
+      <div class="go" id="go">Envoyer ma réponse</div>
+      <div id="merci"><div class="ok">✓</div><p>Merci Mamie !</p></div></div>
+    <div id="lock"><div class="dy">samedi 14 novembre</div><div class="hr">21:04</div>
+      <div class="nt" id="n1" style="top:330px"><div class="ic"></div><div><b>Save The Oui <em>maintenant</em></b><span>Mamie et Papi viendront (2 personnes)</span></div></div>
+      <div class="nt" id="n2" style="top:470px"><div class="ic"></div><div><b>Save The Oui <em>maintenant</em></b><span>Tata Nadia viendra (1 personne)</span></div></div>
+      <div class="nt" id="n3" style="top:610px"><div class="ic"></div><div><b>Save The Oui <em>maintenant</em></b><span>Famille Rossi viendra (4 personnes)</span></div></div>
+      <div id="tally"><b id="tn">0</b><span>oui déjà reçus</span></div></div>
+    <div id="tap" class="abs"></div>
+  </div></div>
+  <div id="pl" class="abs pill"></div>
+  <div id="tri" class="abs tri" style="inset:0"></div>
+  <div id="duo" class="abs tri" style="inset:0"></div>
+  <div id="end" class="abs">
+    <div id="endseal" class="abs">O</div>
+    <div id="logo" class="abs"><span>Save the</span><b>Oui</b></div>
+    <div id="etag" class="abs cap"></div>
+    <div id="price" class="abs"></div>
+    <div id="url" class="abs">SAVETHEOUI.FR</div>
+  </div>
+</div>
+<script src="/themes.js"></script>
+<script src="/carte.js"></script>
+<script>
+const V=window.V||'prix', F=window.FICHES, TH=window.SCEAU_THEMES;
+const $=id=>document.getElementById(id);
+const lin=(t,a,b)=>Math.min(1,Math.max(0,(t-a)/(b-a))), eo=x=>1-Math.pow(1-x,3), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{ const c=1.7; return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2); };
+const S=(el,o,tf)=>{ el.style.opacity=o; if(tf!=null) el.style.transform=tf; };
+const ORD=['page-emma-louis','carte-camille-antoine','page-victoire-charles','page-nour-ilyes','page-leila-mehdi'];
+// une feuille dans une case de largeur w (la hauteur suit, 360 × 740)
+function sheet(parent,inv,w,live){ const b=document.createElement('div'); b.className='box'; b.style.width=w+'px'; b.style.height=Math.round(w*740/360)+'px';
+  b.innerHTML=`<div class="fl-in">${SceauCarte.html(inv,{fit:true,live:!!live})}</div>`; b.firstChild.style.transform=`scale(${w/360})`; parent.appendChild(b); b._in=b.firstChild; return b; }
+const SHEETS=[];
+function layer(inv,live){ const b=sheet($('lays'),inv,540,live); b.style.height='1110px'; b.style.position='absolute'; b.style.opacity=0; SHEETS.push(b); return b; }
+// légendes en haut : [début, fin, html]
+const CAPS=[]; function cap(a,b,h,top){ const d=document.createElement('div'); d.className='abs cap'; d.style.top=(top||150)+'px'; d.innerHTML=h; $('caps').appendChild(d); CAPS.push([a,b,d]); }
+function caps(t){ CAPS.forEach(([a,b,d])=>{ const o=Math.min(eo(lin(t,a,a+.35)),1-lin(t,b-.3,b)); S(d,o,`translateY(${(1-eo(lin(t,a,a+.35)))*26}px)`); }); }
+// toucher : [instant, élément ou {x,y} dans l'écran]
+function tapAt(t,taps){ const el=$('tap'); let o=0;
+  for(const [at,pt] of taps){ const k=lin(t,at-.35,at), u=lin(t,at,at+.35); if(k>0&&u<1){ const p=typeof pt==='function'?pt():pt;
+    el.style.left=p.x+'px'; el.style.top=p.y+'px'; o=k<1?eo(k):1-u; el.style.transform=`scale(${k<1?1.25-.25*eo(k):1-.2*Math.sin(Math.PI*u)})`; } }
+  el.style.opacity=o; }
+// centre d'un élément de la feuille, en coordonnées de l'écran (#scr)
+function ptOf(el){ const s=$('scr').getBoundingClientRect(), r=el.getBoundingClientRect(), k=$('ph')._k||1; return {x:(r.left+r.width/2-s.left)/k,y:(r.top+r.height/2-s.top)/k}; }
+function phone(x,y,sc,o){ const p=$('ph'); p._k=sc; S(p,o,`translate(${x}px,${y}px) scale(${sc})`); }
+function bub(cls,html,top){ const d=document.createElement('div'); d.className='bub '+cls; d.style.top=top+'px'; d.innerHTML=html; $('bubs').appendChild(d); return d; }
+function popIn(el,t,a){ const k=lin(t,a,a+.3); S(el,eo(k),`translateY(${(1-eo(k))*24}px) scale(${.96+.04*eo(k)})`); }
+function endCard(t,a,tag,price){ $('etag').innerHTML=tag; $('price').innerHTML=price;
+  S($('end'),eo(lin(t,a,a+.45)));
+  const sk=back(lin(t,a+.2,a+.75)); S($('endseal'),lin(t,a+.2,a+.4),`scale(${.6+.4*sk}) rotate(${(1-sk)*-12}deg)`);
+  S($('logo'),eo(lin(t,a+.45,a+.9)),`translateY(${(1-eo(lin(t,a+.45,a+.9)))*30}px)`);
+  S($('etag'),eo(lin(t,a+.8,a+1.2)),`translateY(${(1-eo(lin(t,a+.8,a+1.2)))*30}px)`);
+  const pr=back(lin(t,a+1.1,a+1.6)); S($('price'),lin(t,a+1.1,a+1.3),`translateX(-50%) scale(${.85+.15*pr})`);
+  S($('url'),eo(lin(t,a+1.4,a+1.9))); }
+
+let render;
+/* ---------------- 1. prix ---------------- */
+if(V==='prix'){
+  const inv=F['carte-camille-antoine'], L=layer(inv,false);
+  const others=ORD.filter(s=>s!=='carte-camille-antoine').map(s=>layer(F[s],false));
+  $('cav').textContent='C'; $('cnm').textContent='Famille Durand'; $('cmb').textContent='Mamie, Tata Sylvie, Julie et 38 autres';
+  const b1=bub('out','',190); b1.innerHTML='<div class="thumb"></div>On se marie le 3 juillet ! Réponse avant le 1er juin<span class="tm">10:05</span>';
+  const th=sheet(b1.querySelector('.thumb'),inv,300,false);
+  const b2=bub('in','<span class="who">Tata Sylvie</span>Qu’elle est belle cette carte !!<span class="tm">10:06</span>',930);
+  const b3=bub('in','<span class="who">Julie</span>On sera là bien sûr<span class="tm">10:07</span>',1060);
+  cap(4.6,8.6,'<small>La Carte</small>Une vraie carte,<br><i>gaufrée et dorée.</i>',110);
+  cap(8.6,12.6,'Envoyée en un message.<br><i>Zéro timbre.</i>',140);
+  cap(12.6,15.2,'5 univers,<br><i>3 vrais papiers.</i>',140);
+  const sp=$('hk').querySelectorAll('.ln span');
+  render=t=>{
+    caps(t);
+    // accroche : le compteur monte, la somme se barre
+    const h=lin(t,2.35,2.8); S($('hk'),1-h,`translateY(${-60*eo(h)}px)`);
+    $('cnt').textContent=Math.round(700*eo(lin(t,.15,1.3)));
+    sp.forEach((s,i)=>S(s,eo(lin(t,.9+i*.25,1.2+i*.25)),`translateY(${(1-eo(lin(t,.9+i*.25,1.2+i*.25)))*20}px)`));
+    $('strike').style.transform=`scaleX(${eo(lin(t,1.9,2.3))}) rotate(-6deg)`;
+    const u=back(lin(t,2.9,3.4)), uo=lin(t,2.9,3.1)*(1-lin(t,4.2,4.6)); S($('us'),uo,`scale(${.7+.3*u}) translateY(${-80*eo(lin(t,4.1,4.6))}px)`);
+    // le téléphone monte, la carte se regarde de près
+    const r=eo(lin(t,4.1,4.9)); const out=eio(lin(t,15,15.6));
+    phone(0,900*(1-r)+50+40*out,1-.08*out,lin(t,4.1,4.3)*(1-out));
+    const z=eio(lin(t,5.6,7.0))*(1-eio(lin(t,7.6,8.6)));
+    L.style.opacity=1-lin(t,8.6,8.9);
+    L._in.style.transform=`translate(${-270*.3*z}px,${-140*z}px) scale(${1.5*(1+.3*z)})`;
+    // la messagerie
+    const c=lin(t,8.6,9.0); $('chat').style.opacity=c*(1-lin(t,12.5,12.8));
+    popIn(b1,t,8.85); popIn(b2,t,10.4); popIn(b3,t,11.2);
+    // les autres univers, un par un
+    others.forEach((o,i)=>{ const a=12.8+i*.5; o.style.opacity=lin(t,a,a+.15)*(i<3?1-lin(t,a+.5,a+.65):1); });
+    L.style.opacity=Math.max(+L.style.opacity, lin(t,12.5,12.7)*(1-lin(t,12.8,12.95)));
+    endCard(t,15.3,'Le faire-part<br><i>sur une seule feuille.</i>','Carte 29 € · Page unique 59 €');
+  };
+}
+/* ---------------- 2. univers ---------------- */
+if(V==='univers'){
+  $('hk').style.display='none'; $('us').style.display='none';
+  const Ls=ORD.map(s=>layer(F[s],false)), om=Ls[2];
+  const names=ORD.map(s=>TH[F[s].theme].name);
+  cap(0,3.4,'5 univers.<br><i>Lequel est le vôtre ?</i>',120);
+  cap(3.4,7.6,'Gaufrée, dorée,<br><i>pressée dans le papier.</i>',120);
+  cap(7.6,11.9,'<small>Coton, aquarelle, vélin</small>Trois vrais papiers.',170);
+  cap(11.9,15.2,'<small>Une feuille, deux façons</small>À imprimer<br><i>ou à partager.</i>',120);
+  // trois papiers : la même feuille
+  const P=[['coton','Coton','grain doux'],['aquarelle','Aquarelle','relief marqué'],['velin','Vélin','lisse et fin']];
+  const tri=P.map(([k,n,s],i)=>{ const w=300, b=sheet($('tri'),Object.assign({},F['carte-camille-antoine'],{paper:k}),w,false);
+    b.style.left=(60+i*(w+30))+'px'; b.style.top='520px'; b.style.height='640px';
+    b._in.style.transform='translate(-57px,-60px) scale(1.15)'; const l=document.createElement('div'); l.className='lb'; l.style.left=b.style.left; l.style.right='auto'; l.style.width=w+'px'; l.style.top='1200px';
+    l.innerHTML=`${n}<small>${s}</small>`; $('tri').appendChild(l); return [b,l]; });
+  // carte ou page unique
+  const d1=sheet($('duo'),F['page-leila-mehdi'],440,false), d2=sheet($('duo'),F['page-leila-mehdi'],440,true);
+  [d1,d2].forEach((b,i)=>{ b.style.left=(70+i*500)+'px'; b.style.top='470px'; });
+  [['PNG · PDF',d1],['savetheoui.fr/d/…',d2]].forEach(([tx,b])=>{ const g=document.createElement('div'); g.className='tag'; g.textContent=tx; b.appendChild(g); });
+  const dl=[['Carte · 29 €','image et PDF'],['Page unique · 59 €','un lien, en ligne']].map(([n,s],i)=>{ const l=document.createElement('div'); l.className='lb';
+    l.style.left=(70+i*500)+'px'; l.style.right='auto'; l.style.width='440px'; l.style.top='1410px'; l.innerHTML=`${n}<small>${s}</small>`; $('duo').appendChild(l); return l; });
+  render=t=>{
+    caps(t);
+    // les univers défilent au rythme, puis Old money reste
+    const cut=[0,.62,1.24,1.86,2.48], cur=t<3?cut.reduce((a,c,i)=>t>=c?i:a,0):2;
+    Ls.forEach((L,i)=>{ const a=cut[i]; let o=0, x=0;
+      if(i===cur){ const k=lin(t,a,a+.18); o=1; x=t<3.0?(1-eo(k))*540:0; }
+      if(i===cur-1&&t<3) o=1;
+      if(t>=3&&t<3.25&&i===4){ o=1-eo(lin(t,3,3.25)); }
+      L.style.opacity=o; L.style.zIndex=i===cur?2:1; L.style.transform=`translateX(${x}px)`; });
+    if(t>=3){ om.style.opacity=1; om.style.zIndex=1; }
+    const lb=t<3.05?names[cur]:names[2]; $('pl').innerHTML=`${lb}<small>${(t<3.05?cur:2)+1} / 5</small>`;
+    // gros plan : le téléphone s'agrandit vers les prénoms, puis descend sur les moments
+    const z=eio(lin(t,3.6,5.0))*(1-eio(lin(t,6.9,7.6))), pan=eio(lin(t,5.2,6.6));
+    const out=eio(lin(t,7.5,7.9));
+    phone(0,-pan*640*z+60,1+1.5*z,1-out);
+    S($('pl'),lin(t,.1,.3)*(1-lin(t,3.4,3.7)),'translateX(-50%)'); $('pl').style.top='1560px';
+    // trois papiers
+    const tk=lin(t,7.7,8.3)*(1-lin(t,11.6,11.9)); S($('tri'),tk);
+    tri.forEach(([b,l],i)=>{ const k=eo(lin(t,7.8+i*.18,8.5+i*.18)); b.style.transform=`translateY(${(1-k)*120}px)`; b.style.opacity=k; l.style.opacity=k;
+      // le papier choisi se soulève, l'un après l'autre
+      const up=Math.sin(Math.PI*lin(t,9.0+i*.8,9.8+i*.8)); b.style.transform+=` translateY(${-30*up}px) scale(${1+.04*up})`; });
+    // carte ou page unique
+    S($('duo'),lin(t,11.9,12.3)*(1-lin(t,15.1,15.4)));
+    [d1,d2].forEach((b,i)=>{ const k=eo(lin(t,12.0+i*.25,12.7+i*.25)); b.style.opacity=k; b.style.transform=`translateY(${(1-k)*100}px) rotate(${(i?1:-1)*2.5*k}deg)`; dl[i].style.opacity=k; });
+    endCard(t,15.3,'Choisissez le vôtre.<br><i>Il est prêt à envoyer.</i>','Carte 29 € · Page unique 59 €');
+  };
+}
+/* ---------------- 3. mamie ---------------- */
+if(V==='mamie'){
+  $('hk').style.display='none'; $('us').style.display='none';
+  const inv=F['page-leila-mehdi'], L=layer(inv,true);
+  $('cav').textContent='L'; $('cnm').textContent='Leïla'; $('cmb').textContent='en ligne';
+  const b0=bub('in','<span class="who">Leïla</span>Mamie, c’est le faire-part ! Tout est dedans, tu peux répondre directement<span class="tm">18:42</span>',190);
+  const b1=bub('in','',420); b1.innerHTML='<div class="lnk"><div class="t"><b>Leïla &amp; Mehdi vous invitent</b><small>savetheoui.fr/d/leila-mehdi</small></div></div><span class="tm">18:42</span>';
+  const card=sheet(b1.querySelector('.lnk'),inv,380,false); b1.querySelector('.lnk').prepend(card); card.style.position='relative';
+  card._in.style.transform=`scale(${380/360})`; card.style.height='300px';
+  cap(0,3.0,'<small>POV</small>Mamie reçoit<br><i>votre faire-part.</i>',120);
+  cap(3.2,7.0,'Tout sur une page :<br><i>l’heure, l’adresse, l’agenda.</i>',120);
+  cap(7.0,11.0,'Elle répond<br><i>en trois touchers.</i>',120);
+  cap(11.0,15.2,'Et vous,<br><i>vous voyez les oui arriver.</i>',120);
+  const rs=()=>L.querySelector('[data-rsvp]'), pin=()=>L.querySelector('.ct-lk a'), cal=()=>L.querySelector('.ct-lk button');
+  const P=(x,y)=>({x,y});
+  render=t=>{
+    caps(t);
+    phone(0,40,1,1-eio(lin(t,15,15.4)));
+    $('chat').style.opacity=1-lin(t,3.0,3.4);
+    popIn(b0,t,.3); popIn(b1,t,.8);
+    // la carte du lien s'ouvre en plein écran
+    const g=eio(lin(t,3.0,3.5));
+    L.style.opacity=g; L.style.transformOrigin='50% 40%'; L.style.transform=`scale(${.86+.14*g})`;
+    tapAt(t,[[2.8,P(230,640)],[4.6,()=>ptOf(pin())],[5.6,()=>ptOf(cal())],[6.7,()=>ptOf(rs())],[8.1,()=>ptOf($('y1'))],[8.6,()=>ptOf($('y2'))],[9.2,()=>ptOf($('m1'))],[10.0,()=>ptOf($('go'))]]);
+    const ts=lin(t,5.7,5.9)*(1-lin(t,6.5,6.7)); $('toast').textContent='Ajouté à votre agenda'; S($('toast'),ts,'translateX(-50%)');
+    // le formulaire
+    const f=eo(lin(t,6.85,7.35))*(1-eio(lin(t,10.8,11.1))); $('form').style.transform=`translateY(${(1-f)*110}%)`;
+    $('y1').classList.toggle('on',t>=8.1); $('y2').classList.toggle('on',t>=8.6); $('m1').classList.toggle('on',t>=9.2);
+    S($('merci'),lin(t,10.15,10.4));
+    // chez les mariés
+    S($('lock'),lin(t,10.8,11.1));
+    ['n1','n2','n3'].forEach((n,i)=>popIn($(n),t,11.6+i*.75));
+    S($('tally'),lin(t,13.6,13.9)); $('tn').textContent=Math.round(28*eo(lin(t,13.6,14.6)));
+    endCard(t,15.3,'Le faire-part en ligne,<br><i>avec les réponses.</i>','Page unique 59 € · « Répondre » + 20 €');
+  };
+}
+window.render=render;
+window.ready=async()=>{ await document.fonts.ready;
+  await Promise.all([...document.images].map(im=>im.complete?0:new Promise(r=>{ im.onload=im.onerror=r; })));
+  document.querySelectorAll('.box').forEach(b=>SceauCarte.fit(b)); await new Promise(r=>setTimeout(r,400));
+  document.querySelectorAll('.box').forEach(b=>SceauCarte.fit(b)); };
+</script>
+</body></html>
