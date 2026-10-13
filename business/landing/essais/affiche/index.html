@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#e9dcc0">
+<title>Giulia &amp; Hugo · Affiches</title>
+<link rel="stylesheet" href="/polices/polices.css">
+<style>
+/* Les fichiers de polices de Google sont variables : on ouvre toute la plage de graisses. */
+@font-face{font-family:'JostV';font-style:normal;font-weight:300 700;src:url(/polices/jost-35841fe7.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'BodoniV';font-style:normal;font-weight:400 900;src:url(/polices/bodoni-moda-0eef2cd7.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'BodoniV';font-style:italic;font-weight:400 900;src:url(/polices/bodoni-moda-9a5f1336.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'CormV';font-style:normal;font-weight:300 700;src:url(/polices/cormorant-garamond-d8266c4e.woff2) format('woff2');font-display:swap}
+
+:root{
+  /* Papier et encres d'impression */
+  --paper:#f4ecda;      /* marge blanche d'impression */
+  --cream:#f3e7cc;      /* crème des aplats */
+  --navy:#132a4a;       /* bleu de nuit */
+  --lemon:#ecbf3a;      /* jaune citron */
+  --terra:#a3402a;      /* terre cuite */
+  --brick:#8a3120;      /* rouge brique (texte sur clair) */
+  --sea:#1d5b86;        /* bleu de la côte */
+  --bouga:#952c52;      /* bougainvillier */
+  --imprint:#3b3026;
+  --fs-cap:13px; --fs-body:18px; --fs-day:22px; --fs-note:11.5px;
+  --g1:10px; --g2:18px; --g3:28px;
+  --ease:cubic-bezier(.7,0,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;overflow-x:clip}
+body{
+  background:#2b241d;
+  background-image:radial-gradient(120% 90% at 50% 40%, #3a3127 0%, #231d17 70%);
+  color:var(--navy);
+  font-family:'CormV','Cormorant Garamond',Georgia,serif;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+}
+/* La scène : un téléphone, ou une affiche centrée au mur sur ordinateur */
+#stage{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:100vw;height:100dvh;
+  overflow:hidden;background:var(--paper);
+  touch-action:none;user-select:none;-webkit-user-select:none;
+}
+@media (min-width:600px){
+  #stage{height:min(94dvh,900px);width:calc(min(94dvh,900px) * .4621);box-shadow:0 30px 80px rgba(0,0,0,.55),0 4px 14px rgba(0,0,0,.35)}
+}
+
+/* ---------- L'affiche ---------- */
+.pst{
+  position:absolute;inset:0;background:var(--paper);
+  visibility:hidden;z-index:1;
+}
+.pst.on{visibility:visible;z-index:2}
+/* grain du papier, sur toute la feuille (marges comprises) */
+.pst::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:9;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .25 0 0 0 0 .16 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .36 0 0 0 0 .22 0 0 0 .5 -.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+  background-size:220px 220px,600px 600px;
+  mix-blend-mode:multiply;opacity:.38;
+}
+/* la planche imprimée, posée dans ses marges */
+.pp{
+  position:absolute;left:12px;right:12px;top:12px;bottom:36px;
+  container-type:size;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;
+  padding:16px 16px 18px;
+}
+/* mention d'imprimeur dans la marge du bas */
+.imp{
+  position:absolute;left:14px;right:14px;bottom:0;height:36px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font:400 var(--fs-note)/1 'JostV','Jost',sans-serif;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--imprint);white-space:nowrap;
+}
+.imp b{font-weight:500}
+@media (max-width:374px){.imp .opt{display:none}.row .cap{letter-spacing:.2em}.b{padding:0 12px 0 5px;gap:6px}.b i{width:34px;height:34px}}
+.imp .nb{font-variant-numeric:lining-nums tabular-nums;letter-spacing:.12em}
+
+/* ---------- Typographie d'affiche ---------- */
+.cap{font:500 var(--fs-cap)/1.2 'JostV','Jost',sans-serif;letter-spacing:.32em;text-transform:uppercase;padding-left:.32em}
+.row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.row .cap{padding-left:0}
+.rule{width:100%;height:0;border-top:2px solid currentColor;position:relative}
+.rule.dbl{height:5px;border-bottom:1px solid currentColor}
+.fit{width:100%;text-align:center;line-height:.86;font-family:'Abril Fatface',serif;text-transform:uppercase;letter-spacing:.005em}
+.fit .fl{display:inline-block;white-space:nowrap}
+.fit .amp{font-family:'BodoniV','Bodoni Moda',serif;font-style:italic;font-weight:500;text-transform:none;letter-spacing:0;margin-right:.06em}
+.ital{font-family:'BodoniV','Bodoni Moda',serif;font-style:italic;font-weight:400;line-height:1.1;text-align:center}
+.body{font:500 var(--fs-body)/1.45 'CormV','Cormorant Garamond',serif;text-align:center;text-wrap:balance;font-variant-numeric:lining-nums}
+.day{font:500 var(--fs-day)/1.15 'BodoniV','Bodoni Moda',serif;letter-spacing:.01em;text-align:center}
+.hour{font-family:'Abril Fatface',serif;line-height:.82;font-variant-numeric:lining-nums;letter-spacing:-.01em;text-align:center}
+.hour small{font-size:.42em;vertical-align:.95em;margin-left:.04em;letter-spacing:0}
+.nowrap{white-space:nowrap}
+
+/* ---------- Images : la peinture imprimée dans une forme ---------- */
+.fig{position:relative;flex:1 1 auto;min-height:0;width:100%;overflow:hidden}
+.fig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.arch{border-radius:999px 999px 0 0}
+.disc{border-radius:50%;flex:0 0 auto;aspect-ratio:1}
+/* filet d'impression autour de la forme */
+.frame{position:relative;flex:1 1 auto;min-height:0;padding:5px;border:2px solid currentColor}
+.frame.arch{border-radius:999px 999px 0 0}
+.frame.disc{border-radius:50%}
+.frame > .fig{height:100%}
+/* option (b) : sérigraphie en aplats */
+body.seri .fig img{filter:url(#seri)}
+.fig img{filter:saturate(1.06) contrast(1.03)}
+
+/* ---------- Boutons : pastilles ---------- */
+.acts{display:flex;gap:10px;justify-content:center;width:100%}
+.b{
+  flex:1 1 0;min-width:0;max-width:200px;height:46px;border-radius:999px;border:0;cursor:pointer;
+  display:inline-flex;align-items:center;gap:10px;padding:0 18px 0 5px;
+  font:600 17px/1 'CormV','Cormorant Garamond',serif;letter-spacing:.01em;text-decoration:none;
+  background:var(--btn-bg);color:var(--btn-fg);
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 0 rgba(0,0,0,.18);
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.acts .b:only-child{flex:0 0 auto;padding-right:24px}
+.b:active{transform:translateY(1px) scale(.98);box-shadow:0 0 0 rgba(0,0,0,0)}
+.b:focus-visible{outline:2px solid var(--btn-bg);outline-offset:3px}
+.b i{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--btn-md);color:var(--btn-mdfg);flex:0 0 auto}
+.b i svg{width:18px;height:18px}
+.b span{flex:1;text-align:center;white-space:nowrap}
+
+/* ---------- Les six affiches ---------- */
+/* I. Accueil : citron, encre de nuit */
+.p1 .pp{background:var(--lemon);color:var(--navy);padding-bottom:0}
+.p1 .amp{color:var(--brick)}
+.p1 .scene{position:relative;flex:1 1 auto;min-height:0;width:calc(100% + 32px);display:flex;justify-content:center;align-items:flex-end;margin-top:var(--g2);padding-top:22px;overflow:hidden}
+.p1 .scene::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from -90deg at 50% 100%, #dfa61f 0 3.6deg, transparent 3.6deg 7.2deg)}
+.p1 .fig{width:78%;height:100%;border-radius:999px 999px 0 0;flex:0 0 auto}
+.p1 .fig img{object-position:50% 100%}
+.p1 .band{position:relative;z-index:1;width:calc(100% + 32px);background:var(--navy);color:var(--lemon);display:flex;align-items:center;justify-content:center;gap:16px;padding:16px 18px 18px}
+.p1 .band .n28{font-family:'Abril Fatface',serif;font-size:min(23cqw,96px);line-height:.8;font-variant-numeric:lining-nums}
+.p1 .band .dt{display:flex;flex-direction:column;gap:6px;border-left:2px solid var(--lemon);padding-left:16px}
+.p1 .band .dt .day{text-align:left;font-size:22px;color:var(--cream);font-weight:600}
+.p1 .band .dt .cap{padding-left:0;letter-spacing:.24em;color:var(--lemon)}
+
+/* II. Cérémonie : terre cuite, crème */
+.p2 .pp{background:var(--terra);color:var(--cream);--btn-bg:var(--cream);--btn-fg:var(--navy);--btn-md:var(--terra);--btn-mdfg:var(--cream)}
+.p2 .fig{width:70%;border-radius:999px 999px 0 0;overflow:visible}
+.p2 .fig img,.p5 .fig img{border-radius:inherit}
+.p2 .fig::after,.p5 .fig::after{content:"";position:absolute;inset:-8px -8px 0;border:2px solid var(--cream);border-bottom:0;border-radius:999px 999px 0 0;pointer-events:none}
+.p2 .fig img{object-position:50% 100%}
+.p2 .hour{font-size:min(31cqw,26cqh)}
+
+/* III. Dîner : nuit, citron */
+.p3 .pp{background:var(--navy);color:var(--cream);--btn-bg:var(--lemon);--btn-fg:var(--navy);--btn-md:var(--navy);--btn-mdfg:var(--lemon)}
+.p3 .hour{color:var(--lemon);font-size:min(36cqw,24cqh)}
+.p3 .moon{position:relative;flex:1 1 auto;min-height:0;width:100%;display:flex;justify-content:center;align-items:center;container-type:size}
+.p3 .moon .ring{width:min(80cqw,100cqh);height:min(80cqw,100cqh);border-radius:50%;border:2px solid var(--lemon);padding:6px;flex:0 0 auto}
+.p3 .moon{width:calc(100% + 32px)}
+.p3 .moon::before{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 50%,transparent 0 12px,rgba(236,191,58,.5) 12px 13.5px);-webkit-mask:radial-gradient(circle closest-side at 50% 50%,#000 70%,transparent 116%);mask:radial-gradient(circle closest-side at 50% 50%,#000 70%,transparent 116%)}
+.p3 .moon .ring{position:relative;background:var(--navy)}
+.p3 .moon .fig{height:100%;border-radius:50%}
+.p3 .moon .fig img{object-position:50% 92%}
+
+/* IV. Programme : papier crème, encres brique et nuit */
+.p4 .pp{background:var(--cream);color:var(--navy)}
+.p4 .tt{width:100%;display:flex;flex-direction:column}
+.p4 .tr{display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:baseline;padding:9px 0 10px;border-top:1px solid rgba(19,42,74,.55)}
+.p4 .tr:last-child{border-bottom:1px solid rgba(19,42,74,.55)}
+.p4 .tr .t{font-family:'Abril Fatface',serif;font-size:min(9.6cqw,36px);line-height:1;color:var(--brick);font-variant-numeric:lining-nums tabular-nums;min-width:3.05em}
+.p4 .tr .w{display:flex;flex-direction:column;gap:2px}
+.p4 .tr .w b{font:500 21px/1.15 'BodoniV','Bodoni Moda',serif}
+.p4 .tr .w span{font:500 18px/1.3 'CormV','Cormorant Garamond',serif;color:#2c3550}
+.p4 .card{flex:1 1 auto;min-height:0;width:100%;border:2px solid var(--navy);padding:5px;display:flex}
+.p4 .card .fig{height:100%}
+.p4 .card .fig img{object-position:60% 96%}
+
+/* V. Dress code : mer, crème */
+.p5 .pp{background:var(--sea);color:var(--cream)}
+.p5 .split{flex:1 1 auto;min-height:0;width:100%;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:stretch}
+.p5 .fig{border-radius:999px 999px 0 0;height:calc(100% - 8px);margin:8px 0 0 8px;overflow:visible;width:calc(100% - 8px)}
+.p5 .fig img{object-position:30% 100%}
+.p5 .sw{display:flex;flex-direction:column;justify-content:space-between;gap:10px;padding:4px 0}
+.p5 .sw div{display:flex;flex-direction:column;align-items:center;gap:12px}
+.p5 .sw i{display:block;width:min(15cqw,13cqh,58px);aspect-ratio:1;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px var(--cream),0 0 0 5px var(--sea),0 0 0 6px rgba(243,231,204,.6)}
+.p5 .sw span{font:500 12px/1 'JostV','Jost',sans-serif;letter-spacing:.2em;text-transform:uppercase}
+
+/* VI. Réponse : bougainvillier, crème */
+.p6 .pp{background:var(--bouga);color:var(--cream);--btn-bg:var(--cream);--btn-fg:var(--navy);--btn-md:var(--bouga);--btn-mdfg:var(--cream)}
+.p6 .duo{position:relative;flex:1 1 auto;min-height:0;width:calc(100% + 32px);display:flex;justify-content:center;align-items:center;container-type:size;overflow:hidden}
+.p6 .duo::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 50%, #822343 0 4deg, transparent 4deg 8deg)}
+.p6 .duo .ring{position:relative;width:min(100cqw - 32px,100cqh);height:min(100cqw - 32px,100cqh);border-radius:50%;border:2px solid var(--cream);padding:6px;background:var(--bouga)}
+.p6 .duo .fig{height:100%;border-radius:50%}
+.p6 .duo .fig img{object-position:50% 90%}
+
+/* ---------- Respirations ---------- */
+.s1{margin-top:var(--g1)}.s2{margin-top:var(--g2)}.s3{margin-top:var(--g3)}
+
+/* ---------- Révélation du texte, une fois l'affiche posée ---------- */
+.rv{opacity:0;transform:translateY(10px)}
+.pst.lit .rv{opacity:1;transform:none;transition:opacity .7s ease, transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--d,0) * 90ms + 60ms)}
+.pst.lit .fig.rv{transition-duration:1s,1.1s}
+
+/* ---------- Transition : bandes de couleur ---------- */
+#wipe{position:absolute;inset:0;z-index:20;pointer-events:none;display:flex;flex-direction:column}
+#wipe i{flex:1;transform:scaleY(0);transform-origin:50% 100%}
+#wipe.up i{transform-origin:50% 0}
+
+/* ---------- Repères ---------- */
+#dots{position:absolute;right:4px;top:50%;transform:translateY(-50%);z-index:15;display:flex;flex-direction:column;gap:6px}
+#dots button{width:4px;height:14px;border:0;border-radius:2px;background:rgba(59,48,38,.28);cursor:pointer;padding:0}
+#dots button[aria-current="true"]{background:var(--imprint);height:22px}
+.hint{display:inline-flex;align-items:center;gap:6px}
+.hint svg{width:12px;height:12px;animation:nud 1.8s ease-in-out infinite}
+@keyframes nud{0%,100%{transform:translateY(-1px)}50%{transform:translateY(2px)}}
+
+/* ---------- Le billet de réponse ---------- */
+#sheet{position:absolute;inset:0;z-index:30;display:flex;align-items:flex-end;visibility:hidden}
+#sheet.open{visibility:visible}
+#sheet .sc{position:absolute;inset:0;background:rgba(27,20,14,.5);opacity:0;transition:opacity .35s}
+#sheet.open .sc{opacity:1}
+.tk{
+  position:relative;width:100%;max-height:92%;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;
+  background:var(--cream);color:var(--navy);padding:26px 22px 24px;
+  transform:translateY(102%);transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  -webkit-mask:radial-gradient(circle 9px at 0 86px,#0000 98%,#000) ,radial-gradient(circle 9px at 100% 86px,#0000 98%,#000);
+  -webkit-mask-composite:source-in;mask-composite:intersect;
+}
+#sheet.open .tk{transform:none}
+.tk .perf{position:absolute;left:14px;right:14px;top:86px;border-top:2px dashed rgba(19,42,74,.4)}
+.tk h3{font:400 34px/1 'Abril Fatface',serif;text-transform:uppercase;text-align:center;margin-bottom:6px}
+.tk .cap{text-align:center;color:var(--brick)}
+.tk form{display:flex;flex-direction:column;gap:18px;margin-top:40px}
+.tk label{display:flex;flex-direction:column;gap:8px;font:500 var(--fs-cap)/1.2 'JostV','Jost',sans-serif;letter-spacing:.22em;text-transform:uppercase}
+.tk input[type=text]{height:48px;border:0;border-bottom:2px solid var(--navy);background:transparent;font:500 20px 'CormV','Cormorant Garamond',serif;color:var(--navy);padding:0 2px;border-radius:0}
+.tk input::placeholder{color:#5b6378;opacity:1}
+.tk input[type=text]:focus{outline:none;border-bottom-color:var(--brick)}
+.tk fieldset{border:0;display:flex;flex-direction:column;gap:8px}
+.tk legend{font:500 var(--fs-cap)/1.2 'JostV','Jost',sans-serif;letter-spacing:.22em;text-transform:uppercase;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips span{display:inline-flex;align-items:center;height:42px;padding:0 16px;border-radius:999px;border:2px solid var(--navy);font:600 17px/1 'CormV','Cormorant Garamond',serif;cursor:pointer}
+.chips input:checked + span{background:var(--navy);color:var(--lemon)}
+.chips input:focus-visible + span{outline:2px solid var(--brick);outline-offset:2px}
+.tk .acts{margin-top:6px;--btn-bg:var(--navy);--btn-fg:var(--cream);--btn-md:var(--lemon);--btn-mdfg:var(--navy)}
+.tk .x{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:2px solid var(--navy);background:transparent;color:var(--navy);display:grid;place-items:center;cursor:pointer}
+.tk .x svg{width:16px;height:16px}
+.tk .done{text-align:center;padding:30px 0 10px;display:none}
+.tk.ok form{display:none}.tk.ok .done{display:block}
+.tk .done p{font:400 44px/1 'Abril Fatface',serif;text-transform:uppercase;margin:6px 0 14px}
+
+@media (prefers-reduced-motion: reduce){
+  .rv,.pst.lit .rv{transition:opacity .3s ease!important;transform:none!important}
+  .hint svg{animation:none}
+  .tk{transition:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- (b) sérigraphie : la peinture réduite à quatre encres de l'affiche -->
+    <filter id="seri" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values=".30 .58 .12 0 0  .30 .58 .12 0 0  .30 .58 .12 0 0  0 0 0 1 0"/>
+      <feComponentTransfer>
+        <feFuncR type="discrete" tableValues=".075 .64 .93 .95"/>
+        <feFuncG type="discrete" tableValues=".165 .25 .75 .91"/>
+        <feFuncB type="discrete" tableValues=".29 .16 .23 .80"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+</svg>
+
+<main id="stage" aria-label="Faire-part de Giulia et Hugo">
+
+  <!-- I. L'accueil -->
+  <section class="pst p1" data-c="#ecbf3a,#132a4a,#a3402a,#f4ecda" aria-label="Giulia et Hugo se marient">
+    <div class="pp">
+      <div class="row rv" style="--d:0"><span class="cap">N° I</span><span class="cap">Ci sposiamo</span><span class="cap">MMXXVII</span></div>
+      <div class="rule dbl s1 rv" style="--d:0"></div>
+      <h1 class="fit s2 rv" style="--d:1" data-fit data-max="20"><span class="fl">Giulia</span><br><span class="fl"><span class="amp">&amp;</span>Hugo</span></h1>
+      <div class="scene rv" style="--d:2"><div class="fig"><img src="/img/hd/dolcevitajour-mains.webp" alt="Leurs mains et leurs alliances, un citron et des bougainvilliers, face à la mer"></div></div>
+      <div class="band rv" style="--d:3">
+        <span class="n28">28</span>
+        <div class="dt"><span class="day">Samedi<br>août 2027</span><span class="cap">Ravello · Amalfi</span></div>
+      </div>
+    </div>
+    <div class="imp"><span><b>Save The Oui</b><span class="opt"> · Stampa d'arte</span></span><span class="hint">Faites glisser <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4l4 4 4-4"/></svg></span></div>
+  </section>
+
+  <!-- II. La cérémonie -->
+  <section class="pst p2" data-c="#a3402a,#f3e7cc,#132a4a,#ecbf3a" aria-label="La cérémonie">
+    <div class="pp">
+      <div class="row rv" style="--d:0"><span class="cap">II</span><span class="cap">La cérémonie</span><span class="cap">17·00</span></div>
+      <div class="rule s1 rv" style="--d:0"></div>
+      <div class="fig s3 rv" style="--d:1"><img src="/img/hd/dolcevitajour-2.webp" alt="Les mariés marchent vers la petite chapelle blanche"></div>
+      <h2 class="fit s3 rv" style="--d:2" data-fit data-max="7.5"><span class="fl">À la petite chapelle</span></h2>
+      <p class="day s2 rv" style="--d:3">Samedi 28 août</p>
+      <p class="hour s1 rv" style="--d:3">17h00</p>
+      <p class="body s2 rv nowrap" style="--d:4">Villa Cimbrone · Ravello</p>
+      <div class="acts s2 rv" style="--d:5">
+        <a class="b" href="https://www.google.com/maps/search/?api=1&amp;query=Villa+Cimbrone+Ravello" target="_blank" rel="noopener"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></i><span>Itinéraire</span></a>
+        <button class="b" type="button" data-ics="ceremonie"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></i><span>Calendrier</span></button>
+      </div>
+    </div>
+    <div class="imp"><span><b>Save The Oui</b> · Ravello</span><span class="nb">02 / 06</span></div>
+  </section>
+
+  <!-- III. Le dîner -->
+  <section class="pst p3" data-c="#132a4a,#ecbf3a,#f3e7cc,#1d5b86" aria-label="Le dîner">
+    <div class="pp">
+      <div class="row rv" style="--d:0"><span class="cap">III</span><span class="cap">Le dîner</span><span class="cap">La cena</span></div>
+      <div class="rule s1 rv" style="--d:0"></div>
+      <p class="hour s3 rv" style="--d:1">19h30</p>
+      <p class="day s2 rv" style="--d:2">Samedi 28 août</p>
+      <div class="moon s3 rv" style="--d:3"><div class="ring"><div class="fig"><img src="/img/hd/dolcevita-3.webp" alt="Le dîner sous la pergola, face à la mer, à la nuit tombée"></div></div></div>
+      <h2 class="fit s3 rv" style="--d:4" data-fit data-max="8"><span class="fl">Face à la mer</span></h2>
+      <p class="body s1 rv nowrap" style="--d:4">Terrasse de l'infini · jusqu'à 1 h</p>
+      <div class="acts s2 rv" style="--d:5">
+        <a class="b" href="https://www.google.com/maps/search/?api=1&amp;query=Terrazza+dell%27Infinito+Villa+Cimbrone+Ravello" target="_blank" rel="noopener"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></i><span>Itinéraire</span></a>
+        <button class="b" type="button" data-ics="diner"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></i><span>Calendrier</span></button>
+      </div>
+    </div>
+    <div class="imp"><span><b>Save The Oui</b> · Ravello</span><span class="nb">03 / 06</span></div>
+  </section>
+
+  <!-- IV. Le programme -->
+  <section class="pst p4" data-c="#f3e7cc,#8a3120,#132a4a,#ecbf3a" aria-label="Le programme">
+    <div class="pp">
+      <div class="row rv" style="--d:0"><span class="cap">IV</span><span class="cap">Il programma</span><span class="cap">28·VIII</span></div>
+      <div class="rule dbl s1 rv" style="--d:0"></div>
+      <h2 class="fit s2 rv" style="--d:1" data-fit data-max="15"><span class="fl">Le 28 août</span></h2>
+      <div class="tt s3 rv" style="--d:2">
+        <div class="tr"><span class="t">17h00</span><div class="w"><b>La cérémonie</b><span>À la petite chapelle</span></div></div>
+        <div class="tr"><span class="t">18h00</span><div class="w"><b>Aperitivo</b><span>Spritz et citrons de la côte</span></div></div>
+        <div class="tr"><span class="t">19h30</span><div class="w"><b>Le dîner</b><span>Face à la mer</span></div></div>
+        <div class="tr"><span class="t">22h30</span><div class="w"><b>Gelato e musica</b><span>On danse sur la terrasse</span></div></div>
+      </div>
+      <div class="card s3 rv" style="--d:3"><div class="fig"><img src="/img/hd/dolcevitajour-4.webp" alt="Les mariés en Vespa sur la route de la côte"></div></div>
+    </div>
+    <div class="imp"><span><b>Save The Oui</b> · Ravello</span><span class="nb">04 / 06</span></div>
+  </section>
+
+  <!-- V. Le dress code -->
+  <section class="pst p5" data-c="#1d5b86,#f3e7cc,#e58f7a,#ecbf3a" aria-label="Le dress code">
+    <div class="pp">
+      <div class="row rv" style="--d:0"><span class="cap">V</span><span class="cap">Dress code</span><span class="cap">Estate</span></div>
+      <div class="rule s1 rv" style="--d:0"></div>
+      <h2 class="fit s2 rv" style="--d:1" data-fit data-max="18"><span class="fl">Élégance</span><br><span class="fl"><span class="amp">d'</span>été</span></h2>
+      <div class="split s3 rv" style="--d:2">
+        <div class="fig"><img src="/img/hd/dolcevitajour-dress.webp" alt="La robe et le costume de lin suspendus au balcon, face à la mer"></div>
+        <div class="sw" role="list" aria-label="Les couleurs">
+          <div role="listitem"><i style="--c:#f3e3c3"></i><span>Crème</span></div>
+          <div role="listitem"><i style="--c:#e7b04d"></i><span>Citron</span></div>
+          <div role="listitem"><i style="--c:#7fb4d6"></i><span>Mer</span></div>
+          <div role="listitem"><i style="--c:#e58f7a"></i><span>Corail</span></div>
+        </div>
+      </div>
+      <p class="body s3 rv" style="--d:3">Lin, soie et couleurs de la côte.<br>Les talons fins et les pavés ne s’aiment pas.</p>
+    </div>
+    <div class="imp"><span><b>Save The Oui</b> · Ravello</span><span class="nb">05 / 06</span></div>
+  </section>
+
+  <!-- VI. La réponse -->
+  <section class="pst p6" data-c="#952c52,#f3e7cc,#ecbf3a,#132a4a" aria-label="La réponse">
+    <div class="pp">
+      <div class="row rv" style="--d:0"><span class="cap">VI</span><span class="cap">La réponse</span><span class="cap">RSVP</span></div>
+      <div class="rule s1 rv" style="--d:0"></div>
+      <h2 class="fit s2 rv" style="--d:1" data-fit data-max="11"><span class="fl">Serez-vous</span><br><span class="fl">des nôtres ?</span></h2>
+      <div class="duo s3 rv" style="--d:2"><div class="ring"><div class="fig"><img src="/img/hd/dolcevita-verres.webp" alt="Deux verres de spritz qui trinquent au-dessus de la côte"></div></div></div>
+      <p class="day s3 rv" style="--d:3">Avant le 1<sup style="font-size:.6em">er</sup> juillet 2027</p>
+      <p class="body s1 rv" style="--d:3"><em>A presto in Italia !</em></p>
+      <div class="acts s2 rv" style="--d:4">
+        <button class="b" type="button" id="open"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></i><span>Répondre</span></button>
+      </div>
+    </div>
+    <div class="imp"><span><b>Save The Oui</b> · Stampa d'arte</span><span class="nb">06 / 06</span></div>
+  </section>
+
+  <div id="wipe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <nav id="dots" aria-label="Affiches"></nav>
+
+  <!-- Le billet de réponse (factice) -->
+  <div id="sheet" aria-hidden="true">
+    <div class="sc" data-close></div>
+    <div class="tk" role="dialog" aria-modal="true" aria-labelledby="tkT">
+      <button class="x" type="button" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+      <p class="cap">Biglietto · Ravello</p>
+      <h3 id="tkT">Giulia &amp; Hugo</h3>
+      <span class="perf"></span>
+      <form>
+        <label>Votre prénom et nom<input type="text" name="nom" autocomplete="name" placeholder="Ex. Claire Martin" required></label>
+        <fieldset><legend>Serez-vous là ?</legend>
+          <div class="chips">
+            <label style="all:unset"><input type="radio" name="v" value="oui" checked><span>Avec joie</span></label>
+            <label style="all:unset"><input type="radio" name="v" value="non"><span>Hélas, non</span></label>
+          </div>
+        </fieldset>
+        <fieldset><legend>Votre menu</legend>
+          <div class="chips">
+            <label style="all:unset"><input type="radio" name="m" value="poisson" checked><span>Poisson</span></label>
+            <label style="all:unset"><input type="radio" name="m" value="viande"><span>Viande</span></label>
+            <label style="all:unset"><input type="radio" name="m" value="vege"><span>Végétarien</span></label>
+          </div>
+        </fieldset>
+        <label>Une chanson qui vous fera danser&nbsp;?<input type="text" name="q" placeholder="Ex. Volare"></label>
+        <div class="acts"><button class="b" type="submit"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg></i><span>Envoyer</span></button></div>
+      </form>
+      <div class="done"><span class="cap">Réponse reçue</span><p>Grazie !</p><span class="body">A presto in Italia.</span></div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var q=new URLSearchParams(location.search);
+  if(q.get('print')==='b') document.body.classList.add('seri');
+  var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stage=document.getElementById('stage');
+  var P=[].slice.call(document.querySelectorAll('.pst'));
+  var wipe=document.getElementById('wipe'), bands=[].slice.call(wipe.children);
+  var dots=document.getElementById('dots');
+  var cur=0, busy=false;
+
+  /* --- Lettrage justifié : chaque bloc remplit la largeur, comme une affiche composée à la main --- */
+  function fit(){
+    document.querySelectorAll('[data-fit]').forEach(function(g){
+      var lines=g.querySelectorAll('.fl');
+      g.style.fontSize='100px';
+      var W=g.clientWidth, mw=0;
+      lines.forEach(function(l){mw=Math.max(mw,l.getBoundingClientRect().width)});
+      var pp=g.closest('.pp');
+      var cap=(parseFloat(g.dataset.max)||12)*pp.clientHeight/100;
+      g.style.fontSize=Math.max(22,Math.min(100*W/mw*.995,cap))+'px';
+    });
+  }
+
+  /* --- Navigation : un geste, une affiche --- */
+  P.forEach(function(p,i){
+    var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Affiche '+(i+1));
+    b.onclick=function(){go(i)};dots.appendChild(b);
+  });
+  function mark(){[].forEach.call(dots.children,function(b,i){b.setAttribute('aria-current',i===cur)})}
+  function land(i){
+    P.forEach(function(p,j){p.classList.toggle('on',j===i);p.classList.remove('lit')});
+    cur=i;mark();
+    requestAnimationFrame(function(){requestAnimationFrame(function(){P[i].classList.add('lit')})});
+  }
+  function go(i){
+    if(busy||i===cur||i<0||i>=P.length) return;
+    var down=i>cur;
+    P[cur].classList.remove('lit');
+    if(RM){land(i);return}
+    busy=true;
+    var cols=P[i].dataset.c.split(',');
+    var order=down?[0,1,2,3]:[3,2,1,0];
+    wipe.className=down?'':'up';
+    bands.forEach(function(b,k){b.style.background=cols[[2,3,1,0][k]]||cols[0]});
+    /* les bandes montent l'une après l'autre, couvrent la page, puis repartent */
+    var T=420, st=70;
+    bands.forEach(function(b,k){
+      var d=order.indexOf(k)*st;
+      b.animate([{transform:'scaleY(0)'},{transform:'scaleY(1)'}],{duration:T,delay:d,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
+    });
+    setTimeout(function(){
+      land(i);
+      P[i].classList.remove('lit');
+      bands.forEach(function(b,k){
+        var d=order.indexOf(k)*st;
+        b.style.transformOrigin=down?'50% 0':'50% 100%';
+        var a=b.animate([{transform:'scaleY(1)'},{transform:'scaleY(0)'}],{duration:T,delay:d,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
+        if(k===order[3]) a.onfinish=function(){
+          bands.forEach(function(x){x.getAnimations().forEach(function(z){z.cancel()});x.style.transformOrigin=''});
+          busy=false;P[i].classList.add('lit');
+        };
+      });
+    },T+3*st+40);
+  }
+  /* toucher */
+  var y0=null;
+  stage.addEventListener('touchstart',function(e){if(sheet.classList.contains('open'))return;y0=e.touches[0].clientY},{passive:true});
+  stage.addEventListener('touchend',function(e){
+    if(y0===null)return;var dy=e.changedTouches[0].clientY-y0;y0=null;
+    if(Math.abs(dy)>36) go(cur+(dy<0?1:-1));
+  });
+  /* molette : un cran = une affiche */
+  var wl=0;
+  stage.addEventListener('wheel',function(e){
+    if(sheet.classList.contains('open'))return;
+    e.preventDefault();var t=Date.now();
+    if(Math.abs(e.deltaY)<8||t-wl<900) return;wl=t;go(cur+(e.deltaY>0?1:-1));
+  },{passive:false});
+  addEventListener('keydown',function(e){
+    if(sheet.classList.contains('open')){if(e.key==='Escape')close();return}
+    if(['ArrowDown','PageDown',' '].indexOf(e.key)>=0){e.preventDefault();go(cur+1)}
+    if(['ArrowUp','PageUp'].indexOf(e.key)>=0){e.preventDefault();go(cur-1)}
+  });
+
+  /* --- Calendrier --- */
+  var EV={
+    ceremonie:{t:'Giulia & Hugo · La cérémonie',s:'20270828T150000Z',e:'20270828T163000Z',l:'Villa Cimbrone, Ravello'},
+    diner:{t:'Giulia & Hugo · Le dîner',s:'20270828T173000Z',e:'20270828T230000Z',l:"Terrasse de l'infini, Villa Cimbrone, Ravello"}
+  };
+  document.querySelectorAll('[data-ics]').forEach(function(b){
+    b.onclick=function(){
+      var v=EV[b.dataset.ics];
+      var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Save The Oui//FR','BEGIN:VEVENT','UID:'+b.dataset.ics+'-giulia-hugo@savetheoui','DTSTAMP:20261013T000000Z','DTSTART:'+v.s,'DTEND:'+v.e,'SUMMARY:'+v.t,'LOCATION:'+v.l.replace(/,/g,'\\,'),'END:VEVENT','END:VCALENDAR'].join('\r\n');
+      var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download='giulia-hugo-'+b.dataset.ics+'.ics';a.click();
+    };
+  });
+
+  /* --- Billet de réponse --- */
+  var sheet=document.getElementById('sheet'), tk=sheet.querySelector('.tk');
+  function open(){sheet.classList.add('open');sheet.setAttribute('aria-hidden','false');setTimeout(function(){tk.querySelector('input').focus({preventScroll:true})},450)}
+  function close(){sheet.classList.remove('open');sheet.setAttribute('aria-hidden','true');document.getElementById('open').focus()}
+  document.getElementById('open').onclick=open;
+  sheet.querySelectorAll('[data-close]').forEach(function(x){x.onclick=close});
+  tk.querySelector('form').onsubmit=function(e){e.preventDefault();tk.classList.add('ok')};
+
+  /* --- Départ --- */
+  var start=Math.max(0,Math.min(P.length-1,(parseInt(q.get('p'),10)||1)-1));
+  function boot(){fit();land(start)}
+  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(boot);
+  addEventListener('resize',fit);
+  window.__go=go;
+})();
+</script>
+</body>
+</html>
