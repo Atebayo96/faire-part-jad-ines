@@ -147,10 +147,8 @@ p{margin:0}
 .pub{margin-top:var(--sp3)}
 
 /* ============ 2 · Avant-propos ============ */
-.fam .pl{margin:var(--sp3) calc(var(--mx) * -1) 0 auto;width:calc(84% + var(--mx));flex:0 1 auto}
-.fam .pl .im{aspect-ratio:1;flex:none}
-.fam .pl figcaption{padding-right:var(--mx)}
-.spread .fam.R .pl{margin-right:calc(var(--mx) * -1)}
+.fam .pl{margin:var(--sp3) auto 0;flex:0 1 auto;width:min(100%,calc(var(--ph) * .42));align-self:center}
+.fam .pl .im{aspect-ratio:1/1.08;flex:none;box-shadow:0 1px 0 rgba(0,0,0,.05),0 14px 30px -18px rgba(40,26,8,.55)}
 .fam h2{margin:var(--sp3) 0 var(--sp2);font:italic 400 clamp(34px,9.6cqi,50px)/1 "Bodoni Moda",serif;letter-spacing:-.01em}
 .fam .txt::first-letter{float:left;font:400 3.15em/.82 "Bodoni Moda",serif;margin:.06em .1em 0 0;color:var(--gold)}
 .sign{margin-top:var(--sp2);font:italic 400 clamp(20px,5.4cqi,24px)/1.3 "Cormorant Garamond",serif;color:var(--ink)}
@@ -337,7 +335,7 @@ dialog::backdrop{background:rgba(20,15,8,.55);backdrop-filter:blur(3px)}
 <section class="pg paper fam" aria-label="Le mot des familles">
   <div class="pi">
     <div class="rh"><span>Avant-propos</span><span>Bianchi · Moreau</span></div>
-    <figure class="pl rv" style="--d:0;--fx:46%;--fy:80%;--z:1.06">
+    <figure class="pl rv" style="--d:0;--fx:50%;--fy:100%">
       <div class="im"><img src="/img/hd/dolcevita-mains.webp" alt="Deux mains l'une sur l'autre, une alliance, un citron et du bougainvillier sur une nappe blanche" loading="lazy"></div>
       <figcaption class="cap"><b>Pl. I</b>Les mains. Huile sur toile, détail.</figcaption>
     </figure>
@@ -658,7 +656,7 @@ function go(d){
     b.animate([{transform:P+'rotateY(-104deg)'},{transform:P+'rotateY(0deg)'}],{duration:900,easing:EASE}).finished.then(()=>{b.style.visibility='';busy=false;i=j;show()});
   }
 }
-function face(p,cls){ const f=document.createElement('div'); f.className='face '+cls; const c=p.cloneNode(true); c.classList.remove('L','R','cur'); c.classList.add('on'); c.removeAttribute('aria-hidden'); c.inert=true; f.appendChild(c); return f }
+function face(p,cls,side){ const f=document.createElement('div'); f.className='face '+cls; const c=p.cloneNode(true); c.classList.remove('L','R','cur'); c.classList.add(side); c.classList.add('on'); c.removeAttribute('aria-hidden'); c.inert=true; f.appendChild(c); return f }
 function goSpread(d){
   const j=k+d; if(j<0||j>kMax) return;
   if(reduce){ k=j; show(); return }
@@ -668,14 +666,14 @@ function goSpread(d){
   let front,back,newL=j===0?null:pages[2*j-1],newR=pages[j===0?0:2*j];
   if(d>0){
     const oldR=k===0?pages[0]:pages[2*k];
-    front=face(oldR,'front'); back=face(newL,'back');
+    front=face(oldR,'front','R'); back=face(newL,'back','L');
     leaf.style.left=pw+'px'; leaf.style.transformOrigin='0 50%';
     newR&&(newR.classList.add('R','on'),newR.style.zIndex=1,newR.inert=true);
     newL&&newL.classList.add('on');
     oldR.style.visibility='hidden';
   } else {
     const oldL=pages[2*k-1];
-    front=face(oldL,'front'); back=face(newR,'back');
+    front=face(oldL,'front','L'); back=face(newR,'back','R');
     leaf.style.left='0px'; leaf.style.transformOrigin='100% 50%';
     newL&&(newL.classList.add('L','on'),newL.style.zIndex=1,newL.inert=true);
     newR&&newR.classList.add('on');
