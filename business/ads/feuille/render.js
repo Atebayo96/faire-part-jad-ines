@@ -8,7 +8,7 @@ const {spawn}=require('child_process'); const fs=require('fs'), path=require('pa
  const [mode,V]=[process.argv[2],process.argv[3]];
  const inv=path.join(__dirname,'../../invites'), F={};
  for(const s of ['page-emma-louis','carte-camille-antoine','page-victoire-charles','page-nour-ilyes','page-leila-mehdi']) F[s]=JSON.parse(fs.readFileSync(`${inv}/${s}.json`,'utf8'));
- const html=fs.readFileSync(__dirname+({collage:'/collage.html',trait:'/trait.html'}[V]||'/feuille.html'),'utf8').replace('<script>',`<script>window.V=${JSON.stringify(V)};window.FICHES=${JSON.stringify(F)};</script><script>`);
+ const html=fs.readFileSync(__dirname+({collage:'/collage.html',trait:'/trait.html',vox:'/vox.html'}[V]||'/feuille.html'),'utf8').replace('<script>',`<script>window.V=${JSON.stringify(V)};window.FICHES=${JSON.stringify(F)};</script><script>`);
  const b=await chromium.launch(); const p=await b.newPage({viewport:{width:1080,height:1920}});
  p.on('pageerror',e=>console.error('page:',e.message));
  await p.route('http://localhost:8765/_f/',r=>r.fulfill({contentType:'text/html; charset=utf-8',body:html}));

@@ -1,0 +1,126 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<!-- Pub « vox » (style vidéo explicative à la Vox, 9:16, 20,5 s) : papier texturé, surligneur jaune, cercles et flèches rouges
+     dessinés, étiquettes qui pointent les détails, caméra qui glisse sur un grand tableau en trois zones :
+     1) « Pourquoi un faire-part papier coûte-t-il si cher ? » 2) 200 invités, impression, enveloppes, timbres → plusieurs
+     centaines d'euros 3) aujourd'hui, la vraie feuille (carte.js, Emma & Louis), envoyée par message, ses détails pointés,
+     29 €. Calé sur la voix off (audio/vox.json, voix de narrateur). render(t) est déterministe ; render.js filme. -->
+<link rel="stylesheet" href="/polices/polices.css">
+<link rel="stylesheet" href="/carte.css">
+<style>
+:root{--ink:#141414;--hl:#ffd84a;--red:#d8382c;--paper:#f2ede2}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--paper)}
+#cam{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden}
+#board{position:absolute;left:0;top:0;width:1080px;height:5760px;transform-origin:540px 960px;background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .27 0 0 0 0 .2 0 0 0 .13 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
+  linear-gradient(rgba(20,20,20,.035) 2px,transparent 2px) 0 0/100% 96px,var(--paper)}
+.abs{position:absolute}
+.kick{font:700 30px/1 "Inter Tight",Inter,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);padding-left:28px;border-left:10px solid var(--red)}
+.hd{font:400 142px/1.0 "DM Serif Display",serif;color:var(--ink);letter-spacing:-.01em}
+.hl{position:relative;display:inline-block;z-index:0}
+.hl::before{content:"";position:absolute;left:-12px;right:-12px;top:22%;bottom:4%;background:var(--hl);z-index:-1;transform-origin:0 50%;transform:scaleX(var(--k,0));border-radius:4px 10px 6px 12px}
+.row{font:600 70px/1 "Inter Tight",Inter,sans-serif;color:var(--ink);display:flex;align-items:center;gap:30px;opacity:0}
+.row b{font:700 66px/1 "Inter Tight";color:var(--red);width:60px;text-align:center}
+.card{position:absolute;background:#fbf8f1;box-shadow:0 14px 24px -10px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.2)}
+.sheet{position:absolute;overflow:hidden;box-shadow:0 30px 50px -20px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.2)}
+.sheet .fl-in{position:absolute;left:0;top:0;width:360px;height:740px;transform-origin:0 0;display:flex;flex-direction:column}
+.sheet .fl-in .ct{min-height:100%}
+.lab{position:absolute;font:700 38px/1 "Inter Tight",Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--hl);padding:14px 20px;opacity:0;white-space:nowrap;box-shadow:0 6px 10px -6px rgba(0,0,0,.35)}
+.msg{position:absolute;left:600px;top:230px;width:420px;background:#fff;border-radius:30px 30px 30px 8px;padding:24px 28px;font:600 34px/1.2 "Inter Tight",Inter,sans-serif;color:var(--ink);box-shadow:0 18px 30px -12px rgba(0,0,0,.35);opacity:0}
+.msg small{display:block;margin-top:8px;font:500 26px/1.2 Inter;color:#6b665d}
+svg.ov{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.rl{fill:none;stroke:var(--red);stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
+.bl{fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round}
+.dot{fill:var(--ink)}
+#end{position:absolute;inset:0;background:var(--paper);opacity:0}
+#end .seal{position:absolute;left:50%;top:520px;width:200px;height:200px;margin-left:-100px;background:url(/img/seals/or.webp) center/contain no-repeat;display:flex;align-items:center;justify-content:center;
+  font:400 96px/1 "Great Vibes",cursive;color:#6e4f17;text-shadow:-1px -1px 0 rgba(255,236,170,.55),1px 1px 1px rgba(60,35,5,.7)}
+#end .logo{position:absolute;left:0;right:0;top:800px;text-align:center;white-space:nowrap;color:var(--ink)}
+#end .logo span{font:500 40px/1 "Inter Tight",Inter,sans-serif;letter-spacing:.32em;text-transform:uppercase}
+#end .logo b{font:400 180px/1 "Great Vibes",cursive;font-weight:400;margin-left:12px;position:relative;top:15px}
+#end .pr{position:absolute;left:0;right:0;top:1080px;text-align:center}
+#end .pr span{font:400 64px/1 "DM Serif Display",serif;color:var(--ink)}
+#end .url{position:absolute;left:0;right:0;top:1210px;text-align:center;font:700 30px/1 "Inter Tight",Inter;letter-spacing:.2em;color:#57534b}
+</style></head><body>
+<div id="cam"><div id="board">
+  <!-- zone 1 : la question -->
+  <div class="abs kick" style="left:80px;top:360px">Le vrai prix du papier</div>
+  <div class="abs hd" id="q" style="left:80px;top:470px">Pourquoi un<br>faire-part papier<br>coûte-t-il<br><span class="hl" id="q1">si cher&nbsp;?</span></div>
+  <div id="stack"></div>
+  <!-- zone 2 : le compte -->
+  <div class="abs hd" style="left:80px;top:2300px;font-size:330px" id="n200">200</div>
+  <div class="abs" style="left:96px;top:2670px;font:600 64px/1 'Inter Tight',Inter;color:#3b3833" id="inv">invités</div>
+  <div class="abs" style="left:80px;top:2920px;display:flex;flex-direction:column;gap:46px">
+    <div class="row" id="r1"><b>+</b>L’impression</div><div class="row" id="r2"><b>+</b>Les enveloppes</div><div class="row" id="r3"><b>+</b>Les timbres</div></div>
+  <div class="abs" id="rule" style="left:80px;top:3340px;width:860px;height:8px;background:var(--ink);transform-origin:0 50%;transform:scaleX(0)"></div>
+  <div class="abs hd" style="left:80px;top:3400px;font-size:104px;line-height:1.08" id="tot"><span class="hl" id="q2">Plusieurs centaines</span><br>d’euros.</div>
+  <!-- zone 3 : aujourd'hui -->
+  <div class="abs kick" style="left:80px;top:3990px" id="auj">Aujourd’hui</div>
+  <div class="sheet" id="sh" style="left:270px;top:4120px;width:540px;height:1110px"></div>
+  <div class="msg" id="msg" style="left:610px;top:4930px">✈︎ Envoyé à 200 invités<small>Un lien, par message</small></div>
+  <div class="abs hd" style="left:80px;top:5290px;font-size:84px;opacity:0" id="prix">pour <span class="hl" id="q3" style="font-size:150px">29 €</span></div>
+  <svg class="ov" id="ov" width="1080" height="5760" viewBox="0 0 1080 5760"></svg>
+</div></div>
+<div id="end"><div class="seal">O</div><div class="logo"><span>Save the</span><b>Oui</b></div>
+  <div class="pr"><span>Carte 29 € · Page unique 59 €</span></div><div class="url">SAVETHEOUI.FR</div></div>
+<script src="/themes.js"></script>
+<script src="/carte.js"></script>
+<script>
+const F=window.FICHES, $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
+const lin=(t,a,b)=>Math.min(1,Math.max(0,(t-a)/(b-a))), eo=x=>1-Math.pow(1-x,3), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{ const c=1.6; return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2); };
+const rnd=s=>{ const x=Math.sin(s*127.1+311.7)*43758.5453; return x-Math.floor(x); };
+const mk=(tag,at)=>{ const e=document.createElementNS(NS,tag); for(const k in at) e.setAttribute(k,at[k]); $('ov').appendChild(e); return e; };
+const LINES=[]; const line=(d,a,b,cls)=>{ const p=mk('path',{d,class:cls||'rl'}); LINES.push({p,a,b}); return p; };
+// cercle tracé à la main : une ellipse qui ne se referme pas tout à fait
+const scrib=(cx,cy,rx,ry,s)=>{ let d=''; for(let i=0;i<=56;i++){ const a=-2.2+i/56*Math.PI*2.15, w=1+(rnd(s+i)-.5)*.06; d+=(i?'L':'M')+(cx+rx*w*Math.cos(a)).toFixed(1)+','+(cy+ry*w*Math.sin(a)+i*.35).toFixed(1); } return d; };
+// une pile de cartons imprimés, en bas de la première zone
+for(let i=0;i<6;i++){ const c=document.createElement('div'); c.className='card'; c.style.cssText=`left:${560+i*12}px;top:${1230-i*16}px;width:400px;height:280px;transform:rotate(${(rnd(i+3)-.5)*14}deg)`;
+  c.innerHTML=`<div style="margin:60px auto 0;width:220px;height:8px;background:#d9cfbd"></div><div style="margin:22px auto 0;width:300px;height:30px;background:#e6dccb"></div><div style="margin:22px auto 0;width:160px;height:8px;background:#d9cfbd"></div>`; $('stack').appendChild(c); }
+// ---- la feuille
+const sh=$('sh'); sh.innerHTML=`<div class="fl-in" style="transform:scale(1.5)">${SceauCarte.html(F['page-emma-louis'],{fit:true})}</div>`;
+const LBL=[];
+function build(){
+  line(scrib(300,2470,250,190,7),3.35,3.95);
+  line('M80,3655 C230,3672 420,3648 600,3660 M110,3684 C270,3700 430,3688 570,3694',8.0,8.5);
+  // flèche de la feuille vers le message
+  line('M760,4700 C900,4740 960,4800 900,4905 M900,4905 l-36,-14 M900,4905 l4,-38',11.95,12.45);
+  // étiquettes : élément de la feuille → étiquette dans la marge
+  const B=$('board').getBoundingClientRect();
+  const at=sel=>{ const r=sh.querySelector(sel).getBoundingClientRect(); return {x:r.left-B.left+r.width/2,y:r.top-B.top+r.height/2}; };
+  [['.ct-nm','Papier gaufré',13.55,40,4360,'l'],['.ct-seal','Sceau de cire',14.6,680,4050,'r'],['.ct-ic','Dorure',15.35,40,4800,'l']].forEach(([sel,txt,a,lx,ly,side])=>{
+    const p=at(sel), d=document.createElement('div'); d.className='lab'; d.textContent=txt; d.style.left=lx+'px'; d.style.top=ly+'px'; $('board').appendChild(d);
+    const w=d.offsetWidth, ex=side==='l'?lx+w:lx, ey=ly+33;
+    const dot=mk('circle',{cx:p.x,cy:p.y,r:0,class:'dot'});
+    line(`M${p.x},${p.y} L${ex+(side==='l'?18:-18)},${ey}`,a,a+.3,'bl');
+    LBL.push({d,dot,a}); }); }
+window.AUDIO={d:20.5,music:'m-vox',vo:[['vox',.2,0,18.7]]};
+const cam=t=>{ const u1=eio(lin(t,2.75,3.3)), u2=eio(lin(t,8.85,9.45)); return {y:1920*u1+1920*u2, z:1+.07*Math.sin(Math.PI*lin(t,2.75,3.3))+.07*Math.sin(Math.PI*lin(t,8.85,9.45))}; };
+window.render=t=>{
+  const c=cam(t), drift=1+.025*((t<3.3?t:t<9.45?t-3.3:t-9.45)/6), out=eio(lin(t,16.2,16.9));
+  $('board').style.transform=`translateY(${-c.y}px) scale(${c.z*drift})`;
+  // zone 1
+  $('q').style.transform=`translateY(${(1-eo(lin(t,-.2,.4)))*30}px)`;
+  $('q1').style.setProperty('--k',eo(lin(t,2.2,2.55)));
+  // zone 2
+  const n=back(lin(t,3.2,3.55)); $('n200').style.transform=`scale(${.7+.3*n})`; $('n200').style.transformOrigin='0 60%';
+  [['r1',4.55],['r2',5.55],['r3',6.5]].forEach(([id,a])=>{ const k=eo(lin(t,a,a+.3)); $(id).style.opacity=k; $(id).style.transform=`translateX(${(1-k)*-60}px)`; });
+  $('rule').style.transform=`scaleX(${eo(lin(t,7.2,7.6))})`;
+  $('tot').style.opacity=lin(t,7.3,7.5); $('q2').style.setProperty('--k',eo(lin(t,7.6,8.15)));
+  // zone 3
+  const s=eo(lin(t,10.0,10.5)); sh.style.opacity=lin(t,10.0,10.15); sh.style.transform=`translate(${(1-s)*500}px,0) rotate(${2-(1-s)*8}deg)`;
+  $('auj').style.opacity=lin(t,9.1,9.4);
+  const m=back(lin(t,12.0,12.4)); $('msg').style.opacity=lin(t,12.0,12.15); $('msg').style.transform=`scale(${.8+.2*m})`;
+  LBL.forEach(({d,dot,a})=>{ const k=back(lin(t,a+.15,a+.45)); d.style.opacity=lin(t,a+.15,a+.25); d.style.transform=`scale(${.8+.2*k})`; dot.setAttribute('r',(12*eo(lin(t,a,a+.12))).toFixed(1)); });
+  $('prix').style.opacity=lin(t,16.3,16.5); $('q3').style.setProperty('--k',eo(lin(t,16.6,17.0)));
+  LINES.forEach(({p,a,b})=>{ if(!p._L) p._L=p.getTotalLength()+2; const k=eio(lin(t,a,b)); p.style.strokeDasharray=p._L; p.style.strokeDashoffset=p._L*(1-k); p.style.opacity=k>0?1:0; });
+  // fin
+  $('end').style.opacity=lin(t,17.6,17.9);
+  const e=back(lin(t,17.8,18.3)); $('end').querySelector('.seal').style.transform=`scale(${.6+.4*e})`;
+  $('end').querySelector('.logo').style.opacity=lin(t,18.0,18.3); $('end').querySelector('.pr').style.opacity=lin(t,18.4,18.7); $('end').querySelector('.url').style.opacity=lin(t,18.7,19);
+};
+window.ready=async()=>{ await document.fonts.ready; await Promise.all(['142px "DM Serif Display"','700 70px "Inter Tight"','600 70px "Inter Tight"'].map(f=>document.fonts.load(f)));
+  await Promise.all([...document.images].map(im=>im.complete?0:new Promise(r=>{ im.onload=im.onerror=r; })));
+  SceauCarte.fit(sh); await new Promise(r=>setTimeout(r,400)); SceauCarte.fit(sh); build(); };
+</script>
+</body></html>
