@@ -56,14 +56,14 @@
 
   /* ---- emplacement du QR code ---- */
   .qr{position:relative;width:66mm;height:66mm;margin-top:9mm;display:flex;align-items:center;justify-content:center}
-  .qr .pad{position:absolute;inset:0;background:#fffdf7;box-shadow:0 1.5mm 4mm rgba(60,40,10,.14), inset 0 0 0 .5pt rgba(184,151,90,.55)}
+  .qr .pad{position:absolute;inset:0;background:#fff;box-shadow:0 1.5mm 4mm rgba(60,40,10,.14), inset 0 0 0 .5pt rgba(184,151,90,.55)}
   .qr .mark{position:absolute;width:9mm;height:9mm;border:.9pt solid var(--gold)}
   .qr .mark.tl{top:-1.6mm;left:-1.6mm;border-right:0;border-bottom:0}
   .qr .mark.tr{top:-1.6mm;right:-1.6mm;border-left:0;border-bottom:0}
   .qr .mark.bl{bottom:-1.6mm;left:-1.6mm;border-right:0;border-top:0}
   .qr .mark.br{bottom:-1.6mm;right:-1.6mm;border-left:0;border-top:0}
   .qr .ph{position:relative;font-family:"Playfair",serif;font-size:9.5pt;letter-spacing:.2em;text-transform:uppercase;color:rgba(140,111,71,.55);line-height:1.6}
-  body.clean .qr .ph{display:none}
+  .qr img{position:relative;width:100%;height:100%;object-fit:contain;display:block}
 
   .thanks{margin-top:9mm;font-size:16.2pt;line-height:1.5;display:flex;align-items:center;gap:2.6mm;color:var(--ink)}
   .thanks svg{width:6.4mm;height:6.4mm;display:block;margin-top:.3mm}
@@ -96,7 +96,7 @@
     <div class="qr">
       <div class="pad"></div>
       <div class="mark tl"></div><div class="mark tr"></div><div class="mark bl"></div><div class="mark br"></div>
-      <div class="ph">Votre<br>QR code<br>ici</div>
+      <img src="qr-lydia.png" alt="QR code de la cagnotte">
     </div>
 
     <div class="thanks">Merci du fond du cœur
