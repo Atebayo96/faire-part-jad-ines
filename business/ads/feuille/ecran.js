@@ -22,17 +22,17 @@ const SC={
   type:[[11.1,12.3,'input[name="name"]','Sarah Benali']],
   end:{a:15.4,price:'Page unique · dès 59 €'}},
  imagine:{slug:'page-victoire-charles', d:15.5, music:'m-imagine', vo:[],
-  caps:[[-1,2.6,'Imagine tu reçois ça pour un mariage',96],[3.6,5.4,'tout tient sur une seule page',96],[5.6,8.2,'les prénoms en relief, comme gaufrés',96],
+  caps:[[-1,2.6,'Imagine tu reçois ça pour un mariage',96],[3.6,5.4,'tout tient sur une seule page',96],[5.6,8.2,'les prénoms en relief',470],
         [8.6,9.9,'l’itinéraire en un clic',96],[9.9,11.2,'direct dans ton agenda',96],[11.3,12.6,'et ça part par WhatsApp',96]],
   taps:[[1.9,'.op-seal'],[8.9,'.ct-lk a',false],[10.1,'.ct-lk button',false]],
   zoom:[5.5,8.3,'.ct-nm',1.9],
   end:{a:12.7,price:'Page unique · dès 59 €'}},
  serie:{slug:'giulia-hugo', d:18, music:'m-serie', vo:[['serie',.2,0,16.6]],
-  caps:[[-1,3.3,'POV : ton faire-part de mariage est une mini-série',96],[3.5,4.9,'le rideau se lève…',96],[5.0,7.5,'on tourne la roue pour la date',96],
-        [7.7,9.3,'épisode 1 : la cérémonie',96],[9.4,10.6,'épisode 2 : le dîner',96],[10.7,11.9,'épisode 3 : le programme',96],[12.4,14.6,'et ils répondent en un clic',96]],
-  taps:[[3.3,{x:202,y:420}],[5.0,'.rvl-hub'],[13.1,'[data-rsvp], .pg.on .b, .rsvp-b, button.b']],
-  keys:[[7.7,'ArrowDown'],[9.4,'ArrowDown'],[10.7,'ArrowDown'],[11.4,'ArrowDown'],[11.85,'ArrowDown'],[12.3,'ArrowDown']],
-  end:{a:14.7,price:'Faire-part animé · dès 99 €'}}
+  caps:[[-1,3.3,'POV : ton faire-part de mariage est une mini-série',96],[3.5,4.9,'le rideau se lève…',96],[5.0,8.2,'on tourne la roue pour la date',96],
+        [8.3,9.5,'épisode 1 : la cérémonie',96],[9.6,10.4,'épisode 2 : le dîner',96],[10.5,11.2,'épisode 3 : le programme',96],[12.6,15.0,'et ils répondent en un clic',96]],
+  taps:[[3.3,{x:202,y:420}],[5.0,'.rvl-hub'],[13.6,'[data-rsvp], .pg.on .b, .rsvp-b, button.b']],
+  keys:[[8.3,'ArrowDown'],[9.6,'ArrowDown'],[10.5,'ArrowDown'],[11.2,'ArrowDown'],[11.9,'ArrowDown'],[12.6,'ArrowDown']],
+  end:{a:15.1,price:'Faire-part animé · dès 99 €'}}
 };
 
 const OVERLAY=`
