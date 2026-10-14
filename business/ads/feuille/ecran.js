@@ -22,17 +22,18 @@ const SC={
   type:[[11.1,12.3,'input[name="name"]','Sarah Benali']],
   end:{a:15.4,price:'Page unique · dès 59 €'}},
  imagine:{slug:'page-victoire-charles', d:15.5, music:'m-imagine', vo:[],
-  caps:[[-1,2.6,'Imagine tu reçois ça pour un mariage',96],[3.6,5.4,'tout tient sur une seule page',96],[5.6,8.2,'les prénoms en relief',470],
+  caps:[[-1,2.6,'Imagine tu reçois ça pour un mariage',96],[3.6,5.6,'tout tient sur une seule page',96],[5.8,8.2,'les prénoms en relief, comme gaufrés',96],
         [8.6,9.9,'l’itinéraire en un clic',96],[9.9,11.2,'direct dans ton agenda',96],[11.3,12.6,'et ça part par WhatsApp',96]],
-  taps:[[1.9,'.op-seal'],[8.9,'.ct-lk a',false],[10.1,'.ct-lk button',false]],
-  zoom:[5.5,8.3,'.ct-nm',1.9],
+  taps:[[1.9,'.op-seal']],
   end:{a:12.7,price:'Page unique · dès 59 €'}},
- serie:{slug:'giulia-hugo', d:18, music:'m-serie', vo:[['serie',.2,0,16.6]],
-  caps:[[-1,3.3,'POV : ton faire-part de mariage est une mini-série',96],[3.5,4.9,'le rideau se lève…',96],[5.0,8.2,'on tourne la roue pour la date',96],
-        [8.3,9.5,'épisode 1 : la cérémonie',96],[9.6,10.4,'épisode 2 : le dîner',96],[10.5,11.2,'épisode 3 : le programme',96],[12.6,15.0,'et ils répondent en un clic',96]],
-  taps:[[3.3,{x:202,y:420}],[5.0,'.rvl-hub'],[13.6,'[data-rsvp], .pg.on .b, .rsvp-b, button.b']],
-  keys:[[8.3,'ArrowDown'],[9.6,'ArrowDown'],[10.5,'ArrowDown'],[11.2,'ArrowDown'],[11.9,'ArrowDown'],[12.6,'ArrowDown']],
-  end:{a:15.1,price:'Faire-part animé · dès 99 €'}}
+ // plus lent : chaque scène reste à l'écran le temps de la regarder ; la voix est découpée et posée sur chaque scène
+ serie:{slug:'giulia-hugo', d:26.5, music:'m-serie2',
+  vo:[['serie',.2,0,3.15],['serie',4.0,3.25,4.35],['serie',6.0,4.43,6.55],['serie',10.0,6.61,8.3],['serie',12.0,8.38,9.38],['serie',14.6,9.42,10.12],['serie',17.0,10.14,11.08],['serie',20.4,11.13,13.75],['serie',23.6,13.8,16.5]],
+  caps:[[-1,3.4,'POV : ton faire-part de mariage est une mini-série',96],[4.0,5.8,'le rideau se lève…',96],[6.0,9.8,'on tourne la roue pour la date',96],
+        [11.8,14.3,'épisode 1 : la cérémonie',96],[14.4,16.7,'épisode 2 : le dîner',96],[16.8,19.3,'épisode 3 : le programme',96],[20.4,23.3,'et ils répondent en un clic',96]],
+  taps:[[3.6,{x:202,y:420}],[6.0,'.rvl-hub'],[22.0,'[data-rsvp], .pg.on .b, .rsvp-b, button.b']],
+  keys:[[11.8,'ArrowDown'],[14.4,'ArrowDown'],[16.8,'ArrowDown'],[19.4,'ArrowDown'],[20.1,'ArrowDown'],[20.8,'ArrowDown']],
+  end:{a:23.4,price:'Faire-part animé · dès 99 €'}}
 };
 
 const OVERLAY=`
@@ -40,7 +41,7 @@ const OVERLAY=`
 #ad .cap{position:absolute;left:24px;right:24px;text-align:center;opacity:0}
 #ad .cap span{display:inline;background:#fff;color:#111;font:700 21px/1.55 "Inter Tight",Inter,sans-serif;padding:4px 11px;border-radius:7px;
   -webkit-box-decoration-break:clone;box-decoration-break:clone;box-shadow:0 2px 10px rgba(0,0,0,.18)}
-#ad .tap{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.35);border:3px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15),0 4px 14px rgba(0,0,0,.25);opacity:0}
+#ad .tap{display:none;position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.35);border:3px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15),0 4px 14px rgba(0,0,0,.25);opacity:0}
 #ad .chat{position:absolute;inset:0;background:#ece5d8;font-family:Inter,sans-serif}
 #ad .chat .hd{height:92px;background:#fbf8f2;display:flex;align-items:flex-end;gap:11px;padding:0 16px 13px;border-bottom:1px solid #e2dacb}
 #ad .chat .av{width:38px;height:38px;border-radius:50%;background:#b07a4f;color:#fff;display:flex;align-items:center;justify-content:center;font:600 17px/1 Inter}
