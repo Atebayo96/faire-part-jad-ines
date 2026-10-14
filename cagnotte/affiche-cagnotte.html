@@ -30,12 +30,6 @@
   /* ---- double filet doré ---- */
   .frame{position:absolute;inset:9mm;border:.9pt solid var(--gold);pointer-events:none}
   .frame::after{content:"";position:absolute;inset:1.8mm;border:.35pt solid var(--gold)}
-  .corner{position:absolute;width:13mm;height:13mm;pointer-events:none}
-  .corner.tl{top:8mm;left:8mm}
-  .corner.tr{top:8mm;right:8mm;transform:scaleX(-1)}
-  .corner.bl{bottom:8mm;left:8mm;transform:scaleY(-1)}
-  .corner.br{bottom:8mm;right:8mm;transform:scale(-1)}
-  .corner svg{width:100%;height:100%;display:block}
 
   /* ---- mise en page ---- */
   .inner{position:absolute;inset:0;padding:17mm 24mm 16mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:1}
@@ -78,10 +72,6 @@
 <body>
 <div class="sheet">
   <div class="frame"></div>
-  <div class="corner tl"><svg viewBox="0 0 40 40" fill="none" stroke="#b8975a" stroke-width="1.1" stroke-linecap="round"><path d="M3 37 C3 18, 18 3, 37 3"/><path d="M8 32 C9 20, 20 9, 32 8"/><path d="M8 32 c-2 -6, 2 -10, 7 -9 c-4 2, -5 5, -3 8"/><path d="M32 8 c-6 -2, -10 2, -9 7 c2 -4, 5 -5, 8 -3"/><circle cx="13" cy="13" r="1.4" fill="#b8975a" stroke="none"/></svg></div>
-  <div class="corner tr"><svg viewBox="0 0 40 40" fill="none" stroke="#b8975a" stroke-width="1.1" stroke-linecap="round"><path d="M3 37 C3 18, 18 3, 37 3"/><path d="M8 32 C9 20, 20 9, 32 8"/><path d="M8 32 c-2 -6, 2 -10, 7 -9 c-4 2, -5 5, -3 8"/><path d="M32 8 c-6 -2, -10 2, -9 7 c2 -4, 5 -5, 8 -3"/><circle cx="13" cy="13" r="1.4" fill="#b8975a" stroke="none"/></svg></div>
-  <div class="corner bl"><svg viewBox="0 0 40 40" fill="none" stroke="#b8975a" stroke-width="1.1" stroke-linecap="round"><path d="M3 37 C3 18, 18 3, 37 3"/><path d="M8 32 C9 20, 20 9, 32 8"/><path d="M8 32 c-2 -6, 2 -10, 7 -9 c-4 2, -5 5, -3 8"/><path d="M32 8 c-6 -2, -10 2, -9 7 c2 -4, 5 -5, 8 -3"/><circle cx="13" cy="13" r="1.4" fill="#b8975a" stroke="none"/></svg></div>
-  <div class="corner br"><svg viewBox="0 0 40 40" fill="none" stroke="#b8975a" stroke-width="1.1" stroke-linecap="round"><path d="M3 37 C3 18, 18 3, 37 3"/><path d="M8 32 C9 20, 20 9, 32 8"/><path d="M8 32 c-2 -6, 2 -10, 7 -9 c-4 2, -5 5, -3 8"/><path d="M32 8 c-6 -2, -10 2, -9 7 c2 -4, 5 -5, 8 -3"/><circle cx="13" cy="13" r="1.4" fill="#b8975a" stroke="none"/></svg></div>
 
   <div class="inner">
     <img class="seal" src="../assets/seal_ij_cut.png" alt="">
