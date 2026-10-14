@@ -12,3 +12,7 @@ index - Copie.html
 business/.frames-keep/
 business/.trans-keep/
 business/.fx-check/
+
+# images de contrôle des pubs (aperçus temporaires)
+business/ads/feuille/e-*.jpg
+business/ads/feuille/f-*.jpg
