@@ -902,14 +902,19 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 
 ## Mesure des visites
 
-- **Vercel Web Analytics** (27 octobre 2026 : « on a reçu des visites sur le site ? » : rien ne le mesurait). La balise
-  `<script defer src="/_vercel/insights/script.js">` est posée par `build-site.py` (`insights()`) dans **toutes** les pages
-  HTML de `site/` (vitrine, pages légales, tableau de bord, faire-part `/d/…`) et par `api/page.js` dans les faire-part
-  servis à la volée. Sans cookie ni bandeau de consentement : pages vues, pays, appareil, source. La mesure ne compte que
-  si Web Analytics est **activé sur le projet** dans le tableau de bord Vercel (onglet Analytics), ce que l'API MCP ne
-  permet pas ; sinon le script répond 404, sans effet sur la page. Lecture : outils `count_pageviews` /
-  `aggregate_pageviews` du serveur MCP Vercel, ou l'onglet Analytics. Le site n'enregistre par ailleurs que les demandes,
-  commandes, réponses et ouvertures de liens personnels (`/api/admin` avec `SCEAU_SECRET`).
+- **Deux outils, une seule source de balises** (27 octobre 2026 : « on a reçu des visites sur le site ? » : rien ne le mesurait).
+  `analytics_tags()` dans `build-site.py` pose, dans **toutes** les pages HTML de `site/` (vitrine, pages légales, tableau de bord,
+  faire-part `/d/…`) et, via `_meta.js` (`analytics`), dans les faire-part servis à la volée par `api/page.js` :
+  1. **Vercel Web Analytics**, activé sur le projet par l'utilisateur (compte **Pro**, pas gratuit). Pages vues, pays, appareil,
+     dans l'onglet Analytics. L'API de lecture (`count_pageviews` du serveur MCP Vercel) répondait encore « Web Analytics not
+     found » le jour même : jeton de session limité ou aucune vraie visite ingérée (le trafic d'un centre de données est écarté).
+     Après l'activation, **un redéploiement de la prod est nécessaire** pour que `/_vercel/insights/script.js` soit servi.
+  2. **Umami Cloud** (sans cookie, API lisible par Claude) : la balise ne sort que si `UMAMI_ID` (build-site.py) est renseigné ;
+     identifiant public du site, pas un secret ; `data-domains` exclut les aperçus Vercel. Compte à créer par l'utilisateur.
+  Sans cookie ni bandeau de consentement, rien de personnel. **Événements du tunnel**, nommés, envoyés aux deux outils par
+  `track()` (vitrine.js) : `etape {etape, formule, theme}` à chaque onglet du configurateur, `commander {formule}` quand le
+  formulaire de commande part, `paiement {formule}` sur la page Merci (`merci/index.html`). Le site n'enregistre par ailleurs que les
+  demandes, commandes, réponses et ouvertures de liens personnels (`/api/admin` avec `SCEAU_SECRET`).
 
 ## Cache des images
 

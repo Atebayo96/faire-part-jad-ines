@@ -7,6 +7,10 @@
   const PLANS={carte:{name:'Carte',price:'29 €'},page:{name:'Page unique',price:'59 €'},essentiel:{name:'Essentiel',price:'99 €'},signature:{name:'Signature',price:'229 €'},couture:{name:'Couture',price:'dès 590 €'}};
   // formules en libre-service : composées dans le configurateur, en ligne (ou à télécharger) dès le paiement
   const SELF=['carte','page','essentiel'], ONE=p=>p==='carte'||p==='page';
+  // mesure du tunnel (27 octobre 2026) : un événement nommé, sans donnée personnelle, envoyé à Umami et à Vercel Web Analytics
+  // (balises posées par build-site.py). etape {etape, formule, theme} à chaque onglet du configurateur, commander {formule} quand
+  // le formulaire de commande part, paiement {formule} sur la page Merci (merci/index.html).
+  const track=(name,data)=>{ try{ if(window.umami&&umami.track) umami.track(name,data); if(window.va) va('event',{name,data}); }catch(e){} };
   // bouton de formule : sur /creer/, la commande Stripe s'ouvre (formule payable en ligne) ; ailleurs, le lien mène à /creer/?plan=…
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',e=>{ const sel=document.getElementById('planSel'); if(sel) sel.value=a.dataset.plan;
     // Essentiel en libre-service (api/commande.js) : le faire-part composé est publié dès le paiement ; sinon, lien de paiement Stripe
@@ -52,7 +56,7 @@
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return show('Indiquez une adresse e-mail valide.');
     if(!$o('oCgv').checked) return show('Merci d’accepter les conditions de vente.');
     if(!$o('oWaiver').checked) return show('Cochez la case pour que nous puissions commencer la création dès votre paiement.');
-    err.hidden=true; const btn=$o('oPay'); btn.disabled=true; btn.textContent='Ouverture du paiement…';
+    err.hidden=true; track('commander',{formule:ordPlan}); const btn=$o('oPay'); btn.disabled=true; btn.textContent='Ouverture du paiement…';
     if(!ordLink){ // Essentiel en libre-service : la fiche du faire-part part avec la commande, Stripe Checkout s'ouvre
       try{ const r=await fetch('/api/commande',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,cgv:true,waiver:true,consent:true,plan:ordPlan,options:window.SCEAU_COMPOSE.opts(),fiche:window.SCEAU_COMPOSE.fiche(),config:window.SCEAU_COMPOSE.config()})});
         const j=await r.json().catch(()=>({})); if(!r.ok||!j.url) throw new Error(j.error||r.status);
@@ -918,6 +922,7 @@
       steps.forEach(w=>{ w.hidden=+w.dataset.step!==cur; });
       tabs.forEach(b=>{ const k=+b.dataset.go; b.setAttribute('aria-current',k===cur); b.classList.toggle('done',k<cur); });
       prev.hidden=cur===1; next.hidden=cur===steps.length;
+      track('etape',{etape:cur,formule:C.plan,theme:C.k});
       next.textContent=['','L’ouverture →',C.fmt==='long'?'Mon tableau →':'Mes écrans →','Les détails →','Ma formule →'][cur]||'Suivant →';
       const sc=$('cpScroll'); if(cur===3) showEv(0); else if(cur!==4) sc.scrollTo({top:0,behavior:'smooth'});
       if(cur===2) replayOp(500); // l'onglet de l'ouverture la rejoue

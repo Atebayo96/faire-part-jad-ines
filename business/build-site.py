@@ -235,11 +235,25 @@ def site_og(T):
     im.save(os.path.join(SITE, 'og-sceau.jpg'), 'JPEG', quality=84, optimize=True)
 
 
-# Mesure des visites : Vercel Web Analytics (activé sur le projet le 27 octobre 2026). Une seule balise, posée dans
-# toutes les pages du site au build (vitrine, pages légales, tableau de bord, faire-part /d/…) ; les faire-part servis
-# par api/page.js portent la même ligne. Sans cookie ni bandeau : pages vues, pays, appareil, rien de personnel.
-INSIGHTS = '<script defer src="/_vercel/insights/script.js"></script>\n</head>'
+# Mesure des visites (27 octobre 2026). Deux balises, posées au build dans toutes les pages HTML du site (vitrine, pages
+# légales, tableau de bord, faire-part /d/…) ; api/page.js pose les mêmes (via _meta.js) dans les faire-part servis à la volée.
+# 1) Vercel Web Analytics (activé sur le projet) : pages vues, pays, appareil ; `window.va` reçoit aussi nos événements.
+# 2) Umami Cloud (sans cookie, API lisible) : actif dès que UMAMI_ID est renseigné (identifiant public du site, pas un secret ;
+#    « Websites » > « Edit » > « Tracking code » sur cloud.umami.is). `data-domains` : les aperçus Vercel ne comptent pas.
+# Événements du tunnel (vitrine.js `track()`, merci/index.html) : etape {etape, formule, theme}, commander {formule}, paiement {formule}.
+UMAMI_HOST = 'https://cloud.umami.is'
+UMAMI_ID = ''
+UMAMI_DOMAINS = 'savetheoui.fr,sceau-faire-part.vercel.app'
 
+
+def analytics_tags():
+    t = '<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>\n<script defer src="/_vercel/insights/script.js"></script>\n'
+    if UMAMI_ID:
+        t += f'<script defer src="{UMAMI_HOST}/script.js" data-website-id="{UMAMI_ID}" data-domains="{UMAMI_DOMAINS}"></script>\n'
+    return t
+
+
+INSIGHTS = analytics_tags() + '</head>'
 
 def insights(root):
     n = 0
@@ -371,7 +385,7 @@ def main():
             og_image(os.path.join(SITE, 'img', 'hd', f'{k}-1.webp'), os.path.join(SITE, 'img', 'og', f'{k}.jpg'), 'Vous êtes invités', 'Ouvrez le faire-part', k, t)
     open(os.path.join(SITE, 'api', '_meta.js'), 'w', encoding='utf-8').write(
         '// Généré par business/build-site.py : ce que les faire-part commandés en ligne reprennent de chaque thème. Ne pas modifier à la main.\nexport default ' +
-        json.dumps({'site': SITE_URL, 'themes': meta}, ensure_ascii=False) + ';\n')
+        json.dumps({'site': SITE_URL, 'analytics': analytics_tags(), 'themes': meta}, ensure_ascii=False) + ';\n')
     # liste des démos pour la vitrine
     demos = [{'slug': 'yasmine-karim', 'theme': 'nuits', 'couple': 'Yasmine & Karim', 'special': 'Lieux réels peints et animés', 'events': 2,
               'music': 'scheherazade', 'thumb': '/d/yasmine-karim/thumb.webp'}]

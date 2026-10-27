@@ -24,7 +24,8 @@ ol{padding-left:20px} li{margin:10px 0;color:#333} p{color:#333} a{color:#111}
 /* la carte : un aperçu de la feuille téléchargée (carte.js) */
 .cprev{width:min(360px,100%);margin:24px auto 0;border-radius:6px;overflow:hidden;box-shadow:0 20px 50px -20px rgba(0,0,0,.35)}
 .btn:disabled{opacity:.6}
-</style><script defer src="/_vercel/insights/script.js"></script>
+</style><script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head><body>
 <header><div><a href="/" class="logo"><span>Save the</span><b>Oui</b></a></div></header>
 <main>
@@ -57,6 +58,7 @@ ol{padding-left:20px} li{margin:10px 0;color:#333} p{color:#333} a{color:#111}
     let j=null; try{ const r=await fetch('/api/commande?ref='+encodeURIComponent(ref)+'&k='+encodeURIComponent(k)+(q.get('fake')?'&fake=1':'')); j=await r.json(); }catch(e){}
     if(!j||j.status!=='paid'){ if(++n<30) return setTimeout(poll,2000);
       box.innerHTML='<h1>Merci !</h1><p>Votre paiement est bien reçu. La mise en ligne prend un peu plus de temps que prévu : vous recevrez vos liens par e-mail, et nous vérifions de notre côté. Une question ? <a href="/contact/">Écrivez-nous</a>.</p>'; return; }
+    try{ if(window.umami&&umami.track) umami.track('paiement',{formule:j.plan}); if(window.va) va('event',{name:'paiement',data:{formule:j.plan}}); }catch(e){} // mesure du tunnel (vitrine.js track())
     // la Carte : pas de lien en ligne, la feuille se dessine ici (carte.js) et se télécharge en image et en PDF
     if(j.plan==='carte'&&j.inv){ box.innerHTML=`<h1>Votre carte est prête !</h1><p>Le faire-part de ${esc(j.couple)}, à envoyer sur WhatsApp ou à imprimer. ${j.mailed?`Le lien de cette page vous est aussi envoyé par e-mail (${esc(j.email)}), pour la retélécharger.`:'Ajoutez cette page à vos favoris pour la retélécharger.'}</p>`+
         `<div class="box"><h2>L'image</h2><p>Au format du téléphone, en haute définition : pour WhatsApp, vos statuts, un e-mail.</p><div class="url"><button type="button" class="btn" data-dl="png">Télécharger l'image</button></div></div>`+
