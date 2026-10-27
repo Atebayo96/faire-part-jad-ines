@@ -235,6 +235,24 @@ def site_og(T):
     im.save(os.path.join(SITE, 'og-sceau.jpg'), 'JPEG', quality=84, optimize=True)
 
 
+# Mesure des visites : Vercel Web Analytics (activé sur le projet le 27 octobre 2026). Une seule balise, posée dans
+# toutes les pages du site au build (vitrine, pages légales, tableau de bord, faire-part /d/…) ; les faire-part servis
+# par api/page.js portent la même ligne. Sans cookie ni bandeau : pages vues, pays, appareil, rien de personnel.
+INSIGHTS = '<script defer src="/_vercel/insights/script.js"></script>\n</head>'
+
+
+def insights(root):
+    n = 0
+    for d, _, files in os.walk(root):
+        for f in files:
+            if not f.endswith('.html'): continue
+            fp = os.path.join(d, f)
+            h = open(fp, encoding='utf-8').read()
+            if '/_vercel/insights/script.js' in h or '</head>' not in h: continue
+            open(fp, 'w', encoding='utf-8').write(h.replace('</head>', INSIGHTS, 1)); n += 1
+    return n
+
+
 def main():
     # les images d'animation (img/frames) ne vivent que dans site/ : on les met de côté pendant la reconstruction
     # (scènes animées img/frames et transitions filmées img/trans)
@@ -374,7 +392,8 @@ def main():
         assert '[]/*DEMOS*/' in l and '{}/*CALQUES*/' in l, p
         open(p, 'w', encoding='utf-8').write(l.replace('[]/*DEMOS*/', json.dumps(demos, ensure_ascii=False)).replace('{}/*CALQUES*/', json.dumps(calques) + ';window.SCEAU_CHAINS=' + json.dumps(chains)))
     site_og(T)
-    print('site ->', SITE, '|', len(invites), 'faire-part')
+    n = insights(SITE)
+    print('site ->', SITE, '|', len(invites), 'faire-part |', n, 'pages avec Web Analytics')
 
 
 if __name__ == '__main__':

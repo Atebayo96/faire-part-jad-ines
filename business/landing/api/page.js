@@ -48,6 +48,7 @@ export default async function handler(req, res) {
 <link rel="stylesheet" href="/invite.css">
 <link rel="stylesheet" href="/reveal.css">
 <link rel="stylesheet" href="/carte.css">
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <noscript><p style="padding:24px;font-family:sans-serif">${esc(title)}. Activez JavaScript pour ouvrir le faire-part.</p></noscript>
