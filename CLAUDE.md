@@ -900,6 +900,17 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
 - Si la prod doit partir sans attendre, l'API Vercel (`create_deployment`, `target: production`, `gitSource` = le commit)
   déploie ce commit en production ; `request_promote` d'un aperçu est refusé (422) sur ce projet.
 
+## Mesure des visites
+
+- **Vercel Web Analytics** (27 octobre 2026 : « on a reçu des visites sur le site ? » : rien ne le mesurait). La balise
+  `<script defer src="/_vercel/insights/script.js">` est posée par `build-site.py` (`insights()`) dans **toutes** les pages
+  HTML de `site/` (vitrine, pages légales, tableau de bord, faire-part `/d/…`) et par `api/page.js` dans les faire-part
+  servis à la volée. Sans cookie ni bandeau de consentement : pages vues, pays, appareil, source. La mesure ne compte que
+  si Web Analytics est **activé sur le projet** dans le tableau de bord Vercel (onglet Analytics), ce que l'API MCP ne
+  permet pas ; sinon le script répond 404, sans effet sur la page. Lecture : outils `count_pageviews` /
+  `aggregate_pageviews` du serveur MCP Vercel, ou l'onglet Analytics. Le site n'enregistre par ailleurs que les demandes,
+  commandes, réponses et ouvertures de liens personnels (`/api/admin` avec `SCEAU_SECRET`).
+
 ## Cache des images
 
 - Les images (`/img/…`) sont servies avec `max-age=0, must-revalidate` (vercel.json) : le navigateur vérifie à chaque
