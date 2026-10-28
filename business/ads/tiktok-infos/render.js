@@ -7,7 +7,7 @@ const { chromium } = require('playwright'); const fs = require('fs'), path = req
   for (const f of files) {
     await pg.goto('file://' + path.join(here, 'html', f)); await pg.evaluate(() => document.fonts.ready); await pg.waitForTimeout(150);
     // titre d'accroche : chaque ligne voulue (<br>) doit tenir sur une ligne, on réduit la police jusqu'à ce que ce soit le cas
-    await pg.evaluate(() => { const h = document.querySelector('.hook h1'); if (!h) return; h.style.whiteSpace = 'nowrap';
+    await pg.evaluate(() => { const h = document.querySelector('.hook h1'); if (!h || !h.querySelector('br')) return; h.style.whiteSpace = 'nowrap';
       let fs = parseFloat(getComputedStyle(h).fontSize); while (h.scrollWidth > h.clientWidth && fs > 60) { fs -= 2; h.style.fontSize = fs + 'px'; }
       h.style.whiteSpace = ''; });
     const slug = f.replace(/-\d+\.html$/, ''); fs.mkdirSync(path.join(here, 'out', slug), { recursive: true });

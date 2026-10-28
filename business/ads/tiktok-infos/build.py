@@ -36,7 +36,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#111}
 .k::after{content:"";display:block;width:64px;height:2px;background:var(--ac);margin:18px auto 0;opacity:.75}
 h1{font-weight:500;font-size:68px;line-height:1.08;text-align:center;margin-top:26px;letter-spacing:-.005em;text-wrap:balance}
 .hook .in{justify-content:center;top:230px;bottom:150px}
-.hook h1{font-size:100px;line-height:1.04;margin-top:30px}
+.hook h1{font-size:88px;line-height:1.08;margin-top:30px}
 .hook .sub{font:italic 400 46px/1.3 "Cormorant Garamond",serif;text-align:center;margin-top:34px;color:#4a403a;text-wrap:balance}
 .hook .go{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:16px;font:500 24px/1 "Inter Tight",sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--ac)}
 .hook .go i{width:44px;height:44px;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;font:normal 22px/1 sans-serif}
@@ -76,7 +76,7 @@ def slide_html(post, s, i, n):
     T = lambda x: typo(x) if isinstance(x, str) else tuple(typo(y) for y in x)
     parts = [f'<div class="k">{s["kicker"]}</div>', f'<h1>{s["title"]}</h1>']
     if kind == 'hook':
-        parts.append(f'<p class="sub">{s["sub"]}</p>')
+        parts.append(f'<p class="sub">{s["sub"]}</p>' if s.get('sub') else '')
         parts.append('<div class="go">Glissez <i>→</i></div>')
     elif kind == 'list':
         parts.append('<ol class="body list">' + ''.join(f'<li><i>{j+1}</i><span>{t}</span></li>' for j, t in enumerate(map(T, s['items']))) + '</ol>')

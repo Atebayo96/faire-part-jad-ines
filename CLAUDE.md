@@ -695,9 +695,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     sans vendre : la feuille de papier de la Carte sur le fond peint d'un univers, sceau, signature discrète. Textes dans
     `posts.py`, images par `build.py` + `render.js` ; à alterner avec les pubs (une pub, un post utile).
     **La personne doit se reconnaître dès la première image** (même jour, « il faut que ça soit vraiment inclusif ») : la
-    première image est une situation (« tu viens de te fiancer ? », « tu as trouvé ta date ? », « papier ou numérique ? »,
-    « personne ne répond ? ») ou un vécu (« les erreurs que j'ai faites », « ce que mon faire-part m'a appris »), on tutoie,
-    on parle comme une copine qui vient de se marier. Pas de titre générique (« Les 7 infos d'un faire-part »).
+    première image est **une phrase simple et complète** que la personne se dit (« Tu as envoyé ton faire-part et personne
+    ne t'a répondu ? », « Tu hésites entre un faire-part papier et un faire-part numérique ? ») ou une liste (« Les 5 erreurs
+    à éviter sur ton faire-part », « 5 choses que j'ai mises dans mon faire-part et qui ont sauvé mon mariage »). Tutoiement,
+    mots simples. Refusés : un titre générique (« Les 7 infos d'un faire-part »), un chiffre comme accroche (« Tu as 150
+    noms », « ça veut rien dire »), une accroche inventée (« tout le monde te demande déjà la date », « c'est faux »), les
+    expressions (« failli tomber de ta chaise », « on reste très simple »), un mot télégraphique (« Papier ou numérique ? »).
+    **Le texte (accroches, puis les trois images) se valide en chat avant tout rendu** (« avant d'envoyer tes trucs, il faut
+    valider l'angle »). On commence petit : trois posts, on regarde ce que ça donne (`candidats.md` garde les textes validés
+    en attente).
     Publication : le connecteur Higgsfield relie le compte TikTok (lien à ouvrir une fois) et dépose le carrousel dans les
     brouillons de l'application (`UPLOAD_TO_DRAFT`) : l'utilisateur n'a plus qu'à appuyer sur Publier.
 

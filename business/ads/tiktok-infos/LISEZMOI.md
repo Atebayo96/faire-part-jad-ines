@@ -1,8 +1,10 @@
 # TikTok : posts informatifs (carrousels de 3 images)
 
 Des posts fixes qui **donnent une info utile** aux futurs mariés, sans vendre : la page ne doit pas être qu'une suite de pubs.
-**Angle (28 octobre 2026)** : la personne se reconnaît dès la première image (« tu viens de te fiancer ? », « papier ou
-numérique ? », « les erreurs que j'ai faites »), on la tutoie, on lui parle comme une copine qui vient de se marier.
+**Ton validé (28 octobre 2026)** : la première image est une phrase simple et complète que la personne se dit (« Tu as envoyé
+ton faire-part et personne ne t'a répondu ? ») ou une liste (« Les 5 erreurs à éviter », « 5 choses qui ont sauvé mon
+mariage ») ; tutoiement, mots simples, pas d'expression, pas de chiffre comme accroche, jamais de vente. **Le texte se valide
+en chat avant tout rendu.** On commence par trois posts ; les autres textes validés attendent dans `candidats.md`.
 Chaque post = 3 images 1080 × 1920 (`out/<post>/`) : 1) l'accroche, 2) le contenu, 3) « à retenir ». Le texte tient dans une
 feuille de papier (comme la Carte), posée sur le fond peint d'un univers, sceau de cire, signature « Save The Oui » discrète.
 La zone basse (légende, boutons TikTok) et le bord droit restent libres.
@@ -21,25 +23,9 @@ l'encre et des accents ≥ 4,5:1 sur le papier le plus sombre.
 
 | Dossier | Univers | Légende |
 |---|---|---|
-| `out/fiances/` | dolcevita | Tu viens de te fiancer ? Avant de parler faire-part, il y a 5 choses à poser. Dans cet ordre. #fiancailles #mariage2027 #futuremariee #organisationmariage #mariage #fiancée |
-| `out/date-trouvee/` | doucefrance | Tu viens de trouver ta date de mariage ? Voilà quand envoyer ton faire-part (et quand ajouter deux mois). #mariage #mariage2027 #fairepart #organisationmariage #futuremariee #datedemariage |
-| `out/papier-ou-numerique/` | oldmoney | Tu hésites entre faire-part papier et faire-part numérique ? Ce n'est pas l'un ou l'autre : le bon ratio. #fairepart #mariage #mariage2027 #fairepartmariage #organisationmariage #futuremariee |
-| `out/mes-erreurs/` | nuits | Les 5 erreurs que j'ai faites sur mon faire-part de mariage (pour que tu ne les fasses pas). #mariage #fairepart #erreursmariage #mariage2027 #organisationmariage #futuremariee |
-| `out/ce-que-jai-appris/` | alhambra | Ce que mon faire-part de mariage m'a appris sur mes invités (et que j'aurais aimé savoir avant). #mariage #fairepart #mariage2027 #organisationmariage #futuremariee #vécu |
-| `out/texte-qui-invite/` | doucefrance | Tu bloques sur le texte de ton faire-part ? Commence par la première phrase : qui invite. Les 3 formules, et les cas délicats. #fairepart #textefairepart #mariage #mariage2027 #organisationmariage #futuremariee |
-| `out/personne-ne-repond/` | oldmoney | Tu as envoyé ton faire-part et personne ne répond ? Ce n'est pas qu'ils s'en fichent. Les vraies raisons, et ce qui marche. #mariage #rsvp #fairepart #organisationmariage #mariage2027 #futuremariee |
-| `out/combien-viendront/` | nuits | Tu as 150 noms sur ta liste : combien vont vraiment venir ? Les proportions qu'on observe, pour dimensionner la salle sans se tromper. #mariage #listeinvites #mariage2027 #organisationmariage #budgetmariage #futuremariee |
-| `out/enfants-plus-un/` | dolcevita | Mariage sans enfants ? Invités avec ou sans +1 ? Comment le dire sur ton faire-part, clairement et sans drame. #mariage #fairepart #mariage2027 #mariagesansenfants #organisationmariage #futuremariee |
-| `out/dress-code/` | alhambra | Tu veux un dress code sans vexer personne ? Les phrases qui marchent, celles qui piquent. #mariage #dresscode #fairepart #mariage2027 #tenuemariage #futuremariee |
-| `out/trois-jours/` | nuits | Henné, mairie, salle : tu as trois jours de fête et une seule liste d'invités ? Comment dire à chacun où il est attendu. #mariage #henné #mariagemarocain #mariagealgerien #mariageoriental #mariage2027 #fairepart |
-| `out/cout-papier/` | doucefrance | Tu as 150 invités et tu penses au faire-part papier ? Le vrai calcul, timbres compris, avant de signer le devis. #mariage #budgetmariage #fairepart #mariage2027 #organisationmariage #futuremariee |
-
-## Ordre conseillé (en alternance avec les vidéos : une pub, un post utile)
-
-fiances → date-trouvee → papier-ou-numerique → mes-erreurs → personne-ne-repond → texte-qui-invite → combien-viendront →
-ce-que-jai-appris → enfants-plus-un → dress-code → trois-jours → cout-papier.
-Les posts « mes-erreurs » et « ce-que-jai-appris » parlent en « je » : c'est la voix de la marque (le faire-part d'Inès & Jad est
-réel) ; à relire et à garder vrai.
+| `out/personne-ne-repond/` | oldmoney | Tu as envoyé ton faire-part et personne ne t'a répondu ? Ce n'est pas qu'ils s'en fichent. Les vraies raisons, et ce qui marche. #mariage #fairepart #rsvp #organisationmariage #mariage2027 #futuremariee |
+| `out/5-erreurs/` | doucefrance | Tu prépares ton mariage ? Les 5 erreurs à éviter sur ton faire-part. #mariage #fairepart #mariage2027 #organisationmariage #futuremariee #erreursaeviter |
+| `out/5-choses/` | nuits | 5 choses que j'ai mises dans mon faire-part et qui ont sauvé mon mariage. #mariage #fairepart #mariage2027 #organisationmariage #futuremariee #astucesmariage |
 
 ## Publier depuis Claude (connecteur Higgsfield)
 
