@@ -690,6 +690,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     Le carrousel 3D incurvé de tous les univers (`ads/carrousel/`) a plu : c'est le modèle des présentations de nos créations.
     Version principale : les faire-part qui défilent, sans ouverture. La variante où chaque carte s'ouvre au centre
     (`OUVERTURES=1`) est gardée pour plus tard : les portes ont plu, l'enveloppe moins.
+    **Posts informatifs pour TikTok** (28 octobre 2026 : « que ma page TikTok ne soit pas que je vende mon produit ») :
+    `business/ads/tiktok-infos/`, carrousels fixes de 3 images (accroche, contenu, à retenir) qui donnent une info utile
+    (calendrier d'envoi, check-list, réponses, coût du papier, dress code, qui invite, enfants et +1, henné-mairie-salle),
+    sans vendre : la feuille de papier de la Carte sur le fond peint d'un univers, sceau, signature discrète. Textes dans
+    `posts.py`, images par `build.py` + `render.js` ; à alterner avec les pubs (une pub, un post utile).
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un
