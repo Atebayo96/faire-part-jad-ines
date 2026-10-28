@@ -692,9 +692,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     (`OUVERTURES=1`) est gardée pour plus tard : les portes ont plu, l'enveloppe moins.
     **Posts informatifs pour TikTok** (28 octobre 2026 : « que ma page TikTok ne soit pas que je vende mon produit ») :
     `business/ads/tiktok-infos/`, carrousels fixes de 3 images (accroche, contenu, à retenir) qui donnent une info utile
-    (calendrier d'envoi, check-list, réponses, coût du papier, dress code, qui invite, enfants et +1, henné-mairie-salle),
     sans vendre : la feuille de papier de la Carte sur le fond peint d'un univers, sceau, signature discrète. Textes dans
     `posts.py`, images par `build.py` + `render.js` ; à alterner avec les pubs (une pub, un post utile).
+    **La personne doit se reconnaître dès la première image** (même jour, « il faut que ça soit vraiment inclusif ») : la
+    première image est une situation (« tu viens de te fiancer ? », « tu as trouvé ta date ? », « papier ou numérique ? »,
+    « personne ne répond ? ») ou un vécu (« les erreurs que j'ai faites », « ce que mon faire-part m'a appris »), on tutoie,
+    on parle comme une copine qui vient de se marier. Pas de titre générique (« Les 7 infos d'un faire-part »).
+    Publication : le connecteur Higgsfield relie le compte TikTok (lien à ouvrir une fois) et dépose le carrousel dans les
+    brouillons de l'application (`UPLOAD_TO_DRAFT`) : l'utilisateur n'a plus qu'à appuyer sur Publier.
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un

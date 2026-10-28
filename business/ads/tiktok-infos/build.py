@@ -61,6 +61,7 @@ tr.tot td{border:0;padding-top:28px;font-weight:600;font-size:50px;color:var(--a
 .sig{position:absolute;left:0;right:0;bottom:46px;display:flex;justify-content:center;align-items:baseline;gap:10px;color:#2a2420}
 .sig span{font:500 19px/1 "Inter Tight",sans-serif;letter-spacing:.26em}
 .sig b{font:400 44px/1 "Great Vibes",cursive}
+.ad .in :is(h1,p,li,b,span,td,i,div){font-variant-numeric:lining-nums}
 .num{position:absolute;right:70px;bottom:52px;font:500 20px/1 "Inter Tight",sans-serif;letter-spacing:.14em;color:#4a403a;font-variant-numeric:lining-nums}
 """
 
