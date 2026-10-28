@@ -54,6 +54,11 @@ p{font:400 50px/1.32 "Inter Tight",sans-serif;color:#3a342f;max-width:880px;text
 .sig{position:absolute;left:84px;bottom:296px;display:flex;align-items:baseline;gap:10px;color:#1e1a17}
 .sig span{font:500 20px/1 "Inter Tight",sans-serif;letter-spacing:.26em}
 .sig b{font:400 46px/1 "Great Vibes",cursive}
+.hook .ic{height:560px}.hook .ic .blob{width:380px;height:350px}.hook .ic svg{width:280px;height:280px}
+.hook .ph{height:620px}
+.hook .in{top:560px;bottom:380px;justify-content:center;gap:40px}
+.hook h1{font-size:140px;line-height:1.12}
+.hook p{font-size:54px}
 .pg{position:absolute;right:84px;bottom:306px;font:500 24px/1 "Inter Tight",sans-serif;letter-spacing:.14em;color:#6b625b}
 """
 
@@ -63,8 +68,8 @@ def html(s, i, n):
     go = '<div class="go">Glisse <i>→</i></div>' if s.get('go') else ''
     sig = '<div class="sig"><span>SAVE THE</span><b>Oui</b></div>' if s.get('end') else ''
     ic = f'<div class="ic"><div class="blob"></div>{svg(s["ic"])}</div>'
-    fit = '<script>document.fonts.ready.then(()=>{const b=document.querySelector(".in"),h=b.querySelector("h1");let fs=parseFloat(getComputedStyle(h).fontSize);while(b.scrollHeight>b.clientHeight&&fs>80){fs-=2;h.style.fontSize=fs+"px"}})</script>'
-    return f'<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>{FONTS}{CSS}</style></head><body><div class="ad">{ic}<div class="in">{top}{body}</div>{go}{sig}<div class="pg">{i} / {n}</div></div>{fit}</body></html>'
+    fit = '<script>document.fonts.ready.then(()=>{const b=document.querySelector(".in"),h=b.querySelector("h1");let fs=parseFloat(getComputedStyle(h).fontSize);while(b.scrollHeight>b.clientHeight&&fs>84){fs-=2;h.style.fontSize=fs+"px"}})</script>'
+    return f'<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>{FONTS}{CSS}</style></head><body><div class="ad{' hook' if s.get('go') else ''}">{ic}<div class="in">{top}{body}</div>{go}{sig}<div class="pg">{i} / {n}</div></div>{fit}</body></html>'
 
 if __name__ == '__main__':
     os.makedirs(os.path.join(HERE, 'html'), exist_ok=True)

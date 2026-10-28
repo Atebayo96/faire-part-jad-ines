@@ -720,6 +720,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     jaune ; une icône par image, qui dit la phrase (téléphone à point d'interrogation, calendrier barré, famille, bulle de
     pensée, liste cochée, marque-page). Noto Color Emoji est installé si un emoji est voulu. Aucune génération.
     Premier post en ce style : « Tu as envoyé ton faire-part et personne ne t'a répondu ? » (`out/repond/`, 7 images).
+    **L'accroche est la problématique, énorme** (même jour : « il faut que ce soit le hook, la problématique bien lisible,
+    bien visible ») : sur la première image, l'icône ou la photo est réduite (560 px de haut) et la phrase prend le reste
+    (140 px, réduite jusqu'à 84 px seulement si elle ne tient pas), centrée verticalement ; classe `hook` dans les deux
+    gabarits.
     Publication : le connecteur Higgsfield relie le compte TikTok (lien à ouvrir une fois) et dépose le carrousel dans les
     brouillons de l'application (`UPLOAD_TO_DRAFT`) : l'utilisateur n'a plus qu'à appuyer sur Publier.
 
