@@ -5,6 +5,10 @@
 uni, texte énorme (DM Serif Display 122 px, explication 56 px), un mot clé surligné en jaune par image, une image par erreur,
 une image de fin, **une photo documentaire de `img/people/` en haut de chaque image**. `python3 erreurs.py && node render.js erreurs`. Légende : « Les 5 erreurs que tu dois absolument éviter sur
 ton faire-part de mariage. La 5, tout le monde la fait. #mariage #fairepart #mariage2027 #organisationmariage #futuremariee ».
+**Deuxième post, en iconographie : `out/repond/` (7 images)**, « Tu as envoyé ton faire-part et personne ne t'a répondu ? » :
+même mise en page, une icône au trait sur une tache jaune en haut de chaque image, aucune image générée (`icones.py`,
+`node render.js repond`). Légende : « Tu as envoyé ton faire-part et personne ne t'a répondu ? Les 4 vraies raisons, et ce qui
+marche. #mariage #fairepart #rsvp #organisationmariage #mariage2027 #futuremariee ».
 La version « feuille sur fond peint » ci-dessous (texte plus petit, « les gens ne vont pas le lire ») reste pour mémoire.
 
 Des posts fixes qui **donnent une info utile** aux futurs mariés, sans vendre : la page ne doit pas être qu'une suite de pubs.

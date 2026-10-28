@@ -714,6 +714,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     les amis, le petit-déjeuner), posées en haut (900 px, `cover`, fondu de 140 px vers le papier), le texte dessous ;
     `erreurs.py` (`img`, `pos`). Toute nouvelle photo suit la règle 9 (vraie photo libre de droits créditée, ou rendu
     photographique pris sur le vif) ; Unsplash est joignable depuis l'environnement, Pexels non.
+    **Pour les posts suivants : des icônes, pas des images** (même jour : « pas des images réelles : des emojis, des symboles,
+    de l'iconographie, des trucs qu'on peut faire gratuitement sans générer d'images »). `icones.py` : même mise en page,
+    mais en haut une grande icône au trait (SVG écrit dans le fichier, trait 7, bouts ronds, encre `#1e1a17`) sur une tache
+    jaune ; une icône par image, qui dit la phrase (téléphone à point d'interrogation, calendrier barré, famille, bulle de
+    pensée, liste cochée, marque-page). Noto Color Emoji est installé si un emoji est voulu. Aucune génération.
+    Premier post en ce style : « Tu as envoyé ton faire-part et personne ne t'a répondu ? » (`out/repond/`, 7 images).
     Publication : le connecteur Higgsfield relie le compte TikTok (lien à ouvrir une fois) et dépose le carrousel dans les
     brouillons de l'application (`UPLOAD_TO_DRAFT`) : l'utilisateur n'a plus qu'à appuyer sur Publier.
 
