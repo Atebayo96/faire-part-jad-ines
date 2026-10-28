@@ -3,7 +3,7 @@
 **Le premier post à publier : `out/erreurs/` (7 images), « Les 5 erreurs que tu dois absolument éviter sur ton faire-part »**
 (28 octobre 2026 : « on va juste en faire un, on va le faire bien »). Mise en page très simple, titre de journal : fond papier
 uni, texte énorme (DM Serif Display 122 px, explication 56 px), un mot clé surligné en jaune par image, une image par erreur,
-une image de fin. `python3 erreurs.py && node render.js erreurs`. Légende : « Les 5 erreurs que tu dois absolument éviter sur
+une image de fin, **une photo documentaire de `img/people/` en haut de chaque image**. `python3 erreurs.py && node render.js erreurs`. Légende : « Les 5 erreurs que tu dois absolument éviter sur
 ton faire-part de mariage. La 5, tout le monde la fait. #mariage #fairepart #mariage2027 #organisationmariage #futuremariee ».
 La version « feuille sur fond peint » ci-dessous (texte plus petit, « les gens ne vont pas le lire ») reste pour mémoire.
 

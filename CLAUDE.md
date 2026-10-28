@@ -709,6 +709,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     DM Serif Display 122 px, explication Inter Tight 56 px), **une phrase par image** (une image par erreur), le mot clé
     **surligné** en jaune, un fin « Save The Oui » sur la dernière image seulement. Pas d'obligation de reprendre les
     couleurs des thèmes. Un seul post pour commencer (« on va juste en faire un, on va le faire bien ») : les 5 erreurs.
+    **Une photo humaine en haut de chaque image** (« pas juste du texte sur du blanc, un truc qui rend la chose humaine ») :
+    les photos documentaires de `img/people/` (couple sur le canapé, mamie au café, les mains sur le téléphone, la famille,
+    les amis, le petit-déjeuner), posées en haut (900 px, `cover`, fondu de 140 px vers le papier), le texte dessous ;
+    `erreurs.py` (`img`, `pos`). Toute nouvelle photo suit la règle 9 (vraie photo libre de droits créditée, ou rendu
+    photographique pris sur le vif) ; Unsplash est joignable depuis l'environnement, Pexels non.
     Publication : le connecteur Higgsfield relie le compte TikTok (lien à ouvrir une fois) et dépose le carrousel dans les
     brouillons de l'application (`UPLOAD_TO_DRAFT`) : l'utilisateur n'a plus qu'à appuyer sur Publier.
 
