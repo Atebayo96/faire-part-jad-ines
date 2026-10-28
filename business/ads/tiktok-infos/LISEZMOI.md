@@ -1,4 +1,11 @@
-# TikTok : posts informatifs (carrousels de 3 images)
+# TikTok : posts informatifs (carrousels)
+
+**Le premier post à publier : `out/erreurs/` (7 images), « Les 5 erreurs que tu dois absolument éviter sur ton faire-part »**
+(28 octobre 2026 : « on va juste en faire un, on va le faire bien »). Mise en page très simple, titre de journal : fond papier
+uni, texte énorme (DM Serif Display 122 px, explication 56 px), un mot clé surligné en jaune par image, une image par erreur,
+une image de fin. `python3 erreurs.py && node render.js erreurs`. Légende : « Les 5 erreurs que tu dois absolument éviter sur
+ton faire-part de mariage. La 5, tout le monde la fait. #mariage #fairepart #mariage2027 #organisationmariage #futuremariee ».
+La version « feuille sur fond peint » ci-dessous (texte plus petit, « les gens ne vont pas le lire ») reste pour mémoire.
 
 Des posts fixes qui **donnent une info utile** aux futurs mariés, sans vendre : la page ne doit pas être qu'une suite de pubs.
 **Ton validé (28 octobre 2026)** : la première image est une phrase simple et complète que la personne se dit (« Tu as envoyé

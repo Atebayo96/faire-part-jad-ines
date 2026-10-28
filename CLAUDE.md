@@ -704,6 +704,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **Le texte (accroches, puis les trois images) se valide en chat avant tout rendu** (« avant d'envoyer tes trucs, il faut
     valider l'angle »). On commence petit : trois posts, on regarde ce que ça donne (`candidats.md` garde les textes validés
     en attente).
+    **Mise en page très simple, titre de journal** (même jour : « c'est sophistiqué mais le texte est petit, les gens ne vont
+    pas le lire ») : la feuille sur fond peint est abandonnée pour ces posts. Fond papier uni, texte énorme (`erreurs.py` :
+    DM Serif Display 122 px, explication Inter Tight 56 px), **une phrase par image** (une image par erreur), le mot clé
+    **surligné** en jaune, un fin « Save The Oui » sur la dernière image seulement. Pas d'obligation de reprendre les
+    couleurs des thèmes. Un seul post pour commencer (« on va juste en faire un, on va le faire bien ») : les 5 erreurs.
     Publication : le connecteur Higgsfield relie le compte TikTok (lien à ouvrir une fois) et dépose le carrousel dans les
     brouillons de l'application (`UPLOAD_TO_DRAFT`) : l'utilisateur n'a plus qu'à appuyer sur Publier.
 
