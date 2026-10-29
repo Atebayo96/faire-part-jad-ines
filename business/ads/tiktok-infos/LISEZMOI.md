@@ -9,6 +9,10 @@ ton faire-part de mariage. La 5, tout le monde la fait. #mariage #fairepart #mar
 même mise en page, une icône au trait sur une tache jaune en haut de chaque image, aucune image générée (`icones.py`,
 `node render.js repond`). Légende : « Tu as envoyé ton faire-part et personne ne t'a répondu ? Les 4 vraies raisons, et ce qui
 marche. #mariage #fairepart #rsvp #organisationmariage #mariage2027 #futuremariee ».
+**Troisième post, en iconographie : `out/choses/` (7 images)**, « 5 choses que j'ai mises dans mon faire-part » (itinéraire,
+menu, WhatsApp, date limite, programme ; `icones.py`, `node render.js choses`). Légende : « 5 choses que j'ai mises dans mon
+faire-part de mariage, à mettre absolument. Elles m'ont évité cinquante messages la dernière semaine. #mariage #fairepart
+#mariage2027 #organisationmariage #futuremariee #astucesmariage ».
 La version « feuille sur fond peint » ci-dessous (texte plus petit, « les gens ne vont pas le lire ») reste pour mémoire.
 
 Des posts fixes qui **donnent une info utile** aux futurs mariés, sans vendre : la page ne doit pas être qu'une suite de pubs.

@@ -719,7 +719,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     mais en haut une grande icône au trait (SVG écrit dans le fichier, trait 7, bouts ronds, encre `#1e1a17`) sur une tache
     jaune ; une icône par image, qui dit la phrase (téléphone à point d'interrogation, calendrier barré, famille, bulle de
     pensée, liste cochée, marque-page). Noto Color Emoji est installé si un emoji est voulu. Aucune génération.
-    Premier post en ce style : « Tu as envoyé ton faire-part et personne ne t'a répondu ? » (`out/repond/`, 7 images).
+    Premier post en ce style : « Tu as envoyé ton faire-part et personne ne t'a répondu ? » (`out/repond/`, 7 images) ; puis
+    « 5 choses que j'ai mises dans mon faire-part » (`out/choses/`, 29 octobre 2026 : « direct visuel, bien expliqué, bien
+    visible » : une icône qui montre la chose, épingle d'itinéraire, assiette, bulle « Oui ! », calendrier coché, horloge).
+    « faire-part » ne se coupe jamais en fin de ligne (trait d'union insécable dans `typo()`).
     **L'accroche est la problématique, énorme** (même jour : « il faut que ce soit le hook, la problématique bien lisible,
     bien visible ») : sur la première image, l'icône ou la photo est réduite (560 px de haut) et la phrase prend le reste
     (140 px, réduite jusqu'à 84 px seulement si elle ne tient pas), centrée verticalement ; classe `hook` dans les deux

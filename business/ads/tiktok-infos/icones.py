@@ -2,7 +2,7 @@
 """Posts en iconographie (28 octobre 2026 : « pour les prochains posts, pas d'images réelles : des emojis, des symboles, des
 icônes, des trucs qu'on peut faire gratuitement sans générer d'images »). Même mise en page que erreurs.py (titre de journal,
 une phrase par image, mot clé surligné), mais en haut une grande icône dessinée au trait (SVG, dans le fichier, aucune image
-générée) sur une tache jaune. python3 icones.py && node render.js repond"""
+générée) sur une tache jaune. python3 icones.py && node render.js <repond|choses>"""
 import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', 'landing'))
@@ -18,10 +18,16 @@ I = dict(
  thought='<path d="M70 140c-30 0-45-20-45-45 0-30 25-50 60-50 10-20 40-30 65-15 25 10 30 40 15 60 15 10 10 45-25 45-20 0-30-5-40-10-10 10-20 15-30 15z"/><circle cx="55" cy="160" r="8"/><circle cx="35" cy="180" r="5"/><path d="M80 90l15 15 30-35"/>',
  check='<rect x="35" y="25" width="130" height="150" rx="14"/><path d="M60 70l12 12 24-26M60 115l12 12 24-26M110 70h35M110 115h35"/>',
  bookmark='<path d="M55 25h90v150l-45-32-45 32z"/>',
+ pin='<path d="M100 180c-35-45-60-75-60-105a60 60 0 0 1 120 0c0 30-25 60-60 105z"/><circle cx="100" cy="75" r="22"/><path d="M30 185c20-10 40-5 60 5s40 15 80-5" stroke-dasharray="3 14"/>',
+ plate='<circle cx="100" cy="100" r="62"/><circle cx="100" cy="100" r="38"/><path d="M22 40v45M12 40v30q0 15 10 15t10-15V40M22 85v75"/><path d="M178 40c-14 10-14 50 0 60v60"/>',
+ bubble='<path d="M40 150l-15 30 40-18h65c22 0 40-18 40-40V70c0-22-18-40-40-40H70C48 30 30 48 30 70v45c0 14 4 25 10 35z"/><text x="100" y="112" text-anchor="middle" font-family="Inter Tight" font-weight="600" font-size="46" fill="#1e1a17" stroke="none">Oui !</text>',
+ calcheck='<rect x="30" y="45" width="140" height="130" rx="12"/><path d="M30 80h140M65 30v30M135 30v30"/><path d="M70 125l20 20 40-45"/>',
+ clock='<circle cx="100" cy="100" r="70"/><path d="M100 55v45l32 20"/><path d="M100 40v8M160 100h-8M100 160v-8M40 100h8"/>',
 )
 def svg(k): return f'<svg viewBox="0 0 200 200" fill="none" stroke="#1e1a17" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">{I[k]}</svg>'
 
-SLIDES = [
+POSTS = {}
+POSTS['repond'] = [
  dict(k="Faire-part de mariage", h="Tu as envoyé ton faire-part et <i>personne ne t'a répondu ?</i>", p="Ce n'est pas qu'ils s'en fichent.", ic="silence", go=True),
  dict(n=1, t="Raison 1 sur 4", h="Ils ne savent pas <i>comment répondre.</i>", p="Pas de numéro, pas de lien, pas de carton : alors ils attendent.", ic="phoneq"),
  dict(n=2, t="Raison 2 sur 4", h="Il n'y a pas de <i>date limite.</i>", p="Sans date, c'est « plus tard ». Et plus tard, c'est jamais.", ic="calendar"),
@@ -29,6 +35,15 @@ SLIDES = [
  dict(n=4, t="Raison 4 sur 4", h="Ils pensent que <i>tu sais déjà</i> qu'ils viennent.", p="Ta sœur, ton meilleur ami, tes parents. Eux aussi doivent répondre.", ic="thought"),
  dict(k="Ce qui marche", h="Une date limite. <i>Une seule</i> façon de répondre.", p="Demande le menu en même temps. Et relance en message privé, pas dans un groupe.", ic="check"),
  dict(k="À retenir", h="<i>Enregistre</i> ce post pour le jour où tu relances.", p="Tu as une autre astuce ? Dis‑la en commentaire.", ic="bookmark", end=True),
+]
+POSTS['choses'] = [
+ dict(k="Vécu", h="<i>5 choses</i> que j'ai mises dans mon faire-part.", p="À mettre absolument. Elles m'ont évité cinquante messages la dernière semaine.", ic="check", go=True),
+ dict(n=1, t="Chose 1 sur 5", h="Le lien vers <i>l'itinéraire.</i>", p="Un bouton, et le GPS s'ouvre. Personne ne m'a appelée pour l'adresse.", ic="pin"),
+ dict(n=2, t="Chose 2 sur 5", h="Le choix du <i>menu</i> dans la réponse.", p="Viande, poisson, végétarien. Le traiteur a eu ses chiffres tout de suite.", ic="plate"),
+ dict(n=3, t="Chose 3 sur 5", h="Un numéro <i>WhatsApp</i> pour répondre.", p="Mes tantes ne remplissent pas de formulaire. Elles ont répondu en une minute.", ic="bubble"),
+ dict(n=4, t="Chose 4 sur 5", h="La <i>date limite</i> de réponse.", p="Écrite en gros. J'ai pu relancer sans gêne ceux qui l'avaient dépassée.", ic="calcheck"),
+ dict(n=5, t="Chose 5 sur 5", h="Le <i>programme</i> de la journée.", p="Cérémonie 15 h, cocktail 17 h, dîner 20 h. Plus de « ça commence à quelle heure ? ».", ic="clock"),
+ dict(k="À retenir", h="Un faire-part, ce n'est pas que <i>joli.</i>", p="C'est ce qui évite les questions. Enregistre ce post pour quand tu écriras le tien.", ic="bookmark", end=True),
 ]
 
 def typo(t):
@@ -73,6 +88,7 @@ def html(s, i, n):
 
 if __name__ == '__main__':
     os.makedirs(os.path.join(HERE, 'html'), exist_ok=True)
-    for i, s in enumerate(SLIDES, 1):
-        open(os.path.join(HERE, 'html', f'repond-{i}.html'), 'w', encoding='utf-8').write(html(s, i, len(SLIDES)))
-    print('html:', len(SLIDES))
+    for slug, SL in POSTS.items():
+        for i, s in enumerate(SL, 1):
+            open(os.path.join(HERE, 'html', f'{slug}-{i}.html'), 'w', encoding='utf-8').write(html(s, i, len(SL)))
+        print(slug, len(SL))
