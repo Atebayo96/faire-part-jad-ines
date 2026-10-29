@@ -37,9 +37,9 @@ POSTS['repond'] = [
  dict(k="À retenir", h="<i>Enregistre</i> ce post pour le jour où tu relances.", p="Tu as une autre astuce ? Dis‑la en commentaire.", ic="bookmark", end=True),
 ]
 POSTS['types'] = [
- dict(n=1, t="Nos faire-part · 1 sur 3", h="La Carte. <i>29 €</i>", p="Tout ton faire-part sur une seule feuille, en image et en PDF. Tu l'envoies sur WhatsApp ou tu l'imprimes.", cap=dict(file="carte", full=True), end=True),
- dict(n=2, t="Nos faire-part · 2 sur 3", h="La Page unique. <i>Dès 59 €</i>", p="La même feuille, en ligne, avec un lien. Itinéraire, agenda, et le bouton Répondre en option.", cap=dict(file="page", full=True), end=True),
- dict(n=3, t="Nos faire-part · 3 sur 3", h="Le Faire-part animé. <i>Dès 99 €</i>", p="Une enveloppe qui s'ouvre, un écran par moment, et les réponses arrivent sur ton tableau de bord.", cap=dict(file="itineraire", full=True), end=True),
+ dict(n=1, t="Nos faire-part · 1 sur 3", h="La Carte. <i>29 €</i>", p="Une image. Tu l'envoies sur WhatsApp, c'est tout.", cap=dict(file="carte", full=True), end=True),
+ dict(n=2, t="Nos faire-part · 2 sur 3", h="La Page unique. <i>Dès 59 €</i>", p="Un lien. Tes invités répondent dessus, tu vois qui vient.", cap=dict(file="page-reponse", full=True), end=True),
+ dict(n=3, t="Nos faire-part · 3 sur 3", h="Le Faire-part animé. <i>Dès 99 €</i>", p="Une enveloppe qui s'ouvre, un écran par moment.", cap=dict(file="itineraire", full=True), end=True),
 ]
 POSTS['choses'] = [
  dict(k="Faire-part de mariage", h="<i>5 choses</i> à mettre absolument dans ton faire-part.", p="Elles t'éviteront cinquante messages la dernière semaine.", ic="check", go=True),
