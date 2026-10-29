@@ -736,6 +736,11 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     gabarits.
     Publication : le connecteur Higgsfield relie le compte TikTok (lien à ouvrir une fois) et dépose le carrousel dans les
     brouillons de l'application (`UPLOAD_TO_DRAFT`) : l'utilisateur n'a plus qu'à appuyer sur Publier.
+    **Compte TikTok relié le 29 octobre 2026** (connecteur `tiktok`, actif). Chemin : `media_upload` (PUT des JPG depuis le
+    dépôt, puis `media_confirm`) → `tiktok_prepare_publish` (PHOTO, `UPLOAD_TO_DRAFT`, légende, couverture = image 1).
+    **La confirmation finale est un formulaire (widget MCP) qui ne s'affiche pas dans Claude Code** : depuis une session
+    Claude Code, on s'arrête à la préparation et on donne à l'utilisateur les URL hébergées des images, pour finir dans
+    l'app Claude (claude.ai) où le formulaire apparaît, ou dans TikTok Studio. Jamais de consentement déduit du chat.
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un
