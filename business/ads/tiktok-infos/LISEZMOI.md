@@ -47,12 +47,35 @@ l'encre et des accents ≥ 4,5:1 sur le papier le plus sombre.
 | `out/5-erreurs/` | doucefrance | Tu prépares ton mariage ? Les 5 erreurs à éviter sur ton faire-part. #mariage #fairepart #mariage2027 #organisationmariage #futuremariee #erreursaeviter |
 | `out/5-choses/` | nuits | 5 choses que j'ai mises dans mon faire-part et qui ont sauvé mon mariage. #mariage #fairepart #mariage2027 #organisationmariage #futuremariee #astucesmariage |
 
-## Publier depuis Claude (connecteur Higgsfield)
+## Publier depuis Claude : notre outil TikTok (29 octobre 2026)
 
-Le connecteur Higgsfield publie sur TikTok des carrousels photo (JPEG, 1080 × 1920, jusqu'à 35 images) : une fois le
-compte relié (lien d'autorisation à ouvrir, valable 10 minutes, `tiktok_connect`), les images sont déposées chez
-Higgsfield puis un formulaire de publication est proposé ; mode `UPLOAD_TO_DRAFT` = le post arrive **dans les brouillons
-de l'application TikTok**, il ne reste qu'à appuyer sur Publier. Pas d'heure programmable par ce chemin.
+Plus de Higgsfield ni de TikTok Studio (« je veux faire le nôtre », « un truc très simple qui permet de publier quand on
+veut »). Tout est dans le site : `api/_tiktok.js` (API officielle TikTok : Login Kit + Content Posting), `api/tiktok.js`
+(connexion, dépôt des fichiers, file des posts), `api/tiktok-cron.js` (toutes les 10 minutes, publie ce qui est dû et relit
+l'état de ce qui est parti). Côté Claude : `business/tools/tiktok.mjs` en ligne de commande et le serveur MCP
+`tiktok-mcp.mjs` (`.mcp.json` : outils `tiktok_statut`, `tiktok_connecter`, `tiktok_programmer`, `tiktok_publier_maintenant`,
+`tiktok_liste`, `tiktok_publier`, `tiktok_retirer`, `tiktok_verifier`). Il faut `SCEAU_SECRET` dans l'environnement de la session.
+
+```
+node business/tools/tiktok.mjs programmer business/ads/tiktok-infos/out/repond --date 2026-11-02 --heure 12:00 \
+  --titre "Tu as envoyé ton faire-part et personne ne t'a répondu ?" --legende "… #mariage #fairepart"
+node business/tools/tiktok.mjs programmer business/ads/feuille/save-the-oui-feuille-trait-9x16.mp4 --maintenant --ia --legende "…"
+node business/tools/tiktok.mjs liste | publier <id> | retirer <id> | verifier | statut
+```
+
+Un dossier = un carrousel (images dans l'ordre des numéros, 35 au plus, titre 90 caractères, légende 4000) ; un `.mp4` = une
+vidéo (légende 2200). `--brouillon` dépose dans l'application TikTok au lieu de publier ; `--prive` = visible par nous seuls ;
+`--ia` pose l'étiquette « généré par IA » (vidéos faites avec les images des thèmes : oui ; posts en icônes : non). Les
+fichiers sont déposés dans le stockage privé du site et servis à TikTok sur `/tm/<clé>` (clé imprévisible), par morceaux de
+3 Mo pour les vidéos. Heures en heure de Paris. Un post en échec garde son erreur dans la liste ; `publier <id>` le relance.
+
+**Ce qui dépend de TikTok** (réglé une fois) : une app sur developers.tiktok.com avec Login Kit et Content Posting API,
+retour OAuth `https://savetheoui.fr/tiktok/retour`, domaine `savetheoui.fr` vérifié dans « URL properties » (TikTok tire les
+fichiers par URL) ; sa clé et son secret sur Vercel (`TIKTOK_CLIENT_KEY`, `TIKTOK_CLIENT_SECRET`), jamais dans le dépôt.
+Tant que l'app n'est **pas auditée**, un post direct ne peut être que **privé** : l'outil le fait tout seul et le note sur le
+post ; les brouillons marchent. L'audit (quelques jours à deux semaines) se demande dans le portail avec une courte vidéo de
+démo de l'outil. Recette locale (faux TikTok) jouée le 29 octobre 2026 : connexion, carrousel, vidéo par morceaux en
+brouillon, cron, renouvellement du jeton, refus sans clé.
 
 ## Idées pour la suite (à écrire dans `posts.py`)
 

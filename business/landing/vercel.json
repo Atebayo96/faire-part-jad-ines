@@ -1,10 +1,15 @@
 {
   "regions": ["cdg1"],
   "cleanUrls": true,
-  "crons": [{ "path": "/api/purge", "schedule": "0 4 * * *" }],
+  "crons": [
+    { "path": "/api/purge", "schedule": "0 4 * * *" },
+    { "path": "/api/tiktok-cron", "schedule": "*/10 * * * *" }
+  ],
   "rewrites": [
     { "source": "/d/:slug", "destination": "/api/page?s=:slug" },
-    { "source": "/d/:slug/", "destination": "/api/page?s=:slug" }
+    { "source": "/d/:slug/", "destination": "/api/page?s=:slug" },
+    { "source": "/tiktok/retour", "destination": "/api/tiktok?action=callback" },
+    { "source": "/tm/:key", "destination": "/api/tiktok?media=:key" }
   ],
   "headers": [
     { "source": "/d/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },

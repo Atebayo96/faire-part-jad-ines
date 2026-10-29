@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "mcp__Higgsfield",
-      "mcp__Higgsfield__*"
+      "mcp__Higgsfield__*",
+      "mcp__tiktok",
+      "mcp__tiktok__*"
     ]
   },
   "extraKnownMarketplaces": {

@@ -741,6 +741,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **La confirmation finale est un formulaire (widget MCP) qui ne s'affiche pas dans Claude Code** : depuis une session
     Claude Code, on s'arrête à la préparation et on donne à l'utilisateur les URL hébergées des images, pour finir dans
     l'app Claude (claude.ai) où le formulaire apparaît, ou dans TikTok Studio. Jamais de consentement déduit du chat.
+    **Remplacé le 29 octobre 2026 par notre outil TikTok** (« je veux pas passer par Higgsfield, je veux faire le nôtre »,
+    « un truc très simple qui permet de publier quand on veut ») : l'API officielle de TikTok, appelée par le site
+    (`api/_tiktok.js`, `api/tiktok.js`, `api/tiktok-cron.js` toutes les 10 minutes), une file de posts dans le stockage
+    privé, les fichiers servis à TikTok sur `/tm/<clé>`, et pour Claude `business/tools/tiktok.mjs` (programmer, publier
+    maintenant, liste, retirer, vérifier) et le serveur MCP `tiktok-mcp.mjs` (`.mcp.json`). Réglages : `TIKTOK_CLIENT_KEY`
+    et `TIKTOK_CLIENT_SECRET` sur Vercel, `SCEAU_SECRET` dans l'environnement de la session ; retour OAuth
+    `https://savetheoui.fr/tiktok/retour`, domaine vérifié dans l'app TikTok. Tant que l'app n'est pas auditée par TikTok,
+    un post direct ne peut être que privé (l'outil le fait et le note). Détail : `business/ads/tiktok-infos/LISEZMOI.md`.
+    Ni Higgsfield ni TikTok Studio pour publier.
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un

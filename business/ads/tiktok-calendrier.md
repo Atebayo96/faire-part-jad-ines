@@ -31,8 +31,8 @@ TikTok Studio (https://www.tiktok.com/tiktokstudio/upload?from=webapp&tab=video)
 
 Ensuite : republier dans le même ordre, ou rendre de nouvelles vidéos (`LISEZMOI.md`).
 
-## Automatiser plus tard
+## Automatiser : notre outil (29 octobre 2026)
 
-Le connecteur Higgsfield de Claude peut publier sur TikTok (compte à relier une fois par un lien d'autorisation,
-puis chaque vidéo passe par un formulaire de publication à valider). Il ne programme pas une heure de
-publication : pour « une par jour à 12 h », TikTok Studio reste le bon outil.
+Plus besoin de TikTok Studio : `node business/tools/tiktok.mjs programmer <fichier.mp4> --date 2026-11-04 --heure 12:00 --ia
+--legende "…"` pour chaque ligne du tableau, sans limite des 10 jours, et le site publie à l'heure (voir
+`tiktok-infos/LISEZMOI.md`, « notre outil TikTok »). Demande à Claude : « programme les dix vidéos à partir du 4 novembre ».
