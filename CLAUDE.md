@@ -723,6 +723,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     « 5 choses que j'ai mises dans mon faire-part » (`out/choses/`, 29 octobre 2026 : « direct visuel, bien expliqué, bien
     visible » : une icône qui montre la chose, épingle d'itinéraire, assiette, bulle « Oui ! », calendrier coché, horloge).
     « faire-part » ne se coupe jamais en fin de ligne (trait d'union insécable dans `typo()`).
+    **Des captures de nos vrais faire-part dans les images** (29 octobre 2026 : « l'idée c'est que ce soit visuel, et c'est là
+    qu'on peut mettre des captures d'écran de nos faire-part ») : `captures.js` filme la démo Giulia & Hugo en local (site sur
+    8765, rideau et roue passés, mention démo masquée, formulaire rempli : Sarah Martin, présente, menu Poisson) et sort
+    `caps/<écran>.png` (iPhone ×3) ; dans `icones.py`, une image peut porter `cap` (fichier, décalage `off`, `box` de
+    l'élément en pixels de la capture) : un téléphone noir en haut, **zoomé** sur l'élément (760 px de large pour 1170), avec
+    un cadre jaune autour de la chose dont on parle (Itinéraire, programme, « Avant le 1er juillet », le menu, WhatsApp).
+    L'accroche : « 5 choses à mettre absolument dans ton faire-part. »
     **L'accroche est la problématique, énorme** (même jour : « il faut que ce soit le hook, la problématique bien lisible,
     bien visible ») : sur la première image, l'icône ou la photo est réduite (560 px de haut) et la phrase prend le reste
     (140 px, réduite jusqu'à 84 px seulement si elle ne tient pas), centrée verticalement ; classe `hook` dans les deux

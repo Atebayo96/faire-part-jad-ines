@@ -37,12 +37,12 @@ POSTS['repond'] = [
  dict(k="À retenir", h="<i>Enregistre</i> ce post pour le jour où tu relances.", p="Tu as une autre astuce ? Dis‑la en commentaire.", ic="bookmark", end=True),
 ]
 POSTS['choses'] = [
- dict(k="Vécu", h="<i>5 choses</i> que j'ai mises dans mon faire-part.", p="À mettre absolument. Elles m'ont évité cinquante messages la dernière semaine.", ic="check", go=True),
- dict(n=1, t="Chose 1 sur 5", h="Le lien vers <i>l'itinéraire.</i>", p="Un bouton, et le GPS s'ouvre. Personne ne m'a appelée pour l'adresse.", ic="pin"),
- dict(n=2, t="Chose 2 sur 5", h="Le choix du <i>menu</i> dans la réponse.", p="Viande, poisson, végétarien. Le traiteur a eu ses chiffres tout de suite.", ic="plate"),
- dict(n=3, t="Chose 3 sur 5", h="Un numéro <i>WhatsApp</i> pour répondre.", p="Mes tantes ne remplissent pas de formulaire. Elles ont répondu en une minute.", ic="bubble"),
- dict(n=4, t="Chose 4 sur 5", h="La <i>date limite</i> de réponse.", p="Écrite en gros. J'ai pu relancer sans gêne ceux qui l'avaient dépassée.", ic="calcheck"),
- dict(n=5, t="Chose 5 sur 5", h="Le <i>programme</i> de la journée.", p="Cérémonie 15 h, cocktail 17 h, dîner 20 h. Plus de « ça commence à quelle heure ? ».", ic="clock"),
+ dict(k="Faire-part de mariage", h="<i>5 choses</i> à mettre absolument dans ton faire-part.", p="Elles t'éviteront cinquante messages la dernière semaine.", ic="check", go=True),
+ dict(n=1, t="Chose 1 sur 5", h="Le bouton <i>Itinéraire.</i>", p="Un geste, et le GPS s'ouvre sur le lieu. Personne ne t'appelle pour l'adresse.", cap=dict(file="itineraire", off=350, box=[78,822,1081,964])),
+ dict(n=2, t="Chose 2 sur 5", h="Le <i>programme</i> de la journée.", p="Cérémonie, apéritif, dîner, soirée, avec les heures. Plus de « ça commence à quelle heure ? ».", cap=dict(file="programme", off=390, box=[89,460,1081,1400])),
+ dict(n=3, t="Chose 3 sur 5", h="La <i>date limite</i> pour répondre.", p="Écrite en grand, juste au-dessus du bouton. Tu peux relancer sans gêne.", cap=dict(file="deadline", off=100, box=[220,390,960,720])),
+ dict(n=4, t="Chose 4 sur 5", h="Le choix du <i>menu</i> dans la réponse.", p="Viande, poisson, végétarien : chacun choisit. Le traiteur a ses chiffres tout de suite.", cap=dict(file="menu", off=170, box=[60,603,1110,808])),
+ dict(n=5, t="Chose 5 sur 5", h="Un bouton <i>WhatsApp</i> pour répondre.", p="Pour ceux qui ne remplissent jamais un formulaire. Tes tantes répondent en une minute.", cap=dict(file="whatsapp", off=1455, box=[60,2120,1110,2255])),
  dict(k="À retenir", h="Un faire-part, ce n'est pas que <i>joli.</i>", p="C'est ce qui évite les questions. Enregistre ce post pour quand tu écriras le tien.", ic="bookmark", end=True),
 ]
 
@@ -57,6 +57,10 @@ html,body{width:1080px;height:1920px;overflow:hidden}
 .ic{position:absolute;left:0;top:0;width:1080px;height:860px;display:grid;place-items:center}
 .ic .blob{position:absolute;width:560px;height:520px;border-radius:48% 52% 46% 54% / 55% 45% 55% 45%;background:#f6d66a;transform:rotate(-8deg)}
 .ic svg{position:relative;width:420px;height:420px}
+.ph{position:absolute;left:50%;top:70px;width:800px;height:740px;margin-left:-400px;border-radius:64px;background:#1e1a17;padding:20px;box-shadow:0 30px 60px rgba(0,0,0,.25)}
+.ph .win{position:relative;width:760px;height:700px;border-radius:46px;overflow:hidden;background:#fff}
+.ph .win img{position:absolute;left:0;width:760px}
+.ph .hl{position:absolute;border:7px solid #f6d66a;border-radius:22px;box-shadow:0 0 0 4px rgba(30,26,23,.08)}
 .in{position:absolute;left:84px;right:84px;top:880px;bottom:380px;display:flex;flex-direction:column;justify-content:flex-start;gap:34px}
 .k{font:600 30px/1 "Inter Tight",sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#8a4a2a}
 .n{display:inline-flex;align-items:center;gap:18px;font:600 30px/1 "Inter Tight",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#1e1a17}
@@ -82,7 +86,12 @@ def html(s, i, n):
     body = f'<h1>{typo(s["h"])}</h1>' + (f'<p>{typo(s["p"])}</p>' if s.get('p') else '')
     go = '<div class="go">Glisse <i>→</i></div>' if s.get('go') else ''
     sig = '<div class="sig"><span>SAVE THE</span><b>Oui</b></div>' if s.get('end') else ''
-    ic = f'<div class="ic"><div class="blob"></div>{svg(s["ic"])}</div>'
+    if s.get('cap'):
+        c = s['cap']; k = 760 / 1170; off = c.get('off', 0); x0, y0, x1, y1 = c['box']
+        hl = f'<div class="hl" style="left:{x0*k-10:.0f}px;top:{(y0-off)*k-10:.0f}px;width:{(x1-x0)*k+20:.0f}px;height:{(y1-y0)*k+20:.0f}px"></div>'
+        ic = f'<div class="ph"><div class="win"><img src="file://{HERE}/caps/{c["file"]}.png" style="top:{-off*k:.0f}px">{hl}</div></div>'
+    else:
+        ic = f'<div class="ic"><div class="blob"></div>{svg(s["ic"])}</div>'
     fit = '<script>document.fonts.ready.then(()=>{const b=document.querySelector(".in"),h=b.querySelector("h1");let fs=parseFloat(getComputedStyle(h).fontSize);while(b.scrollHeight>b.clientHeight&&fs>84){fs-=2;h.style.fontSize=fs+"px"}})</script>'
     return f'<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>{FONTS}{CSS}</style></head><body><div class="ad{' hook' if s.get('go') else ''}">{ic}<div class="in">{top}{body}</div>{go}{sig}<div class="pg">{i} / {n}</div></div>{fit}</body></html>'
 
