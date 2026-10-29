@@ -36,6 +36,11 @@ POSTS['repond'] = [
  dict(k="Ce qui marche", h="Une date limite. <i>Une seule</i> façon de répondre.", p="Demande le menu en même temps. Et relance en message privé, pas dans un groupe.", ic="check"),
  dict(k="À retenir", h="<i>Enregistre</i> ce post pour le jour où tu relances.", p="Tu as une autre astuce ? Dis‑la en commentaire.", ic="bookmark", end=True),
 ]
+POSTS['types'] = [
+ dict(n=1, t="Nos faire-part · 1 sur 3", h="La Carte. <i>29 €</i>", p="Tout ton faire-part sur une seule feuille, en image et en PDF. Tu l'envoies sur WhatsApp ou tu l'imprimes.", cap=dict(file="carte", full=True), end=True),
+ dict(n=2, t="Nos faire-part · 2 sur 3", h="La Page unique. <i>Dès 59 €</i>", p="La même feuille, en ligne, avec un lien. Itinéraire, agenda, et le bouton Répondre en option.", cap=dict(file="page", full=True), end=True),
+ dict(n=3, t="Nos faire-part · 3 sur 3", h="Le Faire-part animé. <i>Dès 99 €</i>", p="Une enveloppe qui s'ouvre, un écran par moment, et les réponses arrivent sur ton tableau de bord.", cap=dict(file="itineraire", full=True), end=True),
+]
 POSTS['choses'] = [
  dict(k="Faire-part de mariage", h="<i>5 choses</i> à mettre absolument dans ton faire-part.", p="Elles t'éviteront cinquante messages la dernière semaine.", ic="check", go=True),
  dict(n=1, t="Chose 1 sur 5", h="Le bouton <i>Itinéraire.</i>", p="Un geste, et le GPS s'ouvre sur le lieu. Personne ne t'appelle pour l'adresse.", cap=dict(file="itineraire", off=350, box=[78,822,1081,964])),
@@ -61,6 +66,10 @@ html,body{width:1080px;height:1920px;overflow:hidden}
 .ph .win{position:relative;width:760px;height:700px;border-radius:46px;overflow:hidden;background:#fff}
 .ph .win img{position:absolute;left:0;width:760px}
 .ph .hl{position:absolute;border:7px solid #f6d66a;border-radius:22px;box-shadow:0 0 0 4px rgba(30,26,23,.08)}
+.ph.full{width:440px;height:906px;top:30px;margin-left:-220px;border-radius:56px;padding:20px}
+.ph.full .win{width:400px;height:866px;border-radius:40px}
+.ph.full .win img{width:400px;top:0}
+.full-in .in{top:980px}
 .in{position:absolute;left:84px;right:84px;top:880px;bottom:380px;display:flex;flex-direction:column;justify-content:flex-start;gap:34px}
 .k{font:600 30px/1 "Inter Tight",sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#8a4a2a}
 .n{display:inline-flex;align-items:center;gap:18px;font:600 30px/1 "Inter Tight",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#1e1a17}
@@ -86,14 +95,16 @@ def html(s, i, n):
     body = f'<h1>{typo(s["h"])}</h1>' + (f'<p>{typo(s["p"])}</p>' if s.get('p') else '')
     go = '<div class="go">Glisse <i>→</i></div>' if s.get('go') else ''
     sig = '<div class="sig"><span>SAVE THE</span><b>Oui</b></div>' if s.get('end') else ''
-    if s.get('cap'):
+    if s.get('cap') and s['cap'].get('full'):
+        ic = f'<div class="ph full"><div class="win"><img src="file://{HERE}/caps/{s["cap"]["file"]}.png"></div></div>'
+    elif s.get('cap'):
         c = s['cap']; k = 760 / 1170; off = c.get('off', 0); x0, y0, x1, y1 = c['box']
         hl = f'<div class="hl" style="left:{x0*k-10:.0f}px;top:{(y0-off)*k-10:.0f}px;width:{(x1-x0)*k+20:.0f}px;height:{(y1-y0)*k+20:.0f}px"></div>'
         ic = f'<div class="ph"><div class="win"><img src="file://{HERE}/caps/{c["file"]}.png" style="top:{-off*k:.0f}px">{hl}</div></div>'
     else:
         ic = f'<div class="ic"><div class="blob"></div>{svg(s["ic"])}</div>'
     fit = '<script>document.fonts.ready.then(()=>{const b=document.querySelector(".in"),h=b.querySelector("h1");let fs=parseFloat(getComputedStyle(h).fontSize);while(b.scrollHeight>b.clientHeight&&fs>84){fs-=2;h.style.fontSize=fs+"px"}})</script>'
-    return f'<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>{FONTS}{CSS}</style></head><body><div class="ad{' hook' if s.get('go') else ''}">{ic}<div class="in">{top}{body}</div>{go}{sig}<div class="pg">{i} / {n}</div></div>{fit}</body></html>'
+    return f'<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>{FONTS}{CSS}</style></head><body><div class="ad{' hook' if s.get('go') else ''}{' full-in' if s.get('cap') and s['cap'].get('full') else ''}">{ic}<div class="in">{top}{body}</div>{go}{sig}<div class="pg">{i} / {n}</div></div>{fit}</body></html>'
 
 if __name__ == '__main__':
     os.makedirs(os.path.join(HERE, 'html'), exist_ok=True)

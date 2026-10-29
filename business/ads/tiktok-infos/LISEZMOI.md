@@ -14,6 +14,10 @@ par une **capture du vrai faire-part** (démo Giulia & Hugo, `node captures.js` 
 téléphone zoomé avec un cadre jaune sur l'élément (`icones.py`, `cap`, `node render.js choses`). Légende : « 5 choses à mettre absolument dans ton
 faire-part de mariage. Elles t'éviteront cinquante messages la dernière semaine. #mariage #fairepart
 #mariage2027 #organisationmariage #futuremariee #astucesmariage ».
+**Quatrième post : `out/types/` (3 images)**, nos trois faire-part, un par image avec le vrai produit en plein téléphone
+(`cap` en mode `full`) : la Carte 29 €, la Page unique dès 59 €, le Faire-part animé dès 99 €. Légende : « Trois façons de
+faire ton faire-part de mariage : la Carte, la Page unique, le Faire-part animé. Dès 29 €. #mariage #fairepart #mariage2027
+#organisationmariage #futuremariee #savetheoui ».
 La version « feuille sur fond peint » ci-dessous (texte plus petit, « les gens ne vont pas le lire ») reste pour mémoire.
 
 Des posts fixes qui **donnent une info utile** aux futurs mariés, sans vendre : la page ne doit pas être qu'une suite de pubs.
