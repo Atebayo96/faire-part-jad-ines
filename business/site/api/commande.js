@@ -8,7 +8,7 @@ import { save, readOne, ready, clean, id, newKey, keyHash, same } from './_store
 import { sanitize, priceOf } from './_fiche.js';
 import { publish, links } from './_publish.js';
 
-const NAMES = { essentiel: 'Essentiel', page: 'Page unique', carte: 'Carte' };
+const NAMES = { essentiel: 'Essentiel', page: 'Page unique', carte: 'Carte', std: 'Save the date' };
 const fake = () => process.env.SCEAU_LOCAL === '1' && process.env.SCEAU_STRIPE_FAKE === '1';
 const auto = () => ready() && (!!process.env.STRIPE_SECRET_KEY || fake());
 const origin = req => (req.headers['x-forwarded-proto'] || (process.env.SCEAU_LOCAL === '1' ? 'http' : 'https')) + '://' + (req.headers['x-forwarded-host'] || req.headers.host);
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
         mode: 'payment', customer_email: email, client_reference_id: ref, 'metadata[ref]': ref, allow_promotion_codes: 'true', locale: 'fr',
         'line_items[0][quantity]': '1', 'line_items[0][price_data][currency]': 'eur', 'line_items[0][price_data][unit_amount]': String(priceOf(plan, options)),
         'line_items[0][price_data][product_data][name]': `Faire-part Save The Oui · ${NAMES[plan]}${options && options.opening ? ' + ouverture' : ''}${options && options.reply ? ' + réponses' : ''} · ${inv.couple.join(' & ')}`,
-        success_url: back + '&session_id={CHECKOUT_SESSION_ID}', cancel_url: `${origin(req)}/creer/?plan=${plan}` });
+        success_url: back + '&session_id={CHECKOUT_SESSION_ID}', cancel_url: plan === 'std' ? `${origin(req)}/save-the-date/` : `${origin(req)}/creer/?plan=${plan}` });
       const c = await readOne(`commandes/${ref}.json`); c.session = s.id; await save(`commandes/${ref}.json`, c);
       return res.status(200).json({ url: s.url });
     } catch (e) { return res.status(502).json({ error: 'stripe' }); }
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
     const who = c.inv.couple.join(' & ');
     // la carte : pas de lien en ligne, la fiche revient à la page Merci qui dessine l'image et le PDF
     if (c.plan === 'carte') return res.status(200).json({ status: 'paid', plan: 'carte', couple: who, mailed: !!c.mailed, email: c.email, inv: c.inv });
-    const L = links(c.slug, origin(req));
+    const L = links(c.slug, origin(req), c.plan);
     if (c.plan === 'page' && !(c.options && c.options.reply)) delete L.dashboard;
     return res.status(200).json({ status: 'paid', plan: c.plan, slug: c.slug, couple: who, mailed: !!c.mailed, email: c.email, ...L });
   }

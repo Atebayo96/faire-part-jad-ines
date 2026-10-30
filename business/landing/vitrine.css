@@ -1175,3 +1175,17 @@
 .fl-two{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .fl-two .btn{height:auto;min-height:48px;padding:6px 8px;flex-direction:column;gap:1px;font-size:14px;line-height:1.2}
 .fl-two .btn small{font-size:12px;opacity:.8}
+
+  /* le save-the-date (19 €, 30 octobre 2026) : le lien de navigation (ordinateur seulement), le bandeau de l'accueil */
+  @media (max-width:720px){ nav .links a.nav-std{display:none!important} }
+  .std-new{display:inline-block;margin-bottom:14px;padding:6px 12px;border-radius:999px;background:var(--ink);color:#fff;font:600 13px/1 "Inter Tight",Inter,sans-serif;letter-spacing:.04em}
+  .std-ts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .std-t{display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:16px;text-decoration:none;color:var(--ink);background:#fff;transition:border-color .2s}
+  .std-t:hover{border-color:var(--ink)}
+  .std-t i{grid-row:span 2;font-style:normal;font-size:30px;line-height:44px;text-align:center}
+  .std-t b{font:600 16px/1.25 "Inter Tight",Inter,sans-serif}
+  .std-t span{font-size:14px;color:var(--muted);white-space:nowrap}
+  .std-band .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+  @media (max-width:600px){ .std-band .ctas .btn{flex:1 1 auto} }
+  @media (max-width:900px){ .std-ts{grid-template-columns:repeat(2,minmax(0,1fr))} }
+  @media (max-width:420px){ .std-t{grid-template-columns:34px 1fr;padding:12px;column-gap:8px} .std-t i{font-size:24px;line-height:34px} .std-t b{font-size:15px} }

@@ -1,0 +1,35 @@
+{
+ "demo": true,
+ "kind": "std",
+ "format": "std",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "std-chloe-nathan",
+ "theme": "dolcevita",
+ "couple": [
+  "Chloé",
+  "Nathan"
+ ],
+ "date": "2027-08-28T10:00",
+ "opening": "none",
+ "reply": true,
+ "palette": "#b5562f",
+ "paper": "coton",
+ "std": {
+  "anim": "billet",
+  "city": "Lisbonne"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "Le mariage",
+   "title": "Lisbonne",
+   "start": "2027-08-28T10:00",
+   "end": "2027-08-28T23:30"
+  }
+ ],
+ "rsvp": {
+  "title": "Serez-vous des nôtres ?"
+ }
+}

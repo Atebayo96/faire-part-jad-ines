@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Save the date animé, 19 € — Save The Oui</title>
+<meta name="description" content="Annoncez votre date de façon drôle : ticket à gratter, jackpot, carte d'embarquement, cadenas à code, pluie de cœurs… Un lien à envoyer sur WhatsApp, « Je serai là » et le tableau de bord compris. 19 €, en ligne dès le paiement.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Save the date animé, 19 € — Save The Oui">
+<meta property="og:description" content="Annoncez votre date de façon drôle : ticket à gratter, jackpot, carte d'embarquement, cadenas à code, pluie de cœurs… 19 €, en ligne dès le paiement.">
+<meta property="og:image" content="https://savetheoui.fr/og-sceau.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://savetheoui.fr/save-the-date/">
+<link rel="stylesheet" href="/polices/polices.css">
+<link rel="stylesheet" href="/vitrine.css">
+<link rel="stylesheet" href="/reveal.css">
+<link rel="stylesheet" href="/carte.css">
+<link rel="stylesheet" href="/std.css">
+<style>
+  /* la page du save-the-date (30 octobre 2026) : le formulaire à gauche, le vrai save-the-date dans un téléphone à droite
+     (au-dessus sur téléphone). Mêmes couleurs que la vitrine : noir, blanc, gris. */
+  .sd-top{padding:40px 0 8px;border-top:0}
+  .sd-top h1{font-size:clamp(34px,6vw,60px);max-width:13em}
+  .sd-top p.lead{max-width:34em;margin:16px 0 0;color:#444;font-size:18px;line-height:1.5}
+  .sd-tag{display:inline-block;margin-bottom:14px;padding:6px 12px;border-radius:999px;background:#0d0d0d;color:#fff;font:600 13px/1 "Inter Tight",Inter,sans-serif;letter-spacing:.04em}
+  .sd{padding:28px 0 72px;border-top:0}
+  .sd .grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:56px;align-items:start}
+  .sd-prev{position:sticky;top:76px;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .sd-phone{position:relative;width:340px;height:699px;border-radius:44px;background:#111;padding:10px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+  .sd-phone .std-scr{position:absolute;left:10px;top:10px;width:360px;height:740px;transform-origin:0 0;border-radius:36px;overflow:hidden auto;scrollbar-width:none;background:#3a2f26;display:flex;flex-direction:column}
+  .sd-phone .std-scr::-webkit-scrollbar{display:none}
+  .sd-again{height:44px;padding:0 18px;border:1px solid #0d0d0d;border-radius:999px;background:#fff;font:500 15px/1 Inter,sans-serif;cursor:pointer}
+  .sd-f h2{font-size:22px;letter-spacing:-.02em;margin:34px 0 12px;display:flex;align-items:baseline;gap:10px}
+  .sd-f h2:first-child{margin-top:0}
+  .sd-f h2 b{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#0d0d0d;color:#fff;font:600 14px/1 Inter,sans-serif;flex:none}
+  .sd-f label.f{display:block;font:500 14px/1.3 Inter,sans-serif;color:#333;margin:0 0 6px}
+  .sd-f input[type=text],.sd-f input[type=date],.sd-f input[type=email]{width:100%;height:50px;padding:0 14px;border:1px solid #cfcfcb;border-radius:10px;font:400 17px/1 Inter,sans-serif;color:#0d0d0d;background:#fff}
+  .sd-f input:focus{outline:2px solid #0d0d0d;outline-offset:1px}
+  .sd-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .sd-pick{display:grid;gap:10px}
+  .sd-pick button{position:relative;cursor:pointer;font:inherit;color:inherit;text-align:left}
+  .sd-pick button[aria-pressed=true]::after{content:"✓";position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:#0d0d0d;color:#fff;display:grid;place-items:center;font:600 13px/1 Inter,sans-serif}
+  .sd-pick.has button[aria-pressed=false]{opacity:.72}
+  .sd-th{grid-template-columns:repeat(5,1fr)}
+  .sd-th button{aspect-ratio:3/4;border:0;border-radius:12px;background:#ddd center/cover;padding:0;display:flex;align-items:flex-end;overflow:hidden}
+  .sd-th button span{display:block;width:100%;padding:8px 6px;background:#fff;font:500 13px/1.2 Inter,sans-serif;text-align:center}
+  .sd-co{display:flex;flex-wrap:wrap;gap:10px}
+  .sd-co button{width:44px;height:44px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px #cfcfcb;cursor:pointer}
+  .sd-co button[aria-pressed=true]{box-shadow:0 0 0 2px #0d0d0d}
+  .sd-an{grid-template-columns:repeat(2,1fr)}
+  .sd-an button{display:grid;grid-template-columns:40px 1fr;gap:4px 12px;align-items:start;padding:14px 38px 14px 14px;border:1px solid #dcdcd8;border-radius:14px;background:#fff}
+  .sd-an button i{grid-row:span 2;font-style:normal;font-size:28px;line-height:40px;text-align:center}
+  .sd-an button b{font:600 16px/1.25 "Inter Tight",Inter,sans-serif}
+  .sd-an button small{font-size:14px;line-height:1.4;color:#555}
+  .sd-an button[aria-pressed=true]{border-color:#0d0d0d}
+  .sd-buy{margin-top:34px;padding:24px;border-radius:18px;background:#f4f4f2}
+  .sd-buy .amount{font:500 44px/1 "Inter Tight",Inter,sans-serif;letter-spacing:-.03em}
+  .sd-buy ul{margin:14px 0 18px;padding:0;list-style:none;display:grid;gap:8px;font-size:16px}
+  .sd-buy li::before{content:"✓";display:inline-block;width:22px;font-weight:600}
+  .sd-buy form{display:grid;gap:12px}
+  .sd-buy .chk{display:grid;grid-template-columns:20px 1fr;gap:10px;font-size:13.5px;line-height:1.45;color:#333;align-items:start}
+  .sd-buy .chk input{width:18px;height:18px;margin:1px 0 0}
+  .sd-buy .btn{height:54px;border-radius:999px;font-size:17px;width:100%}
+  .sd-buy .err{margin:0;color:#a3141f;font-size:15px}
+  .sd-buy .note{margin:0;font-size:14px;color:#555}
+  .sd-see{display:none}
+  @media (max-width:900px){
+    .sd .grid{grid-template-columns:1fr;gap:28px}
+    .sd-prev{position:relative;top:0;order:-1}
+    .sd-th{grid-template-columns:repeat(3,1fr)}
+    .sd-an{grid-template-columns:1fr}
+    .sd-see{display:flex;position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:20;height:46px;align-items:center;padding:0 20px;border:0;border-radius:999px;background:#0d0d0d;color:#fff;font:500 15px/1 Inter,sans-serif;box-shadow:0 10px 24px -8px rgba(0,0,0,.5);cursor:pointer}
+    .sd-see[hidden]{display:none}
+  }
+  @media (max-width:420px){ .sd-row{grid-template-columns:1fr} }
+</style>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body data-page="std">
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="/"><span>Save the</span><b>Oui</b></a>
+    <div class="links">
+      <a href="/">Accueil</a><a href="/modeles/">Modèles</a><a href="/formules/">Formules</a><a class="nav-std" href="/save-the-date/" aria-current="page">Save the date</a><a href="/questions/">Questions</a>
+      <a class="btn solid" href="/creer/"><span>Créer votre faire-part</span><em>Créer</em></a>
+    </div>
+  </div>
+</nav>
+
+<section class="sd-top">
+  <div class="wrap">
+    <span class="sd-tag">Nouveau · 19 €</span>
+    <h1 class="h2">Le save-the-date qu'on a envie d'ouvrir.</h1>
+    <p class="lead">Vos invités grattent un ticket, déchirent une carte d'embarquement ou regardent des cœurs tomber du ciel… et découvrent votre date. Un lien à envoyer sur WhatsApp, en ligne dès le paiement.</p>
+  </div>
+</section>
+
+<section class="sd">
+  <div class="wrap grid">
+    <div class="sd-f" id="sdForm">
+      <h2><b>1</b>Vous deux</h2>
+      <div class="sd-row">
+        <div><label class="f" for="n1">Premier prénom</label><input type="text" id="n1" maxlength="40" value="Emma" autocomplete="off"></div>
+        <div><label class="f" for="n2">Second prénom</label><input type="text" id="n2" maxlength="40" value="Louis" autocomplete="off"></div>
+      </div>
+      <div class="sd-row">
+        <div><label class="f" for="dt">La date</label><input type="date" id="dt" value="2027-06-12"></div>
+        <div><label class="f" for="ct">La ville</label><input type="text" id="ct" maxlength="60" value="Ravello, Italie" placeholder="Ex. : Lyon" autocomplete="off"></div>
+      </div>
+
+      <h2><b>2</b>Comment l'annoncer ?</h2>
+      <div class="sd-pick sd-an" id="pAn"></div>
+
+      <h2><b>3</b>Le style</h2>
+      <div class="sd-pick sd-th" id="pTh"></div>
+      <label class="f" style="margin-top:16px">La couleur</label>
+      <div class="sd-co" id="pCo"></div>
+
+      <div class="sd-buy" id="buy">
+        <p class="label">Save the date</p>
+        <div class="amount">19 €</div>
+        <ul>
+          <li>Un lien à envoyer sur WhatsApp, par SMS ou par e-mail</li>
+          <li>L'animation choisie, puis la date, la ville et « Ajouter à l'agenda »</li>
+          <li>« Je serai là » : vous voyez qui pense venir, dans votre tableau de bord</li>
+          <li>Modifiable à tout moment, le lien ne change pas</li>
+        </ul>
+        <form id="ordForm" novalidate onsubmit="return false">
+          <input type="email" id="oEmail" placeholder="Votre e-mail (pour le reçu et vos liens)" autocomplete="email" aria-label="E-mail">
+          <label class="chk"><input type="checkbox" id="oCgv"><span>J'ai lu et j'accepte les <a href="/cgv/" target="_blank" rel="noopener">conditions de vente</a>.</span></label>
+          <label class="chk"><input type="checkbox" id="oWaiver"><span>Je demande que mon save-the-date soit mis en ligne dès mon paiement, et je reconnais perdre mon droit de rétractation dès ce commencement (article L221-28 du Code de la consommation).</span></label>
+          <p class="err" id="oErr" hidden></p>
+          <button class="btn solid" type="button" id="oPay">Commander · 19 €</button>
+          <p class="note" id="oNote">Paiement sécurisé par Stripe. Votre save-the-date est en ligne dès le paiement, et vos liens arrivent par e-mail.</p>
+        </form>
+      </div>
+    </div>
+
+    <div class="sd-prev" id="prev">
+      <div class="sd-phone" id="phone"><div class="std-scr" id="scr"></div></div>
+      <button type="button" class="sd-again" id="again">↺ Rejouer l'animation</button>
+    </div>
+  </div>
+</section>
+<button type="button" class="sd-see" id="see" hidden>Voir l'aperçu ↑</button>
+
+<footer>
+  <div class="wrap"><span class="logo small"><span>Save the</span><b>Oui</b> · Paris</span><span class="legal"><a href="/contact/">Nous écrire</a> · <a href="/mentions-legales/">Mentions légales</a> · <a href="/cgv/">CGV</a> · <a href="/confidentialite/">Confidentialité</a></span></div>
+</footer>
+
+<script src="/themes.js"></script>
+<script src="/reveal.js"></script>
+<script src="/carte.js"></script>
+<script src="/std.js"></script>
+<script>window.SCEAU_DEMOS=[{"slug": "yasmine-karim", "theme": "nuits", "couple": "Yasmine & Karim", "special": "Lieux réels peints et animés", "events": 2, "music": "scheherazade", "thumb": "/d/yasmine-karim/thumb.webp"}, {"slug": "alice-theo", "theme": "aquarelle", "couple": "Alice & Théo", "opening": "env", "layout": "pages", "reveal": null, "kind": null, "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "/img/themes/aquarelle-2.webp"}, {"slug": "amira-youssef", "theme": "desert", "couple": "Amira & Youssef", "opening": "cur", "layout": "pages", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/desert-2.webp"}, {"slug": "ananya-rohan", "theme": "bollywood", "couple": "Ananya & Rohan", "opening": "cur", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "raga", "thumb": "/img/themes/bollywood-2.webp"}, {"slug": "anastasia-nikolai", "theme": "gzhel", "couple": "Anastasia & Nikolaï", "opening": "env", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "valse", "thumb": "/img/themes/gzhel-2.webp"}, {"slug": "camille-antoine", "theme": "doucefrance", "couple": "Camille & Antoine", "opening": "door", "layout": "pages", "reveal": "scratch", "kind": null, "events": 2, "families": false, "lang": "fr", "music": "valse", "thumb": "/img/themes/doucefrance-2.webp"}, {"slug": "carte-camille-antoine", "theme": "doucefrance", "couple": "Camille & Antoine", "opening": "none", "layout": "pages", "reveal": null, "kind": "page", "events": 2, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/doucefrance-2.webp", "fiche": {"demo": true, "kind": "page", "format": "page", "tz": "Europe/Paris", "countdown": "non", "music": "none", "slug": "carte-camille-antoine", "theme": "doucefrance", "couple": ["Camille", "Antoine"], "date": "2027-07-03T16:00", "opening": "none", "reply": false, "palette": "#6f63a3", "intro": {"eyebrow": "Nous vous invitons"}, "events": [{"id": "e0", "eyebrow": "La cérémonie", "title": "Église Saint-André", "start": "2027-07-03T16:00", "address": "Lourmarin, Luberon"}, {"id": "e1", "eyebrow": "Le dîner", "title": "Bastide des Lavandes", "start": "2027-07-03T19:30", "address": "Lourmarin, Luberon"}], "dress": {"title": "Champêtre chic", "text": "Tons clairs, chaussures confortables"}, "rsvp": {"deadline": "2027-06-01", "whatsapp": "06 12 34 56 78"}, "paper": "aquarelle"}}, {"slug": "chiara-lucas", "theme": "dolcevita", "couple": "Chiara & Lucas", "opening": "env", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "funiculi", "thumb": "/img/themes/dolcevita-2.webp"}, {"slug": "chloe-nathan", "theme": "americaine", "couple": "Chloé & Nathan", "opening": "env", "layout": "pages", "reveal": null, "kind": null, "events": 2, "families": false, "lang": "en", "music": "marine", "thumb": "/img/themes/americaine-2.webp"}, {"slug": "claire-thomas", "theme": "gravure", "couple": "Claire & Thomas", "opening": "env", "layout": "pages", "reveal": null, "kind": null, "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "/img/themes/gravure-2.webp"}, {"slug": "constance-henri", "theme": "oldmoney", "couple": "Constance & Henri", "opening": "env", "layout": "pages", "reveal": "scratch", "kind": null, "events": 2, "families": true, "lang": "fr", "music": "valse", "thumb": "/img/themes/oldmoney-2.webp"}, {"slug": "elena-matteo", "theme": "dolcevitajour", "couple": "Elena & Matteo", "opening": "cur", "layout": "pages", "reveal": "scratch", "kind": null, "events": 2, "families": false, "lang": "fr", "music": "funiculi", "thumb": "/img/themes/dolcevitajour-2.webp"}, {"slug": "emma-louis", "theme": "conte", "couple": "Emma & Louis", "opening": "voile", "layout": "pages", "reveal": "scratch", "kind": null, "events": 2, "families": true, "lang": "fr", "music": "valse", "thumb": "/img/themes/conte-2.webp"}, {"slug": "fatou-kwame", "theme": "afro", "couple": "Fatou & Kwame", "opening": "env", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "marine", "thumb": "/img/themes/afro-2.webp"}, {"slug": "giulia-hugo", "theme": "dolcevita", "couple": "Giulia & Hugo", "opening": "cur", "layout": "pages", "reveal": "wheel", "kind": null, "events": 2, "families": false, "lang": "fr", "music": "funiculi", "thumb": "/img/themes/dolcevita-2.webp"}, {"slug": "hana-kenji", "theme": "japonais", "couple": "Hana & Kenji", "opening": "env", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "nocturne", "thumb": "/img/themes/japonais-2.webp"}, {"slug": "henne-yasmine", "theme": "nuits", "couple": "Yasmine", "opening": "voile", "layout": "pages", "reveal": null, "kind": "henne", "events": 1, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/nuits-2.webp"}, {"slug": "hiba-anas", "theme": "alhambra", "couple": "Hiba & Anas", "opening": "door", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/alhambra-2.webp"}, {"slug": "jade-enzo", "theme": "y2k", "couple": "Jade & Enzo", "opening": "env", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "ragtime", "thumb": "/img/themes/y2k-2.webp"}, {"slug": "leila-mehdi", "theme": "alhambra", "couple": "Leïla & Mehdi", "opening": "voile", "layout": "pages", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/alhambra-2.webp"}, {"slug": "lena-adam", "theme": "boheme", "couple": "Léna & Adam", "opening": "cur", "layout": "pages", "reveal": null, "kind": null, "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "/img/themes/boheme-2.webp"}, {"slug": "lin-wei", "theme": "chinois", "couple": "Lin & Wei", "opening": "env", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "nocturne", "thumb": "/img/themes/chinois-2.webp"}, {"slug": "linh-thomas", "theme": "asianchic", "couple": "Linh & Thomas", "opening": "env", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "nocturne", "thumb": "/img/themes/asianchic-2.webp"}, {"slug": "lou-max", "theme": "pop", "couple": "Lou & Max", "opening": "cur", "layout": "pages", "reveal": "slot", "kind": null, "events": 2, "families": false, "lang": "fr", "music": "ragtime", "thumb": "/img/themes/pop-2.webp"}, {"slug": "margaux-victor", "theme": "artdeco", "couple": "Margaux & Victor", "opening": "door", "layout": "pages", "reveal": null, "kind": null, "events": 2, "families": false, "lang": "fr", "music": "ragtime", "thumb": "/img/themes/artdeco-2.webp"}, {"slug": "myriam-bilal", "theme": "emeraude", "couple": "Myriam & Bilal", "opening": "door", "layout": "pages", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/emeraude-2.webp"}, {"slug": "nour-ilyes", "theme": "nuits", "couple": "Nour & Ilyes", "opening": "door", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/nuits-2.webp"}, {"slug": "page-emma-louis", "theme": "dolcevita", "couple": "Emma & Louis", "opening": "env", "layout": "pages", "reveal": null, "kind": "page", "events": 2, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/dolcevita-2.webp", "fiche": {"demo": true, "kind": "page", "format": "page", "tz": "Europe/Paris", "countdown": "non", "music": "none", "slug": "page-emma-louis", "theme": "dolcevita", "couple": ["Emma", "Louis"], "date": "2027-06-12T15:00", "opening": "env", "reply": true, "palette": "#b08648", "parents": {"names": ["Famille Martin", "Famille Rossi"]}, "intro": {"eyebrow": "Ci sposiamo"}, "events": [{"id": "e0", "eyebrow": "La cérémonie", "title": "Église Saint-Paul", "start": "2027-06-12T15:00", "address": "Paris 4e"}, {"id": "e1", "eyebrow": "La fête", "title": "Domaine des Roses", "start": "2027-06-12T19:30", "address": "Gambais, Yvelines"}], "program": {"items": [{"time": "15h00", "title": "La cérémonie"}, {"time": "17h00", "title": "Le vin d'honneur"}, {"time": "19h30", "title": "Le dîner"}, {"time": "23h00", "title": "On danse"}]}, "rsvp": {"deadline": "2027-05-12", "title": "Serez-vous des nôtres ?", "menu": ["Poisson", "Viande", "Végétarien"]}, "paper": "coton"}}, {"slug": "page-leila-mehdi", "theme": "alhambra", "couple": "Leïla & Mehdi", "opening": "door", "layout": "pages", "reveal": null, "kind": "page", "events": 2, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/alhambra-2.webp", "fiche": {"demo": true, "kind": "page", "format": "page", "tz": "Europe/Paris", "countdown": "non", "music": "none", "slug": "page-leila-mehdi", "theme": "alhambra", "couple": ["Leïla", "Mehdi"], "date": "2027-05-22T14:30", "opening": "door", "reply": true, "palette": "#a8532c", "intro": {"eyebrow": "Nous nous marions"}, "events": [{"id": "e0", "eyebrow": "La cérémonie", "title": "Mairie du 11e", "start": "2027-05-22T14:30", "address": "Paris 11e"}, {"id": "e1", "eyebrow": "La réception", "title": "Les Jardins d’Andalousie", "start": "2027-05-22T19:00", "address": "Chantilly"}], "rsvp": {"deadline": "2027-05-15", "title": "Serez-vous des nôtres ?", "menu": ["Poisson", "Viande", "Végétarien"]}, "paper": "aquarelle", "program": {"items": [{"time": "14h30", "title": "La mairie"}, {"time": "17h00", "title": "Le thé"}, {"time": "19h00", "title": "Le dîner"}, {"time": "23h00", "title": "La fête"}]}}}, {"slug": "page-nour-ilyes", "theme": "nuits", "couple": "Nour & Ilyes", "opening": "env", "layout": "pages", "reveal": null, "kind": "page", "events": 2, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/nuits-2.webp", "fiche": {"demo": true, "kind": "page", "format": "page", "tz": "Europe/Paris", "countdown": "non", "music": "none", "slug": "page-nour-ilyes", "theme": "nuits", "couple": ["Nour", "Ilyes"], "date": "2027-07-10T15:00", "opening": "env", "reply": false, "palette": "#c9a35a", "intro": {"eyebrow": "Bismillah"}, "events": [{"id": "e0", "eyebrow": "La cérémonie", "title": "Hôtel de ville", "start": "2027-07-10T15:00", "address": "Montreuil"}, {"id": "e1", "eyebrow": "La réception", "title": "Salle Le Palacio", "start": "2027-07-10T19:30", "address": "Saint-Ouen"}], "rsvp": {"deadline": "2027-05-15", "whatsapp": "06 12 34 56 78"}, "paper": "coton", "parents": {"names": ["Famille Benali", "Famille Haddad"]}}}, {"slug": "page-victoire-charles", "theme": "oldmoney", "couple": "Victoire & Charles", "opening": "env", "layout": "pages", "reveal": null, "kind": "page", "events": 2, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/oldmoney-2.webp", "fiche": {"demo": true, "kind": "page", "format": "page", "tz": "Europe/Paris", "countdown": "non", "music": "none", "slug": "page-victoire-charles", "theme": "oldmoney", "couple": ["Victoire", "Charles"], "date": "2027-06-19T15:30", "opening": "env", "reply": false, "palette": "#1f2b44", "intro": {"eyebrow": "Nous vous invitons"}, "events": [{"id": "e0", "eyebrow": "La cérémonie", "title": "Chapelle Saint-Hubert", "start": "2027-06-19T15:30", "address": "Honfleur, Normandie"}, {"id": "e1", "eyebrow": "Le dîner", "title": "Manoir de la Prée", "start": "2027-06-19T19:30", "address": "Honfleur, Normandie"}], "rsvp": {"deadline": "2027-05-15", "whatsapp": "06 12 34 56 78"}, "paper": "velin", "parents": {"names": ["Famille de Villiers", "Famille Aubrac"]}, "dress": {"title": "Black tie", "text": "Robe longue, smoking"}}}, {"slug": "priya-arjun", "theme": "bollywood", "couple": "Priya & Arjun", "opening": "cur", "layout": "pages", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "raga", "thumb": "/img/themes/bollywood-2.webp"}, {"slug": "rania-ilias", "theme": "desert", "couple": "Rania & Ilias", "opening": "door", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/desert-2.webp"}, {"slug": "salma-rayan", "theme": "nuits", "couple": "Salma & Rayan", "opening": "door", "layout": "pages", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/nuits-2.webp"}, {"slug": "sarah-yanis", "theme": "minimal", "couple": "Sarah & Yanis", "opening": "env", "layout": "pages", "reveal": null, "kind": null, "events": 2, "families": false, "lang": "fr", "music": "nocturne", "thumb": "/img/themes/minimal-2.webp"}, {"slug": "sbou3-lina", "theme": "alhambra", "couple": "Lina", "opening": "env", "layout": "pages", "reveal": null, "kind": "sbou3", "events": 1, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/alhambra-2.webp"}, {"slug": "sofia-hamza", "theme": "emeraude", "couple": "Sofia & Hamza", "opening": "door", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "scheherazade", "thumb": "/img/themes/emeraude-2.webp"}, {"slug": "sofia-nuno", "theme": "ceramique", "couple": "Sofia & Nuno", "opening": "env", "layout": "pages", "reveal": null, "kind": null, "events": 2, "families": false, "lang": "fr", "music": "funiculi", "thumb": "/img/themes/ceramique-2.webp"}, {"slug": "std-camille-antoine", "theme": "doucefrance", "couple": "Camille & Antoine", "opening": "none", "layout": "pages", "reveal": null, "kind": "std", "events": 1, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/doucefrance-2.webp", "anim": "cadenas"}, {"slug": "std-chloe-nathan", "theme": "dolcevita", "couple": "Chloé & Nathan", "opening": "none", "layout": "pages", "reveal": null, "kind": "std", "events": 1, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/dolcevita-2.webp", "anim": "billet"}, {"slug": "std-emma-louis", "theme": "dolcevita", "couple": "Emma & Louis", "opening": "none", "layout": "pages", "reveal": null, "kind": "std", "events": 1, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/dolcevita-2.webp", "anim": "coeurs"}, {"slug": "std-ines-mehdi", "theme": "alhambra", "couple": "Inès & Mehdi", "opening": "none", "layout": "pages", "reveal": null, "kind": "std", "events": 1, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/alhambra-2.webp", "anim": "sms"}, {"slug": "std-jade-enzo", "theme": "doucefrance", "couple": "Jade & Enzo", "opening": "none", "layout": "pages", "reveal": null, "kind": "std", "events": 1, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/doucefrance-2.webp", "anim": "calendrier"}, {"slug": "std-lea-karim", "theme": "nuits", "couple": "Léa & Karim", "opening": "none", "layout": "pages", "reveal": null, "kind": "std", "events": 1, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/nuits-2.webp", "anim": "jackpot"}, {"slug": "std-sarah-yanis", "theme": "dolcevita", "couple": "Sarah & Yanis", "opening": "none", "layout": "pages", "reveal": null, "kind": "std", "events": 1, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/dolcevita-2.webp", "anim": "gratter"}, {"slug": "std-victoire-charles", "theme": "oldmoney", "couple": "Victoire & Charles", "opening": "none", "layout": "pages", "reveal": null, "kind": "std", "events": 1, "families": false, "lang": "fr", "music": "none", "thumb": "/img/themes/oldmoney-2.webp", "anim": "fuit"}, {"slug": "victoire-charles", "theme": "oldmoney", "couple": "Victoire & Charles", "opening": "env", "layout": "long", "reveal": null, "kind": null, "events": 3, "families": true, "lang": "fr", "music": "valse", "thumb": "/img/themes/oldmoney-2.webp"}, {"slug": "yuki-leo", "theme": "japonais", "couple": "Yuki & Léo", "opening": "env", "layout": "pages", "reveal": "scratch", "kind": null, "events": 2, "families": true, "lang": "fr", "music": "nocturne", "thumb": "/img/themes/japonais-2.webp"}];window.SCEAU_CALQUES={"bollywood": ["1", "2", "4", "eglise", "jardin", "mairie", "plage", "salle"], "japonais": ["1", "3", "4", "eglise", "jardin", "mairie", "plage", "salle"]};window.SCEAU_CHAINS=["dolcevita"];</script>
+<script src="/vitrine.js"></script>
+<script>
+/* le configurateur du save-the-date : quatre réponses (prénoms, date, ville ; l'animation ; le style et la couleur), l'aperçu
+   est le vrai save-the-date (std.js), la commande passe par api/commande.js (plan "std", 19 €), comme la Carte et la Page unique.
+   ?anim=… choisit l'animation (liens de l'accueil) ; ?edit=<slug>#k=<clé> rouvre un save-the-date commandé pour le modifier. */
+(function(){
+  const $=id=>document.getElementById(id), TH=window.SCEAU_THEMES;
+  const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const THEMES=['dolcevita','doucefrance','oldmoney','nuits','alhambra'].filter(k=>TH[k]);
+  const ICO={gratter:'🎟️',jackpot:'🎰',billet:'✈️',cadenas:'🔒',sms:'💬',fuit:'🏃',calendrier:'📅',coeurs:'❤️'};
+  const PALS=k=>(TH[k].pals&&TH[k].pals.length?TH[k].pals.map(p=>p.c):['#2f4f3a','#7a2e3b','#b08648']).concat(['#b8975a','#1e1a17','#b0566b']);
+  const q=new URLSearchParams(location.search);
+  const C={theme:THEMES.includes(q.get('theme'))?q.get('theme'):'dolcevita',anim:SceauSTD.ANIMS.some(a=>a.k===q.get('anim'))?q.get('anim'):'coeurs',palette:null};
+  C.palette=PALS(C.theme)[0];
+  const EDIT=q.get('edit'), KEY=(location.hash.match(/k=([\w-]+)/)||[])[1];
+  const track=(name,data)=>{ try{ if(window.umami&&umami.track) umami.track(name,data); if(window.va) va('event',{name,data}); }catch(e){} };
+
+  function inv(){
+    const d=$('dt').value||'2027-06-12', city=$('ct').value.trim();
+    return {format:'std',theme:C.theme,couple:[$('n1').value.trim()||'Emma',$('n2').value.trim()].filter(Boolean),date:d+'T10:00',palette:C.palette,paper:'coton',
+      reply:true,lang:'fr',opening:'none',std:{anim:C.anim,city},events:[{id:'e0',eyebrow:'Le mariage',title:city,start:d+'T10:00'}]};
+  }
+  // l'aperçu : le vrai save-the-date, dans un écran de 360 × 740 réduit à la taille du téléphone
+  function fitPhone(){ const ph=$('phone'), w=Math.min(340,ph.parentNode.clientWidth); ph.style.width=w+'px'; ph.style.height=(w*740/360+20*(1-w/340))+'px';
+    const k=(w-20)/360; $('scr').style.transform=`scale(${k})`; ph.style.height=(740*k+20)+'px'; }
+  function render(){ const I=inv(); $('scr').innerHTML=SceauSTD.html(I,{}); SceauCarte.fit($('scr')); SceauSTD.start($('scr'),I,{onDone:()=>SceauCarte.fit($('scr'))});
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>SceauCarte.fit($('scr'))); }
+  let t=null; const later=()=>{ clearTimeout(t); t=setTimeout(render,450); };
+
+  function pick(box,items,cur,set){ box.classList.add('has'); box.innerHTML=items.map(it=>it.html).join('');
+    [...box.children].forEach((b,i)=>{ b.setAttribute('aria-pressed',items[i].k===cur()); b.onclick=()=>{ set(items[i].k); [...box.children].forEach((x,j)=>x.setAttribute('aria-pressed',items[j].k===cur())); }; }); }
+  function paintAnims(){ pick($('pAn'),SceauSTD.ANIMS.map(a=>({k:a.k,html:`<button type="button"><i aria-hidden="true">${ICO[a.k]||'✨'}</i><b>${esc(a.name)}</b><small>${esc(a.tx)}</small></button>`})),()=>C.anim,k=>{ C.anim=k; render(); show(); }); }
+  function paintThemes(){ pick($('pTh'),THEMES.map(k=>({k,html:`<button type="button" style="background-image:url('${SceauCarte.fondOf(k)}')"><span>${esc(TH[k].name)}</span></button>`})),()=>C.theme,k=>{ C.theme=k; C.palette=PALS(k)[0]; paintCols(); render(); }); }
+  function paintCols(){ const box=$('pCo'); box.innerHTML=PALS(C.theme).map(c=>`<button type="button" style="background:${c}" aria-label="Couleur ${c}"></button>`).join('');
+    [...box.children].forEach((b,i)=>{ const c=PALS(C.theme)[i]; b.setAttribute('aria-pressed',c===C.palette); b.onclick=()=>{ C.palette=c; [...box.children].forEach((x,j)=>x.setAttribute('aria-pressed',PALS(C.theme)[j]===c)); render(); }; }); }
+  // sur téléphone, l'aperçu est en haut : choisir une animation y ramène, et un bouton y revient
+  const small=()=>matchMedia('(max-width:900px)').matches;
+  function show(){ if(small()) $('prev').scrollIntoView({behavior:'smooth',block:'start'}); }
+  $('see').onclick=()=>{ render(); $('prev').scrollIntoView({behavior:'smooth',block:'start'}); };
+  if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{ $('see').hidden=!small()||e.isIntersecting||e.boundingClientRect.top>0; })).observe($('phone'));
+  ['n1','n2','dt','ct'].forEach(id=>$(id).addEventListener('input',later));
+  $('again').onclick=render;
+  addEventListener('resize',fitPhone);
+
+  /* la commande : paiement en ligne (Stripe) quand il est branché, sinon le formulaire de contact */
+  let AUTO=false;
+  const err=m=>{ $('oErr').hidden=!m; $('oErr').textContent=m||''; };
+  fetch('/api/commande').then(r=>r.ok?r.json():{}).then(j=>{ AUTO=!!j.auto; if(!AUTO&&!EDIT){ $('oNote').textContent='Le paiement en ligne arrive : envoyez-nous votre demande, nous mettons votre save-the-date en ligne et vous recevez le lien de paiement.'; $('oPay').textContent='Commander · 19 €'; } }).catch(()=>{});
+  const fiche=()=>{ const I=inv(); return {theme:I.theme,couple:I.couple,palette:I.palette,paper:'coton',std:{anim:C.anim,city:I.std.city,date:$('dt').value}}; };
+  const config=()=>({n1:$('n1').value,n2:$('n2').value,date:$('dt').value,city:$('ct').value,theme:C.theme,anim:C.anim,palette:C.palette});
+  $('oPay').onclick=async()=>{
+    err('');
+    if(!$('n1').value.trim()) return err('Écrivez au moins un prénom.');
+    if(!/^\d{4}-\d{2}-\d{2}$/.test($('dt').value)) return err('Choisissez la date du mariage.');
+    if(EDIT){ $('oPay').disabled=true;
+      try{ const r=await fetch('/api/fiche',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+KEY},body:JSON.stringify({s:EDIT,fiche:fiche(),config:config()})});
+        if(!r.ok) throw 0; $('oNote').innerHTML=`Enregistré. <a href="/d/${esc(EDIT)}/" target="_blank" rel="noopener">Voir mon save-the-date</a>`; }catch(e){ err('L’enregistrement n’a pas fonctionné. Réessayez, ou écrivez-nous.'); }
+      $('oPay').disabled=false; return; }
+    if(!AUTO){ const p=new URLSearchParams({plan:'Save the date',theme:C.theme,prenoms:[$('n1').value,$('n2').value].filter(Boolean).join(' & '),date:$('dt').value,animation:C.anim}); location.href='/contact/?'+p; return; }
+    const email=$('oEmail').value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err('Écrivez une adresse e-mail valide : vos liens y arrivent.');
+    if(!$('oCgv').checked||!$('oWaiver').checked) return err('Cochez les deux cases pour continuer.');
+    $('oPay').disabled=true; $('oPay').textContent='Ouverture du paiement…'; track('commander',{formule:'std'});
+    try{ const r=await fetch('/api/commande',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:'std',email,cgv:true,waiver:true,fiche:fiche(),config:config()})});
+      const j=await r.json(); if(!r.ok||!j.url) throw 0; location.href=j.url; }
+    catch(e){ $('oPay').disabled=false; $('oPay').textContent='Commander · 19 €'; err('Le paiement n’a pas pu s’ouvrir. Réessayez dans un instant, ou écrivez-nous.'); }
+  };
+
+  async function start(){
+    if(EDIT&&KEY){ try{ const r=await fetch('/api/fiche?s='+encodeURIComponent(EDIT),{headers:{Authorization:'Bearer '+KEY}}); const j=await r.json(); const c=j.config||{};
+        $('n1').value=c.n1||''; $('n2').value=c.n2||''; $('dt').value=c.date||''; $('ct').value=c.city||'';
+        if(THEMES.includes(c.theme)) C.theme=c.theme; if(c.anim) C.anim=c.anim; C.palette=c.palette||PALS(C.theme)[0]; }catch(e){}
+      document.querySelector('.sd-top h1').textContent='Modifier votre save-the-date';
+      $('oPay').textContent='Enregistrer'; $('oEmail').hidden=true; document.querySelectorAll('#ordForm .chk,.sd-buy .amount,.sd-buy ul,.sd-buy .label').forEach(x=>x.hidden=true);
+      $('oNote').textContent='Le lien de vos invités reste le même.'; }
+    paintAnims(); paintThemes(); paintCols(); fitPhone(); render();
+  }
+  start();
+})();
+</script>
+</body>
+</html>

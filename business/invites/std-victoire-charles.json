@@ -1,0 +1,35 @@
+{
+ "demo": true,
+ "kind": "std",
+ "format": "std",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "std-victoire-charles",
+ "theme": "oldmoney",
+ "couple": [
+  "Victoire",
+  "Charles"
+ ],
+ "date": "2027-10-16T10:00",
+ "opening": "none",
+ "reply": true,
+ "palette": "#2f4f3a",
+ "paper": "coton",
+ "std": {
+  "anim": "fuit",
+  "city": "Deauville"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "Le mariage",
+   "title": "Deauville",
+   "start": "2027-10-16T10:00",
+   "end": "2027-10-16T23:30"
+  }
+ ],
+ "rsvp": {
+  "title": "Serez-vous des nôtres ?"
+ }
+}

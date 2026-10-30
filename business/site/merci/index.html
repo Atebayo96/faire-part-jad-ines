@@ -67,11 +67,12 @@ ol{padding-left:20px} li{margin:10px 0;color:#333} p{color:#333} a{color:#111}
       SceauCarte.fit(box);
       box.querySelectorAll('[data-dl]').forEach(b=>b.onclick=async()=>{ const t=b.textContent; b.disabled=true; b.textContent='Préparation…'; try{ await SceauCarte[b.dataset.dl](j.inv); }catch(e){ alert('Le téléchargement n’a pas fonctionné. Réessayez, ou écrivez-nous.'); } b.disabled=false; b.textContent=t; });
       return; }
-    box.innerHTML=`<h1>C'est en ligne !</h1><p>Le faire-part de ${esc(j.couple)} est prêt à partir. ${j.mailed?`Vous recevez aussi ces liens par e-mail (${esc(j.email)}).`:'Gardez ces liens : ajoutez cette page à vos favoris.'}</p>`+
+    const what=j.plan==='std'?'save-the-date':'faire-part';
+    box.innerHTML=`<h1>C'est en ligne !</h1><p>Le ${what} de ${esc(j.couple)} est prêt à partir. ${j.mailed?`Vous recevez aussi ces liens par e-mail (${esc(j.email)}).`:'Gardez ces liens : ajoutez cette page à vos favoris.'}</p>`+
       row('lk','Le lien à envoyer à vos invités','Sur WhatsApp, par SMS ou par e-mail. Il s’ouvre sur tous les téléphones.',j.link,'Voir')+
       (j.dashboard?row('db','Votre tableau de bord','Les réponses de vos invités, en temps réel. Gardez ce lien pour vous.',j.dashboard,'Ouvrir'):'')+
-      row('ed','Modifier votre faire-part','Un horaire ou un texte change ? Le lien de vos invités reste le même.',j.edit,'Modifier')+
-      `<a class="btn" href="https://wa.me/?text=${encodeURIComponent('Notre faire-part : '+j.link)}" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>`;
+      row('ed','Modifier votre '+what,'Un horaire ou un texte change ? Le lien de vos invités reste le même.',j.edit,'Modifier')+
+      `<a class="btn" href="https://wa.me/?text=${encodeURIComponent((j.plan==='std'?'Save the date ! ':'Notre faire-part : ')+j.link)}" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>`;
     box.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{ const i=document.getElementById(b.dataset.copy); i.select(); (navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(()=>document.execCommand('copy')); b.textContent='Copié'; setTimeout(()=>b.textContent='Copier',1600); });
   })();
 })();

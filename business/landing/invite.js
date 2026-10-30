@@ -286,8 +286,10 @@
   /* page unique (formule « Page unique », 10 octobre 2026) : tout le faire-part sur une seule feuille, comme un faire-part
      papier (carte.js). L'ouverture est en option ("opening": "none" sans), le bouton Répondre aussi ("reply": true). La
      feuille défile librement si son contenu dépasse l'écran ; pas de décor derrière (elle est opaque). */
-  const PG=I.format==='page'&&!!window.SceauCarte;
-  if(PG){ pages.length=0; pages.push({n:K1,lt:true,role:'home',evi:0,html:`<section class="pg pg-ct" data-img="${img(K1)}">${SceauCarte.html(I,{live:true})}</section>`}); }
+  /* save-the-date (formule « Save the date », 19 €, std.js) : la même feuille, précédée d'un petit jeu qui annonce la date */
+  const STD=I.format==='std'&&!!window.SceauSTD&&!!window.SceauCarte;
+  const PG=(I.format==='page'&&!!window.SceauCarte)||STD;
+  if(PG){ pages.length=0; pages.push({n:K1,lt:true,role:'home',evi:0,html:`<section class="pg pg-ct" data-img="${img(K1)}">${STD?SceauSTD.html(I,{live:true}):SceauCarte.html(I,{live:true})}</section>`}); }
   const FREE=!!(I.layout==='long'&&I.long)||PG;
 
   /* ---------- mise en page continue (comme un long rouleau peint) ----------
@@ -637,6 +639,7 @@
   op.addEventListener('click',open);
   op.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
   // sans ouverture (option de la page unique) : la feuille est là tout de suite
+  if(STD) SceauSTD.start(sc,I,{onDone:()=>SceauCarte.fit(sc)});
   if(PG){ SceauCarte.fit(sc); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>SceauCarte.fit(sc)); addEventListener('resize',()=>SceauCarte.fit(sc)); }
   // porte en vidéo : le faire-part est monté derrière la porte fermée dès le chargement, son apparition (le fond du thème,
   // puis le papier) se joue cachée ; quand les battants s'entrouvrent, il est déjà entièrement posé (sinon on voyait un

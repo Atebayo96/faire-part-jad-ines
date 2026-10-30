@@ -1,0 +1,35 @@
+{
+ "demo": true,
+ "kind": "std",
+ "format": "std",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "std-lea-karim",
+ "theme": "nuits",
+ "couple": [
+  "Léa",
+  "Karim"
+ ],
+ "date": "2027-07-10T10:00",
+ "opening": "none",
+ "reply": true,
+ "palette": "#c9a35a",
+ "paper": "coton",
+ "std": {
+  "anim": "jackpot",
+  "city": "Marrakech"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "Le mariage",
+   "title": "Marrakech",
+   "start": "2027-07-10T10:00",
+   "end": "2027-07-10T23:30"
+  }
+ ],
+ "rsvp": {
+  "title": "Serez-vous des nôtres ?"
+ }
+}

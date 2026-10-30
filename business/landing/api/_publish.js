@@ -5,9 +5,10 @@ import { save, readOne, dashKey } from './_store.js';
 import { freeSlug } from './_fiche.js';
 import META from './_meta.js';
 
-export const links = (slug, origin) => {
+export const links = (slug, origin, plan) => {
   const o = origin || process.env.SCEAU_SITE_URL || META.site;
-  return { link: `${o}/d/${slug}/`, dashboard: `${o}/tableau/#i=${slug}&k=${dashKey(slug)}`, edit: `${o}/creer/?edit=${slug}#k=${dashKey(slug)}` };
+  // le save-the-date se modifie depuis sa propre page (/save-the-date/), pas depuis le configurateur du faire-part
+  return { link: `${o}/d/${slug}/`, dashboard: `${o}/tableau/#i=${slug}&k=${dashKey(slug)}`, edit: `${o}/${plan === 'std' ? 'save-the-date' : 'creer'}/?edit=${slug}#k=${dashKey(slug)}` };
 };
 
 export async function publish(ref, payment) {
@@ -27,7 +28,8 @@ export async function publish(ref, payment) {
   await save(`fiches/${slug}.json`, { ref, plan: c.plan, options: c.options, email: c.email, at: now, paidAt: now, inv: Object.assign({ slug }, c.inv), config: c.config });
   const done = Object.assign({}, c, { slug, paidAt: now, payment: payment || c.payment || null });
   await save(`commandes/${ref}.json`, done);
-  const L = links(slug);
+  const L = links(slug, undefined, c.plan);
+  if (c.plan === 'std') L.what = 'save-the-date';
   // page unique sans le bouton Répondre : pas de réponses, donc pas de tableau de bord
   if (c.plan === 'page' && !(c.options && c.options.reply)) delete L.dashboard;
   done.mailed = await mail(done.email, c.inv.couple.join(' & '), L);
@@ -48,17 +50,17 @@ async function mail(to, couple, L) {
 ${a(L.dl, 'Télécharger mon faire-part')}
 <p>Une question ? Répondez simplement à cet e-mail.</p><p>Save The Oui</p></div>` : `<div style="font:16px/1.6 Arial,sans-serif;color:#111;max-width:560px">
 <p>Bonjour ${esc(couple)},</p>
-<p>Votre faire-part est en ligne. Voici votre lien, à envoyer à vos invités sur WhatsApp, par SMS ou par e-mail :</p>
-${a(L.link, 'Voir mon faire-part')}<p style="color:#555">${esc(L.link)}</p>
+<p>Votre ${L.what || 'faire-part'} est en ligne. Voici votre lien, à envoyer à vos invités sur WhatsApp, par SMS ou par e-mail :</p>
+${a(L.link, L.what ? 'Voir mon save-the-date' : 'Voir mon faire-part')}<p style="color:#555">${esc(L.link)}</p>
 ${L.dashboard ? `<p>Les réponses de vos invités arrivent dans votre tableau de bord. Gardez ce lien pour vous : il donne accès aux réponses.</p>
 ${a(L.dashboard, 'Mon tableau de bord')}` : ''}
-<p>Un horaire ou un texte change ? Modifiez votre faire-part quand vous voulez, le lien de vos invités reste le même :</p>
-${a(L.edit, 'Modifier mon faire-part')}
+<p>Un horaire ou un texte change ? Modifiez votre ${L.what || 'faire-part'} quand vous voulez, le lien de vos invités reste le même :</p>
+${a(L.edit, L.what ? 'Modifier mon save-the-date' : 'Modifier mon faire-part')}
 <p>Une question ? Répondez simplement à cet e-mail.</p><p>Save The Oui</p></div>`;
   try {
     const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
       // les réponses des mariés vont à une vraie boîte (savetheoui.fr n'a pas de boîte de réception) : SCEAU_MAIL_REPLY_TO
-      body: JSON.stringify({ from, to: [to], ...(process.env.SCEAU_MAIL_REPLY_TO ? { reply_to: process.env.SCEAU_MAIL_REPLY_TO } : {}), subject: `${L.dl ? 'Votre faire-part est prêt' : 'Votre faire-part est en ligne'} · ${couple}`, html }) });
+      body: JSON.stringify({ from, to: [to], ...(process.env.SCEAU_MAIL_REPLY_TO ? { reply_to: process.env.SCEAU_MAIL_REPLY_TO } : {}), subject: `${L.dl ? 'Votre faire-part est prêt' : `Votre ${L.what || 'faire-part'} est en ligne`} · ${couple}`, html }) });
     return r.ok;
   } catch { return false; }
 }

@@ -1,0 +1,35 @@
+{
+ "demo": true,
+ "kind": "std",
+ "format": "std",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "std-sarah-yanis",
+ "theme": "dolcevita",
+ "couple": [
+  "Sarah",
+  "Yanis"
+ ],
+ "date": "2027-06-12T10:00",
+ "opening": "none",
+ "reply": true,
+ "palette": "#1f5f8b",
+ "paper": "coton",
+ "std": {
+  "anim": "gratter",
+  "city": "Ravello, Italie"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "Le mariage",
+   "title": "Ravello, Italie",
+   "start": "2027-06-12T10:00",
+   "end": "2027-06-12T23:30"
+  }
+ ],
+ "rsvp": {
+  "title": "Serez-vous des nôtres ?"
+ }
+}

@@ -122,6 +122,7 @@ PAGE = """<!doctype html>
 <link rel="stylesheet" href="/invite.css">
 <link rel="stylesheet" href="/reveal.css">
 <link rel="stylesheet" href="/carte.css">
+<link rel="stylesheet" href="/std.css">
 </head>
 <body>
 <noscript><p style="padding:24px;font-family:sans-serif">{title}. Activez JavaScript pour ouvrir le faire-part.</p></noscript>
@@ -129,6 +130,7 @@ PAGE = """<!doctype html>
 <script src="/themes.js"></script>
 <script src="/reveal.js"></script>
 <script src="/carte.js"></script>
+<script src="/std.js"></script>
 <script src="/invite.js"></script>
 </body>
 </html>
@@ -280,7 +282,7 @@ def main():
     for keep, src in kept:
         shutil.move(keep, src)
     # la vitrine est en quatre pages (accueil, modèles, formules, créer) qui partagent vitrine.css et vitrine.js
-    PAGES = ['/', '/modeles/', '/formules/', '/creer/', '/questions/', '/contact/']
+    PAGES = ['/', '/modeles/', '/formules/', '/creer/', '/questions/', '/contact/', '/save-the-date/']
     for u in PAGES:
         fp = os.path.join(SITE, u.strip('/'), 'index.html')
         l = open(fp, encoding='utf-8').read()
@@ -398,6 +400,9 @@ def main():
             # carte et page unique : la vitrine dessine la feuille en direct (carte.js), elle a besoin de la fiche entière
             if inv.get('format') == 'page':
                 demos[-1]['fiche'] = inv
+            # save-the-date : l'animation de la démo (liens « Voir l'exemple » de l'accueil et de /save-the-date/)
+            if inv.get('format') == 'std':
+                demos[-1]['anim'] = (inv.get('std') or {}).get('anim')
     # modèles dont la peinture en chaîne existe (img/chaine/<thème>/meta.json, tools/chaine.py)
     chains = sorted(d for d in os.listdir(os.path.join(SITE, 'img', 'chaine')) if os.path.exists(os.path.join(SITE, 'img', 'chaine', d, 'meta.json')))
     for u in PAGES:

@@ -1,0 +1,35 @@
+{
+ "demo": true,
+ "kind": "std",
+ "format": "std",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "std-emma-louis",
+ "theme": "dolcevita",
+ "couple": [
+  "Emma",
+  "Louis"
+ ],
+ "date": "2027-06-12T10:00",
+ "opening": "none",
+ "reply": true,
+ "palette": "#c9a227",
+ "paper": "coton",
+ "std": {
+  "anim": "coeurs",
+  "city": "Annecy"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "Le mariage",
+   "title": "Annecy",
+   "start": "2027-06-12T10:00",
+   "end": "2027-06-12T23:30"
+  }
+ ],
+ "rsvp": {
+  "title": "Serez-vous des nôtres ?"
+ }
+}

@@ -1,0 +1,35 @@
+{
+ "demo": true,
+ "kind": "std",
+ "format": "std",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "std-ines-mehdi",
+ "theme": "alhambra",
+ "couple": [
+  "Inès",
+  "Mehdi"
+ ],
+ "date": "2027-09-18T10:00",
+ "opening": "none",
+ "reply": true,
+ "palette": "#a8532c",
+ "paper": "coton",
+ "std": {
+  "anim": "sms",
+  "city": "Grenade, Espagne"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "Le mariage",
+   "title": "Grenade, Espagne",
+   "start": "2027-09-18T10:00",
+   "end": "2027-09-18T23:30"
+  }
+ ],
+ "rsvp": {
+  "title": "Serez-vous des nôtres ?"
+ }
+}

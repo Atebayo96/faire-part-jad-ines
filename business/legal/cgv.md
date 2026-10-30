@@ -3,6 +3,7 @@ _Dernière mise à jour : 10 octobre 2026. Version à faire relire par un profes
 ## 1. Objet
 Les présentes conditions encadrent la vente de faire-part numériques personnalisés par Jad GHAILAN, entrepreneur individuel (EI), nom commercial Noctuna, SIRET 100 079 342 00018 (« Save The Oui ») à des particuliers (« le Client ») : création du faire-part, mise en ligne, recueil des réponses des invités et tableau de bord.
 ## 2. Formules et prix
+- **Save the date : 19 €, en libre-service.** Le Client compose lui-même l'annonce de sa date (prénoms, date, ville, une animation au choix, un thème) ; elle est mise en ligne dès le paiement, avec un lien à partager, le bouton « Je serai là » et un tableau de bord des réponses, et reste modifiable.
 - **Carte : 29 €, en libre-service.** Le Client compose lui-même son faire-part sur une seule feuille (un thème, jusqu'à trois événements, le papier, les couleurs) et le télécharge en image et en PDF ; il n'y a pas de lien en ligne ni de recueil des réponses.
 - **Page unique : 59 €, en libre-service.** La même feuille mise en ligne, avec itinéraire et calendrier. Options : l'ouverture animée (+ 10 €), le bouton « Répondre » et le tableau de bord (+ 20 €).
 - **Essentiel : 99 €, en libre-service.** Le Client compose lui-même son faire-part sur le site : un thème, deux événements, des lieux de notre bibliothèque, réponses et tableau de bord, calendrier, itinéraire, compte à rebours, musique.

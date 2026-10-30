@@ -18,14 +18,17 @@ const tidy = o => JSON.parse(JSON.stringify(o));
 /* Ce que l'Essentiel comprend (page Formules) : 2 événements, les lieux déjà peints du thème, une langue.
    Le lieu peint d'après photo, le lien par famille et l'anglais sont en Signature : le configurateur bascule alors
    la formule, et l'API refuse une fiche Essentiel qui les demande. */
-export const LIMITS = { essentiel: { events: 2 }, page: { events: 2 }, carte: { events: 2 } };
+export const LIMITS = { essentiel: { events: 2 }, page: { events: 2 }, carte: { events: 2 }, std: { events: 1 } };
 
 /* Page unique (59 €) et Carte (29 €), 10 octobre 2026 : tout le faire-part sur une seule feuille (carte.js). La carte est
    cette feuille en image et en PDF, sans lien en ligne. L'ouverture (+10 €) et le bouton Répondre avec le tableau de bord
    (+20 €) sont des options de la page unique : opts dit ce qui a été payé, la fiche ne peut pas en demander davantage. */
-export const PAGE_PRICE = { carte: 2900, page: 5900, opening: 1000, reply: 2000 };
-export const ONE_PAGE = ['page', 'carte'];
-export const priceOf = (plan, opts = {}) => plan === 'carte' ? PAGE_PRICE.carte : plan === 'page' ? PAGE_PRICE.page + (opts.opening ? PAGE_PRICE.opening : 0) + (opts.reply ? PAGE_PRICE.reply : 0) : 9900;
+/* Save the date (19 €, 30 octobre 2026, std.js) : la feuille réduite aux prénoms, à la date et à la ville, précédée d'un
+   petit jeu (std.anim) ; « Je serai là » et le tableau de bord compris. Un seul « événement » : le jour entier. */
+export const PAGE_PRICE = { carte: 2900, page: 5900, opening: 1000, reply: 2000, std: 1900 };
+export const ONE_PAGE = ['page', 'carte', 'std'];
+export const STD_ANIMS = ['gratter', 'jackpot', 'billet', 'cadenas', 'sms', 'fuit', 'calendrier', 'coeurs'];
+export const priceOf = (plan, opts = {}) => plan === 'std' ? PAGE_PRICE.std : plan === 'carte' ? PAGE_PRICE.carte : plan === 'page' ? PAGE_PRICE.page + (opts.opening ? PAGE_PRICE.opening : 0) + (opts.reply ? PAGE_PRICE.reply : 0) : 9900;
 
 export function sanitize(raw, plan = 'essentiel', opts = {}) {
   const r = raw || {}, th = META.themes[r.theme];
@@ -33,11 +36,18 @@ export function sanitize(raw, plan = 'essentiel', opts = {}) {
   const couple = arr(r.couple, 2).map(x => clean(x, 40)).filter(Boolean);
   if (!couple.length) throw new Error('couple');
   const keys = new Set(th.keys);
+  const isStd = plan === 'std', SD = r.std || {};
+  // le save-the-date : le jour seulement, le moment unique se construit ici (le jour entier, pour l'agenda des invités)
+  if (isStd) {
+    const d = String(SD.date || r.date || '').slice(0, 10);
+    if (!DAY.test(d)) throw new Error('date');
+    r.events = [{ eyebrow: 'Le mariage', title: clean(SD.city, 60) || '', start: d + 'T10:00', bg: 'simple' }];
+  }
   const evs = arr(r.events, 6).map((e, i) => {
     const start = String(e && e.start || '');
     if (!STAMP.test(start)) throw new Error('date');
     const ev = { id: 'e' + i, eyebrow: txt(e.eyebrow, 40) || 'Événement ' + (i + 1), title: txt(e.title, 60) || '', start,
-      address: txt(e.address, 160), place: txt(e.place, 160) };
+      address: txt(e.address, 160), place: txt(e.place, 160), end: isStd ? start.slice(0, 10) + 'T23:30' : undefined };
     if (e.bg === 'simple') ev.bg = 'simple';
     else if (/^[a-z0-9]{2,20}$/.test(String(e.lieu || '')) && keys.has(e.lieu)) ev.lieu = e.lieu;
     else if ([1, 2, 3, 4].includes(+e.scene)) ev.scene = +e.scene;
@@ -52,7 +62,8 @@ export function sanitize(raw, plan = 'essentiel', opts = {}) {
   const gmode = GF ? pick(GF.mode, ['liste', 'cagnotte', 'lien'], 'lien') : null;
   const one = ONE_PAGE.includes(plan);
   return tidy({
-    format: one ? 'page' : undefined, reply: one ? plan === 'page' && !!opts.reply : undefined,
+    format: isStd ? 'std' : one ? 'page' : undefined, reply: one ? isStd || (plan === 'page' && !!opts.reply) : undefined,
+    std: isStd ? { anim: pick(SD.anim, STD_ANIMS, 'gratter'), city: txt(SD.city, 60), text: txt(SD.text, 120) } : undefined,
     paper: one ? pick(r.paper, ['coton', 'aquarelle', 'velin'], 'coton') : undefined,
     icons: one ? pick(r.icons, ['presse', 'or'], 'presse') : undefined,
     theme: r.theme, couple, date: first, tz: 'Europe/Paris', lang: 'fr', kind: pick(r.kind, ['henne', 'sbou3', 'bapteme', 'fiancailles', 'anniv'], undefined),

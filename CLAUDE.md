@@ -938,6 +938,29 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `C.data.rsvp.deadline` ; par défaut un mois avant le mariage, `dlDef()`, affiché dans le champ par `data-def`).
     **Le jasmin de l'Andalou est réduit de moitié** (24 cqw au lieu de 48 : « il sert à rien et bloque le texte »).
 
+52. **Le save-the-date, 19 €, pour vendre tout de suite** (30 octobre 2026 : « on focalise pour vendre déjà une première page
+    de save-the-date, avec des façons drôles ou interactives de l'annoncer » ; « vas-y, 19 €, avec toutes les animations »).
+    C'est la saison (septembre à décembre) et le faire-part ne s'achète qu'en janvier. Fiche `"format": "std"`, formule `std`
+    (`PAGE_PRICE.std = 1900`, `_fiche.js`), en libre-service comme la Carte et la Page unique : composé sur **sa propre page
+    `/save-the-date/`** (prénoms, date, ville ; l'animation ; le thème et la couleur : rien d'autre), payé, publié sur
+    `/d/<slug>/`, modifiable par `/save-the-date/?edit=<slug>#k=<clé>` (`links(…, plan)`). Un écran en deux temps (`std.js`,
+    `std.css`) : d'abord **un petit jeu qui annonce la date**, puis **la feuille de la carte** (carte.js en mode `std` : « Save
+    the date », les prénoms, la phrase, la date en grand, la ville, et deux pastilles côte à côte, **Agenda** (le jour entier,
+    10 h à 23 h 30) et **« Je serai là »** (la réponse habituelle, un seul moment « Le mariage », comptée dans le tableau de bord)).
+    Huit jeux (`std.anim`) : ticket à gratter et jackpot (le vrai composant `reveal.js`), carte d'embarquement (on tire le talon
+    vers le bas, le tampon « Embarquement confirmé » se pose **sous** la date), cadenas à code (JJ MM, chaque chiffre juste se
+    verrouille ; « Je donne ma langue au chat » après 9 s), message (une conversation qui s'écrit, l'invité choisit sa réplique),
+    bouton qui fuit (« Non » s'échappe six fois puis devient « Bon… oui ! »), calendrier (les pages se tournent jusqu'au mois,
+    le jour entouré au feutre) et **pluie de cœurs** (demandée le même jour : « des cœurs emoji qui tombent du haut du téléphone
+    et s'empilent en formant la date » : chiffres de 3 × 5 ❤️, le bas tombe d'abord, puis la date en toutes lettres).
+    Les jeux se posent sur le fond peint du thème (`img/carte/<thème>-fond.webp`) **dans des cartes crème au texte foncé**
+    (`--sink` : l'encre du couple assombrie à 4,6:1 contre le crème) ; rien n'est écrit directement sur le motif. « Voir
+    directement » passe le jeu à tout moment. Le bloc racine porte `std-a-<jeu>`, jamais `std-<jeu>` (`std-sms` était aussi la
+    carte du message : la page se réduisait à 350 px). Huit démos, une par jeu (`invites/std-*.json`, `"kind": "std"` pour
+    rester hors des galeries), liées depuis le bandeau « D'abord, annoncez la date » de l'accueil ; carte « Pour annoncer la
+    date » en tête de `/formules/` ; lien « Save the date » dans la navigation sur ordinateur (masqué sous 720 px : la barre
+    est pleine). Pas encore fait : déduire les 19 € du faire-part commandé ensuite (ne pas le promettre avant).
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

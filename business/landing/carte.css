@@ -91,6 +91,10 @@
 .ct-b:active{transform:scale(.97)}
 .ct-b svg{width:32px;height:32px;flex:none;padding:8px;border-radius:50%;color:#fff;background:var(--ink)}
 .ct-acts+.ct-rs{margin-top:var(--g1)!important}
+/* save-the-date (std.js) : la ville sous la date, puis Agenda et « Je serai là » côte à côte, de même largeur (règle 40) */
+.ct-city{margin-top:var(--g1)!important;font:600 max(15px,calc(19px*var(--k)))/1.3 "Cormorant Garamond",Georgia,serif;letter-spacing:.12em;text-transform:uppercase;text-wrap:balance}
+.ct-acts.ct-two{gap:10px;width:100%;max-width:410px}
+.ct-acts.ct-two .ct-b{flex:1 1 0;max-width:200px;min-width:0;padding-right:14px;white-space:nowrap}
 /* la signature : le logo Save The Oui (« SAVE THE » en capitales espacées, « Oui » en Great Vibes, comme .logo de la vitrine),
    en blanc sur le fond peint, petit (« fais-le en calligraphie, et plus petit ») ; une ombre douce le détache des motifs */
 .ct-sheet>.ct-made{position:absolute;left:0;right:0;bottom:calc(var(--pb)/2 - 8px);margin:0!important;padding:0;display:flex;justify-content:center;align-items:baseline;gap:5px;

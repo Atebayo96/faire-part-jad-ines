@@ -1269,6 +1269,166 @@ export default {
   "gifts": [],
   "giftLabels": {}
  },
+ "std-camille-antoine": {
+  "demo": true,
+  "couple": "Camille & Antoine",
+  "date": "2027-07-03T08:00:00+00:00",
+  "events": [
+   "e0"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "Le mariage"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "std-chloe-nathan": {
+  "demo": true,
+  "couple": "Chloé & Nathan",
+  "date": "2027-08-28T08:00:00+00:00",
+  "events": [
+   "e0"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "Le mariage"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "std-emma-louis": {
+  "demo": true,
+  "couple": "Emma & Louis",
+  "date": "2027-06-12T08:00:00+00:00",
+  "events": [
+   "e0"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "Le mariage"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "std-ines-mehdi": {
+  "demo": true,
+  "couple": "Inès & Mehdi",
+  "date": "2027-09-18T08:00:00+00:00",
+  "events": [
+   "e0"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "Le mariage"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "std-jade-enzo": {
+  "demo": true,
+  "couple": "Jade & Enzo",
+  "date": "2027-05-22T08:00:00+00:00",
+  "events": [
+   "e0"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "Le mariage"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "std-lea-karim": {
+  "demo": true,
+  "couple": "Léa & Karim",
+  "date": "2027-07-10T08:00:00+00:00",
+  "events": [
+   "e0"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "Le mariage"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "std-sarah-yanis": {
+  "demo": true,
+  "couple": "Sarah & Yanis",
+  "date": "2027-06-12T08:00:00+00:00",
+  "events": [
+   "e0"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "Le mariage"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
+ "std-victoire-charles": {
+  "demo": true,
+  "couple": "Victoire & Charles",
+  "date": "2027-10-16T08:00:00+00:00",
+  "events": [
+   "e0"
+  ],
+  "eventList": [
+   {
+    "id": "e0",
+    "label": "Le mariage"
+   }
+  ],
+  "families": {},
+  "familyLabels": {},
+  "rsvpMenu": [],
+  "rsvpQuestion": "",
+  "gifts": [],
+  "giftLabels": {}
+ },
  "victoire-charles": {
   "demo": true,
   "couple": "Victoire & Charles",

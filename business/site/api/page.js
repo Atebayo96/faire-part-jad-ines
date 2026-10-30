@@ -48,6 +48,7 @@ export default async function handler(req, res) {
 <link rel="stylesheet" href="/invite.css">
 <link rel="stylesheet" href="/reveal.css">
 <link rel="stylesheet" href="/carte.css">
+<link rel="stylesheet" href="/std.css">
 ${META.analytics || ''}</head>
 <body>
 <noscript><p style="padding:24px;font-family:sans-serif">${esc(title)}. Activez JavaScript pour ouvrir le faire-part.</p></noscript>
@@ -55,6 +56,7 @@ ${META.analytics || ''}</head>
 <script src="/themes.js"></script>
 <script src="/reveal.js"></script>
 <script src="/carte.js"></script>
+<script src="/std.js"></script>
 <script src="/invite.js"></script>
 </body>
 </html>

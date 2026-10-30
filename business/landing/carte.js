@@ -40,14 +40,15 @@
   const at=s=>{ const [d,t='12:00']=String(s).split('T'), [y,m,da]=d.split('-').map(Number), [h,mi]=t.split(':').map(Number); return new Date(Date.UTC(y,m-1,da,h||0,mi||0)); };
   const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
   const L10={fr:{loc:'fr-FR',joy:'Ont la joie de vous convier à leur mariage',prog:'Le programme',dress:'Dress code',reply:'Répondre',route:'Y aller',cal:'Agenda',
-      rs:'Réponse souhaitée',before:'avant le',by:'au',fams:'Avec leurs familles'},
+      rs:'Réponse souhaitée',before:'avant le',by:'au',fams:'Avec leurs familles',std:'Save the date',stdTx:'Réservez votre journée, le faire-part suivra.',here:'Je serai là'},
     en:{loc:'en-GB',joy:'Request the pleasure of your company at their wedding',prog:'The day',dress:'Dress code',reply:'RSVP',route:'Map',cal:'Calendar',
-      rs:'Kindly reply',before:'by',by:'on',fams:'Together with their families'}};
+      rs:'Kindly reply',before:'by',by:'on',fams:'Together with their families',std:'Save the date',stdTx:'Keep the day free, the invitation will follow.',here:'I\'ll be there'}};
   const day=(d,L,year)=>{ const s=cap(d.toLocaleDateString(L.loc,Object.assign({weekday:'long',day:'numeric',month:'long',timeZone:'UTC'},year?{year:'numeric'}:{}))); const t=L.loc==='fr-FR'?s.replace(/(^|\s)1 (?=\D)/,'$11er '):s; return t.replace(/(\d+(?:er)?) (?=\D)/g,'$1\u00a0'); };
   const hour=(d,L)=>{ const s=d.toLocaleTimeString(L.loc,{hour:'2-digit',minute:'2-digit',timeZone:'UTC'}); return L.loc==='fr-FR'?s.replace(':','h'):s; };
   const ic={
     pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
     cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>',
+    heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20z"/></svg>',
     mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>'
   };
 
@@ -129,6 +130,9 @@
     const ey=window.sceauEy?window.sceauEy(inv.intro&&inv.intro.eyebrow||(T.scenes&&T.scenes[0][0])||''):{text:inv.intro&&inv.intro.eyebrow||''};
     const P=inv.parents, PR=inv.program, DR=inv.dress, R=inv.rsvp||{};
     const live=!!o.live;
+    /* save-the-date (format "std", std.js) : la même feuille, réduite à l'essentiel : les prénoms, la date, la ville, et deux
+       pastilles côte à côte, Agenda et « Je serai là » (la réponse, comptée dans le tableau de bord) */
+    const std=inv.format==='std', SD=inv.std||{};
     const ev=e=>{ const d=at(e.start), where=[e.place,e.address].find(x=>x&&x!==e.title), ico=icoOf(e,inv);
       const lk=live?`<p class="ct-lk">${e.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener" aria-label="${esc(L.route)}" title="${esc(L.route)}">${ic.pin}</a>`:''}<button type="button" data-cal="${esc(e.id)}" aria-label="${esc(L.cal)}" title="${esc(L.cal)}">${ic.cal}</button></p>`:'';
       // toujours les mêmes cases, dans le même ordre (vides au besoin) : les colonnes partagent les lignes de la grille
@@ -154,12 +158,14 @@
         `<div class="ct-deco" aria-hidden="true">${decoOf(st)}</div>`+
         `<div class="ct-seal" style="background-image:url('/img/seals/${sealName}.webp')"><b style="--l:${sl};--m:${sm};--d:${sd}">${ini}</b></div>`+
         (P&&(P.names||[]).filter(Boolean).length?`<p class="ct-fam">${P.names.filter(Boolean).map(esc).join(' &amp; ')}</p>`:'')+
-        `<p class="ct-ey ct-top${ey.ar?' ar':''}"${ey.ar?' lang="ar" dir="rtl"':''}>${esc(ey.text)}</p>`+
+        (std?`<p class="ct-ey ct-top">${esc(L.std)}</p>`:`<p class="ct-ey ct-top${ey.ar?' ar':''}"${ey.ar?' lang="ar" dir="rtl"':''}>${esc(ey.text)}</p>`)+
         `<h1 class="ct-nm" style="font-family:${esc(ff)};font-style:${it?'italic':'normal'};text-transform:${up?'uppercase':'none'};letter-spacing:${up?'.12em':'0'};font-weight:${up?300:400};--nk:${nmSz}">${solo?esc(n1):`${esc(n1)} <i>&amp;</i> ${esc(n2)}`}</h1>`+
-        `<p class="ct-tx">${esc(inv.intro&&inv.intro.text||L.joy)}</p>`+
+        `<p class="ct-tx">${esc(std?SD.text||L.stdTx:inv.intro&&inv.intro.text||L.joy)}</p>`+
         `<p class="ct-dl"><i></i><span>${esc(inv.intro&&inv.intro.dateText||day(main,L,true))}</span><i></i></p>`+
+        (std?(SD.city?`<p class="ct-city">${esc(SD.city)}</p>`:'')+
+          `<div class="ct-acts ct-two"><button type="button" class="ct-b"${live?' data-cal="e0"':''}>${ic.cal}${esc(L.cal)}</button>${inv.reply!==false?`<button type="button" class="ct-b"${live?' data-rsvp':''}>${ic.heart}${esc(L.here)}</button>`:''}</div>`:
         `<div class="ct-evs" style="--slots:${slots}">${evs.map(ev).join('')}</div>`+
-        prog+dress+rs+
+        prog+dress+rs)+
         `<p class="ct-made"><span>Save the</span> <b>Oui</b></p>`+
       `</div></div>`;
   }
@@ -181,7 +187,7 @@
     (root||document).querySelectorAll('.ct-lk').forEach(lk=>{ lk.classList.remove('ico'); if(lk.scrollWidth>lk.clientWidth+1) lk.classList.add('ico'); });
     // en ligne : s'il reste de la place sur l'écran, le texte grandit un peu (jusqu'à 106 %) pour composer une vraie page
     (root||document).querySelectorAll('.ct-fit').forEach(el=>{ const sh=el.querySelector('.ct-sheet'), box=el.parentNode; if(!sh||!box) return;
-      const H=(box.closest('.sc,.pv-scroll')||box).clientHeight; if(!H) return;
+      const H=(box.closest('.sc,.pv-scroll,.std-scr')||box).clientHeight; if(!H) return;
       // une illustration pas encore chargée n'a pas de hauteur : la mise en page se refait quand elle arrive
       el.querySelectorAll('.ct-deco img,.ct-pw img').forEach(im=>{ if(!im.complete&&!im._fit){ im._fit=1; im.addEventListener('load',()=>fit(el.parentNode),{once:true}); } });
       /* les mesures à l'écran sont réduites quand l'aperçu l'est (téléphone à 31 % dans le bandeau du configurateur sur
@@ -280,5 +286,10 @@
     const xref=len; put(`xref\n0 6\n0000000000 65535 f \n${[1,2,3,4,5].map(n=>String(offs[n]).padStart(10,'0')+' 00000 n \n').join('')}trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
     const blob=new Blob(parts,{type:'application/pdf'}); if(dl!==false) save(blob,fileName(inv,'pdf')); return blob;
   }
-  window.SceauCarte={PAPERS,html,fit,png,pdf,inkOf,ratio};
+  // pour le save-the-date (std.js) : le fond peint du thème, la police des prénoms, la cire du sceau
+  const fondOf=k=>`/img/carte/${FOND[styleOf(k)]}-fond.webp?v=${CARTEV}`;
+  function fontOf(inv){ const T=TH()[inv.theme]||{}, F=FONTS[inv.font]||null;
+    return {ff:F?F.css:(T.font||'"Cormorant Garamond",Georgia,serif'),it:F?!!F.italic:!!T.italic,up:F?!!F.upper:!!T.upper}; }
+  const sealFor=inv=>{ const n=SEALS[inv.seal]?inv.seal:sealOf(inv.palette||'#b8975a'); return [n].concat(SEALS[n]); };
+  window.SceauCarte={PAPERS,html,fit,png,pdf,inkOf,ratio,fondOf,fontOf,sealFor};
 })();

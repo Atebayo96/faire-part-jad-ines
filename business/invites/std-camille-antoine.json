@@ -1,0 +1,35 @@
+{
+ "demo": true,
+ "kind": "std",
+ "format": "std",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "std-camille-antoine",
+ "theme": "doucefrance",
+ "couple": [
+  "Camille",
+  "Antoine"
+ ],
+ "date": "2027-07-03T10:00",
+ "opening": "none",
+ "reply": true,
+ "palette": "#6f63a3",
+ "paper": "coton",
+ "std": {
+  "anim": "cadenas",
+  "city": "Lourmarin"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "Le mariage",
+   "title": "Lourmarin",
+   "start": "2027-07-03T10:00",
+   "end": "2027-07-03T23:30"
+  }
+ ],
+ "rsvp": {
+  "title": "Serez-vous des nôtres ?"
+ }
+}

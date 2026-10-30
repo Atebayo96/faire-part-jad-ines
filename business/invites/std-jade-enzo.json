@@ -1,0 +1,35 @@
+{
+ "demo": true,
+ "kind": "std",
+ "format": "std",
+ "tz": "Europe/Paris",
+ "countdown": "non",
+ "music": "none",
+ "slug": "std-jade-enzo",
+ "theme": "doucefrance",
+ "couple": [
+  "Jade",
+  "Enzo"
+ ],
+ "date": "2027-05-22T10:00",
+ "opening": "none",
+ "reply": true,
+ "palette": "#b08648",
+ "paper": "coton",
+ "std": {
+  "anim": "calendrier",
+  "city": "Aix-en-Provence"
+ },
+ "events": [
+  {
+   "id": "e0",
+   "eyebrow": "Le mariage",
+   "title": "Aix-en-Provence",
+   "start": "2027-05-22T10:00",
+   "end": "2027-05-22T23:30"
+  }
+ ],
+ "rsvp": {
+  "title": "Serez-vous des nôtres ?"
+ }
+}
