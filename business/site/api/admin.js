@@ -94,7 +94,7 @@ export default async function handler(req, res) {
       if (!c.paidAt) return res.status(400).json({ error: 'unpaid' });
       let L;
       if (c.plan === 'carte') L = { dl: c.dl };
-      else { L = links(c.slug); if (c.plan === 'page' && !(c.options && c.options.reply)) delete L.dashboard; }
+      else { L = links(c.slug, undefined, c.plan); if (c.plan === 'std') L.what = 'save-the-date'; if (c.plan === 'page' && !(c.options && c.options.reply)) delete L.dashboard; }
       const ok = await mail(c.email, c.inv.couple.join(' & '), L);
       if (!ok) return res.status(502).json({ error: process.env.RESEND_API_KEY ? 'mail' : 'resend' });
       c.mailed = true; c.remailedAt = new Date().toISOString(); await save(`commandes/${ref}.json`, c);
@@ -118,7 +118,7 @@ export default async function handler(req, res) {
     return Object.assign(c, {
       couple: inv && inv.couple.join(' & '), date: inv && inv.date, theme: inv && inv.theme, events: inv && inv.events ? inv.events.length : 0,
       paid: !!(c.slug || c.paidAt), price, amount, test: !!c.test || (!!(c.slug || c.paidAt) && amount === 0) || !!(c.payment && c.payment.fake) },
-      c.slug ? links(c.slug, '') : {});
+      c.slug ? links(c.slug, '', c.plan) : {});
   });
 
   // les faire-part : ceux du dépôt (démos, premiers clients) et ceux commandés en ligne

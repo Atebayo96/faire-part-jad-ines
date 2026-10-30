@@ -115,7 +115,7 @@ const dd=s=>s?new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'short
 const day=s=>{const d=new Date(s);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const THEMES={dolcevita:'Dolce Vita',dolcevitajour:'Dolce Vita (jour)',doucefrance:'Douce France',oldmoney:'Old money',nuits:'Mille et une nuits',alhambra:'Andalou'};
 const thm=k=>THEMES[k]||k||'';
-const PLANS={carte:'Carte',page:'Page unique',essentiel:'Essentiel',signature:'Signature / Couture'};
+const PLANS={std:'Save the date',carte:'Carte',page:'Page unique',essentiel:'Essentiel',signature:'Signature / Couture'};
 const LS={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
 let KEY='', D=null, DAYS=+(LS.get('adm-days')||30), TAB=LS.get('adm-tab')||'vue';
 const S={cmd:'all',q:'',lead:'all',lq:''};
