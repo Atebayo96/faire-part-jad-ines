@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publier sur TikTok · Save The Oui</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<!-- Notre page de publication TikTok (29-30 octobre 2026). Elle suit les règles d'interface de TikTok pour la publication
+     directe (Content Sharing Guidelines) : compte relu à chaque affichage et nommé, visibilité sans valeur par défaut,
+     interactions décochées, divulgation commerciale, phrase de consentement, aperçu, durée vérifiée, envoi seulement
+     après le clic, suivi de l'état. ?lang=en pour la vidéo de démonstration de l'audit. -->
+<style>
+  @font-face{font-family:"Great Vibes";src:url("/polices/great-vibes-1402a25d.woff2") format("woff2");font-display:swap}
+  :root{--ink:#16130f;--mute:#6b655c;--line:#e6e1d8;--bg:#faf8f4;--card:#fff;--acc:#fe2c55;--ok:#1f7a4d;--warn:#8a5a00}
+  *{box-sizing:border-box}
+  body{margin:0;font:400 16px/1.5 Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 80px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+  .logo{font:500 13px/1 Inter,sans-serif;letter-spacing:.28em;text-transform:uppercase;color:var(--ink);text-decoration:none}
+  .logo i{font:400 28px/1 "Great Vibes",cursive;letter-spacing:0;text-transform:none;font-style:normal;margin-left:4px}
+  .lang{font-size:13px;color:var(--mute)}
+  h1{font:600 26px/1.15 -apple-system,"Helvetica Neue",sans-serif;letter-spacing:-.02em;margin:18px 0 18px}
+  h2{font:600 18px/1.2 -apple-system,"Helvetica Neue",sans-serif;margin:0 0 14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+  .acct{display:flex;align-items:center;gap:14px}
+  .acct img{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#eee}
+  .acct b{display:block;font-size:17px}
+  .acct small,.hint{color:var(--mute);font-size:14px}
+  label.f{display:block;font-weight:600;font-size:15px;margin:18px 0 6px}
+  input[type=text],input[type=password],input[type=datetime-local],textarea,select{width:100%;font:inherit;padding:11px 12px;border:1px solid #d6d0c5;border-radius:10px;background:#fff;color:var(--ink)}
+  textarea{min-height:110px;resize:vertical}
+  .count{float:right;font-weight:400;color:var(--mute);font-size:13px}
+  button,.btn{font:600 16px/1 Inter,-apple-system,sans-serif;padding:13px 18px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+  button.ghost{background:#fff;color:var(--ink)}
+  button.tk{background:#000;border-color:#000}
+  button.pub{background:var(--acc);border-color:var(--acc);width:100%;justify-content:center;font-size:17px;padding:15px}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #9ec5ff;outline-offset:2px}
+  .drop{border:2px dashed #cfc8bb;border-radius:12px;padding:22px;text-align:center;color:var(--mute);cursor:pointer;background:#fdfcfa}
+  .drop.on{border-color:var(--ink);color:var(--ink)}
+  .prev{display:flex;gap:8px;overflow-x:auto;margin-top:12px}
+  .prev img,.prev video{height:220px;aspect-ratio:9/16;object-fit:cover;border-radius:8px;background:#000;flex:none}
+  .row{display:flex;align-items:center;gap:10px;padding:9px 0}
+  .row input[type=checkbox]{width:20px;height:20px;accent-color:var(--ink)}
+  .row.dis{color:#aaa}
+  .sw{margin-left:auto}
+  .sub{margin:4px 0 0 30px}
+  .note{font-size:14px;padding:10px 12px;border-radius:10px;background:#f4f1ea;color:var(--ink);margin-top:10px}
+  .note.warn{background:#fff4dc;color:var(--warn)}
+  .note.err{background:#ffe9ec;color:#a3112b}
+  .note.ok{background:#e6f5ec;color:var(--ok)}
+  .decl{font-size:14px;color:var(--mute);margin:16px 0 12px}
+  .decl a{color:var(--ink)}
+  .seg{display:flex;gap:8px;flex-wrap:wrap}
+  .seg label{display:flex;align-items:center;gap:8px;border:1px solid #d6d0c5;border-radius:999px;padding:9px 14px;cursor:pointer}
+  .seg input{accent-color:var(--ink)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  td{padding:10px 6px;border-top:1px solid var(--line);vertical-align:top}
+  .st{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600;background:#eee;white-space:nowrap}
+  .st.publie,.st.brouillon{background:#e6f5ec;color:var(--ok)}
+  .st.echec{background:#ffe9ec;color:#a3112b}
+  .st.envoye{background:#fff4dc;color:var(--warn)}
+  td button{padding:7px 11px;font-size:13px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a class="logo" href="/">Save The<i>Oui</i></a><a class="lang" id="lang" href="?lang=en">English</a></header>
+
+  <section id="login" class="card" hidden>
+    <h2 data-t="keyTitle"></h2>
+    <p class="hint" data-t="keyHint"></p>
+    <form id="kf" style="display:flex;gap:8px"><input id="k" type="password" autocomplete="off"><button data-t="open"></button></form>
+  </section>
+
+  <div id="main" hidden>
+    <h1 data-t="title"></h1>
+
+    <section class="card" id="acctCard">
+      <div id="acct"></div>
+    </section>
+
+    <section class="card" id="compose" hidden>
+      <h2 data-t="newPost"></h2>
+      <div class="drop" id="drop" tabindex="0" role="button"><span data-t="pick"></span><br><small data-t="pickHint"></small></div>
+      <input id="file" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm" multiple hidden>
+      <div class="prev" id="prev"></div>
+      <div id="durNote"></div>
+
+      <div id="titleBox" hidden>
+        <label class="f" for="title"><span data-t="titleL"></span> <span class="count" id="tc"></span></label>
+        <input id="title" type="text" maxlength="90">
+      </div>
+      <label class="f" for="cap"><span data-t="capL"></span> <span class="count" id="cc"></span></label>
+      <textarea id="cap"></textarea>
+
+      <label class="f" for="priv" data-t="privL"></label>
+      <select id="priv"></select>
+      <div id="privNote"></div>
+
+      <label class="f" data-t="allowL"></label>
+      <div class="row" id="rowComment"><input type="checkbox" id="iComment"><label for="iComment" data-t="comment"></label></div>
+      <div class="row" id="rowDuet"><input type="checkbox" id="iDuet"><label for="iDuet" data-t="duet"></label></div>
+      <div class="row" id="rowStitch"><input type="checkbox" id="iStitch"><label for="iStitch" data-t="stitch"></label></div>
+
+      <label class="f" data-t="discL"></label>
+      <div class="row"><input type="checkbox" id="disc"><label for="disc" data-t="disc"></label></div>
+      <p class="hint sub" data-t="discHint"></p>
+      <div id="discBox" class="sub" hidden>
+        <div class="row"><input type="checkbox" id="bOrg"><label for="bOrg"><b data-t="yourBrand"></b><br><small data-t="yourBrandH"></small></label></div>
+        <div class="row" id="rowBC"><input type="checkbox" id="bCon"><label for="bCon"><b data-t="branded"></b><br><small data-t="brandedH"></small></label></div>
+        <div id="discNote"></div>
+      </div>
+
+      <div class="row"><input type="checkbox" id="aigc"><label for="aigc" data-t="aigc"></label></div>
+
+      <label class="f" data-t="whenL"></label>
+      <div class="seg">
+        <label><input type="radio" name="when" value="now" checked><span data-t="now"></span></label>
+        <label><input type="radio" name="when" value="later"><span data-t="later"></span></label>
+      </div>
+      <div id="atBox" hidden style="margin-top:10px"><input id="at" type="datetime-local"><p class="hint" data-t="tz"></p></div>
+
+      <p class="decl" id="decl"></p>
+      <span id="pubWrap" style="display:block"><button class="pub" id="pub" disabled></button></span>
+      <div id="pubNote"></div>
+    </section>
+
+    <section class="card" id="queueCard" hidden>
+      <h2 data-t="queue"></h2>
+      <table><tbody id="queue"></tbody></table>
+    </section>
+  </div>
+</div>
+<script>
+// la langue choisie survit au passage par TikTok (le retour de connexion revient sur /admin/tiktok/ sans paramètre)
+const LQ = new URLSearchParams(location.search).get('lang');
+try { if (LQ) sessionStorage.setItem('tk-lang', LQ); } catch (e) {}
+const EN = (LQ || (() => { try { return sessionStorage.getItem('tk-lang'); } catch (e) { return ''; } })()) === 'en';
+const T = {
+  keyTitle:['Accès réservé','Restricted access'], keyHint:['Clé secrète du site (SCEAU_SECRET sur Vercel).','Site secret key.'], open:['Ouvrir','Open'],
+  title:['Publier sur TikTok','Post to TikTok'],
+  notConnected:['Aucun compte TikTok relié.','No TikTok account connected.'], connect:['Se connecter avec TikTok','Continue with TikTok'],
+  postingTo:['Publication sur le compte','Posting to'], disconnect:['Déconnecter','Disconnect'],
+  newPost:['Nouveau post','New post'], pick:['Choisir une vidéo, ou des images pour un carrousel','Choose a video, or photos for a carousel'],
+  pickHint:['MP4, MOV, WEBM ou JPG, PNG, WEBP · 35 images au plus','MP4, MOV, WEBM or JPG, PNG, WEBP · up to 35 photos'],
+  titleL:['Titre','Title'], capL:['Légende','Caption'], privL:['Qui peut voir ce post','Who can view this post'],
+  choose:['Choisir…','Select…'],
+  PUBLIC_TO_EVERYONE:['Tout le monde','Everyone'], MUTUAL_FOLLOW_FRIENDS:['Amis','Friends'], FOLLOWER_OF_CREATOR:['Abonnés','Followers'], SELF_ONLY:['Moi uniquement','Only me'],
+  allowL:['Autoriser','Allow users to'], comment:['Les commentaires','Comment'], duet:['Le duo','Duet'], stitch:['Le collage','Stitch'],
+  disabledByApp:['désactivé dans les réglages TikTok du compte','disabled in your TikTok settings'],
+  discL:['Contenu commercial','Disclose post content'], disc:['Ce post fait la promotion d’une marque, d’un produit ou d’un service','This post promotes a brand, product or service'],
+  discHint:['Activez-le si ce contenu fait la promotion de vous-même, d’un tiers, ou des deux.','Turn on to disclose that this content promotes goods or services in exchange for something of value.'],
+  yourBrand:['Votre marque','Your brand'], yourBrandH:['Vous faites la promotion de vous-même ou de votre entreprise.','You are promoting yourself or your own business.'],
+  branded:['Contenu de marque','Branded content'], brandedH:['Vous faites la promotion d’un autre que vous (partenariat rémunéré).','You are promoting another brand or a third party.'],
+  needOne:['Indiquez si ce contenu fait la promotion de vous-même, d’un tiers, ou des deux.','You need to indicate if your content promotes yourself, a third party, or both.'],
+  lblPromo:['Votre {x} portera la mention « Contenu promotionnel ».','Your {x} will be labeled as “Promotional content”.'],
+  lblPaid:['Votre {x} portera la mention « Partenariat rémunéré ».','Your {x} will be labeled as “Paid partnership”.'],
+  photo:['photo','photo'], video:['vidéo','video'],
+  bcPrivate:['Un contenu de marque ne peut pas être privé : la visibilité « Moi uniquement » n’est pas possible.','Branded content visibility cannot be set to private.'],
+  aigc:['Contenu généré par IA','AI-generated content'],
+  whenL:['Quand','When'], now:['Maintenant','Now'], later:['Programmer','Schedule'], tz:['Heure de Paris.','Paris time.'],
+  declMusic:['En publiant, vous acceptez la {m} de TikTok.','By posting, you agree to TikTok’s {m}.'],
+  declBC:['En publiant, vous acceptez la {b} et la {m} de TikTok.','By posting, you agree to TikTok’s {b} and {m}.'],
+  music:['Confirmation d’utilisation de la musique','Music Usage Confirmation'], bcp:['Politique sur le contenu de marque','Branded Content Policy'],
+  publish:['Publier','Post'], schedule:['Programmer le post','Schedule post'],
+  tooLong:['Cette vidéo dure {d} s : le compte accepte {m} s au plus.','This video is {d} s long; this account accepts up to {m} s.'],
+  mixed:['Une vidéo seule, ou des images seules.','Choose one video, or photos only.'],
+  sending:['Envoi des fichiers… {p} %','Uploading… {p}%'], sent:['C’est parti. TikTok traite le post : il peut mettre quelques minutes à apparaître sur le profil.','Done. TikTok is processing your post; it may take a few minutes to appear on your profile.'],
+  scheduled:['Post programmé pour le {d}.','Post scheduled for {d}.'],
+  queue:['Posts','Posts'], st_prevu:['Prévu','Scheduled'], st_envoye:['En cours','Processing'], st_publie:['Publié','Posted'], st_brouillon:['Dans les brouillons','In drafts'], st_echec:['Échec','Failed'],
+  now2:['Publier maintenant','Post now'], remove:['Retirer','Remove'], empty:['Aucun post pour l’instant.','No posts yet.'],
+  unaudited:['Tant que l’app n’est pas validée par TikTok, seul « Moi uniquement » est possible.','Until the app is audited by TikTok, only “Only me” is available.'],
+  cantPost:['TikTok ne permet pas de publier sur ce compte pour le moment. Réessayez plus tard.','TikTok does not allow posting to this account right now. Please try again later.'],
+};
+const t = (k, v) => { let s = (T[k] || [k, k])[EN ? 1 : 0]; for (const x in v || {}) s = s.replace('{' + x + '}', v[x]); return s; };
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+if (EN) { document.documentElement.lang = 'en'; $('lang').textContent = 'Français'; $('lang').href = '?lang=fr'; document.title = 'Post to TikTok · Save The Oui'; }
+document.querySelectorAll('[data-t]').forEach(e => e.textContent = t(e.dataset.t));
+
+let KEY = ''; try { KEY = sessionStorage.getItem('sceau-k') || ''; } catch (e) {}
+async function api(op, body) {
+  const r = await fetch('/api/tiktok', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + KEY }, body: JSON.stringify(Object.assign({ op }, body || {})) });
+  const j = await r.json().catch(() => ({}));
+  if (r.status === 401) { try { sessionStorage.removeItem('sceau-k'); } catch (e) {} $('main').hidden = true; $('login').hidden = false; throw new Error('key'); }
+  if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
+  return j;
+}
+
+// ---- le compte, relu à chaque affichage
+let S = null;
+async function loadAccount() {
+  S = await api('status', { live: true });
+  const a = $('acct');
+  if (!S.connected) {
+    a.innerHTML = `<p style="margin-top:0">${t('notConnected')}</p>${S.error ? `<p class="note err">${esc(S.error)}</p>` : ''}<button class="tk" id="cn"><svg width="18" height="18" viewBox="0 0 48 48" fill="#fff"><path d="M34 6c1 5 4 8 9 9v7c-3 0-6-1-9-3v13c0 7-6 12-13 12S8 39 8 32s6-12 13-12v7c-3 0-6 2-6 5s3 6 6 6 6-3 6-6V6h7z"/></svg>${t('connect')}</button>`;
+    $('cn').onclick = async () => { const r = await api('connect'); location.href = r.url; };
+    $('compose').hidden = true; return;
+  }
+  a.innerHTML = `<div class="acct">${S.avatar ? `<img src="${esc(S.avatar)}" alt="">` : ''}<div><small>${t('postingTo')}</small><b>${esc(S.nickname || S.username || '')}</b>${S.username ? `<small>@${esc(S.username)}</small>` : ''}</div><button class="ghost sw" id="dc">${t('disconnect')}</button></div>${S.error ? `<p class="note err">${esc(/spam|ban|cap|limit/i.test(S.error) ? t('cantPost') : S.error)}</p>` : ''}`;
+  $('dc').onclick = async () => { await api('disconnect'); loadAccount(); };
+  $('compose').hidden = !!S.error;
+  const opts = S.privacy_options || [];
+  $('priv').innerHTML = `<option value="" selected disabled>${t('choose')}</option>` + opts.map(o => `<option value="${o}">${t(o)}</option>`).join('');
+  $('privNote').innerHTML = opts.length === 1 && opts[0] === 'SELF_ONLY' ? `<p class="note warn">${t('unaudited')}</p>` : '';
+  sync();
+}
+
+// ---- les fichiers : rien n'est envoyé avant le clic sur Publier
+let FILES = [], KIND = null, DUR = 0;
+$('drop').onclick = () => $('file').click();
+$('drop').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('file').click(); } };
+['dragover', 'dragenter'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.add('on'); }));
+['dragleave', 'drop'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('on'); }));
+$('drop').addEventListener('drop', e => take([...e.dataTransfer.files]));
+$('file').onchange = () => take([...$('file').files]);
+function take(fs) {
+  const vids = fs.filter(f => f.type.startsWith('video/')), imgs = fs.filter(f => f.type.startsWith('image/'));
+  $('durNote').innerHTML = ''; DUR = 0;
+  if ((vids.length && imgs.length) || vids.length > 1) { FILES = []; KIND = null; $('prev').innerHTML = ''; $('durNote').innerHTML = `<p class="note err">${t('mixed')}</p>`; return sync(); }
+  FILES = vids.length ? vids : imgs.slice(0, 35).sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+  KIND = vids.length ? 'video' : imgs.length ? 'photo' : null;
+  $('prev').innerHTML = FILES.map(f => KIND === 'video' ? `<video src="${URL.createObjectURL(f)}" controls playsinline muted></video>` : `<img src="${URL.createObjectURL(f)}" alt="">`).join('');
+  if (KIND === 'video') $('prev').querySelector('video').onloadedmetadata = e => { DUR = e.target.duration; sync(); };
+  sync();
+}
+
+['title', 'cap', 'priv', 'iComment', 'iDuet', 'iStitch', 'disc', 'bOrg', 'bCon', 'at'].forEach(id => $(id).addEventListener('input', sync));
+document.querySelectorAll('input[name=when]').forEach(r => r.addEventListener('change', sync));
+const when = () => document.querySelector('input[name=when]:checked').value;
+
+function sync() {
+  if (!S) return;
+  const photo = KIND === 'photo';
+  $('titleBox').hidden = !photo;
+  $('rowDuet').hidden = $('rowStitch').hidden = photo;
+  $('tc').textContent = $('title').value.length + ' / 90';
+  const capMax = photo ? 4000 : 2200; $('cap').maxLength = capMax; $('cc').textContent = $('cap').value.length + ' / ' + capMax;
+  // interactions désactivées dans les réglages du compte : grisées
+  for (const [row, box, k] of [['rowComment', 'iComment', 'comment_disabled'], ['rowDuet', 'iDuet', 'duet_disabled'], ['rowStitch', 'iStitch', 'stitch_disabled']]) {
+    const off = !!S[k]; $(box).disabled = off; if (off) $(box).checked = false; $(row).classList.toggle('dis', off);
+    $(row).title = off ? t('disabledByApp') : '';
+  }
+  // contenu commercial
+  const disc = $('disc').checked; $('discBox').hidden = !disc;
+  if (!disc) { $('bOrg').checked = false; $('bCon').checked = false; }
+  const org = $('bOrg').checked, con = $('bCon').checked;
+  const privOpt = $('priv').querySelector('option[value=SELF_ONLY]');
+  if (privOpt) { privOpt.disabled = con; privOpt.title = con ? t('bcPrivate') : ''; }
+  if (con && $('priv').value === 'SELF_ONLY') $('priv').value = '';
+  const onlyPrivate = (S.privacy_options || []).every(o => o === 'SELF_ONLY');
+  $('bCon').disabled = onlyPrivate || $('priv').value === 'SELF_ONLY'; $('rowBC').classList.toggle('dis', $('bCon').disabled);
+  $('rowBC').title = $('bCon').disabled ? t('bcPrivate') : '';
+  const x = t(photo ? 'photo' : 'video');
+  $('discNote').innerHTML = !disc ? '' : !org && !con ? `<p class="note warn">${t('needOne')}</p>` : `<p class="note">${t(con ? 'lblPaid' : 'lblPromo', { x })}</p>${$('bCon').disabled ? `<p class="note warn">${t('bcPrivate')}</p>` : ''}`;
+  // phrase de consentement
+  const mu = `<a href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en" target="_blank" rel="noopener">${t('music')}</a>`;
+  const bc = `<a href="https://www.tiktok.com/legal/page/global/bc-policy/en" target="_blank" rel="noopener">${t('bcp')}</a>`;
+  $('decl').innerHTML = con ? t('declBC', { b: bc, m: mu }) : t('declMusic', { m: mu });
+  // durée
+  const tooLong = KIND === 'video' && DUR && S.max_video_sec && DUR > S.max_video_sec;
+  $('durNote').innerHTML = tooLong ? `<p class="note err">${t('tooLong', { d: Math.round(DUR), m: S.max_video_sec })}</p>` : $('durNote').innerHTML.includes('mixed') ? $('durNote').innerHTML : '';
+  $('atBox').hidden = when() !== 'later';
+  $('pub').textContent = t(when() === 'later' ? 'schedule' : 'publish');
+  const ok = FILES.length && $('priv').value && !(disc && !org && !con) && !tooLong && !(when() === 'later' && !$('at').value);
+  $('pub').disabled = !ok;
+  $('pubWrap').title = disc && !org && !con ? t('needOne') : '';
+}
+
+// heure de Paris (champ datetime-local) → instant
+function parisIso(v) {
+  const [d, h] = v.split('T'); const [Y, M, D] = d.split('-').map(Number); const [hh, mm] = h.split(':').map(Number);
+  const wall = Date.UTC(Y, M - 1, D, hh, mm); let x = wall;
+  for (let i = 0; i < 2; i++) {
+    const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Paris', hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).formatToParts(new Date(x));
+    const g = k => +p.find(q => q.type === k).value;
+    x = wall - (Date.UTC(g('year'), g('month') - 1, g('day'), g('hour'), g('minute')) - Math.floor(x / 6e4) * 6e4);
+  }
+  return new Date(x).toISOString();
+}
+const b64 = buf => { let s = '', a = new Uint8Array(buf); for (let i = 0; i < a.length; i += 32768) s += String.fromCharCode.apply(null, a.subarray(i, i + 32768)); return btoa(s); };
+const EXT = f => ({ 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'video/mp4': 'mp4', 'video/quicktime': 'mov', 'video/webm': 'webm' }[f.type]);
+const CH = 2.5 * 1024 * 1024;
+
+$('pub').onclick = async () => {
+  $('pub').disabled = true; const note = $('pubNote');
+  try {
+    const total = FILES.reduce((s, f) => s + f.size, 0); let done = 0; const media = [];
+    const prog = () => note.innerHTML = `<p class="note">${t('sending', { p: Math.round(done / total * 100) })}</p>`; prog();
+    for (const f of FILES) {
+      const ext = EXT(f), buf = await f.arrayBuffer();
+      if (buf.byteLength <= CH) { media.push((await api('media', { ext, data: `data:${f.type};base64,` + b64(buf) })).key); done += buf.byteLength; prog(); continue; }
+      const up = Math.random().toString(36).slice(2, 12), n = Math.ceil(buf.byteLength / CH);
+      for (let i = 0; i < n; i++) { const part = buf.slice(i * CH, (i + 1) * CH); await api('part', { upload: up, part: i, data: 'data:application/octet-stream;base64,' + b64(part) }); done += part.byteLength; prog(); }
+      media.push((await api('media-done', { upload: up, parts: n, ext })).key);
+    }
+    const later = when() === 'later', at = later ? parisIso($('at').value) : new Date().toISOString();
+    const { item } = await api('add', { kind: KIND, media, title: KIND === 'photo' ? $('title').value : '', caption: $('cap').value, at, mode: 'direct', privacy: $('priv').value,
+      comment: $('iComment').checked, duet: $('iDuet').checked, stitch: $('iStitch').checked, brand_organic: $('bOrg').checked, brand_content: $('bCon').checked, aigc: $('aigc').checked });
+    if (later) note.innerHTML = `<p class="note ok">${t('scheduled', { d: fmt(at) })}</p>`;
+    else { const r = await api('now', { id: item.id }); if (r.error || (r.item && r.item.status === 'echec')) throw new Error(r.error || r.item.error); note.innerHTML = `<p class="note ok">${t('sent')}</p>`; follow(item.id); }
+    FILES = []; KIND = null; $('prev').innerHTML = ''; $('file').value = ''; $('title').value = ''; $('cap').value = '';
+    $('priv').value = ''; ['iComment', 'iDuet', 'iStitch', 'disc', 'bOrg', 'bCon', 'aigc'].forEach(id => $(id).checked = false);
+    sync(); loadQueue();
+  } catch (e) { if (e.message !== 'key') note.innerHTML = `<p class="note err">${esc(e.message)}</p>`; sync(); }
+};
+
+// ---- suivi : l'état du post chez TikTok, relu toutes les 5 s jusqu'au bout
+function follow(id, n = 0) {
+  setTimeout(async () => {
+    try { const r = await api('check', { id }); renderQueue(r.queue); const it = r.queue.find(x => x.id === id); if (it && it.status === 'envoye' && n < 60) follow(id, n + 1); } catch (e) {}
+  }, 5000);
+}
+const fmt = iso => new Date(iso).toLocaleString(EN ? 'en-GB' : 'fr-FR', { timeZone: 'Europe/Paris', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+async function loadQueue() { try { renderQueue((await api('list')).queue); } catch (e) {} }
+function renderQueue(q) {
+  $('queueCard').hidden = false;
+  $('queue').innerHTML = !q.length ? `<tr><td class="hint">${t('empty')}</td></tr>` : q.slice().reverse().map(i => `<tr>
+    <td style="white-space:nowrap">${fmt(i.at)}</td>
+    <td>${i.kind === 'photo' ? i.media.length + ' 🖼' : '🎬'} ${esc((i.title || i.caption || '').slice(0, 70))}${i.error ? `<br><small style="color:#a3112b">${esc(i.error)}</small>` : ''}${i.note ? `<br><small class="hint">${esc(i.note)}</small>` : ''}</td>
+    <td>${i.privacy ? `<small class="hint">${t(i.privacy)}</small>` : ''}</td>
+    <td><span class="st ${i.status}">${t('st_' + i.status)}</span></td>
+    <td style="text-align:right;white-space:nowrap">${i.status === 'prevu' || i.status === 'echec' ? `<button class="ghost" data-now="${i.id}">${t('now2')}</button> ` : ''}${i.status !== 'envoye' ? `<button class="ghost" data-rm="${i.id}">${t('remove')}</button>` : ''}</td></tr>`).join('');
+  $('queue').querySelectorAll('[data-now]').forEach(b => b.onclick = async () => { b.disabled = true; try { await api('now', { id: b.dataset.now }); follow(b.dataset.now); } catch (e) {} loadQueue(); });
+  $('queue').querySelectorAll('[data-rm]').forEach(b => b.onclick = async () => { b.disabled = true; try { await api('remove', { id: b.dataset.rm }); } catch (e) {} loadQueue(); });
+  if (q.some(i => i.status === 'envoye')) follow(q.find(i => i.status === 'envoye').id);
+}
+
+async function start() {
+  $('login').hidden = true; $('main').hidden = false;
+  try { await loadAccount(); await loadQueue(); } catch (e) { if (e.message !== 'key') $('acct').innerHTML = `<p class="note err">${esc(e.message)}</p>`; }
+}
+$('kf').onsubmit = e => { e.preventDefault(); KEY = $('k').value.trim(); try { sessionStorage.setItem('sceau-k', KEY); } catch (x) {} start(); };
+if (KEY) start(); else $('login').hidden = false;
+</script>
+</body>
+</html>

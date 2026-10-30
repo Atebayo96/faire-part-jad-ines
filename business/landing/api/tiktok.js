@@ -7,7 +7,8 @@
 import { ready, isAdmin, clean, id as newId } from './_store.js';
 import { configured, connectUrl, finishConnect, disconnect, accessToken, creatorInfo, queue, saveQueue, run, putBin, getBin, KEY, newKey, typeOf, TYPES, mediaUrl, redirectUri } from './_tiktok.js';
 
-export const config = { api: { bodyParser: { sizeLimit: '4mb' } } };
+// morceaux de 2,5 Mo au plus côté client (3,4 Mo en base64), sous la limite de 4,5 Mo des fonctions Vercel
+export const config = { api: { bodyParser: { sizeLimit: '4.4mb' } } };
 const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 const page = (title, body) => `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>body{font:18px/1.5 Georgia,serif;max-width:560px;margin:12vh auto;padding:0 20px;color:#1e1a17}h1{font-weight:normal;font-size:28px}</style><h1>${esc(title)}</h1><p>${body}</p>`;
 
@@ -28,7 +29,7 @@ export default async function handler(req, res) {
       if (req.query.error) return res.status(400).send(page('TikTok a refusé', esc(req.query.error_description || req.query.error) + '.'));
       try {
         const t = await finishConnect(req.query.code, req.query.state);
-        return res.status(200).send(page('Compte TikTok relié', `Save The Oui peut publier sur <b>@${esc(t.username || t.open_id)}</b>. Vous pouvez fermer cette page.`));
+        return res.status(200).send(page('Compte TikTok relié', `Save The Oui peut publier sur <b>@${esc(t.username || t.open_id)}</b>.</p><p><a href="/admin/tiktok/">Retour à la publication</a>`));
       } catch (e) { return res.status(400).send(page('Connexion impossible', esc(e.message || e) + '.')); }
     }
     return res.status(401).json({ error: 'key' });
@@ -46,7 +47,12 @@ export default async function handler(req, res) {
         const t = await accessToken();
         if (t) {
           Object.assign(out, { connected: true, username: t.username, open_id: t.open_id, connected_at: t.connected_at, refresh_expires_at: new Date(t.refresh_expires_at).toISOString() });
-          if (b.live) { const i = await creatorInfo(t); out.username = i.creator_username; out.privacy_options = i.privacy_level_options; out.max_video_sec = i.max_video_post_duration_sec; }
+          if (b.live) {
+            // la page de publication relit le compte à chaque affichage (règle de TikTok) : nom, avatar, visibilités, interactions
+            const i = await creatorInfo(t);
+            Object.assign(out, { username: i.creator_username, nickname: i.creator_nickname, avatar: i.creator_avatar_url, privacy_options: i.privacy_level_options,
+              comment_disabled: !!i.comment_disabled, duet_disabled: !!i.duet_disabled, stitch_disabled: !!i.stitch_disabled, max_video_sec: i.max_video_post_duration_sec });
+          }
           else out.privacy_options = t.privacy_options;
         }
       } catch (e) { out.error = String(e.message || e); }
@@ -96,6 +102,9 @@ export default async function handler(req, res) {
         privacy: ['PUBLIC_TO_EVERYONE', 'MUTUAL_FOLLOW_FRIENDS', 'FOLLOWER_OF_CREATOR', 'SELF_ONLY'].includes(b.privacy) ? b.privacy : 'PUBLIC_TO_EVERYONE',
         aigc: !!b.aigc, music: !!b.music, status: 'prevu', createdAt: new Date().toISOString(),
       };
+      // réglages de la page : interactions (cochées par la personne) et contenu commercial ; un contenu sponsorisé ne peut pas être privé
+      for (const k of ['comment', 'duet', 'stitch', 'brand_organic', 'brand_content']) if (b[k] !== undefined) item[k] = !!b[k];
+      if (item.brand_content && item.privacy === 'SELF_ONLY') return res.status(400).json({ error: 'branded-private' });
       const q = await queue(); q.push(item); await saveQueue(q);
       return res.status(200).json({ item });
     }

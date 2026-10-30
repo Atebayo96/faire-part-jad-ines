@@ -117,10 +117,14 @@ export async function publishItem(item, tok) {
     item.note = `publié en ${fallback} : le compte ne propose pas ${privacy} (app TikTok pas encore auditée, ou compte privé)`;
     privacy = fallback;
   }
+  // interactions et contenu commercial : choisis dans la page (/admin/tiktok/, règles de TikTok : tout décoché par défaut) ;
+  // depuis la ligne de commande, les commentaires restent ouverts
+  const no = k => item[k] === undefined ? k !== 'comment' : !item[k];
+  const brand = { brand_content_toggle: !!item.brand_content, brand_organic_toggle: !!item.brand_organic };
   let d;
   if (item.kind === 'photo') {
     const post_info = { title: item.title || '', description: item.caption || '' };
-    if (direct) Object.assign(post_info, { privacy_level: privacy, disable_comment: false, auto_add_music: !!item.music, brand_content_toggle: false, brand_organic_toggle: false });
+    if (direct) Object.assign(post_info, { privacy_level: privacy, disable_comment: no('comment') || !!info.comment_disabled, auto_add_music: !!item.music }, brand);
     d = await tk(tok, '/v2/post/publish/content/init/', {
       post_info, source_info: { source: 'PULL_FROM_URL', photo_images: urls, photo_cover_index: 0 },
       post_mode: direct ? 'DIRECT_POST' : 'MEDIA_UPLOAD', media_type: 'PHOTO', is_aigc: !!item.aigc,
@@ -128,7 +132,7 @@ export async function publishItem(item, tok) {
   } else {
     const source_info = { source: 'PULL_FROM_URL', video_url: urls[0] };
     d = direct
-      ? await tk(tok, '/v2/post/publish/video/init/', { post_info: { title: item.caption || '', privacy_level: privacy, disable_duet: false, disable_comment: false, disable_stitch: false, brand_content_toggle: false, brand_organic_toggle: false, is_aigc: !!item.aigc }, source_info })
+      ? await tk(tok, '/v2/post/publish/video/init/', { post_info: Object.assign({ title: item.caption || '', privacy_level: privacy, disable_duet: no('duet') || !!info.duet_disabled, disable_comment: no('comment') || !!info.comment_disabled, disable_stitch: no('stitch') || !!info.stitch_disabled, is_aigc: !!item.aigc }, brand), source_info })
       : await tk(tok, '/v2/post/publish/inbox/video/init/', { source_info });
   }
   Object.assign(item, { publish_id: d.publish_id, status: 'envoye', sentAt: new Date().toISOString(), username: info.creator_username, error: undefined });

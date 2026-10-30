@@ -6,7 +6,8 @@ import path from 'node:path';
 import { randomBytes } from 'node:crypto';
 
 export const SITE = (process.env.SCEAU_SITE_URL || 'https://savetheoui.fr').replace(/\/$/, '');
-const CHUNK = 3 * 1024 * 1024;
+// 2,5 Mo par envoi : une fois en base64 (× 4/3), le corps reste sous la limite de 4,5 Mo des fonctions Vercel
+const CHUNK = 2.5 * 1024 * 1024;
 const EXT = { '.jpg': 'jpg', '.jpeg': 'jpg', '.png': 'png', '.webp': 'webp', '.mp4': 'mp4', '.mov': 'mov', '.webm': 'webm' };
 const IMG = new Set(['jpg', 'png', 'webp']);
 
