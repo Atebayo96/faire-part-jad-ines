@@ -174,6 +174,9 @@ const T = {
   sending:['Envoi des fichiers… {p} %','Uploading… {p}%'], sent:['C’est parti. TikTok traite le post : il peut mettre quelques minutes à apparaître sur le profil.','Done. TikTok is processing your post; it may take a few minutes to appear on your profile.'],
   scheduled:['Post programmé pour le {d}.','Post scheduled for {d}.'],
   queue:['Posts','Posts'], st_prevu:['Prévu','Scheduled'], st_envoye:['En cours','Processing'], st_publie:['Publié','Posted'], st_brouillon:['Dans les brouillons','In drafts'], st_echec:['Échec','Failed'],
+  er_unaudited:['L’app n’est pas encore validée par TikTok : choisissez « Moi uniquement ». Si l’erreur revient, passez le compte TikTok en privé le temps du test.','The app is not audited yet: choose “Only me”. If it happens again, set the TikTok account to private for the test.'],
+  er_url:['TikTok n’a pas pu vérifier que le fichier vient de savetheoui.fr : vérifiez le domaine dans l’app TikTok (URL properties).','TikTok could not verify that the file comes from savetheoui.fr: verify the domain in the TikTok app (URL properties).'],
+  er_spam:['TikTok limite les publications sur ce compte pour le moment. Réessayez plus tard.','TikTok is limiting posts on this account right now. Please try again later.'],
   now2:['Publier maintenant','Post now'], remove:['Retirer','Remove'], empty:['Aucun post pour l’instant.','No posts yet.'],
   unaudited:['Tant que l’app n’est pas validée par TikTok, seul « Moi uniquement » est possible.','Until the app is audited by TikTok, only “Only me” is available.'],
   cantPost:['TikTok ne permet pas de publier sur ce compte pour le moment. Réessayez plus tard.','TikTok does not allow posting to this account right now. Please try again later.'],
@@ -306,7 +309,7 @@ $('pub').onclick = async () => {
     const { item } = await api('add', { kind: KIND, media, title: KIND === 'photo' ? $('title').value : '', caption: $('cap').value, at, mode: 'direct', privacy: $('priv').value,
       comment: $('iComment').checked, duet: $('iDuet').checked, stitch: $('iStitch').checked, brand_organic: $('bOrg').checked, brand_content: $('bCon').checked, aigc: $('aigc').checked });
     if (later) note.innerHTML = `<p class="note ok">${t('scheduled', { d: fmt(at) })}</p>`;
-    else { const r = await api('now', { id: item.id }); if (r.error || (r.item && r.item.status === 'echec')) throw new Error(r.error || r.item.error); note.innerHTML = `<p class="note ok">${t('sent')}</p>`; follow(item.id); }
+    else { const r = await api('now', { id: item.id }); if (r.error || (r.item && r.item.status === 'echec')) throw new Error(why(r.error || r.item.error)); note.innerHTML = `<p class="note ok">${t('sent')}</p>`; follow(item.id); }
     FILES = []; KIND = null; $('prev').innerHTML = ''; $('file').value = ''; $('title').value = ''; $('cap').value = '';
     $('priv').value = ''; ['iComment', 'iDuet', 'iStitch', 'disc', 'bOrg', 'bCon', 'aigc'].forEach(id => $(id).checked = false);
     sync(); loadQueue();
@@ -319,13 +322,15 @@ function follow(id, n = 0) {
     try { const r = await api('check', { id }); renderQueue(r.queue); const it = r.queue.find(x => x.id === id); if (it && it.status === 'envoye' && n < 60) follow(id, n + 1); } catch (e) {}
   }, 5000);
 }
+// une phrase claire pour les erreurs connues de TikTok, le code brut sinon
+const why = e => /unaudited_client/.test(e) ? t('er_unaudited') : /url_ownership/.test(e) ? t('er_url') : /spam_risk|reached_active_user_cap/.test(e) ? t('er_spam') : e;
 const fmt = iso => new Date(iso).toLocaleString(EN ? 'en-GB' : 'fr-FR', { timeZone: 'Europe/Paris', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 async function loadQueue() { try { renderQueue((await api('list')).queue); } catch (e) {} }
 function renderQueue(q) {
   $('queueCard').hidden = false;
   $('queue').innerHTML = !q.length ? `<tr><td class="hint">${t('empty')}</td></tr>` : q.slice().reverse().map(i => `<tr>
     <td style="white-space:nowrap">${fmt(i.at)}</td>
-    <td>${i.kind === 'photo' ? i.media.length + ' 🖼' : '🎬'} ${esc((i.title || i.caption || '').slice(0, 70))}${i.error ? `<br><small style="color:#a3112b">${esc(i.error)}</small>` : ''}${i.note ? `<br><small class="hint">${esc(i.note)}</small>` : ''}</td>
+    <td>${i.kind === 'photo' ? i.media.length + ' 🖼' : '🎬'} ${esc((i.title || i.caption || '').slice(0, 70))}${i.error ? `<br><small style="color:#a3112b">${esc(why(i.error))}</small>` : ''}${i.note ? `<br><small class="hint">${esc(i.note)}</small>` : ''}</td>
     <td>${i.privacy ? `<small class="hint">${t(i.privacy)}</small>` : ''}</td>
     <td><span class="st ${i.status}">${t('st_' + i.status)}</span></td>
     <td style="text-align:right;white-space:nowrap">${i.status === 'prevu' || i.status === 'echec' ? `<button class="ghost" data-now="${i.id}">${t('now2')}</button> ` : ''}${i.status !== 'envoye' ? `<button class="ghost" data-rm="${i.id}">${t('remove')}</button>` : ''}</td></tr>`).join('');
