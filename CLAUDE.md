@@ -949,10 +949,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     10 h à 23 h 30) et **« Je serai là »** (la réponse habituelle, un seul moment « Le mariage », comptée dans le tableau de bord)).
     Huit jeux (`std.anim`) : ticket à gratter et jackpot (le vrai composant `reveal.js`), carte d'embarquement (on tire le talon
     vers le bas, le tampon « Embarquement confirmé » se pose **sous** la date), cadenas à code (JJ MM, chaque chiffre juste se
-    verrouille ; « Je donne ma langue au chat » après 9 s), message (une conversation qui s'écrit, l'invité choisit sa réplique),
-    bouton qui fuit (« Non » s'échappe six fois puis devient « Bon… oui ! »), calendrier (les pages se tournent jusqu'au mois,
-    le jour entouré au feutre) et **pluie de cœurs** (demandée le même jour : « des cœurs emoji qui tombent du haut du téléphone
-    et s'empilent en formant la date » : chiffres de 3 × 5 ❤️, le bas tombe d'abord, puis la date en toutes lettres).
+    verrouille ; « Je donne ma langue au chat » après 8 s ; le chiffre tourne **au contact du doigt** (`pointerdown`,
+    `touch-action: manipulation`) : au clic, deux taps rapides faisaient un double-tap et le second était perdu, « le cadenas
+    fonctionne pas » ; chaque rouleau montre ses chiffres voisins), message (une conversation qui s'écrit, l'invité choisit sa réplique),
+    bouton qui fuit (« Non » s'échappe six fois puis devient « Bon… oui ! »), calendrier (validé, « plus dynamique » : il part seul
+    après 1,6 s, au moins dix pages s'arrachent et s'envolent de travers en accélérant, freinent sur les trois derniers mois,
+    puis le mois du mariage zoome, le jour est entouré au feutre, confettis) et **pluie de cœurs** (« une pluie torrentielle
+    d'emojis, et ceux qui restent, c'est la date » : une averse de 300 emojis cœurs sur tout l'écran pendant près de 4 s, et
+    au milieu, les cœurs qui se posent écrivent la date en chiffres de 3 × 5 ❤️, puis la date en toutes lettres).
     Les jeux se posent sur le fond peint du thème (`img/carte/<thème>-fond.webp`) **dans des cartes crème au texte foncé**
     (`--sink` : l'encre du couple assombrie à 4,6:1 contre le crème) ; rien n'est écrit directement sur le motif. « Voir
     directement » passe le jeu à tout moment. Le bloc racine porte `std-a-<jeu>`, jamais `std-<jeu>` (`std-sms` était aussi la

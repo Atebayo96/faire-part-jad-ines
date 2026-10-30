@@ -98,7 +98,9 @@
   GAMES.cadenas=(st,c,done)=>{
     const code=(String(c.P.d).padStart(2,'0')+String(c.P.m+1).padStart(2,'0')).split('').map(Number);
     const cur=code.map(n=>(n+1+Math.floor(Math.random()*8))%10);
-    const wheel=i=>`<button type="button" class="lk-w" data-i="${i}" aria-label="Chiffre ${i+1}"><b>${cur[i]}</b></button>`;
+    // un rouleau : le chiffre et ses voisins, comme un vrai cadenas à molettes
+    const roll=n=>`<s>${(n+9)%10}</s><b>${n}</b><s>${(n+1)%10}</s>`;
+    const wheel=i=>`<button type="button" class="lk-w" data-i="${i}" aria-label="Chiffre ${i+1}"><span class="lk-r">${roll(cur[i])}</span></button>`;
     st.innerHTML=`<div class="std-lock">
       <svg class="lk-sh" viewBox="0 0 120 92" aria-hidden="true"><defs><linearGradient id="lkg" x1="0" x2="1"><stop offset="0" stop-color="#8d8a84"/><stop offset=".35" stop-color="#f1efe9"/><stop offset=".6" stop-color="#b4b0a8"/><stop offset="1" stop-color="#6f6b64"/></linearGradient></defs><path d="M24 92V50a36 36 0 0 1 72 0v42" fill="none" stroke="url(#lkg)" stroke-width="15" stroke-linecap="round"/></svg>
       <div class="lk-body">
@@ -115,10 +117,12 @@
     const check=()=>{ ws.forEach((w,i)=>{ if(cur[i]===code[i]&&!w.classList.contains('ok')){ w.classList.add('ok'); w.disabled=true; w.setAttribute('aria-label',`Chiffre ${i+1} trouvé : ${cur[i]}`); } });
       if(!open&&cur.every((n,i)=>n===code[i])){ open=true; help.hidden=true; L.querySelector('.lk-tip').hidden=true;
         setTimeout(()=>{ L.classList.add('open'); L.querySelector('.lk-date').textContent=c.P.full+(c.city?` · ${c.city}`:''); burst(L.querySelector('.lk-body'),c.pal); setTimeout(done,reduce?200:2100); },350); } };
-    const turn=i=>{ if(open||cur[i]===code[i]) return; cur[i]=(cur[i]+1)%10; const b=ws[i].querySelector('b'); b.textContent=cur[i]; ws[i].classList.remove('roll'); void ws[i].offsetWidth; ws[i].classList.add('roll'); check(); };
-    ws.forEach((w,i)=>w.addEventListener('click',()=>turn(i)));
-    const ht=setTimeout(()=>{ if(!open) help.hidden=false; },9000);
-    help.addEventListener('click',()=>{ clearTimeout(ht); help.hidden=true; const go=()=>{ const i=cur.findIndex((n,j)=>n!==code[j]); if(i<0) return; turn(i); setTimeout(go,reduce?0:110); }; go(); });
+    const turn=i=>{ if(open||cur[i]===code[i]) return; cur[i]=(cur[i]+1)%10; ws[i].querySelector('.lk-r').innerHTML=roll(cur[i]); ws[i].classList.remove('roll'); void ws[i].offsetWidth; ws[i].classList.add('roll'); if(navigator.vibrate) try{ navigator.vibrate(6); }catch(e){} check(); };
+    /* le chiffre tourne dès que le doigt touche (30 octobre 2026, « le cadenas fonctionne pas ») : sur téléphone, deux taps
+       rapides faisaient un double-tap (zoom) et le second était perdu ; le clic ne sert plus qu'au clavier */
+    ws.forEach((w,i)=>{ w.addEventListener('pointerdown',e=>{ e.preventDefault(); turn(i); }); w.addEventListener('click',e=>{ if(e.detail===0) turn(i); }); });
+    let alive=true; const ht=setTimeout(()=>{ if(!open&&alive) help.hidden=false; },8000); st._stop=()=>{ alive=false; clearTimeout(ht); };
+    help.addEventListener('click',()=>{ clearTimeout(ht); help.hidden=true; const go=()=>{ if(!alive) return; const i=cur.findIndex((n,j)=>n!==code[j]); if(i<0) return; turn(i); setTimeout(go,reduce?0:90); }; go(); });
     check();
   };
 
@@ -177,48 +181,65 @@
     no.addEventListener('click',e=>{ if(no.classList.contains('gave')&&Date.now()-(no._t||0)>450) ok(); else e.preventDefault(); });
   };
 
-  /* ---------- 7. le calendrier : les pages se tournent jusqu'au mois du mariage, le jour entouré au feutre ---------- */
+  /* ---------- 7. le calendrier : les pages s'arrachent et s'envolent de plus en plus vite (30 octobre 2026 : « j'aime bien
+     l'idée du calendrier, faut que ce soit plus dynamique »), ralentissent sur les derniers mois, puis le mois du mariage
+     arrive en grand : le jour entouré au feutre, des confettis. Il démarre seul si l'on ne touche pas. ---------- */
   GAMES.calendrier=(st,c,done)=>{
     const now=new Date(), T=c.P.y*12+c.P.m;
-    let s=now.getFullYear()*12+now.getMonth(); if(s>=T) s=T-6; if(T-s>14) s=T-14;
+    let s=Math.min(now.getFullYear()*12+now.getMonth(),T-10); if(T-s>24) s=T-24;
     const page=(ym,final)=>{ const y=Math.floor(ym/12), m=ym%12, first=(new Date(Date.UTC(y,m,1)).getUTCDay()+6)%7, n=new Date(Date.UTC(y,m+1,0)).getUTCDate();
       let cells='<i>L</i><i>M</i><i>M</i><i>J</i><i>V</i><i>S</i><i>D</i>'+'<span></span>'.repeat(first);
       for(let d=1;d<=n;d++) cells+=final&&d===c.P.d?`<span class="hit"><b>${d}</b><svg viewBox="0 0 60 50" aria-hidden="true"><path d="M33 6C17 4 5 13 5 26c0 12 12 19 27 18 15-1 24-10 23-21C54 11 41 4 26 6"/></svg></span>`:`<span>${d}</span>`;
       return `<p class="cl-m">${cap(MO[m])}</p><p class="cl-y">${y}</p><div class="cl-g">${cells}</div>`; };
     st.innerHTML=`<div class="std-cal">
       <div class="cl-pad"><div class="cl-rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="cl-pg">${page(s)}</div></div>
-      <button type="button" class="cl-go">Tournez les pages jusqu’au grand jour</button>
+      <button type="button" class="cl-go">Touchez pour tourner les pages</button>
       <div class="cl-end">${head(c)}<p class="cl-full">${esc(c.P.full)}</p>${c.city?`<p class="std-city">${esc(c.city)}</p>`:''}</div>
     </div>`;
     const C=st.firstChild, pad=C.querySelector('.cl-pad'), pg=C.querySelector('.cl-pg'), go=C.querySelector('.cl-go');
-    let busy=false;
-    const flip=(ym,final,ms)=>new Promise(ok=>{ const f=pg.cloneNode(true); f.classList.add('fly'); f.style.animationDuration=ms+'ms'; pad.appendChild(f); pg.innerHTML=page(ym,final);
-      setTimeout(()=>{ f.remove(); ok(); },reduce?0:ms); });
-    const run=async()=>{ if(busy) return; busy=true; go.hidden=true;
-      const steps=T-s; for(let k=1;k<=steps;k++){ const ms=Math.max(110,420-k*45); await flip(s+k,k===steps,ms); if(!reduce) await new Promise(r=>setTimeout(r,ms*.35)); }
-      if(steps<=0) pg.innerHTML=page(T,true);
-      C.classList.add('hit'); await wait(1300); C.classList.add('end'); burst(C.querySelector('.cl-end'),c.pal); setTimeout(done,reduce?200:2200); };
+    let busy=false, alive=true; const auto=setTimeout(()=>run(),1600); st._stop=()=>{ alive=false; clearTimeout(auto); };
+    const sleep=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
+    // la page du dessus s'arrache vers le haut, de travers, pendant que la suivante est déjà là
+    const tear=()=>{ if(reduce) return; const f=pg.cloneNode(true); f.classList.add('fly');
+      f.style.setProperty('--tx',(Math.random()*140-70).toFixed(0)+'%'); f.style.setProperty('--tr',(Math.random()*80-40).toFixed(0)+'deg');
+      pad.appendChild(f); setTimeout(()=>f.remove(),900); pad.classList.remove('bump'); void pad.offsetWidth; pad.classList.add('bump'); };
+    async function run(){ if(busy||!alive) return; busy=true; clearTimeout(auto); go.hidden=true;
+      const steps=T-s;
+      for(let k=1;k<=steps&&alive;k++){ tear(); pg.innerHTML=page(s+k,k===steps);
+        // accélère, puis freine sur les trois derniers mois
+        const left=steps-k; await sleep(left<3?220+(3-left)*110:Math.max(60,300*Math.pow(.78,k))); }
+      if(!alive) return; if(steps<=0) pg.innerHTML=page(T,true);
+      pad.classList.remove('bump'); C.classList.add('hit');
+      await sleep(750); const h=pg.querySelector('.hit'); if(h&&alive) burst(h,c.pal);
+      await sleep(1300); if(!alive) return; C.classList.add('end'); burst(C.querySelector('.cl-end'),c.pal); setTimeout(()=>{ if(alive) done(); },reduce?200:2200); }
     go.addEventListener('click',run); pad.addEventListener('click',run);
   };
 
-  /* ---------- 8. la pluie de cœurs : des ❤️ tombent du haut de l'écran et s'empilent, du bas vers le haut, pour écrire
-     la date en chiffres de 3 × 5 cœurs (« 12·06 », puis « 2027 ») ; la date en toutes lettres suit ---------- */
+  /* ---------- 8. la pluie de cœurs : une averse d'emojis cœurs sur tout l'écran (30 octobre 2026 : « une pluie torrentielle
+     d'emojis, et après, ceux qui restent, c'est la date ») ; au milieu de l'averse, certains cœurs se posent et restent : ils
+     écrivent la date en chiffres de 3 × 5 cœurs (« 12·06 », puis « 2027 »), puis la date en toutes lettres ---------- */
   const DIG=['111101101101111','010110010010111','111001111100111','111001111001111','101101111001001','111100111001111','111100111101111','111001010010010','111101111101111','111101111001111'];
+  const RAIN=['❤️','❤️','❤️','❤️','💖','💕','💗','💘','💞','💓','🩷'];
   GAMES.coeurs=(st,c,done)=>{
     const W=17, line=parts=>{ const g=Array.from({length:5},()=>Array(W).fill(0)); let x=0;
       parts.forEach(p=>{ if(p==='.'){ g[4][x+1]=1; x+=3; return; } if(p===' '){ x+=1; return; } if(p==='_'){ x+=1; return; }
         const d=DIG[+p]; for(let r=0;r<5;r++) for(let k=0;k<3;k++) if(d[r*3+k]==='1') g[r][x+k]=1; x+=3; }); return g; };
     const dd=String(c.P.d).padStart(2,'0'), mm=String(c.P.m+1).padStart(2,'0'), yy=String(c.P.y);
     const rows=line([dd[0],' ',dd[1],'.',mm[0],' ',mm[1]]).concat([Array(W).fill(0)],line(['_',yy[0],' ',yy[1],' ',yy[2],' ',yy[3]]));
-    let cells='', n=0; const H=rows.length;
+    let cells=''; const H=rows.length, R=Math.random;
     rows.forEach((row,r)=>row.forEach(v=>{ if(!v){ cells+='<span></span>'; return; }
-      // le bas de chaque ligne de chiffres tombe d'abord : les cœurs s'empilent
-      const base=r<5?(4-r)*.28:(10-r)*.28+1.5, dl=base+Math.random()*.32; n++;
-      cells+=`<span class="h" style="--dl:${dl.toFixed(2)}s;--rt:${(Math.random()*40-20).toFixed(0)}deg">❤️</span>`; }));
+      // ceux qui restent tombent pendant l'averse, le bas de chaque ligne d'abord : ils s'empilent
+      const dl=(r<5?.9+(4-r)*.3:2.1+(10-r)*.3)+R()*.3;
+      cells+=`<span class="h" style="--dl:${dl.toFixed(2)}s;--rt:${(R()*40-20).toFixed(0)}deg">❤️</span>`; }));
+    // l'averse : 300 cœurs qui traversent tout l'écran, de plus en plus rares vers la fin
+    const drops=reduce?'':Array.from({length:300},()=>{ const z=R(), sz=16+z*30;
+      return `<i style="--x:${(R()*104-4).toFixed(1)}%;--s:${sz.toFixed(0)}px;--o:${(.55+z*.45).toFixed(2)};--d:${(1.7-z*.7).toFixed(2)}s;--dl:${(3.7*Math.pow(R(),1.35)).toFixed(2)}s;--r0:${(R()*60-30).toFixed(0)}deg;--r1:${(R()*160-80).toFixed(0)}deg">${RAIN[Math.floor(R()*RAIN.length)]}</i>`; }).join('');
     st.innerHTML=`<div class="std-card std-hz">${head(c)}<div class="hz-g" role="img" aria-label="${esc(c.P.full)}" style="--cols:${W};--rows:${H}">${cells}</div>
-      <p class="hz-full">${esc(c.P.full)}</p>${c.city?`<p class="std-city">${esc(c.city)}</p>`:''}</div>`;
-    const card=st.firstChild, T=reduce?0:1.5+2.6+.32+1.1;
-    setTimeout(()=>{ card.classList.add('on'); burst(card,c.pal); setTimeout(done,reduce?200:2300); },T*1000);
+      <p class="hz-full">${esc(c.P.full)}</p>${c.city?`<p class="std-city">${esc(c.city)}</p>`:''}</div><div class="hz-rain" aria-hidden="true">${drops}</div>`;
+    const card=st.firstChild, rain=st.querySelector('.hz-rain'); rain.style.setProperty('--H',st.clientHeight+'px');
+    let alive=true; st._stop=()=>{ alive=false; };
+    setTimeout(()=>{ if(!alive) return; card.classList.add('on'); burst(card,c.pal); setTimeout(()=>{ if(alive) done(); },reduce?200:2400); },reduce?0:5000);
+    setTimeout(()=>rain.remove(),reduce?0:6200);
   };
 
   /* ---------- le save-the-date ---------- */

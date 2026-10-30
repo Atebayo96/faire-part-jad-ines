@@ -17,6 +17,7 @@
 .std-play[hidden]{display:none}
 .std-done .std-play{opacity:0;pointer-events:none}
 .std-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:24px 16px 76px;box-sizing:border-box}
+.std button{touch-action:manipulation}
 .std-skip{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:4;min-height:40px;padding:0 18px;border-radius:999px;
   border:0;background:rgba(255,255,255,.9);color:#2b2621;font:500 15px/1 "Inter Tight",Inter,-apple-system,Arial,sans-serif;cursor:pointer;
   box-shadow:0 6px 18px -8px rgba(0,0,0,.45)}
@@ -87,12 +88,16 @@
 .lk-q{margin:18px 0 12px;font:600 19px/1.3 "Cormorant Garamond",Georgia,serif}
 .lk-ws{display:flex;align-items:center;justify-content:center;gap:8px}
 .lk-ws span{font:600 30px/1 "Cormorant Garamond",Georgia,serif;color:#5f5448}
-.lk-w{width:56px;height:74px;padding:0;border:0;border-radius:12px;cursor:pointer;color:#fff;overflow:hidden;
+.lk-w{width:56px;height:88px;padding:0;border:0;border-radius:12px;cursor:pointer;color:#fff;overflow:hidden;
   background:linear-gradient(#1f1a16,#4a4038 46%,#2b2621 54%,#1f1a16);box-shadow:inset 0 2px 3px rgba(255,255,255,.18),0 3px 6px rgba(0,0,0,.3);
   font:600 42px/1 "Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums tabular-nums;transition:background .3s,box-shadow .3s,transform .12s}
-.lk-w b{display:block}
+.lk-w{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.lk-r{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:2px}
+.lk-r b{display:block}
+.lk-r s{display:block;text-decoration:none;font-size:20px;line-height:1;opacity:.38}
 .lk-w:active{transform:scale(.95)}
-.lk-w.roll b{animation:lkRoll .22s ease-out}
+.lk-w.roll .lk-r{animation:lkRoll .2s ease-out}
+.lk-w.ok .lk-r s{visibility:hidden}
 .lk-w.ok{background:var(--sink);box-shadow:0 0 0 3px color-mix(in srgb,var(--pal) 45%,transparent),inset 0 2px 3px rgba(255,255,255,.2);animation:lkOk .4s}
 .lk-w:disabled{cursor:default;color:#fff}
 .lk-tip{margin:14px auto 0;max-width:20em;font:italic 500 17px/1.4 "Cormorant Garamond",Georgia,serif;color:#4a4036}
@@ -101,7 +106,7 @@
 .lk-help{margin-top:14px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid #cbbfae;background:#fff;color:#2b2621;cursor:pointer;
   font:500 15px/1 "Inter Tight",Inter,-apple-system,Arial,sans-serif}
 .lk-help[hidden]{display:none}
-@keyframes lkRoll{from{transform:translateY(-55%);opacity:.15}to{transform:none;opacity:1}}
+@keyframes lkRoll{from{transform:translateY(-34%)}to{transform:none}}
 @keyframes lkOk{50%{transform:scale(1.08)}}
 
 /* ---------- le message ---------- */
@@ -151,8 +156,14 @@
 .cl-rings i{width:12px;height:28px;border-radius:6px;background:linear-gradient(90deg,#77736c,#efece6 45%,#9a958d);box-shadow:0 2px 3px rgba(0,0,0,.35)}
 .cl-pg{position:absolute;inset:0;box-sizing:border-box;padding:24px 16px 14px;border-radius:16px;border-top:16px solid var(--sink);background:#fbf7f0;color:#2b2621;text-align:center;
   box-shadow:0 2px 4px rgba(30,20,10,.12),0 24px 50px -18px rgba(20,12,5,.6);backface-visibility:hidden}
-.cl-pg.fly{z-index:3;transform-origin:50% 0;animation:clFly .4s ease-in forwards;box-shadow:0 2px 4px rgba(30,20,10,.18)}
-@keyframes clFly{to{transform:rotateX(110deg) translateY(-6px);opacity:.3}}
+.cl-pg.fly{z-index:3;transform-origin:50% 0;animation:clTear .75s cubic-bezier(.3,.1,.6,1) forwards;box-shadow:0 10px 30px -8px rgba(20,12,5,.5);backface-visibility:visible}
+@keyframes clTear{0%{transform:none}25%{transform:rotateX(-18deg) translateY(-3%) rotate(calc(var(--tr) * .15))}100%{transform:translate(var(--tx),-150%) rotate(var(--tr)) scale(.9);opacity:0}}
+.cl-pad.bump{animation:clBump .16s ease-out}
+@keyframes clBump{50%{transform:translateY(5px) scale(.99)}}
+.std-cal.hit .cl-pad{animation:clZoom .7s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes clZoom{to{transform:scale(1.07)}}
+.std-cal.hit .cl-g .hit b{animation:clPop .5s .5s both}
+@keyframes clPop{50%{transform:scale(1.35)}}
 .cl-m{margin:0;font:600 34px/1.1 "Cormorant Garamond",Georgia,serif;color:var(--sink)}
 .cl-y{margin:2px 0 0;font:600 15px/1.2 "Inter Tight",Inter,-apple-system,Arial,sans-serif;letter-spacing:.2em;color:#5f5448}
 .cl-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:12px;font:500 15px/2 "Inter Tight",Inter,-apple-system,Arial,sans-serif;font-variant-numeric:lining-nums tabular-nums}
@@ -163,7 +174,7 @@
 .cl-g .hit path{fill:none;stroke:var(--sink);stroke-width:3.2;stroke-linecap:round;stroke-dasharray:190;stroke-dashoffset:190}
 .std-cal.hit .cl-g .hit path{animation:clDraw .9s .1s cubic-bezier(.5,0,.3,1) forwards}
 @keyframes clDraw{to{stroke-dashoffset:0}}
-.cl-go{min-height:46px;padding:0 20px;border:0;border-radius:999px;background:#fff;color:#2b2621;cursor:pointer;font:600 17px/1.2 "Cormorant Garamond",Georgia,serif;
+.cl-go{touch-action:manipulation;min-height:46px;padding:0 20px;border:0;border-radius:999px;background:#fff;color:#2b2621;cursor:pointer;font:600 17px/1.2 "Cormorant Garamond",Georgia,serif;
   box-shadow:0 10px 24px -10px rgba(0,0,0,.5);animation:clPulse 2.2s 1.2s ease-in-out infinite}
 .cl-go[hidden]{display:none}
 @keyframes clPulse{0%,100%{transform:none}50%{transform:scale(1.05)}}
@@ -175,6 +186,10 @@
 
 /* ---------- la pluie de cœurs ---------- */
 .std-hz{overflow:visible}
+.hz-rain{position:absolute;inset:0;z-index:3;overflow:hidden;pointer-events:none}
+.hz-rain i{position:absolute;top:0;left:var(--x);font-style:normal;font-size:var(--s);line-height:1;opacity:var(--o);will-change:transform;
+  font-family:"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif;transform:translateY(-70px);animation:hzRain var(--d) var(--dl) cubic-bezier(.4,0,.9,.7) both}
+@keyframes hzRain{from{transform:translateY(-70px) rotate(var(--r0))}to{transform:translateY(calc(var(--H) + 70px)) rotate(var(--r1))}}
 .hz-g{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:1px;margin:22px auto 0;width:100%;container-type:inline-size}
 .hz-g span{aspect-ratio:1;display:grid;place-items:center;font-size:calc(100cqw / var(--cols) * .78);line-height:1;overflow:visible;
   font-family:"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif}
