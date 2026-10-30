@@ -40,7 +40,7 @@ export async function publish(ref, payment) {
 const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 
 // e-mail aux mariés (Resend) : sans clé, rien ne part, et la page Merci reste le seul endroit où voir les liens
-async function mail(to, couple, L) {
+export async function mail(to, couple, L) {
   const key = process.env.RESEND_API_KEY, from = process.env.SCEAU_MAIL_FROM || 'Save The Oui <bonjour@savetheoui.fr>';
   if (!key) return false;
   const a = (href, label) => `<p style="margin:18px 0"><a href="${esc(href)}" style="display:inline-block;background:#111;color:#fff;padding:13px 22px;border-radius:999px;text-decoration:none;font:500 16px/1 Arial,sans-serif">${label}</a></p>`;
