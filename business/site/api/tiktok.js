@@ -1,10 +1,13 @@
 // Notre outil TikTok (voir _tiktok.js). Trois entrées :
 //   GET  /tiktok/retour?code&state       retour de TikTok après l'autorisation (réécriture vers ?action=callback)
 //   GET  /tm/<clé>                        une image ou une vidéo déposée chez nous, lue par TikTok (réécriture vers ?media=)
-//   POST /api/tiktok  (Authorization: Bearer SCEAU_SECRET)  {op, …} : pour nous seulement (business/tools/tiktok.mjs, MCP)
+//   POST /api/tiktok  (Authorization: Bearer SCEAU_SECRET ou TIKTOK_ADMIN_KEY)  {op, …} : pour nous seulement (business/tools/tiktok.mjs, MCP)
 //     connect → {url} ; status ; disconnect ; media {data} ou part/media-done (gros fichiers par morceaux) → {key, url} ;
 //     add {kind, media, title, caption, at, mode, privacy, aigc, music} → {item} ; list ; remove {id} ; now {id} ; check {id?}
-import { ready, isAdmin, clean, id as newId } from './_store.js';
+import { ready, isAdmin, clean, same, bearer, id as newId } from './_store.js';
+// accès : la clé du site (SCEAU_SECRET) ou une clé propre à TikTok (TIKTOK_ADMIN_KEY), qu'on peut choisir et noter sans toucher
+// à SCEAU_SECRET (Vercel ne réaffiche pas une variable sensible, et la changer casserait les liens des tableaux de bord)
+const allowed = req => isAdmin(req) || (!!process.env.TIKTOK_ADMIN_KEY && same(bearer(req), process.env.TIKTOK_ADMIN_KEY));
 import { configured, connectUrl, finishConnect, disconnect, accessToken, creatorInfo, queue, saveQueue, run, putBin, getBin, KEY, newKey, typeOf, TYPES, mediaUrl, redirectUri } from './_tiktok.js';
 
 // morceaux de 2,5 Mo au plus côté client (3,4 Mo en base64), sous la limite de 4,5 Mo des fonctions Vercel
@@ -35,7 +38,7 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'key' });
   }
   if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
-  if (!isAdmin(req)) return res.status(401).json({ error: 'key' });
+  if (!allowed(req)) return res.status(401).json({ error: 'key' });
   if (!ready()) return res.status(503).json({ error: 'storage' });
   const b = req.body || {}, op = String(b.op || '');
   try {

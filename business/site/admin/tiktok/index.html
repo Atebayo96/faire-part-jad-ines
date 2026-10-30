@@ -142,7 +142,7 @@ const LQ = new URLSearchParams(location.search).get('lang');
 try { if (LQ) sessionStorage.setItem('tk-lang', LQ); } catch (e) {}
 const EN = (LQ || (() => { try { return sessionStorage.getItem('tk-lang'); } catch (e) { return ''; } })()) === 'en';
 const T = {
-  keyTitle:['Accès réservé','Restricted access'], keyHint:['Clé secrète du site (SCEAU_SECRET sur Vercel).','Site secret key.'], open:['Ouvrir','Open'],
+  keyTitle:['Accès réservé','Restricted access'], keyHint:['La clé TIKTOK_ADMIN_KEY posée sur Vercel.','Admin key.'], open:['Ouvrir','Open'],
   title:['Publier sur TikTok','Post to TikTok'],
   notConnected:['Aucun compte TikTok relié.','No TikTok account connected.'], connect:['Se connecter avec TikTok','Continue with TikTok'],
   postingTo:['Publication sur le compte','Posting to'], disconnect:['Déconnecter','Disconnect'],

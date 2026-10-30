@@ -54,7 +54,7 @@ veut »). Tout est dans le site : `api/_tiktok.js` (API officielle TikTok : Logi
 (connexion, dépôt des fichiers, file des posts), `api/tiktok-cron.js` (toutes les 10 minutes, publie ce qui est dû et relit
 l'état de ce qui est parti). Côté Claude : `business/tools/tiktok.mjs` en ligne de commande et le serveur MCP
 `tiktok-mcp.mjs` (`.mcp.json` : outils `tiktok_statut`, `tiktok_connecter`, `tiktok_programmer`, `tiktok_publier_maintenant`,
-`tiktok_liste`, `tiktok_publier`, `tiktok_retirer`, `tiktok_verifier`). Il faut `SCEAU_SECRET` dans l'environnement de la session.
+`tiktok_liste`, `tiktok_publier`, `tiktok_retirer`, `tiktok_verifier`). Il faut `TIKTOK_ADMIN_KEY` (clé choisie par l'utilisateur, sur Vercel et dans l'environnement de la session ; `SCEAU_SECRET` marche aussi, mais Vercel ne le réaffiche pas). Page de publication : `/admin/tiktok/` (règles d'interface de TikTok, `?lang=en` pour la vidéo de l'audit).
 
 ```
 node business/tools/tiktok.mjs programmer business/ads/tiktok-infos/out/repond --date 2026-11-02 --heure 12:00 \

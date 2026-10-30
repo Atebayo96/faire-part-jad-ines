@@ -746,7 +746,7 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     (`api/_tiktok.js`, `api/tiktok.js`, `api/tiktok-cron.js` toutes les 10 minutes), une file de posts dans le stockage
     privé, les fichiers servis à TikTok sur `/tm/<clé>`, et pour Claude `business/tools/tiktok.mjs` (programmer, publier
     maintenant, liste, retirer, vérifier) et le serveur MCP `tiktok-mcp.mjs` (`.mcp.json`). Réglages : `TIKTOK_CLIENT_KEY`
-    et `TIKTOK_CLIENT_SECRET` sur Vercel, `SCEAU_SECRET` dans l'environnement de la session ; retour OAuth
+    et `TIKTOK_CLIENT_SECRET` sur Vercel, `TIKTOK_ADMIN_KEY` (clé choisie par l'utilisateur, sur Vercel et dans l'environnement de la session ; `SCEAU_SECRET` marche aussi, mais Vercel ne le réaffiche pas). Page de publication : `/admin/tiktok/` (règles d'interface de TikTok, `?lang=en` pour la vidéo de l'audit) ; retour OAuth
     `https://savetheoui.fr/tiktok/retour`, domaine vérifié dans l'app TikTok. Tant que l'app n'est pas auditée par TikTok,
     un post direct ne peut être que privé (l'outil le fait et le note). Détail : `business/ads/tiktok-infos/LISEZMOI.md`.
     Ni Higgsfield ni TikTok Studio pour publier.

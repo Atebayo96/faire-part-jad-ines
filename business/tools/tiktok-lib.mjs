@@ -1,5 +1,5 @@
 // Côté Claude : parle à notre API TikTok (business/landing/api/tiktok.js). Partagé par la ligne de commande
-// (tiktok.mjs) et le serveur MCP (tiktok-mcp.mjs). Réglages : SCEAU_SECRET (obligatoire), SCEAU_SITE_URL (par défaut
+// (tiktok.mjs) et le serveur MCP (tiktok-mcp.mjs). Réglages : TIKTOK_ADMIN_KEY (ou SCEAU_SECRET), SCEAU_SITE_URL (par défaut
 // https://savetheoui.fr). Les fichiers (images d'un carrousel, vidéo) sont lus sur le disque et déposés chez nous.
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
@@ -12,8 +12,9 @@ const EXT = { '.jpg': 'jpg', '.jpeg': 'jpg', '.png': 'png', '.webp': 'webp', '.m
 const IMG = new Set(['jpg', 'png', 'webp']);
 
 export async function api(op, body) {
-  if (!process.env.SCEAU_SECRET) throw new Error('SCEAU_SECRET manquant dans l’environnement (la clé du site, la même que sur Vercel)');
-  const r = await fetch(SITE + '/api/tiktok', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + process.env.SCEAU_SECRET }, body: JSON.stringify(Object.assign({ op }, body || {})) });
+  const key = process.env.TIKTOK_ADMIN_KEY || process.env.SCEAU_SECRET;
+  if (!key) throw new Error('TIKTOK_ADMIN_KEY manquant dans l’environnement (la même valeur que sur Vercel)');
+  const r = await fetch(SITE + '/api/tiktok', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + key }, body: JSON.stringify(Object.assign({ op }, body || {})) });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(`${op} : ${j.error || r.status}${j.status ? ' (' + j.status + ')' : ''}`);
   return j;
