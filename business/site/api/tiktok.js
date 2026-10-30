@@ -96,7 +96,8 @@ export default async function handler(req, res) {
       const media = Array.isArray(b.media) ? b.media.map(String).filter(k => KEY.test(k)) : [];
       if (!media.length || media.length > 35) return res.status(400).json({ error: 'media' });
       if (kind === 'video' && (media.length !== 1 || !typeOf(media[0]).startsWith('video/'))) return res.status(400).json({ error: 'video' });
-      if (kind === 'photo' && media.some(k => !typeOf(k).startsWith('image/'))) return res.status(400).json({ error: 'photo' });
+      // TikTok ne prend que du JPEG ou du WEBP pour les photos (guide de transfert des médias)
+      if (kind === 'photo' && media.some(k => !/^image\/(jpeg|webp)$/.test(typeOf(k)))) return res.status(400).json({ error: 'photo : JPG ou WEBP seulement' });
       const at = new Date(String(b.at || ''));
       if (Number.isNaN(at.getTime())) return res.status(400).json({ error: 'at' });
       const item = {

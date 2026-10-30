@@ -37,6 +37,7 @@ export async function resolveFiles(args) {
   const kind = IMG.has(exts[0]) ? 'photo' : 'video';
   if (kind === 'video' && files.length !== 1) throw new Error('une vidéo = un seul fichier');
   if (kind === 'photo' && exts.some(e => !IMG.has(e))) throw new Error('un carrousel ne contient que des images');
+  if (kind === 'photo' && exts.includes('png')) throw new Error('TikTok ne prend pas le PNG pour les photos : JPG ou WEBP');
   if (files.length > 35) throw new Error('35 images au plus');
   return { kind, files, exts };
 }

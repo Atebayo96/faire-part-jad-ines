@@ -87,7 +87,7 @@
     <section class="card" id="compose" hidden>
       <h2 data-t="newPost"></h2>
       <div class="drop" id="drop" tabindex="0" role="button"><span data-t="pick"></span><br><small data-t="pickHint"></small></div>
-      <input id="file" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm" multiple hidden>
+      <input id="file" type="file" accept="image/jpeg,image/webp,video/mp4,video/quicktime,video/webm" multiple hidden>
       <div class="prev" id="prev"></div>
       <div id="durNote"></div>
 
@@ -147,7 +147,7 @@ const T = {
   notConnected:['Aucun compte TikTok relié.','No TikTok account connected.'], connect:['Se connecter avec TikTok','Continue with TikTok'],
   postingTo:['Publication sur le compte','Posting to'], disconnect:['Déconnecter','Disconnect'],
   newPost:['Nouveau post','New post'], pick:['Choisir une vidéo, ou des images pour un carrousel','Choose a video, or photos for a carousel'],
-  pickHint:['MP4, MOV, WEBM ou JPG, PNG, WEBP · 35 images au plus','MP4, MOV, WEBM or JPG, PNG, WEBP · up to 35 photos'],
+  pickHint:['MP4, MOV, WEBM ou JPG, WEBP · 35 images au plus','MP4, MOV, WEBM or JPG, WEBP · up to 35 photos'],
   titleL:['Titre','Title'], capL:['Légende','Caption'], privL:['Qui peut voir ce post','Who can view this post'],
   choose:['Choisir…','Select…'],
   PUBLIC_TO_EVERYONE:['Tout le monde','Everyone'], MUTUAL_FOLLOW_FRIENDS:['Amis','Friends'], FOLLOWER_OF_CREATOR:['Abonnés','Followers'], SELF_ONLY:['Moi uniquement','Only me'],
@@ -170,6 +170,7 @@ const T = {
   publish:['Publier','Post'], schedule:['Programmer le post','Schedule post'],
   tooLong:['Cette vidéo dure {d} s : le compte accepte {m} s au plus.','This video is {d} s long; this account accepts up to {m} s.'],
   mixed:['Une vidéo seule, ou des images seules.','Choose one video, or photos only.'],
+  noPng:['TikTok ne prend pas le PNG : JPG ou WEBP seulement.','TikTok does not accept PNG photos: use JPG or WEBP.'],
   sending:['Envoi des fichiers… {p} %','Uploading… {p}%'], sent:['C’est parti. TikTok traite le post : il peut mettre quelques minutes à apparaître sur le profil.','Done. TikTok is processing your post; it may take a few minutes to appear on your profile.'],
   scheduled:['Post programmé pour le {d}.','Post scheduled for {d}.'],
   queue:['Posts','Posts'], st_prevu:['Prévu','Scheduled'], st_envoye:['En cours','Processing'], st_publie:['Publié','Posted'], st_brouillon:['Dans les brouillons','In drafts'], st_echec:['Échec','Failed'],
@@ -220,8 +221,10 @@ $('drop').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.prevent
 $('drop').addEventListener('drop', e => take([...e.dataTransfer.files]));
 $('file').onchange = () => take([...$('file').files]);
 function take(fs) {
-  const vids = fs.filter(f => f.type.startsWith('video/')), imgs = fs.filter(f => f.type.startsWith('image/'));
-  $('durNote').innerHTML = ''; DUR = 0;
+  $('durNote').innerHTML = '';
+  const vids = fs.filter(f => f.type.startsWith('video/')), imgs = fs.filter(f => /^image\/(jpeg|webp)$/.test(f.type));
+  if (fs.some(f => f.type === 'image/png')) { $('durNote').innerHTML = `<p class="note err">${t('noPng')}</p>`; }
+  DUR = 0;
   if ((vids.length && imgs.length) || vids.length > 1) { FILES = []; KIND = null; $('prev').innerHTML = ''; $('durNote').innerHTML = `<p class="note err">${t('mixed')}</p>`; return sync(); }
   FILES = vids.length ? vids : imgs.slice(0, 35).sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
   KIND = vids.length ? 'video' : imgs.length ? 'photo' : null;
@@ -264,7 +267,7 @@ function sync() {
   $('decl').innerHTML = con ? t('declBC', { b: bc, m: mu }) : t('declMusic', { m: mu });
   // durée
   const tooLong = KIND === 'video' && DUR && S.max_video_sec && DUR > S.max_video_sec;
-  $('durNote').innerHTML = tooLong ? `<p class="note err">${t('tooLong', { d: Math.round(DUR), m: S.max_video_sec })}</p>` : $('durNote').innerHTML.includes('mixed') ? $('durNote').innerHTML : '';
+  if (tooLong) $('durNote').innerHTML = `<p class="note err">${t('tooLong', { d: Math.round(DUR), m: S.max_video_sec })}</p>`;
   $('atBox').hidden = when() !== 'later';
   $('pub').textContent = t(when() === 'later' ? 'schedule' : 'publish');
   const ok = FILES.length && $('priv').value && !(disc && !org && !con) && !tooLong && !(when() === 'later' && !$('at').value);
