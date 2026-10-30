@@ -27,7 +27,8 @@ export async function readOne(pathname) {
 export async function readAll(prefix) {
   if (LOCAL) {
     const d = path.join(DIR, prefix); let names = [];
-    try { names = await fs.readdir(d); } catch { return []; }
+    // récursif, comme la liste de Vercel Blob (rsvp/, seen/, gifts/ ont un dossier par faire-part)
+    try { names = (await fs.readdir(d, { recursive: true })).filter(n => n.endsWith('.json')); } catch { return []; }
     return Promise.all(names.map(async n => ({ pathname: prefix + n, ...JSON.parse(await fs.readFile(path.join(d, n), 'utf8')) })));
   }
   const { list, get } = await import('@vercel/blob');
@@ -58,7 +59,9 @@ export function same(a, b) {
   const x = Buffer.from(String(a || '')), y = Buffer.from(String(b || ''));
   return x.length === y.length && timingSafeEqual(x, y);
 }
-export const isAdmin = req => !!process.env.SCEAU_SECRET && same(bearer(req), process.env.SCEAU_SECRET);
+// accès admin : la clé du site (SCEAU_SECRET), ou une clé propre à l'admin (ADMIN_KEY) qu'on peut choisir et noter sans
+// toucher à SCEAU_SECRET (Vercel ne réaffiche pas une variable sensible, et la changer casserait les liens des tableaux de bord)
+export const isAdmin = req => [process.env.SCEAU_SECRET, process.env.ADMIN_KEY].some(k => !!k && same(bearer(req), k));
 export const bearer = req => (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
 export const clean = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n);
 export const id = () => new Date().toISOString().replace(/[:.]/g, '-') + '-' + Math.random().toString(36).slice(2, 8);

@@ -975,6 +975,17 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
   `track()` (vitrine.js) : `etape {etape, formule, theme}` à chaque onglet du configurateur, `commander {formule}` quand le
   formulaire de commande part, `paiement {formule}` sur la page Merci (`merci/index.html`). Le site n'enregistre par ailleurs que les
   demandes, commandes, réponses et ouvertures de liens personnels (`/api/admin` avec `SCEAU_SECRET`).
+- **Tableau de bord de l'admin** (`/admin/`, 30 octobre 2026 : « fais-moi tout pour mon tableau de bord avec ce qu'il y a ») :
+  ouvert avec `ADMIN_KEY` (clé propre à l'admin, à choisir et noter, reconnue partout où `SCEAU_SECRET` l'est : `isAdmin()`
+  dans `_store.js`) ou `SCEAU_SECRET`, qu'on ne change jamais (elle signe les liens des tableaux de bord des mariés).
+  Onglets : vue d'ensemble (chiffre d'affaires, ventes, panier moyen, visiteurs, conversion, demandes, paiements abandonnés,
+  comparés à la période précédente ; graphiques par jour, une série chacun ; entonnoir ; ventes par formule et options ;
+  thèmes ; prochains mariages), commandes (filtres, recherche, CSV, « Renvoyer l'e-mail », « Relancer par e-mail » pour un
+  paiement non terminé, « Marquer comme test » qui sort une commande des chiffres), demandes (statut nouveau / en cours /
+  gagné / perdu et note, enregistrés dans le fichier de la demande), faire-part clients (réponses, personnes, liens ouverts,
+  cadeaux), paiements (Stripe : paiements du site et liens de paiement Signature, remboursements, solde) et visites (Umami :
+  `UMAMI_API_KEY` + `UMAMI_WEBSITE_ID` sur Vercel, en plus de `UMAMI_ID` dans build-site.py pour la balise). Une commande
+  payée 0 € (code `TESTOUI`) compte comme test. En local, `readAll()` parcourt les sous-dossiers comme Vercel Blob.
 
 ## Cache des images
 

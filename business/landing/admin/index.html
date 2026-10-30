@@ -7,52 +7,409 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
-  body{margin:0;font:400 15px/1.5 Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;color:#111;background:#fff}
-  .wrap{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
-  h1{font:500 30px/1.1 -apple-system,"Helvetica Neue",sans-serif;letter-spacing:-.02em;margin:10px 0 4px}
-  h2{font:500 20px/1.2 -apple-system,"Helvetica Neue",sans-serif;margin:34px 0 10px}
-  p{color:#6b6b6b}
-  .tbl{overflow-x:auto;border:1px solid #e6e6e6;border-radius:6px}
-  table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
-  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid #e6e6e6;vertical-align:top}
-  th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6b6b6b;background:#f6f5f2}
-  small{color:#6b6b6b}
-  form{display:flex;gap:8px;margin-top:16px}
-  input{flex:1;font:inherit;padding:10px;border:1px solid #ddd;border-radius:6px}
-  button{font:inherit;padding:10px 14px;border:1px solid #111;background:#111;color:#fff;border-radius:6px;cursor:pointer}
-  .warn{background:#fff6e5;border:1px solid #f0d9a8;color:#7a5a14;padding:12px 14px;border-radius:6px}
+  :root{--ink:#111;--ink2:#555;--mut:#6b6b6b;--line:#e6e6e6;--soft:#f6f5f2;--ac:#2f54c9;--ac-soft:#e8edfb;--good:#1d7a46;--good-bg:#e7f5ec;--warn:#8a5a00;--warn-bg:#fff6e5;--bad:#b3261e;--bad-bg:#fdeceb;color-scheme:light}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  body{margin:0;font:400 15px/1.5 Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:#fff}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 16px 80px}
+  h1{font:500 28px/1.1 -apple-system,"Helvetica Neue",sans-serif;letter-spacing:-.02em;margin:6px 0 2px}
+  h2{font:500 20px/1.2 -apple-system,"Helvetica Neue",sans-serif;margin:0}
+  h3{font:600 13px/1.3 -apple-system,"Helvetica Neue",sans-serif;margin:0 0 10px;color:var(--ink2)}
+  p{color:var(--mut);margin:6px 0}
+  a{color:var(--ac)}
+  small,.mut{color:var(--mut)}
+  .num{font-variant-numeric:tabular-nums}
+  /* en-tête */
+  .top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .seg{display:inline-flex;max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--soft)}
+  .seg button{white-space:nowrap;flex:none}
+  .seg button{border:0;background:none;color:var(--ink2);padding:6px 12px;border-radius:999px;font:500 13px/1 inherit;cursor:pointer}
+  .seg button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+  button,.btn{font:500 13px/1 Inter,-apple-system,sans-serif;padding:9px 13px;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:999px;cursor:pointer;text-decoration:none;display:inline-block}
+  button.ghost,.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+  button.sm,.btn.sm{padding:6px 10px;font-size:12px}
+  button:disabled{opacity:.5;cursor:default}
+  /* onglets */
+  nav.tabs{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:2px;overflow-x:auto;margin:0 -16px 20px;padding:0 16px}
+  nav.tabs a{color:var(--ink2);text-decoration:none;padding:12px 12px 10px;border-bottom:2px solid transparent;white-space:nowrap;font-size:14px}
+  nav.tabs a[aria-current=page]{color:var(--ink);border-color:var(--ink);font-weight:500}
+  nav.tabs b{display:inline-block;min-width:18px;padding:1px 6px;margin-left:5px;border-radius:999px;background:var(--bad);color:#fff;font:600 11px/16px inherit;text-align:center}
+  section[data-tab]{display:none}
+  section[data-tab].on{display:block}
+  /* alertes */
+  .alerts{display:grid;gap:8px;margin-bottom:18px}
+  .al{border-radius:8px;padding:10px 14px;font-size:14px;display:flex;gap:10px;align-items:flex-start}
+  .al i{font-style:normal;font-weight:700}
+  .al.warn{background:var(--warn-bg);color:var(--warn)}
+  .al.bad{background:var(--bad-bg);color:var(--bad)}
+  .al.info{background:var(--soft);color:var(--ink2)}
+  /* chiffres clés */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:22px}
+  .kpi{border:1px solid var(--line);border-radius:10px;padding:14px 14px 12px}
+  .kpi .l{font-size:12px;color:var(--mut)}
+  .kpi .v{font:600 26px/1.15 -apple-system,"Helvetica Neue",sans-serif;letter-spacing:-.02em;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+  .kpi .d{font-size:12px;color:var(--mut)}
+  .up{color:var(--good)} .down{color:var(--bad)}
+  .kpi.off .v{color:#b5b5b5}
+  /* cartes */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin-bottom:14px}
+  .card{border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+  .card .hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}
+  .card .hd b{font:600 15px/1.3 inherit}
+  .chart{position:relative}
+  .chart svg{display:block;width:100%;height:auto;overflow:visible}
+  .tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 8px;border-radius:6px;white-space:nowrap;transform:translate(-50%,-110%);display:none;z-index:3}
+  .bars{display:grid;gap:9px}
+  .bar{display:grid;grid-template-columns:minmax(90px,38%) 1fr auto;gap:10px;align-items:center;font-size:14px}
+  .bar .t{height:12px;background:var(--soft);border-radius:4px;overflow:hidden}
+  .bar .t span{display:block;height:100%;background:var(--ac);border-radius:0 4px 4px 0}
+  .bar .n{font-variant-numeric:tabular-nums;color:var(--ink2);font-size:13px;text-align:right;min-width:64px}
+  .funnel .bar{grid-template-columns:minmax(120px,38%) 1fr auto}
+  .empty{color:var(--mut);font-size:14px;padding:14px 0}
+  /* tableaux */
+  .bar2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin:0 0 10px}
+  .bar2 .ctl input[type=search]{font:inherit;font-size:14px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;min-width:200px}
+  .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+  table{border-collapse:collapse;width:100%;min-width:820px;font-size:14px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);background:var(--soft);font-weight:600}
+  td.r,th.r{text-align:right}
+  tr.test td{opacity:.55}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+  .p-good{background:var(--good-bg);color:var(--good)} .p-warn{background:var(--warn-bg);color:var(--warn)} .p-bad{background:var(--bad-bg);color:var(--bad)} .p-mut{background:var(--soft);color:var(--ink2)} .p-ac{background:var(--ac-soft);color:var(--ac)}
+  td .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  select,textarea,input.f{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:#fff}
+  textarea{width:100%;min-width:180px;resize:vertical;min-height:34px}
+  details.more summary{cursor:pointer;color:var(--ac);font-size:13px}
+  details.sec{margin-top:22px} details.sec summary{cursor:pointer;font:500 16px/1.3 inherit}
+  .login{max-width:420px;margin:60px auto}
+  .login form{display:flex;gap:8px;margin-top:16px}
+  .login input{flex:1;font:inherit;padding:10px 12px;border:1px solid #ddd;border-radius:8px}
+  .steps{margin:8px 0 0;padding-left:20px;color:var(--ink2);font-size:14px}
+  .steps li{margin:4px 0}
+  code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:13px}
+  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;display:none;z-index:20}
+  @media (max-width:560px){ .grid{grid-template-columns:1fr} .kpi .v{font-size:22px} h1{font-size:24px} }
 </style>
 </head>
 <body>
 <div class="wrap" id="app">
-  <h1>Admin Save The Oui</h1>
-  <p>Entrez la clé secrète du site (variable SCEAU_SECRET sur Vercel).</p>
-  <form id="f"><input id="k" type="password" placeholder="Clé secrète" autocomplete="off"><button>Ouvrir</button></form>
+  <div class="login">
+    <h1>Admin Save The Oui</h1>
+    <p>Entrez la clé admin : <code>ADMIN_KEY</code> ou <code>SCEAU_SECRET</code> (variables d’environnement sur Vercel).</p>
+    <form id="f"><input id="k" type="password" placeholder="Clé secrète" autocomplete="current-password"><button>Ouvrir</button></form>
+  </div>
 </div>
+<div class="toast" id="toast"></div>
 <script>
-  const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  async function load(k){
-    const r=await fetch('/api/admin',{headers:{Authorization:'Bearer '+k}});
-    if(!r.ok){ alert(r.status===401?'Clé incorrecte':'Erreur '+r.status); return; }
-    try{ sessionStorage.setItem('sceau-k',k); }catch(e){}
-    const d=await r.json();
-    document.getElementById('app').innerHTML=`<h1>Admin Save The Oui</h1>
-      ${d.storage?'':'<p class="warn">Le stockage n’est pas encore activé : les demandes et les réponses ne peuvent pas être enregistrées. Créez le store Blob sur Vercel (voir business/11-mise-en-service.md).</p>'}
-      <h2>Demandes reçues (${d.leads.length})</h2>
-      <div class="tbl"><table><thead><tr><th>Reçu</th><th>Contact</th><th>Formule</th><th>Date du mariage</th><th>Choix dans l’essai</th><th>Message</th></tr></thead><tbody>
-      ${d.leads.map(l=>`<tr><td><small>${new Date(l.at).toLocaleString('fr-FR')}</small></td><td>${esc(l.name)}<br><a href="mailto:${esc(l.email)}">${esc(l.email)}</a><br><small>${esc(l.phone)}</small></td><td>${esc(l.plan)}${l.type==='commande'?`<br><b>commande</b><br><small>${esc(l.ref||'')}</small>`:''}</td><td>${esc(l.date)}</td><td><small>${esc(Object.entries(l.choix||{}).filter(x=>x[1]).map(x=>x[0]+' : '+x[1]).join(' · '))}</small></td><td>${esc(l.message)}</td></tr>`).join('')||'<tr><td colspan="6"><small>Aucune demande pour le moment.</small></td></tr>'}
-      </tbody></table></div>
-      <h2>Commandes Essentiel en ligne (${(d.commandes||[]).length})</h2>
-      <div class="tbl"><table><thead><tr><th>Reçu</th><th>Couple</th><th>Contact</th><th>État</th><th>Liens</th></tr></thead><tbody>
-      ${(d.commandes||[]).map(c=>`<tr><td><small>${new Date(c.at).toLocaleString('fr-FR')}</small></td><td>${esc(c.couple||'')}<br><small>${c.date?new Date(c.date).toLocaleDateString('fr-FR'):''}</small></td><td><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></td><td>${c.slug?`<b>Payée, en ligne</b><br><small>${c.mailed?'liens envoyés par e-mail':'e-mail non envoyé : envoyez les liens'}</small>`:'<small>Paiement non terminé</small>'}<br><small>${esc(c.ref)}</small></td><td>${c.slug?`<a href="${esc(c.link)}" target="_blank">Faire-part</a> · <a href="${esc(c.dashboard)}" target="_blank">Tableau de bord</a> · <a href="${esc(c.edit)}" target="_blank">Modifier</a>`:''}</td></tr>`).join('')||'<tr><td colspan="5"><small>Aucune commande en ligne pour le moment.</small></td></tr>'}
-      </tbody></table></div>
-      <h2>Faire-part en ligne (${d.invites.length})</h2>
-      <div class="tbl"><table><thead><tr><th>Couple</th><th>Type</th><th>Faire-part</th><th>Tableau de bord des mariés</th></tr></thead><tbody>
-      ${d.invites.map(i=>`<tr><td>${esc(i.couple)}<br><small>${new Date(i.date).toLocaleDateString('fr-FR')}</small></td><td>${i.demo?'Démo':'Client'}</td><td><a href="${esc(i.link)}" target="_blank">${esc(i.link)}</a></td><td><a href="${esc(i.dashboard)}" target="_blank">Ouvrir</a><br><small>Lien à envoyer aux mariés (garder privé)</small></td></tr>`).join('')}
-      </tbody></table></div>`;
-  }
-  document.getElementById('f').addEventListener('submit',e=>{ e.preventDefault(); load(document.getElementById('k').value.trim()); });
-  try{ const k=sessionStorage.getItem('sceau-k'); if(k) load(k); }catch(e){}
+const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const eur=c=>(c/100).toLocaleString('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:c%100?2:0});
+const nf=n=>Number(n||0).toLocaleString('fr-FR');
+const pct=(a,b)=>b?Math.round(a/b*1000)/10+' %':'—';
+const dt=s=>s?new Date(s).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+const dd=s=>s?new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}):'';
+const day=s=>{const d=new Date(s);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+const THEMES={dolcevita:'Dolce Vita',dolcevitajour:'Dolce Vita (jour)',doucefrance:'Douce France',oldmoney:'Old money',nuits:'Mille et une nuits',alhambra:'Andalou'};
+const thm=k=>THEMES[k]||k||'';
+const PLANS={carte:'Carte',page:'Page unique',essentiel:'Essentiel',signature:'Signature / Couture'};
+const LS={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+let KEY='', D=null, DAYS=+(LS.get('adm-days')||30), TAB=LS.get('adm-tab')||'vue';
+const S={cmd:'all',q:'',lead:'all',lq:''};
+
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',2600);}
+async function api(method,body){
+  const r=await fetch('/api/admin'+(method==='GET'?'?days='+DAYS:''),{method,headers:{Authorization:'Bearer '+KEY,...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined});
+  if(r.status===401){try{sessionStorage.removeItem('sceau-k')}catch(e){} throw new Error('key');}
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(j.error||('Erreur '+r.status));
+  return j;
+}
+async function load(k){
+  if(k) KEY=k;
+  try{ D=await api('GET'); }
+  catch(e){ if(e.message==='key'){ alert('Clé incorrecte'); location.reload(); return; } toast('Chargement impossible : '+e.message); return; }
+  try{ sessionStorage.setItem('sceau-k',KEY); }catch(e){}
+  render();
+}
+
+/* ---------- calculs ---------- */
+function model(){
+  const now=Date.now(), from=now-DAYS*864e5, prev=from-DAYS*864e5;
+  const inP=(s,a=from,b=now)=>{const t=new Date(s).getTime();return t>=a&&t<b;};
+  const real=D.commandes.filter(c=>!c.test);
+  const paid=real.filter(c=>c.paid);
+  // ventes : nos commandes payées, plus les paiements Stripe qui ne sont pas des commandes du site (liens de paiement Signature et Couture)
+  const refs=new Set(D.commandes.map(c=>c.ref));
+  const extra=(D.stripe&&D.stripe.sessions||[]).filter(s=>!refs.has(s.ref)&&s.amount>0).map(s=>({at:s.at,paidAt:s.at,amount:s.amount,plan:'signature',email:s.email,couple:s.name,stripe:true}));
+  const sales=[...paid.map(c=>({...c,paidAt:c.paidAt||c.at})),...extra];
+  const sP=sales.filter(s=>inP(s.paidAt)), sPrev=sales.filter(s=>inP(s.paidAt,prev,from));
+  const sum=a=>a.reduce((n,s)=>n+(s.amount||0),0);
+  const started=real.filter(c=>inP(c.at)), abandoned=started.filter(c=>!c.paid);
+  const leadsP=D.leads.filter(l=>inP(l.at)), leadsPrev=D.leads.filter(l=>inP(l.at,prev,from));
+  const refunds=(D.stripe&&D.stripe.refunds||[]).filter(r=>inP(r.at));
+  return {from,now,sales,sP,sPrev,ca:sum(sP),caPrev:sum(sPrev),started,abandoned,leadsP,leadsPrev,refunds,refund:sum(refunds),sum,inP};
+}
+function delta(a,b,money){
+  if(!b&&!a) return '<span class="mut">pas de période précédente</span>';
+  if(!b) return '<span class="up">nouveau</span>';
+  const d=Math.round((a-b)/b*100);
+  return `<span class="${d>=0?'up':'down'}">${d>=0?'+':''}${d} %</span> <span class="mut">vs ${money?eur(b):nf(b)}</span>`;
+}
+
+/* ---------- graphiques (une seule série par graphique, un seul axe) ---------- */
+function series(rows,valOf,M){
+  const week=DAYS>92, out=[], idx={};
+  const start=new Date(M.from); start.setHours(0,0,0,0);
+  if(week){ const g=(start.getDay()+6)%7; start.setDate(start.getDate()-g); }
+  for(let d=new Date(start);d.getTime()<=M.now;d.setDate(d.getDate()+(week?7:1))){ const k=day(d); idx[k]=out.length; out.push({k,d:new Date(d),v:0}); }
+  for(const r of rows){ const t=new Date(r.t); if(t.getTime()<M.from) continue; const s=new Date(t); s.setHours(0,0,0,0); if(week) s.setDate(s.getDate()-((s.getDay()+6)%7)); const i=idx[day(s)]; if(i!=null) out[i].v+=valOf(r); }
+  return {pts:out,week};
+}
+function barChart(id,S,fmt,int){
+  const W=innerWidth<600?360:640,H=innerWidth<600?170:190,P={l:46,r:6,t:10,b:24}, n=S.pts.length, max=Math.max(1,...S.pts.map(p=>p.v));
+  const nice=v=>{const e=Math.pow(10,Math.floor(Math.log10(v)));return Math.ceil(v/e/ (v/e>5?2:1))*e*(v/e>5?2:1);};
+  const top=int?Math.max(2,Math.ceil(max/2)*2):nice(max), bw=(W-P.l-P.r)/n, gap=Math.min(2,bw*.25), y=v=>P.t+(H-P.t-P.b)*(1-v/top);
+  let g='';
+  for(const f of [0,.5,1]){ const v=top*f; g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y(v)}" y2="${y(v)}" stroke="#ececec"/><text x="${P.l-6}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#8a8a8a">${esc(fmt(v,true))}</text>`; }
+  const every=Math.ceil(n/7);
+  S.pts.forEach((p,i)=>{
+    const x=P.l+i*bw+gap/2, w=Math.max(1,bw-gap), h=Math.max(0,y(0)-y(p.v)), r=Math.min(4,w/2,h);
+    if(p.v>0) g+=`<path d="M${x},${y(0)} v${-(h-r)} q0,${-r} ${r},${-r} h${w-2*r} q${r},0 ${r},${r} v${h-r} z" fill="var(--ac)"/>`;
+    g+=`<rect class="hit" data-i="${i}" x="${P.l+i*bw}" y="${P.t}" width="${bw}" height="${H-P.t-P.b}" fill="transparent"/>`;
+    if(i%every===0) g+=`<text x="${x+w/2}" y="${H-6}" text-anchor="middle" font-size="11" fill="#8a8a8a">${esc(p.d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'}))}</text>`;
+  });
+  g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y(0)}" y2="${y(0)}" stroke="#cfcfcf"/>`;
+  const total=S.pts.reduce((a,p)=>a+p.v,0);
+  return {html:`<div class="chart" id="${id}"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(fmt(total))} sur la période">${g}</svg><div class="tip"></div></div>`,
+    bind(){ const el=document.getElementById(id); if(!el) return; const tip=el.querySelector('.tip'), svg=el.querySelector('svg');
+      el.querySelectorAll('.hit').forEach(h=>{ const show=()=>{ const p=S.pts[+h.dataset.i]; const b=h.getBoundingClientRect(), o=el.getBoundingClientRect();
+        tip.innerHTML=`${S.week?'Semaine du ':''}${esc(p.d.toLocaleDateString('fr-FR',{weekday:S.week?undefined:'short',day:'numeric',month:'short'}))} · <b>${esc(fmt(p.v))}</b>`;
+        tip.style.left=(b.left-o.left+b.width/2)+'px'; tip.style.top=Math.max(18,(svg.getBoundingClientRect().height*0.1))+'px'; tip.style.display='block'; h.setAttribute('fill','rgba(47,84,201,.07)'); };
+        h.addEventListener('mouseenter',show); h.addEventListener('touchstart',show,{passive:true}); h.addEventListener('mouseleave',()=>{tip.style.display='none';h.setAttribute('fill','transparent');}); }); }};
+}
+function hbars(rows,fmt){
+  if(!rows.length) return '<div class="empty">Rien sur la période.</div>';
+  const max=Math.max(1,...rows.map(r=>r.v));
+  return `<div class="bars">${rows.map(r=>`<div class="bar"><span>${esc(r.l)}</span><span class="t"><span style="width:${Math.max(r.v?2:0,r.v/max*100)}%"></span></span><span class="n">${fmt?fmt(r):nf(r.v)}</span></div>`).join('')}</div>`;
+}
+const count=(arr,f)=>{const m={};for(const x of arr){const k=f(x);if(k)m[k]=(m[k]||0)+1;}return Object.entries(m).map(([l,v])=>({l,v})).sort((a,b)=>b.v-a.v);};
+
+/* ---------- onglets ---------- */
+function render(){
+  const M=model(), U=D.umami&&!D.umami.error?D.umami:null;
+  const newLeads=D.leads.filter(l=>l.status==='nouveau').length;
+  const unmailed=D.commandes.filter(c=>c.paid&&!c.test&&!c.mailed);
+  const clients=D.invites.filter(i=>!i.demo&&!i.test);
+  const alerts=[];
+  if(!D.storage) alerts.push(['bad','Le stockage n’est pas activé : aucune demande ni commande ne peut être enregistrée (store Blob à créer sur Vercel).']);
+  if(unmailed.length) alerts.push(['bad',`${unmailed.length} commande${unmailed.length>1?'s':''} payée${unmailed.length>1?'s':''} sans e-mail envoyé aux mariés : onglet Commandes, « Renvoyer l’e-mail ».`]);
+  if(newLeads) alerts.push(['warn',`${newLeads} demande${newLeads>1?'s':''} à traiter (statut « nouveau »).`]);
+  if(D.stripe&&D.stripe.error) alerts.push(['bad','Stripe ne répond pas : '+D.stripe.error]);
+  if(D.umami&&D.umami.error) alerts.push(['warn','Umami ne répond pas ('+D.umami.error+') : vérifiez UMAMI_API_KEY et UMAMI_WEBSITE_ID.']);
+  if(!D.setup.stripe) alerts.push(['info','Stripe n’est pas branché : les paiements des liens Signature et le solde n’apparaissent pas.']);
+  else if(D.stripe&&!D.stripe.error&&!D.stripe.live) alerts.push(['info','Clé Stripe de test (bac à sable) : les paiements affichés ne sont pas réels.']);
+  if(!D.setup.umami) alerts.push(['info','Les visites ne sont pas branchées : voir l’onglet Visites pour les relier (Umami, gratuit).']);
+  if(!D.setup.adminKey) alerts.push(['info','Conseil : ajoutez une variable ADMIN_KEY sur Vercel (une clé que vous notez) pour ouvrir cette page sans SCEAU_SECRET.']);
+
+  const tabs=[['vue','Vue d’ensemble'],['commandes','Commandes',unmailed.length],['demandes','Demandes',newLeads],['clients','Faire-part clients'],['stripe','Paiements'],['visites','Visites']];
+  document.getElementById('app').innerHTML=`
+  <div class="top"><div><h1>Admin Save The Oui</h1><small>Mis à jour ${esc(dt(D.now))}</small></div>
+    <div class="ctl"><div class="seg" role="group" aria-label="Période">${[[7,'7 j'],[30,'30 j'],[90,'90 j'],[365,'12 mois']].map(([d,l])=>`<button data-days="${d}" aria-pressed="${DAYS===d}">${l}</button>`).join('')}</div>
+    <button class="ghost" id="rf">Actualiser</button><button class="ghost" id="out">Se déconnecter</button></div></div>
+  <nav class="tabs">${tabs.map(([k,l,b])=>`<a href="#${k}" data-t="${k}" ${TAB===k?'aria-current="page"':''}>${l}${b?`<b>${b}</b>`:''}</a>`).join('')}</nav>
+  ${alerts.length?`<div class="alerts">${alerts.map(([c,t])=>`<div class="al ${c}"${c==='info'?' data-info':''}><i>${c==='info'?'i':'!'}</i><span>${esc(t)}</span></div>`).join('')}</div>`:''}
+  <section data-tab="vue">${vue(M,U)}</section>
+  <section data-tab="commandes">${commandes()}</section>
+  <section data-tab="demandes">${demandes()}</section>
+  <section data-tab="clients">${clientsTab(clients)}</section>
+  <section data-tab="stripe">${stripeTab()}</section>
+  <section data-tab="visites">${visites(U)}</section>`;
+  CH.forEach(c=>c.bind()); CH=[];
+  show(TAB);
+  document.querySelectorAll('[data-days]').forEach(b=>b.onclick=()=>{DAYS=+b.dataset.days;LS.set('adm-days',DAYS);load();});
+  document.getElementById('rf').onclick=()=>load();
+  document.getElementById('out').onclick=()=>{try{sessionStorage.removeItem('sceau-k')}catch(e){} location.reload();};
+  document.querySelectorAll('nav.tabs a').forEach(a=>a.onclick=e=>{e.preventDefault();show(a.dataset.t);});
+  bindTables();
+}
+let CH=[];
+function show(t){ TAB=t; LS.set('adm-tab',t);
+  document.querySelectorAll('section[data-tab]').forEach(s=>s.classList.toggle('on',s.dataset.tab===t));
+  document.querySelectorAll('[data-info]').forEach(a=>a.hidden=t!=='vue');
+  document.querySelectorAll('nav.tabs a').forEach(a=>a.toggleAttribute('aria-current',a.dataset.t===t)); document.querySelectorAll('nav.tabs a[aria-current]').forEach(a=>a.setAttribute('aria-current','page')); }
+
+function vue(M,U){
+  const n=M.sP.length, avg=n?M.ca/n:0, nPrev=M.sPrev.length;
+  const conv=U&&U.visitors?pct(n,U.visitors):'—';
+  const kp=(l,v,d,off)=>`<div class="kpi${off?' off':''}"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></div>`;
+  const ev=U?Object.fromEntries((U.events||[]).map(e=>[e.x,e.y])):{};
+  const ca=barChart('chCA',series(M.sales.map(s=>({t:s.paidAt,a:s.amount})),r=>r.a,M),(v,ax)=>ax?(v>=100000?Math.round(v/100000)+' k€':Math.round(v/100)+' €'):eur(v));
+  const cnt=barChart('chN',series(M.sales.map(s=>({t:s.paidAt})),()=>1,M),(v,ax)=>ax?String(Math.round(v)):nf(v)+' vente'+(v>1?'s':''),true);
+  CH.push(ca,cnt);
+  let vis=null; if(U&&U.series&&U.series.length){ vis=barChart('chV',{week:false,pts:U.series.map(p=>({k:p.d,d:new Date(p.d+'T12:00'),v:p.n}))},(v,ax)=>ax?String(Math.round(v)):nf(v)+' visite'+(v>1?'s':''),true); CH.push(vis); }
+  // entonnoir : des visites jusqu'au paiement (les étapes viennent des événements track() de vitrine.js quand Umami est branché)
+  const F=[]; if(U){ F.push(['Visiteurs',U.visitors]); if(ev.etape!=null) F.push(['Configurateur (étapes vues)',ev.etape]); if(ev.commander!=null) F.push(['Formulaire de commande envoyé',ev.commander]); }
+  F.push(['Commandes lancées (paiement ouvert)',M.started.length]); F.push(['Commandes payées',M.started.filter(c=>c.paid).length]);
+  const fmax=Math.max(1,...F.map(f=>f[1]));
+  const funnel=`<div class="bars funnel">${F.map((f,i)=>`<div class="bar"><span>${esc(f[0])}</span><span class="t"><span style="width:${Math.max(f[1]?2:0,f[1]/fmax*100)}%"></span></span><span class="n">${nf(f[1])}${i?` <small>· ${pct(f[1],F[i-1][1])}</small>`:''}</span></div>`).join('')}</div>`;
+  const byPlan=Object.entries(M.sP.reduce((m,s)=>{const k=PLANS[s.plan]||s.plan;(m[k]=m[k]||{v:0,ca:0});m[k].v++;m[k].ca+=s.amount;return m;},{})).map(([l,o])=>({l,v:o.ca,n:o.v})).sort((a,b)=>b.v-a.v);
+  const pages=M.sP.filter(s=>s.plan==='page');
+  const opts=[{l:'Ouverture animée (+10 €)',v:pages.filter(s=>s.options&&s.options.opening).length},{l:'Bouton Répondre (+20 €)',v:pages.filter(s=>s.options&&s.options.reply).length}];
+  const themes=count(M.sP.filter(s=>s.theme),s=>thm(s.theme));
+  const up=D.invites.filter(i=>!i.demo&&!i.test&&i.date&&new Date(i.date)>new Date()).sort((a,b)=>a.date<b.date?-1:1).slice(0,5);
+  return `<div class="kpis">
+    ${kp('Chiffre d’affaires',eur(M.ca),delta(M.ca,M.caPrev,true))}
+    ${kp('Ventes',nf(n),delta(n,nPrev))}
+    ${kp('Panier moyen',n?eur(avg):'—',M.refund?`dont ${eur(M.refund)} remboursés`:'sur la période')}
+    ${kp('Visiteurs',U?nf(U.visitors):'—',U?`${nf(U.pageviews)} pages vues`:'à brancher (onglet Visites)',!U)}
+    ${kp('Conversion',conv,U?'ventes / visiteurs':'à brancher',!U)}
+    ${kp('Demandes reçues',nf(M.leadsP.length),delta(M.leadsP.length,M.leadsPrev.length))}
+    ${kp('Paiements abandonnés',nf(M.abandoned.length),M.started.length?pct(M.abandoned.length,M.started.length)+' des commandes lancées':'aucune commande lancée')}
+  </div>
+  <div class="grid">
+    <div class="card"><div class="hd"><b>Chiffre d’affaires ${DAYS>92?'par semaine':'par jour'}</b><small>${eur(M.ca)}</small></div>${ca.html}</div>
+    <div class="card"><div class="hd"><b>Ventes ${DAYS>92?'par semaine':'par jour'}</b><small>${nf(n)}</small></div>${cnt.html}</div>
+  </div>
+  <div class="grid">
+    ${vis?`<div class="card"><div class="hd"><b>Visites par jour</b><small>${nf(U.visits)} visites</small></div>${vis.html}</div>`:''}
+    <div class="card"><div class="hd"><b>Du visiteur à la vente</b><small>${DAYS} derniers jours</small></div>${funnel}${U?'':'<p><small>Les visites et les étapes du configurateur s’ajouteront ici une fois Umami branché.</small></p>'}</div>
+    <div class="card"><div class="hd"><b>Ventes par formule</b></div>${hbars(byPlan,r=>`${eur(r.v)} <small>· ${r.n}</small>`)}
+      ${pages.length?`<h3 style="margin-top:16px">Options des pages uniques vendues (${pages.length})</h3>${hbars(opts,r=>`${r.v} <small>· ${pct(r.v,pages.length)}</small>`)}`:''}</div>
+    <div class="card"><div class="hd"><b>Thèmes vendus</b></div>${hbars(themes)}</div>
+    <div class="card"><div class="hd"><b>Prochains mariages</b><small>${D.invites.filter(i=>!i.demo&&!i.test).length} faire-part clients</small></div>
+      ${up.length?`<div class="bars">${up.map(i=>`<div class="bar" style="grid-template-columns:1fr auto"><span>${esc(i.couple)}<br><small>${esc(dd(i.date))} · ${i.answers} réponse${i.answers>1?'s':''}, ${i.guests} personne${i.guests>1?'s':''}</small></span><span class="pill p-ac">J-${Math.ceil((new Date(i.date)-Date.now())/864e5)}</span></div>`).join('')}</div>`:'<div class="empty">Aucun mariage client à venir.</div>'}</div>
+  </div>`;
+}
+
+function csv(name,rows){
+  const s=rows.map(r=>r.map(v=>{v=String(v==null?'':v);return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}).join(';')).join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+s],{type:'text/csv;charset=utf-8'})); a.download=name+'-'+day(new Date())+'.csv'; a.click();
+}
+function planOf(c){ let t=PLANS[c.plan]||c.plan; if(c.plan==='page'&&c.options){ const o=[c.options.opening&&'ouverture',c.options.reply&&'réponses'].filter(Boolean); if(o.length) t+=' + '+o.join(' + '); } return t; }
+function relance(c){
+  const sub=encodeURIComponent('Votre faire-part Save The Oui'+(c.couple?' · '+c.couple:''));
+  const body=encodeURIComponent(`Bonjour,\n\nVous avez commencé à créer votre faire-part${c.couple?' ('+c.couple+')':''} sur Save The Oui sans aller jusqu’au paiement. Un souci, une question ? Répondez simplement à cet e-mail, on vous aide.\n\nVous pouvez le reprendre ici : https://savetheoui.fr/creer/?plan=${c.plan}\n\nSave The Oui`);
+  return `mailto:${encodeURIComponent(c.email)}?subject=${sub}&body=${body}`;
+}
+function cmdRows(){
+  const q=S.q.toLowerCase();
+  return D.commandes.filter(c=>S.cmd==='all'?true:S.cmd==='paid'?c.paid&&!c.test:S.cmd==='unpaid'?!c.paid&&!c.test:c.test)
+    .filter(c=>!q||[c.couple,c.email,c.ref,c.slug,c.theme].join(' ').toLowerCase().includes(q));
+}
+function commandes(){
+  const n=k=>D.commandes.filter(c=>k==='paid'?c.paid&&!c.test:k==='unpaid'?!c.paid&&!c.test:k==='test'?c.test:true).length;
+  const rows=cmdRows();
+  return `<div class="bar2"><div class="ctl"><div class="seg" id="cmdF">${[['all','Toutes'],['paid','Payées'],['unpaid','Non payées'],['test','Tests']].map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.cmd===k}">${l} · ${n(k)}</button>`).join('')}</div>
+    <input type="search" id="cmdQ" placeholder="Chercher un couple, un e-mail…" value="${esc(S.q)}"></div><button class="ghost sm" id="cmdCsv">Exporter en CSV</button></div>
+  <div class="tbl"><table><thead><tr><th>Reçue</th><th>Couple</th><th>Contact</th><th>Formule</th><th class="r">Montant</th><th>État</th><th>Liens et actions</th></tr></thead><tbody id="cmdB">
+  ${rows.map(c=>`<tr class="${c.test?'test':''}"><td><small>${esc(dt(c.at))}</small></td>
+    <td>${esc(c.couple||'')}<br><small>${c.date?'Mariage le '+esc(dd(c.date)):''}${c.theme?' · '+esc(thm(c.theme)):''}${c.events?' · '+c.events+' moment'+(c.events>1?'s':''):''}</small></td>
+    <td><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></td>
+    <td>${esc(planOf(c))}</td>
+    <td class="r num">${eur(c.amount)}${c.paid&&c.amount!==c.price?`<br><small>prix ${eur(c.price)}</small>`:''}</td>
+    <td>${c.test?'<span class="pill p-mut">Test</span>':c.paid?'<span class="pill p-good">Payée</span>':'<span class="pill p-warn">Paiement non terminé</span>'}
+      ${c.paid?`<br><small>${c.mailed?'liens envoyés par e-mail':'<b style="color:var(--bad)">e-mail non envoyé</b>'}${c.paidAt?' · '+esc(dt(c.paidAt)):''}</small>`:''}<br><small>${esc(c.ref)}</small></td>
+    <td>${c.slug?`<a href="${esc(c.link)}" target="_blank">Faire-part</a> · ${c.plan!=='page'||(c.options&&c.options.reply)?`<a href="${esc(c.dashboard)}" target="_blank">Tableau de bord</a> · `:''}<a href="${esc(c.edit)}" target="_blank">Modifier</a>`:c.dl&&c.paid?`<a href="${esc(c.dl)}" target="_blank">Télécharger la carte</a>`:''}
+      <div class="acts">${c.paid?`<button class="ghost sm" data-remail="${esc(c.ref)}">Renvoyer l’e-mail</button>`:`<a class="btn ghost sm" href="${relance(c)}">Relancer par e-mail</a>`}
+      <button class="ghost sm" data-test="${esc(c.ref)}" data-v="${c.test?0:1}">${c.test?'Ce n’est pas un test':'Marquer comme test'}</button></div></td></tr>`).join('')||'<tr><td colspan="7"><small>Aucune commande.</small></td></tr>'}
+  </tbody></table></div>`;
+}
+function leadRows(){ const q=S.lq.toLowerCase(); return D.leads.filter(l=>S.lead==='all'||l.status===S.lead).filter(l=>!q||[l.name,l.email,l.phone,l.message,l.plan].join(' ').toLowerCase().includes(q)); }
+function demandes(){
+  const ST=['nouveau','en cours','gagné','perdu'], n=k=>D.leads.filter(l=>k==='all'||l.status===k).length, rows=leadRows();
+  return `<div class="bar2"><div class="ctl"><div class="seg" id="leadF">${[['all','Toutes'],...ST.map(s=>[s,s[0].toUpperCase()+s.slice(1)])].map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.lead===k}">${l} · ${n(k)}</button>`).join('')}</div>
+    <input type="search" id="leadQ" placeholder="Chercher…" value="${esc(S.lq)}"></div><button class="ghost sm" id="leadCsv">Exporter en CSV</button></div>
+  <div class="tbl"><table><thead><tr><th>Reçue</th><th>Contact</th><th>Demande</th><th>Ses choix</th><th>Message</th><th style="min-width:200px">Suivi</th></tr></thead><tbody>
+  ${rows.map(l=>{ const ch=Object.entries(l.choix||{}).filter(x=>x[1]&&x[0]!=='evenements');
+    return `<tr><td><small>${esc(dt(l.at))}</small></td>
+    <td>${esc(l.name)}<br><a href="mailto:${esc(l.email)}">${esc(l.email)}</a>${l.phone?`<br><a href="tel:${esc(l.phone)}"><small>${esc(l.phone)}</small></a> · <a href="https://wa.me/${esc(String(l.phone).replace(/\D/g,'').replace(/^0/,'33'))}" target="_blank"><small>WhatsApp</small></a>`:''}</td>
+    <td>${esc(l.plan)}${l.type==='commande'?' <span class="pill p-ac">commande</span>':''}${l.date?`<br><small>Mariage : ${esc(l.date)}</small>`:''}${l.photos&&l.photos.length?`<br><small>${l.photos.length} photo${l.photos.length>1?'s':''} envoyée${l.photos.length>1?'s':''}</small>`:''}</td>
+    <td><small>${esc(ch.slice(0,4).map(x=>x[0]+' : '+x[1]).join(' · '))}</small>${ch.length>4||(l.choix&&l.choix.evenements)?`<details class="more"><summary>tout voir</summary><small>${esc(ch.slice(4).map(x=>x[0]+' : '+x[1]).join(' · '))}${l.choix&&l.choix.evenements?'<br>Événements : '+esc(l.choix.evenements):''}</small></details>`:''}</td>
+    <td><small>${esc(l.message)}</small></td>
+    <td><select data-st="${esc(l.path)}">${ST.map(s=>`<option ${l.status===s?'selected':''}>${s}</option>`).join('')}</select>
+      <textarea data-note="${esc(l.path)}" placeholder="Note (rappelé le…, devis envoyé…)">${esc(l.note||'')}</textarea></td></tr>`;}).join('')||'<tr><td colspan="6"><small>Aucune demande.</small></td></tr>'}
+  </tbody></table></div>`;
+}
+function clientsTab(clients){
+  const row=i=>`<tr><td>${esc(i.couple)}<br><small>${esc(i.slug)}</small></td><td>${esc(dd(i.date))}<br>${new Date(i.date)>new Date()?`<span class="pill p-ac">J-${Math.ceil((new Date(i.date)-Date.now())/864e5)}</span>`:'<span class="pill p-mut">passé</span>'}</td>
+    <td>${i.online?esc(PLANS[i.plan]||i.plan||'')+'<br><small>commandé en ligne</small>':'<small>fait par nous</small>'}</td>
+    <td class="r num">${i.answers}<br><small>${i.yes} oui · ${i.no} non</small></td><td class="r num">${i.guests}</td>
+    <td class="r num">${i.families?`${i.opened} / ${i.families}<br><small>${i.opens} ouverture${i.opens>1?'s':''}</small>`:'<small>—</small>'}</td>
+    <td class="r num">${i.gifts?`${i.giftsTaken} / ${i.gifts}`:'<small>—</small>'}</td>
+    <td><small>${i.last?esc(dt(i.last)):''}</small></td>
+    <td><a href="${esc(i.link)}" target="_blank">Faire-part</a> · <a href="${esc(i.dashboard)}" target="_blank">Tableau de bord</a></td></tr>`;
+  const head='<thead><tr><th>Couple</th><th>Mariage</th><th>Formule</th><th class="r">Réponses</th><th class="r">Personnes</th><th class="r">Liens famille ouverts</th><th class="r">Cadeaux pris</th><th>Dernière réponse</th><th>Liens</th></tr></thead>';
+  const sorted=[...clients].sort((a,b)=>a.date<b.date?-1:1), demos=D.invites.filter(i=>i.demo);
+  return `<div class="bar2"><p style="margin:0">Le lien « Tableau de bord » est celui des mariés : gardez-le privé.</p><button class="ghost sm" id="cliCsv">Exporter en CSV</button></div>
+  <div class="tbl"><table>${head}<tbody>${sorted.map(row).join('')||'<tr><td colspan="9"><small>Aucun faire-part client pour le moment.</small></td></tr>'}</tbody></table></div>
+  <details class="sec"><summary>Démos (${demos.length})</summary><div class="tbl" style="margin-top:10px"><table>${head}<tbody>${demos.map(row).join('')}</tbody></table></div></details>`;
+}
+function stripeTab(){
+  if(!D.setup.stripe) return `<div class="card"><b>Stripe n’est pas branché</b><p>Ajoutez <code>STRIPE_SECRET_KEY</code> dans les variables d’environnement Vercel du projet, puis redéployez.</p></div>`;
+  const s=D.stripe; if(s.error) return `<div class="al bad"><i>!</i><span>Stripe : ${esc(s.error)}</span></div>`;
+  const refs=new Set(D.commandes.map(c=>c.ref));
+  return `<div class="kpis">
+    <div class="kpi"><div class="l">Solde disponible</div><div class="v">${s.balance?eur(s.balance.available):'—'}</div><div class="d">versé sur votre compte au prochain virement</div></div>
+    <div class="kpi"><div class="l">En attente</div><div class="v">${s.balance?eur(s.balance.pending):'—'}</div><div class="d">paiements pas encore disponibles</div></div>
+    <div class="kpi"><div class="l">Mode</div><div class="v" style="font-size:20px">${s.live?'<span class="pill p-good">Réel</span>':'<span class="pill p-warn">Test</span>'}</div><div class="d">${s.sessions.length} paiement${s.sessions.length>1?'s':''} (100 derniers)</div></div>
+  </div>
+  <div class="tbl"><table><thead><tr><th>Date</th><th>Client</th><th>Origine</th><th class="r">Montant</th><th>Référence</th></tr></thead><tbody>
+  ${s.sessions.map(x=>`<tr><td><small>${esc(dt(x.at))}</small></td><td>${esc(x.name)}<br><a href="mailto:${esc(x.email)}">${esc(x.email)}</a></td>
+    <td>${refs.has(x.ref)?'<span class="pill p-ac">Commande du site</span>':x.link?'<span class="pill p-mut">Lien de paiement</span>':'<span class="pill p-mut">Autre</span>'}</td>
+    <td class="r num">${eur(x.amount)}</td><td><small>${esc(x.ref||x.id)}</small></td></tr>`).join('')||'<tr><td colspan="5"><small>Aucun paiement.</small></td></tr>'}
+  </tbody></table></div>
+  ${s.refunds.length?`<h2 style="margin:24px 0 10px">Remboursements</h2><div class="tbl"><table><thead><tr><th>Date</th><th>Client</th><th class="r">Montant remboursé</th></tr></thead><tbody>${s.refunds.map(r=>`<tr><td><small>${esc(dt(r.at))}</small></td><td>${esc(r.email)}</td><td class="r num">${eur(r.amount)}</td></tr>`).join('')}</tbody></table></div>`:''}`;
+}
+function visites(U){
+  if(!D.setup.umami) return `<div class="card"><b>Brancher les visites (Umami Cloud, gratuit, sans cookie)</b>
+    <ol class="steps"><li>Créez un compte sur <a href="https://cloud.umami.is/signup" target="_blank">cloud.umami.is</a> et ajoutez le site <code>savetheoui.fr</code>.</li>
+    <li>Copiez l’<b>identifiant du site</b> (Website ID) et créez une <b>clé d’API</b> (Settings → API keys).</li>
+    <li>Sur Vercel, projet <code>sceau-faire-part</code> → Settings → Environment Variables : <code>UMAMI_WEBSITE_ID</code> et <code>UMAMI_API_KEY</code>.</li>
+    <li>Donnez l’identifiant du site à Claude : il le met dans <code>UMAMI_ID</code> (build-site.py) pour poser la balise sur toutes les pages, et la prod se redéploie.</li></ol>
+    <p>En attendant, les visites sont dans l’onglet <b>Analytics</b> du projet sur Vercel.</p></div>`;
+  if(!U) return `<div class="al warn"><i>!</i><span>Umami ne répond pas : ${esc(D.umami&&D.umami.error||'')}</span></div>`;
+  const m=a=>(a||[]).map(x=>({l:x.x||'(direct)',v:x.y}));
+  const min=Math.round(U.visits?U.totaltime/U.visits/60*10:0)/10;
+  return `<div class="kpis">
+    <div class="kpi"><div class="l">Visiteurs</div><div class="v">${nf(U.visitors)}</div><div class="d">${DAYS} derniers jours</div></div>
+    <div class="kpi"><div class="l">Visites</div><div class="v">${nf(U.visits)}</div><div class="d">${nf(U.pageviews)} pages vues</div></div>
+    <div class="kpi"><div class="l">Rebond</div><div class="v">${pct(U.bounces,U.visits)}</div><div class="d">visites d’une seule page</div></div>
+    <div class="kpi"><div class="l">Durée moyenne</div><div class="v">${min} min</div><div class="d">par visite</div></div></div>
+  <div class="grid">
+    <div class="card"><div class="hd"><b>Pages les plus vues</b></div>${hbars(m(U.pages))}</div>
+    <div class="card"><div class="hd"><b>D’où viennent les visiteurs</b></div>${hbars(m(U.refs))}</div>
+    <div class="card"><div class="hd"><b>Pays</b></div>${hbars(m(U.countries))}</div>
+    <div class="card"><div class="hd"><b>Appareils</b></div>${hbars(m(U.devices))}</div>
+    <div class="card"><div class="hd"><b>Actions (tunnel)</b></div>${hbars(m(U.events))}</div></div>`;
+}
+
+/* ---------- interactions des tableaux ---------- */
+function rerender(id,html){ const sec=document.querySelector(`section[data-tab="${id}"]`); sec.innerHTML=html; bindTables(); }
+function bindTables(){
+  document.querySelectorAll('#cmdF [data-f]').forEach(b=>b.onclick=()=>{S.cmd=b.dataset.f;rerender('commandes',commandes());});
+  const cq=document.getElementById('cmdQ'); if(cq) cq.oninput=()=>{S.q=cq.value;rerender('commandes',commandes());const e=document.getElementById('cmdQ');e.focus();e.setSelectionRange(e.value.length,e.value.length);};
+  document.querySelectorAll('#leadF [data-f]').forEach(b=>b.onclick=()=>{S.lead=b.dataset.f;rerender('demandes',demandes());});
+  const lq=document.getElementById('leadQ'); if(lq) lq.oninput=()=>{S.lq=lq.value;rerender('demandes',demandes());const e=document.getElementById('leadQ');e.focus();e.setSelectionRange(e.value.length,e.value.length);};
+  const on=(id,f)=>{const e=document.getElementById(id);if(e)e.onclick=f;};
+  on('cmdCsv',()=>csv('commandes',[['Reçue','Payée le','Couple','Mariage','Thème','E-mail','Formule','Montant (€)','État','E-mail envoyé','Référence','Faire-part'],...cmdRows().map(c=>[c.at,c.paidAt||'',c.couple,c.date,thm(c.theme),c.email,planOf(c),(c.amount/100).toFixed(2).replace('.',','),c.test?'test':c.paid?'payée':'non payée',c.mailed?'oui':'non',c.ref,c.slug?'https://savetheoui.fr'+c.link:''])]));
+  on('leadCsv',()=>csv('demandes',[['Reçue','Nom','E-mail','Téléphone','Formule','Type','Date du mariage','Message','Statut','Note'],...leadRows().map(l=>[l.at,l.name,l.email,l.phone,l.plan,l.type,l.date,l.message,l.status,l.note||''])]));
+  on('cliCsv',()=>csv('faire-part',[['Couple','Mariage','Formule','Réponses','Oui','Non','Personnes','Liens ouverts','Familles','Cadeaux pris','Faire-part'],...D.invites.filter(i=>!i.demo&&!i.test).map(i=>[i.couple,i.date,i.plan||'',i.answers,i.yes,i.no,i.guests,i.opened,i.families,i.giftsTaken,'https://savetheoui.fr'+i.link])]));
+  document.querySelectorAll('[data-remail]').forEach(b=>b.onclick=async()=>{ b.disabled=true;
+    try{ await api('POST',{op:'remail',ref:b.dataset.remail}); toast('E-mail renvoyé aux mariés'); const c=D.commandes.find(x=>x.ref===b.dataset.remail); if(c) c.mailed=true; render(); }
+    catch(e){ toast(e.message==='resend'?'RESEND_API_KEY manque sur Vercel':'Envoi impossible ('+e.message+')'); b.disabled=false; } });
+  document.querySelectorAll('[data-test]').forEach(b=>b.onclick=async()=>{ b.disabled=true;
+    try{ const v=b.dataset.v==='1'; await api('POST',{op:'test',ref:b.dataset.test,test:v}); const c=D.commandes.find(x=>x.ref===b.dataset.test); if(c) c.test=v; toast(v?'Sortie des chiffres':'Remise dans les chiffres'); render(); }
+    catch(e){ toast('Impossible : '+e.message); b.disabled=false; } });
+  document.querySelectorAll('[data-st]').forEach(s=>s.onchange=async()=>{ const l=D.leads.find(x=>x.path===s.dataset.st);
+    try{ await api('POST',{op:'lead',path:s.dataset.st,status:s.value}); l.status=s.value; toast('Statut enregistré'); render(); } catch(e){ toast('Impossible : '+e.message); } });
+  document.querySelectorAll('[data-note]').forEach(t=>t.onchange=async()=>{ const l=D.leads.find(x=>x.path===t.dataset.note);
+    try{ await api('POST',{op:'lead',path:t.dataset.note,note:t.value}); l.note=t.value; toast('Note enregistrée'); } catch(e){ toast('Impossible : '+e.message); } });
+}
+
+document.getElementById('f').addEventListener('submit',e=>{ e.preventDefault(); load(document.getElementById('k').value.trim()); });
+try{ const k=sessionStorage.getItem('sceau-k'); if(k) load(k); }catch(e){}
 </script>
 </body>
 </html>
