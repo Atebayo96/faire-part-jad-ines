@@ -957,6 +957,17 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     puis le mois du mariage zoome, le jour est entouré au feutre, confettis) et **pluie de cœurs** (« une pluie torrentielle
     d'emojis, et ceux qui restent, c'est la date » : une averse de 300 emojis cœurs sur tout l'écran pendant près de 4 s, et
     au milieu, les cœurs qui se posent écrivent la date en chiffres de 3 × 5 ❤️, puis la date en toutes lettres).
+    **Refaits le 2 novembre 2026** : *calendrier* = un éphéméride qui montre la date du jour sur une ligne, chaque mot est un
+    rouleau qui tourne (l'année s'arrête d'abord, puis le mois, puis le jour et son nom), le jour entouré au feutre, la ligne
+    grandit, « Aujourd'hui » devient « Le grand jour » (« la date du jour s'affiche et après, sur la même ligne, tout roule ») ;
+    *pluie de cœurs* = les cœurs qui restent s'entassent en **un grand cœur**, rangées décalées posées du bas vers le haut,
+    puis la date en vraies lettres : les chiffres en pixels de cœurs ont été refusés (« c'est très alphanumérique ») ;
+    *cadenas* = une molette de coffre qu'on tourne au doigt, chiffre courant en grand au centre, un indice (« entre le 10 et
+    le 14 », « en été ») et une molette qui chauffe en approchant (froid, tiède, chaud, ça brûle), on relâche sur le bon
+    chiffre : le jour puis le mois (l'ancien « on touche et on attend » était « du tâtonnement ») ; *carte d'embarquement* =
+    deux gestes, le talon puis l'avion qu'on fait glisser jusqu'à la ville, la date s'affiche en tableau des départs ;
+    *bouton qui fuit* = c'est **« Oui ! »** qui fuit, et chaque fuite ajoute une info (la date, la ville, dans combien de
+    jours, le faire-part qui suit) avant qu'il se laisse attraper ; « Non » ne fait que dire « Mauvaise réponse ».
     Les jeux se posent sur le fond peint du thème (`img/carte/<thème>-fond.webp`) **dans des cartes crème au texte foncé**
     (`--sink` : l'encre du couple assombrie à 4,6:1 contre le crème) ; rien n'est écrit directement sur le motif. « Voir
     directement » passe le jeu à tout moment. Le bloc racine porte `std-a-<jeu>`, jamais `std-<jeu>` (`std-sms` était aussi la
