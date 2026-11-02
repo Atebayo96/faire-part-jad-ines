@@ -968,6 +968,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     deux gestes, le talon puis l'avion qu'on fait glisser jusqu'à la ville, la date s'affiche en tableau des départs ;
     *bouton qui fuit* = c'est **« Oui ! »** qui fuit, et chaque fuite ajoute une info (la date, la ville, dans combien de
     jours, le faire-part qui suit) avant qu'il se laisse attraper ; « Non » ne fait que dire « Mauvaise réponse ».
+    **Retouchés le même jour** : le calendrier est **plus lent** (année 2,6 s, mois 4,2 s, jour 5,8 s) et **figé** : chaque
+    rouleau garde du début à la fin la largeur de son plus long mot, rien ne rebondit ni ne grandit, la place des prénoms est
+    réservée dans la carte (« les jours, l'année bougent sur x, y : faut que ce soit figé, juste ça tourne ») ; la pluie de
+    cœurs remplit **un bocal**, rangée par rangée, et **toute la date** (« Samedi / 12 juin / 2027 », chaque ligne à la largeur
+    du bocal) reste en blanc, découpée dans le tas (« c'est comme un bocal qui se remplit de cœurs et ça laisse vide en blanc
+    que la date » ; « y'a que le 12 qui s'affiche, je voulais toute la date ») ; cœurs rouges assombris pour le contraste du
+    blanc ; le **cadenas est mis de côté** (`off:true`, hors des listes, il marche encore pour une fiche qui l'a) ; le bouton
+    qui fuit n'a **plus de « Non »** ; le glisser de l'avion (carte d'embarquement) plaît, à réutiliser ailleurs.
     Les jeux se posent sur le fond peint du thème (`img/carte/<thème>-fond.webp`) **dans des cartes crème au texte foncé**
     (`--sink` : l'encre du couple assombrie à 4,6:1 contre le crème) ; rien n'est écrit directement sur le motif. « Voir
     directement » passe le jeu à tout moment. Le bloc racine porte `std-a-<jeu>`, jamais `std-<jeu>` (`std-sms` était aussi la

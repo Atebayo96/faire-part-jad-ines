@@ -14,13 +14,15 @@
     {k:'gratter',name:'Le ticket à gratter',tx:'On gratte, la date apparaît.'},
     {k:'jackpot',name:'Le jackpot',tx:'On tire le levier, les rouleaux tombent sur votre date.'},
     {k:'billet',name:'La carte d’embarquement',tx:'On déchire le talon, on fait décoller l’avion : la date s’affiche comme au tableau des départs.'},
-    {k:'cadenas',name:'Le cadenas à code',tx:'On tourne la molette d’un coffre : elle chauffe quand on approche du jour, puis du mois.'},
+    {k:'cadenas',off:true,name:'Le cadenas à code',tx:'On tourne la molette d’un coffre : elle chauffe quand on approche du jour, puis du mois.'},
     {k:'sms',name:'Le message',tx:'Une conversation s’écrit toute seule, jusqu’à « On se marie ! ».'},
-    {k:'fuit',name:'Le bouton qui fuit',tx:'« Oui » s’échappe, et à chaque fois une info de plus apparaît.'},
+    {k:'fuit',name:'Le bouton qui fuit',tx:'Le bouton « Oui » s’échappe, et à chaque fois une info de plus apparaît.'},
     {k:'calendrier',name:'Le calendrier',tx:'La date d’aujourd’hui se met à rouler et s’arrête sur le grand jour.'},
-    {k:'coeurs',name:'La pluie de cœurs',tx:'Une averse de cœurs, qui s’empilent rangée par rangée pour écrire votre date.'}
+    {k:'coeurs',name:'La pluie de cœurs',tx:'Un bocal se remplit de cœurs, et seule votre date reste en blanc.'}
   ];
   const KEYS=ANIMS.map(a=>a.k);
+  // le cadenas est mis de côté (2 novembre 2026 : « pas ouf ») : il marche encore pour une fiche qui l'a, mais ne se propose plus
+  const LIST=ANIMS.filter(a=>!a.off);
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
@@ -218,7 +220,7 @@
   /* ---------- 6. le bouton qui fuit, à l'envers (2 novembre 2026 : « c'est le bouton Oui qui doit fuir plusieurs fois, et à
      chaque clic on a des infos en plus ») : « Serez-vous des nôtres ? » ; « Oui ! » s'échappe, et à chaque fois une info
      s'ajoute à la carte (la date, la ville, dans combien de jours, le faire-part qui suit). Quand tout est dit, il se laisse
-     attraper : « Bon… oui ! ». « Non » ne fuit pas : il dit seulement que ce n'est pas la bonne réponse. ---------- */
+     attraper : « Bon… oui ! ». Pas de bouton « Non » (« faut même pas mettre le non »). ---------- */
   GAMES.fuit=(st,c,done)=>{
     const days=Math.round((c.P.D-Date.now())/864e5);
     const INFO=[['Pas si vite ! D’abord, la date',`${c.P.full} 📅`],c.city?['Et c’est où ?',`À ${c.city} 📍`]:null,
@@ -227,14 +229,14 @@
     st.innerHTML=`<div class="std-card std-run">${head(c)}
       <p class="rn-q">Une grande nouvelle… Serez-vous des nôtres ?</p>
       <ul class="rn-info" aria-live="polite"></ul>
-      <div class="rn-acts"><button type="button" class="rn-yes">Oui !</button><button type="button" class="rn-no">Non</button></div>
+      <div class="rn-acts"><button type="button" class="rn-yes">Oui !</button></div>
       <p class="rn-msg" aria-live="polite"></p></div>`;
-    const card=st.firstChild, no=card.querySelector('.rn-no'), yes=card.querySelector('.rn-yes'), msg=card.querySelector('.rn-msg'), info=card.querySelector('.rn-info'), acts=card.querySelector('.rn-acts');
+    const card=st.firstChild, yes=card.querySelector('.rn-yes'), msg=card.querySelector('.rn-msg'), info=card.querySelector('.rn-info'), acts=card.querySelector('.rn-acts');
     let n=0, fin=false, gave=0;
     const run=e=>{ if(fin||gave) return; if(e) e.preventDefault();
       const [a,b]=INFO[n++]; const li=document.createElement('li'); li.innerHTML=`<small>${esc(a)}</small><b>${esc(b)}</b>`; info.appendChild(li);
       if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
-      if(n>=INFO.length){ gave=Date.now(); yes.textContent='Bon… oui ! 🥂'; yes.classList.remove('away'); yes.classList.add('gave'); yes.style.left=''; yes.style.top=''; acts.insertBefore(yes,no); return; }
+      if(n>=INFO.length){ gave=Date.now(); yes.textContent='Bon… oui ! 🥂'; yes.classList.remove('away'); yes.classList.add('gave'); yes.style.left=''; yes.style.top=''; acts.appendChild(yes); return; }
       yes.textContent=LAB[n]||LAB[LAB.length-1];
       if(yes.parentNode!==st){ st.appendChild(yes); yes.classList.add('away'); }
       // il saute au-dessus ou au-dessous de la carte, jamais sur le texte
@@ -249,8 +251,6 @@
     yes.addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&!gave) run(e); });
     const ok=()=>{ if(fin) return; fin=true; msg.textContent='On le savait ! 🥂'; card.classList.add('yes'); burst(card,c.pal); setTimeout(done,reduce?200:2200); };
     yes.addEventListener('click',e=>{ if(gave&&Date.now()-gave>450) ok(); else e.preventDefault(); });
-    no.addEventListener('click',()=>{ if(fin) return; msg.textContent=['Mauvaise réponse 😄','Essayez l’autre bouton','Toujours pas 😇'][Math.min(2,(no._n=(no._n||0)+1)-1)];
-      no.classList.remove('shake'); void no.offsetWidth; no.classList.add('shake'); });
   };
 
   /* ---------- 7. le calendrier : les pages s'arrachent et s'envolent de plus en plus vite (30 octobre 2026 : « j'aime bien
@@ -286,26 +286,23 @@
     const fit=()=>{ line.style.fontSize=''; const max=W.reduce((a,x)=>a+x.s.offsetWidth,0)+line.offsetHeight*.25*3, av=line.parentNode.clientWidth-8;
       if(max>av) line.style.fontSize=Math.max(18,parseFloat(getComputedStyle(line).fontSize)*av/max)+'px'; };
     fit();
-    // au repos, chaque rouleau a la largeur de son mot ; il prend la largeur du plus long pendant qu'il tourne
-    const fs=()=>parseFloat(getComputedStyle(line).fontSize);
-    const wid=(x,i)=>{ x.r.style.width=(x.it[i].offsetWidth/fs()).toFixed(3)+'em'; };
-    W.forEach(x=>wid(x,0));
+    /* chaque rouleau a, du début à la fin, la largeur de son plus long mot (2 novembre 2026 : « les jours, l'année bougent
+       sur x, y, pourquoi ? faut que ce soit figé, juste ça tourne ») : rien ne se déplace, ne rebondit ni ne grandit */
+    W.forEach(x=>{ x.r.style.width=x.s.offsetWidth+'px'; });
     let busy=false, alive=true; const auto=setTimeout(()=>run(),1500), tm=[]; st._stop=()=>{ alive=false; clearTimeout(auto); tm.forEach(clearTimeout); };
     const later=(f,ms)=>tm.push(setTimeout(()=>{ if(alive) f(); },reduce?0:ms));
     function run(){ if(busy||!alive) return; busy=true; clearTimeout(auto); go.hidden=true; C.classList.add('run');
       // l'année s'arrête d'abord, puis le mois, puis le jour et son nom ensemble
-      const T={y:1300,m:2300,d:3300,wd:3300};
+      const T={y:2600,m:4200,d:5800,wd:5800};
       W.forEach((x,j)=>{ const k=['wd','d','m','y'][j], last=x.it.length-1, ms=reduce?10:T[k];
-        if(last>0){ x.r.style.width=(x.s.offsetWidth/fs()).toFixed(3)+'em'; x.w.classList.add('spin'); }
-        x.s.style.transition=`transform ${ms}ms cubic-bezier(.16,.62,.2,1.02)`;
+        if(last>0) x.w.classList.add('spin');
+        x.s.style.transition=`transform ${ms}ms cubic-bezier(.22,.61,.24,1)`;
         x.s.style.transform=`translateY(${-last*1.2}em)`;
-        later(()=>{ x.w.classList.remove('spin'); x.w.classList.add('stop'); wid(x,last); if(navigator.vibrate) try{ navigator.vibrate(k==='d'?24:10); }catch(e){} },ms); });
-      // tout est arrêté : la ligne, plus courte, grandit pour remplir la carte
-      later(()=>{ W.forEach(x=>{ x.s.style.transition='none'; }); const f=fs(), w=W.reduce((a,x)=>a+x.it[x.it.length-1].offsetWidth,0)+f*.3*3+f*.3, av=line.parentNode.clientWidth-16;
-        line.style.fontSize=Math.min(38,f*av/w).toFixed(1)+'px'; C.classList.add('hit'); },3450);
-      later(()=>{ burst(C.querySelector('.cr-d'),c.pal); },4100);
-      later(()=>{ C.classList.add('end'); },4500);
-      later(()=>done(),7000); }
+        later(()=>{ x.w.classList.remove('spin'); x.w.classList.add('stop'); if(navigator.vibrate) try{ navigator.vibrate(k==='d'?24:10); }catch(e){} },ms); });
+      later(()=>{ C.classList.add('hit'); },6000);
+      later(()=>{ burst(C.querySelector('.cr-d'),c.pal); },6700);
+      later(()=>{ C.classList.add('end'); },7300);
+      later(()=>done(),10000); }
     go.addEventListener('click',run); pad.addEventListener('click',run);
   };
 
@@ -314,25 +311,26 @@
      écrivent la date en chiffres de 3 × 5 cœurs (« 12·06 », puis « 2027 »), puis la date en toutes lettres ---------- */
   const RAIN=['❤️','❤️','❤️','❤️','💖','💕','💗','💘','💞','💓','🩷'];
   GAMES.coeurs=(st,c,done)=>{
-    /* ceux qui restent s'entassent en un grand cœur (2 novembre 2026 : les chiffres en pixels de cœurs, « c'est moche, c'est
-       très alphanumérique » ; « faut que plusieurs cœurs se stackent sur une seule ligne ») : des rangées décalées comme des
-       billes empilées, plusieurs cœurs par rangée, chacun un peu penché et de taille un peu différente ; ils tombent pendant
-       l'averse et se posent du bas vers le haut, chaque rangée sur la précédente. La date s'écrit ensuite en vraies lettres. */
-    const COLS=13, ROWS=12, R=Math.random, PK=['❤️','❤️','❤️','❤️','❤️','💗','💖','💕'];
-    const inHeart=(x,y)=>Math.pow(x*x+y*y-1,3)-x*x*y*y*y<=0;
-    let cells='', rk=0;
-    for(let r=ROWS-1;r>=0;r--){ let any=false; const off=r%2?.5:0;
-      for(let k=0;k<COLS;k++){ const cx=k+.5+off, cy=r+.5, x=(cx/COLS-.5)*2.5, y=(1-cy/ROWS)*2.45-1.15;
-        if(cx>COLS||!inHeart(x,y)) continue; any=true;
-        const dl=.6+rk*.28+R()*.14, sz=.95+R()*.22;
-        cells+=`<span class="h" style="left:${(cx/COLS*100).toFixed(2)}%;top:${(cy/ROWS*100).toFixed(2)}%;--sz:${sz.toFixed(2)};--rt:${(R()*36-18).toFixed(0)}deg;--dl:${dl.toFixed(2)}s">${PK[Math.floor(R()*PK.length)]}</span>`; }
-      if(any) rk++; }
-    const H=ROWS, W=COLS;
-    const date=`<p class="hz-full"><span>${esc(cap(WD[c.P.wd]))}</span><b>${esc(c.P.dd)}${NB}${esc(MO[c.P.m])}</b><span>${c.P.y}</span></p>`;
+    /* un bocal qui se remplit de cœurs et laisse la date en blanc (2 novembre 2026 : après les chiffres en pixels de cœurs,
+       « très alphanumérique », puis un grand cœur : « on fait l'inverse, c'est comme un bocal qui se remplit de cœurs et ça
+       laisse vide en blanc que la date ») : pendant l'averse, les cœurs tombent dans le bocal et s'empilent rangée par rangée,
+       du fond vers le haut ; la date est découpée dans le tas, en lettres de papier, et apparaît à mesure que le niveau monte.
+       Seuls les cœurs rouges, assombris (filter) : le papier crème des lettres s'y lit à plus de 4,5:1. */
+    const COLS=11, ROWS=13, R=Math.random;
+    let cells='';
+    for(let r=ROWS-1;r>=0;r--){ const off=r%2?.5:0;
+      for(let k=0;k<=COLS;k++){ const cx=k+off; if(cx>COLS+.3) continue;
+        const dl=.4+(ROWS-1-r)*.27+R()*.18;
+        cells+=`<span class="h" style="left:${(cx/COLS*100).toFixed(2)}%;top:${((r+.5)/ROWS*100).toFixed(2)}%;--rt:${(R()*40-20).toFixed(0)}deg;--sz:${(.96+R()*.16).toFixed(2)};--dl:${dl.toFixed(2)}s">❤️</span>`; } }
+    const date=`<p class="hz-full">${esc(c.P.full)}</p>`;
+    // toute la date en creux (« y'a que le 12 qui s'affiche, moi je voulais toute la date ») : trois lignes, chacune à la
+    // largeur du bocal (taille d'après son nombre de lettres), « Samedi », « 12 juin », « 2027 »
+    const kl=t=>`<span style="font-size:${Math.min(30,88/(t.length*.66)).toFixed(1)}cqw">${esc(t)}</span>`;
+    const ko=`<p class="hz-ko" aria-hidden="true">${kl(cap(WD[c.P.wd]))}${kl(c.P.dd+NB+MO[c.P.m])}${kl(String(c.P.y))}</p>`;
     // l'averse : 300 cœurs qui traversent tout l'écran, de plus en plus rares vers la fin
     const drops=reduce?'':Array.from({length:300},()=>{ const z=R(), sz=16+z*30;
       return `<i style="--x:${(R()*104-4).toFixed(1)}%;--s:${sz.toFixed(0)}px;--o:${(.55+z*.45).toFixed(2)};--d:${(1.7-z*.7).toFixed(2)}s;--dl:${(3.7*Math.pow(R(),1.35)).toFixed(2)}s;--r0:${(R()*60-30).toFixed(0)}deg;--r1:${(R()*160-80).toFixed(0)}deg">${RAIN[Math.floor(R()*RAIN.length)]}</i>`; }).join('');
-    st.innerHTML=`<div class="std-card std-hz">${head(c)}<div class="hz-g" role="img" aria-label="${esc(c.P.full)}" style="--cols:${W};--rows:${H}">${cells}</div>
+    st.innerHTML=`<div class="std-card std-hz">${head(c)}<div class="hz-b"><i class="hz-lid" aria-hidden="true"></i><div class="hz-g" role="img" aria-label="${esc(c.P.full)}" style="--cols:${COLS};--rows:${ROWS}">${cells}${ko}</div></div>
       ${date}${c.city?`<p class="std-city">${esc(c.city)}</p>`:''}</div><div class="hz-rain" aria-hidden="true">${drops}</div>`;
     const card=st.firstChild, rain=st.querySelector('.hz-rain'); rain.style.setProperty('--H',st.clientHeight+'px');
     let alive=true; st._stop=()=>{ alive=false; };
@@ -360,5 +358,5 @@
     S.querySelector('.std-skip').onclick=done;
     (GAMES[k]||GAMES.gratter)(st,ctx(inv),()=>{ if(!fin) done(); });
   }
-  window.SceauSTD={ANIMS,html,start};
+  window.SceauSTD={ANIMS:LIST,html,start};
 })();
