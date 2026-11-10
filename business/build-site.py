@@ -269,6 +269,41 @@ def insights(root):
     return n
 
 
+# données structurées (référencement) : une seule source pour les prix affichés aux moteurs
+OFFERS = [('Save the date animé', 19, '/save-the-date/'), ('Carte (image et PDF)', 29, '/creer/?plan=carte'),
+          ('Page unique (lien)', 59, '/creer/?plan=page'), ('Essentiel (faire-part animé)', 99, '/formules/'),
+          ('Signature', 229, '/formules/')]
+
+def jsonld(u, html):
+    import json, re, html as H
+    org = {'@type': 'Organization', '@id': SITE_URL + '/#org', 'name': 'Save The Oui', 'url': SITE_URL + '/', 'logo': SITE_URL + '/og-sceau.jpg'}
+    offer = lambda n, p, url: {'@type': 'Offer', 'name': n, 'price': f'{p}.00', 'priceCurrency': 'EUR',
+                               'availability': 'https://schema.org/InStock', 'url': SITE_URL + url}
+    def product(name, desc, offers):
+        return {'@type': 'Product', 'name': name, 'description': desc, 'image': SITE_URL + '/og-sceau.jpg',
+                'brand': {'@type': 'Brand', 'name': 'Save The Oui'},
+                'offers': offers[0] if len(offers) == 1 else {'@type': 'AggregateOffer', 'priceCurrency': 'EUR',
+                    'lowPrice': f'{min(o["price"] for o in offers)}', 'highPrice': f'{max(o["price"] for o in offers)}',
+                    'offerCount': len(offers), 'offers': offers}}
+    desc = H.unescape(re.search(r'<meta name="description" content="([^"]*)"', html).group(1))
+    fp = [offer(*o) for o in OFFERS[1:]]
+    g = []
+    if u == '/':
+        g = [org, {'@type': 'WebSite', 'name': 'Save The Oui', 'url': SITE_URL + '/', 'inLanguage': 'fr-FR'},
+             product('Faire-part de mariage digital', desc, fp)]
+    elif u == '/formules/':
+        g = [product('Faire-part de mariage digital', desc, fp)]
+    elif u == '/save-the-date/':
+        g = [product('Save the date animé', desc, [offer(*OFFERS[0])])]
+    elif u == '/questions/':
+        txt = lambda x: H.unescape(re.sub(r'<[^>]+>', '', x)).strip()
+        qa = re.findall(r'<details><summary>(.*?)</summary>(.*?)</details>', html, re.S)
+        g = [{'@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': txt(q),
+              'acceptedAnswer': {'@type': 'Answer', 'text': txt(r)}} for q, r in qa]}]
+    if not g: return ''
+    return '<script type="application/ld+json">' + json.dumps({'@context': 'https://schema.org', '@graph': g}, ensure_ascii=False).replace('</', '<\\/') + '</script>\n'
+
+
 def main():
     # les images d'animation (img/frames) ne vivent que dans site/ : on les met de côté pendant la reconstruction
     # (scènes animées img/frames et transitions filmées img/trans)
@@ -288,6 +323,7 @@ def main():
         l = open(fp, encoding='utf-8').read()
         l = l.replace('<meta name="robots" content="noindex">\n', '')
         l = l.replace('<link rel="icon" href="/favicon.svg" type="image/svg+xml">', f'<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n<link rel="canonical" href="{SITE_URL}{u}">', 1)
+        l = l.replace('</head>', jsonld(u, l) + '</head>', 1)
         open(fp, 'w', encoding='utf-8').write(l)
     # référencement : la vitrine et les pages légales ; les faire-part, tableaux de bord et l'admin restent hors des moteurs
     open(os.path.join(SITE, 'robots.txt'), 'w').write(f"User-agent: *\nDisallow: /d/\nDisallow: /tableau/\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: {SITE_URL}/sitemap.xml\n")

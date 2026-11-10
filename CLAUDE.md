@@ -1033,6 +1033,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
   `UMAMI_API_KEY` + `UMAMI_WEBSITE_ID` sur Vercel, en plus de `UMAMI_ID` dans build-site.py pour la balise). Une commande
   payée 0 € (code `TESTOUI`) compte comme test. En local, `readAll()` parcourt les sous-dossiers comme Vercel Blob.
 
+## Référencement
+
+- **Un mot-clé par page, mot-clé au début du titre** (10 novembre 2026, méthode de `business/18-referencement.md`) : titre
+  de moins de 60 caractères, un seul `<h1>` qui contient le mot-clé, description en une phrase, données structurées
+  (`jsonld()` et `OFFERS` dans build-site.py : `Product` avec prix sur l'accueil, les formules et le save-the-date,
+  `FAQPage` sur les questions ; un prix qui change se change aussi dans `OFFERS`). Toute nouvelle page de la vitrine
+  entre dans `PAGES` (sitemap, canonical). Pas de volume de recherche inventé ; pas de pages en série qui n'apportent rien.
+
 ## Cache des images
 
 - Les images (`/img/…`) sont servies avec `max-age=0, must-revalidate` (vercel.json) : le navigateur vérifie à chaque
