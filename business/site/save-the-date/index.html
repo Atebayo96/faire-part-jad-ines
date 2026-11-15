@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Créer son save the date animé en 5 minutes — Save The Oui</title>
-<meta name="description" content="Créez votre save the date en 5 minutes : ticket à gratter, jackpot, carte d'embarquement, bouton qui fuit, pluie de cœurs… Un lien à envoyer sur WhatsApp, « Je serai là » et le tableau de bord compris. 19 €, en ligne dès le paiement.">
+<meta name="description" content="Créez votre save the date en 5 minutes : ticket à gratter ou jackpot. Un lien à envoyer sur WhatsApp, « Je serai là » et le tableau de bord compris. 19 €, en ligne dès le paiement.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Créer son save the date animé en 5 minutes — Save The Oui">
-<meta property="og:description" content="Annoncez votre date de façon drôle : ticket à gratter, jackpot, carte d'embarquement, bouton qui fuit, pluie de cœurs… 19 €, en ligne dès le paiement.">
+<meta property="og:description" content="Annoncez votre date de façon drôle : ticket à gratter ou jackpot. 19 €, en ligne dès le paiement.">
 <meta property="og:image" content="https://savetheoui.fr/og-sceau.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -73,7 +73,7 @@
   }
   @media (max-width:420px){ .sd-row{grid-template-columns:1fr} }
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Product", "name": "Save the date animé", "description": "Créez votre save the date en 5 minutes : ticket à gratter, jackpot, carte d'embarquement, bouton qui fuit, pluie de cœurs… Un lien à envoyer sur WhatsApp, « Je serai là » et le tableau de bord compris. 19 €, en ligne dès le paiement.", "image": "https://savetheoui.fr/og-sceau.jpg", "brand": {"@type": "Brand", "name": "Save The Oui"}, "offers": {"@type": "Offer", "name": "Save the date animé", "price": "19.00", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://savetheoui.fr/save-the-date/"}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Product", "name": "Save the date animé", "description": "Créez votre save the date en 5 minutes : ticket à gratter ou jackpot. Un lien à envoyer sur WhatsApp, « Je serai là » et le tableau de bord compris. 19 €, en ligne dès le paiement.", "image": "https://savetheoui.fr/og-sceau.jpg", "brand": {"@type": "Brand", "name": "Save The Oui"}, "offers": {"@type": "Offer", "name": "Save the date animé", "price": "19.00", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://savetheoui.fr/save-the-date/"}}]}</script>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -166,7 +166,7 @@
   const THEMES=['dolcevita','doucefrance','oldmoney','nuits','alhambra'].filter(k=>TH[k]);
   const PALS=k=>(TH[k].pals&&TH[k].pals.length?TH[k].pals.map(p=>p.c):['#2f4f3a','#7a2e3b','#b08648']).concat(['#b8975a','#1e1a17','#b0566b']);
   const q=new URLSearchParams(location.search);
-  const C={theme:THEMES.includes(q.get('theme'))?q.get('theme'):'dolcevita',anim:SceauSTD.ANIMS.some(a=>a.k===q.get('anim'))?q.get('anim'):'coeurs',palette:null};
+  const C={theme:THEMES.includes(q.get('theme'))?q.get('theme'):'dolcevita',anim:SceauSTD.ANIMS.some(a=>a.k===q.get('anim'))?q.get('anim'):'gratter',palette:null};
   C.palette=PALS(C.theme)[0];
   const EDIT=q.get('edit'), KEY=(location.hash.match(/k=([\w-]+)/)||[])[1];
   const track=(name,data)=>{ try{ if(window.umami&&umami.track) umami.track(name,data); if(window.va) va('event',{name,data}); }catch(e){} };

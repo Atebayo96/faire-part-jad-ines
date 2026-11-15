@@ -997,6 +997,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     build-site.py). L'icône de chaque jeu est dans `ANIMS` (`ico`, std.js) ; le téléphone (`.sd-phone`) est dans vitrine.css.
     Rien n'est supprimé du faire-part (carte, page unique, animé) : pour le remettre, rétablir `PAGES`, la navigation et
     retirer les deux redirections.
+    **Deux jeux seulement : le ticket à gratter et le jackpot** (même jour : « on va se focus sur le ticket à gratter, proposer
+    que ça et le jackpot, c'est ce que j'aime le plus ») : les cinq autres sont `off:true` dans `ANIMS` (std.js), comme le
+    cadenas ; ils marchent encore pour une fiche ou une démo qui les a, mais ne sont plus proposés ni montrés. L'accueil dit
+    « Deux façons d'annoncer la date », le jeu par défaut est le ticket.
 
 ## Méthode
 

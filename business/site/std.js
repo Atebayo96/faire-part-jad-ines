@@ -13,14 +13,16 @@
   const ANIMS=[
     {k:'gratter',ico:'🎟️',name:'Le ticket à gratter',tx:'On gratte, la date apparaît.'},
     {k:'jackpot',ico:'🎰',name:'Le jackpot',tx:'On tire le levier, les rouleaux tombent sur votre date.'},
-    {k:'billet',ico:'✈️',name:'La carte d’embarquement',tx:'On déchire le talon, on fait décoller l’avion : la date s’affiche comme au tableau des départs.'},
+    {k:'billet',off:true,ico:'✈️',name:'La carte d’embarquement',tx:'On déchire le talon, on fait décoller l’avion : la date s’affiche comme au tableau des départs.'},
     {k:'cadenas',ico:'🔒',off:true,name:'Le cadenas à code',tx:'On tourne la molette d’un coffre : elle chauffe quand on approche du jour, puis du mois.'},
-    {k:'sms',ico:'💬',name:'Le message',tx:'Une conversation s’écrit toute seule, jusqu’à « On se marie ! ».'},
-    {k:'fuit',ico:'🏃',name:'Le bouton qui fuit',tx:'Le bouton « Oui » s’échappe, et à chaque fois une info de plus apparaît.'},
-    {k:'calendrier',ico:'📅',name:'Le calendrier',tx:'La date d’aujourd’hui se met à rouler et s’arrête sur le grand jour.'},
-    {k:'coeurs',ico:'❤️',name:'La pluie de cœurs',tx:'Un bocal se remplit de cœurs, et seule votre date reste en blanc.'}
+    {k:'sms',off:true,ico:'💬',name:'Le message',tx:'Une conversation s’écrit toute seule, jusqu’à « On se marie ! ».'},
+    {k:'fuit',off:true,ico:'🏃',name:'Le bouton qui fuit',tx:'Le bouton « Oui » s’échappe, et à chaque fois une info de plus apparaît.'},
+    {k:'calendrier',off:true,ico:'📅',name:'Le calendrier',tx:'La date d’aujourd’hui se met à rouler et s’arrête sur le grand jour.'},
+    {k:'coeurs',off:true,ico:'❤️',name:'La pluie de cœurs',tx:'Un bocal se remplit de cœurs, et seule votre date reste en blanc.'}
   ];
   const KEYS=ANIMS.map(a=>a.k);
+  // 15 novembre 2026 : « on va se focus sur le ticket à gratter et le jackpot, proposer que ça » : les autres jeux sont mis de
+  // côté (off) comme le cadenas ; ils marchent encore pour une fiche ou une démo qui les a, mais ne se proposent plus
   // le cadenas est mis de côté (2 novembre 2026 : « pas ouf ») : il marche encore pour une fiche qui l'a, mais ne se propose plus
   const LIST=ANIMS.filter(a=>!a.off);
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
