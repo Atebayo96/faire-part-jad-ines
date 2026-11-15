@@ -411,14 +411,15 @@
 @keyframes jpWin{to{filter:brightness(1.12) saturate(1.15)}}
 /* le levier peint fait partie de la machine (« le levier ne s'insère pas bien » : posé à côté sur son socle, il faisait
    lampadaire). C'est le bras d'un bandit manchot : il sort du flanc en biais, son socle caché DERRIÈRE la machine, et il
-   pivote vers le bas quand on le tire (de 30° à 120°), puis remonte d'un coup. Plus d'étiquette « Tirez » : le bandeau le dit,
+   s'enfonce le long de son axe quand on le tire (la boule descend vers le flanc), puis remonte d'un coup : en pivotant, la
+   boule sortait de l'écran. Plus d'étiquette « Tirez » : le bandeau le dit,
    et le bras frémit tant qu'on ne l'a pas touché. */
 .std-jp.art{width:366px}
 .std-jp.art .jp-lever{position:absolute;left:250px;right:auto;top:197px;bottom:auto;width:116px;height:330px;margin:0}
 .std-jp.art .lv-clip{position:absolute;inset:0;overflow:visible}
-.std-jp.art .jp-arm{position:absolute;left:-30px;top:8px;width:62px;height:209px;transform-origin:31px 192px;transform:rotate(calc(30deg + var(--k,0)*72deg))}
+.std-jp.art .jp-arm{position:absolute;left:-30px;top:8px;width:62px;height:209px;transform-origin:31px 192px;transform:rotate(30deg) translateY(calc(var(--k,0)*42%))}
 .std-jp.art:not(.touched):not(.held) .jp-arm{animation:jpNudge 2.6s ease-in-out infinite}
-@keyframes jpNudge{0%,70%,100%{transform:rotate(30deg)}80%{transform:rotate(38deg)}90%{transform:rotate(29deg)}}
+@keyframes jpNudge{0%,70%,100%{transform:rotate(30deg) translateY(0)}80%{transform:rotate(30deg) translateY(7%)}90%{transform:rotate(30deg) translateY(-1%)}}
 .std-jp.art .jp-arm::before{display:none}
 .std-jp.art .jp-arm img{position:absolute;left:0;top:0;width:62px;height:209px;pointer-events:none}
 .std-jp.art .lv-base,.std-jp.art .jp-pull{display:none}
