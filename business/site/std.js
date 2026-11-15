@@ -217,12 +217,19 @@
       <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><i class="jp-base"></i><i class="jp-arm"><b></b></i><p class="jp-pull">Tirez</p></div>${c.art?`<img class="std-art" src="${c.art}" alt="">`:''}
     </div><div class="std-sr" aria-live="polite"></div>`;
     const jp=st.firstElementChild, win=jp.querySelector('.jp-win'), lever=jp.querySelector('.jp-lever'), arm=jp.querySelector('.jp-arm');
-    fitGame(st,jp,J?366:336,J?572:510); if(J) st.parentNode.classList.add('std-dim'); fitNm(jp.querySelector('.std-nm')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitNm(jp.querySelector('.std-nm')));
+    fitGame(st,jp,J?398:336,J?572:510); if(J) st.parentNode.classList.add('std-dim'); fitNm(jp.querySelector('.std-nm')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitNm(jp.querySelector('.std-nm')));
     let alive=true, spun=false; st._stop=()=>{ alive=false; };
     // chaque rouleau : sa position en cases (flottante), posée sur le ruban du milieu
     const R=[...jp.querySelectorAll('.jp-strip')].map((el,i)=>{ const n=LST[i].length; let p=(TGT[i]+3+Math.floor(Math.random()*(n-5)))%n; return {el,n,p,i}; });
     const put=(r,p,v)=>{ const m=((p%r.n)+r.n)%r.n; r.el.style.transform=`translateY(${(IH*.25-(r.n+m)*IH).toFixed(1)}px)`; r.el.style.filter=v>6?`blur(${Math.min(2.6,v*.09).toFixed(2)}px)`:''; };
     R.forEach(r=>put(r,r.p,0));
+    // le jour, le mois et l'année à la MÊME taille (« pourquoi le juin est petit, c'est dommage ») : la largeur de chaque rouleau
+    // suit la longueur de son mot (celui de la date), et la police est la plus grande qui fait tenir les trois dans la vitre
+    (function sameSize(){ const L=[String(LST[0][TGT[0]]).length,MO[P.m].length,4], W=win.clientWidth||(J?170:230), F=Math.max(15,Math.min(J?34:40,Math.floor(W/(L.reduce((a,b)=>a+b,0)*.5+2.4))));
+      jp.style.setProperty('--rf',F+'px'); [...jp.querySelectorAll('.jp-reel')].forEach((el,i)=>{ el.style.flex=`${L[i]+1.6} 1 0`; el.style.width='auto'; el.style.minWidth='0'; }); })();
+    // la ligne du jour et de la ville tient sur une ligne dans son bandeau (elle passait sur deux, hors du cadre)
+    const fitLine=el=>{ if(!el) return; el.style.whiteSpace='nowrap'; let f=parseFloat(getComputedStyle(el).fontSize), ls=.14; while(el.scrollWidth>el.clientWidth+1&&(ls>.02||f>11)){ if(ls>.02){ ls-=.03; el.style.letterSpacing=ls+'em'; } else { f-=.5; el.style.fontSize=f+'px'; } } };
+    fitLine(jp.querySelector('.jp-res')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitLine(jp.querySelector('.jp-res')));
     let lastTick=0;
     function go(){
       if(spun||!alive) return; spun=true; jp.classList.add('touched','spin'); win.removeAttribute('tabindex'); win.setAttribute('aria-disabled','true');

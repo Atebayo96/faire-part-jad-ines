@@ -1051,6 +1051,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     de son axe quand on le tire (en pivotant, la boule sortait de l'écran) ; plus d'étiquette « Tirez », le bras frémit tant qu'on ne l'a pas touché. Posé à côté sur
     son socle, il faisait lampadaire. Règle : un texte ou une pièce mobile ajouté à une peinture doit sembler en faire partie
     (même matière, même encre, un point d'attache), jamais posé à côté ou par-dessus.
+    **Retours sur capture d'iPhone** (même jour) : **le jour, le mois et l'année ont la même taille** (« pourquoi le juin est
+    petit, c'est dommage, le mieux c'est tout à la même taille ») : la largeur de chaque rouleau suit la longueur de son mot et
+    la police est la plus grande qui fait tenir les trois (`sameSize()`, `--rf`), dans la machine peinte comme dans l'autre.
+    **La machine peinte est moins grande et centrée** (elle était collée à gauche, le levier à droite) : même marge à gauche
+    que la place du levier à droite (jeu de 398 px), levier réduit d'un cinquième. La ligne « Samedi · ville » tient sur une
+    ligne dans son bandeau (`fitLine()` : elle passait sur deux lignes, hors du cadre, avec « Ravello, Italie »).
     **Tout part en prod, ces jeux compris** : après « avant de passer en prod, propose-moi », le travail était resté sur la
     branche de travail (aperçu Vercel), et l'utilisateur ne le voyait pas (« c'est pas en prod, je comprends pas »). La règle
     générale vaut toujours : pousser la branche ET `main` à chaque fois ; une proposition à valider se montre en plus, elle

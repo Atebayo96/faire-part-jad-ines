@@ -427,3 +427,14 @@
 
 /* plus de pièce qui montre le geste (« dans le gratter ici, je comprends pas la boule jaune ») : l'étiquette « Grattez ici » suffit */
 .tk-coin{display:none!important}
+
+/* jour, mois et année à la même taille (--rf, calculée par std.js d'après la date) */
+.std-jp .jp-reel .jp-strip div,.std-jp .jp-reel.m .jp-strip div,.std-jp .jp-reel.y .jp-strip div{font-size:var(--rf,26px)!important;font-style:normal!important}
+/* la machine peinte, moins grande et centrée (« moins grande la machine, et plus centrée ») : la machine est au milieu du jeu,
+   la même marge à gauche que la place du levier à droite ; le levier est réduit d'un cinquième */
+.std-jp.art{width:398px}
+.std-jp.art .jp-cab{left:54px}
+.std-jp.art .jp-lever{left:304px}
+.std-jp.art .jp-arm{left:-24px;top:46px;width:50px;height:168px;transform-origin:25px 154px}
+.std-jp.art .jp-arm img{width:50px;height:168px}
+.std-jp.art .jp-res{overflow:hidden}
