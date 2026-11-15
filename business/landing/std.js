@@ -106,7 +106,9 @@
      le geste tant qu'on n'a pas touché. À moitié gratté, le reste se détache et la date bat. */
   GAMES.gratter=(st,c,done)=>{
     const P=c.P, no=String(P.d).padStart(2,'0')+String(P.m+1).padStart(2,'0')+String(P.y).slice(2);
-    const dm=P.dd+NB+MO[P.m], J=jeu(c.inv), key=c.inv.theme.replace(/jour$/,'');
+    // le ticket peint (Dolce Vita) n'est plus utilisé : l'utilisateur préfère le ticket de papier des autres thèmes (« pour le
+    // gratter, j'aime bien ce qu'on avait avant, ce qu'il y a toujours dans Douce France, Old money ») ; le code peint reste
+    const dm=P.dd+NB+MO[P.m], J=null, key=c.inv.theme.replace(/jour$/,'');
     const zoneH=`<div class="tk-under"><small>${esc(cap(WD[P.wd]))}</small><b${dm.length>10?' class="lg"':''}>${esc(dm)}</b><span>${P.y}</span></div>
           <canvas class="tk-foil" tabindex="0" role="button" aria-label="Gratter pour découvrir la date"></canvas><i class="tk-coin" aria-hidden="true"></i>`;
     if(J) st.innerHTML=`<div class="std-game std-tkw"><div class="std-tk art" style="aspect-ratio:${J.t.r}">
@@ -215,7 +217,7 @@
       <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><i class="jp-base"></i><i class="jp-arm"><b></b></i><p class="jp-pull">Tirez</p></div>${c.art?`<img class="std-art" src="${c.art}" alt="">`:''}
     </div><div class="std-sr" aria-live="polite"></div>`;
     const jp=st.firstElementChild, win=jp.querySelector('.jp-win'), lever=jp.querySelector('.jp-lever'), arm=jp.querySelector('.jp-arm');
-    fitGame(st,jp,J?368:336,J?572:510); if(J) st.parentNode.classList.add('std-dim'); fitNm(jp.querySelector('.std-nm')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitNm(jp.querySelector('.std-nm')));
+    fitGame(st,jp,J?346:336,J?572:510); if(J) st.parentNode.classList.add('std-dim'); fitNm(jp.querySelector('.std-nm')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitNm(jp.querySelector('.std-nm')));
     let alive=true, spun=false; st._stop=()=>{ alive=false; };
     // chaque rouleau : sa position en cases (flottante), posée sur le ruban du milieu
     const R=[...jp.querySelectorAll('.jp-strip')].map((el,i)=>{ const n=LST[i].length; let p=(TGT[i]+3+Math.floor(Math.random()*(n-5)))%n; return {el,n,p,i}; });
@@ -247,7 +249,7 @@
     // la tige se raccourcit puis s'inverse (elle bascule vers nous) ; la boule garde sa taille
     const setArm=k=>{ pull=k; let s=1-1.7*k; if(Math.abs(s)<.14) s=s<0?-.14:.14; arm.style.setProperty('--s',s.toFixed(3)); arm.style.setProperty('--ks',(1/Math.abs(s)).toFixed(3)); arm.style.setProperty('--k',k.toFixed(3)); };
     lever.addEventListener('pointerdown',e=>{ if(spun) return; y0=e.clientY; jp.classList.add('held'); arm.classList.remove('back'); try{ lever.setPointerCapture(e.pointerId); }catch(x){} ac(); });
-    lever.addEventListener('pointermove',e=>{ if(y0==null||spun) return; const r=jp.getBoundingClientRect().width/jp.offsetWidth||1, k=Math.max(0,Math.min(1,(e.clientY-y0)/(150*r))); setArm(k);
+    lever.addEventListener('pointermove',e=>{ if(y0==null||spun) return; const r=jp.getBoundingClientRect().width/jp.offsetWidth||1, k=Math.max(0,Math.min(1,(e.clientY-y0)/((J?100:150)*r))); setArm(k);
       const n=Math.floor(k*6); if(n!==notch){ notch=n; tone(700,.02,'square',.03); buzz(5); } });
     const release=()=>{ if(y0==null) return; y0=null; const k=pull; arm.classList.add('back'); setArm(0); if(k>.5) go(); };
     lever.addEventListener('click',()=>{ if(!spun&&y0==null&&pull===0) auto(); });

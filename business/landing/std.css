@@ -386,7 +386,7 @@
 /* l'objet peint porte le même décor que le fond du thème : derrière lui, le fond recule (flou et assombri), comme une faible
    profondeur de champ ; l'objet et ses textes restent nets */
 .std-play.std-dim::before{content:"";position:absolute;inset:0;-webkit-backdrop-filter:blur(5px) brightness(.62) saturate(.8);backdrop-filter:blur(5px) brightness(.62) saturate(.8);background:rgba(20,16,12,.12)}
-.std-jp.art{display:block;position:relative;width:368px;height:572px;padding:0}
+.std-jp.art{display:block;position:relative;width:346px;height:572px;padding:0}
 .std-jp.art .jp-cab{position:absolute;left:0;top:7px;width:290px;border-radius:0;background:none;box-shadow:none;overflow:visible}
 .std-jp.art .jp-cab::before,.std-jp.art .jp-cab::after{display:none}
 .std-jp.art .jp-win{position:absolute;margin:0;height:auto;border:0;border-radius:0;box-shadow:none;gap:3px;background:#3a2f26;animation:none}
@@ -405,11 +405,15 @@
 .std-jp.art.won .jp-img{animation:jpWin .45s ease-in-out 4 alternate}
 @keyframes jpWin{to{filter:brightness(1.12) saturate(1.15)}}
 /* le levier peint : la tige et sa boule descendent derrière le socle (qui reste en place), puis remontent d'un coup */
-.std-jp.art .jp-lever{position:absolute;left:auto;right:0;top:auto;bottom:9px;width:92px;height:310px;margin:0}
+/* levier plus petit (« le truc pour tirer le jackpot est trop grand ») : 62 px de large, la boule à hauteur du bas de la vitre */
+.std-jp.art .jp-lever{position:absolute;left:auto;right:0;top:auto;bottom:9px;width:62px;height:209px;margin:0}
 .std-jp.art .lv-clip{position:absolute;inset:0 0 9% 0;overflow:hidden}
-.std-jp.art .jp-arm{position:absolute;left:0;top:0;width:92px;height:310px;transform:translateY(calc(var(--k,0)*46%));transform-origin:50% 100%}
+.std-jp.art .jp-arm{position:absolute;left:0;top:0;width:62px;height:209px;transform:translateY(calc(var(--k,0)*46%));transform-origin:50% 100%}
 .std-jp.art .jp-arm::before{display:none}
-.std-jp.art .jp-arm img,.std-jp.art .lv-base{position:absolute;left:0;top:0;width:92px;height:310px;pointer-events:none}
+.std-jp.art .jp-arm img,.std-jp.art .lv-base{position:absolute;left:0;top:0;width:62px;height:209px;pointer-events:none}
 .std-jp.art .jp-arm img{clip-path:inset(0 0 17% 0)}
 .std-jp.art .lv-base{clip-path:inset(82% 0 0 0)}
-.std-jp.art .jp-pull{left:12px;right:12px;bottom:auto;top:-50px}
+.std-jp.art .jp-pull{left:0;right:0;bottom:auto;top:-46px;font-size:11px;padding:4px 2px}
+
+/* plus de pièce qui montre le geste (« dans le gratter ici, je comprends pas la boule jaune ») : l'étiquette « Grattez ici » suffit */
+.tk-coin{display:none!important}

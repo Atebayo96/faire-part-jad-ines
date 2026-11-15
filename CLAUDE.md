@@ -1038,6 +1038,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     machine en maïolique se perdait sur le mur en maïolique. Les prénoms se réduisent pour tenir (`fitNm`). La finition en CSS
     (papier, filets d'or, illustration au pied) **n'a pas plu** : elle ne reste que pour les thèmes sans peinture. Restent à
     peindre, avec accord : les 4 autres thèmes (8 images, ~1,20 €).
+    **Retours sur les objets peints** (même jour) : pour **le ticket**, l'utilisateur préfère le ticket de papier d'avant
+    (« j'aime bien ce qu'on avait avant, ce qu'il y a toujours dans Douce France, Old money ») : le ticket peint n'est plus
+    utilisé (`J=null` dans `GAMES.gratter`, image et code gardés), **tous les thèmes ont le ticket de papier** ; ne pas peindre
+    de ticket pour les autres thèmes. **Plus de pièce qui montre le geste** (« je comprends pas la boule jaune ») : `.tk-coin`
+    masquée partout. **Levier de la machine peinte plus petit** (« le truc pour tirer est trop grand ») : 62 px de large au
+    lieu de 92, course de 100 px. Un « c'est mal fait ici » est arrivé sans image : demander où avant de corriger.
     **Tout part en prod, ces jeux compris** : après « avant de passer en prod, propose-moi », le travail était resté sur la
     branche de travail (aperçu Vercel), et l'utilisateur ne le voyait pas (« c'est pas en prod, je comprends pas »). La règle
     générale vaut toujours : pousser la branche ET `main` à chaque fois ; une proposition à valider se montre en plus, elle
