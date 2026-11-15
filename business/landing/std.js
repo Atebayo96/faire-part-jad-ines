@@ -45,7 +45,7 @@
     const pal=/^#[0-9a-f]{6}$/i.test(inv.palette||'')?inv.palette:'#b8975a', C=window.SceauCarte;
     const n1=(inv.couple||[])[0]||'', n2=(inv.couple||[])[1]||'';
     return {inv,pal,ink:C.inkOf(pal,4.6,CARD_LOW),P:dateOf(inv),n1,n2,names:n2?`${n1} & ${n2}`:n1,
-      ini:n2?`${n1.charAt(0)}&${n2.charAt(0)}`.toUpperCase():n1.charAt(0).toUpperCase(),city:(inv.std||{}).city||'',seal:C.sealFor(inv)};
+      art:C.artOf?C.artOf(inv.theme):'',ini:n2?`${n1.charAt(0)}&${n2.charAt(0)}`.toUpperCase():n1.charAt(0).toUpperCase(),city:(inv.std||{}).city||'',seal:C.sealFor(inv)};
   }
   const head=c=>`<p class="std-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2>`;
 
@@ -93,15 +93,15 @@
   GAMES.gratter=(st,c,done)=>{
     const P=c.P, no=String(P.d).padStart(2,'0')+String(P.m+1).padStart(2,'0')+String(P.y).slice(2);
     const dm=P.dd+NB+MO[P.m];
-    st.innerHTML=`<div class="std-game std-tkw"><div class="std-tk">
+    st.innerHTML=`<div class="std-game std-tkw ct-p-coton"><div class="std-tk">
       <div class="tk-top"><p class="tk-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
       <div class="tk-perf" aria-hidden="true"></div>
       <div class="tk-body"><p class="tk-call">Grattez pour découvrir la date</p>
         <div class="tk-zone"><div class="tk-under"><small>${esc(cap(WD[P.wd]))}</small><b${dm.length>10?' class="lg"':''}>${esc(dm)}</b><span>${P.y}</span></div>
           <canvas class="tk-foil" tabindex="0" role="button" aria-label="Gratter pour découvrir la date"></canvas><i class="tk-coin" aria-hidden="true"></i></div></div>
       <div class="tk-foot"><p class="tk-city">${esc(c.city||'Notez bien la date')}</p></div>
-    </div></div><canvas class="tk-dust" aria-hidden="true"></canvas><div class="std-sr" aria-live="polite"></div>`;
-    const wrap=st.firstChild, tk=wrap.firstChild, cv=st.querySelector('.tk-foil'), zone=cv.parentNode, dust=st.querySelector('.tk-dust');
+    </div>${c.art?`<img class="std-art" src="${c.art}" alt="">`:''}</div><canvas class="tk-dust" aria-hidden="true"></canvas><div class="std-sr" aria-live="polite"></div>`;
+    const wrap=st.firstElementChild, tk=wrap.firstElementChild, cv=st.querySelector('.tk-foil'), zone=cv.parentNode, dust=st.querySelector('.tk-dust');
     fitGame(st,wrap,336,500);
     let cx, W=0, H=0, down=false, last=null, over=false, lastCheck=0, tries=0, alive=true, src=null, sg=null, lastT=0;
     st._stop=()=>{ alive=false; hush(true); };
@@ -115,9 +115,9 @@
       cx.fillStyle=c.ink; cx.fillRect(0,0,W,H);
       const g=cx.createLinearGradient(0,0,W,H); [[0,.16],[.3,0],[.46,.26],[.6,0],[1,.1]].forEach(([p,a])=>g.addColorStop(p,`rgba(255,255,255,${a})`)); cx.fillStyle=g; cx.fillRect(0,0,W,H);
       for(let i=0;i<W*H/9;i++){ cx.fillStyle=Math.random()<.5?'rgba(255,255,255,.07)':'rgba(0,0,0,.07)'; cx.fillRect(Math.random()*W,Math.random()*H,1,1); }
-      cx.font='15px Georgia,serif'; cx.textAlign='center'; cx.textBaseline='middle'; cx.fillStyle='rgba(255,255,255,.22)';
+      cx.font='15px Georgia,serif'; cx.textAlign='center'; cx.textBaseline='middle'; cx.fillStyle='rgba(243,220,155,.5)';
       for(let y=22;y<H;y+=44) for(let x=((y-22)/44%2?44:22);x<W;x+=44) cx.fillText('✦',x,y);
-      cx.strokeStyle='rgba(255,255,255,.5)'; cx.lineWidth=1; cx.setLineDash([3,5]); cx.strokeRect(9.5,9.5,W-19,H-19); cx.setLineDash([]);
+      cx.strokeStyle='rgba(243,220,155,.85)'; cx.lineWidth=1.2; cx.setLineDash([3,5]); cx.strokeRect(9.5,9.5,W-19,H-19); cx.setLineDash([]);
       cx.font='600 26px "Cormorant Garamond",Georgia,serif'; const lb='Grattez ici', tw=cx.measureText(lb).width+52;
       cx.fillStyle='#fbf7f0'; cx.beginPath(); cx.roundRect?cx.roundRect(W/2-tw/2,H/2-28,tw,56,28):cx.rect(W/2-tw/2,H/2-28,tw,56); cx.fill();
       cx.fillStyle='#2b2621'; cx.fillText(lb,W/2,H/2+1);
@@ -171,7 +171,7 @@
     const P=c.P, IH=80;
     const LST=[Array.from({length:31},(_,i)=>i===0?'1er':String(i+1)),MO,Array.from({length:6},(_,i)=>String(P.y-2+i))], TGT=[P.d-1,P.m,2];
     const strip=l=>[...l,...l,...l].map(v=>`<div>${esc(v)}</div>`).join('');
-    st.innerHTML=`<div class="std-game std-jp">
+    st.innerHTML=`<div class="std-game std-jp ct-p-coton">
       <div class="jp-cab">
         <div class="jp-sign"><i class="jp-bulbs" aria-hidden="true">${'<b></b>'.repeat(9)}</i><p class="jp-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
         <div class="jp-body"><p class="jp-call">Tirez le levier</p>
@@ -179,7 +179,7 @@
           <p class="jp-res">${esc(cap(WD[P.wd]))}${c.city?' · '+esc(c.city):''}</p>
           <div class="jp-tray" aria-hidden="true"></div></div>
       </div>
-      <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><i class="jp-base"></i><i class="jp-arm"><b></b></i><p class="jp-pull">Tirez</p></div>
+      <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><i class="jp-base"></i><i class="jp-arm"><b></b></i><p class="jp-pull">Tirez</p></div>${c.art?`<img class="std-art" src="${c.art}" alt="">`:''}
     </div><div class="std-sr" aria-live="polite"></div>`;
     const jp=st.firstChild, win=jp.querySelector('.jp-win'), lever=jp.querySelector('.jp-lever'), arm=jp.querySelector('.jp-arm');
     fitGame(st,jp,336,510);

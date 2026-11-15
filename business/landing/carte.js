@@ -292,5 +292,7 @@
   function fontOf(inv){ const T=TH()[inv.theme]||{}, F=FONTS[inv.font]||null;
     return {ff:F?F.css:(T.font||'"Cormorant Garamond",Georgia,serif'),it:F?!!F.italic:!!T.italic,up:F?!!F.upper:!!T.upper}; }
   const sealFor=inv=>{ const n=SEALS[inv.seal]?inv.seal:sealOf(inv.palette||'#b8975a'); return [n].concat(SEALS[n]); };
-  window.SceauCarte={PAPERS,html,fit,png,pdf,inkOf,ratio,fondOf,fontOf,sealFor};
+  // l'illustration peinte du thème qui se pose au pied d'un objet (jeux du save-the-date, std.js)
+  const artOf=k=>`/img/carte/${({arche:'dolcevita-bouquet',ogive:'nuits-lune',outrepasse:'alhambra-jasmin',medaillon:'oldmoney-roses',bandeau:'doucefrance-lavande'})[styleOf(k)]}.webp?v=${CARTEV}`;
+  window.SceauCarte={PAPERS,html,fit,png,pdf,inkOf,ratio,fondOf,fontOf,sealFor,artOf};
 })();

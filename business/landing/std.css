@@ -277,18 +277,28 @@
 .std-gold i{border-radius:50%;height:var(--w)!important;animation-duration:2s!important}
 
 /* le ticket */
-.std-tk{position:relative;margin:0 4px;border-radius:22px;background:#fbf7f0;color:#2b2621;text-align:center;box-shadow:0 2px 4px rgba(30,20,10,.14),0 26px 44px -18px rgba(20,12,5,.6)}
-.tk-top{padding:20px 18px 14px}
+/* finition (« ça fait cheap, ça se voit que c'est des objets déposés ») : la matière de la feuille. Papier coton (le même grain
+   que la carte, --tex), double filet d'or, bords dentelés du ticket, creux ombrés, or en dégradé, et l'illustration peinte du
+   thème posée au pied de l'objet (citrons, lune, jasmin, roses, lavande : SceauCarte.artOf), hors de tout texte. */
+.std-tkw{filter:drop-shadow(0 2px 3px rgba(30,20,10,.22)) drop-shadow(0 24px 30px rgba(20,12,5,.5))}
+.std-tk{position:relative;margin:0 4px;border-radius:10px;color:#2b2621;text-align:center;background-color:#f8f2e7;background-image:radial-gradient(ellipse 130% 100% at 50% 40%,#fff 50%,#e6dac4),var(--tex,none);background-blend-mode:multiply;
+  -webkit-mask:radial-gradient(7px at 0 50%,#0000 96%,#000) 0 0/51% 24px repeat-y,radial-gradient(7px at 100% 50%,#0000 96%,#000) 100% 0/51% 24px repeat-y;
+  mask:radial-gradient(7px at 0 50%,#0000 96%,#000) 0 0/51% 24px repeat-y,radial-gradient(7px at 100% 50%,#0000 96%,#000) 100% 0/51% 24px repeat-y}
+.std-tk::before{content:"";position:absolute;inset:9px 15px;border:1.5px solid #c79a3a;border-radius:6px;box-shadow:0 0 0 3px #f8f2e7,0 0 0 4px rgba(199,154,58,.55);pointer-events:none}
+.std-art{position:absolute;right:-22px;bottom:-30px;width:104px;height:auto;pointer-events:none;filter:drop-shadow(0 6px 8px rgba(20,12,5,.4));z-index:2}
+.std-jp .std-art{right:auto;left:-28px;bottom:-22px;width:92px}
+.std-tk .tk-call{letter-spacing:.07em;white-space:nowrap}
+.tk-top{padding:26px 26px 14px}
 .tk-ey,.jp-ey{margin:0;font:600 13px/1.2 "Inter Tight",Inter,-apple-system,Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--sink)}
 .std-tk .std-nm{margin:6px 0 0;color:var(--sink);font-size:38px}
-.tk-perf{height:0;margin:0 16px;border-top:1.5px dashed var(--sink);opacity:.4}
-.tk-body{padding:14px 14px 12px}
+.tk-perf{height:0;margin:0 26px;border-top:1.5px dashed var(--sink);opacity:.4}
+.tk-body{padding:14px 26px 12px}
 .tk-call,.jp-call{margin:0;font:600 13px/1.3 "Inter Tight",Inter,-apple-system,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#2b2621}
-.tk-zone{position:relative;height:236px;margin:12px 0 0;border-radius:14px;overflow:hidden;background:#fffdf8;box-shadow:inset 0 0 0 1.5px var(--sink),inset 0 3px 8px rgba(43,38,33,.2)}
+.tk-zone{position:relative;height:236px;margin:12px 0 0;border-radius:14px;overflow:hidden;background:#fffdf8;box-shadow:inset 0 0 0 2px #c79a3a,inset 0 0 0 3px #7a5a17,inset 0 4px 10px rgba(43,38,33,.28)}
 .tk-under{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--sink);
   background:#fffdf8}
 .tk-under small{font:600 15px/1.2 "Inter Tight",Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase}
-.tk-under b{font:600 66px/1 "Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;white-space:nowrap}
+.tk-under b{font:600 62px/1 "Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;white-space:nowrap}
 .tk-under b.lg{font-size:50px}
 .tk-under span{font:600 32px/1 "Cormorant Garamond",Georgia,serif;letter-spacing:.2em;font-variant-numeric:lining-nums}
 .tk-foil{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none;transition:opacity .6s ease,transform .6s ease}
@@ -301,19 +311,20 @@
 @keyframes tkCoin{0%,10%{transform:translate(24px,30px) rotate(-10deg);opacity:0}18%{opacity:1}34%{transform:translate(96px,140px) rotate(8deg)}50%{transform:translate(140px,40px) rotate(-6deg)}66%{transform:translate(196px,146px) rotate(10deg)}82%{opacity:1}92%,100%{transform:translate(222px,60px) rotate(0);opacity:0}}
 .std-tk.won .tk-under b{animation:tkPop .7s cubic-bezier(.3,1.6,.5,1) .1s both}
 @keyframes tkPop{0%{transform:scale(.86)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
-.tk-foot{display:flex;align-items:center;justify-content:center;min-height:26px;padding:0 14px 16px}
+.tk-foot{display:flex;align-items:center;justify-content:center;min-height:30px;padding:0 70px 24px 26px}
 .tk-city{margin:0;font:600 17px/1.3 "Cormorant Garamond",Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:#2b2621;opacity:0;transform:translateY(6px);transition:opacity .5s .25s,transform .5s .25s}
 .std-tk.won .tk-city{opacity:1;transform:none}
 .tk-dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
 
 /* la machine à sous : fronton arrondi, corps crème, grande vitre à trois rouleaux, fente et bac, deux pieds ; levier à droite */
 .std-jp{display:flex;align-items:flex-start;padding:0 0 22px}
-.jp-cab{position:relative;flex:1;min-width:0;border-radius:74px 74px 22px 22px;background:#fbf7f0;color:#2b2621;text-align:center;box-shadow:0 2px 4px rgba(30,20,10,.14),0 26px 44px -18px rgba(20,12,5,.6)}
-.jp-cab::before,.jp-cab::after{content:"";position:absolute;bottom:-21px;width:46px;height:18px;border:3px solid var(--sink);border-top:0;z-index:-1;border-radius:0 0 10px 10px;background:var(--sink)}
+.std-jp{filter:drop-shadow(0 2px 3px rgba(30,20,10,.22)) drop-shadow(0 24px 30px rgba(20,12,5,.5))}
+.jp-cab{position:relative;flex:1;min-width:0;border-radius:74px 74px 20px 20px;color:#2b2621;text-align:center;background-color:#f8f2e7;background-image:radial-gradient(ellipse 130% 100% at 50% 40%,#fff 50%,#e6dac4),var(--tex,none);background-blend-mode:multiply;box-shadow:inset 0 0 0 1.5px #a97a22,inset 0 0 0 5px #f8f2e7,inset 0 0 0 6.5px #c79a3a}
+.jp-cab::before,.jp-cab::after{content:"";position:absolute;bottom:-21px;width:46px;height:18px;border:0;z-index:-1;border-radius:0 0 10px 10px;background:linear-gradient(135deg,#f3dc9b,#c9972f 45%,#f6e7ad 60%,#a97a22);box-shadow:inset 0 5px 6px rgba(60,40,5,.5)}
 .jp-cab::before{left:26px}.jp-cab::after{right:26px}
-.jp-sign{position:relative;margin:9px 9px 0;padding:34px 12px 16px;border-radius:62px 62px 14px 14px;background:var(--sink)}
+.jp-sign{position:relative;margin:12px 12px 0;padding:36px 12px 16px;border-radius:60px 60px 12px 12px;background:var(--sink);background-image:linear-gradient(rgba(255,255,255,.12),rgba(0,0,0,.14));box-shadow:0 0 0 1.5px #c79a3a,inset 0 0 0 4px var(--sink),inset 0 0 0 5px rgba(243,220,155,.6),0 3px 6px rgba(43,38,33,.3)}
 .jp-bulbs{position:absolute;left:44px;right:44px;top:16px;display:flex;justify-content:space-between}
-.jp-bulbs b{width:10px;height:10px;border-radius:50%;background:#fff1b8;box-shadow:0 0 6px 2px rgba(255,220,120,.8);animation:jpBulb 1.1s steps(1) infinite}
+.jp-bulbs b{width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#ffe9a3 55%,#e2b84f);box-shadow:0 0 0 1.5px #a97a22,0 0 7px 3px rgba(255,220,120,.8);animation:jpBulb 1.1s steps(1) infinite}
 .jp-bulbs b:nth-child(even){animation-delay:.55s}
 .std-jp.spin .jp-bulbs b{animation-duration:.24s}.std-jp.spin .jp-bulbs b:nth-child(even){animation-delay:.12s}
 .std-jp.won .jp-bulbs b{animation-duration:.36s}.std-jp.won .jp-bulbs b:nth-child(even){animation-delay:.18s}
@@ -322,11 +333,11 @@
 .std-jp .std-nm{margin:6px 0 0;color:#fbf7f0;font-size:30px}
 .jp-body{padding:14px 12px 0}
 .jp-call{min-height:17px}
-.jp-win{position:relative;display:flex;gap:7px;justify-content:center;height:126px;margin:12px 0 0;padding:0;border:3px solid var(--sink);border-radius:16px;box-shadow:0 0 0 2px #d9b45a;background:var(--sink);cursor:pointer;overflow:hidden}
+.jp-win{position:relative;display:flex;gap:7px;justify-content:center;height:126px;margin:12px 0 0;padding:0;border:3px solid #3a2f26;border-radius:14px;box-shadow:0 0 0 4px #c79a3a,0 0 0 5.5px #7a5a17,0 5px 8px rgba(43,38,33,.3);background:#3a2f26;cursor:pointer;overflow:hidden}
 .jp-win:focus-visible{outline:3px solid #2b2621;outline-offset:3px}
 .jp-reel{position:relative;height:120px;overflow:hidden;background:#fffdf8}
 .jp-reel.d{width:60px;border-radius:12px 0 0 12px}.jp-reel.m{flex:1;min-width:0}.jp-reel.y{width:74px;border-radius:0 12px 12px 0}
-.jp-reel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(43,38,33,.34),transparent 24%,transparent 76%,rgba(43,38,33,.34))}
+.jp-reel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(43,38,33,.5),rgba(43,38,33,.08) 22%,rgba(255,255,255,.25) 50%,rgba(43,38,33,.08) 78%,rgba(43,38,33,.5));box-shadow:inset 0 0 6px rgba(43,38,33,.35)}
 .jp-strip{will-change:transform}
 .jp-strip div{height:80px;display:grid;place-items:center;color:var(--sink);font:600 48px/1 "Cormorant Garamond",Georgia,serif;font-variant-numeric:lining-nums;white-space:nowrap}
 .jp-reel.m .jp-strip div{font-size:23px}.jp-reel.y .jp-strip div{font-size:32px}
@@ -341,15 +352,15 @@
 @keyframes jpGlow{50%{box-shadow:0 0 0 2px #d9b45a,0 0 0 6px #f3dc9b,0 0 22px 6px rgba(255,214,110,.7)}}
 .jp-res{margin:12px 0 0;min-height:22px;font:600 17px/1.3 "Cormorant Garamond",Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:#2b2621;opacity:0;transform:translateY(6px);transition:opacity .5s,transform .5s}
 .std-jp.won .jp-res{opacity:1;transform:none}
-.jp-tray{position:relative;height:30px;margin:12px 34px 16px;border:3px solid var(--sink);border-radius:8px 8px 16px 16px;background:var(--sink)}
+.jp-tray{position:relative;height:30px;margin:12px 34px 18px;border-radius:8px 8px 16px 16px;background:linear-gradient(#17130f,#4a4036);box-shadow:inset 0 5px 8px rgba(0,0,0,.7),0 0 0 2px #c79a3a,0 0 0 3.5px #7a5a17}
 /* le levier : large comme le pouce (64 × 250), une grosse boule ; --s = échelle de la tige (1 en haut, négative une fois tiré) */
 .jp-lever{position:relative;flex:none;width:62px;height:250px;margin:54px 0 0 -3px;cursor:grab;touch-action:none}
 .jp-lever:active{cursor:grabbing}
-.jp-base{position:absolute;left:0;top:132px;width:30px;height:44px;border:3px solid var(--sink);border-radius:0 12px 12px 0;background:linear-gradient(#f3dc9b,#c9972f)}
+.jp-base{position:absolute;left:0;top:130px;width:32px;height:48px;border-radius:0 14px 14px 0;background:linear-gradient(135deg,#f3dc9b,#c9972f 45%,#f6e7ad 60%,#a97a22);box-shadow:inset 0 0 0 1.5px #7a5a17,inset -4px -5px 8px rgba(90,60,10,.45)}
 .jp-arm{--s:1;--ks:1;position:absolute;left:19px;top:14px;width:14px;height:140px;transform-origin:50% 100%;transform:scaleY(var(--s))}
 .jp-arm.back{transition:transform .5s cubic-bezier(.3,2.1,.5,1)}.jp-arm.auto{transition:transform .24s cubic-bezier(.5,0,.9,.6)}
-.jp-arm::before{content:"";position:absolute;left:1px;top:20px;bottom:0;width:12px;border-radius:6px;background:var(--sink)}
-.jp-arm b{position:absolute;left:-20px;top:-14px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--pal) 55%,#fff),var(--pal) 55%,var(--sink));box-shadow:inset 0 0 0 2px var(--sink),0 6px 10px rgba(0,0,0,.35);transform:scaleY(var(--ks))}
+.jp-arm::before{content:"";position:absolute;left:2px;top:20px;bottom:0;width:10px;border-radius:5px;background:linear-gradient(90deg,#8a6212,#f6e7ad 42%,#c9972f 70%,#7a5a17);box-shadow:0 0 0 1px rgba(90,60,10,.6)}
+.jp-arm b{position:absolute;left:-20px;top:-14px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff 0,color-mix(in srgb,var(--pal) 45%,#fff) 14%,var(--pal) 52%,var(--sink));box-shadow:inset -5px -7px 10px rgba(0,0,0,.3),inset 0 0 0 1.5px rgba(0,0,0,.35),0 6px 10px rgba(0,0,0,.35);transform:scaleY(var(--ks))}
 .jp-arm.back b,.jp-arm.auto b{transition:transform .2s}
 .jp-pull{position:absolute;left:-6px;right:-6px;bottom:0;margin:0;font:600 12px/1.25 "Inter Tight",Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;text-align:center;color:#2b2621;background:#fbf7f0;border:2px solid var(--sink);border-radius:10px;padding:5px 2px}
 .jp-pull::before{content:"↓";display:block;font-size:16px;line-height:1;animation:jpDown 1.1s ease-in-out infinite}

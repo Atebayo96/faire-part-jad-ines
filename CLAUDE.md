@@ -1021,6 +1021,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     trait fin), l'affiche rétro a plu un instant puis : « je vais pas tout refaire en style rétro, on reste sur nos cinq
     thèmes ». Les jeux sont dans le monde de la feuille : papier crème, encre du couple, police du thème, Cormorant, ombres
     douces. Quand l'utilisateur demande « des propositions », vérifier s'il parle du style ou de la mécanique avant de dessiner.
+    **Finition : pas d'objets posés** (« ça fait cheap, ça se voit que c'est des objets déposés ; un vrai truc dessiné, et
+    derrière des vrais chiffres qui tournent »). Cible : la machine, son levier et le ticket **peints** par thème, vitre et zone
+    à gratter vides (magenta) pour y poser nos rouleaux et notre film : `tools/jeux-art.py`, 2 images accordées pour Dolce
+    Vita (~0,30 €), puis 8 pour les autres thèmes après accord. **Non générées** : la clé Gemini de la session répond 402
+    « prepayment credits are depleted », même pour un appel texte (l'utilisateur dit être en budget réel : la clé de la session
+    pointe sans doute sur un autre projet) ; Higgsfield est à 0 crédit. En attendant, finition sans génération : papier coton
+    de la feuille (`--tex`), double filet d'or, bords dentelés du ticket, creux ombrés, or en dégradé, et l'illustration peinte
+    du thème au pied de l'objet (`SceauCarte.artOf`, `.std-art`), jamais sur un texte.
     **Validation avant la prod** pour ces jeux (« avant de passer en prod, propose-moi ») : pousser la branche de travail
     seulement (aperçu Vercel), `main` après son accord.
     **« Je serai là » est retiré** (« il ne fait rien pour l'instant ») : la feuille du save-the-date n'a plus que « Agenda »
