@@ -31,7 +31,7 @@ export async function publish(ref, payment) {
   const L = links(slug, undefined, c.plan);
   if (c.plan === 'std') L.what = 'save-the-date';
   // page unique sans le bouton Répondre : pas de réponses, donc pas de tableau de bord
-  if (c.plan === 'page' && !(c.options && c.options.reply)) delete L.dashboard;
+  if (c.plan === 'std' || (c.plan === 'page' && !(c.options && c.options.reply))) delete L.dashboard;
   done.mailed = await mail(done.email, c.inv.couple.join(' & '), L);
   if (done.mailed) await save(`commandes/${ref}.json`, done);
   return done;

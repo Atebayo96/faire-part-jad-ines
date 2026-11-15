@@ -40,7 +40,7 @@
     <div class="hero-copy">
       <p class="label">Save the date · 19 €</p>
       <h1 style="margin-top:18px">Le save the date animé qu'on a envie d'ouvrir.</h1>
-      <p>Vos invités grattent un ticket ou tirent un jackpot… et découvrent votre date. <b>Un lien à envoyer sur WhatsApp</b>, avec « Je serai là » et « Ajouter à l'agenda ». En ligne dès le paiement.</p>
+      <p>Vos invités grattent un ticket ou tirent un jackpot… et découvrent votre date. <b>Un lien à envoyer sur WhatsApp</b>, avec « Ajouter à l'agenda » pour bloquer la journée. En ligne dès le paiement.</p>
     </div>
     <div class="car hm-demo" id="demo">
       <div class="sd-phone" id="phone"><div class="std-scr" id="scr"></div></div>
@@ -91,7 +91,7 @@
     <div class="flow three">
       <div><div class="n"><b>01</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg><h3>Écrivez l'essentiel</h3><p>Vos prénoms, la date, la ville. Rien d'autre : le reste viendra avec le faire-part.</p></div>
       <div><div class="n"><b>02</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="m10.5 9.5 4 2.5-4 2.5z"/></svg><h3>Choisissez l'animation et le style</h3><p>Vous voyez le vrai résultat dans un téléphone, et vous le rejouez autant que vous voulez.</p></div>
-      <div><div class="n"><b>03</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="m9 10.5 2 2 4-4"/></svg><h3>Envoyez le lien</h3><p>Sur WhatsApp, par SMS ou par e-mail. Vos invités touchent « Je serai là », et vous voyez qui pense venir dans votre tableau de bord.</p></div>
+      <div><div class="n"><b>03</b></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="m9 10.5 2 2 4-4"/></svg><h3>Envoyez le lien</h3><p>Sur WhatsApp, par SMS ou par e-mail. Vos invités jouent, découvrent la date et l'ajoutent à leur agenda en un toucher.</p></div>
     </div>
   </div>
 </section>
@@ -108,7 +108,6 @@
         <li><b>Un lien à envoyer</b> sur WhatsApp, par SMS ou par e-mail, à autant d'invités que vous voulez</li>
         <li><b>L'animation de votre choix</b> (le ticket à gratter ou le jackpot), puis la date et la ville sur votre feuille</li>
         <li><b>« Ajouter à l'agenda »</b> : la date se bloque dans le calendrier de vos invités en un toucher</li>
-        <li><b>« Je serai là »</b> : vous voyez qui pense venir, dans votre tableau de bord</li>
         <li><b>Modifiable à tout moment</b> : la date ou la ville change, le lien reste le même</li>
       </ul>
     </div>
@@ -139,7 +138,7 @@
   const WITH={gratter:'dolcevita',jackpot:'nuits'};
   const A=SceauSTD.ANIMS, DEMOS=window.SCEAU_DEMOS||[];
   const inv=(theme,anim)=>{ const [couple,city,d]=EX[theme]; const p=TH[theme].pals&&TH[theme].pals[0];
-    return {format:'std',theme,couple,date:d+'T10:00',palette:p?p.c:'#b08648',paper:'coton',reply:true,lang:'fr',opening:'none',std:{anim,city},events:[{id:'e0',eyebrow:'Le mariage',title:city,start:d+'T10:00'}]}; };
+    return {format:'std',theme,couple,date:d+'T10:00',palette:p?p.c:'#b08648',paper:'coton',reply:false,lang:'fr',opening:'none',std:{anim,city},events:[{id:'e0',eyebrow:'Le mariage',title:city,start:d+'T10:00'}]}; };
   let cur='gratter';
   function fitPhone(){ const ph=$('phone'), w=Math.min(300,ph.parentNode.clientWidth), k=(w-20)/360; ph.style.width=w+'px'; ph.style.height=(740*k+20)+'px'; $('scr').style.transform=`scale(${k})`; }
   function play(k){ cur=k; const a=A.find(x=>x.k===k), I=inv(WITH[k]||THEMES[0],k), s=$('scr');

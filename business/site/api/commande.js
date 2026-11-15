@@ -74,7 +74,7 @@ export default async function handler(req, res) {
     // la carte : pas de lien en ligne, la fiche revient à la page Merci qui dessine l'image et le PDF
     if (c.plan === 'carte') return res.status(200).json({ status: 'paid', plan: 'carte', couple: who, mailed: !!c.mailed, email: c.email, inv: c.inv });
     const L = links(c.slug, origin(req), c.plan);
-    if (c.plan === 'page' && !(c.options && c.options.reply)) delete L.dashboard;
+    if (c.plan === 'std' || (c.plan === 'page' && !(c.options && c.options.reply))) delete L.dashboard;
     return res.status(200).json({ status: 'paid', plan: c.plan, slug: c.slug, couple: who, mailed: !!c.mailed, email: c.email, ...L });
   }
   res.status(405).json({ error: 'method' });

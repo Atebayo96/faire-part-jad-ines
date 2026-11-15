@@ -1001,6 +1001,20 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     que ça et le jackpot, c'est ce que j'aime le plus ») : les cinq autres sont `off:true` dans `ANIMS` (std.js), comme le
     cadenas ; ils marchent encore pour une fiche ou une démo qui les a, mais ne sont plus proposés ni montrés. L'accueil dit
     « Deux façons d'annoncer la date », le jeu par défaut est le ticket.
+    **Ticket et jackpot refaits « le plus réaliste possible »** (même jour), dans std.js (`GAMES.gratter`, `GAMES.jackpot`,
+    styles `.std-tk` et `.std-jp` dans std.css) : ils ne passent plus par reveal.js, qui reste le composant du faire-part. Le jeu
+    prend l'écran (dessiné pour 328 px, mis à l'échelle par `fitGame()`, `--z`). *Ticket* : un vrai ticket (souche de couleur
+    aux prénoms, perforation et encoches, numéro et code-barres), latex argenté qui s'écaille avec un bord déchiqueté, copeaux
+    qui tombent (`.tk-dust`), une pièce qui montre le geste tant qu'on n'a pas touché, la date en très grand dessous ; à moitié
+    gratté, le reste se détache. *Jackpot* : une machine (fronton aux ampoules, vitre chromée, rouleaux bombés, bac), des
+    rubans sans fin dans l'ordre (jours, mois, années), un levier qu'on tire vraiment vers le bas (ou un toucher sur la
+    vitre) ; élan, flou de vitesse, arrêt sec et rebond de chaque rouleau l'un après l'autre. Les rouleaux montrent « ? » au
+    départ : une date au hasard se lisait comme la vraie. **Son et vibration** : frottement, cliquetis, « clac » d'arrêt,
+    carillon (WebAudio, créé au premier toucher seulement), `navigator.vibrate` sur Android ; pluie de pièces dorées à la fin
+    (`gold()`). Texte foncé sur crème ou crème sur `--sink`, jamais sur le fond peint.
+    **« Je serai là » est retiré** (« il ne fait rien pour l'instant ») : la feuille du save-the-date n'a plus que « Agenda »
+    (carte.js, pastille seule à sa largeur), plus de tableau de bord pour un save-the-date (`_publish.js`, `commande.js`),
+    et le site, les questions et les CGV n'en parlent plus.
 
 ## Méthode
 

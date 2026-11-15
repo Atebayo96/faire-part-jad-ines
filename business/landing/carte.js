@@ -131,7 +131,8 @@
     const P=inv.parents, PR=inv.program, DR=inv.dress, R=inv.rsvp||{};
     const live=!!o.live;
     /* save-the-date (format "std", std.js) : la même feuille, réduite à l'essentiel : les prénoms, la date, la ville, et deux
-       pastilles côte à côte, Agenda et « Je serai là » (la réponse, comptée dans le tableau de bord) */
+       pastilles côte à côte, Agenda et « Je serai là » (la réponse, comptée dans le tableau de bord).
+       15 novembre 2026 : « le bouton Je serai là ne fait rien pour l'instant, on va le retirer » : il ne reste qu'Agenda. */
     const std=inv.format==='std', SD=inv.std||{};
     const ev=e=>{ const d=at(e.start), where=[e.place,e.address].find(x=>x&&x!==e.title), ico=icoOf(e,inv);
       const lk=live?`<p class="ct-lk">${e.address?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}" target="_blank" rel="noopener" aria-label="${esc(L.route)}" title="${esc(L.route)}">${ic.pin}</a>`:''}<button type="button" data-cal="${esc(e.id)}" aria-label="${esc(L.cal)}" title="${esc(L.cal)}">${ic.cal}</button></p>`:'';
@@ -163,7 +164,7 @@
         `<p class="ct-tx">${esc(std?SD.text||L.stdTx:inv.intro&&inv.intro.text||L.joy)}</p>`+
         `<p class="ct-dl"><i></i><span>${esc(inv.intro&&inv.intro.dateText||day(main,L,true))}</span><i></i></p>`+
         (std?(SD.city?`<p class="ct-city">${esc(SD.city)}</p>`:'')+
-          `<div class="ct-acts ct-two"><button type="button" class="ct-b"${live?' data-cal="e0"':''}>${ic.cal}${esc(L.cal)}</button>${inv.reply!==false?`<button type="button" class="ct-b"${live?' data-rsvp':''}>${ic.heart}${esc(L.here)}</button>`:''}</div>`:
+          `<div class="ct-acts ct-two"><button type="button" class="ct-b"${live?' data-cal="e0"':''}>${ic.cal}${esc(L.cal)}</button></div>`:
         `<div class="ct-evs" style="--slots:${slots}">${evs.map(ev).join('')}</div>`+
         prog+dress+rs)+
         `<p class="ct-made"><span>Save the</span> <b>Oui</b></p>`+

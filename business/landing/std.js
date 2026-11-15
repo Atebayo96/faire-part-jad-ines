@@ -11,8 +11,8 @@
    SceauSTD.html(inv,{live}) : le HTML ; SceauSTD.start(el,inv,{onDone}) : (re)lance le jeu ; SceauSTD.ANIMS : la liste. */
 (function(){
   const ANIMS=[
-    {k:'gratter',ico:'🎟️',name:'Le ticket à gratter',tx:'On gratte, la date apparaît.'},
-    {k:'jackpot',ico:'🎰',name:'Le jackpot',tx:'On tire le levier, les rouleaux tombent sur votre date.'},
+    {k:'gratter',ico:'🎟️',name:'Le ticket à gratter',tx:'Un vrai ticket : le latex argenté s’écaille sous le doigt, les copeaux tombent, la date apparaît.'},
+    {k:'jackpot',ico:'🎰',name:'Le jackpot',tx:'Une vraie machine : on tire le levier, les trois rouleaux tournent et s’arrêtent un à un sur votre date.'},
     {k:'billet',off:true,ico:'✈️',name:'La carte d’embarquement',tx:'On déchire le talon, on fait décoller l’avion : la date s’affiche comme au tableau des départs.'},
     {k:'cadenas',ico:'🔒',off:true,name:'Le cadenas à code',tx:'On tourne la molette d’un coffre : elle chauffe quand on approche du jour, puis du mois.'},
     {k:'sms',off:true,ico:'💬',name:'Le message',tx:'Une conversation s’écrit toute seule, jusqu’à « On se marie ! ».'},
@@ -60,17 +60,173 @@
 
   const GAMES={};
 
-  /* ---------- 1. ticket à gratter et 2. jackpot : le vrai composant de la révélation (reveal.js) ---------- */
-  function reveal(kind){
-    return (st,c,done)=>{
-      st.innerHTML=`<div class="std-card">${head(c)}<div class="std-rvl"></div>${c.city?`<p class="std-city rvl-later">${esc(c.city)}</p>`:''}</div>`;
-      const card=st.firstChild;
-      if(!window.SceauReveal){ done(); return; }
-      SceauReveal.mount(card.querySelector('.std-rvl'),{kind,date:c.P.D,tz:'UTC',lang:'fr',pal:c.pal,light:true,scope:card,onDone:()=>setTimeout(done,reduce?200:1300)});
-    };
-  }
-  GAMES.gratter=reveal('scratch');
-  GAMES.jackpot=reveal('slot');
+  /* ---------- 1. ticket à gratter et 2. jackpot, refaits pour le save-the-date (15 novembre 2026 : « améliorer les effets du
+     ticket à gratter et du jackpot pour que ce soit le plus réaliste possible »). Ils ne passent plus par reveal.js (qui reste
+     le composant du faire-part) : ici le jeu prend l'écran. Réalisme : la matière (latex argenté qui s'écaille, copeaux qui
+     tombent, rouleaux cylindriques, chrome), le poids (élan, vitesse, arrêt sec et rebond de chaque rouleau, levier qu'on tire
+     et qui revient), le son (frottement, cliquetis, « clac » d'arrêt, carillon) et la vibration du téléphone. ---------- */
+  // le son : un petit synthé WebAudio, créé au premier toucher seulement (jamais avant un geste) ; muet si le téléphone l'est
+  let AC=null, NB_=null;
+  const ac=()=>{ try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') AC.resume(); }catch(e){ AC=null; } return AC; };
+  const noise=()=>{ if(NB_||!AC) return NB_; NB_=AC.createBuffer(1,AC.sampleRate,AC.sampleRate); const d=NB_.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1; return NB_; };
+  function tone(f,dur,type,vol,dl){ const A=ac(); if(!A) return; try{ const t=A.currentTime+(dl||0), o=A.createOscillator(), g=A.createGain();
+    o.type=type||'sine'; o.frequency.setValueAtTime(f,t); g.gain.setValueAtTime(vol||.08,t); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g); g.connect(A.destination); o.start(t); o.stop(t+dur+.02); }catch(e){} }
+  function thud(vol,freq,dur){ const A=ac(); if(!A) return; try{ const t=A.currentTime, n=A.createBufferSource(), f=A.createBiquadFilter(), g=A.createGain();
+    n.buffer=noise(); f.type='lowpass'; f.frequency.value=freq||900; g.gain.setValueAtTime(vol||.2,t); g.gain.exponentialRampToValueAtTime(.0001,t+(dur||.09));
+    n.connect(f); f.connect(g); g.connect(A.destination); n.start(t); n.stop(t+(dur||.09)+.02); }catch(e){} }
+  const chime=()=>[523,659,784,1047,1319].forEach((f,i)=>{ tone(f,.5,'triangle',.07,i*.09); tone(f*2,.3,'sine',.025,i*.09); });
+  const buzz=p=>{ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} };
+  // le jeu est dessiné pour 328 px de large : il se met à l'échelle de l'écran (de 0,8 à 1,2)
+  function fitGame(st,el,w,h){ const f=()=>{ if(!el.isConnected) return removeEventListener('resize',f); const W=st.clientWidth-24, H=st.clientHeight-110; if(W>0&&H>0) el.style.setProperty('--z',Math.max(.72,Math.min(1.2,W/w,H/h)).toFixed(3)); };
+    f(); addEventListener('resize',f); requestAnimationFrame(f); }
+  // pluie de pièces et de confettis dorés, plus fournie que burst()
+  function gold(root,pal){ if(reduce) return; const b=document.createElement('div'); b.className='rvl-burst std-gold';
+    const cols=['#e7c15a','#f6e39a','#c9972f','#fff6d6',pal];
+    b.innerHTML=Array.from({length:70},()=>{ const a=-Math.PI/2+(Math.random()-.5)*2.6, r=90+Math.random()*190;
+      return `<i style="--c:${cols[Math.floor(Math.random()*cols.length)]};--x:${(Math.cos(a)*r).toFixed(0)}px;--y:${(Math.sin(a)*r*.7+170+Math.random()*120).toFixed(0)}px;--r:${(Math.random()*900-450).toFixed(0)}deg;--dl:${(Math.random()*.25).toFixed(2)}s;--w:${(5+Math.random()*5).toFixed(1)}px"></i>`; }).join('');
+    root.appendChild(b); setTimeout(()=>b.remove(),2400); }
+
+  /* 1. le ticket à gratter : un vrai ticket (souche de couleur, perforation, zone de latex argenté, numéro et code-barres).
+     Le latex s'écaille sous le doigt avec un bord irrégulier, des copeaux tombent, le frottement s'entend ; une pièce montre
+     le geste tant qu'on n'a pas touché. À moitié gratté, le reste se détache et la date bat. */
+  GAMES.gratter=(st,c,done)=>{
+    const P=c.P, no=String(P.d).padStart(2,'0')+String(P.m+1).padStart(2,'0')+String(P.y).slice(2);
+    st.innerHTML=`<div class="std-game std-tkw"><div class="std-tk">
+      <div class="tk-top"><p class="tk-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
+      <div class="tk-perf" aria-hidden="true"></div>
+      <div class="tk-body"><p class="tk-call">Grattez pour découvrir la date</p>
+        <div class="tk-zone"><div class="tk-under"><small>${esc(cap(WD[P.wd]))}</small><b>${esc(P.dd+NB+MO[P.m])}</b><span>${P.y}</span></div>
+          <canvas class="tk-foil" tabindex="0" role="button" aria-label="Gratter pour découvrir la date"></canvas><i class="tk-coin" aria-hidden="true"></i></div>
+        <p class="tk-city">${esc(c.city||'Notez bien la date')}</p></div>
+      <div class="tk-foot" aria-hidden="true"><span class="tk-bar"></span><span class="tk-no">N° ${no} · ${esc(c.ini)}</span></div>
+    </div></div><canvas class="tk-dust" aria-hidden="true"></canvas><div class="std-sr" aria-live="polite"></div>`;
+    const wrap=st.firstChild, tk=wrap.firstChild, cv=st.querySelector('.tk-foil'), zone=cv.parentNode, dust=st.querySelector('.tk-dust');
+    fitGame(st,wrap,328,470);
+    let cx, W=0, H=0, down=false, last=null, over=false, lastCheck=0, tries=0, alive=true, src=null, sg=null, lastT=0;
+    st._stop=()=>{ alive=false; hush(true); };
+    (function foil(){
+      W=zone.clientWidth; H=zone.clientHeight; if(!alive) return;
+      if(!W||!H){ if(tries++<120) requestAnimationFrame(foil); return; }
+      tk.style.setProperty('--py',(st.querySelector('.tk-perf').offsetTop)+'px');
+      const dpr=Math.min(2,devicePixelRatio||1); cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+      cx=cv.getContext('2d',{willReadFrequently:true}); cx.setTransform(dpr,0,0,dpr,0,0);
+      // le latex argenté : dégradé brossé, grain, « GRATTEZ » répété en filigrane, et l'invitation au centre
+      const g=cx.createLinearGradient(0,0,W,H);
+      [[0,'#b9bdc3'],[.22,'#e4e6ea'],[.4,'#aeb2b9'],[.58,'#d9dce1'],[.78,'#a4a8af'],[1,'#c9ccd2']].forEach(([p,col])=>g.addColorStop(p,col));
+      cx.fillStyle=g; cx.fillRect(0,0,W,H);
+      for(let y=0;y<H;y+=1){ cx.fillStyle=`rgba(${Math.random()<.5?'255,255,255':'60,64,72'},${(Math.random()*.07).toFixed(3)})`; cx.fillRect(0,y,W,1); }
+      for(let i=0;i<W*H/7;i++){ cx.fillStyle=Math.random()<.5?'rgba(255,255,255,.16)':'rgba(40,44,52,.1)'; cx.fillRect(Math.random()*W,Math.random()*H,1,1); }
+      cx.save(); cx.translate(W/2,H/2); cx.rotate(-.42); cx.font='700 10px Inter,Arial,sans-serif'; cx.fillStyle='rgba(60,64,72,.17)'; cx.textAlign='center';
+      for(let y=-H;y<H;y+=17) for(let x=-W;x<W;x+=74) cx.fillText('GRATTEZ',x+((y/17)%2?37:0),y);
+      cx.restore();
+      cx.fillStyle='#34373d'; cx.textAlign='center'; cx.textBaseline='middle'; cx.font='700 15px Inter,Arial,sans-serif';
+      const lb='G R A T T E Z   I C I', tw=cx.measureText(lb).width+28;
+      cx.fillStyle='rgba(236,238,241,.92)'; cx.beginPath(); cx.roundRect?cx.roundRect(W/2-tw/2,H/2-17,tw,34,17):cx.rect(W/2-tw/2,H/2-17,tw,34); cx.fill();
+      cx.fillStyle='#34373d'; cx.fillText(lb,W/2,H/2+1);
+      cx.globalCompositeOperation='destination-out';
+    })();
+    // les copeaux de latex : ils partent du doigt, tombent et s'effacent
+    const dx=dust.getContext('2d'), bits=[]; let raf=0;
+    function sizeDust(){ const d=Math.min(2,devicePixelRatio||1); dust.width=st.clientWidth*d; dust.height=st.clientHeight*d; dx.setTransform(d,0,0,d,0,0); }
+    function loop(){ raf=0; if(!alive) return; dx.clearRect(0,0,dust.width,dust.height); const now=performance.now();
+      for(let i=bits.length-1;i>=0;i--){ const b=bits[i], a=1-(now-b.t)/b.life; if(a<=0){ bits.splice(i,1); continue; }
+        b.vy+=.32; b.x+=b.vx; b.y+=b.vy; b.r+=b.vr; dx.save(); dx.translate(b.x,b.y); dx.rotate(b.r); dx.globalAlpha=Math.min(1,a*1.6); dx.fillStyle=b.c; dx.fillRect(-b.w/2,-b.h/2,b.w,b.h); dx.restore(); }
+      if(bits.length) raf=requestAnimationFrame(loop); }
+    function flake(e,n){ if(reduce) return; const r=st.getBoundingClientRect(), k=st.clientWidth/r.width, x=(e.clientX-r.left)*k, y=(e.clientY-r.top)*k;
+      for(let i=0;i<n;i++) bits.push({x:x+(Math.random()-.5)*20,y:y+(Math.random()-.5)*14,vx:(Math.random()-.5)*3.4,vy:-Math.random()*2.2,r:Math.random()*6,vr:(Math.random()-.5)*.5,
+        w:1.5+Math.random()*3.5,h:1+Math.random()*2.2,c:['#8f939a','#b7bbc2','#d3d6db','#6f737a'][Math.floor(Math.random()*4)],t:performance.now(),life:650+Math.random()*600});
+      if(bits.length>260) bits.splice(0,bits.length-260); if(!raf) raf=requestAnimationFrame(loop); }
+    // le bruit du grattage : un souffle filtré dont le volume suit la vitesse du doigt
+    function rasp(v){ const A=ac(); if(!A) return; try{ if(!src){ src=A.createBufferSource(); src.buffer=noise(); src.loop=true; const f=A.createBiquadFilter(); f.type='bandpass'; f.frequency.value=3400; f.Q.value=.6;
+        sg=A.createGain(); sg.gain.value=0; src.connect(f); f.connect(sg); sg.connect(A.destination); src.start(); }
+      sg.gain.setTargetAtTime(Math.min(.11,v*.05),A.currentTime,.02); }catch(e){} }
+    function hush(kill){ try{ if(sg&&AC) sg.gain.setTargetAtTime(0,AC.currentTime,.03); if(kill&&src){ const s=src; src=null; setTimeout(()=>{ try{ s.stop(); }catch(e){} },200); } }catch(e){} }
+    const at=e=>{ const r=cv.getBoundingClientRect(); return {x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}; };
+    // un coup de pièce : des pastilles de taille inégale le long du trait, pour un bord déchiqueté
+    function rub(a,b){ const d=Math.hypot(b.x-a.x,b.y-a.y), n=Math.max(1,Math.ceil(d/4));
+      for(let i=0;i<=n;i++){ const x=a.x+(b.x-a.x)*i/n, y=a.y+(b.y-a.y)*i/n;
+        cx.beginPath(); cx.arc(x,y,13,0,7); cx.fill();
+        for(let j=0;j<3;j++){ const an=Math.random()*7, rr=11+Math.random()*7; cx.beginPath(); cx.arc(x+Math.cos(an)*rr,y+Math.sin(an)*rr,2+Math.random()*4.5,0,7); cx.fill(); } }
+      return d; }
+    function cleared(){ const d=cx.getImageData(0,0,cv.width,cv.height).data; let n=0, z=0; for(let i=3;i<d.length;i+=96){ n++; if(d[i]<40) z++; } return z/n; }
+    function finish(){
+      if(over) return; over=true; down=false; hush(true); cv.classList.add('gone'); tk.classList.add('won');
+      st.querySelector('.tk-call').textContent='Notez bien la date !'; st.querySelector('.std-sr').textContent=c.P.full;
+      buzz([25,50,25,50,70]); chime(); burst(wrap,c.pal); setTimeout(()=>{ if(alive) gold(wrap,c.pal); },180);
+      setTimeout(()=>{ cv.remove(); },700); setTimeout(()=>{ if(alive) done(); },reduce?300:2300);
+    }
+    cv.addEventListener('pointerdown',e=>{ if(!cx||over) return; down=true; tk.classList.add('touched'); if(!dust.width) sizeDust(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} last=at(e); lastT=performance.now(); rub(last,last); flake(e,5); rasp(.6); buzz(6); });
+    cv.addEventListener('pointermove',e=>{ if(!down||over) return; const p=at(e), d=rub(last,p), now=performance.now(), v=d/Math.max(8,now-lastT); last=p; lastT=now;
+      if(d>2){ flake(e,Math.min(6,1+Math.round(d/7))); rasp(v); }
+      if(now-lastCheck>140){ lastCheck=now; if(d>6) buzz(4); if(cleared()>.52) finish(); } });
+    const up=()=>{ if(!down) return; down=false; hush(); if(!over&&cleared()>.52) finish(); };
+    cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
+    cv.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
+    cv.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); finish(); } });
+  };
+
+  /* 2. le jackpot : une vraie machine à sous (fronton aux ampoules, vitre chromée, trois rouleaux cylindriques, levier).
+     On tire le levier vers le bas (ou on touche la machine) : il revient d'un coup, les rouleaux prennent leur élan, tournent
+     flous (au départ ils montrent « ? » : une date au hasard se lisait comme la vraie), puis s'arrêtent l'un après l'autre, sec, avec un rebond et un « clac » ; jour, mois, année ; les ampoules
+     s'affolent et les pièces tombent. Les rouleaux sont de vrais rubans sans fin, dans l'ordre (1, 2, 3… ; janvier, février…). */
+  GAMES.jackpot=(st,c,done)=>{
+    const P=c.P, IH=58;
+    const LST=[Array.from({length:31},(_,i)=>i===0?'1er':String(i+1)),MO,Array.from({length:6},(_,i)=>String(P.y-2+i))], TGT=[P.d-1,P.m,2];
+    const strip=l=>[...l,...l,...l].map(v=>`<div>${esc(v)}</div>`).join('');
+    st.innerHTML=`<div class="std-game std-jp">
+      <div class="jp-cab">
+        <div class="jp-sign"><i class="jp-bulbs" aria-hidden="true">${'<b></b>'.repeat(11)}</i><p class="jp-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
+        <div class="jp-body"><p class="jp-call">Tirez le levier</p>
+          <div class="jp-win" role="button" tabindex="0" aria-label="Lancer les rouleaux">${['d','m','y'].map((k,i)=>`<div class="jp-reel ${k}"><div class="jp-strip">${strip(LST[i])}</div><div class="jp-q">?</div></div>`).join('')}<i class="jp-line" aria-hidden="true"></i></div>
+          <p class="jp-res">${esc(cap(WD[P.wd]))}${c.city?' · '+esc(c.city):''}</p>
+          <div class="jp-tray" aria-hidden="true"></div></div>
+      </div>
+      <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><i class="jp-base"></i><i class="jp-arm"><b></b></i></div>
+    </div><div class="std-sr" aria-live="polite"></div>`;
+    const jp=st.firstChild, win=jp.querySelector('.jp-win'), lever=jp.querySelector('.jp-lever'), arm=jp.querySelector('.jp-arm');
+    fitGame(st,jp,328,470);
+    let alive=true, spun=false; st._stop=()=>{ alive=false; };
+    // chaque rouleau : sa position en cases (flottante), posée sur le ruban du milieu
+    const R=[...jp.querySelectorAll('.jp-strip')].map((el,i)=>{ const n=LST[i].length; let p=(TGT[i]+3+Math.floor(Math.random()*(n-5)))%n; return {el,n,p,i}; });
+    const put=(r,p,v)=>{ const m=((p%r.n)+r.n)%r.n; r.el.style.transform=`translateY(${(IH*.25-(r.n+m)*IH).toFixed(1)}px)`; r.el.style.filter=v>6?`blur(${Math.min(2.6,v*.09).toFixed(2)}px)`:''; };
+    R.forEach(r=>put(r,r.p,0));
+    let lastTick=0;
+    function go(){
+      if(spun||!alive) return; spun=true; jp.classList.add('touched','spin'); win.removeAttribute('tabindex'); win.setAttribute('aria-disabled','true');
+      ac(); thud(.22,500,.12); buzz(18);
+      const t0=performance.now();
+      R.forEach(r=>{ const turns=reduce?0:(r.n>20?1:r.n>8?3:6)+r.i*(r.n>20?1:r.n>8?2:4), need=((TGT[r.i]-r.p)%r.n+r.n)%r.n;
+        r.p0=r.p; r.D=turns*r.n+need; r.T=reduce?300:1500+r.i*850; r.stopped=false; r.cell=Math.floor(r.p); });
+      (function frame(now){ if(!alive) return; const t=now-t0; let all=true;
+        R.forEach(r=>{ if(r.stopped&&t>r.T+420) return; all=false; let p, v=0;
+          if(t<110&&!reduce){ p=r.p0-.28*Math.sin(t/110*Math.PI/2); }                       // l'élan : un petit recul
+          else if(t<r.T){ const u=Math.max(0,(t-110)/(r.T-110)), e=.72*u+.28*(1-Math.pow(1-u,3)); p=r.p0-.28*(1-Math.min(1,u*8))+r.D*e; v=r.D/((r.T-110)/1000)*(.72+.84*Math.pow(1-u,2)); }
+          else { const w=(t-r.T)/1000; p=r.p0+r.D+(reduce?0:.2*Math.exp(-9*w)*Math.sin(26*w));                                           // l'arrêt sec, puis le rebond
+            if(!r.stopped){ r.stopped=true; thud(.3,700,.1); tone(180,.12,'square',.05); buzz(22); r.el.parentNode.classList.add('hit'); } }
+          const cell=Math.floor(p); if(cell!==r.cell&&!r.stopped){ r.cell=cell; if(now-lastTick>38){ lastTick=now; tone(1500+r.i*250,.018,'square',.022); } }
+          put(r,p,v); });
+        if(all){ R.forEach(r=>{ r.p=TGT[r.i]; put(r,r.p,0); }); return won(); }
+        requestAnimationFrame(frame); })(t0);
+    }
+    function won(){ if(!alive) return; jp.classList.remove('spin'); jp.classList.add('won'); jp.querySelector('.jp-call').textContent='Jackpot ! Notez bien la date';
+      st.querySelector('.std-sr').textContent=c.P.full; chime(); buzz([30,60,30,60,90]); gold(jp,c.pal); setTimeout(()=>{ if(alive) burst(jp,c.pal); },250);
+      setTimeout(()=>{ if(alive) done(); },reduce?300:2600); }
+    // le levier : on le tire vers le bas, il résiste, et lâché assez bas il lance les rouleaux en revenant d'un coup
+    let y0=null, pull=0, notch=0;
+    // la tige se raccourcit puis s'inverse (elle bascule vers nous) ; la boule garde sa taille
+    const setArm=k=>{ pull=k; let s=1-1.62*k; if(Math.abs(s)<.14) s=s<0?-.14:.14; arm.style.setProperty('--s',s.toFixed(3)); arm.style.setProperty('--ks',(1/Math.abs(s)).toFixed(3)); };
+    lever.addEventListener('pointerdown',e=>{ if(spun) return; y0=e.clientY; arm.classList.remove('back'); try{ lever.setPointerCapture(e.pointerId); }catch(x){} ac(); });
+    lever.addEventListener('pointermove',e=>{ if(y0==null||spun) return; const r=jp.getBoundingClientRect().width/jp.offsetWidth||1, k=Math.max(0,Math.min(1,(e.clientY-y0)/(96*r))); setArm(k);
+      const n=Math.floor(k*6); if(n!==notch){ notch=n; tone(700,.02,'square',.03); buzz(5); } });
+    const release=()=>{ if(y0==null) return; y0=null; const k=pull; arm.classList.add('back'); setArm(0); if(k>.55) go(); else if(k<.08) auto(); };
+    lever.addEventListener('pointerup',release); lever.addEventListener('pointercancel',release);
+    lever.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
+    // un simple toucher (levier ou vitre) : le levier descend et remonte tout seul
+    function auto(){ if(spun) return; ac(); arm.classList.remove('back'); arm.classList.add('auto'); setArm(1); tone(700,.02,'square',.03); setTimeout(()=>{ arm.classList.remove('auto'); arm.classList.add('back'); setArm(0); go(); },reduce?0:260); }
+    win.addEventListener('click',auto);
+    win.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); auto(); } });
+  };
 
   /* ---------- 3. la carte d'embarquement, en deux gestes (2 novembre 2026 : « c'est très bien mais faut un effet plus
      interactif ») : on tire le talon vers le bas (« Embarquement confirmé »), puis on fait glisser l'avion le long de la route

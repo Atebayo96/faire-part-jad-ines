@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Créer son save the date animé en 5 minutes — Save The Oui</title>
-<meta name="description" content="Créez votre save the date en 5 minutes : ticket à gratter ou jackpot. Un lien à envoyer sur WhatsApp, « Je serai là » et le tableau de bord compris. 19 €, en ligne dès le paiement.">
+<meta name="description" content="Créez votre save the date en 5 minutes : ticket à gratter ou jackpot. Un lien à envoyer sur WhatsApp, avec « Ajouter à l'agenda ». 19 €, en ligne dès le paiement.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Créer son save the date animé en 5 minutes — Save The Oui">
 <meta property="og:description" content="Annoncez votre date de façon drôle : ticket à gratter ou jackpot. 19 €, en ligne dès le paiement.">
@@ -121,7 +121,6 @@
         <ul>
           <li>Un lien à envoyer sur WhatsApp, par SMS ou par e-mail</li>
           <li>L'animation choisie, puis la date, la ville et « Ajouter à l'agenda »</li>
-          <li>« Je serai là » : vous voyez qui pense venir, dans votre tableau de bord</li>
           <li>Modifiable à tout moment, le lien ne change pas</li>
         </ul>
         <form id="ordForm" novalidate onsubmit="return false">
@@ -171,7 +170,7 @@
   function inv(){
     const d=$('dt').value||'2027-06-12', city=$('ct').value.trim();
     return {format:'std',theme:C.theme,couple:[$('n1').value.trim()||'Emma',$('n2').value.trim()].filter(Boolean),date:d+'T10:00',palette:C.palette,paper:'coton',
-      reply:true,lang:'fr',opening:'none',std:{anim:C.anim,city},events:[{id:'e0',eyebrow:'Le mariage',title:city,start:d+'T10:00'}]};
+      reply:false,lang:'fr',opening:'none',std:{anim:C.anim,city},events:[{id:'e0',eyebrow:'Le mariage',title:city,start:d+'T10:00'}]};
   }
   // l'aperçu : le vrai save-the-date, dans un écran de 360 × 740 réduit à la taille du téléphone
   function fitPhone(){ const ph=$('phone'), w=Math.min(340,ph.parentNode.clientWidth); ph.style.width=w+'px'; ph.style.height=(w*740/360+20*(1-w/340))+'px';
