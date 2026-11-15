@@ -1038,8 +1038,10 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     machine en maïolique se perdait sur le mur en maïolique. Les prénoms se réduisent pour tenir (`fitNm`). La finition en CSS
     (papier, filets d'or, illustration au pied) **n'a pas plu** : elle ne reste que pour les thèmes sans peinture. Restent à
     peindre, avec accord : les 4 autres thèmes (8 images, ~1,20 €).
-    **Validation avant la prod** pour ces jeux (« avant de passer en prod, propose-moi ») : pousser la branche de travail
-    seulement (aperçu Vercel), `main` après son accord.
+    **Tout part en prod, ces jeux compris** : après « avant de passer en prod, propose-moi », le travail était resté sur la
+    branche de travail (aperçu Vercel), et l'utilisateur ne le voyait pas (« c'est pas en prod, je comprends pas »). La règle
+    générale vaut toujours : pousser la branche ET `main` à chaque fois ; une proposition à valider se montre en plus, elle
+    ne retient pas la mise en ligne, sauf s'il dit clairement de ne pas publier.
     **« Je serai là » est retiré** (« il ne fait rien pour l'instant ») : la feuille du save-the-date n'a plus que « Agenda »
     (carte.js, pastille seule à sa largeur), plus de tableau de bord pour un save-the-date (`_publish.js`, `commande.js`),
     et le site, les questions et les CGV n'en parlent plus.
