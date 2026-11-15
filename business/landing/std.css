@@ -389,31 +389,40 @@
 .std-jp.art{display:block;position:relative;width:346px;height:572px;padding:0}
 .std-jp.art .jp-cab{position:absolute;left:0;top:7px;width:290px;border-radius:0;background:none;box-shadow:none;overflow:visible}
 .std-jp.art .jp-cab::before,.std-jp.art .jp-cab::after{display:none}
-.std-jp.art .jp-win{position:absolute;margin:0;height:auto;border:0;border-radius:0;box-shadow:none;gap:3px;background:#3a2f26;animation:none}
-.std-jp.art .jp-reel{height:100%;border-radius:0}
+/* les textes sont IMPRIMÉS sur la faïence, pas posés dessus (« les textes ne s'insèrent pas bien ») : tout en Cormorant (plus
+   de capitales sans empattement, qui faisaient « interface »), encre du couple en multiply pour garder le grain de la peinture,
+   léger relief clair dessous ; les rouleaux sont en papier crème comme les panneaux, séparés par un filet d'or */
+.std-jp.art .jp-win{position:absolute;margin:0;height:auto;border:0;border-radius:0;box-shadow:none;gap:2px;background:#a97a22;animation:none}
+.std-jp.art .jp-reel{height:100%;border-radius:0;background:#f6eedd}
+.std-jp.art .jp-reel::after{background:linear-gradient(rgba(74,53,24,.42),rgba(74,53,24,.06) 24%,rgba(255,255,255,.18) 50%,rgba(74,53,24,.06) 76%,rgba(74,53,24,.42));box-shadow:inset 0 0 5px rgba(74,53,24,.3)}
 .std-jp.art .jp-reel.d{width:25%}.std-jp.art .jp-reel.y{width:31%}
-.std-jp.art .jp-strip div{font-size:34px}
-.std-jp.art .jp-reel.m .jp-strip div{font-size:16px}.std-jp.art .jp-reel.y .jp-strip div{font-size:22px}
-.std-jp.art .jp-q{font-size:38px}
+.std-jp.art .jp-strip div{font-size:36px;color:var(--sink)}
+.std-jp.art .jp-reel.m .jp-strip div{font-size:17px;font-style:italic}.std-jp.art .jp-reel.y .jp-strip div{font-size:23px}
+.std-jp.art .jp-q{font-size:38px;background:#f6eedd;font-style:italic}
 .std-jp.art .jp-line::before,.std-jp.art .jp-line::after{top:-6px;border-width:6px}
-.std-jp.art .jp-line::before{left:1px;border-left-color:#b8862a}.std-jp.art .jp-line::after{right:1px;border-right-color:#b8862a}
+.std-jp.art .jp-line::before{left:1px;border-left-color:#a97a22}.std-jp.art .jp-line::after{right:1px;border-right-color:#a97a22}
 .std-jp.art .jp-sign{position:absolute;left:20%;width:60%;top:13.2%;height:11.4%;margin:0;padding:0;border-radius:0;background:none;box-shadow:none;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.std-jp.art .jp-ey{color:var(--sink);font-size:11px;letter-spacing:.2em}
-.std-jp.art .std-nm{width:100%;margin:3px 0 0;color:var(--sink);font-size:27px;overflow:hidden}
-.std-jp.art .jp-call{position:absolute;left:6%;right:6%;top:29.7%;height:4.7%;display:grid;place-items:center;min-height:0;font-size:12px}
-.std-jp.art .jp-res{position:absolute;left:11%;right:11%;top:61.3%;height:4.6%;display:grid;place-items:center;margin:0;min-height:0;font-size:15px;transform:none}
+.std-jp.art .jp-sign,.std-jp.art .jp-call,.std-jp.art .jp-res{mix-blend-mode:multiply;text-shadow:0 1px 0 rgba(255,255,255,.55)}
+.std-jp.art .jp-ey{color:var(--sink);font:600 12.5px/1.2 "Cormorant Garamond",Georgia,serif;letter-spacing:.3em}
+.std-jp.art .std-nm{width:100%;margin:2px 0 0;color:var(--sink);font-size:28px;overflow:hidden}
+.std-jp.art .jp-call{position:absolute;left:6%;right:6%;top:29.7%;height:4.7%;display:grid;place-items:center;min-height:0;color:var(--sink);font:600 14px/1 "Cormorant Garamond",Georgia,serif;letter-spacing:.24em}
+.std-jp.art .jp-res{position:absolute;left:11%;right:11%;top:61.3%;height:4.6%;display:grid;place-items:center;margin:0;min-height:0;color:var(--sink);font-size:15px;transform:none}
 .std-jp.art.won .jp-img{animation:jpWin .45s ease-in-out 4 alternate}
 @keyframes jpWin{to{filter:brightness(1.12) saturate(1.15)}}
-/* le levier peint : la tige et sa boule descendent derrière le socle (qui reste en place), puis remontent d'un coup */
-/* levier plus petit (« le truc pour tirer le jackpot est trop grand ») : 62 px de large, la boule à hauteur du bas de la vitre */
-.std-jp.art .jp-lever{position:absolute;left:auto;right:0;top:auto;bottom:9px;width:62px;height:209px;margin:0}
-.std-jp.art .lv-clip{position:absolute;inset:0 0 9% 0;overflow:hidden}
-.std-jp.art .jp-arm{position:absolute;left:0;top:0;width:62px;height:209px;transform:translateY(calc(var(--k,0)*46%));transform-origin:50% 100%}
+/* le levier peint fait partie de la machine (« le levier ne s'insère pas bien » : posé à côté sur son socle, il faisait
+   lampadaire). C'est le bras d'un bandit manchot : il sort du flanc en biais, son socle caché DERRIÈRE la machine, et il
+   pivote vers le bas quand on le tire (de 30° à 120°), puis remonte d'un coup. Plus d'étiquette « Tirez » : le bandeau le dit,
+   et le bras frémit tant qu'on ne l'a pas touché. */
+.std-jp.art{width:366px}
+.std-jp.art .jp-lever{position:absolute;left:250px;right:auto;top:197px;bottom:auto;width:116px;height:330px;margin:0}
+.std-jp.art .lv-clip{position:absolute;inset:0;overflow:visible}
+.std-jp.art .jp-arm{position:absolute;left:-30px;top:8px;width:62px;height:209px;transform-origin:31px 192px;transform:rotate(calc(30deg + var(--k,0)*72deg))}
+.std-jp.art:not(.touched):not(.held) .jp-arm{animation:jpNudge 2.6s ease-in-out infinite}
+@keyframes jpNudge{0%,70%,100%{transform:rotate(30deg)}80%{transform:rotate(38deg)}90%{transform:rotate(29deg)}}
 .std-jp.art .jp-arm::before{display:none}
-.std-jp.art .jp-arm img,.std-jp.art .lv-base{position:absolute;left:0;top:0;width:62px;height:209px;pointer-events:none}
-.std-jp.art .jp-arm img{clip-path:inset(0 0 17% 0)}
-.std-jp.art .lv-base{clip-path:inset(82% 0 0 0)}
-.std-jp.art .jp-pull{left:0;right:0;bottom:auto;top:-46px;font-size:11px;padding:4px 2px}
+.std-jp.art .jp-arm img{position:absolute;left:0;top:0;width:62px;height:209px;pointer-events:none}
+.std-jp.art .lv-base,.std-jp.art .jp-pull{display:none}
+@media (prefers-reduced-motion:reduce){ .std-jp.art .jp-arm{animation:none!important} }
 
 /* plus de pièce qui montre le geste (« dans le gratter ici, je comprends pas la boule jaune ») : l'étiquette « Grattez ici » suffit */
 .tk-coin{display:none!important}

@@ -1044,6 +1044,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     de ticket pour les autres thèmes. **Plus de pièce qui montre le geste** (« je comprends pas la boule jaune ») : `.tk-coin`
     masquée partout. **Levier de la machine peinte plus petit** (« le truc pour tirer est trop grand ») : 62 px de large au
     lieu de 92, course de 100 px. Un « c'est mal fait ici » est arrivé sans image : demander où avant de corriger.
+    **Machine peinte, 7/10 puis reprise** (« les textes et le levier ne s'insèrent pas bien ») : les textes sont **imprimés sur
+    la faïence** (tout en Cormorant, plus de capitales sans empattement qui faisaient « interface » ; encre du couple en
+    `multiply`, léger relief clair), les rouleaux en papier crème séparés par un filet d'or ; le levier **fait partie de la
+    machine** : un bras de bandit manchot qui sort du flanc en biais, socle caché derrière la machine, et pivote vers le bas
+    quand on le tire (30° à 102°) ; plus d'étiquette « Tirez », le bras frémit tant qu'on ne l'a pas touché. Posé à côté sur
+    son socle, il faisait lampadaire. Règle : un texte ou une pièce mobile ajouté à une peinture doit sembler en faire partie
+    (même matière, même encre, un point d'attache), jamais posé à côté ou par-dessus.
     **Tout part en prod, ces jeux compris** : après « avant de passer en prod, propose-moi », le travail était resté sur la
     branche de travail (aperçu Vercel), et l'utilisateur ne le voyait pas (« c'est pas en prod, je comprends pas »). La règle
     générale vaut toujours : pousser la branche ET `main` à chaque fois ; une proposition à valider se montre en plus, elle

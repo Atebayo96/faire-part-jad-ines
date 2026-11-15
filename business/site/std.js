@@ -217,7 +217,7 @@
       <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><i class="jp-base"></i><i class="jp-arm"><b></b></i><p class="jp-pull">Tirez</p></div>${c.art?`<img class="std-art" src="${c.art}" alt="">`:''}
     </div><div class="std-sr" aria-live="polite"></div>`;
     const jp=st.firstElementChild, win=jp.querySelector('.jp-win'), lever=jp.querySelector('.jp-lever'), arm=jp.querySelector('.jp-arm');
-    fitGame(st,jp,J?346:336,J?572:510); if(J) st.parentNode.classList.add('std-dim'); fitNm(jp.querySelector('.std-nm')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitNm(jp.querySelector('.std-nm')));
+    fitGame(st,jp,J?366:336,J?572:510); if(J) st.parentNode.classList.add('std-dim'); fitNm(jp.querySelector('.std-nm')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitNm(jp.querySelector('.std-nm')));
     let alive=true, spun=false; st._stop=()=>{ alive=false; };
     // chaque rouleau : sa position en cases (flottante), posée sur le ruban du milieu
     const R=[...jp.querySelectorAll('.jp-strip')].map((el,i)=>{ const n=LST[i].length; let p=(TGT[i]+3+Math.floor(Math.random()*(n-5)))%n; return {el,n,p,i}; });
