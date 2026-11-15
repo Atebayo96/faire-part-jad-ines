@@ -92,38 +92,35 @@
      le geste tant qu'on n'a pas touché. À moitié gratté, le reste se détache et la date bat. */
   GAMES.gratter=(st,c,done)=>{
     const P=c.P, no=String(P.d).padStart(2,'0')+String(P.m+1).padStart(2,'0')+String(P.y).slice(2);
+    const dm=P.dd+NB+MO[P.m];
     st.innerHTML=`<div class="std-game std-tkw"><div class="std-tk">
       <div class="tk-top"><p class="tk-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
       <div class="tk-perf" aria-hidden="true"></div>
       <div class="tk-body"><p class="tk-call">Grattez pour découvrir la date</p>
-        <div class="tk-zone"><div class="tk-under"><small>${esc(cap(WD[P.wd]))}</small><b>${esc(P.dd+NB+MO[P.m])}</b><span>${P.y}</span></div>
-          <canvas class="tk-foil" tabindex="0" role="button" aria-label="Gratter pour découvrir la date"></canvas><i class="tk-coin" aria-hidden="true"></i></div>
-        <p class="tk-city">${esc(c.city||'Notez bien la date')}</p></div>
-      <div class="tk-foot" aria-hidden="true"><span class="tk-bar"></span><span class="tk-no">N° ${no} · ${esc(c.ini)}</span></div>
+        <div class="tk-zone"><div class="tk-under"><small>${esc(cap(WD[P.wd]))}</small><b${dm.length>10?' class="lg"':''}>${esc(dm)}</b><span>${P.y}</span></div>
+          <canvas class="tk-foil" tabindex="0" role="button" aria-label="Gratter pour découvrir la date"></canvas><i class="tk-coin" aria-hidden="true"></i></div></div>
+      <div class="tk-foot"><p class="tk-city">${esc(c.city||'Notez bien la date')}</p></div>
     </div></div><canvas class="tk-dust" aria-hidden="true"></canvas><div class="std-sr" aria-live="polite"></div>`;
     const wrap=st.firstChild, tk=wrap.firstChild, cv=st.querySelector('.tk-foil'), zone=cv.parentNode, dust=st.querySelector('.tk-dust');
-    fitGame(st,wrap,328,470);
+    fitGame(st,wrap,336,500);
     let cx, W=0, H=0, down=false, last=null, over=false, lastCheck=0, tries=0, alive=true, src=null, sg=null, lastT=0;
     st._stop=()=>{ alive=false; hush(true); };
     (function foil(){
       W=zone.clientWidth; H=zone.clientHeight; if(!alive) return;
       if(!W||!H){ if(tries++<120) requestAnimationFrame(foil); return; }
-      tk.style.setProperty('--py',(st.querySelector('.tk-perf').offsetTop)+'px');
       const dpr=Math.min(2,devicePixelRatio||1); cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
       cx=cv.getContext('2d',{willReadFrequently:true}); cx.setTransform(dpr,0,0,dpr,0,0);
-      // le latex argenté : dégradé brossé, grain, « GRATTEZ » répété en filigrane, et l'invitation au centre
-      const g=cx.createLinearGradient(0,0,W,H);
-      [[0,'#b9bdc3'],[.22,'#e4e6ea'],[.4,'#aeb2b9'],[.58,'#d9dce1'],[.78,'#a4a8af'],[1,'#c9ccd2']].forEach(([p,col])=>g.addColorStop(p,col));
-      cx.fillStyle=g; cx.fillRect(0,0,W,H);
-      for(let y=0;y<H;y+=1){ cx.fillStyle=`rgba(${Math.random()<.5?'255,255,255':'60,64,72'},${(Math.random()*.07).toFixed(3)})`; cx.fillRect(0,y,W,1); }
-      for(let i=0;i<W*H/7;i++){ cx.fillStyle=Math.random()<.5?'rgba(255,255,255,.16)':'rgba(40,44,52,.1)'; cx.fillRect(Math.random()*W,Math.random()*H,1,1); }
-      cx.save(); cx.translate(W/2,H/2); cx.rotate(-.42); cx.font='700 10px Inter,Arial,sans-serif'; cx.fillStyle='rgba(60,64,72,.17)'; cx.textAlign='center';
-      for(let y=-H;y<H;y+=17) for(let x=-W;x<W;x+=74) cx.fillText('GRATTEZ',x+((y/17)%2?37:0),y);
-      cx.restore();
-      cx.fillStyle='#34373d'; cx.textAlign='center'; cx.textBaseline='middle'; cx.font='700 15px Inter,Arial,sans-serif';
-      const lb='G R A T T E Z   I C I', tw=cx.measureText(lb).width+28;
-      cx.fillStyle='rgba(236,238,241,.92)'; cx.beginPath(); cx.roundRect?cx.roundRect(W/2-tw/2,H/2-17,tw,34,17):cx.rect(W/2-tw/2,H/2-17,tw,34); cx.fill();
-      cx.fillStyle='#34373d'; cx.fillText(lb,W/2,H/2+1);
+      // le film à gratter : la couleur du couple, satinée (un reflet en biais), semée de petits motifs, et une grande étiquette
+      // crème « Grattez ici » en Cormorant ; sobre, pour aller avec les cinq thèmes
+      cx.fillStyle=c.ink; cx.fillRect(0,0,W,H);
+      const g=cx.createLinearGradient(0,0,W,H); [[0,.16],[.3,0],[.46,.26],[.6,0],[1,.1]].forEach(([p,a])=>g.addColorStop(p,`rgba(255,255,255,${a})`)); cx.fillStyle=g; cx.fillRect(0,0,W,H);
+      for(let i=0;i<W*H/9;i++){ cx.fillStyle=Math.random()<.5?'rgba(255,255,255,.07)':'rgba(0,0,0,.07)'; cx.fillRect(Math.random()*W,Math.random()*H,1,1); }
+      cx.font='15px Georgia,serif'; cx.textAlign='center'; cx.textBaseline='middle'; cx.fillStyle='rgba(255,255,255,.22)';
+      for(let y=22;y<H;y+=44) for(let x=((y-22)/44%2?44:22);x<W;x+=44) cx.fillText('✦',x,y);
+      cx.strokeStyle='rgba(255,255,255,.5)'; cx.lineWidth=1; cx.setLineDash([3,5]); cx.strokeRect(9.5,9.5,W-19,H-19); cx.setLineDash([]);
+      cx.font='600 26px "Cormorant Garamond",Georgia,serif'; const lb='Grattez ici', tw=cx.measureText(lb).width+52;
+      cx.fillStyle='#fbf7f0'; cx.beginPath(); cx.roundRect?cx.roundRect(W/2-tw/2,H/2-28,tw,56,28):cx.rect(W/2-tw/2,H/2-28,tw,56); cx.fill();
+      cx.fillStyle='#2b2621'; cx.fillText(lb,W/2,H/2+1);
       cx.globalCompositeOperation='destination-out';
     })();
     // les copeaux de latex : ils partent du doigt, tombent et s'effacent
@@ -135,7 +132,7 @@
       if(bits.length) raf=requestAnimationFrame(loop); }
     function flake(e,n){ if(reduce) return; const r=st.getBoundingClientRect(), k=st.clientWidth/r.width, x=(e.clientX-r.left)*k, y=(e.clientY-r.top)*k;
       for(let i=0;i<n;i++) bits.push({x:x+(Math.random()-.5)*20,y:y+(Math.random()-.5)*14,vx:(Math.random()-.5)*3.4,vy:-Math.random()*2.2,r:Math.random()*6,vr:(Math.random()-.5)*.5,
-        w:1.5+Math.random()*3.5,h:1+Math.random()*2.2,c:['#8f939a','#b7bbc2','#d3d6db','#6f737a'][Math.floor(Math.random()*4)],t:performance.now(),life:650+Math.random()*600});
+        w:2+Math.random()*5,h:1.5+Math.random()*3,c:[c.ink,c.ink,c.pal,'#e9dfcc'][Math.floor(Math.random()*4)],t:performance.now(),life:650+Math.random()*600});
       if(bits.length>260) bits.splice(0,bits.length-260); if(!raf) raf=requestAnimationFrame(loop); }
     // le bruit du grattage : un souffle filtré dont le volume suit la vitesse du doigt
     function rasp(v){ const A=ac(); if(!A) return; try{ if(!src){ src=A.createBufferSource(); src.buffer=noise(); src.loop=true; const f=A.createBiquadFilter(); f.type='bandpass'; f.frequency.value=3400; f.Q.value=.6;
@@ -146,8 +143,8 @@
     // un coup de pièce : des pastilles de taille inégale le long du trait, pour un bord déchiqueté
     function rub(a,b){ const d=Math.hypot(b.x-a.x,b.y-a.y), n=Math.max(1,Math.ceil(d/4));
       for(let i=0;i<=n;i++){ const x=a.x+(b.x-a.x)*i/n, y=a.y+(b.y-a.y)*i/n;
-        cx.beginPath(); cx.arc(x,y,13,0,7); cx.fill();
-        for(let j=0;j<3;j++){ const an=Math.random()*7, rr=11+Math.random()*7; cx.beginPath(); cx.arc(x+Math.cos(an)*rr,y+Math.sin(an)*rr,2+Math.random()*4.5,0,7); cx.fill(); } }
+        cx.beginPath(); cx.arc(x,y,21,0,7); cx.fill();
+        for(let j=0;j<3;j++){ const an=Math.random()*7, rr=19+Math.random()*8; cx.beginPath(); cx.arc(x+Math.cos(an)*rr,y+Math.sin(an)*rr,2+Math.random()*5,0,7); cx.fill(); } }
       return d; }
     function cleared(){ const d=cx.getImageData(0,0,cv.width,cv.height).data; let n=0, z=0; for(let i=3;i<d.length;i+=96){ n++; if(d[i]<40) z++; } return z/n; }
     function finish(){
@@ -159,7 +156,7 @@
     cv.addEventListener('pointerdown',e=>{ if(!cx||over) return; down=true; tk.classList.add('touched'); if(!dust.width) sizeDust(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} last=at(e); lastT=performance.now(); rub(last,last); flake(e,5); rasp(.6); buzz(6); });
     cv.addEventListener('pointermove',e=>{ if(!down||over) return; const p=at(e), d=rub(last,p), now=performance.now(), v=d/Math.max(8,now-lastT); last=p; lastT=now;
       if(d>2){ flake(e,Math.min(6,1+Math.round(d/7))); rasp(v); }
-      if(now-lastCheck>140){ lastCheck=now; if(d>6) buzz(4); if(cleared()>.52) finish(); } });
+      if(now-lastCheck>140){ lastCheck=now; if(d>6) buzz(4); if(cleared()>.5) finish(); } });
     const up=()=>{ if(!down) return; down=false; hush(); if(!over&&cleared()>.52) finish(); };
     cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
     cv.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
@@ -171,21 +168,21 @@
      flous (au départ ils montrent « ? » : une date au hasard se lisait comme la vraie), puis s'arrêtent l'un après l'autre, sec, avec un rebond et un « clac » ; jour, mois, année ; les ampoules
      s'affolent et les pièces tombent. Les rouleaux sont de vrais rubans sans fin, dans l'ordre (1, 2, 3… ; janvier, février…). */
   GAMES.jackpot=(st,c,done)=>{
-    const P=c.P, IH=58;
+    const P=c.P, IH=80;
     const LST=[Array.from({length:31},(_,i)=>i===0?'1er':String(i+1)),MO,Array.from({length:6},(_,i)=>String(P.y-2+i))], TGT=[P.d-1,P.m,2];
     const strip=l=>[...l,...l,...l].map(v=>`<div>${esc(v)}</div>`).join('');
     st.innerHTML=`<div class="std-game std-jp">
       <div class="jp-cab">
-        <div class="jp-sign"><i class="jp-bulbs" aria-hidden="true">${'<b></b>'.repeat(11)}</i><p class="jp-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
+        <div class="jp-sign"><i class="jp-bulbs" aria-hidden="true">${'<b></b>'.repeat(9)}</i><p class="jp-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
         <div class="jp-body"><p class="jp-call">Tirez le levier</p>
           <div class="jp-win" role="button" tabindex="0" aria-label="Lancer les rouleaux">${['d','m','y'].map((k,i)=>`<div class="jp-reel ${k}"><div class="jp-strip">${strip(LST[i])}</div><div class="jp-q">?</div></div>`).join('')}<i class="jp-line" aria-hidden="true"></i></div>
           <p class="jp-res">${esc(cap(WD[P.wd]))}${c.city?' · '+esc(c.city):''}</p>
           <div class="jp-tray" aria-hidden="true"></div></div>
       </div>
-      <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><i class="jp-base"></i><i class="jp-arm"><b></b></i></div>
+      <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><i class="jp-base"></i><i class="jp-arm"><b></b></i><p class="jp-pull">Tirez</p></div>
     </div><div class="std-sr" aria-live="polite"></div>`;
     const jp=st.firstChild, win=jp.querySelector('.jp-win'), lever=jp.querySelector('.jp-lever'), arm=jp.querySelector('.jp-arm');
-    fitGame(st,jp,328,470);
+    fitGame(st,jp,336,510);
     let alive=true, spun=false; st._stop=()=>{ alive=false; };
     // chaque rouleau : sa position en cases (flottante), posée sur le ruban du milieu
     const R=[...jp.querySelectorAll('.jp-strip')].map((el,i)=>{ const n=LST[i].length; let p=(TGT[i]+3+Math.floor(Math.random()*(n-5)))%n; return {el,n,p,i}; });
@@ -215,11 +212,12 @@
     // le levier : on le tire vers le bas, il résiste, et lâché assez bas il lance les rouleaux en revenant d'un coup
     let y0=null, pull=0, notch=0;
     // la tige se raccourcit puis s'inverse (elle bascule vers nous) ; la boule garde sa taille
-    const setArm=k=>{ pull=k; let s=1-1.62*k; if(Math.abs(s)<.14) s=s<0?-.14:.14; arm.style.setProperty('--s',s.toFixed(3)); arm.style.setProperty('--ks',(1/Math.abs(s)).toFixed(3)); };
-    lever.addEventListener('pointerdown',e=>{ if(spun) return; y0=e.clientY; arm.classList.remove('back'); try{ lever.setPointerCapture(e.pointerId); }catch(x){} ac(); });
-    lever.addEventListener('pointermove',e=>{ if(y0==null||spun) return; const r=jp.getBoundingClientRect().width/jp.offsetWidth||1, k=Math.max(0,Math.min(1,(e.clientY-y0)/(96*r))); setArm(k);
+    const setArm=k=>{ pull=k; let s=1-1.7*k; if(Math.abs(s)<.14) s=s<0?-.14:.14; arm.style.setProperty('--s',s.toFixed(3)); arm.style.setProperty('--ks',(1/Math.abs(s)).toFixed(3)); };
+    lever.addEventListener('pointerdown',e=>{ if(spun) return; y0=e.clientY; jp.classList.add('held'); arm.classList.remove('back'); try{ lever.setPointerCapture(e.pointerId); }catch(x){} ac(); });
+    lever.addEventListener('pointermove',e=>{ if(y0==null||spun) return; const r=jp.getBoundingClientRect().width/jp.offsetWidth||1, k=Math.max(0,Math.min(1,(e.clientY-y0)/(150*r))); setArm(k);
       const n=Math.floor(k*6); if(n!==notch){ notch=n; tone(700,.02,'square',.03); buzz(5); } });
-    const release=()=>{ if(y0==null) return; y0=null; const k=pull; arm.classList.add('back'); setArm(0); if(k>.55) go(); else if(k<.08) auto(); };
+    const release=()=>{ if(y0==null) return; y0=null; const k=pull; arm.classList.add('back'); setArm(0); if(k>.5) go(); };
+    lever.addEventListener('click',()=>{ if(!spun&&y0==null&&pull===0) auto(); });
     lever.addEventListener('pointerup',release); lever.addEventListener('pointercancel',release);
     lever.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
     // un simple toucher (levier ou vitre) : le levier descend et remonte tout seul

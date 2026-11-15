@@ -1012,6 +1012,17 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     départ : une date au hasard se lisait comme la vraie. **Son et vibration** : frottement, cliquetis, « clac » d'arrêt,
     carillon (WebAudio, créé au premier toucher seulement), `navigator.vibrate` sur Android ; pluie de pièces dorées à la fin
     (`gold()`). Texte foncé sur crème ou crème sur `--sink`, jamais sur le fond peint.
+    **La version réaliste a été refusée** (même jour : « trop réaliste, pas assez artistique », puis : « le champ gratter ici
+    était trop petit, le levier trop petit, ça faisait pas vraiment machine à jackpot »). Ce qui compte, c'est **la mécanique,
+    en grand** : la zone à gratter fait les deux tiers du ticket (236 px de haut, date à 66 px dessous, étiquette « Grattez
+    ici » au centre) ; la machine a sa silhouette (fronton arrondi aux ampoules, grande vitre de trois rouleaux de 120 px, bac,
+    pieds) et un levier large comme le pouce (grosse boule, mot « Tirez », course de 150 px ; un toucher suffit aussi).
+    **Pas de style à part pour les jeux** : cinq styles proposés sur une planche (dorure, aquarelle, art déco, affiche rétro,
+    trait fin), l'affiche rétro a plu un instant puis : « je vais pas tout refaire en style rétro, on reste sur nos cinq
+    thèmes ». Les jeux sont dans le monde de la feuille : papier crème, encre du couple, police du thème, Cormorant, ombres
+    douces. Quand l'utilisateur demande « des propositions », vérifier s'il parle du style ou de la mécanique avant de dessiner.
+    **Validation avant la prod** pour ces jeux (« avant de passer en prod, propose-moi ») : pousser la branche de travail
+    seulement (aperçu Vercel), `main` après son accord.
     **« Je serai là » est retiré** (« il ne fait rien pour l'instant ») : la feuille du save-the-date n'a plus que « Agenda »
     (carte.js, pastille seule à sa largeur), plus de tableau de bord pour un save-the-date (`_publish.js`, `commande.js`),
     et le site, les questions et les CGV n'en parlent plus.
