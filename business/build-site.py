@@ -218,8 +218,8 @@ def site_og(T):
     """Aperçu de la vitrine : 4 thèmes côte à côte + la signature."""
     W, H = 1200, 630
     im = Image.new('RGB', (W, H), (255, 255, 255))
-    for i, k in enumerate(['conte', 'artdeco', 'nuits', 'dolcevita', 'aquarelle']):
-        t = Image.open(os.path.join(SITE, 'img', 'hd', f'{k}-2.webp')).convert('RGB')
+    for i, k in enumerate(['alhambra', 'dolcevita', 'nuits', 'doucefrance', 'oldmoney']):
+        t = Image.open(os.path.join(SITE, 'img', 'carte', f'{k}-fond.webp')).convert('RGB')
         w = W // 5
         t = t.resize((int(t.width * H / t.height), H), Image.LANCZOS)
         x0 = (t.width - w) // 2
@@ -231,7 +231,7 @@ def site_og(T):
     d = ImageDraw.Draw(im)
     f1 = ImageFont.truetype(os.path.join(FONTS, 'Inter_wght_500.ttf'), 30)
     f2 = ImageFont.truetype(os.path.join(FONTS, 'Cormorant_Garamond_ital_wght_1_400.ttf'), 92)
-    for txt, f, y, sp in [('S A V E   T H E   O U I', f1, 222, 0), ("Votre mariage, peint et animé.", f2, 272, 0)]:
+    for txt, f, y, sp in [('S A V E   T H E   O U I', f1, 222, 0), ("Le save the date animé.", f2, 272, 0)]:
         w = d.textlength(txt, font=f)
         d.text(((W - w) / 2, y), txt, font=f, fill=(255, 255, 255))
     im.save(os.path.join(SITE, 'og-sceau.jpg'), 'JPEG', quality=84, optimize=True)
@@ -290,7 +290,7 @@ def jsonld(u, html):
     g = []
     if u == '/':
         g = [org, {'@type': 'WebSite', 'name': 'Save The Oui', 'url': SITE_URL + '/', 'inLanguage': 'fr-FR'},
-             product('Faire-part de mariage digital', desc, fp)]
+             product('Save the date animé', desc, [offer(*OFFERS[0])])]
     elif u == '/formules/':
         g = [product('Faire-part de mariage digital', desc, fp)]
     elif u == '/save-the-date/':
@@ -317,7 +317,11 @@ def main():
     for keep, src in kept:
         shutil.move(keep, src)
     # la vitrine est en quatre pages (accueil, modèles, formules, créer) qui partagent vitrine.css et vitrine.js
-    PAGES = ['/', '/modeles/', '/formules/', '/creer/', '/questions/', '/contact/', '/save-the-date/']
+    # 15 novembre 2026 : le site ne vend que le save-the-date. Les pages du faire-part (/modeles/, /formules/, /creer/)
+    # restent construites (liens « Modifier » des clients, retour prévu) mais hors navigation, hors moteurs et hors sitemap ;
+    # /modeles/ et /formules/ renvoient à l'accueil (vercel.json).
+    PAGES = ['/', '/save-the-date/', '/questions/', '/contact/']
+    FILL = PAGES + ['/modeles/', '/formules/', '/creer/']
     for u in PAGES:
         fp = os.path.join(SITE, u.strip('/'), 'index.html')
         l = open(fp, encoding='utf-8').read()
@@ -441,7 +445,7 @@ def main():
                 demos[-1]['anim'] = (inv.get('std') or {}).get('anim')
     # modèles dont la peinture en chaîne existe (img/chaine/<thème>/meta.json, tools/chaine.py)
     chains = sorted(d for d in os.listdir(os.path.join(SITE, 'img', 'chaine')) if os.path.exists(os.path.join(SITE, 'img', 'chaine', d, 'meta.json')))
-    for u in PAGES:
+    for u in FILL:
         p = os.path.join(SITE, u.strip('/'), 'index.html')
         l = open(p, encoding='utf-8').read()
         assert '[]/*DEMOS*/' in l and '{}/*CALQUES*/' in l, p

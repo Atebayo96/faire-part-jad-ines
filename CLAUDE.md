@@ -984,6 +984,20 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     date » en tête de `/formules/` ; lien « Save the date » dans la navigation sur ordinateur (masqué sous 720 px : la barre
     est pleine). Pas encore fait : déduire les 19 € du faire-part commandé ensuite (ne pas le promettre avant).
 
+53. **Le site ne vend que le save-the-date** (15 novembre 2026 : « on se focalise uniquement sur un save the date, on fera
+    les faire-part après »). **Accueil** (`index.html`, script dans la page) : « Le save the date animé qu'on a envie
+    d'ouvrir », un téléphone qui joue **le vrai save-the-date** (`SceauSTD`, pastilles pour essayer chaque jeu, chaque jeu
+    montré avec un thème différent), « Sept façons d'annoncer la date » (`#animations` : Essayer le joue dans le téléphone
+    du haut, Choisir mène à `/save-the-date/?anim=…`), « Cinq styles » (`#styles` : la vraie feuille par thème, vers
+    `?theme=…`), comment ça marche, un seul prix 19 €. **Navigation** partout : Accueil, Animations, Styles, Questions,
+    bouton « Créer votre save the date » ; plus de Modèles ni de Formules. `/questions/` et `/contact/` ne parlent que du
+    save-the-date ; le faire-part est dit « il arrive ensuite », sans date ni prix. `/modeles/` et `/formules/` renvoient à
+    l'accueil (redirections temporaires dans vercel.json) ; `/creer/` reste en ligne sans lien (liens « Modifier » des
+    clients), hors moteurs et hors sitemap (`PAGES` = pages référencées, `FILL` = pages qui reçoivent les démos, dans
+    build-site.py). L'icône de chaque jeu est dans `ANIMS` (`ico`, std.js) ; le téléphone (`.sd-phone`) est dans vitrine.css.
+    Rien n'est supprimé du faire-part (carte, page unique, animé) : pour le remettre, rétablir `PAGES`, la navigation et
+    retirer les deux redirections.
+
 ## Méthode
 
 12. Avant de livrer un écran : capture au format téléphone (390 × 844), lue en grand, et vérification des trois

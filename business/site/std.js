@@ -11,14 +11,14 @@
    SceauSTD.html(inv,{live}) : le HTML ; SceauSTD.start(el,inv,{onDone}) : (re)lance le jeu ; SceauSTD.ANIMS : la liste. */
 (function(){
   const ANIMS=[
-    {k:'gratter',name:'Le ticket à gratter',tx:'On gratte, la date apparaît.'},
-    {k:'jackpot',name:'Le jackpot',tx:'On tire le levier, les rouleaux tombent sur votre date.'},
-    {k:'billet',name:'La carte d’embarquement',tx:'On déchire le talon, on fait décoller l’avion : la date s’affiche comme au tableau des départs.'},
-    {k:'cadenas',off:true,name:'Le cadenas à code',tx:'On tourne la molette d’un coffre : elle chauffe quand on approche du jour, puis du mois.'},
-    {k:'sms',name:'Le message',tx:'Une conversation s’écrit toute seule, jusqu’à « On se marie ! ».'},
-    {k:'fuit',name:'Le bouton qui fuit',tx:'Le bouton « Oui » s’échappe, et à chaque fois une info de plus apparaît.'},
-    {k:'calendrier',name:'Le calendrier',tx:'La date d’aujourd’hui se met à rouler et s’arrête sur le grand jour.'},
-    {k:'coeurs',name:'La pluie de cœurs',tx:'Un bocal se remplit de cœurs, et seule votre date reste en blanc.'}
+    {k:'gratter',ico:'🎟️',name:'Le ticket à gratter',tx:'On gratte, la date apparaît.'},
+    {k:'jackpot',ico:'🎰',name:'Le jackpot',tx:'On tire le levier, les rouleaux tombent sur votre date.'},
+    {k:'billet',ico:'✈️',name:'La carte d’embarquement',tx:'On déchire le talon, on fait décoller l’avion : la date s’affiche comme au tableau des départs.'},
+    {k:'cadenas',ico:'🔒',off:true,name:'Le cadenas à code',tx:'On tourne la molette d’un coffre : elle chauffe quand on approche du jour, puis du mois.'},
+    {k:'sms',ico:'💬',name:'Le message',tx:'Une conversation s’écrit toute seule, jusqu’à « On se marie ! ».'},
+    {k:'fuit',ico:'🏃',name:'Le bouton qui fuit',tx:'Le bouton « Oui » s’échappe, et à chaque fois une info de plus apparaît.'},
+    {k:'calendrier',ico:'📅',name:'Le calendrier',tx:'La date d’aujourd’hui se met à rouler et s’arrête sur le grand jour.'},
+    {k:'coeurs',ico:'❤️',name:'La pluie de cœurs',tx:'Un bocal se remplit de cœurs, et seule votre date reste en blanc.'}
   ];
   const KEYS=ANIMS.map(a=>a.k);
   // le cadenas est mis de côté (2 novembre 2026 : « pas ouf ») : il marche encore pour une fiche qui l'a, mais ne se propose plus
