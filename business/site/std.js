@@ -87,13 +87,35 @@
       return `<i style="--c:${cols[Math.floor(Math.random()*cols.length)]};--x:${(Math.cos(a)*r).toFixed(0)}px;--y:${(Math.sin(a)*r*.7+170+Math.random()*120).toFixed(0)}px;--r:${(Math.random()*900-450).toFixed(0)}deg;--dl:${(Math.random()*.25).toFixed(2)}s;--w:${(5+Math.random()*5).toFixed(1)}px"></i>`; }).join('');
     root.appendChild(b); setTimeout(()=>b.remove(),2400); }
 
+  /* les objets peints (15 novembre 2026 : « ça fait cheap, ça se voit que c'est des objets déposés ; un vrai truc dessiné, et
+     derrière des vrais chiffres qui tournent ») : par thème, une machine et un ticket peints (tools/jeux-art.py,
+     img/jeux/<thème>-machine|levier|ticket.webp), la vitre et la zone à gratter sont des trous : nos rouleaux et notre film
+     se posent DERRIÈRE la peinture. win = le trou [x, y, l, h] en fractions de l'image (img/jeux/meta.json) ; les autres
+     cases (fronton, bandeaux) sont les panneaux crème laissés vides par la peinture, mesurés sur l'image.
+     Un thème sans peinture garde les objets dessinés en CSS. */
+  const JV=1, JEUX={
+    dolcevita:{m:{r:'900/1727',win:[.2126,.4068,.5756,.1441]},t:{r:'900/1239',win:[.1636,.3485,.6727,.4678]}}
+  };
+  const jeu=inv=>JEUX[inv.theme]||JEUX[String(inv.theme).replace(/jour$/,'')]||null;
+  const pos=(b,m)=>`left:${((b[0]-m)*100).toFixed(2)}%;top:${((b[1]-m)*100).toFixed(2)}%;width:${((b[2]+2*m)*100).toFixed(2)}%;height:${((b[3]+2*m)*100).toFixed(2)}%`;
+  // les prénoms tiennent sur une ligne dans leur panneau : on réduit la police s'il le faut (jamais sous 16 px)
+  const fitNm=el=>{ if(!el) return; el.style.whiteSpace='nowrap'; let f=parseFloat(getComputedStyle(el).fontSize); while(el.scrollWidth>el.clientWidth+1&&f>16){ f-=1; el.style.fontSize=f+'px'; } };
+
   /* 1. le ticket à gratter : un vrai ticket (souche de couleur, perforation, zone de latex argenté, numéro et code-barres).
      Le latex s'écaille sous le doigt avec un bord irrégulier, des copeaux tombent, le frottement s'entend ; une pièce montre
      le geste tant qu'on n'a pas touché. À moitié gratté, le reste se détache et la date bat. */
   GAMES.gratter=(st,c,done)=>{
     const P=c.P, no=String(P.d).padStart(2,'0')+String(P.m+1).padStart(2,'0')+String(P.y).slice(2);
-    const dm=P.dd+NB+MO[P.m];
-    st.innerHTML=`<div class="std-game std-tkw ct-p-coton"><div class="std-tk">
+    const dm=P.dd+NB+MO[P.m], J=jeu(c.inv), key=c.inv.theme.replace(/jour$/,'');
+    const zoneH=`<div class="tk-under"><small>${esc(cap(WD[P.wd]))}</small><b${dm.length>10?' class="lg"':''}>${esc(dm)}</b><span>${P.y}</span></div>
+          <canvas class="tk-foil" tabindex="0" role="button" aria-label="Gratter pour découvrir la date"></canvas><i class="tk-coin" aria-hidden="true"></i>`;
+    if(J) st.innerHTML=`<div class="std-game std-tkw"><div class="std-tk art" style="aspect-ratio:${J.t.r}">
+      <div class="tk-zone" style="${pos(J.t.win,.008)}">${zoneH}</div>
+      <img class="tk-img" src="/img/jeux/${key}-ticket.webp?v=${JV}" alt="">
+      <div class="tk-top"><p class="tk-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
+      <div class="tk-strip"><p class="tk-call">Grattez pour découvrir la date</p><p class="tk-city">${esc(c.city||'Notez bien la date')}</p></div>
+    </div></div><canvas class="tk-dust" aria-hidden="true"></canvas><div class="std-sr" aria-live="polite"></div>`;
+    else st.innerHTML=`<div class="std-game std-tkw ct-p-coton"><div class="std-tk">
       <div class="tk-top"><p class="tk-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
       <div class="tk-perf" aria-hidden="true"></div>
       <div class="tk-body"><p class="tk-call">Grattez pour découvrir la date</p>
@@ -102,7 +124,7 @@
       <div class="tk-foot"><p class="tk-city">${esc(c.city||'Notez bien la date')}</p></div>
     </div>${c.art?`<img class="std-art" src="${c.art}" alt="">`:''}</div><canvas class="tk-dust" aria-hidden="true"></canvas><div class="std-sr" aria-live="polite"></div>`;
     const wrap=st.firstElementChild, tk=wrap.firstElementChild, cv=st.querySelector('.tk-foil'), zone=cv.parentNode, dust=st.querySelector('.tk-dust');
-    fitGame(st,wrap,336,500);
+    fitGame(st,wrap,336,J?470:500); if(J) st.parentNode.classList.add('std-dim'); fitNm(st.querySelector('.std-nm')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitNm(st.querySelector('.std-nm')));
     let cx, W=0, H=0, down=false, last=null, over=false, lastCheck=0, tries=0, alive=true, src=null, sg=null, lastT=0;
     st._stop=()=>{ alive=false; hush(true); };
     (function foil(){
@@ -149,7 +171,7 @@
     function cleared(){ const d=cx.getImageData(0,0,cv.width,cv.height).data; let n=0, z=0; for(let i=3;i<d.length;i+=96){ n++; if(d[i]<40) z++; } return z/n; }
     function finish(){
       if(over) return; over=true; down=false; hush(true); cv.classList.add('gone'); tk.classList.add('won');
-      st.querySelector('.tk-call').textContent='Notez bien la date !'; st.querySelector('.std-sr').textContent=c.P.full;
+      if(!J) st.querySelector('.tk-call').textContent='Notez bien la date !'; st.querySelector('.std-sr').textContent=c.P.full;
       buzz([25,50,25,50,70]); chime(); burst(wrap,c.pal); setTimeout(()=>{ if(alive) gold(wrap,c.pal); },180);
       setTimeout(()=>{ cv.remove(); },700); setTimeout(()=>{ if(alive) done(); },reduce?300:2300);
     }
@@ -168,10 +190,21 @@
      flous (au départ ils montrent « ? » : une date au hasard se lisait comme la vraie), puis s'arrêtent l'un après l'autre, sec, avec un rebond et un « clac » ; jour, mois, année ; les ampoules
      s'affolent et les pièces tombent. Les rouleaux sont de vrais rubans sans fin, dans l'ordre (1, 2, 3… ; janvier, février…). */
   GAMES.jackpot=(st,c,done)=>{
-    const P=c.P, IH=80;
+    const P=c.P, J=jeu(c.inv), key=c.inv.theme.replace(/jour$/,''), MW=290, IH=J?Math.round(MW*1727/900*(J.m.win[3]+.012)/1.5):80;
     const LST=[Array.from({length:31},(_,i)=>i===0?'1er':String(i+1)),MO,Array.from({length:6},(_,i)=>String(P.y-2+i))], TGT=[P.d-1,P.m,2];
     const strip=l=>[...l,...l,...l].map(v=>`<div>${esc(v)}</div>`).join('');
-    st.innerHTML=`<div class="std-game std-jp ct-p-coton">
+    const reels=`${['d','m','y'].map((k,i)=>`<div class="jp-reel ${k}"><div class="jp-strip">${strip(LST[i])}</div><div class="jp-q">?</div></div>`).join('')}<i class="jp-line" aria-hidden="true"></i>`;
+    if(J) st.innerHTML=`<div class="std-game std-jp art" style="--ih:${IH}px">
+      <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><div class="lv-clip"><i class="jp-arm"><img src="/img/jeux/${key}-levier.webp?v=${JV}" alt=""></i></div><img class="lv-base" src="/img/jeux/${key}-levier.webp?v=${JV}" alt=""><p class="jp-pull">Tirez</p></div>
+      <div class="jp-cab" style="aspect-ratio:${J.m.r}">
+        <div class="jp-win" role="button" tabindex="0" aria-label="Lancer les rouleaux" style="${pos(J.m.win,.006)}">${reels}</div>
+        <img class="jp-img" src="/img/jeux/${key}-machine.webp?v=${JV}" alt="">
+        <div class="jp-sign"><p class="jp-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
+        <p class="jp-call">Tirez le levier</p>
+        <p class="jp-res">${esc(cap(WD[P.wd]))}${c.city?' · '+esc(c.city):''}</p>
+      </div>
+    </div><div class="std-sr" aria-live="polite"></div>`;
+    else st.innerHTML=`<div class="std-game std-jp ct-p-coton">
       <div class="jp-cab">
         <div class="jp-sign"><i class="jp-bulbs" aria-hidden="true">${'<b></b>'.repeat(9)}</i><p class="jp-ey">Save the date</p><h2 class="std-nm">${esc(c.names)}</h2></div>
         <div class="jp-body"><p class="jp-call">Tirez le levier</p>
@@ -181,8 +214,8 @@
       </div>
       <div class="jp-lever" role="button" tabindex="-1" aria-label="Tirer le levier"><i class="jp-base"></i><i class="jp-arm"><b></b></i><p class="jp-pull">Tirez</p></div>${c.art?`<img class="std-art" src="${c.art}" alt="">`:''}
     </div><div class="std-sr" aria-live="polite"></div>`;
-    const jp=st.firstChild, win=jp.querySelector('.jp-win'), lever=jp.querySelector('.jp-lever'), arm=jp.querySelector('.jp-arm');
-    fitGame(st,jp,336,510);
+    const jp=st.firstElementChild, win=jp.querySelector('.jp-win'), lever=jp.querySelector('.jp-lever'), arm=jp.querySelector('.jp-arm');
+    fitGame(st,jp,J?368:336,J?572:510); if(J) st.parentNode.classList.add('std-dim'); fitNm(jp.querySelector('.std-nm')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitNm(jp.querySelector('.std-nm')));
     let alive=true, spun=false; st._stop=()=>{ alive=false; };
     // chaque rouleau : sa position en cases (flottante), posée sur le ruban du milieu
     const R=[...jp.querySelectorAll('.jp-strip')].map((el,i)=>{ const n=LST[i].length; let p=(TGT[i]+3+Math.floor(Math.random()*(n-5)))%n; return {el,n,p,i}; });
@@ -206,13 +239,13 @@
         if(all){ R.forEach(r=>{ r.p=TGT[r.i]; put(r,r.p,0); }); return won(); }
         requestAnimationFrame(frame); })(t0);
     }
-    function won(){ if(!alive) return; jp.classList.remove('spin'); jp.classList.add('won'); jp.querySelector('.jp-call').textContent='Jackpot ! Notez bien la date';
+    function won(){ if(!alive) return; jp.classList.remove('spin'); jp.classList.add('won'); jp.querySelector('.jp-call').textContent=J?'Jackpot !':'Jackpot ! Notez bien la date';
       st.querySelector('.std-sr').textContent=c.P.full; chime(); buzz([30,60,30,60,90]); gold(jp,c.pal); setTimeout(()=>{ if(alive) burst(jp,c.pal); },250);
       setTimeout(()=>{ if(alive) done(); },reduce?300:2600); }
     // le levier : on le tire vers le bas, il résiste, et lâché assez bas il lance les rouleaux en revenant d'un coup
     let y0=null, pull=0, notch=0;
     // la tige se raccourcit puis s'inverse (elle bascule vers nous) ; la boule garde sa taille
-    const setArm=k=>{ pull=k; let s=1-1.7*k; if(Math.abs(s)<.14) s=s<0?-.14:.14; arm.style.setProperty('--s',s.toFixed(3)); arm.style.setProperty('--ks',(1/Math.abs(s)).toFixed(3)); };
+    const setArm=k=>{ pull=k; let s=1-1.7*k; if(Math.abs(s)<.14) s=s<0?-.14:.14; arm.style.setProperty('--s',s.toFixed(3)); arm.style.setProperty('--ks',(1/Math.abs(s)).toFixed(3)); arm.style.setProperty('--k',k.toFixed(3)); };
     lever.addEventListener('pointerdown',e=>{ if(spun) return; y0=e.clientY; jp.classList.add('held'); arm.classList.remove('back'); try{ lever.setPointerCapture(e.pointerId); }catch(x){} ac(); });
     lever.addEventListener('pointermove',e=>{ if(y0==null||spun) return; const r=jp.getBoundingClientRect().width/jp.offsetWidth||1, k=Math.max(0,Math.min(1,(e.clientY-y0)/(150*r))); setArm(k);
       const n=Math.floor(k*6); if(n!==notch){ notch=n; tone(700,.02,'square',.03); buzz(5); } });
@@ -507,7 +540,7 @@
     o=o||{}; const S=el.matches&&el.matches('.std')?el:el.querySelector('.std'); if(!S) return;
     const st=S.querySelector('.std-stage'), play=S.querySelector('.std-play'), k=S.dataset.anim;
     if(st._stop) st._stop(); st._stop=null; clearTimeout(S._t);
-    S.classList.remove('std-done','std-gone'); play.hidden=false;
+    S.classList.remove('std-done','std-gone'); play.hidden=false; play.classList.remove('std-dim');
     let fin=false;
     const done=()=>{ if(fin) return; fin=true; if(st._stop) st._stop(); S.classList.add('std-done');
       S._t=setTimeout(()=>{ S.classList.add('std-gone'); play.hidden=true; if(o.onDone) o.onDone(); },reduce?0:750); };

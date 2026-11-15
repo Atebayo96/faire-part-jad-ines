@@ -1029,6 +1029,15 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     pointe sans doute sur un autre projet) ; Higgsfield est à 0 crédit. En attendant, finition sans génération : papier coton
     de la feuille (`--tex`), double filet d'or, bords dentelés du ticket, creux ombrés, or en dégradé, et l'illustration peinte
     du thème au pied de l'objet (`SceauCarte.artOf`, `.std-art`), jamais sur un texte.
+    **Objets peints, Dolce Vita fait** (même jour, après recharge de 20 € sur Gemini, « on va le garder en tête » : budget à
+    suivre ; 2 générations, ~0,30 €, une seule passe chacune) : la machine en maïolique avec sa vitre trouée et son levier
+    à part, le ticket dentelé avec sa zone trouée (`img/jeux/dolcevita-*.webp`, `meta.json`). Dans std.js, `JEUX[thème]` (trou
+    `win` et format) fait passer le jeu en mode peint (`.std-tk.art`, `.std-jp.art`) : la zone à gratter et les rouleaux sont
+    **derrière** la peinture, les textes sur ses panneaux crème (fronton, bandeaux, mesurés sur l'image), le levier peint
+    descend derrière son socle et remonte. Le fond du thème recule derrière l'objet (`.std-dim` : flou et assombri), sinon la
+    machine en maïolique se perdait sur le mur en maïolique. Les prénoms se réduisent pour tenir (`fitNm`). La finition en CSS
+    (papier, filets d'or, illustration au pied) **n'a pas plu** : elle ne reste que pour les thèmes sans peinture. Restent à
+    peindre, avec accord : les 4 autres thèmes (8 images, ~1,20 €).
     **Validation avant la prod** pour ces jeux (« avant de passer en prod, propose-moi ») : pousser la branche de travail
     seulement (aperçu Vercel), `main` après son accord.
     **« Je serai là » est retiré** (« il ne fait rien pour l'instant ») : la feuille du save-the-date n'a plus que « Agenda »

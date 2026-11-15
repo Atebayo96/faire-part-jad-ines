@@ -59,6 +59,10 @@ def key(im):
     al = al * ndimage.binary_dilation(keep, iterations=2)
     col = a.copy(); col[..., 1] = np.where(al < .98, np.minimum(g, np.maximum(r, b) * 1.1 + 12), g)
     mag = (r > 150) & (b > 150) & (g < 120) & (np.abs(r - b) < 90)
+    # la vitre (ou la zone à gratter) devient un trou : nos rouleaux et notre film se posent DERRIÈRE la peinture, dont le
+    # cadre doré recouvre leur bord ; le liseré magenta du bord est retiré avec (2 px)
+    hole = ndimage.binary_dilation(ndimage.binary_opening(mag, iterations=3), iterations=3)
+    al = np.where(hole, 0, al)
     return np.dstack([col, al * 255]).astype(np.uint8), mag, lab * keep
 
 def box(m):
@@ -68,7 +72,7 @@ def cut(raw, k):
     os.makedirs(OUT, exist_ok=True)
     mp = os.path.join(OUT, 'meta.json'); meta = json.load(open(mp)) if os.path.exists(mp) else {}
     rgba, mag, lab = key(Image.open(os.path.join(raw, k + '.png')))
-    al = rgba[..., 3] > 127
+    al = (rgba[..., 3] > 127) | mag
     # les objets, du plus grand au plus petit : la machine (ou le ticket), puis le levier
     l2, n = ndimage.label(ndimage.binary_closing(al, iterations=3)); sz = ndimage.sum(np.ones(al.shape), l2, range(1, n + 1))
     order = np.argsort(sz)[::-1] + 1
