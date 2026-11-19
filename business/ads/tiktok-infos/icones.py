@@ -22,6 +22,8 @@ I = dict(
  plate='<circle cx="100" cy="100" r="62"/><circle cx="100" cy="100" r="38"/><path d="M22 40v45M12 40v30q0 15 10 15t10-15V40M22 85v75"/><path d="M178 40c-14 10-14 50 0 60v60"/>',
  bubble='<path d="M40 150l-15 30 40-18h65c22 0 40-18 40-40V70c0-22-18-40-40-40H70C48 30 30 48 30 70v45c0 14 4 25 10 35z"/><text x="100" y="112" text-anchor="middle" font-family="Inter Tight" font-weight="600" font-size="46" fill="#1e1a17" stroke="none">Oui !</text>',
  calcheck='<rect x="30" y="45" width="140" height="130" rx="12"/><path d="M30 80h140M65 30v30M135 30v30"/><path d="M70 125l20 20 40-45"/>',
+ rings='<circle cx="75" cy="115" r="48"/><circle cx="125" cy="115" r="48"/><path d="M62 52l13-22 13 22-13 14z"/>',
+ mairie='<path d="M25 80l75-50 75 50z"/><path d="M40 80v80M80 80v80M120 80v80M160 80v80"/><path d="M20 165h160"/><path d="M100 30V10h22l-6 7 6 7h-22"/>',
  clock='<circle cx="100" cy="100" r="70"/><path d="M100 55v45l32 20"/><path d="M100 40v8M160 100h-8M100 160v-8M40 100h8"/>',
 )
 def svg(k): return f'<svg viewBox="0 0 200 200" fill="none" stroke="#1e1a17" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">{I[k]}</svg>'
@@ -49,6 +51,14 @@ POSTS['choses'] = [
  dict(n=4, t="Chose 4 sur 5", h="Le choix du <i>menu</i> dans la réponse.", p="Viande, poisson, végétarien : chacun choisit. Le traiteur a ses chiffres tout de suite.", cap=dict(file="menu", off=170, box=[60,603,1110,808])),
  dict(n=5, t="Chose 5 sur 5", h="Un bouton <i>WhatsApp</i> pour répondre.", p="Pour ceux qui ne remplissent jamais un formulaire. Tes tantes répondent en une minute.", cap=dict(file="whatsapp", off=1455, box=[60,2120,1110,2255])),
  dict(k="À retenir", h="Un faire-part, ce n'est pas que <i>joli.</i>", p="C'est ce qui évite les questions. Enregistre ce post pour quand tu écriras le tien.", ic="bookmark", end=True),
+]
+
+POSTS['unan'] = [
+ dict(k="Organisation du mariage", h="Tu te maries dans <i>moins d'un an ?</i>", p="3 choses à ne pas oublier.", ic="rings", go=True),
+ dict(n=1, t="Chose 1 sur 3", h="Ta <i>liste d'invités.</i>", p="Fais‑la en premier. Le lieu, le traiteur, le budget : tout dépend du nombre de personnes.", ic="family"),
+ dict(n=2, t="Chose 2 sur 3", h="Ton dossier <i>à la mairie.</i>", p="Chaque mairie a ses délais et sa liste de papiers. Appelle la tienne maintenant, pas dans six mois.", ic="mairie"),
+ dict(n=3, t="Chose 3 sur 3", h="Annoncer <i>la date</i> à tes invités.", p="Ils doivent poser des congés et réserver leur trajet. Plus ils le savent tôt, plus ils viennent.", ic="calcheck"),
+ dict(k="À retenir", h="La liste, la mairie, <i>la date.</i>", p="Enregistre ce post pour ne rien oublier. Et toi, tu en es où ?", ic="bookmark", end=True),
 ]
 
 def typo(t):
