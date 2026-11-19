@@ -754,8 +754,8 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     l'audit de la Content Posting API n'est pas passé, TikTok refuse tout post direct, **même privé**, parce que le compte est
     public (`unaudited_client_can_only_post_to_private_accounts`) ; « Publication publique possible » dans `statut` ne dit que
     ce que le compte propose. **On publie donc en brouillon** (`--brouillon`, essai réussi : la vidéo arrive dans la boîte de
-    l'application, l'utilisateur appuie sur Publier). Le domaine est bien vérifié pour cette app. Dans une session, la clé de
-    l'outil passe par le proxy (identifiant enregistré pour `savetheoui.fr`) : `TIKTOK_ADMIN_KEY=proxy-injected`.
+    l'application, l'utilisateur appuie sur Publier). Le domaine est bien vérifié pour cette app. Dans une session, l'outil a
+    besoin de `TIKTOK_ADMIN_KEY` (le mot de passe de `/admin/tiktok/`) dans l'environnement ; jamais dans le dépôt.
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un
