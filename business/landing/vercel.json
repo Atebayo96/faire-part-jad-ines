@@ -6,8 +6,6 @@
     { "path": "/api/tiktok-cron", "schedule": "*/10 * * * *" }
   ],
   "redirects": [
-    { "source": "/modeles", "destination": "/", "permanent": false },
-    { "source": "/formules", "destination": "/", "permanent": false }
   ],
   "rewrites": [
     { "source": "/d/:slug", "destination": "/api/page?s=:slug" },

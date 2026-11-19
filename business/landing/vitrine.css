@@ -660,7 +660,7 @@
   nav .links a[aria-current]{color:var(--ink);font-weight:500;border-bottom:1px solid var(--ink);padding-bottom:2px}
   nav .links{gap:22px}
   @media (max-width:720px){ nav .links{gap:12px} nav .links a:not(.btn){font-size:12.5px} nav .btn{padding:0 12px;font-size:13px} .logo b{font-size:23px} .logo span{font-size:10.5px;letter-spacing:.14em} }
-  @media (max-width:720px){ nav .links a[href="/"]{display:none} .logo{margin-right:10px} } /* sur téléphone : le logo vaut Accueil, Questions est dans Formules */
+  @media (max-width:720px){ nav .links a[href="/"],nav .links a[href="/#styles"],nav .links a[href="/#animations"]{display:none} nav .links a{white-space:nowrap} .logo{margin-right:10px} } /* sur téléphone : le logo vaut Accueil, Questions est dans Formules */
   /* « ce que vous recevez » : quatre temps, numérotés, reliés par des flèches */
   .flow{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);counter-reset:f}
   @media (max-width:820px){ .flow{grid-template-columns:1fr 1fr} }

@@ -801,6 +801,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     enregistrement ancien qui grésille. Dans une nouvelle session, l'outil TikTok répond 401 tant que l'identifiant enregistré
     pour `savetheoui.fr` n'est pas le `TIKTOK_ADMIN_KEY` de Vercel : une seule saisie dans le formulaire sécurisé le règle pour
     toutes les sessions ; une clé écrite dans une ancienne conversation n'est pas lisible depuis une autre.
+    **Dix jours pour tout montrer** (19 novembre 2026, le soir : « on montre tout ce qu'on sait faire sur le site, pas que le
+    jackpot, pas que le gratter, toute la partie faire-part, et on voit ce que ça donne ») : `business/ads/plan-10-jours.md`
+    (familles de posts, rythme, relevés aux jours 3, 6 et 10). **Le jackpot classique (machine dessinée en CSS) est refusé**
+    (« j'aime pas trop le jackpot, la version classique ») : on ne publie que la machine peinte de Dolce Vita. Le ticket à
+    gratter filmé à l'écran fait « très mid, très IA » : à faire évoluer avec les retours. Pour que ce qu'on montre puisse
+    s'acheter, **les pages faire-part sont rouvertes** : lien « Faire-part » dans la navigation (vers `/modeles/`), plus de
+    redirection de `/modeles/` et `/formules/`, toutes deux de retour dans `PAGES` ; l'accueil reste celui du save-the-date
+    (cela corrige la règle 53 sur ce point). Sur téléphone, « Styles » est masqué et les liens ne se coupent pas.
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un

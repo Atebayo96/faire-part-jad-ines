@@ -320,8 +320,8 @@ def main():
     # 15 novembre 2026 : le site ne vend que le save-the-date. Les pages du faire-part (/modeles/, /formules/, /creer/)
     # restent construites (liens « Modifier » des clients, retour prévu) mais hors navigation, hors moteurs et hors sitemap ;
     # /modeles/ et /formules/ renvoient à l'accueil (vercel.json).
-    PAGES = ['/', '/save-the-date/', '/questions/', '/contact/']
-    FILL = PAGES + ['/modeles/', '/formules/', '/creer/']
+    PAGES = ['/', '/save-the-date/', '/modeles/', '/formules/', '/questions/', '/contact/']
+    FILL = PAGES + ['/creer/']
     for u in PAGES:
         fp = os.path.join(SITE, u.strip('/'), 'index.html')
         l = open(fp, encoding='utf-8').read()
