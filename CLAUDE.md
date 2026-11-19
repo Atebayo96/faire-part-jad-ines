@@ -794,6 +794,13 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     accord chiffré. Vidéos : `ads/std/ecran.js` filme le vrai ticket et le vrai jackpot par thème (`ads/std/ecrans/`), et pour
     des vidéos « en vrai », l'utilisateur filme un téléphone à écran vert (`ads/std/fondvert.png`, mode d'emploi
     `fondvert.md`) où l'on incruste ces écrans ; l'incrustation reste à écrire sur la première prise.
+    **Montage des vidéos d'écran** (`ads/std/monter.sh`, même soir) : l'écran dans un téléphone aux **coins arrondis**, posé sur
+    son propre fond flouté, la légende en pastilles blanches au-dessus (« pas en full screen pour mettre le texte par-dessus,
+    ça peut être pas mal, mais pas d'angles droits, des rectangles, c'est moche »). **Musique** : le vieux 78 tours
+    (`funiculi`) a été refusé (« trop cheap ») ; on prend les morceaux d'`ads/feuille/audio/m-*.mp3`, jamais un
+    enregistrement ancien qui grésille. Dans une nouvelle session, l'outil TikTok répond 401 tant que l'identifiant enregistré
+    pour `savetheoui.fr` n'est pas le `TIKTOK_ADMIN_KEY` de Vercel : une seule saisie dans le formulaire sécurisé le règle pour
+    toutes les sessions ; une clé écrite dans une ancienne conversation n'est pas lisible depuis une autre.
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un
