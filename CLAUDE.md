@@ -756,6 +756,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     ce que le compte propose. **On publie donc en brouillon** (`--brouillon`, essai réussi : la vidéo arrive dans la boîte de
     l'application, l'utilisateur appuie sur Publier). Le domaine est bien vérifié pour cette app. Dans une session, l'outil a
     besoin de `TIKTOK_ADMIN_KEY` (le mot de passe de `/admin/tiktok/`) dans l'environnement ; jamais dans le dépôt.
+    **L'envoi passe par Zernio** (19 novembre 2026 : « toute la pipeline de publication doit être automatisée, le brouillon
+    à valider à la main c'est trop chiant ») : TikTok n'audite pas un outil qui publie sur ses propres comptes (règles de
+    partage de contenu), donc le dernier maillon est zernio.com, dont l'app est auditée (gratuit jusqu'à 2 comptes reliés,
+    @savetheoui y est relié). `api/_zernio.js` : quand `ZERNIO_API_KEY` est sur Vercel, `publishItem()` crée le post chez
+    Zernio (`publishNow`, médias tirés de `/tm/<clé>`) et `checkItem()` relit son état ; la file, les heures, la page et les
+    outils ne changent pas. Une vidéo ne sort qu'en public (ou en brouillon) par Zernio. Essai de bout en bout réussi en
+    brouillon ; pour changer de service, on remplace ce seul fichier. Un robot dans TikTok Studio a été écarté (règles de
+    TikTok, fragile). **Rien ne part en public sans que l'utilisateur ait vu le post** (vidéo, légende, heure).
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un
