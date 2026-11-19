@@ -801,6 +801,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     enregistrement ancien qui grésille. Dans une nouvelle session, l'outil TikTok répond 401 tant que l'identifiant enregistré
     pour `savetheoui.fr` n'est pas le `TIKTOK_ADMIN_KEY` de Vercel : une seule saisie dans le formulaire sécurisé le règle pour
     toutes les sessions ; une clé écrite dans une ancienne conversation n'est pas lisible depuis une autre.
+    **Zone sûre de TikTok** (19 novembre 2026, capture de l'utilisateur sur la première vidéo publiée : « c'est pas bien
+    visible, c'est trop grand, on n'arrive pas à lire le texte du haut ») : la légende incrustée passait sous l'heure et la
+    barre de recherche, et le bas du téléphone sous le nom, la légende et le bandeau. Dans une vidéo 1080 × 1920, rien
+    d'important au-dessus de 240 px, sous 1400 px, ni à droite de 900 px entre 800 et 1400 px. `monter.sh` : légende à partir
+    de 262 px, téléphone plus petit (574 × 1020, de 500 à 1520 px, son bas n'est que du décor). Les 7 vidéos sont remontées
+    et les 4 encore prévues dans la file remplacées. Toute nouvelle vidéo ou image à texte se vérifie avec ces zones.
     **Dix jours pour tout montrer** (19 novembre 2026, le soir : « on montre tout ce qu'on sait faire sur le site, pas que le
     jackpot, pas que le gratter, toute la partie faire-part, et on voit ce que ça donne ») : `business/ads/plan-10-jours.md`
     (familles de posts, rythme, relevés aux jours 3, 6 et 10). **Le jackpot classique (machine dessinée en CSS) est refusé**
