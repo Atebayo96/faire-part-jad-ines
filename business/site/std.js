@@ -127,6 +127,9 @@
     </div>${c.art?`<img class="std-art" src="${c.art}" alt="">`:''}</div><canvas class="tk-dust" aria-hidden="true"></canvas><div class="std-sr" aria-live="polite"></div>`;
     const wrap=st.firstElementChild, tk=wrap.firstElementChild, cv=st.querySelector('.tk-foil'), zone=cv.parentNode, dust=st.querySelector('.tk-dust');
     fitGame(st,wrap,336,J?470:500); if(J) st.parentNode.classList.add('std-dim'); fitNm(st.querySelector('.std-nm')); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitNm(st.querySelector('.std-nm')));
+    // la date tient toujours dans la zone à gratter (« 18 septembre » débordait des deux côtés du ticket)
+    const fitDt=()=>{ const b=zone.querySelector('.tk-under b'); if(!b) return; let f=parseFloat(getComputedStyle(b).fontSize); while(b.offsetWidth>zone.clientWidth-24&&f>26){ f-=1; b.style.fontSize=f+'px'; } };
+    fitDt(); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitDt);
     let cx, W=0, H=0, down=false, last=null, over=false, lastCheck=0, tries=0, alive=true, src=null, sg=null, lastT=0;
     st._stop=()=>{ alive=false; hush(true); };
     (function foil(){
