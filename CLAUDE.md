@@ -786,6 +786,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     le ressaisit dans le formulaire sécurisé (`request_credential`, Bearer), jamais dans le chat. Claude ne se crée pas sa
     propre clé d'accès (refusé). **Les vidéos du dépôt parlent toutes du faire-part** alors que le site ne vend que le
     save-the-date : aucune vidéo du ticket à gratter ni du jackpot n'existe encore (à filmer sur le vrai site, sans génération).
+    **Pilotage « bête et méchant »** (19 novembre 2026) : 10 posts par jour (5 carrousels utiles, 5 vidéos du save-the-date à
+    19 €), pas de pub payante avant les premières ventes ; chaque lundi on lit les chiffres (TikTok, visites, ventes), on
+    décline ce qui marche, on retire ce qui ne marche pas. **Claude est aux commandes** (« c'est l'IA qui gère, moi je donne
+    juste des orientations », « on maximise tout ») : sujets, textes et publication sans validation post par post, l'utilisateur
+    voit après coup ; cela remplace la validation en chat pour ces posts. Les générations payantes restent soumises à un
+    accord chiffré. Vidéos : `ads/std/ecran.js` filme le vrai ticket et le vrai jackpot par thème (`ads/std/ecrans/`), et pour
+    des vidéos « en vrai », l'utilisateur filme un téléphone à écran vert (`ads/std/fondvert.png`, mode d'emploi
+    `fondvert.md`) où l'on incruste ces écrans ; l'incrustation reste à écrire sur la première prise.
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un
