@@ -761,9 +761,31 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     partage de contenu), donc le dernier maillon est zernio.com, dont l'app est auditée (gratuit jusqu'à 2 comptes reliés,
     @savetheoui y est relié). `api/_zernio.js` : quand `ZERNIO_API_KEY` est sur Vercel, `publishItem()` crée le post chez
     Zernio (`publishNow`, médias tirés de `/tm/<clé>`) et `checkItem()` relit son état ; la file, les heures, la page et les
-    outils ne changent pas. Une vidéo ne sort qu'en public (ou en brouillon) par Zernio. Essai de bout en bout réussi en
-    brouillon ; pour changer de service, on remplace ce seul fichier. Un robot dans TikTok Studio a été écarté (règles de
-    TikTok, fragile). **Rien ne part en public sans que l'utilisateur ait vu le post** (vidéo, légende, heure).
+    outils ne changent pas. Une vidéo ne sort qu'en public (ou en brouillon) par Zernio. Pour changer de service, on
+    remplace ce seul fichier. Un robot dans TikTok Studio a été écarté (règles de TikTok, fragile).
+    **La chaîne est validée de bout en bout** (même jour) : un carrousel programmé avec `--maintenant` est sorti **en public**
+    sur @savetheoui en moins d'une minute, sans brouillon ni geste de l'utilisateur ; `tiktok.mjs statut` dit « Envoi par
+    Zernio ». Zernio ne renvoie pas le lien du post TikTok. L'utilisateur vise **4 à 5 posts par jour** (limite TikTok : 15
+    vidéos et 15 carrousels par 24 h) : « nous, on va travailler sur la qualité de ce qu'on publie, la pipeline doit être
+    automatisée ». On ne publie que ce qu'il a demandé ou validé (sujet, texte) ; quand il dit « fais-le et publie-le », on
+    publie sans redemander et on lui montre la planche des images.
+    **Premier post sorti par la chaîne** : `out/unan/` (5 images, `POSTS['unan']` dans `icones.py`), « Tu te maries dans moins
+    d'un an ? 3 choses à ne pas oublier » : la liste d'invités, le dossier à la mairie, annoncer la date ; icônes `rings` et
+    `mairie` ajoutées. Sujet donné par l'utilisateur (« un truc très classique »), textes écrits et publiés directement.
+    **Les chiffres se lisent chez nous** : `node business/tools/tiktok.mjs stats` (op `stats` de `api/tiktok.js`, lit
+    `/v1/analytics` de Zernio) : vues, portée, likes, commentaires, partages, enregistrements, part vue jusqu'au bout, par
+    post. Relevé du 19 novembre (9 posts d'octobre) : 250 à 800 vues chacun, 97 à 99 % par « Pour toi », aucun abonné ; **le
+    seul post partagé (3) et enregistré (6), vu jusqu'au bout 9,4 % du temps contre 1 à 4 %, est « Et toi quelle erreur tu as
+    faite ? »** : c'est le format « info utile » qui accroche, pas la présentation du produit. Proposé, pas encore fait : un
+    onglet TikTok dans `/admin/` avec ces chiffres.
+    **Clés** : sur Vercel (production) `TIKTOK_CLIENT_KEY` / `TIKTOK_CLIENT_SECRET` (app TikTok en production, plus utilisées
+    tant que l'envoi passe par Zernio), `TIKTOK_ADMIN_KEY`, `ZERNIO_API_KEY`. Le mot de passe de l'outil, le secret TikTok et
+    la clé Zernio ont été écrits dans le chat du 19 novembre : **à régénérer par l'utilisateur**, puis à reposer sur Vercel
+    (`create_project_env` avec `upsert`, puis redéploiement de la prod). L'identifiant enregistré pour `savetheoui.fr` dans
+    l'environnement des sessions ne correspond pas au mot de passe de l'outil (401) : pour une nouvelle session, l'utilisateur
+    le ressaisit dans le formulaire sécurisé (`request_credential`, Bearer), jamais dans le chat. Claude ne se crée pas sa
+    propre clé d'accès (refusé). **Les vidéos du dépôt parlent toutes du faire-part** alors que le site ne vend que le
+    save-the-date : aucune vidéo du ticket à gratter ni du jackpot n'existe encore (à filmer sur le vrai site, sans génération).
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un

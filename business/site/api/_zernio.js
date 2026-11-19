@@ -59,3 +59,14 @@ export async function check(id) {
   else if (/fail|error/i.test(st)) { out.status = 'echec'; out.error = pl.errorMessage || pl.error || p.errorMessage || p.error || st; if (typeof out.error !== 'string') out.error = JSON.stringify(out.error); }
   return out;
 }
+
+// les chiffres de chaque post du compte (vues, portée, likes, commentaires, partages, enregistrements, vu jusqu'au bout)
+export async function stats() {
+  const j = await call('GET', '/analytics?limit=100');
+  const posts = (j.posts || []).map(p => { const a = p.analytics || {}; return {
+    at: p.publishedAt, text: String(p.content || '').slice(0, 90), views: a.views || 0, reach: a.reach || 0, likes: a.likes || 0,
+    comments: a.comments || 0, shares: a.shares || 0, saves: a.saves || 0, completion: a.completionRate || 0,
+    forYou: a.impressionSources ? a.impressionSources.forYou : undefined, updated: a.lastUpdated }; })
+    .sort((x, y) => String(x.at) < String(y.at) ? -1 : 1);
+  return { synced: j.overview && j.overview.lastSync, posts };
+}

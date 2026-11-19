@@ -8,7 +8,7 @@ import { ready, isAdmin, clean, same, bearer, id as newId } from './_store.js';
 // accès : la clé du site (SCEAU_SECRET) ou une clé propre à TikTok (TIKTOK_ADMIN_KEY), qu'on peut choisir et noter sans toucher
 // à SCEAU_SECRET (Vercel ne réaffiche pas une variable sensible, et la changer casserait les liens des tableaux de bord)
 const allowed = req => isAdmin(req) || (!!process.env.TIKTOK_ADMIN_KEY && same(bearer(req), process.env.TIKTOK_ADMIN_KEY));
-import { zernio, account as zAccount } from './_zernio.js';
+import { zernio, account as zAccount, stats as zStats } from './_zernio.js';
 import { configured, connectUrl, finishConnect, disconnect, accessToken, creatorInfo, queue, saveQueue, run, putBin, getBin, KEY, newKey, typeOf, TYPES, mediaUrl, redirectUri } from './_tiktok.js';
 
 // morceaux de 2,5 Mo au plus côté client (3,4 Mo en base64), sous la limite de 4,5 Mo des fonctions Vercel
@@ -118,6 +118,7 @@ export default async function handler(req, res) {
       const q = await queue(); q.push(item); await saveQueue(q);
       return res.status(200).json({ item });
     }
+    if (op === 'stats') { if (!zernio()) return res.status(400).json({ error: 'zernio' }); return res.status(200).json(await zStats()); }
     if (op === 'list') return res.status(200).json({ queue: (await queue()).sort((a, c) => a.at < c.at ? -1 : 1) });
     if (op === 'remove') {
       const q = await queue(), i = q.findIndex(x => x.id === b.id);

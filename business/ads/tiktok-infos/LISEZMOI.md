@@ -77,6 +77,19 @@ post ; les brouillons marchent. L'audit (quelques jours à deux semaines) se dem
 démo de l'outil. Recette locale (faux TikTok) jouée le 29 octobre 2026 : connexion, carrousel, vidéo par morceaux en
 brouillon, cron, renouvellement du jeton, refus sans clé.
 
+## Depuis le 19 novembre 2026 : l'envoi passe par Zernio, tout est automatique
+
+TikTok n'audite pas un outil qui publie sur ses propres comptes, et sans audit aucun post direct ne passe. Le dernier
+maillon est donc zernio.com (`api/_zernio.js`, `ZERNIO_API_KEY` sur Vercel, gratuit jusqu'à 2 comptes) ; la file, les heures
+et les commandes ci-dessus ne changent pas. Un post programmé sort **en public** tout seul à son heure (le cron passe toutes
+les 10 minutes) ; `--brouillon` existe toujours. Validé par le carrousel `out/unan/` (« Tu te maries dans moins d'un an ?
+3 choses à ne pas oublier », `python3 icones.py && node render.js unan`).
+
+```
+node business/tools/tiktok.mjs statut     # « Envoi par Zernio, compte relié : @savetheoui »
+node business/tools/tiktok.mjs stats      # vues, likes, partages, enregistrements, vu jusqu'au bout, par post
+```
+
 ## Idées pour la suite (à écrire dans `posts.py`)
 
 - Save the date ou faire-part : faut-il les deux ?
