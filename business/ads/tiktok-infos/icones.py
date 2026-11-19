@@ -24,6 +24,12 @@ I = dict(
  calcheck='<rect x="30" y="45" width="140" height="130" rx="12"/><path d="M30 80h140M65 30v30M135 30v30"/><path d="M70 125l20 20 40-45"/>',
  rings='<circle cx="75" cy="115" r="48"/><circle cx="125" cy="115" r="48"/><path d="M62 52l13-22 13 22-13 14z"/>',
  mairie='<path d="M25 80l75-50 75 50z"/><path d="M40 80v80M80 80v80M120 80v80M160 80v80"/><path d="M20 165h160"/><path d="M100 30V10h22l-6 7 6 7h-22"/>',
+ plane='<path d="M20 110l160-70-45 130-35-45z"/><path d="M100 125l80-85"/><path d="M100 125v40l22-22"/>',
+ bed='<path d="M20 160V60M20 120h160v40M180 160v-40"/><path d="M40 120V95h50v25"/><path d="M100 120v-18h60q20 0 20 18"/>',
+ coins='<ellipse cx="100" cy="60" rx="55" ry="22"/><path d="M45 60v35c0 12 25 22 55 22s55-10 55-22V60"/><path d="M45 95v35c0 12 25 22 55 22s55-10 55-22V95"/>',
+ heart='<path d="M100 165C40 120 25 90 25 68a37 37 0 0 1 75-12 37 37 0 0 1 75 12c0 22-15 52-75 97z"/>',
+ table='<circle cx="100" cy="100" r="34"/><circle cx="100" cy="32" r="12"/><circle cx="100" cy="168" r="12"/><circle cx="32" cy="100" r="12"/><circle cx="168" cy="100" r="12"/>',
+ eye='<path d="M15 100c25-40 55-55 85-55s60 15 85 55c-25 40-55 55-85 55s-60-15-85-55z"/><circle cx="100" cy="100" r="24"/><path d="M30 170L170 30"/>',
  clock='<circle cx="100" cy="100" r="70"/><path d="M100 55v45l32 20"/><path d="M100 40v8M160 100h-8M100 160v-8M40 100h8"/>',
 )
 def svg(k): return f'<svg viewBox="0 0 200 200" fill="none" stroke="#1e1a17" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">{I[k]}</svg>'
@@ -59,6 +65,53 @@ POSTS['unan'] = [
  dict(n=2, t="Chose 2 sur 3", h="Ton dossier <i>à la mairie.</i>", p="Chaque mairie a ses délais et sa liste de papiers. Appelle la tienne maintenant, pas dans six mois.", ic="mairie"),
  dict(n=3, t="Chose 3 sur 3", h="Annoncer <i>la date</i> à tes invités.", p="Ils doivent poser des congés et réserver leur trajet. Plus ils le savent tôt, plus ils viennent.", ic="calcheck"),
  dict(k="À retenir", h="La liste, la mairie, <i>la date.</i>", p="Enregistre ce post pour ne rien oublier. Et toi, tu en es où ?", ic="bookmark", end=True),
+]
+
+POSTS['datefixee'] = [
+ dict(k="Organisation du mariage", h="Tu viens de fixer <i>ta date de mariage ?</i>", p="3 choses à faire cette semaine.", ic="calcheck", go=True),
+ dict(n=1, t="Chose 1 sur 3", h="Dis‑le d'abord <i>à tes proches.</i>", p="Tes parents et tes témoins l'apprennent de ta bouche, pas dans une story.", ic="family"),
+ dict(n=2, t="Chose 2 sur 3", h="Réserve <i>le lieu.</i>", p="Tant que le lieu n'est pas signé, ta date peut encore bouger. Ne l'annonce pas avant.", ic="pin"),
+ dict(n=3, t="Chose 3 sur 3", h="Annonce la date <i>à tous tes invités.</i>", p="Un message court suffit : vos prénoms, la date, la ville. Le faire‑part viendra plus tard.", ic="envelope"),
+ dict(k="À retenir", h="Les proches, le lieu, <i>puis tout le monde.</i>", p="Enregistre ce post. Et toi, ta date, c'est quand ?", ic="bookmark", end=True),
+]
+POSTS['cestquoi'] = [
+ dict(k="Mariage", h="C'est quoi un save the date, et <i>est‑ce que tu en as besoin ?</i>", ic="phoneq", go=True),
+ dict(n=1, t="Ce que c'est", h="Un message <i>très court.</i>", p="Vos prénoms, la date, la ville. Rien d'autre. Il dit juste : réservez votre journée.", ic="bubble"),
+ dict(n=2, t="Ce que ce n'est pas", h="Ce n'est pas <i>le faire‑part.</i>", p="Pas d'horaires, pas d'adresse, pas de menu. Tout ça arrive plus tard, avec le faire‑part.", ic="envelope"),
+ dict(n=3, t="Quand l'envoyer", h="Dès que la date et le lieu <i>sont sûrs.</i>", p="Souvent entre 6 et 12 mois avant le mariage.", ic="calcheck"),
+ dict(n=4, t="Tu en as besoin si", h="Tes invités <i>viennent de loin.</i>", p="Ou si tu te maries en été, pendant un pont, ou à l'étranger. Ils doivent s'organiser tôt.", ic="plane"),
+ dict(k="À retenir", h="La date d'abord, <i>les détails ensuite.</i>", p="Enregistre ce post pour le jour où ta date sera fixée.", ic="bookmark", end=True),
+]
+POSTS['ordre'] = [
+ dict(k="Organisation du mariage", h="Tu ne sais pas <i>par où commencer</i> ton mariage ?", p="L'ordre qui évite de tout refaire.", ic="thought", go=True),
+ dict(n=1, t="D'abord", h="Le <i>budget.</i>", p="Un chiffre, même approximatif. Sans lui, tu visites des lieux que tu ne pourras pas payer.", ic="coins"),
+ dict(n=2, t="Ensuite", h="La liste <i>d'invités.</i>", p="Pas les noms exacts : le nombre. 60 ou 160 personnes, ce n'est pas le même lieu.", ic="family"),
+ dict(n=3, t="Puis", h="Le lieu <i>et la date.</i>", p="Les deux se décident ensemble : c'est le lieu qui te dit quelles dates sont libres.", ic="pin"),
+ dict(n=4, t="Et là seulement", h="Tu annonces <i>la date.</i>", p="Une fois le lieu réservé. Tout le reste (traiteur, tenue, déco) peut attendre un peu.", ic="calcheck"),
+ dict(k="À retenir", h="Budget, invités, lieu, <i>date.</i>", p="Dans cet ordre. Enregistre ce post, et dis‑moi où tu en es.", ic="bookmark", end=True),
+]
+POSTS['loin'] = [
+ dict(k="Invités", h="Tes invités <i>viennent de loin ?</i>", p="4 choses à leur dire le plus tôt possible.", ic="plane", go=True),
+ dict(n=1, t="Chose 1 sur 4", h="La date <i>exacte.</i>", p="Pas « en juin ». Le jour précis, pour poser des congés et prendre un billet.", ic="calcheck"),
+ dict(n=2, t="Chose 2 sur 4", h="La <i>ville.</i>", p="Pas besoin de l'adresse tout de suite. La ville suffit pour regarder les trajets.", ic="pin"),
+ dict(n=3, t="Chose 3 sur 4", h="Combien <i>de jours.</i>", p="Une soirée, ou tout un week‑end ? Ça change le billet de retour.", ic="clock"),
+ dict(n=4, t="Chose 4 sur 4", h="Où <i>dormir.</i>", p="Deux ou trois adresses près du lieu. Les meilleures partent en premier.", ic="bed"),
+ dict(k="À retenir", h="Plus ils le savent tôt, <i>plus ils viennent.</i>", p="Enregistre ce post, et envoie‑le à celui ou celle qui organise avec toi.", ic="bookmark", end=True),
+]
+POSTS['erreursdate'] = [
+ dict(k="Mariage", h="Les 4 erreurs quand on <i>annonce sa date</i> de mariage.", ic="calendar", go=True),
+ dict(n=1, t="Erreur 1 sur 4", h="L'annoncer <i>avant d'avoir le lieu.</i>", p="Si le lieu n'est pas libre ce jour‑là, tu devras tout redire à tout le monde.", ic="pin"),
+ dict(n=2, t="Erreur 2 sur 4", h="Oublier <i>la ville.</i>", p="La date sans le lieu, ça ne suffit pas pour s'organiser. La première question sera : c'est où ?", ic="phoneq"),
+ dict(n=3, t="Erreur 3 sur 4", h="La dire <i>seulement en story.</i>", p="Elle disparaît en 24 heures, et ta grand‑mère ne l'aura jamais vue.", ic="eye"),
+ dict(n=4, t="Erreur 4 sur 4", h="L'envoyer à des gens <i>que tu n'inviteras pas.</i>", p="Celui qui reçoit la date s'attend à recevoir le faire‑part.", ic="envelope"),
+ dict(k="À retenir", h="Le lieu d'abord, <i>un vrai message ensuite.</i>", p="Enregistre ce post. Et toi, tu l'as annoncée comment ?", ic="bookmark", end=True),
+]
+POSTS['liste'] = [
+ dict(k="Invités", h="Tu n'arrives pas à faire <i>ta liste d'invités ?</i>", p="3 questions qui t'aident à trancher.", ic="check", go=True),
+ dict(n=1, t="Question 1 sur 3", h="Est‑ce que je l'ai vu <i>cette année ?</i>", p="Si ça fait trois ans sans nouvelles, la réponse est souvent là.", ic="calendar"),
+ dict(n=2, t="Question 2 sur 3", h="Est‑ce que je l'inviterais <i>à dîner chez moi ?</i>", p="Ton mariage, c'est un très grand dîner. La question est la même.", ic="plate"),
+ dict(n=3, t="Question 3 sur 3", h="Est‑ce que son absence <i>me ferait de la peine ?</i>", p="Si oui, il vient. Si tu hésites longtemps, tu as ta réponse.", ic="heart"),
+ dict(k="À retenir", h="Tu invites pour toi, <i>pas par obligation.</i>", p="Enregistre ce post pour le soir où tu feras ta liste.", ic="bookmark", end=True),
 ]
 
 def typo(t):
