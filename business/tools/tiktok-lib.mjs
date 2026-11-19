@@ -87,6 +87,12 @@ export function line(i) {
 }
 export function statusText(s) {
   const out = [];
+  if (s.via === 'zernio') {
+    out.push(s.connected ? `Envoi par Zernio, compte relié : @${s.username}. Publication publique directe.` : 'Envoi par Zernio : aucun compte TikTok relié chez Zernio.');
+    if (s.error) out.push('Erreur : ' + s.error);
+    if (s.queue) out.push(`File : ${s.queue.prevu} prévu(s), ${s.queue.envoye} envoyé(s), ${s.queue.publie} publié(s), ${s.queue.echec} en échec.`);
+    return out.join('\n');
+  }
   if (!s.configured) out.push('App TikTok non réglée sur Vercel : TIKTOK_CLIENT_KEY et TIKTOK_CLIENT_SECRET manquent.');
   out.push(s.connected ? `Compte relié : @${s.username || s.open_id} (depuis le ${new Date(s.connected_at).toLocaleDateString('fr-FR')}, à renouveler avant le ${new Date(s.refresh_expires_at).toLocaleDateString('fr-FR')}).` : 'Aucun compte TikTok relié.');
   if (s.privacy_options) out.push(s.privacy_options.includes('PUBLIC_TO_EVERYONE') ? 'Publication publique possible.' : `Visibilités possibles : ${s.privacy_options.join(', ')} (app pas encore auditée, ou compte privé : les posts directs seront privés).`);

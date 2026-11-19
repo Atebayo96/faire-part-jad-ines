@@ -10,6 +10,7 @@ import { randomBytes } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import META from './_meta.js';
+import { zernio, publish as zPublish, check as zCheck } from './_zernio.js';
 
 const LOCAL = process.env.SCEAU_LOCAL === '1', DIR = '/tmp/sceau-data';
 // surchargeables pour la recette locale (faux TikTok)
@@ -107,6 +108,12 @@ export const saveQueue = q => save('tiktok/queue.json', q);
 // publie un post : carrousel photo (jusqu'à 35 images) ou vidéo ; direct (en ligne tout de suite, visibilité choisie) ou
 // brouillon (déposé dans l'application TikTok, à finir là-bas). Les fichiers sont tirés par TikTok depuis /tm/<clé>.
 export async function publishItem(item, tok) {
+  // par Zernio quand sa clé est réglée (voir _zernio.js) : publication directe en public, sans audit de notre app
+  if (zernio()) {
+    const r = await zPublish(item, item.media.map(mediaUrl));
+    Object.assign(item, { via: 'zernio', publish_id: r.id, status: 'envoye', sentAt: new Date().toISOString(), username: r.username, error: undefined });
+    return item;
+  }
   const info = await creatorInfo(tok);
   const urls = item.media.map(mediaUrl);
   const direct = item.mode !== 'brouillon';
@@ -142,6 +149,13 @@ export async function publishItem(item, tok) {
 
 // état d'un post envoyé : TikTok le télécharge, puis le publie (ou le dépose dans l'application pour un brouillon)
 export async function checkItem(item, tok) {
+  if (item.via === 'zernio') {
+    const r = await zCheck(item.publish_id);
+    item.tk_status = r.raw; item.checkedAt = new Date().toISOString();
+    if (r.status === 'ok') { item.status = item.mode === 'brouillon' ? 'brouillon' : 'publie'; if (r.url) item.url = r.url; }
+    else if (r.status === 'echec') { item.status = 'echec'; item.error = r.error; }
+    return item;
+  }
   const d = await tk(tok, '/v2/post/publish/status/fetch/', { publish_id: item.publish_id });
   item.tk_status = d.status; item.checkedAt = new Date().toISOString();
   if (d.status === 'PUBLISH_COMPLETE') { item.status = 'publie'; item.post_id = Array.isArray(d.publicaly_available_post_id) ? d.publicaly_available_post_id[0] : d.publicaly_available_post_id; }
@@ -159,7 +173,8 @@ export async function run(ids) {
   const todo = q.filter(i => pick(i) && (i.status === 'prevu' && (ids || new Date(i.at).getTime() <= now) || i.status === 'envoye'));
   if (!todo.length) return { done, queue: q };
   let tok;
-  try { tok = await accessToken(); } catch (e) { for (const i of todo) if (i.status === 'prevu') { i.status = 'echec'; i.error = String(e.message || e); } await saveQueue(q); return { done, queue: q, error: String(e.message || e) }; }
+  if (zernio()) tok = {};
+  else try { tok = await accessToken(); } catch (e) { for (const i of todo) if (i.status === 'prevu') { i.status = 'echec'; i.error = String(e.message || e); } await saveQueue(q); return { done, queue: q, error: String(e.message || e) }; }
   if (!tok) return { done, queue: q, error: 'compte TikTok non relié' };
   for (const i of todo) {
     try {

@@ -8,6 +8,7 @@ import { ready, isAdmin, clean, same, bearer, id as newId } from './_store.js';
 // accès : la clé du site (SCEAU_SECRET) ou une clé propre à TikTok (TIKTOK_ADMIN_KEY), qu'on peut choisir et noter sans toucher
 // à SCEAU_SECRET (Vercel ne réaffiche pas une variable sensible, et la changer casserait les liens des tableaux de bord)
 const allowed = req => isAdmin(req) || (!!process.env.TIKTOK_ADMIN_KEY && same(bearer(req), process.env.TIKTOK_ADMIN_KEY));
+import { zernio, account as zAccount } from './_zernio.js';
 import { configured, connectUrl, finishConnect, disconnect, accessToken, creatorInfo, queue, saveQueue, run, putBin, getBin, KEY, newKey, typeOf, TYPES, mediaUrl, redirectUri } from './_tiktok.js';
 
 // morceaux de 2,5 Mo au plus côté client (3,4 Mo en base64), sous la limite de 4,5 Mo des fonctions Vercel
@@ -46,6 +47,11 @@ export default async function handler(req, res) {
     if (op === 'disconnect') { await disconnect(); return res.status(200).json({ ok: true }); }
     if (op === 'status') {
       const out = { configured: configured(), redirect: redirectUri(), connected: false };
+      if (zernio()) {
+        // l'envoi passe par Zernio : c'est son compte relié qui compte
+        out.via = 'zernio'; out.configured = true;
+        try { const a = await zAccount(); Object.assign(out, { connected: true, username: a.username, connected_at: a.connected_at, privacy_options: ['PUBLIC_TO_EVERYONE'] }); } catch (e) { out.error = String(e.message || e); }
+      } else
       try {
         const t = await accessToken();
         if (t) {
