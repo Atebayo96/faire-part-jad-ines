@@ -750,6 +750,12 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     `https://savetheoui.fr/tiktok/retour`, domaine vérifié dans l'app TikTok. Tant que l'app n'est pas auditée par TikTok,
     un post direct ne peut être que privé (l'outil le fait et le note). Détail : `business/ads/tiktok-infos/LISEZMOI.md`.
     Ni Higgsfield ni TikTok Studio pour publier.
+    **App TikTok en production depuis le 19 novembre 2026** (clés Production sur Vercel, compte @savetheoui relié) : tant que
+    l'audit de la Content Posting API n'est pas passé, TikTok refuse tout post direct, **même privé**, parce que le compte est
+    public (`unaudited_client_can_only_post_to_private_accounts`) ; « Publication publique possible » dans `statut` ne dit que
+    ce que le compte propose. **On publie donc en brouillon** (`--brouillon`, essai réussi : la vidéo arrive dans la boîte de
+    l'application, l'utilisateur appuie sur Publier). Le domaine est bien vérifié pour cette app. Dans une session, la clé de
+    l'outil passe par le proxy (identifiant enregistré pour `savetheoui.fr`) : `TIKTOK_ADMIN_KEY=proxy-injected`.
 
 47. **Carte (29 €) et Page unique (59 €) : tout sur une seule feuille, comme un faire-part papier** (10 octobre 2026 : « une
     offre plus simple, la personne paye et on lui envoie son faire-part en image ou PDF » ; « une version où on met tout sur un
