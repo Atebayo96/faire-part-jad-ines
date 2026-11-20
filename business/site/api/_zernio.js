@@ -62,11 +62,17 @@ export async function check(id) {
 
 // les chiffres de chaque post du compte (vues, portée, likes, commentaires, partages, enregistrements, vu jusqu'au bout)
 export async function stats() {
-  const j = await call('GET', '/analytics?limit=100');
-  const posts = (j.posts || []).map(p => { const a = p.analytics || {}; return {
+  // Zernio peut porter un autre compte TikTok que le nôtre (jusqu'à 2) : on ne garde que les posts du compte de l'outil
+  const acc = await account();
+  const j = await call('GET', '/analytics?limit=100&platform=tiktok&accountId=' + encodeURIComponent(acc.id));
+  const ids = p => [p.accountId, p.account && (p.account._id || p.account.id || p.account), p.socialAccountId]
+    .concat((p.platforms || []).map(x => x.accountId && (x.accountId._id || x.accountId)), (p.platformAnalytics || []).map(x => x.accountId))
+    .filter(Boolean).map(String);
+  const mine = p => { const l = ids(p); return !l.length || l.includes(String(acc.id)); };
+  const posts = (j.posts || []).filter(mine).map(p => { const a = p.analytics || {}; return {
     at: p.publishedAt, text: String(p.content || '').slice(0, 90), views: a.views || 0, reach: a.reach || 0, likes: a.likes || 0,
     comments: a.comments || 0, shares: a.shares || 0, saves: a.saves || 0, completion: a.completionRate || 0,
     forYou: a.impressionSources ? a.impressionSources.forYou : undefined, updated: a.lastUpdated }; })
     .sort((x, y) => String(x.at) < String(y.at) ? -1 : 1);
-  return { synced: j.overview && j.overview.lastSync, posts };
+  return { synced: j.overview && j.overview.lastSync, account: acc.username, posts };
 }
