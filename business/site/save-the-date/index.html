@@ -76,6 +76,8 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Product", "name": "Save the date animé", "description": "Créez votre save the date en 5 minutes : ticket à gratter ou jackpot. Un lien à envoyer sur WhatsApp, avec « Ajouter à l'agenda ». 19 €, en ligne dès le paiement.", "image": "https://savetheoui.fr/og-sceau.jpg", "brand": {"@type": "Brand", "name": "Save The Oui"}, "offers": {"@type": "Offer", "name": "Save the date animé", "price": "19.00", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://savetheoui.fr/save-the-date/"}}]}</script>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script>window.stoQ=[];window.stoTrack=function(n,d){if(window.stoQ)stoQ.push([n,d,Date.now()]);};</script>
+<script defer src="/mesure.js?v=1"></script>
 </head>
 <body data-page="std">
 
@@ -168,7 +170,7 @@
   const C={theme:THEMES.includes(q.get('theme'))?q.get('theme'):'dolcevita',anim:SceauSTD.ANIMS.some(a=>a.k===q.get('anim'))?q.get('anim'):'gratter',palette:null};
   C.palette=PALS(C.theme)[0];
   const EDIT=q.get('edit'), KEY=(location.hash.match(/k=([\w-]+)/)||[])[1];
-  const track=(name,data)=>{ try{ if(window.umami&&umami.track) umami.track(name,data); if(window.va) va('event',{name,data}); }catch(e){} };
+  const track=(name,data)=>{ try{ if(window.umami&&umami.track) umami.track(name,data); if(window.va) va('event',{name,data}); if(window.stoTrack) stoTrack(name,data); }catch(e){} };
 
   function inv(){
     const d=$('dt').value||'2027-06-12', city=$('ct').value.trim();

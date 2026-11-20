@@ -10,7 +10,7 @@
   // mesure du tunnel (27 octobre 2026) : un événement nommé, sans donnée personnelle, envoyé à Umami et à Vercel Web Analytics
   // (balises posées par build-site.py). etape {etape, formule, theme} à chaque onglet du configurateur, commander {formule} quand
   // le formulaire de commande part, paiement {formule} sur la page Merci (merci/index.html).
-  const track=(name,data)=>{ try{ if(window.umami&&umami.track) umami.track(name,data); if(window.va) va('event',{name,data}); }catch(e){} };
+  const track=(name,data)=>{ try{ if(window.umami&&umami.track) umami.track(name,data); if(window.va) va('event',{name,data}); if(window.stoTrack) stoTrack(name,data); }catch(e){} };
   // bouton de formule : sur /creer/, la commande Stripe s'ouvre (formule payable en ligne) ; ailleurs, le lien mène à /creer/?plan=…
   document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',e=>{ const sel=document.getElementById('planSel'); if(sel) sel.value=a.dataset.plan;
     // Essentiel en libre-service (api/commande.js) : le faire-part composé est publié dès le paiement ; sinon, lien de paiement Stripe

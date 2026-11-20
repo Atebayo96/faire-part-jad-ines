@@ -8,6 +8,7 @@ import { readAll, readOne, save, ready, dashKey, isAdmin, clean } from './_store
 import { links, mail } from './_publish.js';
 import { priceOf, summary } from './_fiche.js';
 import INVITES from './_invites.js';
+import { visitData } from './_visites.js';
 
 const STATUS = ['nouveau', 'en cours', 'gagné', 'perdu'];
 const REF = /^ess_[\w-]{10,80}$/;
@@ -108,7 +109,9 @@ export default async function handler(req, res) {
   const [leadRows, cmdRows, ficheRows, rsvpRows, seenRows, giftRows, st, um] = await Promise.all([
     store ? readAll('leads/') : [], store ? readAll('commandes/') : [], store ? readAll('fiches/') : [],
     store ? readAll('rsvp/') : [], store ? readAll('seen/') : [], store ? readAll('gifts/') : [],
-    stripeData().catch(e => ({ error: e.message })), umamiData(days)]);
+    stripeData().catch(e => ({ error: e.message })),
+    // les visites : Umami s'il est branché, sinon notre mesure (mesure.js, api/t.js), avec les 60 derniers parcours
+    umamiData(days).then(u => u || (store ? visitData(Math.min(days, 90), 60).catch(e => ({ error: e.message })) : null))]);
 
   const leads = leadRows.sort((a, b) => a.at < b.at ? 1 : -1).map(({ pathname, ...l }) => Object.assign(l, { path: pathname, status: l.status || 'nouveau' }));
 
@@ -137,5 +140,5 @@ export default async function handler(req, res) {
 
   res.status(200).json({ storage: store, days, now: new Date().toISOString(), leads, commandes, invites, stripe: st, umami: um,
     setup: { stripe: !!process.env.STRIPE_SECRET_KEY, webhook: !!process.env.STRIPE_WEBHOOK_SECRET, resend: !!process.env.RESEND_API_KEY,
-      umami: !!(process.env.UMAMI_API_KEY && process.env.UMAMI_WEBSITE_ID), adminKey: !!process.env.ADMIN_KEY } });
+      umami: !!(process.env.UMAMI_API_KEY && process.env.UMAMI_WEBSITE_ID) || !!(um && um.maison), adminKey: !!process.env.ADMIN_KEY } });
 }

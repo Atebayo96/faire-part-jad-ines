@@ -250,6 +250,8 @@ UMAMI_DOMAINS = 'savetheoui.fr,sceau-faire-part.vercel.app'
 
 def analytics_tags():
     t = '<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>\n<script defer src="/_vercel/insights/script.js"></script>\n'
+    # 3) notre mesure (mesure.js -> api/t.js) : le parcours de chaque visite, lisible par Claude (tools/visites.mjs)
+    t += '<script>window.stoQ=[];window.stoTrack=function(n,d){if(window.stoQ)stoQ.push([n,d,Date.now()]);};</script>\n<script defer src="/mesure.js?v=1"></script>\n'
     if UMAMI_ID:
         t += f'<script defer src="{UMAMI_HOST}/script.js" data-website-id="{UMAMI_ID}" data-domains="{UMAMI_DOMAINS}"></script>\n'
     return t

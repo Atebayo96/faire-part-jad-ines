@@ -130,7 +130,7 @@ async function load(k){
   if(k) KEY=k;
   try{ D=await api('GET'); }
   catch(e){ if(e.message==='key'){ alert('Clé incorrecte'); location.reload(); return; } toast('Chargement impossible : '+e.message); return; }
-  try{ sessionStorage.setItem('sceau-k',KEY); }catch(e){}
+  try{ sessionStorage.setItem('sceau-k',KEY); localStorage.setItem('sto_moi','1'); }catch(e){} // ce navigateur est le nôtre : ses visites sortent des chiffres (mesure.js)
   render();
 }
 
@@ -250,7 +250,7 @@ function vue(M,U){
   CH.push(ca,cnt);
   let vis=null; if(U&&U.series&&U.series.length){ vis=barChart('chV',{week:false,pts:U.series.map(p=>({k:p.d,d:new Date(p.d+'T12:00'),v:p.n}))},(v,ax)=>ax?String(Math.round(v)):nf(v)+' visite'+(v>1?'s':''),true); CH.push(vis); }
   // entonnoir : des visites jusqu'au paiement (les étapes viennent des événements track() de vitrine.js quand Umami est branché)
-  const F=[]; if(U){ F.push(['Visiteurs',U.visitors]); if(ev.etape!=null) F.push(['Configurateur (étapes vues)',ev.etape]); if(ev.commander!=null) F.push(['Formulaire de commande envoyé',ev.commander]); }
+  const F=[]; if(U&&U.tunnel){ U.tunnel.slice(0,-1).forEach(t=>F.push(t)); } else if(U){ F.push(['Visiteurs',U.visitors]); if(ev.etape!=null) F.push(['Configurateur (étapes vues)',ev.etape]); if(ev.commander!=null) F.push(['Formulaire de commande envoyé',ev.commander]); }
   F.push(['Commandes lancées (paiement ouvert)',M.started.length]); F.push(['Commandes payées',M.started.filter(c=>c.paid).length]);
   const fmax=Math.max(1,...F.map(f=>f[1]));
   const funnel=`<div class="bars funnel">${F.map((f,i)=>`<div class="bar"><span>${esc(f[0])}</span><span class="t"><span style="width:${Math.max(f[1]?2:0,f[1]/fmax*100)}%"></span></span><span class="n">${nf(f[1])}${i?` <small>· ${pct(f[1],F[i-1][1])}</small>`:''}</span></div>`).join('')}</div>`;
@@ -363,6 +363,7 @@ function stripeTab(){
   ${s.refunds.length?`<h2 style="margin:24px 0 10px">Remboursements</h2><div class="tbl"><table><thead><tr><th>Date</th><th>Client</th><th class="r">Montant remboursé</th></tr></thead><tbody>${s.refunds.map(r=>`<tr><td><small>${esc(dt(r.at))}</small></td><td>${esc(r.email)}</td><td class="r num">${eur(r.amount)}</td></tr>`).join('')}</tbody></table></div>`:''}`;
 }
 function visites(U){
+  if(!D.setup.umami&&D.umami&&D.umami.error) return `<div class="al warn"><i>!</i><span>Les visites ne se lisent pas : ${esc(D.umami.error)}</span></div>`;
   if(!D.setup.umami) return `<div class="card"><b>Brancher les visites (Umami Cloud, gratuit, sans cookie)</b>
     <ol class="steps"><li>Créez un compte sur <a href="https://cloud.umami.is/signup" target="_blank">cloud.umami.is</a> et ajoutez le site <code>savetheoui.fr</code>.</li>
     <li>Copiez l’<b>identifiant du site</b> (Website ID) et créez une <b>clé d’API</b> (Settings → API keys).</li>
@@ -382,7 +383,35 @@ function visites(U){
     <div class="card"><div class="hd"><b>D’où viennent les visiteurs</b></div>${hbars(m(U.refs))}</div>
     <div class="card"><div class="hd"><b>Pays</b></div>${hbars(m(U.countries))}</div>
     <div class="card"><div class="hd"><b>Appareils</b></div>${hbars(m(U.devices))}</div>
-    <div class="card"><div class="hd"><b>Actions (tunnel)</b></div>${hbars(m(U.events))}</div></div>`;
+    <div class="card"><div class="hd"><b>Actions (tunnel)</b></div>${hbars(m(U.events))}</div></div>${U.maison?maison(U,m):''}`;
+}
+// notre mesure (mesure.js) : ce que fait chaque visite, et les derniers parcours un par un
+function maison(U,m){
+  const fm=Math.max(1,...U.tunnel.map(t=>t[1]));
+  const lab={vue:'Ouvre',clic:'Clique',defile:'Défile',champ:'Touche le champ',quitte:'Quitte',jeu:'Jeu',erreur:'Erreur'};
+  const what=x=>{ const d=x.d||{};
+    if(x.n==='vue') return `<b>Ouvre ${esc(x.p)}</b>`; if(x.n==='clic') return `Clique « ${esc(d.tx||'')} »${d.to?' → '+esc(d.to):''}`;
+    if(x.n==='defile') return `Défile jusqu’à ${d.pct} %`; if(x.n==='champ') return `Touche le champ ${esc(d.f)}`;
+    if(x.n==='quitte') return `<span class="mut">Quitte la page (${d.s} s actives, ${d.max} % vus)</span>`;
+    if(x.n==='jeu') return `Jeu ${esc(d.jeu)} (${esc(d.theme||'')}) : <b>${esc(d.etat)}</b>`;
+    return `<b>${esc(lab[x.n]||x.n)}</b> ${esc(JSON.stringify(d))}`; };
+  const mmss=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+  return `<h2 style="margin:24px 0 10px">Ce que font les visiteurs</h2>
+  <div class="grid">
+    <div class="card"><div class="hd"><b>Du premier écran au paiement</b><small>${nf(U.nouveaux)} nouveaux visiteurs${U.aNous?' · '+U.aNous+' visites à nous, hors chiffres':''}</small></div>
+      <div class="bars funnel">${U.tunnel.map((f,i)=>`<div class="bar"><span>${esc(f[0])}</span><span class="t"><span style="width:${Math.max(f[1]?2:0,f[1]/fm*100)}%"></span></span><span class="n">${nf(f[1])}${i?` <small>· ${pct(f[1],U.tunnel[0][1])}</small>`:''}</span></div>`).join('')}</div></div>
+    <div class="card"><div class="hd"><b>Page d’arrivée</b></div>${hbars(m(U.entrees))}</div>
+    <div class="card"><div class="hd"><b>Ce qui est cliqué</b></div>${hbars(m(U.clics))}</div>
+    <div class="card"><div class="hd"><b>Par page : temps et défilement</b></div>${hbars(U.parPage.map(p=>({l:p.p,v:p.n,s:p.s,max:p.max})),r=>`${r.s} s <small>· ${r.max} % vus · ${r.v} visites</small>`)}</div>
+    <div class="card"><div class="hd"><b>Champs touchés</b></div>${hbars(m(U.champs))}</div>
+    <div class="card"><div class="hd"><b>Villes</b></div>${hbars(m(U.villes))}</div>
+    ${U.erreurs.length?`<div class="card"><div class="hd"><b>Erreurs vues par les visiteurs</b></div>${hbars(m(U.erreurs))}</div>`:''}
+  </div>
+  <h2 style="margin:24px 0 10px">Derniers parcours</h2>
+  <div class="card">${(U.parcours||[]).map(s=>`<details style="border-bottom:1px solid #ececec;padding:10px 0"><summary style="cursor:pointer">
+      <b>${esc(dt(s.debut))}</b> · ${esc(s.source)} · ${esc(s.appareil||'?')} ${esc(s.os)} · ${esc([s.ville,s.pays].filter(Boolean).join(', ')||'?')}
+      <small> · ${s.pages.length} page${s.pages.length>1?'s':''}, ${s.clics} clic${s.clics>1?'s':''}, ${s.secondes} s${s.nouveau?'':' · déjà venu'}${s.own?' · à nous':''}${s.pas.paiement?' · <b>a payé</b>':s.pas.commander?' · a cliqué Commander':''}</small></summary>
+      <ol style="margin:8px 0 0;padding-left:0;list-style:none;font-size:14px;line-height:1.7">${s.e.map(x=>`<li><small class="mut" style="display:inline-block;width:46px">${mmss(x.t)}</small> ${what(x)}</li>`).join('')}</ol></details>`).join('')||'<div class="empty">Aucune visite enregistrée pour l’instant.</div>'}</div>`;
 }
 
 /* ---------- interactions des tableaux ---------- */

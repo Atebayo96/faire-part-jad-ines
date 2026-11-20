@@ -1167,6 +1167,24 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
   `track()` (vitrine.js) : `etape {etape, formule, theme}` à chaque onglet du configurateur, `commander {formule}` quand le
   formulaire de commande part, `paiement {formule}` sur la page Merci (`merci/index.html`). Le site n'enregistre par ailleurs que les
   demandes, commandes, réponses et ouvertures de liens personnels (`/api/admin` avec `SCEAU_SECRET`).
+- **Notre propre mesure, parcours par parcours** (20 novembre 2026 : « est-ce que tu peux voir ce que fait chaque personne sur le
+  site ? faut vraiment tout traquer pour avoir le maximum de data »). Constat : Umami n'a jamais été branché (`UMAMI_ID` vide) et
+  l'API de Vercel Web Analytics répond toujours « not found » : Claude ne voyait rien. Désormais `landing/mesure.js` (posé sur
+  toutes les pages par `analytics_tags()`) envoie à `api/t.js`, par paquets (le premier tout de suite, puis toutes les 5 s), ce
+  que fait chaque visite : `vue`, `clic` (le mot du bouton), `defile` (25/50/75/100 %), `champ` (quel champ est touché, **jamais
+  ce qui est écrit**), `actif` / `quitte` (temps actif), `erreur`, et les événements nommés par `window.stoTrack` (`jeu`
+  {jeu, theme, etat : debut, touche, fin, passe} dans std.js ; `etape`, `commander`, `paiement` : les trois `track()` y envoient
+  aussi). Le serveur ajoute pays, ville, type d'appareil et **l'application qui a ouvert la page** (TikTok, Instagram : leur
+  navigateur interne n'envoie pas de provenance, on la lit dans le User-Agent) ; ni IP ni cookie ; identifiants au hasard
+  (`sto_s` par visite, `sto_v` par visiteur). Rangé dans `visites/<jour>/`, compacté chaque nuit en `visites-jour/<jour>.json`
+  (`compact()` dans `_visites.js`, appelé par `api/purge.js`), 13 mois gardés. **Lecture** : `node business/tools/visites.mjs
+  [--jours 30] [--parcours 20] [--json]` (GET `/api/visites`, clé admin), et l'onglet Visites de `/admin/` (tunnel du premier
+  écran au paiement, provenances, clics, temps et défilement par page, champs touchés, derniers parcours action par action).
+  Pas de clics ni de champs sur `/d/…` (noms d'invités), rien sur `/admin/` et `/tableau/`. Ouvrir `/admin/` marque le
+  navigateur comme le nôtre (`sto_moi`, aussi `?moi=1` sur n'importe quelle page, à faire une fois sur chaque téléphone de
+  l'utilisateur) : ses visites restent visibles mais sortent des chiffres. Les navigateurs pilotés (captures Playwright) ne
+  sont pas mesurés. La page Confidentialité le décrit (§ 3). Tout nouveau bouton ou jeu important envoie son événement nommé.
+  Le lien de la bio TikTok porte `?utm_source=tiktok&utm_medium=bio` ; un lien posé ailleurs porte son `utm_source`.
 - **Tableau de bord de l'admin** (`/admin/`, 30 octobre 2026 : « fais-moi tout pour mon tableau de bord avec ce qu'il y a ») :
   ouvert avec `ADMIN_KEY` (clé propre à l'admin, à choisir et noter, reconnue partout où `SCEAU_SECRET` l'est : `isAdmin()`
   dans `_store.js`) ou `SCEAU_SECRET`, qu'on ne change jamais (elle signe les liens des tableaux de bord des mariés).

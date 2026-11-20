@@ -554,10 +554,13 @@
     if(st._stop) st._stop(); st._stop=null; clearTimeout(S._t);
     S.classList.remove('std-done','std-gone'); play.hidden=false; play.classList.remove('std-dim');
     let fin=false;
+    // mesure (mesure.js) : le jeu est lancé, touché pour la première fois, vu jusqu'au bout ou passé
+    const tr=etat=>{ try{ if(window.stoTrack) stoTrack('jeu',{jeu:k,theme:inv.theme,etat}); }catch(e){} };
+    tr('debut'); st.onpointerdown=()=>{ st.onpointerdown=null; tr('touche'); };
     const done=()=>{ if(fin) return; fin=true; if(st._stop) st._stop(); S.classList.add('std-done');
       S._t=setTimeout(()=>{ S.classList.add('std-gone'); play.hidden=true; if(o.onDone) o.onDone(); },reduce?0:750); };
-    S.querySelector('.std-skip').onclick=done;
-    (GAMES[k]||GAMES.gratter)(st,ctx(inv),()=>{ if(!fin) done(); });
+    S.querySelector('.std-skip').onclick=()=>{ if(!fin) tr('passe'); done(); };
+    (GAMES[k]||GAMES.gratter)(st,ctx(inv),()=>{ if(!fin){ tr('fin'); done(); } });
   }
   window.SceauSTD={ANIMS:LIST,html,start};
 })();

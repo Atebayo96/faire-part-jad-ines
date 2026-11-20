@@ -2,6 +2,7 @@
 import { removeAll, readAll, ready, same } from './_store.js';
 import { summary } from './_fiche.js';
 import INVITES from './_invites.js';
+import { compact } from './_visites.js';
 
 export default async function handler(req, res) {
   const auth = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
@@ -14,5 +15,7 @@ export default async function handler(req, res) {
   for (const [slug, v] of all) {
     if (Date.now() > new Date(v.date).getTime() + 90 * 864e5) { await removeAll(`rsvp/${slug}/`); await removeAll(`seen/${slug}/`); done.push(slug); }
   }
-  res.status(200).json({ purged: done });
+  // la mesure maison : chaque jour passé rangé en un fichier, 13 mois gardés
+  let visites = []; try { visites = await compact(); } catch { }
+  res.status(200).json({ purged: done, visites });
 }
