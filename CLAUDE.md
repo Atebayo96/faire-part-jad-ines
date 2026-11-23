@@ -1129,6 +1129,14 @@ faire-part, vitrine, aperçus, images d'aperçu WhatsApp (og.jpg), images géné
     **« Je serai là » est retiré** (« il ne fait rien pour l'instant ») : la feuille du save-the-date n'a plus que « Agenda »
     (carte.js, pastille seule à sa largeur), plus de tableau de bord pour un save-the-date (`_publish.js`, `commande.js`),
     et le site, les questions et les CGV n'en parlent plus.
+    **Le jackpot est retiré du site** (23 novembre 2026 : « celui du jackpot, faut le retirer du site, il est pas ouf, j'aime pas
+    du tout ») : `off:true` dans `ANIMS` ; seul le ticket à gratter est proposé. Avec un seul jeu, l'accueil n'a plus de
+    pastilles de choix et `/save-the-date/` saute l'étape « Comment l'annoncer ? » (le style devient l'étape 2). La démo
+    `std-lea-karim` (jackpot) marche encore, sans lien. Relevé du même jour : 14 posts en 27 h ont fait tomber la portée de
+    ~700 à ~10 vues par post (compte sans doute bridé : 1 à 2 posts par jour au plus) ; les vidéos d'écran font 0 like et
+    ~1 % vues jusqu'au bout, les carrousels « Tu… ? » 7 à 18 % ; aucune visite venue de TikTok, aucune vente. `tiktok.mjs`
+    répond 401 dans une session (le `fetch` de Node ne passe pas par le proxy qui pose la clé) : lire avec `curl`
+    (`POST /api/tiktok {"op":"stats"}`, `GET /api/visites?days=…`, `GET /api/admin`), sans en-tête.
 
 ## Méthode
 

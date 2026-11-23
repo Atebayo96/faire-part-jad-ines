@@ -12,7 +12,7 @@
 (function(){
   const ANIMS=[
     {k:'gratter',ico:'🎟️',name:'Le ticket à gratter',tx:'Un vrai ticket : le latex argenté s’écaille sous le doigt, les copeaux tombent, la date apparaît.'},
-    {k:'jackpot',ico:'🎰',name:'Le jackpot',tx:'Une vraie machine : on tire le levier, les trois rouleaux tournent et s’arrêtent un à un sur votre date.'},
+    {k:'jackpot',off:true,ico:'🎰',name:'Le jackpot',tx:'Une vraie machine : on tire le levier, les trois rouleaux tournent et s’arrêtent un à un sur votre date.'},
     {k:'billet',off:true,ico:'✈️',name:'La carte d’embarquement',tx:'On déchire le talon, on fait décoller l’avion : la date s’affiche comme au tableau des départs.'},
     {k:'cadenas',ico:'🔒',off:true,name:'Le cadenas à code',tx:'On tourne la molette d’un coffre : elle chauffe quand on approche du jour, puis du mois.'},
     {k:'sms',off:true,ico:'💬',name:'Le message',tx:'Une conversation s’écrit toute seule, jusqu’à « On se marie ! ».'},
@@ -24,6 +24,7 @@
   // 15 novembre 2026 : « on va se focus sur le ticket à gratter et le jackpot, proposer que ça » : les autres jeux sont mis de
   // côté (off) comme le cadenas ; ils marchent encore pour une fiche ou une démo qui les a, mais ne se proposent plus
   // le cadenas est mis de côté (2 novembre 2026 : « pas ouf ») : il marche encore pour une fiche qui l'a, mais ne se propose plus
+  // 23 novembre 2026 : le jackpot est retiré du site (« il est pas ouf, j'aime pas du tout ») : seul le ticket à gratter est proposé
   const LIST=ANIMS.filter(a=>!a.off);
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

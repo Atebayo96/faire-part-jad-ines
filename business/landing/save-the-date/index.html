@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Créer son save the date animé en 5 minutes — Save The Oui</title>
-<meta name="description" content="Créez votre save the date en 5 minutes : ticket à gratter ou jackpot. Un lien à envoyer sur WhatsApp, avec « Ajouter à l'agenda ». 19 €, en ligne dès le paiement.">
+<meta name="description" content="Créez votre save the date en 5 minutes : un ticket à gratter qui révèle votre date. Un lien à envoyer sur WhatsApp, avec « Ajouter à l'agenda ». 19 €, en ligne dès le paiement.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Créer son save the date animé en 5 minutes — Save The Oui">
-<meta property="og:description" content="Annoncez votre date de façon drôle : ticket à gratter ou jackpot. 19 €, en ligne dès le paiement.">
+<meta property="og:description" content="Annoncez votre date de façon drôle : un ticket à gratter. 19 €, en ligne dès le paiement.">
 <meta property="og:image" content="https://savetheoui.fr/og-sceau.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -225,6 +225,10 @@
       document.querySelector('.sd-top h1').textContent='Modifier votre save-the-date';
       $('oPay').textContent='Enregistrer'; $('oEmail').hidden=true; document.querySelectorAll('#ordForm .chk,.sd-buy .amount,.sd-buy ul,.sd-buy .label').forEach(x=>x.hidden=true);
       $('oNote').textContent='Le lien de vos invités reste le même.'; }
+    // une seule animation proposée : pas de choix à faire, l'étape disparaît et le style devient l'étape 2
+    if(SceauSTD.ANIMS.length<2){ const h=$('pAn').previousElementSibling; h.style.display='none'; $('pAn').style.display='none';
+      const n=h.parentNode.querySelectorAll('h2 b'); if(n[2]) n[2].textContent='2';
+      const l=document.querySelector('.lead'); if(l) l.textContent=l.textContent.replace("Trois réponses, et c'est prêt : vous deux, l'animation, le style.","Deux réponses, et c'est prêt : vous deux, puis le style."); }
     paintAnims(); paintThemes(); paintCols(); fitPhone(); render();
   }
   start();
